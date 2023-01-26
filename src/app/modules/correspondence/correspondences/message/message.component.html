@@ -1,0 +1,166 @@
+<div class="message">
+  <div class="message__header">
+    <div class="title">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h3>
+          {{ message?.subject }}
+        </h3>
+        <div>
+          <span class="mx-2">{{
+            "CORRERSPONDENCE.CREATED_ON_DATE" | translate
+            }}</span>
+          <span [matTooltip]="'CORRERSPONDENCE.CREATED_ON_DATE' | translate"
+          >{{ message?.createdOn | customDate |date :"medium"   }}
+          </span>
+        </div>
+      </div>
+      <h4 class="font-weight-bold">
+        {{ message?.duedate }}
+      </h4>
+    </div>
+    <div class="info">
+      <div class="info__related">
+        <div [matTooltip]="'CORRERSPONDENCE.CONFIDENTIALITY' | translate">
+          <mat-icon color="primary">security</mat-icon>
+          <span>{{ message?.confidentialty | propTranslator: "name" }}</span>
+        </div>
+        <div class="mx-5" [matTooltip]="'CORRERSPONDENCE.INCIDENT' | translate">
+          <mat-icon color="primary">report</mat-icon>
+          <span>{{ message?.incident?.subject }}</span>
+        </div>
+        <div [matTooltip]="'CORRERSPONDENCE.DUEDATE' | translate">
+          <mat-icon color="primary">date_range</mat-icon>
+          <span>{{ message?.dueDate  }}</span>
+        </div>
+      </div>
+      <div
+        *appPrivileges="'PRIV_REPLY_CORR'"
+        (click)="reply$.emit(message.id)"
+        style="cursor: pointer"
+      >
+        <span>{{ "CORRERSPONDENCE.REPLY" | translate }}</span>
+        <button
+          mat-icon-button
+          [matTooltip]="'CORRERSPONDENCE.REPLY' | translate"
+          color="primary"
+        >
+          <mat-icon>reply</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="message__body">
+    <!-- <div class="symbol-box">
+        <div class="symbol symbol-40 symbol-light-primary mr-2">
+          <span class="symbol-label">
+            <span class="symbol-label font-size-h5 font-weight-bold">
+              {{'AK'}}
+            </span>
+          </span>
+        </div>
+        <div>
+          <h5 class="title">
+            {{}}
+          </h5>
+        </div>
+      </div> -->
+    <div class="text">
+      <pre *ngIf="!message.external">{{ message.body }}</pre>
+      <app-html-body *ngIf="message.external" [body]="message.body"></app-html-body>
+    </div>
+    <div class="toList">
+      <div class="title">
+        <h4>
+          {{ "CORRERSPONDENCE.TO_LIST" | translate }}
+        </h4>
+      </div>
+      <table class="table table-striped mat-table dir">
+        <thead>
+        <tr>
+          <th scope="col">{{ "CORRERSPONDENCE.EN_NAME" | translate }}</th>
+
+          <th scope="col">{{ "CORRERSPONDENCE.AR_NAME" | translate }}</th>
+
+          <th scope="col">{{ "CORRERSPONDENCE.TYPE" | translate }}</th>
+
+          <th scope="col">{{ "CORRERSPONDENCE.STATUS" | translate }}</th>
+
+          <th scope="col">{{ "CORRERSPONDENCE.COPIED" | translate }}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let user of message.toList">
+          <td>{{ user?.toNameEn }}</td>
+          <td>{{ user?.toNameAr }}</td>
+          <td>{{ user?.toType?.label }}</td>
+          <td>{{ user?.correspondenceStatus | propTranslator: "name" }}</td>
+          <td>
+              <span
+                *ngIf="!user?.copied"
+                class="
+                  label label-rounded label-pill label-inline label-success
+                  mr-2
+                "
+              >
+                TO
+              </span>
+            <span
+              *ngIf="user?.copied"
+              class="
+                  label label-rounded label-primary label-pill label-inline
+                  mr-2
+                "
+            >
+                CC
+              </span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="attachments">
+      <div class="title">
+        <h4>
+          {{ "CORRERSPONDENCE.ATTACHMENTS" | translate }}
+        </h4>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <mat-spinner
+            *ngIf="!displayAttachments; else attachmentsSection"
+            diameter="20"
+          ></mat-spinner>
+        </div>
+      </div>
+      <ng-template #attachmentsSection>
+        <div class="d-flex align-items-center justify-content-start">
+          <div class="w-25 mx-2" *ngFor="let att of attachments">
+            <div class="card text-center att">
+              <div class="card-header p-1">
+                <span>
+                  {{ att?.fileName }}
+                </span>
+              </div>
+              <div class="card-footer p-1">
+                <button
+                  mat-icon-button
+                  [matTooltip]="'CORRERSPONDENCE.DOWNLOAD' | translate"
+                  color="accent"
+                  (click)="downloadFile(att.uuid, att.fileName)"
+                >
+                  <mat-icon>cloud_download</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12" *ngIf="attachments.length == 0">
+            <span>{{
+              "CORRERSPONDENCE.THERE_IS_NO_ATTACHMENTS" | translate
+              }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

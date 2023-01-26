@@ -1,0 +1,104 @@
+::ng-deep .esri-ui-inner-container.esri-ui-corner-container {
+  margin-top: 2.3rem !important;
+}
+
+::ng-deep .esri-attribution__powered-by {
+  content: "" !important;
+}
+
+
+.save-map {
+  position: initial;
+  bottom: 1%;
+  left: 50%;
+}
+::ng-deep .esri-popup__header {
+  border-bottom: 4px solid #df4b5b !important;
+}
+::ng-deep .esri-popup__main-container{
+  padding: 5px !important;
+  background: rgba(255,255,255,0.8) !important;
+  border-radius: 15px !important;
+}
+::ng-deep esri-popup__header-buttons.esri-popup__button.esri-popup__button--dock {
+  display: none !important;
+}
+::ng-deep .esri-popup--shadow{
+  box-shadow: none !important;
+}
+::ng-deep .esri-popup__footer {
+  display: none !important;
+}
+::ng-deep .esri-popup__content{
+  padding-top: 15px;
+}
+::ng-deep .esri-widget__table tr th{
+  background: #fff !important;
+  border-right: none !important;
+}
+::ng-deep .esri-widget__table tr td{
+  background: #fff !important;
+}
+::ng-deep .esri-widget {
+  border-radius: 10px !important;
+}
+::ng-deep .image {
+  background-image: url(../../../../assets/media/svg/icons/Code/Time-schedule.svg);
+  background-repeat: no-repeat;
+  height: 20px;
+  background-size: 21px;
+}
+::ng-deep .textId{
+  padding-left: 30px;
+  font-size: 15px;
+}
+::ng-deep .table-bordered th{
+  border: none !important;
+}
+::ng-deep .table-bordered td {
+  border: none !important;
+}
+::ng-deep .table th .table td {
+  border: none !important;
+}
+::ng-deep .table-bordered{
+  border: none !important;
+}
+::ng-deep .customText {
+  margin-top: -23px;
+  margin-left: -50px;
+}
+::ng-deep .custom-btn{
+  height: 38px;
+  padding-left: 50px;
+  margin-left: 170px;
+  float: right;
+  margin-top: -63px;
+}
+::ng-deep .directionAr{
+  direction: ltr;
+}
+::ng-deep .textIdAr{
+  padding-left: 215px;
+  font-size: 15px;
+}
+::ng-deep .imageAr {
+  background-image: url(../../../../assets/media/svg/icons/Code/Time-schedule.svg);
+  background-repeat: no-repeat;
+  height: 20px;
+  background-size: 21px;
+  padding-left: 9px;
+  margin-left: 9px;
+}
+::ng-deep .custom-btnAr {
+  height: 38px;
+  padding-left: 60px;
+  margin-left: 20px;
+  margin-top: -38px;
+  position: relative;
+  top: 26px
+}
+
+::ng-deep .esri-view-width-medium .esri-popup__main-container {
+  width: 400px !important;
+}

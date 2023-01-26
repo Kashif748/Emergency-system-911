@@ -1,0 +1,204 @@
+<div class="container-fluid" [class]="'p-' + (isMobileView ? '0' : '5')">
+  <div class="pb-4 d-flex align-item-center justify-content-center">
+    <button
+      (click)="back()"
+      class="btn btn btn-lg btn-icon cursor-pointer"
+      matTooltip="{{ 'SHARED.BACK' | translate }}"
+    >
+      <span
+        inlineSVG="{{
+          lang == 'en'
+            ? '/assets/media/svg/icons/Navigation//Angle-left.svg'
+            : '/assets/media/svg/icons/Navigation//Angle-right.svg'
+        }}"
+        cacheSVG="true"
+        class="svg-icon svg-icon-2x svg-icon-primary"
+        title="{{ 'SHARED.BACK' | translate }}"
+      ></span>
+    </button>
+
+    <button
+      (click)="drawer.toggle()"
+      class="btn btn-primary border btn-sm mx-4"
+      matTooltip="{{ 'SHARED.BACK' | translate }}"
+    >
+      <span
+        inlineSVG="/assets/media/svg/icons/Text/Menu.svg"
+        cacheSVG="true"
+        class="svg-icon svg-icon-lg m-0"
+      ></span>
+    </button>
+    <h2 class="card-title m-0 d-flex align-items-center">
+      {{ task?.title }}
+    </h2>
+    <div class="spacer"></div>
+    <ng-container *ngIf="task?.modifiable && task?.statusId !==4 && task?.statusId !==7">
+      <button
+        *appPrivileges="'PRIV_UP_TASK'"
+        [routerLink]="['/incidents/updateTask', this.taskId]"
+        class="btn btn-md btn-square btn-primary font-weight-bold cursor-pointer py-2"
+        matTooltip="{{ 'TASK.UPDATE_TASK' | translate }}"
+      >
+        {{ "TASK.UPDATE_TASK" | translate }}
+      </button>
+    </ng-container>
+  </div>
+
+  <!-- content -->
+  <div class="d-flex flex-row">
+    <mat-drawer-container class="example-container" autosize>
+      <mat-drawer
+        #drawer
+        class="sidenav-fixed"
+        [mode]="isMobileView ? 'over' : 'side'"
+      >
+        <div class="flex-row-auto w-200px w-xxl-275px h-100 side-menu">
+          <!-- side  nav -->
+          <div class="card card-custom card-stretch m-0">
+            <div class="card-body px-3 pt-0">
+              <!--begin::tabs-->
+              <div class="d-flex justify-content-between">
+                <h5 class="m-0 p-3 font-weight-normal align-items-center">
+                  {{ "ACTIONS.ChooseOption" | translate }}
+                </h5>
+              </div>
+
+              <div
+                class="navi navi-hover navi-active navi-link-rounded navi-bold scroll scroll-pull"
+              >
+                <!--begin::Item for loop-->
+
+                <div
+                  *ngFor="let item of tabs; let i = index"
+                  class="navi-item my-4 cursor-pointer"
+                  (click)="changeCurrentTab(item)"
+                >
+                  <ng-container *ngIf="item.privileges; else elseTemplate">
+                    <ng-container *appPrivileges="item.privileges">
+                      <a
+                        class="navi-link border px-1"
+                        [class]="item.index == currentTab ? 'active' : ''"
+                      >
+                        <span class="navi-icon mx-2">
+                          <span class="svg-icon svg-icon-md">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/' + item.icon + '.svg'
+                              "
+                              cacheSVG="true"
+                              class="svg-icon svg-icon-lg"
+                              [class]="
+                                item.index == currentTab
+                                  ? 'svg-icon-light'
+                                  : 'svg-icon-dark-50'
+                              "
+                            ></span>
+                          </span>
+                        </span>
+                        <span class="navi-text font-weight-bold font-size-md">{{
+                          item.key | translate
+                        }}</span>
+                      </a>
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <a
+                      class="navi-link border px-1"
+                      [class]="item.index == currentTab ? 'active' : ''"
+                    >
+                      <span class="navi-icon mx-2">
+                        <span class="svg-icon svg-icon-md">
+                          <span
+                            [inlineSVG]="
+                              './assets/media/svg/icons/' + item.icon + '.svg'
+                            "
+                            cacheSVG="true"
+                            class="svg-icon svg-icon-lg"
+                            [class]="
+                              item.index == currentTab
+                                ? 'svg-icon-light'
+                                : 'svg-icon-dark-50'
+                            "
+                          ></span>
+                        </span>
+                      </span>
+                      <span class="navi-text font-weight-bold font-size-md">{{
+                        item.key | translate
+                      }}</span>
+                    </a>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-drawer>
+      <!-- tabs content -->
+      <div *ngIf="!isMobileView" class="w-20px d-block"></div>
+      <div
+        class="card card-custom flex-row-fluid min-h-500px d-block spin-overlay m-0"
+      >
+        <div [dir]="lang === 'en' ? 'ltr' : 'rtl'" class="w-100">
+          <div [ngSwitch]="currentTab">
+            <!-- tasks tab -->
+            <ng-container *ngSwitchCase="0">
+              <app-task-info
+                [task]="task"
+                (updateStatus)="updateStatus($event)"
+              ></app-task-info>
+            </ng-container>
+            <!-- worklog tab -->
+
+            <!-- map  tab -->
+            <ng-container *ngSwitchCase="2">
+              <div class="px-5">
+                <div class="row">
+                  <div class="col-9">
+                    <h5
+                      class="card-title font-weight-normal border-bottom m-0 mb-10 p-3 pb-6 d-flex align-items-center"
+                    >
+                      {{ "INCIDENTS.MAP_INFO" | translate }}
+                    </h5>
+                  </div>
+                  <div class="col-3 set_share_google_map_location">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      (click)="openShareMapLocationDialog()"
+                    >
+                      {{ "INCIDENTS.SHARE_LOCATION_GOOGLE_MAPS" | translate }}
+                      <span class="fa fa-share-alt text-white"></span>
+                    </button>
+                  </div>
+                </div>
+                <app-map *ngIf="task" [config]="mapConfig"></app-map>
+              </div>
+            </ng-container>
+
+            <!-- files list tab -->
+            <ng-container *ngSwitchCase="3">
+              <section>
+                <app-files-list
+                  [files]="fileInfos"
+                  [recordId]="taskId"
+                  [tagId]="TASK_TAG_ID"
+                  [foreignHelperId]="task?.incidentId"
+                ></app-files-list>
+              </section>
+            </ng-container>
+          </div>
+
+          <div [hidden]="currentTab != 1">
+            <ng-container #workLogContainer></ng-container>
+          </div>
+          <div
+            [hidden]="currentTab != 4"
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            class="w-100"
+          >
+            <ng-container #notificationsContainer></ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-drawer-container>
+  </div>
+</div>

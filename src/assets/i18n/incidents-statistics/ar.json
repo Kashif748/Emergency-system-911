@@ -1,0 +1,32 @@
+{
+  "IncidentsStatistics": {
+    "IncidentsStatisticsTitle": " تقرير احصائيات البلاغات",
+    "mainOrg": "اسم الجهة المسؤولة",
+    "org": "الجهة",
+    "USERS": "المستخدمين",
+    "TASKS": "مهام",
+    "INCIDENTS": "بلاغات",
+    "centerName": " موقع البلاغ",
+    "log": "مسجلة",
+    "username": "الاسم",
+    "closed": "منجزة",
+    "inProgress": "قيد  الإجراء",
+    "delayed": "متأخرة",
+    "created": "منشأة",
+    "nonAutomated": "السجلات/اﻹفادات",
+    "fromDate": "منذ",
+    "average": "نسبة  الإغلاق",
+    "toDate": "حتى",
+    "deleted": "محذوف",
+    "rejected": "تم رفض",
+    "allCenters": "كل المواقع",
+    "allOrgs": "كل الجهات",
+    "defaultDate": "الفترة  الزمنية  الإفتراضية  للمخطط والجدول هي  منذ بداية الشهر الحالي",
+    "mainOrgReportTitle": " احصائيات البلاغات  طبقا للمراكز المعنية",
+    "locationReportTitle": " احصائيات البلاغات طبقا للمراكز الجغرافية",
+    "usersReportTitle": "تقرير احصائيات المستخدم",
+    "organization": "الجهة",
+    "exportPdf":"Export To PDF",
+    "exportExcel":"Export To Excel"
+  }
+}

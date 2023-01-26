@@ -1,0 +1,199 @@
+<div class="login-form login-signin" style="position:relative;">
+  <div class="spinner-container m-auto p-2 loader-set" *ngIf="isLoading">
+    <mat-spinner class="m-auto" diameter="40"></mat-spinner>
+  </div>
+  <form
+    class="form"
+    [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+    [formGroup]="form"
+    novalidate="novalidate"
+  >
+    <ng-container *ngIf="errorMsg">
+      <div
+        class="mb-10 alert alert-custom alert-light-danger alert-dismissible"
+        [ngClass]="{ 'cursor-pointer': uaePassErroCode == 'UPASS_USER_SOP1' }"
+        (click)="uaePassReadMore()"
+      >
+        <div class="alert-text">{{ errorMsg }}</div>
+      </div>
+    </ng-container>
+
+    <mat-form-field appearance="fill" class="w-100" *ngIf="!checkOtp">
+      <mat-label> {{ "AUTH.LOGIN.Organizations" | translate }} </mat-label>
+      <input matInput [matAutocomplete]="auto" formControlName="org" />
+      <mat-spinner
+        *ngIf="loading"
+        matSuffix
+        [diameter]="18"
+        style="float: right; margin-left: 8px"
+      ></mat-spinner>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let org of filteredOrgs" [value]="org">
+          <span>{{ org.nameEn + " - " + org.nameAr }}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div class="row" *ngIf="!checkOtp && loginUaePass">
+      <div class="col-md-12 login_smart_pass ng-scope">
+        <div class="smartbtn cursor-pointer" (click)="uaePassLogin()">
+          <a>
+            <img
+              src="assets/images/UAEPass_LoginButton_Transparent_Dark-EN.png"
+              class="hide-ar img-fluid"
+            />
+            <img
+              src="assets/images/UAEPass_LoginButton_Transparent_Dark-AR.png"
+              class="hide-en img-fluid"
+            />
+          </a>
+        </div>
+        <span class="orlogin ng-binding">{{
+          "AUTH.LOGIN.AUE_PASS_MSG" | translate
+        }}</span>
+        <span *ngIf="loginNormal" class="orlogin or_span ng-binding">{{
+          "AUTH.GENERAL.OR" | translate
+        }}</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!checkOtp && loginNormal">
+      <div class="form-group">
+        <div class="d-flex justify-content-between mt-n5">
+          <label>{{ "AUTH.INPUT.USERNAME" | translate }}</label>
+        </div>
+        <input
+          class="form-control"
+          name="username"
+          formControlName="username"
+          autocomplete="off"
+          [ngClass]="{ 'is-invalid': form.controls['username'].invalid }"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'VALIDATION_MSG.USERNAME.REQUIRED',
+            control: form.controls['username']
+          }"
+        ></ng-container>
+      </div>
+
+      <div class="form-group">
+        <div class="d-flex justify-content-between mt-n5">
+          <label>{{ "AUTH.INPUT.PASSWORD" | translate }}</label>
+        </div>
+
+        <input
+          class="form-control"
+          type="password"
+          name="password"
+          autocomplete="off"
+          formControlName="password"
+          [ngClass]="{ 'is-invalid': form.controls['password'].invalid }"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'VALIDATION_MSG.PASSWORD.REQUIRED',
+            control: form.controls['password']
+          }"
+        ></ng-container>
+      </div>
+
+      <div *ngIf="form.get('captcha')" class="form-group">
+        <div class="d-flex justify-content-between mt-n5">
+          <label class="my-auto"
+            >{{ "AUTH.INPUT.CAPTCHA" | translate }} :</label
+          >
+          <span class="switch switch-icon my-auto mx-3">
+            <label>
+              <input type="checkbox" formControlName="captcha" />
+              <span></span>
+            </label>
+          </span>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="checkOtp">
+      <div class="form-group">
+        <div class="d-flex justify-content-between mt-n5">
+          <label>{{ "AUTH.INPUT.OTP" | translate }}</label>
+        </div>
+        <input
+          class="form-control"
+          name="otp"
+          type="password"
+          formControlName="otp"
+          autocomplete="off"
+          [ngClass]="{ 'is-invalid': form.controls['otp'].invalid }"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'VALIDATION_MSG.OTP.REQUIRED',
+            control: form.controls['otp']
+          }"
+        ></ng-container>
+      </div>
+    </ng-container>
+
+    <div class="button-holder" *ngIf="loginNormal">
+      <div class="row">
+        <div class="col-6">
+          <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="form.invalid || isLoading"
+          (click)="onSubmit()"
+        >
+          {{ "AUTH.LOGIN.BUTTON" | translate }}
+        </button>
+  
+        <button
+          [disabled]="this.timeLeftToResendOtp > 0"
+          *ngIf="checkOtp"
+          app-throttle-click
+          (ThrottleClick)="resendOtp()"
+          [ThrottleTime]="2000"
+          class="btn btn-light-primary mx-3"
+        >
+          {{ "AUTH.LOGIN.RESEND_OTP" | translate }}
+          <span>{{ otpCountDown }}</span>
+        </button>
+        </div>
+        <div class="col-6">
+          <div class="forgot-password">
+            <a
+              routerLink="/auth/forgot-password"
+              class="text-primary text-hover-primary"
+              id="kt_login_forgot"
+            >
+              {{ "AUTH.FORGOT.TITLE" | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        {{ message | translate }}
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

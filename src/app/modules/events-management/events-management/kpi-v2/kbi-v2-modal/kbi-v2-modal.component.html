@@ -1,0 +1,251 @@
+<div
+  class="card card-custom"
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  style="overflow: hidden"
+>
+  <div class="card-header p-2">
+    <div class="card-title">
+      <span>{{ "EVENTSMODULES.kpi" | translate }}</span>
+      <span
+        *ngIf="modalType == 'new'"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="modalType == 'edit'"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="modalType == 'version'"
+        class="label label-lg label-primary label-inline mx-4 p-2"
+      >
+        {{ "EVENTSMODULES.version" | translate }}
+        {{ currentItem?.version + 1 }}
+      </span>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close({ reload: false })"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <perfect-scrollbar style="height: 500px">
+    <div class="card-body px-3 pt-0">
+      <form [formGroup]="formGroup">
+        <div class="row justify-content-center">
+          <div class="col-sm-12 col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label class="asterisk_input">
+                {{ "EVENTSMODULES.itemNameAr" | translate }}
+              </mat-label>
+              <input
+                matInput
+                placeholder="{{ 'EVENTSMODULES.itemNameAr' | translate }}"
+                type="text"
+                formControlName="nameAr"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label class="asterisk_input">
+                {{ "EVENTSMODULES.itemNameEn" | translate }}
+              </mat-label>
+              <input
+                matInput
+                placeholder="{{ 'EVENTSMODULES.itemNameEn' | translate }}"
+                type="text"
+                formControlName="nameEn"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-sm-12 col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>
+                {{ "EVENTSMODULES.descriptionAr" | translate }}
+              </mat-label>
+              <textarea
+                matInput
+                placeholder="{{ 'EVENTSMODULES.descriptionAr' | translate }} "
+                type="text"
+                formControlName="descriptionAr"
+              >
+              </textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>
+                {{ "EVENTSMODULES.descriptionEn" | translate }}
+              </mat-label>
+              <textarea
+                matInput
+                placeholder="{{ 'EVENTSMODULES.descriptionEn' | translate }} "
+                type="text"
+                formControlName="descriptionEn"
+              >
+              </textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-sm-12 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label
+                [ngClass]="{
+                  asterisk_input: isRequired('incidentParentCategory')
+                }"
+              >
+                {{ "INCIDENTS.CATEGORY" | translate }}
+              </mat-label>
+              <mat-select
+                placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
+                formControlName="incidentParentCategory"
+              >
+                <mat-option [value]="-1"></mat-option>
+                <mat-option
+                  *ngFor="let category of categories"
+                  [value]="category.id"
+                >
+                  {{ lang === "en" ? category?.nameEn : category?.nameAr }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label
+                [ngClass]="{
+                  asterisk_input: isRequired('incidentCategory')
+                }"
+              >
+                {{ "INCIDENTS.SUB_CATEGORY" | translate }}
+              </mat-label>
+              <mat-select
+                placeholder="{{ 'INCIDENTS.SUB_CATEGORY' | translate }}"
+                formControlName="incidentCategory"
+              >
+                <mat-option
+                  *ngFor="let category of subCategories"
+                  [value]="category.id"
+                >
+                  {{ lang === "en" ? category?.nameEn : category?.nameAr }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body scroll">
+            <div
+              formArrayName="kpiPriorities"
+              *ngFor="
+                let item of formGroup.get('kpiPriorities')['controls'];
+                let i = index
+              "
+            >
+              <div [formGroupName]="i">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      appearance="outline"
+                      disa
+                    >
+                      <mat-label>{{
+                        "INCIDENTS.PRIORITY" | translate
+                        }}</mat-label>
+                      <mat-select
+                        placeholder="{{ 'INCIDENTS.PRIORITY' | translate }}"
+                        formControlName="priority"
+                        readonly
+                      >
+                        <mat-option
+                          *ngFor="let priority of priorities"
+                          [value]="priority.id"
+                        >
+                          {{
+                          lang === "en" ? priority?.nameEn : priority?.nameAr
+                          }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field appearance="fill">
+                      <mat-label class="asterisk_input">
+                        {{ "EVENTSMODULES.TIME" | translate }}
+                      </mat-label>
+                      <input
+                        matInput
+                        placeholder="{{ 'EVENTSMODULES.TIME' | translate }} "
+                        type="number"
+                        formControlName="period"
+                        pattern="^[0-9]+$"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <mat-slide-toggle
+            color="primary"
+            formControlName="isActive"
+            class="m-auto"
+            (change)="onChange($event)"
+          >
+            <span class="mx-4">
+              {{
+              (isChecked ? "ACTIONS.ACTIVE" : "ACTIONS.INACTIVE") | translate
+              }}</span
+            >
+          </mat-slide-toggle>
+        </div>
+      </form>
+    </div>
+  </perfect-scrollbar>
+
+  <div class="card-footer p-2 d-flex justify-content-between">
+    <button
+      (click)="onSubmit()"
+      type="submit"
+      [disabled]="formGroup.invalid"
+      *ngIf="modalType == 'new' || modalType == 'version'"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.CREATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+    <button
+      (click)="onSubmit()"
+      [disabled]="formGroup.invalid"
+      type="submit"
+      *ngIf="modalType == 'edit'"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.UPDATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </div>
+</div>

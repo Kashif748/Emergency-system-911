@@ -1,0 +1,231 @@
+
+.general {
+    max-width: 100%;
+    transition: transform .5s ease;
+}
+
+.general1 {
+    max-width: 100%;
+    transition: transform .5s ease;
+}
+
+.titles {
+	color: #000b38;
+	font-size: 1.40em;
+	text-transform: uppercase;
+	font-weight: bold;
+	position: relative;
+	margin-bottom: 15px;
+}
+.titles:after {
+	position: absolute;
+    content: "";
+    width: 200px;
+    border-bottom: 3px solid #3699ff;
+    bottom: -10px;
+    left: 0;
+}
+
+.updates {
+	padding: 10px 0;
+}
+.updates .title {
+	color: #000b38;
+	font-size: 1.40em;
+	text-transform: uppercase;
+	font-weight: bold;
+	position: relative;
+	margin-bottom: 15px;
+}
+.updates .title:after {
+	position: absolute;
+    content: "";
+    width: 200px;
+    border-bottom: 3px solid #3699ff;
+    bottom: -10px;
+    left: 0;
+}
+.updates .update_boxes {
+	margin: 25px 0 15px;
+}
+.updates .update_boxes .box {
+	display: flex;
+	align-items: center;
+}
+.updates .update_boxes .box.one {
+	border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 25px;
+}
+.updates .update_boxes .box.two {
+	padding-left: 35px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 25px;
+}
+.updates .update_boxes .box.three {
+	border-right: 1px solid #ccc;
+    padding-top: 25px;
+}
+.updates .update_boxes .box.four {
+	padding-left: 35px;
+    padding-top: 25px;
+}
+.updates .update_boxes .box .left {
+	padding-right: 15px;
+}
+
+.updates .update_boxes .box .heading {
+	color: #3699ff !important;
+	font-weight: bold;
+	font-size: 1.15em;
+	text-transform: uppercase;
+	line-height: 20px;
+	margin: 2px;
+}
+.updates .update_boxes .box .number {
+	color: #000b38;
+    font-size: 2.5em;
+    font-weight: 700;
+    margin: 10px 0;
+}
+.updates .update_boxes .box .icon {
+	width: 60px;
+	height: 60px;
+}
+.updates .update_boxes .box.three .icon {
+	width: 75px;
+	height: 75px;
+}
+.updates .colored_bar {
+	background: #3699ff !important;
+	padding: 30px 40px 30px 40px;
+	min-height: 250px;
+}
+.updates .colored_bar .heading {
+	color: #000b38;
+	font-weight: bold;
+	font-size: 1.15em;
+	text-transform: uppercase;
+}
+.updates .timeline {
+  margin: 20px -20px;
+  list-style: none;
+//   max-width: 500px; 
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+.updates .timeline li {
+  display: inline-block;    
+  text-align: center;
+  width: 100px;   
+  position: relative;
+  margin-bottom: 20px;
+}
+.updates .timeline li:before {
+	content: '';
+    line-height: 35px;
+    width: 5px;
+    height: 5px;
+    display: block;
+    border-radius: 100%;
+    border: 4px solid #fff;
+    margin: 0 auto 15px auto;
+    background: #fff;
+}
+.updates .timeline li:after {
+    content: '';
+    width: 95%;
+    height: 1px;
+    background: #DDD;
+    display: block;
+    position: absolute;
+    top: 3.5px;
+    left: 55%;
+    z-index: 99;
+}
+.updates .timeline li:last-child:after {
+  content: none;
+}
+.updates .timeline li:last-child:before {
+  content: none;
+}
+.updates .timeline li .date {
+	text-transform: uppercase;
+    color: #fff;
+    font-weight: 300;
+}
+.updates .timeline li .numbers {
+	text-transform: uppercase;
+    color: #fff;
+    font-weight: bold;
+    font-size: 2.5em;
+    margin: 10px 0 15px;
+}
+.updates .timeline li .labels {
+	font-size: 1.25em;
+	font-weight: 300;
+	line-height: 20px;
+}
+
+/* Structure */
+
+table {
+    width: 100%;
+    box-shadow: none;
+    border-top: 1px solid #eee;
+  }
+
+  table .th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+      padding: 5px !important;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  .fill-space {
+    flex: 1 1 auto;
+  }
+  
+  ::ng-deep .modal {
+    max-width: 400px !important;
+    height: fit-content !important;
+    padding: 0 !important;
+    .mat-dialog-container {
+      padding: 0 !important;
+    }
+  }
+  
+  .table-filter {
+    display: block !important;
+    margin: 29px;
+    max-width: 800px !important;
+    margin: auto;
+  }
+  
+  ::ng-deep .mat-column-actions {
+    max-width: 40px !important;
+    padding: 5px !important;
+    text-align: center !important;
+  }
+  
+  .pagenation {
+    padding: 0px 25px;
+    margin-top: 10px;
+  }
+  
+  select {
+    width: 60px !important;
+    padding: 0 !important;
+    height: 30px !important;
+  }
+
+ .list-content {
+    margin: 1rem 6.5rem;
+  }
+
+  .table-infos {
+    margin: 0 4rem;
+  }
+
+  

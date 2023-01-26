@@ -1,0 +1,15 @@
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #36aef4;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.has-changed-direction {
+  direction: rtl;
+}
+
+::ng-deep .afu-upload-btn {
+    display: none !important;
+}

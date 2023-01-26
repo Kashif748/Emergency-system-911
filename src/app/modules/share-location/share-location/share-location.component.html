@@ -1,0 +1,32 @@
+<div [dir]="directionality.value"  class="row fluid-container bg-white d-flex flex-column justify-content-center align-items-center container">
+    <h3 class="m-6" *ngIf="(status$ | async) !== locationStatus.JUST_SEND">
+        {{'INCIDENTS.REPORTER_GREETING_MSG' | translate }}
+    </h3>
+
+    <div>
+    <h5 class="text-warning" *ngIf="(status$ | async) == locationStatus.PREVIOUS_SET">
+      {{'INCIDENTS.REPORTER_WARNING_MSG' | translate}}
+    </h5>
+
+    <h5 class="text-success" *ngIf="(status$ | async) == locationStatus.JUST_SEND">
+      {{'INCIDENTS.REPORTER_THANKS_MSG' | translate}}
+    </h5>
+    
+    
+    
+    
+    <!-- <button  class="btn btn-md btn-light-primary d-flex justify-self-center font-weight-bolder cursor-pointer mx-auto my-3"
+    (click)="onNewLocation(false)"
+    >
+                  {{ "INCIDENTS.NEW_LOCATION" | translate }}
+                  <span
+                    [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md"
+                  ></span>
+                </button> -->
+    </div>
+    <app-map style="width: 95%; height: 50%;" (OnSaveMap)="OnSaveMap($event)" *ngIf="(status$ | async) == locationStatus.NOT_SEND" [configData]="mapConfigData"></app-map>
+
+    
+</div>

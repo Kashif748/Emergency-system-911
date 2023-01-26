@@ -1,0 +1,264 @@
+.resources-charts {
+  .card-custom {
+    color: #194182;
+  }
+}
+h3 .card-label {
+  color: #194182;
+}
+.resources {
+  margin: auto;
+  mat-toolbar {
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 2px;
+  }
+
+  .table-filter {
+    display: block !important;
+    margin: 29px;
+    max-width: 800px !important;
+    margin: auto;
+  }
+
+  table {
+    width: 100%;
+    box-shadow: none;
+    border-top: 1px solid #eee;
+  }
+
+  .td-arabic {
+    text-align: right;
+  }
+}
+
+::ng-deep .mat-column-actions {
+  max-width: 60px !important;
+  padding: 5px !important;
+  text-align: center !important;
+}
+
+::ng-deep .modal {
+  max-width: 400px !important;
+  height: fit-content !important;
+  padding: 0 !important;
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+}
+
+.resources-charts {
+  .card-custom {
+    min-height: 400px;
+  }
+}
+
+// .resources {
+//   margin: auto;
+//   mat-toolbar {
+//     border-radius: 10px 10px 0 0;
+//     border-bottom: 1px solid #eee;
+//     padding-bottom: 2px;
+//   }
+
+//   .table-filter {
+//     display: block !important;
+//     margin: 29px;
+//     max-width: 800px !important;
+//     margin: auto;
+//   }
+
+//   table {
+//     width: 100%;
+//     box-shadow: none;
+//     border-top: 1px solid #eee;
+//   }
+
+//   .td-arabic {
+//     text-align: right;
+//   }
+// }
+
+::ng-deep .mat-column-actions {
+  max-width: 60px !important;
+  padding: 5px !important;
+  text-align: center !important;
+}
+
+::ng-deep .modal {
+  max-width: 400px !important;
+  height: fit-content !important;
+  padding: 0 !important;
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+}
+
+.resources {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.card-custom {
+  box-shadow: none;
+}
+
+.search-bar {
+  display: flex;
+  width: 100%;
+
+  padding: 14px;
+  align-items: center;
+  overflow: hidden;
+
+  .table-filter {
+    display: block !important;
+    width: 100%;
+  }
+}
+
+.advanced-search {
+  box-shadow: none;
+  width: 100%;
+
+  mat-expansion-panel-header {
+    box-shadow: none !important;
+    border: none !important;
+    display: block;
+    padding: 0 !important;
+    height: fit-content;
+
+    mat-form-field {
+      padding: 0 !important;
+    }
+  }
+}
+
+.incidents-container {
+  margin: 0 6% 0 6%;
+}
+
+.tasklist:hover {
+  background-color: #f7f7f7;
+}
+
+table {
+  position: relative;
+  width: 100%;
+  box-shadow: none;
+  border-spacing: 0 15px;
+  border-collapse: separate;
+
+  tr {
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: rgb(245, 245, 245);
+      cursor: pointer;
+    }
+  }
+
+  thead th,
+  thead td {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+  }
+
+  tr:last-child,
+  td:last-child {
+    border-top-left-radius: 0.42rem !important;
+    border-bottom-left-radius: 0.42rem !important;
+  }
+
+  tr:first-child,
+  td:first-child {
+    border-top-right-radius: 0.42rem !important;
+    border-bottom-right-radius: 0.42rem !important;
+  }
+}
+
+.table.table-head-bg thead th {
+  &:first-child,
+  &:last-child {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+  }
+}
+
+.spinner-container {
+  background-color: rgb(243, 243, 243);
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-white {
+  color: white !important;
+}
+
+table,
+tr:first-child,
+table,
+td:first-child {
+  border-top-right-radius: 0.42rem !important;
+  border-bottom-right-radius: 0.42rem !important;
+}
+
+.search-bar {
+  display: flex;
+  width: 100%;
+
+  padding: 14px;
+  align-items: center;
+  overflow: hidden;
+
+  .table-filter {
+    display: block !important;
+    width: 100%;
+  }
+}
+
+
+
+.red {
+  color: red;
+}
+.active {
+  color: green;
+}
+
+
+
+
+.td-arabic {
+  text-align: right;
+}
+
+.table-filter {
+  display: block !important;
+  margin: 29px;
+  max-width: 800px !important;
+  margin: auto;
+}
+
+table {
+  width: 100%;
+  box-shadow: none;
+  border-top: 1px solid #eee;
+}
+
+.td-arabic {
+  text-align: right;
+}
+
+::ng-deep .mat-column-actions {
+  max-width: 40px !important;
+  padding: 5px !important;
+  text-align: center !important;
+}
+
+
+.table.table-head-bg thead tr, .table.table-head-bg thead th{
+  background-color: transparent !important;
+}

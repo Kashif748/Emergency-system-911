@@ -1,0 +1,327 @@
+
+.general {
+  max-width: 100%;
+  transition: transform .5s ease;
+}
+
+.general1 {
+  max-width: 100%;
+  transition: transform .5s ease;
+}
+
+.titles {
+color: #000b38;
+font-size: 1.40em;
+text-transform: uppercase;
+font-weight: bold;
+position: relative;
+margin-bottom: 15px;
+}
+
+.titles:after {
+position: absolute;
+  content: "";
+  width: 200px;
+  border-bottom: 3px solid #3699ff;
+  bottom: -10px;
+  left: 0;
+}
+
+
+.card-header {
+    padding: 1rem 1.25rem !important;
+}
+
+.card-body {
+    padding: 0px !important;
+}
+
+.list-group li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+// .custom-scrollbar-css {
+//     // height: 200px;
+//   }
+  
+  
+  /* Custom Scrollbar using CSS */
+  .custom-scrollbar-css {
+    overflow-y: scroll;
+  }
+  
+  /* scrollbar width */
+  .custom-scrollbar-css::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* scrollbar track */
+  .custom-scrollbar-css::-webkit-scrollbar-track {
+    background: #eee;
+  }
+  
+  /* scrollbar handle */
+  .custom-scrollbar-css::-webkit-scrollbar-thumb {
+    border-radius: 1rem;
+    background-color: #a77adb;
+    background-image: linear-gradient(to top, #a77adb 0%, #9329bd 100%);
+  }
+
+  .number {
+    font-size: 50px !important;
+    line-height: 60px !important;
+  }
+  
+  .card {
+    margin-bottom: 15px;
+    border-radius: 10px !important;
+  }
+  
+  .alert-text {
+    // animation: color-change 4s infinite;
+    color: rgb(225, 149, 37) !important;
+    animation: reveal 2000ms ease-in-out forwards 100ms,
+      glow 2000ms linear infinite 1000ms;
+  }
+  
+  .pulse {
+    border: 1px solid rgba(54, 153, 255, 0.4);
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 0 rgba(54, 153, 255, 0.4);
+    animation: pulse 2s infinite;
+  }
+  .pulse:hover {
+    animation: none;
+  }
+  
+  @-webkit-keyframes pulse {
+    0% {
+      -webkit-box-shadow: 0 0 0 0 rgba(54, 153, 255, 0.4);
+    }
+    70% {
+      -webkit-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+    }
+    100% {
+      -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    }
+  }
+  @keyframes pulse {
+    0% {
+      -moz-box-shadow: 0 0 0 0 rgba(54, 153, 255, 0.4);
+      box-shadow: 0 0 0 0 rgba(54, 153, 255, 0.4);
+    }
+    70% {
+      -moz-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+      box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+    }
+    100% {
+      -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+      box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    }
+  }
+  
+  @keyframes reveal {
+    80% {
+      letter-spacing: 8px;
+    }
+    100% {
+      background-size: 300% 300%;
+    }
+  }
+  @keyframes glow {
+    0% {
+      text-shadow: 0 0 7px rgb(225, 149, 37);
+    }
+    40% {
+      text-shadow: 0 0 14px rgb(225, 149, 37);
+    }
+    80% {
+      text-shadow: 0 0 0px rgb(225, 149, 37);
+    }
+    100% {
+      text-shadow: 0 0 7px rgb(225, 149, 37);
+    }
+  }
+  
+
+  .top-statistics {
+    padding: 0;
+    list-style: none;
+    height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.top-statistics li {
+  text-align: left;
+  height: 100%;
+  -ms-flex: 1 1 100%;
+  flex: 1 1 100%;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  margin-right: 10px;
+  color: #303030;
+  padding: 10px;
+  height: 172px;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #fff;
+  transition: all .4s ease-in-out;
+  -ms-transform: scale(0.8);
+  transform: scale(0.8);
+}
+
+.top-statistics li.doses {
+  background-color: #fdecd1;
+}
+
+.top-statistics.with-doses li div .icon {
+  width: 45px;
+  height: 40px;
+}
+
+.top-statistics.with-doses li .counter {
+  font-size: 2.3077em;
+}
+
+.top-statistics li div .icon {
+  font-size: 100px;
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  width: 54px;
+  height: 50px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url(../../../../assets/images/icon_1.png);
+}
+
+.top-statistics.with-doses li label.total-doses {
+  font-size: 1.0769em;
+  width: 70%;
+}
+
+
+
+.top-statistics li label {
+  font-size: 1.2308em;
+  line-height: 20px;
+  display: block;
+  width: 35%;
+  margin: 0;
+  height: 40px;
+  padding-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.top-statistics li .counter {
+  font-size: 2.7692em;
+  display: block;
+  font-weight: 800;
+  margin-top: 15px;
+  text-align: center;
+  direction: ltr;
+}
+
+.top-statistics li div.new-cases {
+  padding: 5px;
+}
+
+.top-statistics li div.new-cases span.doses {
+  background-color: #f5c87b;
+}
+
+.top-statistics li div.new-cases span.tests {
+  background-color: #d5f4f6;
+}
+
+.top-statistics li div.new-cases span.bed {
+  background-color: #ffb4b1;
+}
+
+.top-statistics li div.new-cases span.vaccinated {
+  background-color: #bce5ba;
+}
+
+.top-statistics li div.new-cases span.volunteers {
+  background-color: #b3ddef;
+}
+.top-statistics li div.new-cases span {
+  padding: 5px 2px;
+  width: 100%;
+  border-radius: 15px;
+  text-align: center;
+  font-weight: bold;
+  display: block;
+}
+
+
+
+/* Structure */
+
+table {
+  width: 100%;
+  box-shadow: none;
+  border-top: 1px solid #eee;
+}
+
+table .th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+    padding: 5px !important;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.fill-space {
+  flex: 1 1 auto;
+}
+
+::ng-deep .modal {
+  max-width: 400px !important;
+  height: fit-content !important;
+  padding: 0 !important;
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+}
+
+.table-filter {
+  display: block !important;
+  margin: 29px;
+  max-width: 800px !important;
+  margin: auto;
+}
+
+::ng-deep .mat-column-actions {
+  max-width: 40px !important;
+  padding: 5px !important;
+  text-align: center !important;
+}
+
+.pagenation {
+  padding: 0px 25px;
+  margin-top: 10px;
+}
+
+select {
+  width: 60px !important;
+  padding: 0 !important;
+  height: 30px !important;
+}
+
+.list-content {
+  margin: 1rem;
+}
+
+.table-infos {
+  margin: 0 4rem;
+}

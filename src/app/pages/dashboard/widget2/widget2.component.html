@@ -1,0 +1,32 @@
+<div class="card card-custom card-stretch shadow-none">
+  <div class="card-body row p-5" style="padding-top: 0 !important">
+    <div class="col-md-6 item p-3" *ngFor="let widget of widgets">
+      <!--begin::Stats Widget 27-->
+      <div
+        class="card card-custom bg-light-{{ widget['color'] }} bgi-no-repeat"
+      >
+        <!--begin::Body-->
+        <div class="card-body p-2 d-flex flex-column">
+          <div class="content p-0">
+            <span
+              class="d-block value text-{{
+                widget['color']
+              }} font-weight-bolder"
+              >{{ widget["count"] }}
+            </span>
+
+            <span
+              class="card-title font-size-h5  text-{{
+                widget['color']
+              }} font-weight-bold m-0 d-block number"
+            >
+              {{ widget | propTranslator : "name" }}
+            </span>
+          </div>
+        </div>
+        <!--end::Body-->
+      </div>
+      <!--end::Stats Widget 27-->
+    </div>
+  </div>
+</div>

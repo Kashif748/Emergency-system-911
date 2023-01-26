@@ -1,0 +1,14 @@
+:host {
+  text-align: center;
+  display: block;
+  overflow: hidden;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  mat-icon {
+    font-size: 70px !important;
+    width: 60px !important;
+  }
+}

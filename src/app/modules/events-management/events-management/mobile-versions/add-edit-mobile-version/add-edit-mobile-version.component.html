@@ -1,0 +1,105 @@
+<div
+  class="card card-custom"
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  style="overflow: hidden">
+  <div class="card-header p-2">
+    <div class="card-title">
+      <span>{{"EVENTSMODULES.MOBILE_VERSIONS" | translate}}</span>
+
+      <span
+        *ngIf="!id"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="id"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body px-3">
+    <form [formGroup]="formGroup">
+      <mat-form-field appearance="fill" class="w-100">
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.LAST_SUPPORT_VERSION' | translate }}"
+          type="number"
+          formControlName="lastSupportedVersion"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-100">
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.RELEASE_LINK' | translate }}"
+          type="text"
+          formControlName="releaseLink"
+        />
+        <mat-error
+          *ngIf="!formGroup.get('releaseLink')?.valid &&  formGroup.get('releaseLink')?.touched">
+          {{ "VALIDATION_MSG.INVALID_URL" | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-100">
+        <textarea
+          matInput
+          placeholder="{{ 'EVENTSMODULES.RELEASE_NOTE' | translate }} "
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="6"
+          formControlName="releaseNote"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-100">
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.VERSION_NAME' | translate }} "
+          type="text"
+          formControlName="versionName"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-100">
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.VERSION_NUMBER' | translate }} "
+          type="number"
+          formControlName="versionNumber"
+        />
+      </mat-form-field>
+      <div class="row">
+        <mat-slide-toggle
+          color="primary"
+          formControlName="isActive"
+          class="m-auto"
+        >
+          <span class="mx-4"> {{ "ACTIONS.ACTIVE" | translate }}</span>
+        </mat-slide-toggle>
+      </div>
+    </form>
+    <div class="spinner-container m-auto p-10" *ngIf="isLoading">
+      <mat-spinner class="m-auto" diameter="30"></mat-spinner>
+    </div>
+  </div>
+  <div class="card-footer p-5 d-flex justify-content-between">
+    <button
+      (click)="onSubmit()"
+      type="submit"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ (id ? "ACTIONS.UPDATE" : "ACTIONS.CREATE")| translate }}
+      <span
+        [inlineSVG]="id ? '/assets/media/svg/icons/Files/Cloud-upload.svg': '/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+/*This is a fade in example.*/
+@keyframes fadeIn {
+  0% {
+    display: none;
+    visibility: hidden;
+    max-width: 0;
+    opacity: 0;
+  }
+  1% {
+    display: block;
+    visibility: visible;
+    max-width: auto;
+    opacity: 0;
+  }
+  100% {
+    display: block;
+    visibility: visible;
+    max-width: auto;
+    opacity: 1;
+  }
+}
+/*This is a fade out example. */
+@keyframes fadeOut {
+  0% {
+    display: block;
+    visibility: visible;
+    max-width: auto;
+    opacity: 1;
+  }
+  // 1% {
+  //   display: none;
+  //   visibility: hidden;
+  //   max-width: 0;
+  //   opacity: 1;
+  // }
+  100% {
+    display: none;
+    visibility: hidden;
+    max-width: 0;
+    opacity: 0;
+  }
+}
+.animate {
+  /*put animation attributes here. Here's a list.
+    (https://www.w3schools.com/css/css3_animations.asp)*/
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  //   animation-iteration-count: 1;
+  /*put the default display and opacity here, the same as "0%"*/
+  max-width: auto;
+  opacity: 0;
+}

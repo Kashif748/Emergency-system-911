@@ -1,0 +1,128 @@
+<div class="container-fluid">
+  <section class="d-flex flex-column py-4 my-2">
+    <div class="d-flex w-100">
+      <button
+        class="btn btn-link-primary btn-sm font-weight-bold cursor-pointer"
+        matTooltip="{{ 'SHARED.BACK' | translate }}"
+      >
+        <span
+          inlineSVG="{{
+            lang == 'en'
+              ? '/assets/media/svg/icons/Navigation//Angle-left.svg'
+              : '/assets/media/svg/icons/Navigation//Angle-right.svg'
+          }}"
+          cacheSVG="true"
+          class="svg-icon svg-icon-2x"
+          title="{{ 'SHARED.BACK' | translate }}"
+        ></span>
+      </button>
+
+      <app-breadcrumbs></app-breadcrumbs>
+      <div class="spacer"></div>
+      <div>
+        <button
+          class="btn btn-primary btn-square font-weight-bold cursor-pointer"
+          (click)="newAgenda()"
+          *appPrivileges="'PRIV_CR_INC'"
+        >
+          {{ "AGENDA.new_item" | translate }}
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Files/File-plus.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md"
+          ></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="d-flex my-4">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>{{ "ACTIONS.FILTER_PLACEHOLDER" | translate }}</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input />
+        <mat-icon matSuffix color="primary">search</mat-icon>
+      </mat-form-field>
+    </div>
+  </section>
+</div>
+
+<div class="container-fluid">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="table table-head-custom table-head-bg table-vertical-center"
+  >
+    <ng-container matColumnDef="nameAr">
+      <th mat-header-cell class="text-center" *matHeaderCellDef>
+        {{ "AGENDA.nameAr" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.nameAr }}</td>
+    </ng-container>
+    <ng-container matColumnDef="nameEn">
+      <th mat-header-cell class="text-center" *matHeaderCellDef>
+        {{ "AGENDA.nameEn" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.nameEn }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="shiftsNumber">
+      <th mat-header-cell class="text-center" *matHeaderCellDef>
+        {{ "AGENDA.shiftsNumber" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.shiftsNumber }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isActive">
+      <th mat-header-cell class="text-center" *matHeaderCellDef>
+        {{ "AGENDA.isActive" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let element"></td>
+    </ng-container>
+
+    <ng-container class="text-center" matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "AGENDA.actions" | translate }}
+      </th>
+
+      <td mat-cell *matCellDef="let element">
+        <button
+          class="btn btn-sm btn-clean btn-icon mr-1"
+          (click)="editAgenda(element)"
+          matTooltip="  {{ 'ACTIONS.UPDATE' | translate }}"
+        >
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Communication/Write.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md svg-icon-primary"
+          ></span>
+        </button>
+
+        <button class="btn btn-sm btn-clean btn-icon mr-1">
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/General/Trash.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md svg-icon-danger"
+            matTooltip="  {{ 'ACTIONS.DELETE' | translate }}"
+            (click)="deleteAgenda(element.id)"
+          ></span>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="8">
+        <nodata-table [loading]="loading"></nodata-table>
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    class="rounded rounded-top-0 border-top"
+    (page)="onPagination($event)"
+    [pageSizeOptions]="[10, 30, 60]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>

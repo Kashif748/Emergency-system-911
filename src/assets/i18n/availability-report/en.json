@@ -1,0 +1,32 @@
+{
+  "AVAILABILITY": {
+    "title": "Availability Report",
+    "newReport": "Create Report",
+    "updateShifts": "Update Shifts",
+
+    "chooseArea": "Choose Area",
+    "chooseOption": "Choose status",
+    "activeShift": "Active Chift",
+
+    "org": "org",
+    "frequency": "Frequency",
+    "primary": "primary",
+    "shift1": "shift 1",
+    "shift2": "shift 2",
+    "shift3": "shift 3",
+
+    "prepared": "prepared",
+    "not_prepared": "not_prepared",
+    "inactive": "inactive",
+    "Damage": "Damage",
+    "wait": "Wainting  shift",
+
+    "createdBy": "Created By",
+    "createdOn": "Created On",
+    "isActive": "Active",
+    "status": "Status",
+    "actions": "Actions",
+
+    "active": "active"
+  }
+}

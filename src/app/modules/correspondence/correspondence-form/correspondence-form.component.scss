@@ -1,0 +1,75 @@
+::ng-deep .mat-form-field-flex {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+@mixin sticky {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e8e8e8;
+  position: sticky;
+  width: 100%;
+  left: 0;
+}
+
+.bottom-sheet {
+  width: 100%;
+
+  &__header {
+    padding: 1rem;
+    background-color: white;
+    z-index: 1000;
+
+    @include sticky();
+    top: 0;
+  }
+
+  &__body {
+    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    position: relative;
+  }
+
+  &__footer {
+    padding: 1rem;
+    border-top: 1px solid #e8e8e8;
+    background-color: white;
+    z-index: 1000;
+    @include sticky();
+    bottom: 0;
+  }
+}
+
+:lang(ar) {
+  .send-icon {
+    transform: rotate(180deg);
+  }
+}
+
+.spinner-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(243, 243, 243);
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .dark-mode {
+  .bottom-sheet {
+    background-color: #4b5a61 !important;
+    border-color: var(--separator-color) !important;
+    &__footer,
+    &__header {
+      background-color: #4b5a61 !important;
+      border-color: var(--separator-color) !important;
+    }
+  }
+}

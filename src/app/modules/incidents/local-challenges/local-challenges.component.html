@@ -1,0 +1,81 @@
+<div class="overflow-auto">
+    <mat-toolbar
+      class="d-flex p-0"
+      style="background-color: white"
+    >
+      <div>
+        <button
+          class="btn btn-md btn-primary font-weight-bolder cursor-pointer"
+          type="button"
+          (click)="add()"
+        >
+          {{ "INCIDENTS.NEW_CHALLENGE" | translate }}
+        </button>
+      </div>
+    </mat-toolbar>
+      <div>
+        <table mat-table [dataSource]="dataSource" class="table">
+          <ng-container matColumnDef="challenge">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "INCIDENTS.CHALLENGES" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.challenge }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="requmendations">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "INCIDENTS.RECOMENDATIONS" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.requmendations }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="organization">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "SHARED.ORG" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ 'organization' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+
+            <td mat-cell *matCellDef="let element">
+              <button
+                class="btn btn-sm btn-clean btn-icon mr-1"
+                type="button"
+                (click)="edit(element)"
+              >
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/Communication/Write.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md svg-icon-primary"
+                ></span>
+              </button>
+
+              <button class="btn btn-sm btn-clean btn-icon mr-1" type="button">
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/General/Trash.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md svg-icon-danger"
+                  (click)="delete(element.id)"
+                ></span>
+              </button>
+
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns">
+          </tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              {{ "NO_DATA_FILTER" | translate }}
+            </td>
+          </tr>
+        </table>
+      </div>
+  </div>

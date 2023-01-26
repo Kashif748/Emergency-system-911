@@ -1,0 +1,33 @@
+{
+  "IncidentsStatistics": {
+    "IncidentsStatisticsTitle": "Incident Statistics Report",
+    "centerName": "Incident Location",
+    "org": "Organization",
+    "username": "Full name",
+    "USERS": "Users",
+    "TASKS": "Tasks",
+    "INCIDENTS": "Incidents",
+
+    "mainOrg": "Main Organization",
+    "log": "Registerd",
+    "closed": "Completed",
+    "inProgress": "In Progress",
+    "delayed": "Delayed",
+    "created": "created",
+    "nonAutomated": "Worklogs",
+    "fromDate": "From Date",
+    "toDate": "To  Date",
+    "average": "Completion Percentage",
+    "deleted": "Deleted",
+    "rejected": "Rejected",
+    "allCenters": "All  Centers",
+    "allOrgs": "All Organizations",
+    "defaultDate": "The  default  time period  for  table  and  chart  is for  current month",
+    "mainOrgReportTitle": "Incidents Statistics by Geographic Center ",
+    "locationReportTitle": "Incidents Statistics by Specialized Center ",
+    "usersReportTitle": "User Statistics Report",
+    "organization": "Organization",
+    "exportPdf": "Export To PDF",
+    "exportExcel": "Export To Excel"
+  }
+}

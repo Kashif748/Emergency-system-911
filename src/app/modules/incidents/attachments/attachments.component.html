@@ -1,0 +1,67 @@
+<div class="attachments">
+  <ng-container #attachmentsSection>
+    <button
+      class="btn btn-md btn-primary font-weight-bolder cursor-pointer mb-2"
+      type="button"
+      (click)="uploadInput.click()"
+    >
+      {{ "INCIDENTS.UPLOAD" | translate }}
+    </button>
+    <div class="d-flex align-items-center justify-content-start pb-2">
+      <div
+        class="w-25 mx-2"
+        *ngFor="let att of selectedFilesList; let id = index"
+      >
+        <div class="card text-center">
+          <div class="card-body p-1">
+            <span>
+              {{ att?.fileName }}
+            </span>
+          </div>
+          <div class="card-footer py-1">
+            <button
+              *ngIf="incidentId"
+              mat-icon-button
+              [matTooltip]="'INCIDENTS.DOWNLOAD' | translate"
+              color="accent"
+              type="button"
+              (click)="downloadFile(att.uuid, att.fileName)"
+            >
+              <mat-icon>cloud_download</mat-icon>
+            </button>
+            <button
+              *ngIf="incidentId"
+              mat-icon-button
+              color="warn"
+              [matTooltip]="'INCIDENTS.REMOVE' | translate"
+              type="button"
+              (click)="deleteFile(att.uuid)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              *ngIf="!incidentId"
+              mat-icon-button
+              color="warn"
+              [matTooltip]="'INCIDENTS.REMOVE' | translate"
+              type="button"
+              (click)="deleteFile(id)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="w-100" *ngIf="selectedFilesList.length == 0">
+        <span>{{ "CORRERSPONDENCE.THERE_IS_NO_ATTACHMENTS" | translate }}</span>
+      </div>
+    </div>
+  </ng-container>
+
+  <input
+    type="file"
+    hidden="false"
+    #uploadInput
+    (change)="uploadFiles($event.target.files)"
+  />
+</div>

@@ -1,0 +1,473 @@
+<div
+  class="d-flex align-items-center justify-content-between border-bottom p-5"
+>
+  <h5 class="font-weight-normal m-0">
+    {{
+      (type == "task" ? "TASK.WORKLOG.LABEL" : "INCIDENTS.WORKLOG.LABEL")
+        | translate
+    }}
+  </h5>
+  <div class="text-center text-black-50">
+    <i class="flaticon2-information icon-nm"></i>
+    <em>
+      {{
+        "INCIDENTS.NOTES_WORKLOGS_WILL_GIVE_REALTIME_LOGGING_OF_WORK_BEING_DONE"
+          | translate
+      }}
+    </em>
+  </div>
+</div>
+<div *ngIf="loading">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div id="logs" class="card card-bordered rounded-lg rounded-top-0 mt-3">
+  <perfect-scrollbar
+    #scroll
+    [config]="{ wheelSpeed: 2 }"
+    class="ps-container ps-theme-default ps-active-y"
+    style="
+      scroll-behavior: smooth;
+      scroll-snap-type: proximity;
+      height: 450px !important;
+    "
+  >
+    <div
+      @fadeSlideInOut
+      class="media media-chat"
+      *ngFor="let log of newLogs$ | async"
+      [id]="'msg-' + log.id"
+    >
+      <div class="symbol symbol-circle p-2 bg-gray-200 symbol-65">
+        <img
+          *ngIf="!log?.createdBy?.photo"
+          class="avatar align-self-end"
+          src="./assets/media/users/default.jpg"
+          alt="..."
+        />
+        <img
+          class="avatar align-self-end"
+          *ngIf="log?.createdBy?.photo"
+          [attr.src]="log?.createdBy?.photo | secure"
+        />
+      </div>
+
+      <div class="media-body">
+        <div class="msg-body">
+          <div class="d-flex">
+            <div class="col">
+              <h5 class="msg" [ngClass]="{ 'collapsed-msg': !log.show }">
+                <span
+                  *ngFor="
+                    let item of log?.notes?.split('\<br>');
+                    let index = index;
+                    let count = count
+                  "
+                  (click)="log.show = !log.show"
+                >
+                  {{ !log.show ? item.substr(0, 180) : item }}
+                  <a
+                    class="cursor-pointer"
+                    *ngIf="(item.length > 180 || count > 1) && !log.show"
+                    >{{ "SHARED.SHOW_MORE" | translate }}</a
+                  >
+                  <br />
+
+                  <span *ngIf="index == 0 && !log.show">
+                    <br />
+                    <br />
+                    <br />
+                  </span>
+                </span>
+              </h5>
+            </div>
+            <span
+              *ngIf="priorities | extractValue : log?.priority?.id"
+              class="text-dark font-weight-500 label label-lg label-inline text-black"
+              [ngClass]="
+                'label-' +
+                (priorities | extractValue : log?.priority?.id)?.color
+              "
+            >
+              {{
+                priorities
+                  | extractValue : log?.priority?.id
+                  | propTranslator : "name"
+              }}
+            </span>
+            <span
+              *ngIf="getPriorityNameById(log?.priority?.id)"
+              [class]="priorityStyle"
+            >
+              {{ getPriorityNameById(log?.priority?.id) }}
+            </span>
+          </div>
+          <div class="d-flex align-items-center text-muted">
+            <span
+              class="btn btn-sm p-1 btn-light-primary"
+              *ngIf="log?.hasAttachments"
+              (click)="openBottomSheet(log?.id)"
+            >
+              <i class="fa fa-paperclip file-browser"></i>
+            </span>
+
+            <span class="mx-2">
+              {{ log?.createdOn | customDate | date : "short" }}
+            </span>
+            -
+            <span class="mx-2">
+              {{ log.createdBy | propTranslator : "firstName" }}
+              {{ log.createdBy | propTranslator : "lastName" }}
+            </span>
+            -
+            <span class="font-weight-bold ml-2 font-size-sm">
+              {{
+                lang == "ar"
+                  ? log.createdBy?.orgStructure?.nameAr
+                  : log.createdBy?.orgStructure?.nameEn
+              }}
+            </span>
+            <span
+              *ngIf="log?.updated"
+              class="label label-lg label-light-warning label-inline"
+            >
+              {{ "INCIDENTS.UPDATED" | translate }}
+            </span>
+
+            <div class="spacer"></div>
+            <ng-container
+              [ngTemplateOutlet]="privilageCheck"
+              [ngTemplateOutletContext]="{ log: log }"
+            >
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      @fadeSlideInOut
+      class="media media-chat"
+      *ngFor="let log of dataStream | async"
+      [id]="'msg-' + log.id"
+    >
+      <div class="symbol symbol-circle p-2 bg-gray-200 symbol-65">
+        <img
+          *ngIf="!log?.createdBy?.photo"
+          class="avatar align-self-end"
+          src="./assets/media/users/default.jpg"
+          alt="..."
+        />
+        <img
+          class="avatar align-self-end"
+          *ngIf="log?.createdBy?.photo"
+          [attr.src]="log?.createdBy?.photo | secure"
+        />
+      </div>
+      <div class="media-body">
+        <div class="d-flex">
+          <div class="col">
+            <h5
+              class="msg text-break"
+              [ngClass]="{ 'collapsed-msg': !log.show }"
+            >
+              <span
+                *ngFor="
+                  let item of log?.notes?.split('\<br>');
+                  let index = index;
+                  let count = count
+                "
+                (click)="log.show = !log.show"
+              >
+                {{ !log.show ? item.substr(0, 180) : item }}
+                <a
+                  class="cursor-pointer"
+                  *ngIf="(item.length > 180 || count > 1) && !log.show"
+                  >{{ "SHARED.SHOW_MORE" | translate }}</a
+                >
+                <br />
+
+                <span *ngIf="index == 0 && !log.show">
+                  <br />
+                  <br />
+                  <br />
+                </span>
+              </span>
+            </h5>
+          </div>
+          <span
+            *ngIf="getPriorityNameById(log?.priority?.id)"
+            [class]="priorityStyle"
+          >
+            {{ getPriorityNameById(log?.priority?.id) }}
+          </span>
+        </div>
+
+        <div class="msg d-flex align-items-center text-muted">
+          <span
+            class="btn btn-sm p-1 btn-light-primary"
+            *ngIf="log?.hasAttachments"
+            (click)="openBottomSheet(log?.id)"
+          >
+            <i class="fa fa-paperclip file-browser"></i>
+          </span>
+          <span class="mx-2"
+            >{{ log?.createdOn | customDate | date : "short" }}
+          </span>
+          -
+          <span class="mx-2">
+            {{ log.createdBy | propTranslator : "firstName" }}
+            {{ log.createdBy | propTranslator : "lastName" }}
+          </span>
+          -
+          <span class="font-weight-bold ml-2 font-size-sm">
+            {{
+              lang == "ar"
+                ? log.createdBy?.orgStructure?.nameAr
+                : log.createdBy?.orgStructure?.nameEn
+            }}
+          </span>
+          <span
+            *ngIf="log?.updated"
+            class="label label-lg label-light-warning label-inline"
+          >
+            {{ "INCIDENTS.UPDATED" | translate }}
+          </span>
+
+          <div class="spacer"></div>
+
+          <ng-container
+            [ngTemplateOutlet]="privilageCheck"
+            [ngTemplateOutletContext]="{ log: log }"
+          >
+          </ng-container>
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <!-- load more  btn -->
+    <div class="w-100 p-2 text-center">
+      <button
+        *ngIf="pageIndex <= lastPage"
+        (click)="loadMore()"
+        [disabled]="loading"
+        class="btn btn-md btn-primary font-weight-bold btn-pill w-150px py-1 m-auto"
+      >
+        {{ "ACTIONS.LOAD_MORE" | translate }}
+        <i class="flaticon-up-arrow mx-2" style="transform: rotate(180deg)"></i>
+      </button>
+    </div>
+  </perfect-scrollbar>
+  <div class="bottom-msg-input rounded-lg rounded-top-0">
+    <div class="publisher bt-1 border-light p-2">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>{{ "INCIDENTS.WORKLOG_DESCRIPTION" | translate }}</mat-label>
+        <textarea
+          [(ngModel)]="notes"
+          (keypress)="keydown($event)"
+          matInput
+          #message
+          maxlength="4000"
+           style="height: auto;"
+        ></textarea>
+
+        <button
+          *ngIf="mode == 'edit'"
+          (click)="resetWorkLog()"
+          matSuffix
+          mat-icon-button
+        >
+          <i class="flaticon-cancel"></i>
+        </button>
+      </mat-form-field>
+
+      <div class="d-flex">
+        <label
+          style="display: inherit"
+          for="signature-input"
+          class="publisher-btn file-group btn btn-secondary mx-2 my-0"
+        >
+          <i
+            style="padding-top: 0.3rem"
+            class="fa fa-paperclip file-browser"
+          ></i>
+          <input type="file" />
+          <span
+            *ngIf="files?.length > 0"
+            class="badge badge-success badge-pill position-absolute top-0 right-0"
+          >
+            {{ files?.length }} </span
+          ><span style="width: 9rem; text-align: center">{{
+            lang == "en" ? " Max size 20mb" : "اقل من ٢٠ ميجابايت "
+          }}</span>
+        </label>
+
+        <input
+          #fileInput
+          style="width: 0"
+          id="signature-input"
+          type="file"
+          (change)="filesChanged($event.target.files)"
+          accept=".jpeg,.png,.jpg"
+          multiple
+          [disabled]="uploading"
+        />
+
+        <button
+          *ngIf="mode == 'edit'"
+          class="publisher-btn btn btn-primary m-0"
+          app-throttle-click
+          (ThrottleClick)="updateWorkLog()"
+          [disabled]="uploading"
+          data-abc="true"
+          (keypress)="keydown($event)"
+        >
+          {{ "ACTIONS.UPDATE" | translate }}
+        </button>
+
+        <button
+          *ngIf="mode == 'new'"
+          class="publisher-btn btn btn-primary m-0"
+          app-throttle-click
+          (ThrottleClick)="addWorkLog()"
+          [disabled]="uploading"
+          data-abc="true"
+          (keypress)="keydown($event)"
+        >
+          {{ "ACTIONS.SEND" | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="publisher border-top p-2">
+      <div class="col-12 m-auto p-0">
+        <div class="row mx-2">
+          <mat-form-field
+            appearance="fill"
+            class="col-6"
+            *ngIf="canShowOrgAndPriority()"
+          >
+            <mat-label>{{
+              "INCIDENTS.WORKLOG.PRIVATE_ORGS" | translate
+            }}</mat-label>
+            <mat-chip-list #chipList aria-label="org selection">
+              <mat-chip
+                *ngFor="let org of orgs"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="remove(org)"
+              >
+                {{ org?.orgStructure | propTranslator : "name" }}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input
+                placeholder="{{ 'INCIDENTS.WORKLOG.PICK_ONE' | translate }}"
+                #orgInput
+                [formControl]="orgCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              />
+            </mat-chip-list>
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="selected($event)"
+            >
+              <mat-option
+                *ngFor="let org of filteredOrgs | async"
+                [value]="org"
+              >
+                {{ org?.orgStructure | propTranslator : "name" }}
+              </mat-option>
+              <mat-option *ngIf="allOrgs?.length <= 0" [disabled]="true">
+                {{ "" }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field
+            appearance="fill"
+            class="col-6"
+            *ngIf="canShowOrgAndPriority()"
+          >
+            <mat-label>{{ "TASK.PRIORITY" | translate }}</mat-label>
+            <mat-select
+              placeholder="{{ 'TASK.PRIORITY' | translate }}"
+              [(ngModel)]="priority"
+            >
+              <mat-option
+                *ngFor="let priority of priorities$ | async; let index = index"
+                [value]="priority.id"
+              >
+                {{ priority | propTranslator : "name" }}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #privilageCheck let-log="log">
+  <ng-container
+    *ngIf="
+      log?.createdBy?.id == currentUserId && log.modifiable;
+      else elseTemplate
+    "
+  >
+    <ng-container
+      [ngTemplateOutlet]="actions"
+      [ngTemplateOutletContext]="{ log: log }"
+    >
+    </ng-container>
+  </ng-container>
+
+  <ng-template #elseTemplate>
+    <div
+      *ngIf="
+        currentOrg?.id == log.createdBy?.orgStructure?.id && log.modifiable
+      "
+    >
+      <div *ngIf="type == 'task'">
+        <ng-container
+          *appPrivileges="'PRIV_ED_TSK_WL'"
+          [ngTemplateOutlet]="actions"
+          [ngTemplateOutletContext]="{ log: log }"
+        >
+        </ng-container>
+      </div>
+
+      <div *ngIf="type == 'incident'">
+        <ng-container
+          *appPrivileges="'PRIV_ED_INC_WL'"
+          [ngTemplateOutlet]="actions"
+          [ngTemplateOutletContext]="{ log: log }"
+        >
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>
+
+<!-- actions -->
+<ng-template #actions let-log="log">
+  <div>
+    <button
+      [attr.data-actionvalue]="'editWorkLog'"
+      (click)="setEditMode(log)"
+      class="btn btn-icon btn-hover-light-primary btn-circle btn-sm mr-2"
+    >
+      <i class="flaticon2-edit"></i>
+    </button>
+    <button
+      [attr.data-actionvalue]="'deleteWorkLog'"
+      (click)="deleteWorkLog(log)"
+      class="btn btn-icon btn-hover-light-danger btn-circle btn-sm mr-2"
+    >
+      <i class="flaticon2-rubbish-bin-delete-button"></i>
+    </button>
+  </div>
+</ng-template>

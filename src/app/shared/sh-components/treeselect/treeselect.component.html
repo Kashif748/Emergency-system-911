@@ -1,0 +1,68 @@
+<div #container [ngClass]="containerClass()" (click)="onClick($event)">
+  <div class="p-hidden-accessible">
+    <input #focusInput type="text" role="listbox" [attr.id]="inputId" readonly [disabled]="disabled" (focus)="onFocus()"
+      (blur)="onBlur()" (keydown)="onKeyDown($event)" [attr.tabindex]="tabindex" aria-haspopup="true"
+      [attr.aria-expanded]="overlayVisible" [attr.aria-labelledby]="ariaLabelledBy" />
+  </div>
+  <div class="p-treeselect-label-container">
+    <div [ngClass]="labelClass()">
+      <ng-container *ngIf="valueTemplate; else defaultValueTemplate">
+        <ng-container *ngTemplateOutlet="
+            valueTemplate;
+            context: { $implicit: value, placeholder: placeholder }
+          "></ng-container>
+      </ng-container>
+      <ng-template #defaultValueTemplate>
+        <ng-container *ngIf="display === 'comma'; else chipsValueTemplate">
+          {{ label || 'empty' }}
+        </ng-container>
+        <ng-template #chipsValueTemplate>
+          <div *ngFor="let node of value" class="p-treeselect-token">
+            <span class="p-treeselect-token-label">{{ node | translateObj : 'label' }}</span>
+          </div>
+          <ng-container *ngIf="emptyValue">{{
+            placeholder || 'empty'
+            }}</ng-container>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+  <div class="p-treeselect-trigger">
+    <span class="p-treeselect-trigger-icon pi pi-chevron-down"></span>
+  </div>
+  <div #overlayRef class="p-treeselect-panel p-component" *ngIf="overlayVisible" (click)="onOverlayClick($event)"
+    [@overlayAnimation]="{
+      value: 'visible',
+      params: {
+        showTransitionParams: showTransitionOptions,
+        hideTransitionParams: hideTransitionOptions
+      }
+    }" (@overlayAnimation.start)="onOverlayAnimationStart($event)"
+    (@overlayAnimation.done)="onOverlayAnimationDone($event)">
+    <ng-container *ngTemplateOutlet="
+        headerTemplate;
+        context: { $implicit: value, options: options }
+      "></ng-container>
+    <div class="p-treeselect-items-wrapper" [ngStyle]="{ 'max-height': scrollHeight }">
+      <p-tree [value]="options" [selectionMode]="selectionMode" (selectionChange)="onSelectionChange($event)"
+        [selection]="value" [metaKeySelection]="metaKeySelection" (onNodeExpand)="nodeExpand($event)"
+        (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="onSelect($event)" (onNodeUnselect)="onUnselect($event)"
+        [filter]="filter" [filterBy]="filterBy" [propagateSelectionDown]="propagateSelectionDown"
+        [propagateSelectionUp]="propagateSelectionUp">
+        <ng-template let-node pTemplate="default">
+          {{node | translateObj : 'label'}}
+        </ng-template>
+      </p-tree>
+      <div *ngIf="emptyOptions" class="p-treeselect-empty-message">
+        <ng-container *ngIf="!emptyTemplate">
+          {{ emptyMessageText }}
+        </ng-container>
+        <ng-container *ngTemplateOutlet="emptyTemplate"></ng-container>
+      </div>
+    </div>
+    <ng-container *ngTemplateOutlet="
+        footerTemplate;
+        context: { $implicit: value, options: options }
+      "></ng-container>
+  </div>
+</div>

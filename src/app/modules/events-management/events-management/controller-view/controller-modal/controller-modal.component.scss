@@ -1,0 +1,21 @@
+form {
+  mat-form-field {
+    display: block !important;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #ccc !important;
+}
+
+.colors-list {
+  display: flex;
+  flex-wrap: wrap;
+  .label {
+    width: 30px;
+    height: 30px;
+  }
+}

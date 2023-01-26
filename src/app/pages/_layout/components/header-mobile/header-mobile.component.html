@@ -1,0 +1,303 @@
+<div *ngIf="false" class="card card-custom gutter-b card-stretch">
+  <!--begin::Body-->
+  <div class="card-body text-center pt-4">
+    <!--begin::Toolbar-->
+    <div class="d-flex justify-content-end">
+      <div
+        class="dropdown dropdown-inline"
+        data-toggle="tooltip"
+        title=""
+        data-placement="left"
+        data-original-title="Quick actions"
+      >
+        <a
+          href="#"
+          class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="ki ki-bold-more-hor"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+          <!--begin::Navigation-->
+          <ul class="navi navi-hover">
+            <li class="navi-header font-weight-bold py-4">
+              <span class="font-size-lg">Choose Label:</span>
+              <i
+                class="flaticon2-information icon-md text-muted"
+                data-toggle="tooltip"
+                data-placement="right"
+                title=""
+                data-original-title="Click to learn more..."
+              ></i>
+            </li>
+            <li class="navi-separator mb-3 opacity-70"></li>
+            <li class="navi-item">
+              <a href="#" class="navi-link">
+                <span class="navi-text">
+                  <span class="label label-xl label-inline label-light-success"
+                    >Customer</span
+                  >
+                </span>
+              </a>
+            </li>
+            <li class="navi-item">
+              <a href="#" class="navi-link">
+                <span class="navi-text">
+                  <span class="label label-xl label-inline label-light-danger"
+                    >Partner</span
+                  >
+                </span>
+              </a>
+            </li>
+            <li class="navi-item">
+              <a href="#" class="navi-link">
+                <span class="navi-text">
+                  <span class="label label-xl label-inline label-light-warning"
+                    >Suplier</span
+                  >
+                </span>
+              </a>
+            </li>
+            <li class="navi-item">
+              <a href="#" class="navi-link">
+                <span class="navi-text">
+                  <span class="label label-xl label-inline label-light-primary"
+                    >Member</span
+                  >
+                </span>
+              </a>
+            </li>
+            <li class="navi-item">
+              <a href="#" class="navi-link">
+                <span class="navi-text">
+                  <span class="label label-xl label-inline label-light-dark"
+                    >Staff</span
+                  >
+                </span>
+              </a>
+            </li>
+            <li class="navi-separator mt-3 opacity-70"></li>
+            <li class="navi-footer py-4">
+              <a class="btn btn-clean font-weight-bold btn-sm" href="#">
+                <i class="ki ki-plus icon-sm"></i>Add new</a
+              >
+            </li>
+          </ul>
+          <!--end::Navigation-->
+        </div>
+      </div>
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::User-->
+    <div class="mt-7">
+      <div class="symbol symbol-circle symbol-lg-75">
+        <img
+          src="/metronic/theme/html/demo1/dist/assets/media/users/300_14.jpg"
+          alt="image"
+        />
+      </div>
+      <div class="symbol symbol-lg-75 symbol-circle symbol-primary d-none">
+        <span class="font-size-h3 font-weight-boldest">JB</span>
+      </div>
+    </div>
+    <!--end::User-->
+    <!--begin::Name-->
+    <div class="my-2">
+      <a
+        href="#"
+        class="text-dark font-weight-bold text-hover-primary font-size-h4"
+        >John Beans</a
+      >
+    </div>
+    <!--end::Name-->
+    <!--begin::Label-->
+    <span
+      class="
+        label label-inline label-lg label-light-warning
+        btn-sm
+        font-weight-bold
+      "
+      >Active</span
+    >
+    <!--end::Label-->
+    <!--begin::Buttons-->
+    <div class="mt-9 mb-6">
+      <a href="#" class="btn btn-md btn-icon btn-light-facebook btn-pill mx-2">
+        <i class="socicon-facebook"></i>
+      </a>
+      <a href="#" class="btn btn-md btn-icon btn-light-twitter btn-pill mx-2">
+        <i class="socicon-twitter"></i>
+      </a>
+      <a href="#" class="btn btn-md btn-icon btn-light-linkedin btn-pill mx-2">
+        <i class="socicon-linkedin"></i>
+      </a>
+    </div>
+    <!--end::Buttons-->
+  </div>
+  <!--end::Body-->
+</div>
+
+
+<app-user-dropdown-inner
+  [isMobileView]="true"
+  [dir]="dir"
+></app-user-dropdown-inner>
+
+<ng-container *ngIf="navigationsList$ | async as navigationsList">
+  <mat-accordion *ngIf="navigationsList.length > 0">
+    <ng-container *ngFor="let item of navigationsList">
+      <ul class="navi navi-hover navi-active" *ngIf="item?.children == 0">
+        <li class="navi-item">
+          <a
+            *ngIf="item.module.code != 'GIS'"
+            class="navi-link h-100 py-4 px-7 single-item"
+            [class]="'bg-hover-light-primary'"
+            [routerLink]="
+              item.module.code == 'PRVPOS' ? [] : item?.module.routing
+            "
+            (click)="item.module.code == 'PRVPOS' ? openAlertDialog() : ''"
+          >
+            <span class="symbol symbol-35 symbol-circle">
+              <img
+                *ngIf="isEnquiry(item?.module?.code) == true"
+                class="pixelated ml-2 mr-2"
+                [src]="
+                  './assets/media/svg/icons/' + item?.module?.icon + '.png'
+                "
+              />
+            </span>
+
+            <div class="d-flex flex-column" *ngIf="dir == 'rtl'">
+              <span class="navi-text font-size-lg font-weight-bold text-dark">
+                {{ item.module.nameAr }}
+              </span>
+
+              <span class="text-muted" style="font-size: 12px">{{
+                item.module?.descAr
+              }}</span>
+            </div>
+            <div class="d-flex flex-column" *ngIf="dir == 'ltr'">
+              <span class="navi-text font-size-lg font-weight-bold text-dark">
+                {{ item.module.nameEn }}
+              </span>
+              <span class="font-size-sm text-muted">
+                <span class="font-size-sm text-muted">{{
+                  item.module?.descEn
+                }}</span></span
+              >
+            </div>
+          </a>
+        </li>
+      </ul>
+      <mat-expansion-panel *ngIf="item?.children != 0">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span *ngIf="dir == 'rtl'" class="menu-text">
+              {{ item.module.nameAr }}
+            </span>
+            <span *ngIf="dir == 'ltr'" class="menu-text">
+              {{ item.module.nameEn }}
+            </span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <ul class="navi navi-hover navi-active">
+          <li
+            *ngFor="let child of item.children; let i = index"
+            class="navi-item"
+          >
+            <ng-container *ngIf="child.children.length == 0">
+              <a
+                *ngIf="child.module.code != 'GIS'"
+                class="navi-link py-2 h-100 rounded-lg"
+                [class]="'bg-hover-light-primary'"
+                [routerLink]="
+                  child.module.code == 'PRVPOS' ? [] : child?.module.routing
+                "
+                (click)="child.module.code == 'PRVPOS' ? openAlertDialog() : ''"
+              >
+                <span class="symbol symbol-35 symbol-circle">
+                  <img
+                    *ngIf="isEnquiry(child?.module?.code) == true"
+                    class="pixelated ml-2 mr-2"
+                    [src]="
+                      './assets/media/svg/icons/' + child?.module?.icon + '.png'
+                    "
+                  />
+                  <span
+                    *ngIf="isEnquiry(child?.module?.code) == false"
+                    [inlineSVG]="
+                      './assets/media/svg/icons/' + child?.module?.icon + '.svg'
+                    "
+                    cacheSVG="true"
+                    [class]="
+                      child?.module?.icon == 'Design/Circle'
+                        ? 'svg-icon mr-2 ml-2  svg-icon-primary symbol-label '
+                        : 'svg-icon mr-2 ml-2 symbol-label svg-icon-' +
+                          getColor(i)
+                    "
+                  ></span>
+                </span>
+
+                <div class="d-flex flex-column" *ngIf="dir == 'rtl'">
+                  <span
+                    class="navi-text font-size-lg font-weight-bold text-dark"
+                  >
+                    {{ child.module.nameAr }}
+                  </span>
+
+                  <span class="text-muted" style="font-size: 12px">{{
+                    child.module?.descAr
+                  }}</span>
+                </div>
+                <div class="d-flex flex-column" *ngIf="dir == 'ltr'">
+                  <span
+                    class="navi-text font-size-lg font-weight-bold text-dark"
+                  >
+                    {{ child.module.nameEn }}
+                  </span>
+                  <span class="font-size-sm text-muted">
+                    <span class="font-size-sm text-muted">{{
+                      child.module?.descEn
+                    }}</span></span
+                  >
+                </div>
+              </a>
+              <a
+                class="navi-link h-100 py-2"
+                *ngIf="child.module.code == 'GIS'"
+                [href]="child.module?.routing"
+                [target]="'_blank'"
+              >
+                <span class="symbol symbol-35 symbol-circle mr-3">
+                  <span
+                    [inlineSVG]="
+                      './assets/media/svg/icons/' + child?.module.icon + '.svg'
+                    "
+                    cacheSVG="true"
+                    [class]="
+                      child?.module.icon == 'Design/Circle'
+                        ? 'svg-icon mr-2 ml-2  svg-icon-primary'
+                        : 'svg-icon mr-2 ml-2 symbol-label svg-icon-' +
+                          getColor(i)
+                    "
+                  ></span>
+                </span>
+                <span class="navi-text font-size-lg font-weight-bold text-dark">
+                  <span *ngIf="dir == 'rtl'" class="navi-text">
+                    {{ child.module.nameAr }}
+                  </span>
+                  <span *ngIf="dir == 'ltr'" class="navi-text">
+                    {{ child.module.nameEn }}
+                  </span>
+                </span>
+              </a>
+            </ng-container>
+          </li>
+        </ul>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
+</ng-container>

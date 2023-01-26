@@ -1,0 +1,9 @@
+<!--begin::Header Logo-->
+<div class="header-logo px-1" *ngIf="orgLogo" dir="ltr">
+  <img
+    [attr.src]="'assets/logos/' + orgLogo"
+    alt=""
+    [class]="isMobileView ? 'max-w-150px max-h-70px' : 'max-w-200px max-h-100'"
+  />
+</div>
+<!--end::Header Logo-->

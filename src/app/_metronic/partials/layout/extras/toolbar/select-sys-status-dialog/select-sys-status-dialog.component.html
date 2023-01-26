@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>{{ "SYS_STATUS.TITLE" | translate }}</h1>
+<div mat-dialog-content class="w-450px">
+  <p>{{ "SYS_STATUS.DETAILS" | translate }}</p>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>{{ "SYS_STATUS.TITLE" | translate }}</mat-label>
+    <mat-select [formControl]="control">
+      <mat-option>-- {{ "SHARED.NONE" | translate }} --</mat-option>
+      <mat-option value="golden" class="golden">{{
+        "SYS_STATUS.GOLDEN" | translate
+      }}</mat-option>
+      <mat-option value="silver" class="silver">{{
+        "SYS_STATUS.SILVER" | translate
+      }}</mat-option>
+      <mat-option value="bronze" class="bronze">{{
+        "SYS_STATUS.BRONZE" | translate
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field
+    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+    class="w-100"
+    appearance="fill"
+    *ngIf="control.value"
+  >
+    <mat-label
+      >{{ "SHARED.REASON" | translate }}
+      <span class="required-asterisk">*</span>
+    </mat-label>
+
+    <textarea rows="5" [formControl]="reasonControl" matInput></textarea>
+
+    <mat-error>
+      {{ "SHARED.REQUIRED_FIELD" | translate }}
+    </mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="d-flex">
+  <button
+    mat-button
+    mat-dialog-close
+    (click)="cancel()"
+    class="{{ 'm' + (lang == 'en' ? 'l' : 'r') + '-auto' }}"
+  >
+    {{ "ACTIONS.CANCEL" | translate }}
+  </button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial>
+    {{ "ACTIONS.SAVE" | translate }}
+  </button>
+</div>

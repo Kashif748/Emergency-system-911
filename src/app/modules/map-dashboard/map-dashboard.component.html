@@ -1,0 +1,503 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row bg-white rounded-lg border h-100">
+        <div class="col-12">
+          <form [formGroup]="form" class="row py-4">
+            <div class="col-12 mb-4 mt-2 text-center">
+              <mat-slide-toggle (change)="chartToggle($event)"
+                >{{ "MAP_DASHBOARD.SHOW_CHARTS" | translate }}
+              </mat-slide-toggle>
+            </div>
+
+            <app-layers-input
+              class="col-12"
+              appearance="fill"
+              formControlName="layers"
+              label="{{ 'MAP_DASHBOARD.FILTERS.LAYERS' | translate }}"
+              placeholder="{{ 'CORRERSPONDENCE.PICK_ONE' | translate }}"
+            >
+            </app-layers-input>
+
+            <app-orgs-input
+              class="col-12"
+              appearance="fill"
+              formControlName="orgs"
+              label="{{ 'MAP_DASHBOARD.FILTERS.ORGS' | translate }}"
+              placeholder="{{ 'CORRERSPONDENCE.PICK_ONE' | translate }}"
+            >
+            </app-orgs-input>
+
+            <mat-form-field
+              [dir]="dir$ | async"
+              appearance="fill"
+              class="col-12"
+            >
+              <mat-label>{{ "TASK.PRIORITY" | translate }}</mat-label>
+              <mat-select
+                placeholder="{{ 'TASK.PRIORITY' | translate }}"
+                formControlName="priority"
+              >
+                <mat-option
+                  *ngFor="let priority of commonData?.priorities"
+                  [value]="priority.id"
+                >
+                  {{ lang === "en" ? priority?.nameEn : priority?.nameAr }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="col-12">
+              <mat-label>{{
+                "MAP_DASHBOARD.FILTERS.EMERGENCY_LEVEL" | translate
+              }}</mat-label>
+              <mat-select
+                placeholder="{{ 'INCIDENTS.EMERGENCYLEVELS' | translate }}"
+                formControlName="level"
+              >
+                <mat-option
+                  *ngFor="let level of commonData?.emergencyLevels"
+                  [value]="level?.id"
+                >
+                  {{ level?.level }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field
+              [dir]="dir$ | async"
+              appearance="fill"
+              [floatLabel]="'never'"
+              class="col-12"
+            >
+              <mat-label>{{
+                "MAP_DASHBOARD.FILTERS.FROM_DUE+INC_DATE" | translate
+              }}</mat-label>
+
+              <input
+                matInput
+                type="datetime-local"
+                [min]="minDate"
+                [max]="maxDate"
+                formControlName="fromDueDate"
+              />
+              <!-- <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" formControlName="fromDueDate"
+              [min]="minDate" [max]="maxDate" [disabled]="disabled">
+           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+             <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
+              [touchUi]="touchUi" [enableMeridian]="enableMeridian" 
+              >
+              </ngx-mat-datetime-picker> -->
+            </mat-form-field>
+
+            <mat-form-field
+              [dir]="dir$ | async"
+              appearance="fill"
+              class="col-12"
+            >
+              <mat-label>{{
+                "MAP_DASHBOARD.FILTERS.TO_DUE+INC_DATE" | translate
+              }}</mat-label>
+
+              <input
+                matInput
+                type="datetime-local"
+                [min]="minDate"
+                [max]="maxDate"
+                formControlName="toDueDate"
+              />
+              <!-- <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" formControlName="toDueDate"
+              [min]="minDate" [max]="maxDate" [disabled]="disabled">
+           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+             <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
+              [touchUi]="touchUi" [enableMeridian]="enableMeridian" 
+              >
+              </ngx-mat-datetime-picker> -->
+            </mat-form-field>
+          </form>
+
+          <div class="row mt-5">
+            <div class="col-6 d-flex">
+              <button
+                class="btn btn-light-primary w-100 ml-dir-auto"
+                (click)="search()"
+              >
+                {{ "ACTIONS.FILTER" | translate }}
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/General/Search.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md"
+                ></span>
+              </button>
+            </div>
+            <div class="col-6 d-flex">
+              <button
+                class="btn btn-light-primary w-100 mr-dir-auto"
+                (click)="clear()"
+              >
+                {{ "ACTIONS.CLEAR" | translate }}
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/Media/Repeat.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div #mapView id="map" class="w-100 h-100 border"></div>
+    </div>
+    <div
+      class="col-md-3 animate"
+      [ngStyle]="{ animationName: showcharts ? 'fadeOut' : 'fadeIn' }"
+    >
+      <div class="row" dir="ltr">
+        <div class="col-md-12" dir="ltr">
+          <div class="row bg-white rounded-lg border">
+            <mat-tab-group headerPosition="below" class="col-12">
+              <mat-tab label="Tab 1" class="row">
+                <div class="col-md-12">
+                  <div class="w-100 py-4">
+                    <apx-chart
+                      [chart]="chart1.chart"
+                      [series]="chart1.series"
+                      [plotOptions]="chart1.plotOptions"
+                      [responsive]="chart1.responsive"
+                      [title]="chart1.title"
+                      [xaxis]="chart1.xaxis"
+                      [fill]="chart1.fill"
+                      [legend]="chart1.legend"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Tab 2" class="row">
+                <div class="col-md-12">
+                  <div class="w-100 py-4">
+                    <apx-chart
+                      [chart]="chart2.chart"
+                      [series]="chart2.series"
+                      [plotOptions]="chart2.plotOptions"
+                      [stroke]="chart2.stroke"
+                      [title]="chart2.title"
+                      [xaxis]="chart2.xaxis"
+                      [yaxis]="chart2.yaxis"
+                      [tooltip]="chart2.tooltip"
+                      [fill]="chart2.fill"
+                      [legend]="chart2.legend"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Tab 3" class="row">
+                <div class="col-md-12">
+                  <div class="w-100 py-4">
+                    <apx-chart
+                      [chart]="chart3.chart"
+                      [series]="chart3.series"
+                      [dataLabels]="chart3.dataLabels"
+                      [stroke]="chart3.stroke"
+                      [title]="chart3.title"
+                      [xaxis]="chart3.xaxis"
+                      [yaxis]="chart3.yaxis"
+                      [tooltip]="chart3.tooltip"
+                      [legend]="chart3.legend"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+
+        <div class="col-md-12 mt-3" dir="ltr">
+          <div class="row bg-white rounded-lg border">
+            <mat-tab-group headerPosition="below" class="col-12">
+              <mat-tab label="Tab 1" class="row">
+                <div class="col-md-12">
+                  <div class="w-100 py-4">
+                    <apx-chart
+                      [chart]="chart4.chart"
+                      [series]="chart4.series"
+                      [stroke]="chart4.stroke"
+                      [title]="chart4.title"
+                      [legend]="chart4.legend"
+                      [fill]="chart4.fill"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Tab 2" class="row">
+                <div class="col-md-12">
+                  <div class="w-100 py-4">
+                    <apx-chart
+                      [chart]="chart2.chart"
+                      [series]="chart2.series"
+                      [plotOptions]="chart2.plotOptions"
+                      [stroke]="chart2.stroke"
+                      [title]="chart2.title"
+                      [xaxis]="chart2.xaxis"
+                      [yaxis]="chart2.yaxis"
+                      [tooltip]="chart2.tooltip"
+                      [fill]="chart2.fill"
+                      [legend]="chart2.legend"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Tab 3" class="row">
+                <div class="col-md-12">
+                  <div class="w-100 py-4">
+                    <apx-chart
+                      [chart]="chart3.chart"
+                      [series]="chart3.series"
+                      [dataLabels]="chart3.dataLabels"
+                      [stroke]="chart3.stroke"
+                      [title]="chart3.title"
+                      [xaxis]="chart3.xaxis"
+                      [yaxis]="chart3.yaxis"
+                      [tooltip]="chart3.tooltip"
+                      [legend]="chart3.legend"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    </div>
+    <perfect-scrollbar class="col-md-2 h-800px overflow-auto">
+      <div class="row text-center" *ngIf="statistics$ | async as statistics">
+        <div class="col-12 px-2">
+          <div class="bg-white rounded-lg border w-100">
+            <h1 class="my-4">
+              {{ "MAP_DASHBOARD.STATISTICS.TOTAL_TASKS.TITLE" | translate }}
+            </h1>
+            <div class="d-inline m-auto">
+              <div
+                class="text-center font-weight-bolder text-dark-75 font-size-h1"
+              >
+                <strong class="text-success"> {{statistics?.totalTasks}} </strong>
+                <span
+                  [inlineSVG]="
+                    '/assets/media/svg/icons/Files/Protected-file.svg'
+                  "
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-3x svg-icon-success mx-2"
+                ></span>
+              </div>
+            </div>
+            <div class="my-4 mx-3">
+              <span class="text-center text-muted font-size-h5">
+                {{
+                  "MAP_DASHBOARD.STATISTICS.TOTAL_TASKS.SUB_TITLE" | translate
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 px-2 mt-2">
+          <div class="bg-white rounded-lg border w-100">
+            <h1 class="my-4">
+              {{ "MAP_DASHBOARD.STATISTICS.TOTAL_INCIDENTS.TITLE" | translate }}
+            </h1>
+            <div class="d-inline m-auto">
+              <div
+                class="text-center font-weight-bolder text-dark-75 font-size-h1"
+              >
+                <strong class="text-warning"> {{ statistics?.totalIncidents }} </strong>
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/Home/Fireplace.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-3x svg-icon-warning mx-2"
+                ></span>
+              </div>
+            </div>
+            <div class="my-4 mx-3">
+              <span class="text-center text-muted font-size-h5">
+                {{
+                  "MAP_DASHBOARD.STATISTICS.TOTAL_INCIDENTS.SUB_TITLE"
+                    | translate
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 px-2 mt-2">
+          <div class="bg-white rounded-lg border w-100">
+            <h1 class="my-4">Title 3</h1>
+            <div class="d-inline m-auto">
+              <div
+                class="text-center font-weight-bolder text-dark-75 font-size-h1"
+              >
+                <strong> 9,532 </strong>
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/Weather/Cloud-sun.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-3x svg-icon-primary mx-2"
+                ></span>
+              </div>
+            </div>
+            <div class="my-4">
+              <span class="text-center text-muted font-size-h3">
+                Sub Title 3
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 px-2 mt-2">
+          <div class="bg-white rounded-lg border w-100">
+            <h3 class="my-4 font-weight-bolder text-dark-75 font-size-h3">
+              Title 4
+            </h3>
+            <div class="d-inline m-auto">
+              <div
+                class="text-center font-weight-bolder text-dark-75 font-size-h1"
+              >
+                <strong class="text-info"> 71,421 </strong>
+              </div>
+            </div>
+            <div class="my-4">
+              <p class="text-center text-dark-65 font-size-h6">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              </p>
+            </div>
+            <mat-divider class="my-4"></mat-divider>
+            <div class="d-inline m-auto">
+              <div
+                class="text-center font-weight-bolder text-dark-75 font-size-h1"
+              >
+                <strong class="text-danger"> 2,135 </strong>
+              </div>
+            </div>
+            <div class="my-4">
+              <span class="text-center text-muted font-size-h3">
+                Sub Title 4
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </div>
+  <div class="row mt-3">
+    <!-- 1 -->
+    <div class="col px-2">
+      <div class="bg-white rounded-lg border w-100 p-4">
+        <h1 class="mb-4">Title 1</h1>
+        <div class="d-inline m-auto">
+          <div class="text-center font-weight-bolder text-dark-75 font-size-h1">
+            <strong class="text-danger"> 3,125 </strong>
+            <span
+              [inlineSVG]="'/assets/media/svg/icons/General/Attachment1.svg'"
+              cacheSVG="true"
+              class="svg-icon svg-icon-3x svg-icon-danger mx-2"
+            ></span>
+          </div>
+        </div>
+        <div class="mt-4 d-flex">
+          <span class="text-center text-muted font-size-h3 ml-dir-auto">
+            Sub Title 1
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- 2 -->
+    <div class="col px-2">
+      <div class="bg-white rounded-lg border w-100 p-4">
+        <h1 class="mb-4">Title 2</h1>
+        <div class="d-inline m-auto">
+          <div class="text-center font-weight-bolder text-dark-75 font-size-h1">
+            <strong class="text-warning"> 5,436 </strong>
+            <span
+              [inlineSVG]="
+                '/assets/media/svg/icons/General/Shield-protected.svg'
+              "
+              cacheSVG="true"
+              class="svg-icon svg-icon-3x svg-icon-warning mx-2"
+            ></span>
+          </div>
+        </div>
+        <div class="mt-4 d-flex">
+          <span class="text-center text-muted font-size-h3 ml-dir-auto">
+            Sub Title 2
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- 3 -->
+    <div class="col px-2">
+      <div class="bg-white rounded-lg border w-100 p-4">
+        <h1 class="mb-4">Title 3</h1>
+        <div class="d-inline m-auto">
+          <div class="text-center font-weight-bolder text-dark-75 font-size-h1">
+            <strong class="text-success"> 8,532 </strong>
+            <span
+              [inlineSVG]="'/assets/media/svg/icons/General/Shield-check.svg'"
+              cacheSVG="true"
+              class="svg-icon svg-icon-3x svg-icon-success mx-2"
+            ></span>
+          </div>
+        </div>
+        <div class="mt-4 d-flex">
+          <span class="text-center text-muted font-size-h3 ml-dir-auto">
+            Sub Title 3
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- 4 -->
+    <div class="col px-2">
+      <div class="bg-white rounded-lg border w-100 p-4">
+        <h1 class="mb-4">Title 4</h1>
+        <div class="d-inline m-auto">
+          <div class="text-center font-weight-bolder text-dark-75 font-size-h1">
+            <strong class="text-primary"> 6,542 </strong>
+            <span
+              [inlineSVG]="'/assets/media/svg/icons/Communication/Flag.svg'"
+              cacheSVG="true"
+              class="svg-icon svg-icon-3x svg-icon-primary mx-2"
+            ></span>
+          </div>
+        </div>
+        <div class="mt-4 d-flex">
+          <span class="text-center text-muted font-size-h3 ml-dir-auto">
+            Sub Title 4
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- 5 -->
+    <div class="col px-2">
+      <div class="bg-white rounded-lg border w-100 p-4">
+        <h1 class="mb-4">Title 5</h1>
+        <div class="d-inline m-auto">
+          <div class="text-center font-weight-bolder text-dark-75 font-size-h1">
+            <strong class="text-secondary"> 9,853 </strong>
+            <span
+              [inlineSVG]="
+                '/assets/media/svg/icons/Communication/Urgent-mail.svg'
+              "
+              cacheSVG="true"
+              class="svg-icon svg-icon-3x svg-icon-secondary mx-2"
+            ></span>
+          </div>
+        </div>
+        <div class="mt-4 d-flex">
+          <span class="text-center text-muted font-size-h3 ml-dir-auto">
+            Sub Title 5
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

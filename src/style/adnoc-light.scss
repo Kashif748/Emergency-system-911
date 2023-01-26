@@ -1,0 +1,46 @@
+$adnoc-color-primary: #1947ba;
+// $adnoc-color-primary: #254cad;
+
+// alerts
+.alert.alert-custom.alert-light-primary {
+  background: var($adnoc-color-primary) !important;
+}
+
+//buttons
+.btn-light-primary,
+.btn-primary,
+.btn-light-primary:hover,
+.btn-light-primary:focus,
+.btn-light,
+.btn.btn-clean:hover:not(.btn-text):not(:disabled):not(.disabled),
+.btn.btn-clean:focus:not(.btn-text),
+.btn.btn-clean.focus:not(.btn-text),
+.mat-raised-button.mat-primary {
+  background-color: $adnoc-color-primary !important;
+  color: white !important;
+  border-color: $adnoc-color-primary !important;
+}
+
+.svg-icon.svg-icon-primary svg g [fill],
+.navi .navi-item .navi-link:hover .navi-icon svg g [fill] {
+  fill: $adnoc-color-primary !important;
+}
+
+.header .header-menu .menu-nav>.menu-item:hover:not(.menu-item-here):not(.menu-item-active)>.menu-link .menu-text,
+.header .header-menu .menu-nav>.menu-item.menu-item-hover:not(.menu-item-here):not(.menu-item-active)>.menu-link .menu-text,
+.btn-link-primary,
+.text-primary,
+.navi .navi-item .navi-link:hover .navi-text {
+  color: $adnoc-color-primary !important;
+}
+
+// lebels
+.label-light-primary,
+.bg-light-primary,
+.checkbox>span,
+.switch input:checked~span:before,
+.switch input:empty~span:before,
+.toggle-theme {
+  background-color: $adnoc-color-primary !important;
+  color: white !important;
+}

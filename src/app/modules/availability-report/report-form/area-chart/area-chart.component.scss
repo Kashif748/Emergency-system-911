@@ -1,0 +1,19 @@
+#chart {
+    max-width: 650px;
+    margin: 35px auto;
+    text-align: right;
+}
+
+::ng-deep {
+
+    .apexcharts-text,
+    .apexcharts-title-text,
+    .apexcharts-legend-text {
+        font-family: 'Tajawal' !important;
+    }
+
+    .apexcharts-legend-series {
+        display: flex !important;
+        align-items: center;
+    }
+}

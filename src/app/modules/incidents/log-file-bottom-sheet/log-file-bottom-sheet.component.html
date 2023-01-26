@@ -1,0 +1,29 @@
+<div class="card-header text-center text-dark p-2">
+  {{ "WORK_LOG_LIST.ATTACHMENTS" | translate }}
+</div>
+<ul class="list-group list-group-flush" *ngFor="let file of files | async">
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-11 row align-items-center">
+        <ng-container [ngSwitch]="file['type']">
+          <ng-container *ngSwitchCase="'image'">
+            <img [src]="file['image']" style="width: 150px;height: 150px" class="img img-thumbnail"
+                 (click)="showFullImageDialog(file['uuid'])"/>
+          </ng-container>
+          <ng-container *ngSwitchCase="'audio'">
+            <audio [src]="file['audio']" id="audio" controls></audio>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <div class="col">{{ file['fileName'] }}</div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="col-sm-1">
+            <span (click)="download(file['uuid'] ,file['fileName'])"
+                  class="material-icons cursor-pointer mt-1rem text-primary">
+              cloud_download
+    </span>
+      </div>
+    </div>
+  </li>
+</ul>

@@ -1,0 +1,68 @@
+//
+// Main Style
+//
+
+////////////////////////////////////////////////////////////////
+///////////// DO NOT MODIFY BELOW INCLUDE ORDER ////////////////
+////////////////////////////////////////////////////////////////
+@import "../../fonts"; // 1: Initialize
+@import "init";
+
+// 2: Bootstrap framework includes
+@import "~bootstrap/scss/bootstrap";
+@import "vendors/angular/material/angular-material";
+@import "vendors/angular/material/include";
+
+
+$custom-typography: mat-typography-config($font-family,
+    $display-4: mat-typography-level(112px, 112px, 300),
+    $display-3: mat-typography-level(56px, 56px, 400),
+    $display-2: mat-typography-level(45px, 48px, 400),
+    $display-1: mat-typography-level(34px, 40px, 400),
+    $headline: mat-typography-level(24px, 32px, 400),
+    $title: mat-typography-level(20px, 32px, 500),
+    $subheading-2: mat-typography-level(16px, 28px, 400),
+    $subheading-1: mat-typography-level(15px, 24px, 400),
+    $body-2: mat-typography-level(14px, 24px, 500),
+    $body-1: mat-typography-level(14px, 20px, 400),
+    $caption: mat-typography-level(12px, 20px, 400),
+    $button: mat-typography-level(14px, 14px, 500),
+    $input: mat-typography-level(inherit, 1.3, 400));
+
+@include angular-material-typography($custom-typography);
+
+// 3: Components
+@import "components/utilities", "components/burger-icon", "components/card",
+"components/wizard", "components/type", "components/breadcrumb",
+"components/nav", "components/alert", "components/buttons", "components/code",
+"components/dropdown", "components/forms", "components/grid",
+"components/modal", "components/progress", "components/table",
+"components/popover", "components/tooltip", "components/accordion",
+"components/datatable", "components/checkbox", "components/radio",
+"components/switch", "components/option", "components/dialog",
+"components/strikethrough", "components/separator", "components/image-input",
+"components/label", "components/loader", "components/symbol",
+"components/pulse", "components/page-loader", "components/quick-search",
+"components/scrolltop", "components/spinner", "components/sticky-toolbar",
+"components/svg-icon", "components/svg", "components/timeline",
+"components/timeline-2", "components/timeline-3", "components/timeline-4",
+"components/timeline-5", "components/timeline-6", "components/overlay",
+"components/wave", "components/list", "components/bullet", "components/navi",
+"components/ribbon", "components/offcanvas", "components/toggle";
+
+// 4: Plugins
+@import "vendors/plugins/formvalidation", "vendors/plugins/dropzone",
+"vendors/plugins/perfect-scrollbar", "vendors/plugins/prismjs",
+"vendors/plugins/apexcharts";
+
+// 5: Layout
+@import "layout/init";
+
+////////////////////////////////////////////////////////////////
+///////////// DO NOT MODIFY ABOVE INCLUDE ORDER ////////////////
+////////////////////////////////////////////////////////////////
+
+@import '~ng-wizard/themes/ng_wizard.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_arrows.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_circles.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_dots.min.css';

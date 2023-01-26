@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 my-3">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>{{ 'INCIDENTS.WORKLOG.PRIVATE_ORGS' | translate }}</mat-label>
+        <mat-chip-list #chipList aria-label="org selection">
+          <mat-chip *ngFor="let org of orgs" [selectable]="selectable" [removable]="removable" (removed)="remove(org)">
+            {{org?.orgStructure | propTranslator:'name'}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="{{'INCIDENTS.WORKLOG.PICK_ONE' | translate}}" #orgInput [formControl]="orgCtrl"
+            [matAutocomplete]="auto" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let org of filteredOrgs | async" [value]="org">
+            {{org?.orgStructure | propTranslator:'name'}}
+          </mat-option>
+          <mat-option *ngIf="allOrgs?.length <= 0">
+            <div class="spinner-container m-auto p-10">
+              <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+            </div>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col-12 my-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{'TASK.PRIORITY' | translate }}</mat-label>
+        <mat-select placeholder="{{'TASK.PRIORITY' | translate }}" [(ngModel)]="priority">
+          <mat-option *ngFor="let priority of priorities$ | async" [value]="priority.id">
+            {{ priority | propTranslator: 'name'}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          {{'VALIDATION_MSG.REQUIRED' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center">
+
+      <button class="btn w-md-50 btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer" (click)="ok()">
+        {{ "SHARED.SAVE" | translate }}
+      </button>
+
+    </div>
+  </div>
+</div>

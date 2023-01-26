@@ -1,0 +1,78 @@
+<div class="card card-custom gutter-b container">
+
+  <div class="card-header d-flex p-0">
+
+    <div class="card-title p-0 m-0">
+      <h3 class="card-label m-0">{{'SUGGESTION.HEADER' | translate }}</h3>
+    </div>
+    <div class="d-flex align-items-center">
+      <a [routerLink]="['/suggestions/manage']"
+        class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer">
+        {{'SUGGESTION.MY_SUGG' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <form [formGroup]="formGroup" (ngSubmit)="submit()" class="container">
+
+      <div class="row">
+
+        <div class="col-md-7">
+          <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+            <mat-label>{{'SHARED.TITLE' | translate}}</mat-label>
+
+            <input matInput formControlName="title" />
+            <mat-error *ngIf="handleError('title', 'required')">
+              {{'VALIDATION_MSG.REQUIRED' | translate }}
+            </mat-error>
+
+          </mat-form-field>
+        </div>
+        <div class="col-md-5">
+          <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+            <mat-label>{{'SUGGESTION.TYPE.LABEL' | translate}}</mat-label>
+            <mat-select disableRipple formControlName="stype">
+              <mat-option value="suggestion">{{'SUGGESTION.TYPE.SUGGESTION' | translate}}</mat-option>
+              <mat-option value="complaint">{{'SUGGESTION.TYPE.COMPLAINT' | translate}}</mat-option>
+            </mat-select>
+            <mat-hint> {{'SUGGESTION.TYPE.HINT' | translate }}</mat-hint>
+            <mat-error *ngIf="handleError('stype', 'required')">
+              {{'VALIDATION_MSG.REQUIRED' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12 mt-2">
+          <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+            <mat-label>{{'SHARED.DESC' | translate}}</mat-label>
+
+            <textarea rows='8' formControlName="description" matInput
+              placeholder="{{'SUGGESTION.DESC_HINT' | translate }}"></textarea>
+
+            <mat-error *ngIf="handleError('description', 'required')">
+              {{'VALIDATION_MSG.REQUIRED' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <angular-file-uploader #fileUploader [config]="afuConfig" class="col-12" (ApiResponse)="attUploaded($event)">
+          </angular-file-uploader>
+          
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-md-6 m-auto">
+              <button [disabled]="formGroup.invalid"
+                class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer btn-block text-center">
+                {{'SUGGESTION.CREATE.SUBMIT_BTN' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

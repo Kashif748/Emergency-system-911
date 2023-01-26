@@ -1,0 +1,14 @@
+.card-body {
+  max-height: 600px;
+  min-height: 400px;
+}
+
+.proirites-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  .proirity-item {
+    max-width: 250px;
+    width: 100%;
+  }
+}

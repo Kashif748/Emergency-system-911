@@ -1,0 +1,639 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="d-flex card-header1 justify-content-center">
+            <app-breadcrumbs></app-breadcrumbs>
+          </div>
+          <div class="card-body">
+            <mat-form-field
+              hintLabel="Max 10 characters"
+              appearance="outline"
+              [dir]="translationService.dir"
+            >
+              <mat-label>{{
+                "TRADE_LICENSE.ENTER_TRADE_LICENSE_NO" | translate
+              }}</mat-label>
+              <span matPrefix>CN- &nbsp;</span>
+              <input
+                maxlength="10"
+                #cn
+                type="text"
+                matInput
+                placeholder="5551234"
+              />
+              <button
+                matSuffix
+                mat-icon-button
+                color="primary"
+                (click)="clickEvent(cn.value)"
+              >
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <div class="spinner-container m-auto p-10" *ngIf="isSearchMode">
+              <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+            </div>
+
+            <div style="margin-top: 15px" *ngIf="isSearchMode === false">
+              <!-- row -->
+              <div class="row mt-5">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.NAME_AR" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.BusinessNameArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.NAME_EN" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.BusinessNameEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.PRO_MOB_NO" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.PROMobileNumber
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.BUILDING_NUMBER" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.BuildingNumber
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- row -->
+              <div class="row border rounded-lg my-4">
+                <h3 class="text-muted col-12 mb-4">
+                  {{ "TRADE_LICENSE.LEGAL_FORM" | translate }}
+                </h3>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.BUSINESS_LEGAL_FORM_ARB" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.LegalForm
+                          ?.BusinessLegalFormArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.BUSINESS_LEGAL_FORM_ENG" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.LegalForm
+                          ?.BusinessLegalFormEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.BUSINESS_LEGAL_FORM_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.LegalForm
+                          ?.LegalFormCode
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- row -->
+              <div class="row border rounded-lg my-4">
+                <h3 class="text-muted col-12 mb-4">
+                  {{ "TRADE_LICENSE.ESTABLISHMENT_COUNTRY" | translate }}
+                </h3>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.ESTABLISHMENT_COUNTRY_NAME_ARB" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.EstablishmentCountry?.CountryNameArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.ESTABLISHMENT_COUNTRY_NAME_ENG" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.EstablishmentCountry?.CountryNameEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.ESTABLISHMENT_COUNTRY_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.EstablishmentCountry?.CountryCode
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- row -->
+              <div class="row border rounded-lg my-4">
+                <h3 class="text-muted col-12 mb-4">
+                  {{ "TRADE_LICENSE.LICENSE" | translate }}
+                </h3>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_TYPE_AR" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.LicenseTypeCode
+                          ?.BusinessLicenseTypeArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_TYPE_EN" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.LicenseTypeCode
+                          ?.BusinessLicenseTypeEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_TYPE_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.LicenseTypeCode
+                          ?.LicenseTypeCode
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_CITY_AR" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinesslicenseCityArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_CITY_EN" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinesslicenseCityEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_ISS_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinessLicenseIssueDate
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_ADDR_AR" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinessLicenseAddressArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_ADDR_EN" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinessLicenseAddressEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.LICENSE_EXP_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinessLicenseExpiryDate
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.BUSINESS_LICENSE_STATUS_ARB" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinessLicenseStatus?.BusinessLicenseStatusArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.BUSINESS_LICENSE_STATUS_ENG" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinessLicenseStatus?.BusinessLicenseStatusEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.BUSINESS_LICENSE_STATUS_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo
+                          ?.BusinessLicenseStatus?.BusinessLicenseStatusCode
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.ISSUE_PLACE_ARB" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.IssuePlace
+                          ?.IssuePlaceArb
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.ISSUE_PLACE_ENG" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.IssuePlace
+                          ?.IssuePlaceEng
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "TRADE_LICENSE.ISSUE_PLACE_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        companyDetails?.TradeLicenseBasicInfo?.IssuePlace
+                          ?.IssuePlaceCode
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- row -->
+              <div class="row border rounded-lg my-4">
+                <h3 class="text-muted col-12 mb-4">
+                  {{ "TRADE_LICENSE.TRADE_LICENSE_PARTNERS" | translate }}
+                </h3>
+                <div class="col-12">
+                  <div
+                    class="row border rounded-lg m-3"
+                    *ngFor="
+                      let part of companyDetails?.TradeLicensePartners;
+                      let index = index
+                    "
+                  >
+                    <h5 class="col-12 text-muted mt-2">
+                      {{ "TRADE_LICENSE.PARTNER" | translate }} ({{
+                        index + 1
+                      }})
+                    </h5>
+
+                    <!--  -->
+                    <div class="col-md-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.PARTNER_NAME_ARB" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="part?.PartnerNameArb"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.PARTNER_NAME_ENG" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="part?.PartnerNameEng"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.LICENSE_RELATIONSHIP" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'en'
+                              ? part?.LicenseRelationshipCode
+                                  ?.BusinessLicenseRelationshipEng
+                              : part?.LicenseRelationshipCode
+                                  ?.BusinessLicenseRelationshipArb
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.PARTNER_NATIONALITY" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'en'
+                              ? part?.PartnerNationalityCode?.CountryNameEng
+                              : part?.PartnerNationalityCode?.CountryNameArb
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.PARTNER_SHARE_PERCENTAGE" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="part?.PartnerSharePercentage"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- row -->
+              <div class="row border rounded-lg my-4">
+                <h3 class="text-muted col-12 mb-4">
+                  {{ "TRADE_LICENSE.TRADE_LICENSE_ACTIVITIES" | translate }}
+                </h3>
+
+                <div class="col-12">
+                  <div
+                    class="row border rounded-lg m-3"
+                    *ngFor="
+                      let act of companyDetails?.TradeLicenseActivities;
+                      let index = index
+                    "
+                  >
+                    <h5 class="col-12 text-muted mt-2">
+                      {{ "TRADE_LICENSE.ACTIVITY" | translate }} ({{
+                        index + 1
+                      }})
+                    </h5>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.ACTIVITY_CODE" | translate
+                        }}</mat-label>
+                        <input matInput readonly [value]="act?.ActivityCode" />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.ACTIVITY_NAME_ARB" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="act?.ActivityNameArb"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "TRADE_LICENSE.ACTIVITY_NAME_ENG" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="act?.ActivityNameEng"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

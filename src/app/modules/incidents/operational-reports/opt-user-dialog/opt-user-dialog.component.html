@@ -1,0 +1,19 @@
+<div class="container" [dir]="lang == 'en'? 'ltr':'rtl'">
+  <!-- <h1 mat-dialog-title>Hi </h1> -->
+  <div class="row" mat-dialog-content>
+    <p>{{ 'OPERATIONAL_REPORTS.SEND_TO_Q' | translate }}</p>
+    <mat-form-field class="col-12" appearance="outline">
+      <mat-label>{{ 'OPERATIONAL_REPORTS.RECIPIENT' | translate }}</mat-label>
+      <mat-select (infiniteScroll)="getNext()" msInfiniteScroll [(value)]="userId">
+        <mat-option *ngFor="let u of users$ | async" [value]="u?.id">
+          {{ lang == 'en' ? u?.nameEn : u?.nameAr}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button color="warn" (click)="onNoClick()">{{'ACTIONS.CANCEL' | translate}}</button>
+    <button mat-button color="primary" [mat-dialog-close]="userId" cdkFocusInitial>{{'ACTIONS.SEND' |
+      translate}}</button>
+  </div>
+</div>

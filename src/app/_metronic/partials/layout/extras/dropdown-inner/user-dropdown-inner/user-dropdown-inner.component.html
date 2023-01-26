@@ -1,0 +1,167 @@
+<!--begin::User-->
+<ng-container *ngIf="!isMobileView">
+  <div
+    class="ml-3"
+    *ngIf="user$ | async as user"
+    ngbDropdown
+    [placement]="dir == 'ltr' ? 'bottom-right' : 'bottom-left'"
+  >
+    <div
+      class="topbar-item cursor-pointer"
+      data-toggle="dropdown"
+      data-offset="0px,0px"
+      ngbDropdownToggle
+    >
+      <div class="symbol symbol-20 symbol-lg-30 symbol-circle d-flex">
+        <img
+          *ngIf="profileImgUUID$ | async as profileImgUUID"
+          [attr.src]="profileImgUUID | secure"
+        />
+        <img
+          *ngIf="!(profileImgUUID$ | async)"
+          src="./assets/media/users/default.jpg"
+        />
+      </div>
+    </div>
+
+    <!--end::Toggle-->
+    <!--begin::Dropdown-->
+    <div
+      ngbDropdownMenu
+      class="
+        dropdown-menu
+        p-0
+        m-0
+        dropdown-menu-left dropdown-menu-anim-up dropdown-menu-lg
+        p-0
+      "
+    >
+      <ng-container *ngTemplateOutlet="dropdown"></ng-container>
+    </div>
+  </div>
+  <!--end::Dropdown-->
+</ng-container>
+<!--end::User-->
+<ng-template #dropdown>
+  <ng-container>
+    <!--begin::Header-->
+    <div
+      *ngIf="user$ | async as user"
+      class="d-flex align-items-center p-8 rounded-top"
+    >
+      <!--begin::Symbol-->
+      <div class="symbol symbol-md bg-light-primary mr-3 flex-shrink-0">
+        <img
+          *ngIf="profileImgUUID$ | async as profileImgUUID"
+          [attr.src]="profileImgUUID | secure"
+        />
+        <img
+          *ngIf="!(profileImgUUID$ | async)"
+          src="./assets/media/users/default.jpg"
+        />
+      </div>
+      <!--end::Symbol-->
+
+      <!--begin::Text-->
+      <div
+        *ngIf="dir == 'ltr'"
+        class="text-dark m-0 flex-grow-1 mr-3 font-size-h5"
+      >
+        {{ user?.firstNameEn }} {{ user?.lastNameEn }}
+      </div>
+      <div
+        *ngIf="dir == 'rtl'"
+        class="text-dark m-0 flex-grow-1 mr-3 font-size-h5"
+      >
+        {{ user?.firstNameAr }} {{ user?.lastNameAr }}
+      </div>
+      <!--end::Text-->
+    </div>
+    <div class="separator separator-solid"></div>
+    <!--end::Header-->
+  </ng-container>
+
+  <!--begin::Nav-->
+  <div class="navi navi-spacer-x-0 pt-5">
+    <!--begin::Item-->
+    <a class="navi-item px-8 cursor-pointer" href="/settings/profile">
+      <div class="navi-link">
+        <div class="navi-icon mr-2">
+          <i class="flaticon2-calendar-3 text-success"></i>
+        </div>
+        <div class="navi-text">
+          <div class="font-weight-bold">
+            {{ "AUTH.GENERAL.PROFILE" | translate }}
+          </div>
+          <div class="text-muted">
+            {{ "AUTH.GENERAL.PROFILE_TITLE" | translate }}
+          </div>
+        </div>
+      </div>
+    </a>
+    <!--end::Item-->
+
+    <!--begin::Footer-->
+    <div class="navi-separator mt-3"></div>
+    <div class="navi-footer px-8 py-5">
+      <a
+        class="btn btn-light-primary font-weight-bold cursor-pointer"
+        [routerLink]="['/auth/reset-password']"
+        routerLinkActive="router-link-active"
+        >{{ "ACTIONS.CHANGE_PASSWORD" | translate }}</a
+      >
+      <a
+        class="btn btn-light-primary font-weight-bold cursor-pointer"
+        (click)="logout()"
+        >{{ "AUTH.GENERAL.LOGOUT" | translate }}</a
+      >
+    </div>
+    <!--end::Footer-->
+  </div>
+  <!--end::Nav-->
+</ng-template>
+
+<ng-container *ngIf="isMobileView">
+  <div
+    *ngIf="user$ | async as user"
+    class="w-100 d-flex flex-column text-center justify-content-center"
+  >
+    <div class="d-flex mb-5 "  [dir]="'rtl'" >
+      <a class="btn cursor-pointer" (click)="logout()">{{
+        "AUTH.GENERAL.LOGOUT" | translate
+      }}</a>
+      <div class="spacer"></div>
+    </div>
+
+    <div class="w-100">
+      <div class="symbol symbol-circle symbol-75 border border-3">
+        <img
+          *ngIf="profileImgUUID$ | async as profileImgUUID"
+          [attr.src]="profileImgUUID | secure"
+        />
+        <img
+          *ngIf="!(profileImgUUID$ | async)"
+          src="./assets/media/users/default.jpg"
+        />
+      </div>
+    </div>
+
+    <div class="text-dark mx-0 my-3 text-center flex-grow-1 font-size-h4">
+      <span *ngIf="dir == 'ltr'">
+        {{ user?.firstNameEn }} {{ user?.lastNameEn }}
+      </span>
+      <span *ngIf="dir == 'rtl'">
+        {{ user?.firstNameAr }} {{ user?.lastNameAr }}
+      </span>
+    </div>
+
+    <div class="navi-footer px-8 py-5">
+      <a
+        class="btn btn-light-primary font-weight-bold cursor-pointer"
+        [routerLink]="['/auth/reset-password']"
+        routerLinkActive="router-link-active"
+        >{{ "ACTIONS.CHANGE_PASSWORD" | translate }}</a
+      >
+    </div>
+  </div>
+</ng-container>

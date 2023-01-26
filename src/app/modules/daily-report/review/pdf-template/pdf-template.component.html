@@ -1,0 +1,873 @@
+<div [class]="{
+    'col-12': (dir$ | async) == 'rtl',
+    'container-fluid': (dir$ | async) != 'rtl'
+  }" id="daily-report" style="max-width: 1600px">
+  <!-- <div class="h-150px"></div> -->
+  <section>
+    <div class="col-12">
+      <div class="row h-100px">
+
+
+        <div class="col-6">
+          <div class="row" style="margin-top: 20px;">
+
+            <div class="col-5">
+              <img
+                src="data:image/png;base64,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" />
+            </div>
+            <div class="col-7">
+              <h4>هيئة أبو ظبي للدفاع المدني</h4>
+              <h4>ABU DHABI CIVIL DEFENCE AUTHORITY</h4>
+
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-12 text-center bg-gray-500 text-white py-2">
+              <h1>
+                الموقف اليومي
+              </h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <table class="table table-bordered table-vertical-center font-size-h4">
+            <thead>
+              <tr>
+                <th colspan="2" class="text-center">مركز العمليات الرئيسي</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  اليوم
+                </td>
+
+                <td>{{ (initForm$ | async)?.date | date: "EEEE" }}</td>
+              </tr>
+              <tr>
+                <td>
+                  التاريخ
+                </td>
+                <td>
+                  <!-- 2021/05/30 -->
+                  {{ (initForm$ | async)?.date | date: "yyyy/MM/dd" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="h-150px"></div>
+
+    <div class="col-12">
+      <table *ngIf="form$ | async as form" class="table table-bordered table-vertical-center font-size-h4">
+        <thead>
+
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5" class="bg-gray-300 text-center">
+              <p style="direction: rtl;">
+                <b>المناوبات </b>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;"><b>قائد فريق إدارة الحوادث المتطورة</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyIncidentManagement?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyIncidentManagement?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyIncidentManagement?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td class="text-center" colspan="5">
+              <p style="direction: rtl;"><b>مناوبات مركز العمليات الرئيسي</b></p>
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p><b>خلية التخطيط والتنسيق(شرطة أبوظبي)</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyCivilProtection?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyCivilProtection?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyCivilProtection?.phone }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p><b>قائد مجموعة العمليات</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyOperationsManagment?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyOperationsManagment?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyOperationsManagment?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td colspan="5" class="text-center">
+              <p style="direction: rtl;"><b>المناوبات العامة لقطاع الإنقاذ و الإطفاء {{ (initForm$ | async)?.date |
+                  date: "yyyy-MM-dd" }}
+                </b></p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyCivilProtection?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyCivilProtection?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyCivilProtection?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p><b>المناوب العام – العاصمة والمناطق الخارجية</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyCapitalAndOuterRegions?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyCapitalAndOuterRegions?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyCapitalAndOuterRegions?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p><b>المناوب العام – الظفرة</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyAlDhafra?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyAlDhafra?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyAlDhafra?.phone }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p><b>المناوب العام – العين</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyAlAin?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyAlAin?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyAlAin?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td colspan="5" class="text-center">
+              <p><b>المناوبات العامة – التخصصية {{ (initForm$ | async)?.date | date: "yyyy/MM/dd" }}
+                </b></p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p><b>مناوب الإسعاف</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyAmbulance?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyAmbulance?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyAmbulance?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p><b>مناوب المواد الخطرة</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyHazardousSubstances?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyHazardousSubstances?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyHazardousSubstances?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p><b>مناوب الدعم والتحصين النفسي</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyPsychologicalSupport?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyPsychologicalSupport?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyPsychologicalSupport?.phone }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p><b>مناوب الخدمات الإلكترونية</b></p>
+            </td>
+
+            <td colspan="3">
+              <span>{{ form?.ondutyElectronicServices?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyElectronicServices?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyElectronicServices?.phone }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p><b>مناوب النقل والمشاغل</b></p>
+            </td>
+            <td colspan="3">
+              <span>{{ form?.ondutySpecialTransportAndConcerns?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutySpecialTransportAndConcerns?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutySpecialTransportAndConcerns?.phone }}
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p><b>مناوب الاتصال المؤسسي</b></p>
+            </td>
+            <td colspan="3">
+              <span>{{ form?.ondutyCorporateCommunications?.user?.rankId?.nameAr }}</span><span>/</span><span>{{
+                form?.ondutyCorporateCommunications?.user?.nameAr }}</span>
+            </td>
+            <td>
+              {{ form?.ondutyCorporateCommunications?.phone }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="5" class="text-center">
+              <p style="direction: rtl;"> المهام والفعاليات </p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <p style="direction: rtl;"><b>المهمة </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>المنطقة </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>المركز </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>تاريخ المهمة </b></p>
+            </td>
+          </tr>
+          <tr *ngFor="let row of form.performanceTasksAndEvents">
+            <td colspan="2">
+              <p style="direction: rtl;">
+                <b>
+                  {{row[1]}}
+                </b>
+              </p>
+            </td>
+            <td>
+              {{row[0]?.nameAr }}
+            </td>
+            <td>
+              {{row[2]}}
+            </td>
+            <td>
+              {{row[3]}}
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+
+      <table *ngIf="form$ | async as form" class="table table-bordered table-vertical-center font-size-h4">
+        <thead>
+
+        </thead>
+        <tbody class="text-center">
+          <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>أبوظبي </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>المناطق الخارجية </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>العين </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>الظفرة </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;"><b>الإجمالي</b></p>
+            </td>
+          </tr>
+          <tr class="bg-warning">
+            <td colspan="2">
+              <p><b>رقم الهاتف </b></p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="3" style="writing-mode: vertical-rl;">
+              <p style="direction: rtl;"><b>المواقع </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;">عدد مراكز الدفاع المدني </p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">نقاط المستجيب الأول – D</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">نقاط المستجيب الأول - E</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="10" style="writing-mode: vertical-rl;">
+              <p style="direction: rtl;"><b>الموارد البشرية </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;">فريق إدارة الحوادث المتطورة</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">مجموعة المناوبات</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">ضابط عمليات</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>إطفائي</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>منقذ</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>- منقذ CBRN</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>مأمور عمليات</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>مسعف</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>سائق</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>دعم وإسناد</p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr class="bg-warning">
+            <td colspan="2">
+              <p style="direction: rtl;"><b>الإجمالي </b></p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="6" style="writing-mode: vertical-rl;">
+              <p style="direction: rtl;"><b>الآليات والمعدات </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;">مركبات الإطفاء </p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">دوريات برق </p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">دوريات الإنقاذ </p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">دوريات الإسعاف </p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">دوريات التعامل مع المواد الخطرة </p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">الآليات التخصصية </p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr class="bg-warning">
+            <td colspan="2">
+              <p style="direction: rtl;"><b>الإجمالي </b></p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <p style="direction: rtl;"><b>فوم ( صغير )</b></p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <p style="direction: rtl;"><b>فوم ( كبير) </b></p>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="8" style="writing-mode: vertical-rl;">
+              <p style="direction: rtl;"><b>نتائج الأداء الرئيسية </b></p>
+            </td>
+            <td>
+              <p style="direction: rtl;">عدد بلاغات الدفاع المدني </p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][1]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][1]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][1]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][1]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">عدد بلاغات الإسعاف </p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][2]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][2]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][2]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][2]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">عدد بلاغات إنذار الحريق </p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][3]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][3]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][3]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][3]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">إصابات حوادث الدفاع المدني</p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][4]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][4]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][4]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][4]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">وفيات حوادث الدفاع المدني</p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][5]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][5]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][5]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][5]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">عدد المهام </p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][6]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][6]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][6]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][6]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">عدد تقارير الحوادث </p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][7]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][7]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][7]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][7]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="direction: rtl;">عدد إشعارات العمليات </p>
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[0][8]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[1][8]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[2][8]}}
+            </td>
+            <td>
+              {{form.performanceKeyPerformanceResults[3][8]}}
+            </td>
+            <td>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>

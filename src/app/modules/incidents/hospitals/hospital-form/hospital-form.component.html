@@ -1,0 +1,117 @@
+<mat-spinner *ngIf="!display"></mat-spinner>
+
+<div [dir]="lang == 'en' ? 'ltr' : 'rtl'" class="card card-custom" style="overflow: hidden">
+  <div class="card-header px-4">
+    <div class="card-title">
+      <h4 class="card-label">
+        <span *ngIf="type == 'add'">{{
+          "INCIDENTS.ADD_HOSPITAL" | translate
+          }}</span>
+        <span *ngIf="type == 'edit'">{{
+          "INCIDENTS.EDIT_HOSPITAL" | translate
+          }}</span>
+      </h4>
+    </div>
+    <div class="card-toolbar">
+      <button (click)="matDialogRef.close()" class="btn btn-icon btn-sm btn-light-primary">
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body px-4" *ngIf="display">
+    <div class="row" [formGroup]="form">
+      <div class="col-sm-6">
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "INCIDENTS.HOSPITALS" | translate }}</mat-label>
+          <mat-select formControlName="hospital">
+            <mat-option *ngFor="let hp of hospitals" [value]="hp.id">
+              {{ lang == "en" ? hp.nameEN : hp.nameAR }}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            {{'INCIDENTS.THIS_FIELD_IS_REQUIRED' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6">
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "INCIDENTS.NO_OF_DEATHS" | translate }}</mat-label>
+          <input matInput type="number" formControlName="deaths" [min]="0" [max]="999" appNumberOnly />
+          <mat-error *ngIf="form.get('deaths').hasError('required')">
+            {{'INCIDENTS.THIS_FIELD_IS_REQUIRED' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('deaths').hasError('min') || form.get('deaths').hasError('max') ">
+            {{'INCIDENTS.VALIDATION_MSG.HOSPITAILS.OUT_OF_RANGE' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6">
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "INCIDENTS.SERIOUS_INJURIES" | translate }}</mat-label>
+          <input matInput type="number" formControlName="majorInjuries" [min]="0" [max]="999" appNumberOnly />
+          <mat-error *ngIf="form.get('majorInjuries').hasError('required')">
+            {{'INCIDENTS.THIS_FIELD_IS_REQUIRED' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('majorInjuries').hasError('min') || form.get('majorInjuries').hasError('max') ">
+            {{'INCIDENTS.VALIDATION_MSG.HOSPITAILS.OUT_OF_RANGE' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6">
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "INCIDENTS.MINOR_INJURIES" | translate }}</mat-label>
+          <input matInput type="number" formControlName="minorInjuries" [min]="0" [max]="999" appNumberOnly />
+          <mat-error *ngIf="form.get('minorInjuries').hasError('required')">
+            {{'INCIDENTS.THIS_FIELD_IS_REQUIRED' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('minorInjuries').hasError('min') || form.get('minorInjuries').hasError('max') ">
+            {{'INCIDENTS.VALIDATION_MSG.HOSPITAILS.OUT_OF_RANGE' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6">
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "INCIDENTS.NORMAL_INJURIES" | translate }}</mat-label>
+          <input matInput type="number" formControlName="normalInjuries" [min]="0" [max]="999" appNumberOnly />
+          <mat-error *ngIf="form.get('normalInjuries').hasError('required')">
+            {{'INCIDENTS.THIS_FIELD_IS_REQUIRED' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('normalInjuries').hasError('min') || form.get('normalInjuries').hasError('max') ">
+            {{'INCIDENTS.VALIDATION_MSG.HOSPITAILS.OUT_OF_RANGE' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6">
+        <label class="col-form-label" style="vertical-align: bottom;">{{
+          "INCIDENTS.STAFF_INJURIES" | translate
+          }}</label>
+        <span class="switch switch-icon"
+              style="margin: 15px 10px 0 10px ;justify-content: center;display: inline-block;">
+          <label>
+            <input formControlName="staff" type="checkbox" name="staff"/>
+            <span class="mx-3"></span>
+          </label>
+        </span>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer p-2 px-4 d-flex justify-content-between">
+    <button cdkFocusInitial *ngIf="type == 'add'" [disabled]="disableAddEditHospitalReport()"
+            class="btn btn-sm btn-primary font-weight-bold" app-throttle-click [ThrottleTime]="2000"
+            (ThrottleClick)="submit()">
+      {{ "ACTIONS.SAVE" | translate }}
+      <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"></span>
+    </button>
+
+    <button cdkFocusInitial *ngIf="type == 'edit'" [disabled]="disableAddEditHospitalReport()"
+            class="btn btn-sm btn-primary font-weight-bold" app-throttle-click [ThrottleTime]="2000"
+            (ThrottleClick)="submit()">
+      {{ "ACTIONS.UPDATE" | translate }}
+      <span [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'" cacheSVG="true"
+            class="svg-icon svg-icon-md"></span>
+    </button>
+  </div>
+</div>

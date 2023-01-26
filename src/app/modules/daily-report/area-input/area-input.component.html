@@ -1,0 +1,63 @@
+<mat-form-field class="w-100" >
+  <mat-label>{{ placeholder }}</mat-label>
+  <mat-spinner
+    *ngIf="searching"
+    matSuffix
+    [diameter]="18"
+    style="float: right; margin-left: 8px"
+  ></mat-spinner>
+  <input
+    type="text"
+    [placeholder]="'CORRERSPONDENCE.PICK_ONE' | translate"
+    aria-label="Text"
+    matInput
+    [formControl]="searchControl"
+    [matAutocomplete]="auto"
+    (focus)="onFocus()"
+    [required]="required"
+  />
+
+  <mat-autocomplete
+    autoActiveFirstOption
+    #auto="matAutocomplete"
+    (optionSelected)="onSelection($event.option.value)"
+    [displayWith]="displayWith"
+  >
+    <perfect-scrollbar
+      (psYReachEnd)="nextPage($event)"
+      class="h-300px overflow-scroll"
+    >
+      <mat-option *ngFor="let option of areas$ | async" [value]="option">
+        <ng-container *ngIf="lang == 'ar'">
+          <!-- <div class="symbol symbol-circle symbol-30 symbol-primary ml-2">
+            <span class="symbol-label">
+              {{ option?.nameAr | firstLetter }}
+            </span>
+          </div> -->
+          <span dir="">
+            <span class="font-weight"> {{ option?.nameAr }}</span>
+            |
+            <span class="text-muted">{{ option?.nameEn }}</span>
+          </span>
+        </ng-container>
+        <ng-container *ngIf="lang == 'en'">
+          <!-- <div class="symbol symbol-circle symbol-30 symbol-primary ml-2">
+            <span class="symbol-label">
+              {{ option?.nameEn | firstLetter }}
+            </span>
+          </div> -->
+
+          <span>
+            <span class="font-weight"> {{ option?.nameEn }}</span>
+            |
+            <span class="text-muted">{{ option?.nameAr }}</span>
+          </span>
+        </ng-container>
+      </mat-option>
+      <mat-progress-bar
+        *ngIf="loading"
+        mode="indeterminate"
+      ></mat-progress-bar>
+    </perfect-scrollbar>
+  </mat-autocomplete>
+</mat-form-field>

@@ -1,0 +1,40 @@
+<!--begin::Sticky Toolbar-->
+
+<div class="float-btn d-flex">
+    <ul @list *ngIf="isOpened" class="nav flex-column pl-2 pr-2 pt-0 pb-3 mt-1">
+      <li @items class="nav-item mb-2 d-flex" *ngFor="let item of navigation">
+      <ng-container *appPrivileges="item?.privilege" >
+        <a
+          [routerLink]="item.url"
+          (click)="handle(item)"
+          routerLinkActive="active"
+          class="btn btn-icon btn-primary btn-circle mr-2 btn-md"
+        >
+          <span
+            [inlineSVG]="'./assets/media/svg/icons/' + item.icon + '.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+        </a>
+        <span class="title mx-3 px-4 py-1">
+          {{ item.translate | translate }}</span
+        >
+      </ng-container>
+      </li>
+
+    </ul>
+
+    <button
+      (click)="openMenu()"
+      class="btn btn-icon btn-primary btn-circle mr-2 btn-lg pulse pulse-wanning"
+    >
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/General/Thunder.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-lg"
+      ></span>
+      <span class="pulse-ring"></span>
+    </button>
+  </div>
+
+  <!--end::Sticky Toolbar-->

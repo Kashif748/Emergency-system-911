@@ -1,0 +1,174 @@
+<div
+  class="card card-custom"
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  style="overflow-y: auto; overflow-x: hidden"
+>
+  <div class="card-header p-2">
+    <div class="card-title">
+      <span>{{ "GROUP.IncindentsCatTitle" | translate }}</span>
+
+      <span
+        *ngIf="isAddMode"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="!isAddMode"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  <div class="card-body px-3">
+    <div class="d-flex align-items-center mb-9 bg-light-primary rounded p-2">
+      <!--begin::Title-->
+      <div class="d-flex flex-column flex-grow-1 mr-2">
+        <p class="font-weight-bold text-dark-75 font-size-lg mb-1">
+          {{ currentGroup?.nameAr }}
+        </p>
+        <span class="text-muted font-weight-bold">
+          {{ currentGroup?.nameEn }}
+        </span>
+      </div>
+      <!--end::Title-->
+      <!--begin::Lable-->
+      <span class="font-weight-bolder text-primary py-1 font-size-lg">
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Communication/Group.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md svg-icon-primary"
+        ></span>
+        {{ currentGroup?.users?.length }}
+      </span>
+      <!--end::Lable-->
+    </div>
+<div class="d-flex flex-column flex-grow-1 my-1">
+        <p class="text-warning  font-size-lg mb-1">
+          {{ 'GROUP.WARNING_NOTE' | translate }}
+        </p>
+       
+      </div>
+    <form [formGroup]="formGroup">
+      <div>
+        <mat-form-field class="example-chip-list" appearance="fill">
+          <mat-label>
+            {{ "INCIDENTS.MAIN_CAT" | translate }}
+            <span class="required-asterisk">*</span>
+          </mat-label>
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let category of selectedCategories" [removable]="true" (removed)="remove(category)">
+              {{category | propTranslator:'name'}}
+      
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input #categoryInput [formControl]="categoryCtrl" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <ng-container *ngFor="let category of filteredCategories | async">
+              <mat-option [value]="category">
+                {{category | propTranslator:'name'}}
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
+        
+        <label [dir]="directionality.value" id="example-radio-group-label">{{'GROUP.CHOOSE_APPROACH' | translate }}</label>
+        <mat-slide-toggle class="mx-6" (change)="onToggleChanged($event)" [checked]="selectedApproach == 'map'">{{ (selectedApproach == 'map' ? 'GROUP.MAP' : 'GROUP.SELECT') | translate}}</mat-slide-toggle>
+        <!-- <mat-radio-group [dir]="directionality.value" aria-labelledby="example-radio-group-label"
+          [ngModelOptions]="{standalone:true}" class="example-radio-group" [(ngModel)]="selectedApproach">
+          <mat-radio-button class="example-radio-button" *ngFor="let approach of locationApproach" [value]="approach.value">
+            {{approach.name | translate}}
+          </mat-radio-button>
+        </mat-radio-group> -->
+        
+      </div>
+      <mat-divider></mat-divider>
+      <div class="row flex-grow-1 justify-content-center" *ngIf="selectedApproach == 'select'">
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field appearance="fill">
+            <mat-label class="asterisk_input">
+              {{ "INCIDENTS.CENTER" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <mat-select placeholder="{{ 'INCIDENTS.CENTER' | translate }}" formControlName="centers" multiple>
+              <mat-option (onSelectionChange)="selectAll($event)">
+                {{ "GROUP.ALL" | translate }}
+              </mat-option>
+              <mat-option *ngFor="let item of areaItems; let i = index" [value]="item.center.id"
+                (onSelectionChange)="onChangeSub($event, i)">
+                {{
+                lang === "en" ? item.center?.nameEn : item.center?.nameAr
+                }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field appearance="fill">
+            <mat-label class="asterisk_input">
+              {{ "INCIDENTS.DISTRICT" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+      
+            <mat-select placeholder="{{ 'INCIDENTS.DISTRICT' | translate }}" formControlName="zones" multiple>
+              <ng-container *ngFor="let item of areaItems">
+                <mat-optgroup *ngIf="item.center.selected" [label]="
+                            lang === 'en' ? item.center.nameEn : item.center.nameAr
+                          ">
+                  <mat-option *ngFor="let zone of item.zones" [value]="zone.zoneId"
+                    (onSelectionChange)="zone.selected = !zone.selected">
+                    {{ lang === "en" ? zone?.nameEn : zone?.nameAr }}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row flex-grow-1 flex-column justify-content-center"  *ngIf="selectedApproach == 'map'">
+        <form #locationForm="ngForm" class="form-group">
+          <div class="m-4 d-flex  align-items-center justify-content-between" *ngFor="let location of namedLocations; let i = index">
+            <input *ngIf="location.isEditing" ngModel type="text" #name="ngModel" name="name" class="form-control" [(ngModel)]="location.name" />
+            <span *ngIf="!location.isEditing">{{ location.name }}</span>
+            <div class="d-flex">
+              <button *ngIf="location.geometry == null" (click)="openLocationDialoug(i, null)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><mat-icon>place</mat-icon></button>
+            <button *ngIf="location.geometry !== null" (click)="viewLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><mat-icon>visibility</mat-icon></button>
+            <button *ngIf="location.isEditing" (click)="save(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><mat-icon>save</mat-icon></button>
+            <button *ngIf="location.geometry !== null" (click)="updateLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-warning btn btn-sm" ><mat-icon>edit</mat-icon></button>
+            <button [disabled]="namedLocations.length == 1" [ngClass]="{'disabled':namedLocations.length == 1}" (click)="removeLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-danger btn btn-sm" ><mat-icon>delete</mat-icon></button>
+            </div>
+            
+          </div>
+        </form>
+        <button mat-button class=" mx-2 align-self-end btn-primary btn " (click)="addNewLocation()"> <mat-icon>add</mat-icon></button>
+      </div>
+      
+    </form>
+  </div>
+  <div class="card-footer p-2">
+    <button
+      type="submit"
+      [disabled]="((formGroup.invalid && isLocationsInvalid())  || selectedCategories.length == 0)"
+      class="btn btn-primary font-weight-bold"
+      app-throttle-click
+      [ThrottleTime]="1500"
+      (ThrottleClick)="onSubmit()"
+    >
+      {{ (isAddMode ? "SHARED.CREATE" : "SHARED.UPDATE")  | translate }}
+    </button>
+  </div>
+</div>

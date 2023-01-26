@@ -1,0 +1,62 @@
+.tasklist:hover {
+    background-color: #f7f7f7;
+}
+
+table {
+    position: relative;
+    width: 100%;
+    box-shadow: none;
+    border-spacing: 0 15px;
+    border-collapse: separate;
+
+    tr {
+        transition: all 0.2s;
+
+        &:hover {
+            background-color: rgb(245, 245, 245);
+            cursor: pointer;
+        }
+    }
+
+    thead th,
+    thead td {
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
+    }
+
+    tr:last-child,
+    td:last-child {
+        border-top-left-radius: 0.42rem !important;
+        border-bottom-left-radius: 0.42rem !important;
+    }
+
+    tr:first-child,
+    td:first-child {
+        border-top-right-radius: 0.42rem !important;
+        border-bottom-right-radius: 0.42rem !important;
+    }
+}
+
+.table.table-head-bg thead th {
+
+    &:first-child,
+    &:last-child {
+        border-bottom-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+    }
+}
+
+.spinner-container {
+    background-color: rgb(243, 243, 243);
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-white {
+    color: white !important;
+}
+.table.table-head-bg thead tr, .table.table-head-bg thead th{
+  background-color: transparent !important;
+}

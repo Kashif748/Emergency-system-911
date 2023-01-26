@@ -1,0 +1,50 @@
+table {
+  width: 100%;
+  box-shadow: none;
+  border-top: 1px solid #eee;
+  tr {
+    transition: all 0.2s;
+    &:hover {
+      background-color: rgb(245, 245, 245);
+      cursor: pointer;
+    }
+  }
+}
+
+::ng-deep .mat-column-actions {
+  max-width: 70px !important;
+  padding: 5px !important;
+  text-align: center !important;
+}
+.mat-column-modules {
+  text-align: center;
+}
+
+.pagenation {
+  padding: 0px 25px;
+  margin-top: 10px;
+}
+
+select {
+  width: 60px !important;
+  padding: 0 !important;
+  height: 30px !important;
+}
+::ng-deep .mat-progress-bar-buffer {
+  background-color: #e1f0ff !important;
+}
+
+::ng-deep .navigation-modal .mat-dialog-container {
+  padding: 0 !important;
+  overflow: hidden;
+  width: 100% !important;
+}
+
+.pixelated {
+  // image-rendering: pixelated;
+  image-rendering: auto;
+  height: 2em !important;
+  width: 2em !important;
+  border-radius: 50%;
+  border: 1px solid #0053ff21;
+}

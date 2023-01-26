@@ -1,0 +1,43 @@
+<mat-form-field appearance="{{appearance}}" class="w-100">
+  <mat-label>{{ label }}</mat-label>
+  <mat-select (opened)="searchInput?.focus()" placeholder="{{ placeholder }}" [formControl]="control"
+    (infiniteScroll)="_nextPage()" [complete]="complete" msInfiniteScroll [required]="required">
+    <mat-form-field appearance="fill" *ngIf="(list$ | async)?.length > 0 || searchCtrl?.value?.length > 0"
+      class="w-100">
+      <input autocomplete="off" placeholder="{{ searchPlaceholder}}" type="search" [formControl]="searchCtrl"
+        (input)="filterAssigned($event.target.value); $event.preventDefault()" #searchInput="matInput" matInput>
+    </mat-form-field>
+    <mat-progress-bar
+    *ngIf="false"
+     mode="indeterminate">
+   </mat-progress-bar>
+    <mat-option *ngIf="(list$ | async)?.length == 0 && (!searchCtrl?.value || searchCtrl?.value?.length == 0)"
+      [disabled]="true">
+      {{ waitLabel }}
+    </mat-option>
+    <mat-option *ngIf="!required">
+      {{ 'SHARED.NONE' | translate }}
+    </mat-option>
+    <mat-option *ngIf="(list$ | async)?.length == 0 && !(!searchCtrl?.value || searchCtrl?.value?.length == 0)">
+      {{ noDataLabel }}
+    </mat-option>
+    <mat-option *ngFor="let assign of list$ | async" [value]="assign.uid">
+      {{ lang === 'en' ? assign?.nameEn : assign?.nameAr}}
+
+      <span *ngIf="assign?.type == 'org'" class="label label-rounded label-pill label-inline label-success mr-2">{{
+        "SHARED.ORGANIZATION" | translate }}</span>
+
+      <span *ngIf="assign?.type == 'user'" class="label label-rounded label-pill label-inline label-info mr-2">{{
+        "SHARED.USER" | translate }}</span>
+
+      <span *ngIf="assign?.type == 'group'" class="label label-rounded label-pill label-inline label-warning mr-2">{{
+        "SHARED.GROUP" | translate }}</span>
+
+    </mat-option>
+
+  </mat-select>
+
+  <mat-error>
+    {{'VALIDATION_MSG.REQUIRED' | translate }}
+  </mat-error>
+</mat-form-field>

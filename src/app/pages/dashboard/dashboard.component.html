@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <div class="row pb-20">
+    <div class="header-state mb-2 col-lg-2 col-md-12">
+      <div class="row shadow-0">
+        <div class="col-lg-12 col-md-4 col-sm-6 p-0 ">
+          <app-widget1></app-widget1>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-10 col-md-12">
+      <div class="row">
+        <div class="col-12 mb-8">
+          <div
+            class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm"
+          >
+            <div class="card-body  p-0 h-100">
+              <app-map
+                [config]="{ viewOnly: true }"
+                [dashboardMode]="true"
+              ></app-map>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="height:fit-content">
+          <app-widget2 [widgets]="inProgressIncidnts"></app-widget2>
+        </div>
+        <div class="col-md-8">
+          <app-logs></app-logs>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="news-bar border-top row" *ngIf="news">
+  <ng-marquee
+    [stopOnHover]="true"
+    [speed]="'drowsy'"
+    direction="right"
+    class="w-100"
+  >
+    <ng-container *ngTemplateOutlet="marqueeContent"></ng-container>
+  </ng-marquee>
+
+  <ng-template #marqueeContent>
+    <div class="d-inline" *ngFor="let item of news">
+      <p class="d-inline single-news">
+        {{ item.body }}
+      </p>
+
+      <img class="m-4" src="assets/logos/ecms-logo.svg" alt="" />
+    </div>
+  </ng-template>
+</section>

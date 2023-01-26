@@ -1,0 +1,233 @@
+
+<div
+#report
+[class]="{
+  'col-12': (dir$ | async) == 'rtl',
+  'container-fluid': (dir$ | async) != 'rtl'
+}"
+id="daily-report"
+style="max-width: 1600px"
+>
+<!-- <div class="h-150px"></div> -->
+
+<section id="daily-report-page-1">
+  <div class="col-12 bg-main-color h-100px text-center d-flex">
+    <div>
+      <img class="img-fluid h-100px" src="./assets/logos/adcda.png" />
+    </div>
+    <h2 class="text-white availabilty-report-title ">إدارة العمليات - مركز العمليات الرئيسي</h2>
+    <h3 class="text-black m-auto main-title "> منطقة الجاهزية والاستعداد  - المناطق الخارجية </h3>
+  </div>
+
+  <div class="col-12 bg-secondray h-30px text-center d-flex mt-5">
+    <h1 class="text-white m-auto">  مراكز ادارة الانقاذ والاطفاء - النداء الاسلكي (عزام)</h1>
+  </div>
+
+  <div
+  class="
+    col-12
+    h-100px
+    text-center
+    d-flex
+    mt-5
+    table-container table-responsive
+  "
+>
+  <table
+    class="
+      bg-main-color
+      table table-bordered
+      text-black
+      table-vertical-center
+      font-size-h4
+    "
+  >    
+  <!-- <tr>
+      <th>اليوم</th>
+      <th>التاريخ</th>
+      <th>الإعداد</th>
+      <th>الاعتماد</th>
+    </tr> -->
+    <tr>
+      <td></td>
+      <td>
+        <!-- 2021/05/30 -->
+        
+      </td>
+      <td>
+    
+      </td>
+      <td>
+        <!-- الملازم أول/أسعد عوض الهناني -->
+      </td>
+    </tr>
+  </table>
+</div>
+
+  <div class="h-200px"></div>
+ 
+
+  <div class="h-200px"></div>
+  <div
+    class="
+      col-12
+      h-100px
+      text-center
+      d-flex
+      mt-5
+      table-container table-responsive
+    "
+  >
+    <table
+      class="
+        bg-main-color
+        table table-bordered
+        text-white
+        table-vertical-center
+        font-size-h4
+      "
+    >
+      <!-- <tr>
+        <th>اليوم</th>
+        <th>التاريخ</th>
+        <th>الإعداد</th>
+        <th>الاعتماد</th>
+      </tr> -->
+      <tr>
+        <td></td>
+        <td>
+          <!-- 2021/05/30 -->
+     
+        </td>
+        <td>
+     
+        </td>
+        <td>
+          <!-- الملازم أول/أسعد عوض الهناني -->
+        </td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<section id="daily-report-page-2">
+  
+  <!--  -->
+
+</section>
+<div class="h-160px"></div>
+
+  <div class="col-12">
+ 
+      <div class="col-12 bg-main-color h-60px text-center d-flex">
+        <div>
+          <img class="img-fluid h-60px" src="./assets/logos/adcda.png" />
+        </div>
+        
+
+     
+      </div>
+    </div>
+ 
+
+   
+    <!--  -->
+    <!--  -->
+    <div class="row mt-5">
+      <!-- 1 -->
+      <div class="col-md-3">
+        
+      </div>
+      <!-- 2 -->
+
+    
+
+      <!-- 3 -->
+
+   
+      <!-- 4 -->
+
+     
+    </div>
+    <!--  -->
+    <!--  -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="table-container table-responsive text-center">
+         
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="table-container table-responsive text-center">
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="h-150px"></div>
+<section id="daily-report-page-4" *ngIf="form$ | async as form">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-12">
+        <div class="table-container table-responsive text-center">
+          <table class="table table-bordered overflow-hidden m-0">
+            <tr class="bg-main-color text-white">
+              <th colspan="4">
+                نتائج الأداء الرئيسية للمهام والفعاليات بهيئة أبو ظبي للدفاع
+                المدني
+              </th>
+            </tr>
+            <tr class="bg-main-color text-white">
+              <th></th>
+              <th colspan="3">المهام والفعاليات</th>
+            </tr>
+            <tr class="bg-readiness-th-2">
+              <th>المنطقة</th>
+              <th>المهمة</th>
+              <th>المركز</th>
+              <th>تاريخ المهمة</th>
+            </tr>
+            <tr *ngFor="let row of form.performance1">
+              <td *ngFor="let col of row">
+                {{ col?.nameAr ? col?.nameAr : col }}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="h-100px"></div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="table-container table-responsive text-center">
+          <table class="table table-bordered overflow-hidden m-0">
+            <tr class="bg-main-color text-white">
+              <th colspan="7">نتائج الأداء الرئيسية</th>
+            </tr>
+            <tr class="bg-readiness-th-2">
+              <th>عدد حوادث الدفاع المدني</th>
+              <th>عدد تقارير الحوادث</th>
+              <th>عدد اشعارات الارسال للتطبيق</th>
+              <th>عدد إنذارات الغير مؤكدة - حصنتك</th>
+              <th>عدد الاصابات</th>
+              <th>عدد الوفيات</th>
+              <th>عدد المهام والفعاليات</th>
+            </tr>
+            <tr *ngFor="let row of form.performance2">
+              <td *ngFor="let col of row">{{ col }}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="table-container table-responsive text-center">
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,63 @@
+:host {
+  opacity: 0;
+  height: 100%;
+
+  .grid-root {
+    height: 100%;
+  }
+}
+
+.page-loaded {
+  :host {
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+  }
+}
+
+.wrapper {
+  padding-top: 65px !important;
+}
+
+router-outlet ~ * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.custom-main-content {
+  max-width: 1600px;
+  margin: auto;
+  width: 100%;
+  margin-top: -30px;
+  padding-top: 50px !important;
+  // background-color: white;
+}
+
+
+.sidenav-fixed {
+  position:fixed;
+  }
+::ng-deep {
+  .mat-drawer-inner-container {
+    position: relative;
+  }
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+
+@media (max-width: 991.98px){
+  ::ng-deep{
+    .subheader-enabled:not(.subheader-mobile-fixed) .content {
+      padding-top: 15px !important;
+    }
+  }
+
+  .custom-main-content {
+    margin-top: 1px;
+  }
+
+}

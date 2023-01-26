@@ -1,0 +1,605 @@
+<!--Tabs-->
+<div class="tab-container container-fluid d-flex justify-content-between">
+  <div class="tabs">
+    <a
+      class="btn btn-primary btn-lg mx-2 text-center"
+      *appPrivileges="['PRIV_VW_INC', 'PRIV_VW_GRP_INC']"
+      [ngClass]="{
+        active:
+          currentView == incidentViews.COMPLETED_INCIDENTS ||
+          currentView == incidentViews.REJECTED_INCIDENTS ||
+          currentView == incidentViews.IN_PROGRESS_INCIDENTS
+      }"
+      (click)="changeView(incidentViews.ALL_INCIDENTS)"
+    >
+      <span class="link-title">{{ "INCIDENTS.INCIDENTS" | translate }}</span>
+      <span class="link-number">{{ dashboardData?.incidents?.total }}</span>
+      <div class="menu" [ngClass]="{ 'd-none': !showIncidentsMenu }">
+        <a
+          class="btn btn-primary btn-lg mx-2 text-center menu-item"
+          [ngClass]="{
+            active: currentView == incidentViews.IN_PROGRESS_INCIDENTS
+          }"
+          (click)="
+            changeView(incidentViews.IN_PROGRESS_INCIDENTS);
+            $event.stopPropagation()
+          "
+        >
+          <span class="link-title">{{
+            "DASHBOARD.IN_PROGRESS_INCIDENTS" | translate
+          }}</span>
+          <span class="link-number d-flex justify-content-center"
+            ><span>{{ dashboardData?.incidents?.inProgress?.total }}</span>
+            <mat-icon>update</mat-icon></span
+          >
+        </a>
+        <a
+          class="btn btn-primary btn-lg mx-2 text-center menu-item"
+          [ngClass]="{
+            active: currentView == incidentViews.COMPLETED_INCIDENTS
+          }"
+          (click)="
+            changeView(incidentViews.COMPLETED_INCIDENTS);
+            $event.stopPropagation()
+          "
+        >
+          <span class="link-title">{{
+            "INCIDENTS.CLOSED_INCIDENTS" | translate
+          }}</span>
+          <span class="link-number d-flex justify-content-center"
+            ><span>{{ dashboardData?.incidents?.completed?.total }}</span>
+            <mat-icon>task_alt</mat-icon></span
+          >
+        </a>
+        <a
+          class="btn btn-primary btn-lg mx-2 text-center menu-item"
+          [ngClass]="{
+            active: currentView == incidentViews.REJECTED_INCIDENTS
+          }"
+          (click)="
+            changeView(incidentViews.REJECTED_INCIDENTS);
+            $event.stopPropagation()
+          "
+        >
+          <span class="link-title">{{
+            "DASHBOARD.REJECTED_INCIDENTS" | translate
+          }}</span>
+          <span class="link-number d-flex justify-content-center"
+            ><span>{{ dashboardData?.incidents?.rejected?.total }}</span>
+            <mat-icon>warning</mat-icon></span
+          >
+        </a>
+      </div>
+    </a>
+
+    <a
+      *appPrivileges="'PRIV_VW_INQ'"
+      class="btn btn-primary btn-lg mx-2 text-center"
+      (click)="changeView(incidentViews.INQUIRIES)"
+      [ngClass]="{ active: currentView == incidentViews.INQUIRIES }"
+    >
+      <span class="link-title">{{
+        "INCIDENTS.INQUIRIES_TITLE" | translate
+      }}</span>
+      <span class="link-number">{{ dashboardData?.inquiry?.total }}</span>
+    </a>
+    <a
+      *appPrivileges="'PRIV_VW_INT_INC'"
+      class="btn btn-primary btn-lg mx-2 text-center"
+      (click)="changeView(incidentViews.INTERIM_INCIDENTS)"
+      [ngClass]="{ active: currentView == incidentViews.INTERIM_INCIDENTS }"
+    >
+      <span class="link-title">{{
+        "INCIDENTS.INTERIM_INCIDENTS" | translate
+      }}</span>
+      <span class="link-number">{{
+        dashboardData?.interimIncidents?.total
+      }}</span>
+    </a>
+    <a
+      class="btn btn-primary btn-lg mx-2 extra text-center menu-item"
+      [ngClass]="{ active: currentView == incidentViews.COMPLETED_INCIDENTS }"
+      (click)="
+        changeView(incidentViews.COMPLETED_INCIDENTS); $event.stopPropagation()
+      "
+    >
+      <span class="link-title">{{
+        "INCIDENTS.CLOSED_INCIDENTS" | translate
+      }}</span>
+      <span class="link-number"
+        ><span>{{ dashboardData?.incidents?.completed?.total }}</span>
+        <mat-icon>task_alt</mat-icon></span
+      >
+    </a>
+    <a
+      class="btn btn-primary btn-lg mx-2 extra text-center menu-item"
+      [ngClass]="{ active: currentView == incidentViews.IN_PROGRESS_INCIDENTS }"
+      (click)="
+        changeView(incidentViews.IN_PROGRESS_INCIDENTS);
+        $event.stopPropagation()
+      "
+    >
+      <span class="link-title">{{
+        "DASHBOARD.IN_PROGRESS_INCIDENTS" | translate
+      }}</span>
+      <span class="link-number"
+        ><span>{{ dashboardData?.incidents?.inProgress?.total }}</span>
+        <mat-icon>update</mat-icon></span
+      >
+    </a>
+  </div>
+  <div class="d-flex">
+    <div class="add-incident" *appPrivileges="'PRIV_CR_INC'">
+      <a
+        (click)="navigateTo(navigationViews.ADD_INCIDENT)"
+        class="btn btn-lg p-4 m-2"
+        >{{ "INCIDENTS.NEW_INCIDENTS" | translate }}</a
+      >
+    </div>
+    <div class="add-incident" *appPrivileges="'PRIV_CR_INQ'">
+      <a
+        (click)="navigateTo(navigationViews.VIEW_INQURY, 0)"
+        class="btn btn-lg p-4 m-2"
+        >{{ "INCIDENTS.NEW_INQUIRY" | translate }}</a
+      >
+    </div>
+  </div>
+</div>
+<div
+  class="advanced-controls row container-fluid d-flex justify-content-end my-4 py-2"
+>
+  <div class="export">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Example icon-button with a menu"
+      class="d-flex justify-content-between"
+    >
+      <span>{{ "ACTIONS.EXPORT" | translate }}</span>
+      <mat-icon> file_download </mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="exportPdf()">
+        <span
+          [inlineSVG]="'./assets/media/svg/files/pdf.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-lg"
+        ></span>
+        <span> {{ "ACTIONS.EXPORT_TO_PDF" | translate }}</span>
+      </button>
+      <button mat-menu-item (click)="exportExcel()">
+        <span
+          [inlineSVG]="'./assets/media/svg/files/xlsx.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-lg"
+        ></span>
+        <span> {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}</span>
+      </button>
+    </mat-menu>
+  </div>
+  <div
+    class="advanced-search d-flex justify-content-between p-2"
+    (click)="openAdvancedSearchModal()"
+  >
+    <span class="advanced-search__title">{{
+      "ACTIONS.ADVANCED_SEARCH" | translate
+    }}</span>
+    <span><mat-icon>filter_alt</mat-icon></span>
+  </div>
+
+  <!-- <div class="view-switch d-flex p-2 mx-2 flex-row-reverse">
+        <span><mat-icon>pin_drop</mat-icon></span>
+         <span><mat-icon>grid_view</mat-icon></span>
+        <span><mat-icon>menu</mat-icon></span>
+    </div> -->
+</div>
+<div class="row container-fluid">
+  <div class="table-header w-100 d-flex justify-content-between">
+    <div class="time-filters">
+      <ng-container
+        *ngIf="
+          currentView === incidentViews.IN_PROGRESS_INCIDENTS ||
+          currentView === incidentViews.COMPLETED_INCIDENTS ||
+          currentView === incidentViews.REJECTED_INCIDENTS ||
+          currentView === incidentViews.ALL_INCIDENTS
+        "
+      >
+        <span class="backgr-anti-flash-white all">{{
+          "INCIDENTS.ALL" | translate
+        }}</span>
+        <span class="backgr-medium-champagne thirty">30%</span>
+        <span class="backgr-pale-pink sixty">60%</span>
+        <span class="backgr-tulip late">{{
+          "INCIDENTS.LATE" | translate
+        }}</span>
+      </ng-container>
+    </div>
+    <div class="tab-title text-medium-slate-blue">{{ tableTitle }}
+      <div class="text-center mt-4" style="color:#000;" *ngIf="currentView !== incidentViews.INTERIM_INCIDENTS &&
+                                                                currentView !== incidentViews.INQUIRIES">
+        <mat-slide-toggle #toggleElement class="example-margin" [checked]="false" (change)="viewChange($event)">
+          {{ "INCIDENTS.MAPVIEW" | translate }}
+        </mat-slide-toggle>
+      </div></div>
+
+    <div class="column-selector">
+      <ngx-select-dropdown
+        [options]="incidentDisplayedColumns"
+        (change)="onDropdownChange($event)"
+        [(ngModel)]="selectedDisplayedCols"
+        [multiple]="true"
+        [config]="{ displayKey: 'name' }"
+      ></ngx-select-dropdown>
+    </div>
+
+  </div>
+  <div class="table-responsive container-fluid my-2 px-1 mapView" *ngIf="mapView" id="mapView">
+    <app-map #mapContainer id="mapContainer" [config]="{ viewOnly: true, showLayers: false }" [dashboardMode]="false"
+             [showLayers]="false">
+    </app-map>
+</div>
+  <div class="table-responsive container-fluid my-2 px-1"  id="tableView" *ngIf="!mapView">
+    <table class="table w-100">
+      <thead>
+        <tr>
+          <th
+            class="kpi-head"
+            *ngIf="
+              currentView === incidentViews.IN_PROGRESS_INCIDENTS ||
+              currentView === incidentViews.COMPLETED_INCIDENTS ||
+              currentView === incidentViews.REJECTED_INCIDENTS ||
+              currentView === incidentViews.ALL_INCIDENTS
+            "
+          ></th>
+          <th
+            scope="col"
+            *ngFor="let col of selectedDisplayedCols | orderBy: 'order'"
+          >
+            {{ col.name }}
+          </th>
+          <th scope="col">{{ "ACTIONS.ACTIONS" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody
+        *ngIf="
+          (currentView === incidentViews.IN_PROGRESS_INCIDENTS ||
+            currentView === incidentViews.COMPLETED_INCIDENTS ||
+            currentView === incidentViews.REJECTED_INCIDENTS ||
+            currentView === incidentViews.ALL_INCIDENTS) &&
+          !(isLoading$ | async)
+        "
+      >
+        <tr
+          *ngFor="let row of data | paginate: paginationConfig"
+          (click)="navigateTo(navigationViews.VIEW_INCIDENT, row['id'])"
+        >
+          <td
+            class="kpi"
+            [ngClass]="getKpiPeriodClass(row['timeTakenPercentage'])"
+          ></td>
+          <td *ngIf="showRow(columnValues.SR_NO)" class="number">
+            <span>
+              <mat-icon *ngIf="row?.status?.id === 2">task_alt</mat-icon>
+              <mat-icon *ngIf="row?.status?.id === 1">update</mat-icon>
+            </span>
+
+            <span>{{ row[columnValues.SR_NO] }}</span>
+          </td>
+          <td *ngIf="showRow(columnValues.SUBJECT)" class="subject">
+            <span>
+              {{ row[columnValues.SUBJECT] | slice: 0:50 }}
+              <mat-icon *ngIf="row[columnValues.SUBJECT]?.length > 50"
+                >more_horiz</mat-icon
+              ></span
+            >
+          </td>
+          <td
+            *ngIf="showRow(columnValues.INCIDENT_DATE)"
+            class="incident-datetime"
+          >
+            {{ row[columnValues.INCIDENT_DATE] }}
+          </td>
+
+          <td *ngIf="showRow(columnValues.PRIORITY)" class="priority">
+            <app-priority-badge
+              [priority]="getPriority(row[columnValues.PRIORITY])"
+            ></app-priority-badge>
+          </td>
+          <td *ngIf="showRow(columnValues.MAIN_CATEGORY)" class="main-category">
+            <span>{{
+              row[columnValues.MAIN_CATEGORY] | propTranslator: "name"
+            }}</span>
+          </td>
+          <td *ngIf="showRow(columnValues.CENTER)" class="region">
+            <span>{{
+              getCity(row[columnValues.CENTER]) | propTranslator: "name"
+            }}</span>
+          </td>
+          <td *ngIf="showRow(columnValues.GROUPS)" class="teams">
+            <div class="dropdown" ngbDropdown>
+              <button
+                class="btn btn-sm font-weight-bolder dropdown-toggle d-flex py-1"
+                data-toggle="dropdown"
+                data-offset="0px,0px"
+                ngbDropdownToggle
+                (click)="$event.stopPropagation()"
+              >
+                <mat-icon>groups</mat-icon>
+                <span
+                  class="font-weight-bolder font-size-lg mx-4"
+                  style="vertical-align: sub"
+                  >{{ row[columnValues.GROUPS]?.length }}</span
+                >
+              </button>
+              <div ngbDropdownMenu class="dropdown-menu dropdown-menu-anim-up">
+                <span
+                  *ngFor="let item of row[columnValues.GROUPS]"
+                  class="dropdown-item"
+                  (click)="$event.stopPropagation()"
+                >
+                  <span
+                    class="text-dark-75 font-weight-bolder label label-lg label-light-primary label-inline"
+                  >
+                    {{ item?.group | propTranslator: "name" }} </span
+                  ><br />
+                </span>
+              </div>
+            </div>
+          </td>
+          <td
+            *ngIf="showRow(columnValues.RESPONSIBLE_ORG)"
+            class="responsibleOrg"
+          >
+            {{ row[columnValues.RESPONSIBLE_ORG] | propTranslator: "name" }}
+          </td>
+          <td *ngIf="showRow(columnValues.PARENT_ORG)" class="primaryOrg">
+            {{
+              getParentOrg(row[columnValues.PARENT_ORG])
+                | propTranslator: "name"
+            }}
+          </td>
+          <td *ngIf="showRow(columnValues.TASKS)">
+            <div class="d-flex flex-column">
+              <span
+                *ngIf="
+                  row[columnValues.TASKS]?.openTasks +
+                    row[columnValues.TASKS]?.delayedTasks >
+                  0
+                "
+                class="badge m-1"
+                [ngClass]="{
+                  'badge-success': row[columnValues.TASKS]?.delayedTasks == 0,
+                  'badge-danger': row[columnValues.TASKS]?.delayedTasks > 0
+                }"
+                >{{ "INCIDENTS.NOT_CLOSED" | translate }}:
+                {{
+                  row[columnValues.TASKS]?.openTasks +
+                    row[columnValues.TASKS]?.delayedTasks
+                }}
+                <br />
+              </span>
+              <span
+                *ngIf="row[columnValues.TASKS]?.closedTasks > 0"
+                class="badge badge-secondary m-1"
+                >{{ "INCIDENTS.CLOSED" | translate }}:
+                {{ row[columnValues.TASKS]?.closedTasks }}</span
+              >
+            </div>
+          </td>
+          <td (click)="disableNavigation($event)" class="actions">
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Example icon-button with a menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <ng-container *appPrivileges="'PRIV_CR_TASK'">
+                <button
+                  mat-menu-item
+                  *ngIf="canUserTaskUpdate(row.responsibleOrg?.id)"
+                  (click)="createTask(row.subject, row.id)"
+                >
+                  <mat-icon>add_box</mat-icon>
+                  <span>ِ{{ "INCIDENTS.CREATE_TASK" | translate }}</span>
+                </button>
+              </ng-container>
+
+              <ng-container *appPrivileges="'PRIV_SHR_INC'">
+                <button mat-menu-item (click)="sendMail($event, row.id)">
+                  <mat-icon>send</mat-icon>
+                  <span>{{ "INCIDENTS.SHARE_VIA_EMAIL" | translate }}</span>
+                </button>
+              </ng-container>
+
+              <ng-container *appPrivileges="'PRIV_ESC_INC'">
+                <button
+                  mat-menu-item
+                  *ngIf="canEditResponsibleOrg(row)"
+                  (click)="
+                    openModal('edit', row?.responsibleOrg?.id, row?.id);
+                    $event.stopPropagation()
+                  "
+                >
+                  <mat-icon>trending_up</mat-icon>
+                  <span>
+                    {{ "INCIDENTS.ESCALATE_TO_ORGANIZATION" | translate }}</span
+                  >
+                </button>
+              </ng-container>
+
+              <ng-container *appPrivileges="'PRV_ED_INC'">
+                <button
+                  mat-menu-item
+                  *ngIf="
+                    canUserUpdate(row?.primaryOrgId, row?.responsibleOrg?.id)
+                  "
+                  (click)="updateIncident(row.id)"
+                >
+                  <mat-icon>edit</mat-icon>
+                  <span>{{ "INCIDENTS.UPDATE_INCIDENT" | translate }}</span>
+                </button>
+              </ng-container>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+      <tbody
+        *ngIf="currentView === incidentViews.INQUIRIES && !(isLoading$ | async)"
+      >
+        <tr
+          *ngFor="let row of data | paginate: paginationConfig"
+          (click)="navigateTo(navigationViews.VIEW_INQURY, row['id'])"
+        >
+          <td *ngIf="showRow(columnValues.SR_NO)" class="id">
+            <span>{{ row[columnValues.SR_NO] }}</span>
+          </td>
+          <td *ngIf="showRow(columnValues.SUBJECT)" class="subject">
+            <span>{{ row[columnValues.SUBJECT] }}</span>
+          </td>
+          <td
+            *ngIf="showRow(columnValues.CREATED_DATE)"
+            class="incident-datetime"
+          >
+            {{
+              row[columnValues.CREATED_DATE]
+                | customDate
+                | date: "yyyy-MM-dd h:mm:ss"
+            }}
+          </td>
+          <td *ngIf="showRow(columnValues.REPORTING_CONTACT)" class="">
+            <span>{{ row["reportedByMobile"] }}</span>
+          </td>
+          <td (click)="disableNavigation($event)" class="actions">
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Example icon-button with a menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                (click)="navigateTo(navigationViews.VIEW_INQURY, row['id'])"
+              >
+                <mat-icon>edit</mat-icon>
+                <span>{{ "ACTIONS.EDIT" | translate }}</span>
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+      <tbody
+        *ngIf="
+          currentView === incidentViews.INTERIM_INCIDENTS &&
+          !(isLoading$ | async)
+        "
+      >
+        <tr
+          *ngFor="let row of data | paginate: paginationConfig"
+          (click)="
+            navigateTo(this.navigationViews.VIEW_INTERIM_INCIDENT, row['id'])
+          "
+        >
+          <td *ngIf="showRow(columnValues.SR_NO)" class="sr_no">
+            {{ row[columnValues.SR_NO] }}
+          </td>
+          <td *ngIf="showRow(columnValues.DESCRIPTION)" class="subject">
+            <span>{{ row[columnValues.DESCRIPTION] }}</span>
+          </td>
+          <td
+            *ngIf="showRow(columnValues.CREATED_ON)"
+            class="incident-datetime"
+          >
+            {{ row[columnValues.CREATED_ON] }}
+          </td>
+          <td
+            *ngIf="showRow(columnValues.REPORTER_CONTANCT)"
+            class="reporter_phone"
+          >
+            <span>{{ row[columnValues.REPORTER_CONTANCT] }}</span>
+          </td>
+          <td *ngIf="showRow(columnValues.REPORTING_VIA)" class="channelType">
+            <span>{{
+              getReportingVia(row[columnValues.REPORTING_VIA])
+                | propTranslator: "name"
+            }}</span>
+          </td>
+          <td *ngIf="showRow(columnValues.STATUS)" class="status">
+            <span
+              [ngClass]="{
+                'text-success': row?.status?.statusEn === 'Under Evaluation',
+                'text-primary': row?.status?.statusEn === 'Approved',
+                'text-danger': row?.status?.statusEn === 'Declined',
+                'text-warning': row?.status?.statusEn === 'Transferred'
+              }"
+              >{{
+                getStatusVia(row[columnValues.STATUS]) | propTranslator: "name"
+              }}</span
+            >
+          </td>
+
+          <td (click)="disableNavigation($event)" class="actions">
+            <ng-container *appPrivileges="'PRIV_AR_INT_INC'">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu"
+                *ngIf="row?.status?.id !== 3"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button
+                  mat-menu-item
+                  *ngIf="row?.status?.id === 1"
+                  (click)="
+                    navigateTo(navigationViews.APPROVE_INTERIM, row['id'])
+                  "
+                >
+                  <mat-icon>add_box</mat-icon>
+                  <span>{{ "ACTIONS.APPROVE" | translate }}</span>
+                </button>
+                <button
+                  mat-menu-item
+                  *ngIf="row?.status?.id === 1"
+                  (click)="openStatusDialog(row[columnValues.SR_NO])"
+                >
+                  <mat-icon>send</mat-icon>
+                  <span>{{ "ACTIONS.DECLINE" | translate }}</span>
+                </button>
+
+                <button
+                  mat-menu-item
+                  *ngIf="row?.status?.id === 2"
+                  (click)="
+                    navigateTo(
+                      this.navigationViews.VIEW_INTERIM_INCIDENT,
+                      row['id']
+                    )
+                  "
+                >
+                  <mat-icon>visibility</mat-icon>
+                  <span>{{ "ACTIONS.VIEW" | translate }}</span>
+                </button>
+              </mat-menu>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="spinner-container m-auto p-10" *ngIf="isLoading$ | async">
+      <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+    </div>
+    <pagination-controls
+      previousLabel="Prev"
+      nextLabel="Next"
+      responsive="true"
+      [id]="'inc_table_rep'"
+      (pageChange)="pageChanged($event)"
+    >
+    </pagination-controls>
+  </div>
+</div>

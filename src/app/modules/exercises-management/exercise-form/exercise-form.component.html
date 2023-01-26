@@ -1,0 +1,67 @@
+<div class="card card-custom">
+  <div class="card-body px-0 d-flex">
+    <!--begin: Wizard-->
+
+    <ul class="navi navi-hover navi-active w-25 px-4">
+      <li
+        class="navi-item cursor-pointer mb-2"
+        *ngFor="let item of tabs"
+        (click)="activeTab = item.name"
+      >
+        <a
+          class="navi-link rounded-lg px-0 py-2"
+          [ngClass]="{ active: activeTab == item.name }"
+        >
+          <span class="symbol symbol-45 symbol-circle mx-2">
+            <span class="symbol-label"
+              ><i class="text-danger" [class]="item.icon"></i
+            ></span>
+          </span>
+          <span class="navi-text font-weight-bold">{{
+            "EXERCISEIS." + item.name | translate
+          }}</span>
+        </a>
+      </li>
+    </ul>
+
+    <div
+      class="w-75 px-5 border-right d-flex flex-column justify-content-between"
+    >
+      <div [ngSwitch]="activeTab">
+        <div *ngSwitchCase="'main_info'" @fadeSlideInOut>
+          <app-main-details></app-main-details>
+        </div>
+
+        <div *ngSwitchCase="'committee'" [@fader]>
+          <app-exercise-committe></app-exercise-committe>
+        </div>
+        <div *ngSwitchCase="'goals'" @fadeSlideInOut>
+          <app-exercise-goals></app-exercise-goals>
+        </div>
+        <div *ngSwitchCase="'entitis'">
+          <app-exercise-entites></app-exercise-entites>
+        </div>
+        <div *ngSwitchCase="'other_info'">
+          <app-exercise-other-info></app-exercise-other-info>
+        </div>
+        <div *ngSwitchDefault></div>
+      </div>
+
+      <div class="d-flex pt-6">
+        <button
+          type="button"
+          class="btn btn-md btn-primary font-weight-bold text-uppercase px-6 py-2 mx-4"
+        >
+          {{ "ACTIONS.NEXT" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-md btn-light-primary font-weight-bold text-uppercase px-6 py-2"
+        >
+          {{ "ACTIONS.PREVIOUS" | translate }}
+        </button>
+      </div>
+    </div>
+    <!--end: Wizard-->
+  </div>
+</div>

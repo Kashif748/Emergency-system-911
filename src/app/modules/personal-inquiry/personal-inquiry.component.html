@@ -1,0 +1,1166 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="d-flex card-header1 justify-content-center">
+            <app-breadcrumbs></app-breadcrumbs>
+          </div>
+          <div class="card-body">
+            <mat-form-field
+              hintLabel="{{ 'PERSONAL_INQUIRY.EMIRATE_ID_HINT' | translate }}"
+              appearance="outline"
+              [dir]="translationService.dir"
+            >
+              <mat-label>{{
+                "PERSONAL_INQUIRY.EMIRATE_ID" | translate
+              }}</mat-label>
+              <input
+                maxlength="15"
+                #eid
+                type="text"
+                matInput
+                placeholder="777190012345678"
+              />
+              <button
+                matSuffix
+                mat-icon-button
+                color="primary"
+                (click)="clickEvent(eid.value)"
+              >
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <div class="spinner-container m-auto p-10" *ngIf="isSearchMode">
+              <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+            </div>
+
+            <div class="mt-5" *ngIf="!isSearchMode">
+              <div class="row">
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.ID_NO" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.identityCard?.idn"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.ID_ISSUE_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.identityCard?.issueDate | date"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.ID_EXPIRY_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.identityCard?.expiryDate | date"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.ID_BACK_NO" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.identityCard?.idnbackNumber"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.NAME_AR" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.personName?.fullNameArabic"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.NAME_EN" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.personName?.fullNameEnglish"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.NATIONALITY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.nationality?.descriptionArabic
+                          : personalInfo?.nationality?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.GENDER" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.gender?.descriptionArabic
+                          : personalInfo?.gender?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.BIRTH_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.birthDate | date"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.BIRTH_COUNTRY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.birthCountry?.descriptionArabic
+                          : personalInfo?.birthCountry?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.BIRTH_EMIRATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.birthEmirate?.descriptionArabic
+                          : personalInfo?.birthEmirate?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.BIRTH_CITY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.birthCity?.descriptionArabic
+                          : personalInfo?.birthCity?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.BIRTH_PLACE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.birthPlaceArabic
+                          : personalInfo?.birthPlaceEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.MARTIAL_STATUS" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.maritalStatus?.descriptionArabic
+                          : personalInfo?.maritalStatus?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.CLAN_NAME" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.personName?.clanNameArabic
+                          : personalInfo?.personName?.clanNameEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.EDBARAH_NO" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.edbarahNo"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.RELIGION" | translate
+                    }}</mat-label>
+                    <input matInput readonly [value]="personalInfo?.religion" />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.PIMARY_LANG_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.pimarylangCode"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.PERSON_TYPE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.personType?.descriptionArabic
+                          : personalInfo?.personType?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.IS_INSIDE_COUNTRY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.isInsideCountry"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.BLOOD_TYPE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.bloodType"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.DISABILITY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.disability"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!-- Addresses -->
+                <div class="col-12 my-3">
+                  <div
+                    class="row border rounded-lg"
+                    *ngFor="
+                      let address of personalInfo?.addresses?.address;
+                      let index = index
+                    "
+                  >
+                    <h5 class="col-12 text-muted mt-2">
+                      {{ "PERSONAL_INQUIRY.ADDRESS" | translate }} ({{
+                        index + 1
+                      }})
+                    </h5>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.EMIRATE" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.emirate
+                                  ?.descriptionArabic
+                              : address?.localAddress?.emirate
+                                  ?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.CITY" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.city?.descriptionArabic
+                              : address?.localAddress?.city?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.AREA" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.area?.descriptionArabic
+                              : address?.localAddress?.area?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.STREET" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.street?.descriptionArabic
+                              : address?.localAddress?.area?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.BUILDING" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.building"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.POBOX_NO" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.poboxNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.MOBILE_NO" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.mobileNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.EMAIL_ADDRESS" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.emailAddress"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.WORK_PHONE" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.workPhone"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.HOME_PHONE" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.homePhone"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.SECOND_MOBILE_NO" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.secondMobileNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- START FAMILY -->
+              <div class="row py-2 my-5 border rounded-lg">
+                <h3 class="col-12 text-muted">
+                  {{ "PERSONAL_INQUIRY.FAMILY" | translate }}
+                </h3>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.FAMILY_NAME" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.personName?.familyNameArabic
+                          : personalInfo?.personName?.familyNameEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.FAMILY_BOOK_NO" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.familyBookNo"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.FAMILY_BOOK_START_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.familyBookStartDate"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.FAMILY_BOOK_RELATION" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.familyBookRelation"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.WIVES" | translate
+                    }}</mat-label>
+                    <input matInput readonly [value]="personalInfo?.wives" />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.RELATIVES" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.relatives"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.FAMILY_COUNT" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.familyCount"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.FAMILY_MALE_COUNT" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.familyMaleCount"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.FAMILY_FEMALE_COUNT" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.familyFemaleCount"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- END FAMILY -->
+
+              <!-- START QUALIFICATION -->
+              <div class="row py-2 my-5 border rounded-lg">
+                <h3 class="col-12 text-muted">
+                  {{ "PERSONAL_INQUIRY.COMPANY" | translate }}
+                </h3>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.COMPANY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.companyAr
+                          : personalInfo?.companyEn
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.COMPANY_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.companyCode"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.COMPANY_TYPE_CODE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.companyTypeCode"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- END QUALIFICATION -->
+
+              <!-- START QUALIFICATION -->
+              <div class="row py-2 my-5 border rounded-lg">
+                <h3 class="col-12 text-muted">
+                  {{ "PERSONAL_INQUIRY.QUALIFICATION" | translate }}
+                </h3>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.OCCUPATION" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.occupation?.descriptionArabic
+                          : personalInfo?.occupation?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.COUNTRY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.qualification?.country
+                              ?.descriptionArabic
+                          : personalInfo?.qualification?.country
+                              ?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.SPECIALIZATION" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.qualification?.specialization
+                              ?.descriptionArabic
+                          : personalInfo?.qualification?.specialization
+                              ?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.GRADE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.qualification?.grade"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.QUALIFICATION_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        personalInfo?.qualification?.qualificationDate | date
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.NOTE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.qualification?.note"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- END QUALIFICATION -->
+
+              <!-- START PASSPORT -->
+              <div class="row py-2 my-5 border rounded-lg">
+                <h3 class="col-12 text-muted">
+                  {{ "PERSONAL_INQUIRY.PASSPORT" | translate }}
+                </h3>
+
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.PASSPORT_NO" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.passport?.passportNo"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.PASSPORT_TYPE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.passport?.passportType
+                              ?.descriptionArabic
+                          : personalInfo?.passport?.passportType
+                              ?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.PASSPORT_ISSUE_PLACE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.passport?.issuePlace"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.ID_ISSUE_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.passport?.issueDate | date"
+                    />
+                  </mat-form-field>
+                </div>
+                <!--  -->
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.ID_EXPIRY_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="personalInfo?.passport?.expiryDate | date"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.ISSUE_COUNTRY" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.passport?.issueCountry
+                              ?.descriptionArabic
+                          : personalInfo?.passport?.issueCountry
+                              ?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- END PASSPORT -->
+
+              <!-- START SPONSOR -->
+              <div class="row py-2 my-5 border rounded-lg">
+                <h3 class="col-12 text-muted">
+                  {{ "PERSONAL_INQUIRY.SPONSOR" | translate }}
+                </h3>
+                <!--  -->
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.SPONSOR" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.sponsor?.nameArabic
+                          : personalInfo?.sponsor?.nameEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!--  -->
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{
+                      "PERSONAL_INQUIRY.SPONSOR_DEPARTMENT" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      readonly
+                      [value]="
+                        lang == 'ar'
+                          ? personalInfo?.sponsor?.department?.descriptionArabic
+                          : personalInfo?.sponsor?.department
+                              ?.descriptionEnglish
+                      "
+                    />
+                  </mat-form-field>
+                </div>
+                <!-- Addresses -->
+                <div class="col-12 my-3">
+                  <div
+                    class="row border-top"
+                    *ngFor="
+                      let address of personalInfo?.sponsor?.addresses?.address;
+                      let index = index
+                    "
+                  >
+                    <h5 class="col-12 text-muted mt-2">
+                      {{ "PERSONAL_INQUIRY.ADDRESS" | translate }} ({{
+                        index + 1
+                      }})
+                    </h5>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.EMIRATE" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.emirate
+                                  ?.descriptionArabic
+                              : address?.localAddress?.emirate
+                                  ?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.CITY" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.city?.descriptionArabic
+                              : address?.localAddress?.city?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.AREA" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.area?.descriptionArabic
+                              : address?.localAddress?.area?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.STREET" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="
+                            lang == 'ar'
+                              ? address?.localAddress?.street?.descriptionArabic
+                              : address?.localAddress?.area?.descriptionEnglish
+                          "
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.BUILDING" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.building"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.POBOX_NO" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.poboxNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.MOBILE_NO" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.mobileNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.EMAIL_ADDRESS" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.emailAddress"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.WORK_PHONE" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.workPhone"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.HOME_PHONE" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.homePhone"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <!--  -->
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{
+                          "PERSONAL_INQUIRY.SECOND_MOBILE_NO" | translate
+                        }}</mat-label>
+                        <input
+                          matInput
+                          readonly
+                          [value]="address?.localAddress?.secondMobileNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- END SPONSOR -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

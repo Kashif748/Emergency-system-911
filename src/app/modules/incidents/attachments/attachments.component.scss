@@ -1,0 +1,32 @@
+.files {
+  width: 83%;
+}
+
+.files input {
+  width: 100%;
+}
+
+li {
+  text-align: right;
+  position: relative;
+}
+
+li > p {
+  position: absolute;
+  margin: revert;
+}
+
+i.icon-red {
+  color: rgb(211, 98, 98);
+}
+
+:host :ng-deep .mat-menu-panel {
+  min-width: unset !important;
+  max-height: unset !important;
+}
+
+::ng-deep .dark-mode {
+  .card-footer {
+    background-color: var(--background-secondary-color) !important;
+  }
+}

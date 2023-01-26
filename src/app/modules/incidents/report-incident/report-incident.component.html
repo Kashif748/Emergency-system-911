@@ -1,0 +1,13 @@
+<ng-container [ngSwitch]="org">
+  <div *ngSwitchCase="'ADCMC'">
+    <app-main-org></app-main-org>
+  </div>
+
+  <div *ngSwitchCase="'ADCDA'">
+    <app-civil-defence-form></app-civil-defence-form>
+  </div>
+
+  <div *ngSwitchDefault>
+    <app-sub-org></app-sub-org>
+  </div>
+</ng-container>

@@ -1,0 +1,25 @@
+export const environment = {
+  NAME: 'PROD',
+  production: true,
+  appVersion: 'v712demo1',
+  USERDATA_KEY: 'authf649fc9a5f55',
+  isMockEnabled: true,
+  apiUrl: 'ecms/v1',
+  apiUrlNoV1: 'ecms/v1',
+  apiUrlV2: 'ecms/v2',
+  SOCKET_ENDPOINT: 'ecms/ecms-websocket',
+  UAE_PASS_HOST: 'https://id.uaepass.ae',
+  UAE_PASS_CLIENT_ID: 'adcmcm_web_prod',
+  UAE_PASS_ROUTE: '/auth/login',
+  ADMGIS_ROOT_ROUTE: '/admgisn',
+  firebase: {
+    apiKey: 'AIzaSyAJEmaLjWewp8rxKS9nHABmZq1RANR9zN0',
+    authDomain: 'ecms-bdc26.firebaseapp.com',
+    projectId: 'ecms-bdc26',
+    storageBucket: 'ecms-bdc26.appspot.com',
+    messagingSenderId: '390401346167',
+    appId: '1:390401346167:web:1f3d4b6914480d73c95472',
+    vapidKey:
+      'BPQS6tE8rEcyywn0Vtx-9xyjGOj5iVMPKedtwdly413Zv9EJ3Qj8NnUvlpo9HvJSpMg1Smq8OkAetdKEKuL33yQ',
+  },
+};

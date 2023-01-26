@@ -1,0 +1,245 @@
+<div class="col-xxl-12 order-2 order-xxl-1 p-0">
+  <div class="table-container">
+    <table
+      matSort
+      (matSortChange)="customSort($event)"
+      class="table table-head-custom table-head-bg table-borderless table-vertical-center"
+    >
+      <thead>
+      <tr>
+        <th
+          *ngFor="let column of displayedColumns"
+          [mat-sort-header]="column.id"
+        >
+          {{ column.keyTranslate | translate }}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
+        *ngFor="let element of incidentsData | paginate: paginationConfig"
+        (click)="viewIncident(element.id)"
+        title="{{ 'INCIDENTS.VIEW_INCIDENT' | translate }}"
+        class="bg-white rounded shadow-sm"
+        [ngClass]="{ highlight: element.isExpiry === true }"
+      >
+        <td>
+            <span style="margin-right: 5px">
+              {{ element?.id }}/{{
+              element?.createdOn | customDate | date: "yyyy"
+              }}</span
+            >
+        </td>
+        <!-- 2 -->
+        <td>
+          {{ element.subject }}
+        </td>
+        <!-- 4 -->
+        <td>
+            <span
+              *ngIf="helperData[0] | extractValue: element?.priority?.id"
+              class="text-dark font-weight-500 label label-lg label-inline text-black"
+              [ngClass]="
+                'label-' +
+                (helperData[0] | extractValue: element?.priority?.id)?.color
+              "
+            >
+              {{
+              helperData[0]
+                | extractValue: element?.priority?.id
+                | propTranslator: "name"
+              }}
+            </span>
+        </td>
+        <!-- <td>
+          {{ element?.city | propTranslator: "name" }}
+        </td> -->
+        <td>
+          {{ element?.incidentParentCategory | propTranslator: "name" }}
+        </td>
+        <td>
+          {{ getCenter(element.center)| propTranslator: "name" }}
+        </td>
+        <!-- 5 -->
+        <td>
+          <div class="dropdown" ngbDropdown>
+            <button
+              class="btn  btn-sm font-weight-bolder dropdown-toggle py-1   "
+              data-toggle="dropdown"
+              data-offset="0px,0px"
+              ngbDropdownToggle
+              (click)="$event.stopPropagation()"
+            >
+                <span
+                  inlineSVG="./assets/media/svg/icons/Communication/Group.svg"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md svg-icon-primary"
+                ></span>
+              <span class="font-weight-bolder font-size-lg mx-4" style="vertical-align: sub;">{{
+                element?.incidentGroups?.length
+                }}</span>
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu dropdown-menu-anim-up">
+                <span
+
+                  *ngFor="let item of element?.incidentGroups"
+                  class="dropdown-item"
+                  (click)="$event.stopPropagation()"
+                >
+                  <span
+                    class="text-dark-75 font-weight-bolder label label-lg label-light-primary label-inline"
+                  >
+                    {{ item?.group | propTranslator: "name" }} </span
+                  ><br/>
+                </span>
+            </div>
+          </div>
+        </td>
+
+        <!-- 7 -->
+        <td>
+            <span class="font-weight-bold">
+              {{ element?.incidentDate | customDate |date: "yyyy/MM/dd h:mm:ss a" }}</span
+            >
+        </td>
+        <!-- 8 -->
+        <td class="actions">
+          <!-- load actions Interim  template   -->
+          <!-- on larg screens -->
+          <div *ngIf="status == incidentStatus.IN_PROCESSING" class="d-none d-lg-block">
+            <ng-container
+              [ngTemplateOutlet]="actionsInterim"
+              [ngTemplateOutletContext]="{ element: element }"
+            >
+            </ng-container>
+          </div>
+
+          <!-- menu  actions on small - mobile view -->
+          <button 
+            class="d-lg-none btn btn-sm btn-clean btn-icon mr-1"
+            [matMenuTriggerFor]="menu"
+            (click)="$event.stopPropagation()"
+          >
+              <span
+                inlineSVG="./assets/media/svg/icons/General/Other1.svg"
+                cacheSVG="true"
+                class="svg-icon svg-icon-md svg-icon-primary"
+              ></span>
+          </button>
+          <mat-menu #menu="matMenu">
+            <ng-container
+              [ngTemplateOutlet]="actionsInterim"
+              [ngTemplateOutletContext]="{ element: element }"
+            >
+            </ng-container>
+          </mat-menu>
+
+          <!-- end  load  actions  template   -->
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="spinner-container m-auto p-10" *ngIf="loading | async">
+      <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+    </div>
+  </div>
+  <pagination-controls
+    previousLabel="Prev"
+    nextLabel="Next"
+    responsive="true"
+    [id]="id"
+    (pageChange)="pageChanged($event)"
+  >
+  </pagination-controls>
+</div>
+
+<ng-template #actionsInterim let-element="element">
+  <div class="responsive-menu">
+    <ng-container *appPrivileges="'PRIV_SHR_INC'">
+      <button
+        (click)="sendMail($event, element.id)"
+        class="btn btn-sm btn-clean btn-icon mr-2"
+      >
+        <span class="svg-icon svg-icon-md">
+          <span
+            title="  {{ 'INCIDENTS.SHARE_VIA_EMAIL' | translate }}"
+            [inlineSVG]="
+              './assets/media/svg/icons/Communication/Outgoing-mail.svg'
+            "
+            [cacheSVG]="true"
+          ></span>
+        </span>
+
+        <span class="menu-text text-dark-50">
+          {{ "INCIDENTS.SHARE_VIA_EMAIL" | translate }}</span
+        >
+      </button>
+    </ng-container>
+    <ng-container *appPrivileges="'PRV_ED_INC'">
+      <button
+        *ngIf="
+          canUserUpdate(element?.primaryOrgId, element?.responsibleOrg?.id)
+        "
+        (click)="updateIncident(element.id)"
+        class="btn btn-sm btn-clean btn-icon mr-2"
+      >
+        <span class="svg-icon svg-icon-md">
+          <span
+            title="{{ 'INCIDENTS.UPDATE_INCIDENT' | translate }}"
+            [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'"
+            [cacheSVG]="true"
+          ></span>
+        </span>
+        <span class="menu-text text-dark-50">
+          {{ "INCIDENTS.UPDATE_INCIDENT" | translate }}</span
+        >
+      </button>
+    </ng-container>
+
+    <ng-container *appPrivileges="'PRIV_CR_TASK'">
+      <button
+        *ngIf="canUserTaskUpdate(element?.responsibleOrg?.id)"
+        (click)="createTask(element.subject, element.id)"
+        class="btn btn-sm btn-clean btn-icon mr-2"
+        data-toggle="tooltip"
+        data-theme="dark"
+      >
+        <span class="svg-icon svg-icon-md">
+          <span
+            title="{{ 'INCIDENTS.CREATE_TASK' | translate }}"
+            [inlineSVG]="'./assets/media/svg/icons/Files/File-plus.svg'"
+            [cacheSVG]="true"
+          ></span>
+        </span>
+        <span class="menu-text text-dark-50">
+          {{ "INCIDENTS.CREATE_TASK" | translate }}</span
+        >
+      </button>
+    </ng-container>
+
+    <ng-container *appPrivileges="'PRIV_ESC_INC'">
+      <button
+        *ngIf="canEditResponsibleOrg(element)"
+        (click)="
+          openModal('edit', element?.responsibleOrg?.id, element?.id);
+          $event.stopPropagation()
+        "
+        class="btn btn-sm btn-clean btn-icon mr-2"
+        data-toggle="tooltip"
+        data-theme="dark"
+      >
+        <span class="svg-icon svg-icon-md dir-icon">
+          <span
+            title="{{ 'INCIDENTS.ESCALATE_TO_ORGANIZATION' | translate }}"
+            [inlineSVG]="'./assets/media/svg/icons/Communication/Sending.svg'"
+            [cacheSVG]="true"
+          ></span>
+        </span>
+        <span class="menu-text text-dark-50">
+          {{ "INCIDENTS.ESCALATE_TO_ORGANIZATION" | translate }}</span
+        >
+      </button>
+    </ng-container>
+  </div>
+</ng-template>

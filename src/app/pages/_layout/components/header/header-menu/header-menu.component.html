@@ -1,0 +1,178 @@
+<!-- begin::Header Nav -->
+
+<!-- end::Header Nav -->
+
+<!-- Header main list  verticel each ul is main  list item -->
+<ng-container *ngIf="navigationsList$ | async as navigationsList">
+  <ul
+    *ngIf="navigationsList.length > 0"
+    class="menu-nav"
+    [ngClass]="ulCSSClasses"
+  >
+    <ng-container *ngFor="let item of navigationsList">
+      <li
+        *ngIf="item.children.length > 0"
+        class="menu-item menu-item-rel"
+        #myDrop="ngbDropdown"
+        ngbDropdown
+      >
+        <a class="menu-link" data-toggle="dropdown" ngbDropdownToggle>
+          <span *ngIf="dir == 'rtl'" class="menu-text">
+            {{ item.module.nameAr }}
+          </span>
+          <span *ngIf="dir == 'ltr'" class="menu-text">
+            {{ item.module.nameEn }}
+          </span>
+        </a>
+        <div
+          ngbDropdownMenu
+          display="dynamic"
+          class="
+            dropdown-menu
+            p-0
+            m-0
+            dropdown-menu-anim-up dropdown-menu-lg
+            p-0
+            mega-menu
+          "
+        >
+          <ul class="navi navi-hover navi-active p-3">
+            <li
+              *ngFor="let child of item.children; let i = index"
+              class="navi-item rounded-lg"
+            >
+              <ng-container *ngIf="child.children.length == 0">
+                <a
+                  *ngIf="child.module.code != 'GIS'"
+                  class="navi-link py-3 h-100"
+                  [class]="'bg-hover-light-' + getColor(i)"
+                  [routerLink]="
+                    child.module.code == 'PRVPOS' ? [] : child?.module.routing
+                  "
+                  (click)="
+                    child.module.code == 'PRVPOS'
+                      ? openAlertDialog()
+                      : myDrop.close()
+                  "
+                >
+                  <span class="symbol symbol-50 symbol-circle">
+                    <img
+                      *ngIf="isEnquiry(child?.module?.code) == true"
+                      class="pixelated ml-2 mr-2"
+                      [src]="
+                        './assets/media/svg/icons/' +
+                        child?.module?.icon +
+                        '.png'
+                      "
+                    />
+                    <span
+                      *ngIf="isEnquiry(child?.module?.code) == false"
+                      [inlineSVG]="
+                        './assets/media/svg/icons/' +
+                        child?.module?.icon +
+                        '.svg'
+                      "
+                      cacheSVG="true"
+                      [class]="
+                        child?.module?.icon == 'Design/Circle'
+                          ? 'svg-icon mr-2 ml-2  svg-icon-primary'
+                          : 'svg-icon mr-2 ml-2 symbol-label svg-icon-' +
+                            getColor(i)
+                      "
+                    ></span>
+                  </span>
+
+                  <div class="d-flex flex-column" *ngIf="dir == 'rtl'">
+                    <span
+                      class="navi-text font-size-h5 text-dark font-weight-bold"
+                    >
+                      {{ child.module.nameAr }}
+                    </span>
+
+                    <span class="text-muted" style="font-size: 12px">{{
+                      child.module?.descAr
+                    }}</span>
+                  </div>
+                  <div class="d-flex flex-column" *ngIf="dir == 'ltr'">
+                    <span
+                      class="navi-text font-size-h5 text-dark font-weight-bold"
+                    >
+                      {{ child.module.nameEn }}
+                    </span>
+                    <span class="font-size-sm text-muted">
+                      <span class="font-size-sm text-muted">{{
+                        child.module?.descEn
+                      }}</span></span
+                    >
+                  </div>
+                </a>
+                <a
+                  class="navi-link h-100 py-3"
+                  *ngIf="child.module.code == 'GIS'"
+                  [href]="child.module?.routing"
+                  [target]="'_blank'"
+                >
+                  <span class="symbol symbol-50 symbol-circle mr-3">
+                    <span
+                      [inlineSVG]="
+                        './assets/media/svg/icons/' +
+                        child?.module.icon +
+                        '.svg'
+                      "
+                      cacheSVG="true"
+                      [class]="
+                        child?.module.icon == 'Design/Circle'
+                          ? 'svg-icon mr-2 ml-2  svg-icon-primary'
+                          : 'svg-icon mr-2 ml-2 symbol-label svg-icon-' +
+                            getColor(i)
+                      "
+                    ></span>
+                  </span>
+                  <span
+                    class="navi-text font-size-h5 text-dark font-weight-bold"
+                  >
+                    <span *ngIf="dir == 'rtl'" class="navi-text">
+                      {{ child.module.nameAr }}
+                    </span>
+                    <span *ngIf="dir == 'ltr'" class="navi-text">
+                      {{ child.module.nameEn }}
+                    </span>
+                  </span>
+                </a>
+              </ng-container>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- single child  item  -->
+      <ng-container
+        [ngTemplateOutlet]="child"
+        [ngTemplateOutletContext]="{ navigation: item }"
+      ></ng-container>
+    </ng-container>
+  </ul>
+</ng-container>
+
+<!-- child  template -->
+<ng-template #child let-navigation="navigation">
+  <li
+    *ngIf="navigation.children.length == 0"
+    class="menu-item menu-item-rel"
+    routerLinkActive="menu-item-active"
+  >
+    <a
+      class="menu-link"
+      [routerLink]="navigation?.module.routing"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+    >
+      <span *ngIf="dir == 'rtl'" class="menu-text">
+        {{ navigation.module.nameAr }}
+      </span>
+      <span *ngIf="dir == 'ltr'" class="menu-text">
+        {{ navigation.module.nameEn }}
+      </span>
+    </a>
+  </li>
+</ng-template>

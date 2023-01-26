@@ -1,0 +1,1203 @@
+<div class="container-fluid">
+  <section class="d-flex py-4 my-2">
+    <button
+      (click)="back()"
+      class="
+          btn btn-sm btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-2
+        "
+      matTooltip="{{ 'SHARED.BACK' | translate }}"
+    >
+        <span
+          inlineSVG="{{
+                 lang == 'en'
+              ? '/assets/media/svg/icons/Navigation/Arrow-left.svg'
+              : '/assets/media/svg/icons/Navigation/Arrow-right.svg'
+          }}"
+          cacheSVG="true"
+          class="svg-icon svg-icon-lg"
+          title="{{ 'SHARED.BACK' | translate }}"
+        ></span>
+    </button>
+
+    <h3 class="card-title m-0 d-flex align-items-center">
+      {{getTitle() | translate }}
+    </h3>
+
+    <div class="row">
+      <mat-slide-toggle
+        color="primary"
+        class="m-auto"
+        (change)="onChange($event)"
+      >
+        <span class="mx-4">
+          {{ normalView ? "Normal View" : "Advanced View" }}</span
+        >
+      </mat-slide-toggle>
+
+      <div>
+        <h6 *ngIf="isAddMode" class="timer">
+          {{ incidentDurationFormatted }} {{ "INCIDENTS.SECONDS" | translate }}
+        </h6>
+      </div>
+    </div>
+  </section>
+  <div class="spinner-container m-auto p-10" *ngIf="loading">
+    <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <!-- Incident or  INQUIRY toggle -->
+  <ng-container *appPrivileges="'PRIV_CR_INQ'">
+    <div class="col-12 justify-content-center mb-4 align-items-center">
+      <div class="text-center"><span>{{ "INCIDENTS.INCIDENT" | translate }}</span>
+        <mat-slide-toggle [checked]="isInquiry" (change)="changeIncidentType($event)"
+                          class="mx-2" [disabled]="!isAddMode"></mat-slide-toggle>
+        <span>{{ "INCIDENTS.INQUIRY" | translate }}</span></div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="incidentTemplate1">
+    <!-- <app-inquiry [incidentDurationInSeconds]="incidentDurationInSeconds"></app-inquiry> -->
+  </ng-container>
+
+
+  <ng-template #incidentTemplate1>
+    <div *ngIf="!normalView">
+      <form [formGroup]="formGroup">
+        <ng-container *appPrivileges="'PRV_ED_INC'">
+          <div
+            class="row section border rounded"
+            *ngIf="!isAddMode && canEdit"
+            style="background: white"
+          >
+            <div class="col-sm-12 title">
+              <h3>{{ "TASK.STATUS" | translate }}</h3>
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <mat-form-field
+                appearance="outline"
+                class="form-element example-full-width"
+              >
+                <mat-label class="asterisk_input">{{
+                  "INCIDENTS.STATUS" | translate
+                  }}</mat-label>
+                <mat-select
+                  placeholder="{{ 'TASK.STATUS' | translate }}"
+                  (selectionChange)="onStatusChange($event)"
+                  formControlName="status"
+                  appearance="outline"
+                  [disabled]="checkStatus()"
+                >
+                  <mat-option *ngFor="let stat of status" [value]="stat.id">
+                    {{ lang === "en" ? stat?.nameEn : stat?.nameAr }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <mat-form-field
+                [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                class="example-full-width"
+                [hidden]="stas != '2'"
+                appearance="outline"
+              >
+                <mat-label class="asterisk_input">{{
+                  "INCIDENTS.COMPLETION_DATE" | translate
+                  }}</mat-label>
+                <input
+                  matInput
+                  [ngxMatDatetimePicker]="picker"
+                  placeholder="Choose a date"
+                  formControlName="closedDate"
+                  [readonly]="checkStatus()"
+                />
+                <button
+                  type="button"
+                  [disabled]="checkStatus()"
+                  mat-icon-button
+                  matSuffix
+                  (click)="picker.open(); $event.stopPropagation()"
+                >
+                  <mat-icon>today</mat-icon>
+                </button>
+
+                <ngx-mat-datetime-picker
+                  #picker
+                  [showSpinners]="showSpinners"
+                  [showSeconds]="showSeconds"
+                  [stepHour]="stepHour"
+                  [stepMinute]="stepMinute"
+                  [stepSecond]="stepSecond"
+                  [touchUi]="touchUi"
+                  [enableMeridian]="enableMeridian"
+                >
+                </ngx-mat-datetime-picker>
+              </mat-form-field>
+            </div>
+          </div>
+        </ng-container>
+
+        <mat-grid-list cols="2" rowHeight="100px" gutterSize="20px">
+          <mat-grid-tile [colspan]="1" [rowspan]="3">
+            <div class="card flex-row flex-wrap shadow-sm">
+              <div class="col-sm-12 title">
+                <h3>{{ "INCIDENTS.REPORTING_INFORMATION" | translate }}</h3>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label class="asterisk_input">{{
+                    "INCIDENTS.REPORTINGVIA" | translate
+                    }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.REPORTINGVIA' | translate }}"
+                    formControlName="reportingVia"
+                  >
+                    <mat-option
+                      *ngFor="let report of reportingVia"
+                      [value]="report.id"
+                    >
+                      {{ lang === "en" ? report?.nameEn : report?.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element example-full-width"
+                >
+                  <mat-label class="asterisk_input">{{
+                    "INCIDENTS.REPORTEDBYNAME" | translate
+                    }}</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="{{ 'INCIDENTS.REPORTEDBYNAME' | translate }}"
+                    formControlName="reportedByName"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element example-full-width"
+                >
+                  <mat-label
+                    [class]="
+                  getIsRequiredForControl('reportedByMobile')
+                    ? 'asterisk_input'
+                    : ''
+                "
+                  >{{ "INCIDENTS.REPORTEDBYMOBILE" | translate }}</mat-label
+                  >
+
+                  <ngx-mat-intl-tel-input
+                    [preferredCountries]="['ae']"
+                    [enableSearch]="true"
+                    formControlName="reportedByMobile"
+                    type="text"
+                    matInput
+                    placeholder="{{ 'INCIDENTS.REPORTEDBYMOBILE' | translate }}"
+                  ></ngx-mat-intl-tel-input>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element example-full-width"
+                >
+                  <mat-label
+                    [class]="
+                  getIsRequiredForControl('reportedByEmail')
+                    ? 'asterisk_input'
+                    : ''
+                "
+                  >{{ "INCIDENTS.REPORTEDBYEMAIL" | translate }}</mat-label
+                  >
+                  <input
+                    name="reported_by_email"
+                    autocomplete="off"
+                    matInput
+                    placeholder="{{ 'INCIDENTS.REPORTEDBYEMAIL' | translate }}"
+                    formControlName="reportedByEmail"
+                  />
+                  <mat-error
+                    *ngIf="
+                    !formGroup.get('reportedByEmail')?.valid &&
+                    formGroup.get('reportedByEmail')?.touched ">
+                    {{ getErrorEmail() }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div
+                  class="form-group col-lg-6 pl-4 pr-4"
+                  style="display: inline-flex"
+                >
+                  <section
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    class="example-section"
+                  >
+                    <mat-checkbox
+                      formControlName="dontNotifyReporter"
+                    >{{ "INCIDENTS.NOT_NOTIFY_REPORTER" | translate }}?
+                    </mat-checkbox
+                    >
+                  </section>
+                </div>
+              </div>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="1" [rowspan]="6">
+            <div class="card flex-row flex-wrap shadow-sm">
+              <div class="col-sm-12 col-md-10 title">
+                <h3>{{ "INCIDENTS.INCIDENT_INFO" | translate }}</h3>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element example-full-width"
+                >
+                  <mat-label class="asterisk_input">{{
+                    "INCIDENTS.SUBJECT" | translate
+                    }}</mat-label>
+                  <input
+                    matInput
+                    placeholder="{{ 'INCIDENTS.SUBJECT' | translate }}"
+                    formControlName="subject"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label class="asterisk_input">{{
+                    "INCIDENTS.CITY" | translate
+                    }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.CITY' | translate }}"
+                    formControlName="city"
+                  >
+                    <mat-option *ngFor="let city of cities" [value]="city.id">
+                      {{ lang === "en" ? city?.nameEn : city?.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label>{{ "INCIDENTS.CATEGORY" | translate }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
+                    formControlName="incidentParentCategory"
+                    (selectionChange)="onCategoryChange($event)"
+                  >
+                    <mat-option
+                      *ngIf="incidentCategories?.length == 0"
+                      [disabled]="true"
+                    >
+                      {{ "SHARED.EMPTY_SELECTION" | translate }}
+                    </mat-option>
+
+                    <mat-option
+                      *ngFor="let category of incidentCategories"
+                      [value]="category.id"
+                    >
+                      {{ lang === "en" ? category?.nameEn : category?.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label>{{ "INCIDENTS.SUB_CATEGORY" | translate }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.SUB_CATEGORY' | translate }}"
+                    formControlName="incidentCategory"
+                  >
+                    <mat-option
+                      *ngFor="let category of incSubCategories"
+                      [value]="category.id"
+                    >
+                      {{ lang === "en" ? category?.nameEn : category?.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element example-full-width"
+                >
+                  <mat-label>{{
+                    "INCIDENTS.ANOTHER_CATEGORY" | translate
+                    }}</mat-label>
+                  <input
+                    matInput
+                    placeholder="{{ 'INCIDENTS.OTHER' | translate }}"
+                    formControlName="other"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label>{{
+                    "INCIDENTS.EMERGENCYLEVELS" | translate
+                    }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.EMERGENCYLEVELS' | translate }}"
+                    formControlName="emergencyLevel"
+                  >
+                    <mat-option
+                      *ngFor="let level of emergencyLevels"
+                      [value]="level.id"
+                    >
+                      {{ level.level }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label class="asterisk_input">{{
+                    "INCIDENTS.PRIORITY" | translate
+                    }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.PRIORITY' | translate }}"
+                    formControlName="priority"
+                  >
+                    <mat-option
+                      *ngFor="let priority of priorities"
+                      [value]="priority.id"
+                    >
+                      {{ lang === "en" ? priority?.nameEn : priority?.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="example-full-width"
+                  appearance="outline"
+                >
+                  <mat-label class="asterisk_input">{{
+                    "INCIDENTS.DATE" | translate
+                    }}</mat-label>
+
+                  <input
+                    matInput
+                    [ngxMatDatetimePicker]="picker"
+                    placeholder="Choose a date"
+                    formControlName="incidentDate"
+                  />
+
+                  <button
+                    type="button"
+                    mat-icon-button
+                    matSuffix
+                    (click)="picker.open(); $event.stopPropagation()"
+                  >
+                    <mat-icon>today</mat-icon>
+                  </button>
+
+                  <ngx-mat-datetime-picker
+                    #picker
+                    [showSpinners]="showSpinners"
+                    [showSeconds]="showSeconds"
+                    [stepHour]="stepHour"
+                    [stepMinute]="stepMinute"
+                    [stepSecond]="stepSecond"
+                    [touchUi]="touchUi"
+                    [enableMeridian]="enableMeridian"
+                  >
+                  </ngx-mat-datetime-picker>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element"
+                >
+                  <mat-label>{{ "INCIDENTS.DESCRIPTION" | translate }}</mat-label>
+                  <textarea
+                    matInput
+                    placeholder="{{ 'INCIDENTS.DESCRIPTION' | translate }}"
+                    cdkAutosizeMinRows="6"
+                    formControlName="description"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <button
+                  class="
+                btn btn-md btn-light-primary
+                font-weight-bolder
+                cursor-pointer
+                mx-auto
+                mb-3
+              "
+                  (click)="onNewLocation()"
+                >
+                  {{ "INCIDENTS.NEW_LOCATION" | translate }}
+                  <span *ngIf="!!addLocationToMapFunc">
+                ({{ "COMMON.SELECTED" | translate }})
+              </span>
+                  <span
+                    [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md"
+                  ></span>
+                </button>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <app-districts
+                  appearance="outline"
+                  [placeholder]="'INCIDENTS.DISTRICT' | translate"
+                  formControlName="incidentDistrict"
+                  (selectedDist)="onChangeDist($event)"
+                  [city]="formGroup.value.city"
+                >
+                </app-districts>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <app-community
+                  appearance="outline"
+                  [placeholder]="'INCIDENTS.COMMUNITY' | translate"
+                  formControlName="incidentCommunity"
+                  [Dist]="formGroup.value.incidentDistrict"
+                >
+                </app-community>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element example-full-width"
+                >
+                  <mat-label>{{
+                    "INCIDENTS.LOCATION_URL" | translate
+                    }}</mat-label>
+                  <input
+                    matInput
+                    type="url"
+                    placeholder="{{ 'INCIDENTS.LOCATION_URL' | translate }}"
+                    formControlName="locationUrl"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="1" [rowspan]="2">
+            <div class="card flex-row flex-wrap shadow-sm">
+              <div class="col-sm-12 title">
+                <h3>{{ "INCIDENTS.kpi" | translate }}</h3>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label>{{ "INCIDENTS.kpi" | translate }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.kpi' | translate }}"
+                    formControlName="kpi">
+                    <mat-option *ngFor="let kpiItem of kpis" [value]="kpiItem.kpi.id">
+                      {{ this.lang === 'en' ? kpiItem.kpi.nameEn : kpiItem.kpi.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-6" *ngIf="formGroup.get('kpi').value">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                  class="form-element example-full-width"
+                >
+                  <mat-label>{{ "INCIDENTS.KPI_PERIOD" | translate }}</mat-label>
+                  <input
+                    matInput
+                    readonly
+                    formControlName="kpiperiod"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="1" [rowspan]="3">
+            <div class="card flex-row flex-wrap shadow-sm">
+              <div class="col-sm-12 title">
+                <h3>{{ "INCIDENTS.ORGANIZATION_INFORMATION" | translate }}</h3>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <app-org-input
+                  [placeholder]="'INCIDENTS.SPECIALIZED_CENTER' | translate"
+                  (selectedOrg)="onSelect($event)"
+                  formControlName="primaryOrg"
+                >
+                </app-org-input>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label>{{ "INCIDENTS.UNITS" | translate }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.UNITS' | translate }}"
+                    (selectionChange)="onChange($event)"
+                    formControlName="incidentGroups"
+                    multiple
+                  >
+                    <mat-option *ngFor="let group of groups; let i=index" [value]="group.id">
+                      <div class="d-flex align-items-center">
+                        <span class="text-size-sm">{{ getIncidentGroupName(i)}}</span>
+                        <span class="spacer"></span>
+                        <span class="label label-inline label-outline-primary py-0">
+                  {{getIncidentGroupOrg(i) }}
+                </span>
+                      </div>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                  appearance="outline"
+                >
+                  <mat-label>{{ "INCIDENTS.CELLS" | translate }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'INCIDENTS.CELLS' | translate }}"
+                    formControlName="incidentCells"
+                    multiple
+                  >
+
+                    <mat-option *ngFor="let cell of cells" [value]="cell.id">
+                      {{ lang === "en" ? cell?.nameEn : cell?.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="1" [rowspan]="3">
+            <div class="card flex-row flex-wrap shadow-sm">
+              <div class="col-sm-12 title">
+                <h3>{{ "INCIDENTS.CHALLENGES_REQUMENDATIONS" | translate }}</h3>
+              </div>
+              <div class="col-sm-12">
+                <app-local-challenges
+                  formControlName="incidentsChallengesReqs"
+                ></app-local-challenges>
+              </div>
+            </div>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+
+        <div class="row">
+
+          <div class="col-12 section p-2">
+            <div class="card flex-row flex-wrap shadow-sm">
+              <div class="col-sm-12">
+                <app-files-list
+                  #filesList
+                  [files]="fileInfos"
+                  [recordId]="incidentId"
+                  [tagId]="1"
+                  [inline]="true"
+                ></app-files-list>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 section p-2 justify-content-center">
+            <div class="card flex-row flex-wrap shadow-sm">
+              <div class="w-100 d-flex justify-content-center py-2">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="submit"
+                  class="button"
+                  (click)="onSubmit()"
+                >
+                  {{ "INCIDENTS.SUBMIT" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="normalView">
+      <form [formGroup]="formGroup">
+        <div
+          class="row justify-content-center"
+          style="background: white !important"
+        >
+          <!-- Incident or  INQUIRY toggle -->
+          <ng-container *appPrivileges="'PRIV_CR_INQ'">
+            <div class="col-12 justify-content-center mb-4 align-items-center">
+              <div class="text-center"><span>{{ "INCIDENTS.INCIDENT" | translate }}</span>
+                <mat-slide-toggle [checked]="isInquiry" (change)="changeIncidentType($event)"
+                                  class="mx-2" [disabled]="!isAddMode"></mat-slide-toggle>
+                <span>{{ "INCIDENTS.INQUIRY" | translate }}</span></div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="incidentTemplate2">
+            <!-- <app-inquiry [incidentDurationInSeconds]="incidentDurationInSeconds"></app-inquiry> -->
+          </ng-container>
+
+          <ng-template #incidentTemplate2>
+            <div class="col-sm-12">
+              <!-- only responsible org can change status -->
+              <ng-container *appPrivileges="'PRV_ED_INC'">
+                <div class="row section border rounded">
+                  <div class="col-sm-12 title">
+                    <h3>{{ "INCIDENTS.REPORTING_INFORMATION" | translate }}</h3>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      appearance="outline"
+                    >
+                      <mat-label class="asterisk_input">{{
+                        "INCIDENTS.REPORTINGVIA" | translate
+                        }}</mat-label>
+                      <mat-select
+                        placeholder="{{ 'INCIDENTS.REPORTINGVIA' | translate }}"
+                        formControlName="reportingVia"
+                      >
+                        <mat-option
+                          *ngFor="let report of reportingVia"
+                          [value]="report.id"
+                        >
+                          {{ lang === "en" ? report?.nameEn : report?.nameAr }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      appearance="outline"
+                      class="form-element example-full-width"
+                    >
+                      <mat-label class="asterisk_input">{{
+                        "INCIDENTS.REPORTEDBYNAME" | translate
+                        }}</mat-label>
+                      <input
+                        matInput
+                        type="text"
+                        placeholder="{{ 'INCIDENTS.REPORTEDBYNAME' | translate }}"
+                        formControlName="reportedByName"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      appearance="outline"
+                      class="form-element example-full-width"
+                    >
+                      <mat-label>{{
+                        "INCIDENTS.REPORTEDBYMOBILE" | translate
+                        }}</mat-label>
+
+                      <ngx-mat-intl-tel-input
+                        [onlyCountries]="['ae']"
+                        [enablePlaceholder]="true"
+                        [enableSearch]="false"
+                        formControlName="reportedByMobile"
+                        placeholder="{{ 'INCIDENTS.REPORTEDBYMOBILE' | translate }}"
+                      ></ngx-mat-intl-tel-input>
+                      <mat-error
+                        *ngIf="
+                  !formGroup.get('reportedByMobile')?.valid &&
+                  formGroup.get('reportedByMobile')?.touched
+                "
+                      >
+                        {{ getErrorMobile() }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      appearance="outline"
+                      class="form-element example-full-width"
+                    >
+                      <mat-label>{{
+                        "INCIDENTS.REPORTEDBYEMAIL" | translate
+                        }}</mat-label>
+                      <input
+                        name="reported_by_email"
+                        autocomplete="off"
+                        matInput
+                        placeholder="{{ 'INCIDENTS.REPORTEDBYEMAIL' | translate }}"
+                        formControlName="reportedByEmail"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <div
+                      class="form-group col-lg-6 pl-4 pr-4"
+                      style="display: inline-flex"
+                    >
+                      <section
+                        [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                        class="example-section"
+                      >
+                        <mat-checkbox
+                          placeholder="notifyReporter"
+                          [checked]="false"
+                          name="check"
+                          formControlName="notifyReporter"
+                        >{{ "INCIDENTS.NOTIFYREPORTER" | translate }}?
+                        </mat-checkbox
+                        >
+                      </section>
+                    </div>
+                  </div>
+                </div>
+                <div class="row section border rounded" *ngIf="!isAddMode && canEdit">
+                  <div class="col-sm-12 title">
+                    <h3>{{ "TASK.STATUS" | translate }}</h3>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field
+                      appearance="outline"
+                      class="form-element example-full-width"
+                    >
+                      <mat-label class="asterisk_input">{{
+                        "INCIDENTS.STATUS" | translate
+                        }}</mat-label>
+                      <mat-select
+                        placeholder="{{ 'TASK.STATUS' | translate }}"
+                        (selectionChange)="onStatusChange($event)"
+                        formControlName="status"
+                        appearance="outline"
+                        [disabled]="checkStatus()"
+                      >
+                        <mat-option *ngFor="let stat of status" [value]="stat.id">
+                          {{ lang === "en" ? stat?.nameEn : stat?.nameAr }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      class="example-full-width"
+                      [hidden]="stas != '2'"
+                      appearance="outline"
+                    >
+                      <mat-label class="asterisk_input">{{
+                        "INCIDENTS.COMPLETION_DATE" | translate
+                        }}</mat-label>
+
+                      <input
+                        matInput
+                        [ngxMatDatetimePicker]="picker"
+                        placeholder="Choose a date"
+                        formControlName="closedDate"
+                        [readonly]="checkStatus()"
+                      />
+                      <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> -->
+                      <button
+                        type="button"
+                        [disabled]="checkStatus()"
+                        mat-icon-button
+                        matSuffix
+                        (click)="picker.open(); $event.stopPropagation()"
+                      >
+                        <mat-icon>today</mat-icon>
+                      </button>
+
+                      <ngx-mat-datetime-picker
+                        #picker
+                        [showSpinners]="showSpinners"
+                        [showSeconds]="showSeconds"
+                        [stepHour]="stepHour"
+                        [stepMinute]="stepMinute"
+                        [stepSecond]="stepSecond"
+                        [touchUi]="touchUi"
+                        [enableMeridian]="enableMeridian"
+                      >
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="row section border rounded">
+                <div class="col-sm-12 col-md-10 title">
+                  <h3>
+                    {{ "INCIDENTS.INCIDENT_INFO" | translate }}
+                  </h3>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                    class="form-element example-full-width"
+                  >
+                    <mat-label class="asterisk_input">{{
+                      "INCIDENTS.SUBJECT" | translate
+                      }}</mat-label>
+                    <input
+                      matInput
+                      placeholder="{{ 'INCIDENTS.SUBJECT' | translate }}"
+                      formControlName="subject"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                  >
+                    <mat-label class="asterisk_input">{{
+                      "INCIDENTS.CITY" | translate
+                      }}</mat-label>
+                    <mat-select
+                      placeholder="{{ 'INCIDENTS.CITY' | translate }}"
+                      formControlName="city"
+                    >
+                      <mat-option *ngFor="let city of cities" [value]="city.id">
+                        {{ lang === "en" ? city?.nameEn : city?.nameAr }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                  >
+                    <mat-label class="asterisk_input">{{
+                      "INCIDENTS.CATEGORY" | translate
+                      }}</mat-label>
+                    <mat-select
+                      placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
+                      formControlName="incidentParentCategory"
+                      (selectionChange)="onCategoryChange($event)"
+                    >
+                      <mat-option
+                        *ngFor="let category of incidentCategories"
+                        [value]="category.id"
+                      >
+                        {{ lang === "en" ? category?.nameEn : category?.nameAr }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                  >
+                    <mat-label class="asterisk_input">{{
+                      "INCIDENTS.SUB_CATEGORY" | translate
+                      }}</mat-label>
+                    <mat-select
+                      placeholder="{{ 'INCIDENTS.SUB_CATEGORY' | translate }}"
+                      (selectionChange)="onSubCategoryChange($event)"
+                      formControlName="incidentCategory"
+                    >
+                      <mat-option
+                        *ngFor="let category of incSubCategories"
+                        [value]="category.id"
+                      >
+                        {{ lang === "en" ? category?.nameEn : category?.nameAr }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                    class="form-element example-full-width"
+                  >
+                    <mat-label>{{
+                      "INCIDENTS.ANOTHER_CATEGORY" | translate
+                      }}</mat-label>
+                    <input
+                      matInput
+                      placeholder="{{ 'INCIDENTS.OTHER' | translate }}"
+                      formControlName="other"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                  >
+                    <mat-label class="asterisk_input">{{
+                      "INCIDENTS.PRIORITY" | translate
+                      }}</mat-label>
+                    <mat-select
+                      placeholder="{{ 'INCIDENTS.PRIORITY' | translate }}"
+                      (selectionChange)="getKpis()"
+                      formControlName="priority"
+                    >
+                      <mat-option
+                        *ngFor="let priority of priorities"
+                        [value]="priority.id"
+                      >
+                        {{ lang === "en" ? priority?.nameEn : priority?.nameAr }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                    class="example-full-width"
+                  >
+                    <mat-label class="asterisk_input">{{
+                      "INCIDENTS.DATE" | translate
+                      }}</mat-label>
+
+                    <input
+                      matInput
+                      [ngxMatDatetimePicker]="picker2"
+                      placeholder="Choose a date"
+                      formControlName="incidentDate"
+                    />
+
+                    <button
+                      type="button"
+                      mat-icon-button
+                      matSuffix
+                      (click)="picker2.open(); $event.stopPropagation()"
+                    >
+                      <mat-icon>today</mat-icon>
+                    </button>
+
+                    <ngx-mat-datetime-picker
+                      #picker2
+                      [showSpinners]="showSpinners"
+                      [showSeconds]="showSeconds"
+                      [stepHour]="stepHour"
+                      [stepMinute]="stepMinute"
+                      [stepSecond]="stepSecond"
+                      [touchUi]="touchUi"
+                      [enableMeridian]="enableMeridian"
+                    >
+                    </ngx-mat-datetime-picker>
+
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                    class="form-element"
+                  >
+                    <mat-label class="asterisk_input">{{
+                      "INCIDENTS.DESCRIPTION" | translate
+                      }}</mat-label>
+                    <textarea
+                      matInput
+                      placeholder="{{ 'INCIDENTS.DESCRIPTION' | translate }}"
+                      cdkAutosizeMinRows="6"
+                      formControlName="description"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+                  <button
+                    class="
+                btn btn-md btn-light-primary
+                font-weight-bolder
+                cursor-pointer
+                mx-auto
+                mb-3
+              "
+                    (click)="onNewLocation()"
+                  >
+                    {{ "INCIDENTS.NEW_LOCATION" | translate }}
+                    <span *ngIf="!!addLocationToMapFunc">
+                ({{ "COMMON.SELECTED" | translate }})
+              </span>
+                    <span
+                      [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'"
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-md"
+                    ></span>
+                  </button>
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+                  <app-districts
+                    appearance="outline"
+                    [placeholder]="'INCIDENTS.DISTRICT' | translate"
+                    formControlName="incidentDistrict"
+                    (selectedDist)="onChangeDist($event)"
+                    (outLoadedDistricts)="inputLoadedDistricts($event)"
+                    [city]="formGroup.value.city"
+                  >
+                  </app-districts>
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+
+                  <app-community
+                    appearance="outline"
+                    [placeholder]="'INCIDENTS.COMMUNITY' | translate"
+                    formControlName="incidentCommunity"
+                    [Dist]="formGroup.value.incidentDistrict"
+                  >
+                  </app-community>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                    class="form-element example-full-width"
+                  >
+                    <mat-label>{{
+                      "INCIDENTS.LOCATION_URL" | translate
+                      }}</mat-label>
+                    <input
+                      matInput
+                      type="url"
+                      placeholder="{{ 'INCIDENTS.LOCATION_URL' | translate }}"
+                      formControlName="locationUrl"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row section border rounded">
+                <div class="col-sm-12 title">
+                  <h3>{{ "INCIDENTS.ORGANIZATION_INFORMATION" | translate }}</h3>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <app-org-input
+                    [placeholder]="'INCIDENTS.SPECIALIZED_CENTER' | translate"
+                    [childrenOfCurrentOrg]="true"
+                    (selectedOrg)="onSelect($event)"
+                    formControlName="primaryOrg"
+                  >
+                  </app-org-input>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="outline"
+                  >
+                    <mat-label>{{ "INCIDENTS.UNITS" | translate }}</mat-label>
+                    <mat-select
+                      placeholder="{{ 'INCIDENTS.UNITS' | translate }}"
+                      (selectionChange)="onChange($event)"
+                      formControlName="incidentGroups"
+                      multiple
+                    >
+                      <mat-option *ngFor="let group of groups" [value]="group.id">
+                        {{ lang === "en" ? group?.nameEn : group?.nameAr }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row section border rounded">
+                <div class="col-sm-12 title">
+                  <h3>{{ "INCIDENTS.CHALLENGES_REQUMENDATIONS" | translate }}</h3>
+                </div>
+                <div class="col-sm-12">
+                  <app-local-challenges
+                    formControlName="incidentsChallengesReqs"
+                  ></app-local-challenges>
+                </div>
+              </div>
+
+              <div class="row section border rounded">
+                <div class="col-sm-12">
+                  <app-files-list
+                    #filesList
+                    [files]="fileInfos"
+                    [recordId]="incidentId"
+                    [tagId]="1"
+                    [inline]="true"
+                  ></app-files-list>
+                </div>
+              </div>
+
+              <div class="spinner-container m-auto p-10" *ngIf="loading">
+                <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+              </div>
+
+              <div class="row section border rounded justify-content-center">
+                <div class="col-sm-4 d-flex justify-content-center py-2">
+                  <button
+                    [disabled]="disableSubmitButton()"
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    class="button w-200px"
+                    (click)="onSubmit()"
+                  >
+                    {{
+                    (isAddMode ? "INCIDENTS.SUBMIT" : "INCIDENTS.UPDATE")
+                      | translate
+                    }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,195 @@
+<div class="mat-elevation-z8 p-0">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-custom m-0">
+        <div class="card-header d-flex" style="align-content: center">
+          <button
+            class="btn btn-icon btn-sm btn-light-primary"
+            (click)="backClicked()"
+          >
+            <span
+              inlineSVG="{{
+                lang == 'en'
+                  ? '/assets/media/svg/icons/Navigation/Left-2.svg'
+                  : '/assets/media/svg/icons/Navigation/Right-2.svg'
+              }}"
+              cacheSVG="true"
+              class="svg-icon svg-icon-md"
+            ></span>
+          </button>
+          <div class="col">
+            <h3 class="card-title">
+              <span *ngIf="isAddMode" class="card-label font-weight-bolder">{{
+                "GROUP.ADD" | translate
+              }}</span>
+              <span *ngIf="!isAddMode" class="card-label font-weight-bolder">{{
+                "GROUP.EDIT" | translate
+              }}</span>
+            </h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formGroup">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col-md-12">
+                  <mat-form-field
+                    class="example-full-width"
+                    appearance="outline"
+                  >
+                    <mat-label
+                      >{{ "GROUP.NAME_AR" | translate }}
+                      <span class="required-asterisk">*</span>
+                    </mat-label>
+                    <input matInput type="text" formControlName="nameAr" />
+                    <mat-error *ngIf="handleError('nameEn', 'required')">
+                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                  <mat-form-field
+                    class="example-full-width"
+                    appearance="outline"
+                  >
+                    <mat-label
+                      >{{ "GROUP.DESCRIPTION_AR" | translate }}
+                      <span class="required-asterisk">*</span>
+                    </mat-label>
+                    <textarea
+                      matInput
+                      type="text"
+                      formControlName="descAr"
+                      rows="10"
+                    >
+                    </textarea>
+                    <mat-error *ngIf="handleError('nameEn', 'required')">
+                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12"></div>
+                <div class="col-md-12">
+                  <app-pick-org
+                    [multipleSelection]="false"
+                    formControlName="orgStructure"
+                    [returnFullObj]="true"
+                    [childrenOfCurrentOrg]="true"
+                  ></app-pick-org>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="col-md-12">
+                  <mat-form-field
+                    class="example-full-width"
+                    appearance="outline"
+                  >
+                    <mat-label
+                      >{{ "GROUP.NAME_EN" | translate }}
+                      <span class="required-asterisk">*</span>
+                    </mat-label>
+                    <input matInput type="text" formControlName="nameEn" />
+                    <mat-error *ngIf="handleError('nameEn', 'required')">
+                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                  <mat-form-field
+                    class="example-full-width"
+                    appearance="outline"
+                  >
+                    <mat-label
+                      >{{ "GROUP.DESCRIPTION_EN" | translate }}
+                      <span class="required-asterisk">*</span>
+                    </mat-label>
+                    <textarea
+                      matInput
+                      type="text"
+                      formControlName="descEn"
+                      rows="10"
+                    >
+                    </textarea>
+                    <mat-error *ngIf="handleError('nameEn', 'required')">
+                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                  <button
+                    type="submit"
+                    (click)="openModal()"
+                    class="btn btn-outline-primary w-100"
+                  >
+                    <span *ngIf="!manager">
+                      {{ "GROUP.selectManager" | translate }}</span
+                    >
+                    <span *ngIf="manager?.user">
+                      {{
+                        "GROUP.selectedManager"
+                          | translate
+                            : {
+                                userName:
+                                  lang == "ar"
+                                    ? manager?.user?.firstNameAr +
+                                      " " +
+                                      manager?.user?.lastNameAr
+                                    : manager?.user?.firstNameEn +
+                                      " " +
+                                      manager?.user?.lastNameEn
+                              }
+                      }}
+                    </span>
+
+                    <span
+                      [inlineSVG]="
+                        '/assets/media/svg/icons/Communication/Group.svg'
+                      "
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-md ml-2 mr-2"
+                    ></span>
+                  </button>
+                </div>
+                <!-- <div class="col-md-4" style="align-self: center">
+                  <mat-checkbox value="1" formControlName="global">{{
+                    "GROUP.UNIT" | translate
+                  }}</mat-checkbox>
+                </div> -->
+              </div>
+
+              <div class="col-12 mt-4">
+                <div class="row">
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4">
+                    <button
+                      type="submit"
+                      *ngIf="!isAddMode"
+                      class="btn btn-primary font-weight-bold w-100"
+                      app-throttle-click
+                      [ThrottleTime]="1500"
+                      (ThrottleClick)="onSubmit()"
+                    >
+                      {{ "SHARED.UPDATE" | translate }}
+                    </button>
+
+                    <button
+                      type="submit"
+                      *ngIf="isAddMode"
+                      class="btn btn-primary font-weight-bold w-100"
+                      app-throttle-click
+                      [ThrottleTime]="1500"
+                      (ThrottleClick)="onSubmit()"
+                    >
+                      {{ "SHARED.CREATE" | translate }}
+                    </button>
+                  </div>
+                  <div class="col-md-4"></div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

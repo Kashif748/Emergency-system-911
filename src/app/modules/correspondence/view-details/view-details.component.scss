@@ -1,0 +1,60 @@
+// .mat-dialog-actions {
+//   // ...
+//   &[align="end"] {
+//     justify-content: flex-end;
+//   }
+
+//   &[align="center"] {
+//     justify-content: center;
+//   }
+//   &[align="left"] {
+//     justify-content: flex-start;
+//   }
+// }
+
+
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .card--custom > {
+
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding:1rem 2rem;
+    }
+  
+    .card-footer {
+        padding: 0;
+    }
+  
+  }
+
+  .card-subject {
+        display: flex;
+        text-align: unset;
+        justify-content: center;
+        flex-direction: column;
+        .subject {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: .5rem;
+        }
+        .date {
+            font-weight: 300;
+            color: #777;
+        }
+    }
+
+  .mat-expansion-panel{
+    box-shadow: unset;
+   }
+
+
+
+.unread {
+  font-weight: 700;
+}

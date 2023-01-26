@@ -1,0 +1,35 @@
+{
+  "AVAILABILITY": {
+    "title": "تقرير الجاهزية",
+    "newReport": "إنشاء  تقرير",
+    "chooseArea": "إختر منطقة",
+    "updateShifts": "تحديث  المناوبات",
+
+    "activeShift": "المناوبة  النشطة",
+    "chooseOption": "إختر  الحالة",
+
+    "area": "string",
+    "sectors": "Sector",
+
+    "org": "المركز",
+    "frequency": "التردد",
+    "primary": "أساسي",
+    "shift1": "النوبة 1",
+    "shift2": "النوبة 2",
+    "shift3": "النوبة 3",
+
+    "prepared": "تم التحضير",
+    "not_prepared": "لم يتم التحضير",
+    "inactive": "غير فعال",
+    "Damage": "وجود عطل",
+    "wait": "بإنتظار  المناوبة",
+
+    "createdBy": "المنشئ",
+    "createdOn": "تاريخ  الإنشاء",
+    "isActive": "النشاط",
+    "status": "الحالة",
+    "actions": "الإجراء",
+
+    "active": "فعال"
+  }
+}

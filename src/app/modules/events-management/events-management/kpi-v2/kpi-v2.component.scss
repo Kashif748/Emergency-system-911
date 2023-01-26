@@ -1,0 +1,60 @@
+/* Structure */
+
+table {
+  width: 100%;
+  box-shadow: none;
+  border-top: 1px solid #eee;
+  tr {
+    transition: all 0.2s;
+    &:hover {
+      background-color: rgb(245, 245, 245);
+      cursor: pointer;
+    }
+  }
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.fill-space {
+  flex: 1 1 auto;
+}
+
+::ng-deep .modal {
+  max-width: 60vw !important;
+  height: fit-content !important;
+  padding: 0 !important;
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+}
+
+.table-filter {
+  display: block !important;
+  margin: 29px;
+  max-width: 800px !important;
+  margin: auto;
+}
+
+::ng-deep .mat-column-actions {
+  max-width: 100px !important;
+  width: 100px;
+  padding: 5px !important;
+  text-align: center !important;
+}
+
+.pagenation {
+  padding: 0px 25px;
+  margin-top: 10px;
+}
+
+select {
+  width: 60px !important;
+  padding: 0 !important;
+  height: 30px !important;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+  background-color: #e1f0ff !important;
+}

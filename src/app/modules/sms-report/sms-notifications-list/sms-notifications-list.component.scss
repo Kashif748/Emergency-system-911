@@ -1,0 +1,49 @@
+.resources-charts {
+    .card-custom {
+      color :#194182;
+    }
+  }
+ h3 .card-label {
+    color :#194182;
+  }
+  .resources {
+    margin: auto;
+    mat-toolbar {
+      border-radius: 10px 10px 0 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 2px;
+    }
+  
+    .table-filter {
+      display: block !important;
+      margin: 29px;
+      max-width: 800px !important;
+      margin: auto;
+    }
+  
+    table {
+      width: 100%;
+      box-shadow: none;
+      border-top: 1px solid #eee;
+    }
+  
+    .td-arabic {
+      text-align: right;
+    }
+  }
+  
+  ::ng-deep .mat-column-actions {
+    max-width: 60px !important;
+    padding: 5px !important;
+    text-align: center !important;
+  }
+  
+  ::ng-deep .modal {
+    max-width: 400px !important;
+    height: fit-content !important;
+    padding: 0 !important;
+    .mat-dialog-container {
+      padding: 0 !important;
+    }
+  }
+  

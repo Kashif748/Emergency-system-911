@@ -1,0 +1,234 @@
+<div class="main-content mt-4">
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-4 order-md-1 mb-5">
+        <div class="card card-profile">
+          <div class="card-avatar mt-3 mx-auto p-2">
+            <a href="javascript:void(0)" class="text-center">
+              <img *ngIf="profileImgUUID" class="img img-fluid" [attr.src]="profileImgUUID | secure"/>
+              <img *ngIf="!profileImgUUID" class="img img-fluid" src="./assets/media/users/default.jpg"/>
+            </a>
+          </div>
+          <div class="card-body">
+            <h6 class="card-category text-gray">
+              {{'USER.PROFILE.IMAGE.IMG' | translate}}
+            </h6>
+            <h4 class="card-title">
+              {{ formGroup.get('userName').valueChanges | async}}
+            </h4>
+            <p class="card-description">
+              {{'USER.PROFILE.IMAGE.DESC' | translate}}
+            </p>
+            <div>
+              <label for="signature-input"
+                     class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer btn-block text-center">{{'USER.PROFILE.IMAGE.UPLOAD'
+                | translate}}</label>
+              <input id="signature-input" type="file" (change)="uploadImage($event.target.files)"
+                     accept=".jpeg,.png,.jpg"/>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8 order-md-0">
+        <div class="card card-custom gutter-b">
+          <div class="card-header card-header-danger d-flex">
+
+            <h4 class="card-title">{{'SHARED.USERS.EDIT.TITLE' | translate}}
+            </h4>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="formGroup">
+              <h5 class="text-muted">{{ 'PERSONAL_INQUIRY.EMIRATE_ID' | translate }}</h5>
+              <div class="row border rounded py-5 mb-5">
+                <!-- EmirateId -->
+                <div class="col-12">
+                  <mat-form-field [appearance]="appearance" [dir]="translationService.dir">
+                    <mat-label>{{ 'PERSONAL_INQUIRY.EMIRATE_ID' | translate }}</mat-label>
+                    <input maxlength="15" readonly #eid type="text" formControlName="emirateId"
+                           matInput/>
+                  </mat-form-field>
+
+                </div>
+              </div>
+
+              <h5 class="text-muted">{{ 'SHARED.USERS.ACCOUNT_INFO' | translate}}</h5>
+              <div class="row border rounded py-5 mb-5">
+                <!-- Username -->
+                <div class="col-md-12 text-black">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.USERNAME' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.USERNAME' | translate }}"
+                           type="text" formControlName="userName" required readonly>
+                    <mat-error
+                      *ngIf="!formGroup.controls['userName'].valid && formGroup.controls['userName'].touched">
+                      {{ 'VALIDATION_MSG.USERNAME.INVALID' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+
+              <h5 class="text-muted">{{ 'SHARED.USERS.PERSONAL_INFO' | translate}}</h5>
+              <div class="row border rounded py-5 mb-5">
+                <!-- First Name (EN) -->
+                <div class="col-md-4">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.FN_EN' | translate }}</mat-label>
+
+                    <input matInput placeholder="{{'SHARED.FN_EN' | translate }}"
+                           readonly type="text" formControlName="firstNameEn">
+                    <mat-error
+                      *ngIf="!formGroup.controls['firstNameEn'].valid && formGroup.controls['firstNameEn'].touched">
+                      {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- Middle Name (EN) -->
+                <div class="col-md-4">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.MN_EN' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.MN_EN' | translate }}"
+                           readonly type="text" formControlName="middleNameEn">
+                  </mat-form-field>
+                </div>
+                <!-- Last Name (EN) -->
+                <div class="col-md-4">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.LN_EN' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.LN_EN' | translate }}"
+                           readonly type="text" formControlName="lastNameEn">
+                    <mat-error
+                      *ngIf="!formGroup.controls['lastNameEn'].valid && formGroup.controls['lastNameEn'].touched">
+                      {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- First Name (AR) -->
+                <div class="col-md-4">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.FN_AR' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.FN_AR' | translate }}"
+                           readonly type="text" formControlName="firstNameAr">
+                    <mat-error
+                      *ngIf="!formGroup.controls['firstNameAr'].valid && formGroup.controls['firstNameAr'].touched">
+                      {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- Middle Name (AR) -->
+                <div class="col-md-4">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.MN_AR' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.MN_AR' | translate }}"
+                           readonly type="text" formControlName="middleNameAr">
+                  </mat-form-field>
+                </div>
+                <!-- Last Name (AR) -->
+                <div class="col-md-4">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.LN_AR' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.LN_AR' | translate }}"
+                           readonly type="text" formControlName="lastNameAr">
+                    <mat-error
+                      *ngIf="!formGroup.controls['lastNameAr'].valid && formGroup.controls['lastNameAr'].touched">
+                      {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- Email -->
+                <div class="col-md-4 text-black">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.EMAIL' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.EMAIL' | translate }}"
+                           type="email" formControlName="email" required>
+                    <mat-error
+                      *ngIf="!formGroup.controls['email'].valid && formGroup.controls['email'].touched">
+                      {{ getErrorEmail() | async }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- Job Title -->
+                <div class="col-md-4">
+                  <mat-form-field [appearance]="appearance">
+                    <mat-label>{{'SHARED.JOB_TITLE' | translate }}</mat-label>
+                    <input matInput placeholder="{{'SHARED.JOB_TITLE' | translate }}"
+                           readonly type="text" formControlName="title">
+                    <mat-error
+                      *ngIf="!formGroup.controls['title'].valid && formGroup.controls['title'].touched">
+                      {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+
+                <!-- Mobil -->
+                <div formArrayName="mobiles" class="col-md-8">
+                  <div class="col p-0 d-flex align-items-center" *ngFor="
+                                        let email of formGroup.get('mobiles')['controls'];
+                                        let i = index
+                                      " [formGroupName]="i">
+                    <div class="col-2 d-flex mb-5" style="height: fit-content">
+                      <button *ngIf="
+                                            i == formGroup.get('mobiles')['controls'].length - 1
+                                          " class="btn btn-sm btn-primary font-weight-bolder cursor-pointer"
+                              aria-label="Add" (click)="addMobileForm()" matTooltip="Add">
+                                                <span inlineSVG="/assets/media/svg/icons/Code/Plus.svg" cacheSVG="true"
+                                                      class="svg-icon svg-icon-md m-0"></span>
+                      </button>
+                    </div>
+                    <mat-form-field [appearance]="appearance" class="col-md-10 p-0">
+                      <mat-label>{{ "SHARED.MOB_NO" | translate }}
+                        <span *ngIf="i == 0">({{ "SHARED.PRIMARY" | translate }})
+                                                </span>
+                        <span *ngIf="i > 0">({{ "SHARED.SECONDARY" | translate
+                          }})
+                                                </span>
+                      </mat-label>
+
+                      <button *ngIf="i > 0" mat-icon-button matSuffix
+                              (click)="removeOrClearMobile(i)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+
+                      <ngx-mat-intl-tel-input
+                        [onlyCountries]="['ae']"
+                        [enablePlaceholder]="true"
+                        [enableSearch]="false"
+                        formControlName="mobile" matInput
+                        [placeholder]="'SHARED.MOB_NO' | translate">
+                      </ngx-mat-intl-tel-input>
+
+                      <mat-error *ngIf="
+                                            !formGroup.get('mobiles')['controls'][i]?.get('mobile')?.valid &&
+                                            formGroup.get('mobiles')['controls'][i]?.get('mobile')?.touched
+                                          ">
+                        {{ getErrorMobile(i) | async }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+
+              <button class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer"
+                      (click)="onSubmit()"
+                      type="submit">{{'SHARED.USERS.EDIT.SUBMIT_BTN' | translate
+                }}
+              </button>
+
+              <button [routerLink]="['/auth/reset-password']"
+                      class="btn btn-lg btn-light-primary font-weight-bolder reset-pass py-2 px-5 cursor-pointer"
+                      type="submit">{{'ACTIONS.CHANGE_PASSWORD' | translate
+                }}
+              </button>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

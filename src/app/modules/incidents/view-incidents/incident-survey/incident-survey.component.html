@@ -1,0 +1,46 @@
+<div>
+  <!--begin::Item-->
+  <div class="d-flex align-items-center"
+       *ngIf="loadingStatus.isLoading || loadingStatus.msgInfo">
+    <div class="symbol symbol-40 text-primary">
+                        <span>
+                          <span [inlineSVG]="'./assets/media/svg/icons/Code/Minus.svg'"
+                                [class]="'svg-icon svg-icon-lg svg-icon-2x p-3 svg-icon-primary'"></span>
+                        </span>
+    </div>
+    <div class="d-flex flex-column font-weight-bold">
+      <a class="text-dark mb-1 text-size-sm">
+        {{ "INCIDENTS.HAPPINESS_LEVEL_TITLE" | translate }}
+      </a>
+      <div class="spinner spinner-primary spinner-sm my-2" *ngIf="loadingStatus.isLoading"></div>
+      <p class="text-dark mb-1 text-size-sm"
+         *ngIf="!loadingStatus.isLoading && loadingStatus.msgInfo">{{loadingStatus.msgInfo}}</p>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center"
+       *ngIf="!loadingStatus.isLoading && !loadingStatus.msgInfo">
+    <!--begin::Symbol-->
+    <div class="symbol symbol-40 text-primary">
+                        <span>
+                          <span inlineSVG="./assets/media/svg/icons/General/Smile.svg"
+                                class="svg-icon svg-icon-lg svg-icon-2x p-3 svg-icon-success"></span>
+                        </span>
+    </div>
+    <!--end::Symbol-->
+
+    <!--begin::Text-->
+    <div class="d-flex flex-column justify-content-center font-weight-bold">
+      <a class="text-dark mb-1 text-size-sm">
+        {{ "INCIDENTS.HAPPINESS_LEVEL_TITLE" | translate }}
+      </a>
+      <div class="font-weight-bolder text-dark" *ngFor="let dumy of happinessLevelDumpy; let i = index">
+        <span> {{ happinessLevelQuesDumy[i] }} : </span>
+        <span> <angular-emojis [name]="dumy.icon" [size]="20"></angular-emojis></span>
+        <span>{{dumy.levelName}}</span>
+      </div>
+    </div>
+    <!--end::Text-->
+  </div>
+  <!--end::Item-->
+</div>

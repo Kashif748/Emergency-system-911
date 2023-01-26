@@ -1,0 +1,50 @@
+<!--begin::Container-->
+<div
+  [ngClass]="headerContainerCSSClasses"
+  class="d-flex header-row align-items-stretch justify-content-between border-bottom"
+>
+  <ng-container *ngIf="loader$ | async as _loader">
+    <ngb-progressbar
+      class="loading-bar"
+      height="3px"
+      [value]="_loader"
+    ></ngb-progressbar>
+  </ng-container>
+
+  <ng-container *ngIf="headerMenuSelfDisplay">
+    <!--begin::Header Menu Wrapper-->
+    <div
+      *ngIf="!isMobileView"
+      class="header-menu-wrapper header-menu-wrapper-left w-100"
+      [ngClass]="{
+        'header-menu-wrapper-sidebar': isSideDisplay,
+        'header-menu-wrapper-sidebar-hidden': !isSideDisplay
+      }"
+      id="kt_header_menu_wrapper"
+    >
+      <ng-container>
+        <app-logo-wrapper></app-logo-wrapper>
+      </ng-container>
+
+      <app-header-menu
+        #ktHeaderMenu
+        id="kt_header_menu"
+        class="header-menu header-menu-mobile menu-over-scroll justify-content-center w-100"
+        [ngClass]="headerMenuCSSClasses"
+      ></app-header-menu>
+    </div>
+
+    <!--end::Header Menu Wrapper-->
+  </ng-container>
+
+  <ng-container *ngIf="!headerMenuSelfDisplay">
+    <div></div>
+  </ng-container>
+
+  <app-topbar
+    class="topbar"
+    [isMobileView]="isMobileView"
+    (openSideMenu)="openSideMenu.emit()"
+  ></app-topbar>
+</div>
+<!--end::Container-->

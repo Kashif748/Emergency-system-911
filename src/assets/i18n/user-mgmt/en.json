@@ -1,0 +1,77 @@
+{
+  "USER_MANAGEMENT": {
+    "FIRST_LAST_NAME": "First / Last Name",
+    "EMIRATES_ID": "Emirates ID",
+    "HEADER": "Users management",
+    "DOWNLOADANDUPLOADTEMPLATE": "Download  & Upload Excel Template",
+    "NEXT": "Next",
+    "PLACEHOLDER": "Select Role",
+    "STATUS": "Status",
+    "FILESTATUS": "File Status",
+    "ROLE": "Role",
+    "TOTALSUCCESS": "Total Success",
+    "TOTALFAILD": "Total Failed",
+    "PHONENUMBER": "Phone Number",
+    "PASSWORD": "Password",
+    "SIGNATURE": "Signature",
+    "PROFILE_PHOTO": "Profile Photo",
+    "BACK": "Back",
+    "ROLES": {
+      "TITLE": "Roles",
+      "NEW": {
+        "BTN": "New Role"
+      },
+      "FILTER_PLACEHOLDER": "Search  by role  name",
+      "PIVILEGES": {
+        "TITLE": "Privileges",
+        "NO_PIVILEGES": "There are no privileges to be selected",
+        "SELECT_ORG": "Please select an organization to show its privileges",
+        "SELECT_ONE": "Please Select  at least one  Privilage",
+        "INHERITED": "inherited for Sub Orgs"
+      },
+      "ALL_PRIVILAGES": "All Privilages",
+      "IS_PUBLIC": "Public Role",
+      "VIEW": {
+        "TITLE": "View Role"
+      },
+      "EDIT": {
+        "TITLE": "Edit Role",
+        "SUBMIT_BTN": "Update Role"
+      },
+      "CREATE": {
+        "TITLE": "Create Role",
+        "SUBMIT_BTN": "Create Role"
+      }
+    },
+    "USERS": {
+      "CONTROL_INFO": "Control Info",
+      "RANK": "Rank",
+      "FILTER": {
+        "LABEL": "Filter",
+        "HINT": "Ex. John"
+      },
+      "NUMBER": "NO.",
+      "NAME_AR": "Name in Arabic",
+      "NAME_EN": "Name in English",
+      "CREATE": {
+        "TITLE": "Create Profile",
+        "SUBMIT_BTN": "Create Profile"
+      },
+      "VIEW": {
+        "TITLE": "View Profile"
+      },
+      "IMAGE": {
+        "IMG": "Signature Image",
+        "USER": "User",
+        "DESC": "Upload User Signature Image.",
+        "UPLOAD": "Upload Image",
+        "UPLOAD_HINT": "create profile first"
+      },
+      "NEW_USER": "New User",
+      "ROLES": {
+        "LABEL": "Assigned Roles",
+        "HINT": "Select Roles..."
+      }
+    }
+  }
+}

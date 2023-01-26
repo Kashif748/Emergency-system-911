@@ -1,0 +1,83 @@
+<div class="card card-custom"
+     [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+     style="overflow: hidden">
+  <div class="card-header p-2">
+    <div class="card-title">
+      <span>{{ "EVENTSMODULES.RANKS" | translate }}</span>
+      <span *ngIf="isAddMode"
+            class="label label-lg label-light-primary label-inline">
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span *ngIf="!isAddMode"
+            class="label label-lg label-light-success label-inline">
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </div>
+    <div class="card-toolbar">
+      <button (click)="dialogRef.close()"
+              class="btn btn-icon btn-sm btn-light-primary">
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body px-3">
+    <form [formGroup]="formGroup">
+      <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field appearance="fill">
+            <mat-label class="asterisk_input">
+              {{ "EVENTSMODULES.itemNameAr" | translate }}
+            </mat-label>
+            <input matInput
+                   placeholder="{{ 'EVENTSMODULES.itemNameAr' | translate }}"
+                   type="text"
+                   formControlName="nameAr" />
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field appearance="fill">
+            <mat-label class="asterisk_input">
+              {{ "EVENTSMODULES.itemNameEn" | translate }}
+            </mat-label>
+            <input matInput
+                   placeholder="{{ 'EVENTSMODULES.itemNameEn' | translate }}"
+                   type="text"
+                   formControlName="nameEn" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <mat-slide-toggle color="primary"
+                          formControlName="isActive"
+                          class="m-auto"
+                          (change)="onChange($event)">
+          <span class="mx-4">
+            {{
+            (isChecked ? "ACTIONS.ACTIVE" : "ACTIONS.INACTIVE") | translate
+            }}</span>
+        </mat-slide-toggle>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer p-5 d-flex justify-content-between">
+    <button (click)="onSubmit()"
+            type="submit"
+            *ngIf="isAddMode"
+            class="btn btn-primary font-weight-bold">
+      {{ "ACTIONS.CREATE" | translate }}
+      <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md"></span>
+    </button>
+    <button (click)="onSubmit()"
+            type="submit"
+            *ngIf="!isAddMode"
+            class="btn btn-primary font-weight-bold">
+      {{ "ACTIONS.UPDATE" | translate }}
+      <span [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md"></span>
+    </button>
+  </div>
+</div>

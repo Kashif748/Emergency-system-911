@@ -1,0 +1,196 @@
+::ng-deep .carousel-cells .carousel-cell img {
+  object-fit: cover !important;
+}
+.tareget-node {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+}
+
+.oc-groups {
+  display: flex;
+  flex-direction: row;
+  padding-top: 30px;
+}
+
+.orgchart > :host {
+  align-items: center;
+}
+
+:host > .oc-node::after {
+  content: "";
+  box-sizing: border-box;
+  display: block;
+  left: 50%;
+  height: 50px;
+  width: 10px;
+  position: absolute;
+  background-color: rgba(217, 83, 79, 0.8);
+
+  border-style: solid;
+  border-width: 0 0 0px 10px;
+}
+
+:host > .oc-node.oc-is-collapsed::after {
+  display: none;
+}
+
+.orgchart > :host > .oc-groups > .oc-group > :host::before {
+  height: 40px;
+  top: -35px;
+}
+
+:host > .oc-node ::after {
+  box-sizing: border-box;
+  display: block;
+  left: 50%;
+  height: 50px;
+  width: 10px;
+  position: absolute;
+  background-color: rgba(217, 83, 79, 0.8);
+}
+
+.oc-node {
+  width: 300px;
+  font-family: Arial;
+  box-sizing: border-box;
+  position: relative;
+  padding: 3px;
+  margin: 0;
+  border: 2px solid transparent;
+  text-align: center;
+  border-radius: 15px !important;
+}
+
+.oc-node:hover,
+.oc-node.oc-is-selected {
+  background-color: rgba(238, 217, 54, 0.5);
+}
+
+.oc-node .oc-node-heading {
+  box-sizing: border-box;
+  padding: 2px;
+  margin: 0;
+  width: 300px;
+  height: 20px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: rgba(217, 83, 79, 0.8);
+  color: #fff;
+  border-radius: 4px 4px 0 0;
+}
+
+.oc-node .oc-node-content {
+  box-sizing: border-box;
+  padding: 2px;
+  width: 300px;
+  height: 20px;
+  font-size: 0.625rem;
+  border: 1px solid rgba(217, 83, 79, 0.8);
+  border-radius: 0 0 4px 4px;
+  text-align: center;
+  background-color: #fff;
+  color: #333;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-node .toggle-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.oc-group {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  position: relative;
+  padding-top: 50px;
+}
+.oc-group {
+  padding-left: 10px;
+}
+.oc-group:first-child::before {
+  left: calc(50% - 0px);
+  width: calc(50% + 0px);
+}
+.oc-group:last-child:not(:only-child)::before {
+  width: calc(50% + 10px) !important;
+}
+
+.oc-group::before {
+  content: "";
+  box-sizing: border-box;
+  top: 10px;
+  left: 0px;
+  width: calc(100% + 0px);
+  position: absolute;
+  border-style: solid;
+  border-width: 0 0 10px 0;
+}
+
+.single-child:first-child::before {
+  left: calc(50% - 0px);
+  width: 0 !important;
+}
+
+.orgchart > :host > .oc-groups > .oc-group:first-child::before {
+  left: calc(50% - 0px);
+  width: calc(50% + 0px);
+}
+.orgchart > :host > .oc-groups > .oc-group:last-child::before {
+  width: calc(50% + 10px) !important;
+}
+
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+:host:not(:last-child) {
+  padding-bottom: 10px;
+}
+
+:host:not(:last-child) {
+  padding-bottom: 10px;
+}
+
+.oc-group > :host::before {
+  content: "";
+  box-sizing: border-box;
+  height: 40px; /* adjust the vertical postion of link line ⊢ */
+  top: -35px;
+  position: absolute;
+  left: calc(50% - 5px);
+
+  border-color: rgba(217, 83, 79, 0.8);
+  border-style: solid;
+  border-width: 0 0 0px 10px;
+}
+
+/* adjust the vertical postion of link line ⊢ */
+.oc-group:first-child > :host:first-child::before {
+  height: 40px;
+  top: -35px;
+}
+
+mat-card ::after {
+  content: "";
+  border-color: rgba(217, 83, 79, 0.8);
+  border-style: solid;
+  border-width: 0 0 0px 10px;
+  box-sizing: border-box;
+  display: block;
+  left: 50%;
+  height: 50px;
+  width: 10px;
+  position: absolute;
+  background-color: rgba(217, 83, 79, 0.8);
+}

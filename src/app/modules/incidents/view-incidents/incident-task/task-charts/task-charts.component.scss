@@ -1,0 +1,38 @@
+.spinner-container {
+  background-color: rgb(243, 243, 243);
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep {
+  .dark-mode {
+    .chart-header {
+      background-color: var(--background-primary-color) !important;
+    }
+  }
+
+  .apexcharts-canvas {
+    margin: auto !important;
+
+    .apexcharts-legend-series {
+      display: flex;
+      align-items: center;
+
+      .apexcharts-legend-marker {
+        margin: 0 5px !important;
+        border-radius: 4px !important;
+        height: 15px;
+        width: 15px;
+      }
+
+      .apexcharts-legend-text {
+        font-family: Tajawal !important;
+      }
+    }
+  }
+}
+
+
+ 

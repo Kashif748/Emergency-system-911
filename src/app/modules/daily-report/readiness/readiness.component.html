@@ -1,0 +1,183 @@
+<ng-container
+  *ngFor="let report of reportData$ | async as list; let index = index"
+  [formGroup]="form"
+>
+  <div class="h-200px" *ngIf="index % 3 == 0"></div>
+
+  <div
+    class="col-12 bg-main-color h-60px text-center d-flex"
+    *ngIf="index % 3 == 0"
+  >
+    <div>
+      <img class="img-fluid h-60px" src="./assets/logos/adcda.png" />
+    </div>
+    <h3 class="text-white m-auto">
+      الجاهزية والإستعداد لهيئة أبو ظبي للدفاع المدني
+    </h3>
+
+    <div>
+      <p class="mt-2">
+        <span class="text-white mx-1">التاريخ</span>
+        <span class="bg-white p-1">
+          <!-- 2021/05/30 -->
+          {{ (initForm$ | async)?.date | customDate | date: "yyyy/MM/dd" }}
+        </span>
+      </p>
+      <!-- <p>
+      <span class="text-white mx-1">الوقت</span>
+      <span class="bg-white p-1">
+        12:00 AM
+      </span>
+    </p> -->
+    </div>
+  </div>
+
+  <div class="my-5">
+    <ng-container formArrayName="numbers">
+      <div class="h-60px d-flex">
+        <h3
+          class="h-100 bg-readiness-red text-white text-center d-flex w-175px"
+        >
+          <span class="m-auto">{{ report.area }}</span>
+        </h3>
+        <div class="spacer"></div>
+        <div class="font-size-h2 d-flex mx-2">
+          <span class="m-auto"> نقطة الاستجابة </span>
+        </div>
+        <img
+          class="img-thumbnail mx-2"
+          src="data:application/octet-stream;base64,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"
+        />
+        <div class="font-size-h2 d-flex mx-2">
+          <sup
+            ><span
+              class="
+                font-size-h4
+                badge badge-success
+                custom-badge
+                bg-main-color
+              "
+              >D</span
+            ></sup
+          >
+          <div class="border border-black border-2 d-flex">
+            <strong class="my-auto mx-4"> {{ report.d }} </strong>
+          </div>
+        </div>
+
+        <div class="font-size-h2 d-flex mx-2">
+          <sup
+            ><span
+              class="
+                font-size-h4
+                badge badge-success
+                custom-badge
+                bg-main-color
+              "
+              >E</span
+            ></sup
+          >
+          <div class="border border-black border-2 d-flex">
+            <strong class="my-auto mx-4"> {{ report.e }} </strong>
+          </div>
+        </div>
+
+        <!-- <img
+      class="img-thumbnail mx-2"
+      src="data:application/octet-stream;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAfCAYAAAAbW8YEAAAFUklEQVRIDZWXiVNTVxSH/fe0djoUrR2nKCJjN8dOpyDKoqU6rdPWJZB9e4G6IUvCkg1CAsQEiQoxGBXCqhSDGIKkIJDAr3Muk5u8LIBv5s19791z75ez3XNyAPu85t9HMBwK4a6jF1qLFVeFBpTVy/C70ADX8Agm5ub2uRNwYC/J0Ny/aBlwQ2u1oaHXCWVnF+RGE4P+fOMWzkvluKQ3oFKlQX1zK4bHxvbaMj80kUjANeKHzmaHzt4NmdEEaZuR3QpT+w70pgRlknp2l9dJUaXSolqtRXOvE/F4PC88p6axtTW0DrghOHohN7Vz2G5QDq+XoUYroO5BM5ZjsZzgnNCWvn40uvqyYPQD9N09aOx14u+mZlSqtajW6HC+XsY1TsIvCw2Q3H+A7e3tLHAWdCQUgtDjEAHrW9u4iW0+H9yBAPpH/GhxutBotjBolVqLslt1IvglnQDX06e7Q5f/W4WivYMFS9KUNBocvTAP+bAQjWZtQB9m34ah6zSjRieIoBUyBSqkcixGl0XrRJq6nwVgcDi5lqShoceBTu8g4vGEaGHmy8ZmHEpTO2q0evySpjFpa+ofEIlz6Nr6OvQWK1RdZg5Vmy1ocrnwcWMjtWhrC2FTG5b+vIYFUxuwtcXnVj9+xPU793BRoeIaV8iVqNXqsbK6yuU4dCYcZn5LmpVShHJzan6eC9NDPBbDi9PFCJ/9jo2JjAgdnZgE82+dlIMp2IJT03wfDu0b8bPITEJJ4warDfFEyqzxDx8QHfQgUHISr0pPYbSkGFHfIyTWUlpsxuO4qhNE2hKUgi55cah1yCeKWjoUOr3epBwWrRa8uVCOYMlJjJacxPPSUxj+5hgGj36OV+fOYM7UwmU1RhOqVBquKfm50Wzl8xxq9z0WQSli/aEJLjh2sRzzP36L4OniHWDR1/AUHMRQ4WcYO16A4R9KuezAiB8UQMmcJehtq53P54VSrnqfB7ng1PW/EP3pLGa/PwP/iePwFByCt+AgRo99gdmiIwjWVnPZLvdDFsWfDKUgeuBK+WEzEkHYIGBWchPewsN4VHgIXtLyj98wLZdgY/Edh0ruNbECsCfUluFTZUcnBJsdlAbp13okAu+Xh/Dk6GE2bkSX0qdB5/YVnYALMoXIvDl9GpyegT7j+CO/PgqmTEy7by5H4TvxFWaKjrCR3tMvq3dQ5E/Stkajw2DgORfjPo3GYqw40zGYTBuqnQZ7N5ZWVvgCelidmsS8QcPG9ImFSAS/avWg4y9p2nKpHNUqDd4tpX4ch9LidvdDUa6yg95mxx2HAwtLYjOmw+j5dTiMa423d3yZdgxSjipbjSJxEXQ2HIbWZhcVbAJrLFZozBYMBl9gcVl8eM8vLsLs8aJKqcZFpVpUaXYKuwYvp1OnEdFFUPrQ8dDDqgrBkmamUdHRya1gdLvxj9WOuqZmlEmkOzVVKucmJdPSoU+5qmoTa5kTGllZYX4k7TLBBKdCbujuYUW8QqFCeY4CTnWVtK7VCXj7PiIybU4ofXyz8A5UYVjFydCYaZ2jR0oGDo0X5EpUKlUYn32dBcwLpYnQ3BzzJeVrupn3glLkVirV8I+P5wTuCqXJwOQk86M8LY12g1KvRNHqeRbIC9wTSgKPX75i/a4srSvM14JS4PQM+XYF7gtKQtTGNDpdPJUyoZQa1HBntiX56Fkpk0/Q8eQpGpw7/VMm9LLegLv27nxLs77vG0r9q2VoiJk6HUoa6ju6sJXWK2VRMj7sG0rr6K9Gh8eD2/0DuKI3sJZT0WbExuZmxra7v34SlLainmlgdBQ3Wlpxv8eB9U8E0h7/A3ge9B7E+Wk6AAAAAElFTkSuQmCC"
+    />
+    <div class="font-size-h2 d-flex mx-2 border border-black border-2">
+      <strong class="my-auto mx-4">  </strong>
+    </div> -->
+
+        <img
+          class="img-thumbnail mx-2"
+          src="data:application/octet-stream;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAlCAYAAAAnQjt6AAAE+0lEQVRYCc1YWWwbVRR1WMsuxFpK2CU2IX6Q+GMvm0AIkECIXWL9Y6lA8IUQX0hISKhJm5I4adpQRFHThDQtTZUWJSnQUrWx4y3x7tpxYhwv8e6Zi851ZpjNrsdqq15pMuOZ8+477767vVjoDBFLszxSs9soOvEJxaY+b+oCdsmztVn11BwRUSBX/800vd5i6nJYryWxWmiKTFNERLFK7oE7TZEAaZAXKrmTTeSuukT8w09QfuEfmtt+vwrj6r/l1BOxdZ5D7oE7yN51MZWzIV61b+ejp5YIiQK5B9QW8e54kMRqkZaPH2ASolAh15bbDIjkT97WQJNn2z2qSXxDa3UT+AYfUWFArFmxYFXxQ19TZPxdiuz/QHcdP/AhRfa/TzM/Xq6aJDr5qW6O+OFvVBj7pkspMv4O1XTodWPO+N9fcWRZSmmfanBzIdpG+fghHZH8wuEWdFmolPYSE7FtON+UAof1GqqWUjoiyBmuzTeZ0mXrPE9JZJU82NFzFXl+upud0731dgJQayVH95WGRIRKnpx91+vwts5zCbrg8NDt6LlaxsAICovUiGBPi0kHIQJEoUyiUKLYwS/kQUpCmeCoziLZ8JghNjb1Geuq6axQKeMnLAb6DIk4e68jrEopCdt6Q+XIIViJJMglnp/vNcQmpn+QYPJdCnVDIqgN1eKSDMbD4rHvDZVjNfCV8NibFN73Njmsq+viFo9+p9IJSyPrNrSItkglbB11J1BuVaNn0xZBus4vHuH6IJQzJJSzhHzRaJJmvkUnPmJdrLOSYz+c6b6ivkWgFA7r7GsnZ+8ajgDUlGYma4SxdZzNumo623kOCW/oI9LH03k/04m0UXD3ixSdXEfY1/+vj7lNRPsXncCz8pvRcwP85DoK7nmJpjvOqu8jyKoogqdDnH03NCBiXU1CKa3iUUgco8DIs+QffpJ8Q49T6PdXOAJUIMUPobxMob2vMhZj/CPPcPemgHDmdm25tRERdUJDljVKaMuRcUIfqxNRoOXoH7ooWzjyraplPGFCU2ZW1AXfzscIoaeNIvvGC/hIoSUy/+eXZN94oQ4PHd7Bh7neYIwpItgie9cl3ImH971Fob2vUWjsdb4j5Aw7tKG1ZNuwqoZbwWIs0jmSpVQ+zBEpZ7gr8+54gJbc/ZR0dFPS2UNJp5Xg1P7hp7QG4XeoP0lXbw3r6Oax3sGHaGbTZXLrYJqI5NnarcHvwOgLOiIIfSMs3qFPkZqpFoi011UcGH1eRwTk6hLpXdM6EdSdwK7nKBf/i3KxScrFpvhCzUAoawUHLefmGyk3f7CGjU7wWFiKfWSlvTRtEUQRtgcHJ0hxyUWzv9zHSpEftIJ38AWc+AqJaf4MpwZxtIctbw0Go88Mj73BSsvZMFsIRwv/b09refA7ODK2qJSa4+9omtDNKftccxZZCV9EB3rRtPdXSvsGKRPcRWgp64UvnDIT3M3Y1Nx2HgtL2bsuajF8KzluBes5n1lnhaXQaEGMLZKakyshwFLSwQB06tLBGlkTZgYxnAgLi0dZqfJP4V8bRcbfY0xwz8t8igMeWTUTGJGhIAKnri2yjUqpWbJUcvNy4wuTK4lgJMwLn4BgckRSJReTlWofoA8OiyiDYOySZ0AFY4usHNiRAKGP/1FTzgS4QvKZRlPMMKicDbIi1B9gTyTAAAvBMUPfWohUTDoJR1SccSD/AUMKn1/iCDZ5AAAAAElFTkSuQmCC"
+        />
+        <div class="font-size-h2 d-flex mx-2 border border-black border-2">
+          <strong class="my-auto mx-4"> {{ report.abc }} </strong>
+        </div>
+        <div class="font-size-h2 d-flex mx-2">
+          <span class="m-auto"> مركز </span>
+        </div>
+        <div class="spacer"></div>
+        <img
+          class="img-thumbnail mx-2"
+          src="data:application/octet-stream;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAAEHklEQVRYCaWW629URRjG9z8T5Q5yEW+IEoFStqUtF0vBVhoqtSVFtBbvApZw+WSiTUxMjLf4kRg/oSYaolFJGhNB0nPZdvec8zPPTGc5e/Zs97SdZDLn8s77zPvM+z4zJZbRRt5P6DgDT/fDjiOw/Yh93ncahi4uwxFQKmL+zAl47CCsPwRbeyzgjqOgLvDHe2FDGR7tgCeOFfHYBvjFV6yzbX3WoZy261qIFiBWlmotI97UBZu6Ydfx9mDZxWiOmBFLrVou8NqDoCh3FYgwC5p+Vx6sOZAP3QSsvVoOtWmgvGflwZqOZvAG4N0nYcvhh9TuPGrfNx8GddGX57zdNwWiuelWBz4/bZMiu6fdowm947Z3jiSmjNoBZf9ry1QR/RceQteBN3fb8nCTNnbBqx/E1KoBgR8QhgEPHoR0jSZsTbHi7IuM6WQzwBeughIqPXndIZi8HgE+ge8TBj5R1efUZIwyPm1b9Fn5M/CmjdoAa2+39TY629AFI+/FxDUfz7M9iTzGLkWGtqJgaTvljMRGzQCv62wElbGSrO9cQhiIagtM4vHpV9UVA8uvo7s0PdNMswy298GzA3B3NmS+4jM35wMeX3y/OmAl2bkrUBr7CNaXmyMWuPbku1sLiOI48vjlTsUsZjV1riQ+NgGlE29YaRRQtpvVXVaCefz+V8hzJ1cuo8636nn/MJR6xhtFwxloFN1PvgSz/4TcnQ2MbmeTMG1f5FnzXxhsAyxHazvh4k1FPcdnX1frR18RkDybOrDqSqdQnpG+SehFz+1f5w3lr30YGeF39lI6MaMFSnRULnrfmbN1miNfB0T1+OXWyeWcSzDKZxN8P6BSsSLiDv0tPSAdmJ6pcebdmH3DCbo4tEpAJdfx81C69rmtLQeSNyoqKdnpt2OiyKda9Zm4EvHIfhvhD7ctG7Wqz737Af/eD5i8FpmqyPqTn4mPFwVE2Zs1yHsXnQIPwsDQLjH59tYCEhapmy9pDVXvc8x8U2uSYfmsC4jka8/LduV5YNlvUjnR/tNvFQOgUnOS6kYt5JMva2QVUWeztqAumVM32tPtFiDatedKoqkbEXf+rBg9F1hc81iY9wwbeRFLqIamUsB6VJIogx1Au1G2ikjCP/xObErtx5/n+ePvkHv/Bbx1vXmPZe9a/Tyeupl/ESiygI1luwgt/ql+2D1gS8rNNcnZCYOL0Qq8DqyXvYOLktiiBp2jVqOi1/VW+5iuY22LGEq3BmD9UJ3JsJXz5X4XoMvkJYH1U0kghVnt9VYKJqHJa00ROyNFrWNxJeDaUzEnfWjVWgJrQvmsvZAr+qIU6xBQlDqBlmpLAruJe4fsIaBy0P1azkWjuhJJ1yRFp73UraVIKwTsHL1+FXrH4flBzEGgw2DPKegehbFLzqrY+D9Y4KPib/7E+wAAAABJRU5ErkJggg=="
+        />
+        <ng-container formGroupName="{{ index }}">
+          <h4
+            class="
+              h-100
+              border border-3 border-readiness-red
+              text-center
+              d-flex
+              w-175px
+              mx-2
+            "
+          >
+            <input
+              class="m-auto input-custom"
+              type="text"
+              matInput
+              placeholder="{{ 'DAILY_REPORT_ADCDA.PHONE' | translate}}"
+              [maxLength]="7"
+              formControlName="number"
+            />
+          </h4>
+          <h4
+            class="h-100 bg-readiness-red text-white text-center d-flex w-60px"
+          >
+            <input
+              class="m-auto input-custom text-white"
+              type="text"
+              matInput
+              placeholder="00"
+              [maxLength]="2"
+              formControlName="prefix"
+            />
+          </h4>
+        </ng-container>
+      </div>
+      <div class="table-container table-responsive mt-2">
+        <table
+          class="text-center table-bordered border-2 border-transparent w-100"
+        >
+          <tr class="h-60px font-size-h4">
+            <th
+              [colSpan]="category?.subCategories?.length"
+              class="{{
+                index % 2 == 0 ? 'bg-readiness-th-1' : 'bg-readiness-th-2'
+              }}"
+              *ngFor="let category of report.categories; let index = index"
+            >
+              {{ category?.category }}
+            </th>
+          </tr>
+          <tr class="bg-readiness-th-t">
+            <th *ngFor="let subcat of report.subCategories">
+              {{ subcat?.subCategory }}
+            </th>
+          </tr>
+
+          <tr class="bg-readiness-th-t">
+            <td *ngFor="let subcat of report.subCategories">
+              {{ subcat?.count }}
+            </td>
+          </tr>
+
+          <tr class="bg-readiness-th-b">
+            <td
+              [colSpan]="category?.subCategories?.length"
+              *ngFor="let category of report.categories; let index = index"
+            >
+              {{ calcSumCat(category) }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+
+<div class="my-5" style="height: 218px;" *ngFor="let item of padding"></div>

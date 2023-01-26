@@ -1,0 +1,438 @@
+<div class="container-fluid">
+  <img class="img-fluid w-100" src="assets/images/trending.jpeg" alt="">
+</div>
+<!-- <div class="container-fluid">
+  <div class="row">
+    <div class="col-12 mb-3">
+      <div class="row d-flex flex-row">
+        <mat-form-field appearance="fill" class="col">
+          <span matSuffix>
+            <i class="fas flaticon-network icon-2x"></i>
+          </span>
+          <mat-select [formControl]="platfrom">
+            <mat-option [value]="'twitter'">
+              تويتر
+            </mat-option>
+            <mat-option [value]="'facebook'">
+              فيسبوك
+            </mat-option>
+            <mat-option [value]="'instegram'">
+              إنستغرام
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="col">
+          <span matSuffix>
+            <i class="fas fa-globe icon-2x"></i>
+          </span>
+          <mat-select [value]="'1'">
+            <mat-option [value]="'1'">
+              أبوظبي
+            </mat-option>
+            <mat-option [value]="'2'">
+              الشارقة
+            </mat-option>
+            <mat-option [value]="'3'">
+              دبي
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="col">
+          <span matSuffix>
+            <i class="fas fa-hashtag icon-2x"></i>
+          </span>
+          <input matInput [placeholder]="'الموضوع'">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="col">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+
+          <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+
+        <div class="col text-center bg-white rounded mx-2 d-flex trending-header">
+          <div class="d-flex w-100 p-1">
+            <div class="mt-1">
+              <span class="font-size-sm">
+                like
+              </span>
+              <br>
+              <span class="font-size-sm">
+                6,524
+              </span>
+            </div>
+            <span class="spacer"></span>
+            <div>
+              <i class="socicon-instagram text-primary icon-3x"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col text-center bg-white rounded mx-2 d-flex trending-header">
+          <div class="d-flex w-100 p-1">
+            <div class="mt-1">
+              <span class="font-size-sm">
+                like
+              </span>
+              <br>
+              <span class="font-size-sm">
+                45,322
+              </span>
+            </div>
+            <span class="spacer"></span>
+            <div>
+              <i class="socicon-twitter text-primary icon-3x"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col text-center bg-white rounded mx-2 d-flex trending-header">
+          <div class="d-flex w-100 p-1">
+            <div class="mt-1">
+              <span class="font-size-sm">
+                like
+              </span>
+              <br>
+              <span class="font-size-sm">
+                26,472
+              </span>
+            </div>
+            <span class="spacer"></span>
+            <div>
+              <i class="socicon-facebook text-primary icon-3x"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row border-top pt-4">
+
+    <div class="col-md-4">
+      <div class="row">
+        <mat-tab-group class="col-12 vh-100">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <span>
+                <i class="fa fa-newspaper icon-2x"></i>
+              </span>
+            </ng-template>
+            <div class="row">
+              <div class="col-6">
+                <mat-card class="example-card my-3">
+                  <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>Shiba Inu</mat-card-title>
+                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                  </mat-card-header>
+                  <img mat-card-image src="assets/media/stock-600x400/img-67.jpg" alt="Photo of a Shiba Inu">
+                  <mat-card-content>
+                    <p>
+                      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                      bred for hunting.
+                    </p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                  </mat-card-actions>
+                </mat-card>
+
+                <mat-card class="example-card my-3">
+                  <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>Shiba Inu</mat-card-title>
+                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                  </mat-card-header>
+                  <img mat-card-image src="assets/media/stock-600x400/img-67.jpg" alt="Photo of a Shiba Inu">
+                  <mat-card-content>
+                    <p>
+                      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                      bred for hunting.
+                    </p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                  </mat-card-actions>
+                </mat-card>
+              </div>
+
+              <div class="col-6">
+                <mat-card class="example-card my-3">
+                  <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>Shiba Inu</mat-card-title>
+                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                  </mat-card-header>
+                  <img mat-card-image src="assets/media/stock-600x400/img-67.jpg" alt="Photo of a Shiba Inu">
+                  <mat-card-content>
+                    <p>
+                      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                      bred for hunting.
+                    </p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                  </mat-card-actions>
+                </mat-card>
+
+                <mat-card class="example-card my-3">
+                  <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>Shiba Inu</mat-card-title>
+                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                  </mat-card-header>
+                  <img mat-card-image src="assets/media/stock-600x400/img-67.jpg" alt="Photo of a Shiba Inu">
+                  <mat-card-content>
+                    <p>
+                      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                      bred for hunting.
+                    </p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                  </mat-card-actions>
+
+                </mat-card>
+
+                <mat-card class="example-card my-3">
+                  <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>Shiba Inu</mat-card-title>
+                    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                  </mat-card-header>
+                  <img mat-card-image src="assets/media/stock-600x400/img-67.jpg" alt="Photo of a Shiba Inu">
+                  <mat-card-content>
+                    <p>
+                      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                      bred for hunting.
+                    </p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                  </mat-card-actions>
+                </mat-card>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <i class="fa fa-users icon-2x"></i>
+            </ng-template>
+            <div class="row">
+              <div class="col-12">
+                Content 2
+
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <i class="fa fa-map-marker-alt icon-2x"></i>
+
+            </ng-template>
+            <div class="row">
+              <div class="col-12">
+
+                Content 3
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <i class="fa fa-user-alt icon-2x"></i>
+
+            </ng-template>
+            <div class="row">
+              <div class="col-12">
+
+                Content 4
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="w-100 h-100 bg-white rounded-lg m-1 p-3">
+            <h5>
+              الاهتمام بالموضوع حسب الدولة
+            </h5>
+            <div id="chart" class="w-100">
+              <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" class="w-100" [dir]="'ltr'"
+                [dataLabels]="chartOptions.dataLabels" [plotOptions]="chartOptions.plotOptions"
+                [xaxis]="chartOptions.xaxis" [stroke]="chartOptions.stroke" [fill]="chartOptions.fill"
+                [yaxis]="chartOptions.yaxis" [title]="chartOptions.title" [tooltip]="chartOptions.tooltip"
+                [legend]="false"></apx-chart>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="w-100 h-100 bg-white rounded-lg m-1 p-3">
+            <div class="d-flex">
+              <div class="m-auto ">
+                الاهتمام بالموضوع في الدولة حسب الوقت
+              </div>
+              <div class="spacer"></div>
+
+              <div>
+                <span class="text-muted">
+                  Google Trends
+                </span>
+              </div>
+            </div>
+            <div class="w-100">
+              <div class="chart h-100 w-100 mt-5">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                  [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="w-100 h-100 bg-white rounded-lg m-1 p-3">
+            <div class="d-flex">
+              <div class="m-auto ">
+                التفاعل عبر تويتر
+              </div>
+            </div>
+            <div class="w-100">
+              <div class="chart h-100 w-100 mt-5">
+                <apx-chart [series]="pieChartOptions.series" [chart]="pieChartOptions.chart"
+                  [labels]="pieChartOptions.labels" [responsive]="pieChartOptions.responsive"
+                  [legend]="pieChartOptions.legend"></apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-5">
+          <div class="h-100 w-100 cov-19-img m-1 p-3 bg-white rounded-lg">
+
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="w-100 h-100 bg-white rounded-lg m-1 p-3">
+            <div class="d-flex">
+              <div class="m-auto ">
+                الاهتمام بالموضوع في الدولة حسب المدينة والتاريخ
+              </div>
+              <div class="spacer"></div>
+
+            </div>
+            <div class="w-100">
+              <div class="chart h-100 w-100 mt-5">
+                <apx-chart [series]="lineChartOptions.series" [chart]="lineChartOptions.chart"
+                  [xaxis]="lineChartOptions.xaxis" [dataLabels]="lineChartOptions.dataLabels"
+                  [grid]="lineChartOptions.grid" [stroke]="lineChartOptions.stroke" [title]="lineChartOptions.title">
+                </apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12">
+              <div class="row bg-white rounded-lg m-1 p-3">
+                <div class="col-12 mb-5">
+                  <div class="h3">
+                    أكثر المواضيع المتداولة عالمياً
+                  </div>
+                </div>
+                <div class="col text-center border rounded mx-2 d-flex trending-header">
+                  <div class="d-flex w-100 p-1">
+                    <div class="m-auto">
+                      <strong class="text-primary h3">Twitter</strong>
+                    </div>
+                    <span class="spacer"></span>
+                    <div>
+                      <i class="socicon-twitter text-primary icon-3x"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col text-center border rounded mx-2 d-flex trending-header">
+                  <div class="d-flex w-100 p-1">
+                    <div class="m-auto">
+                      <strong class="text-primary h3">Facebook</strong>
+                    </div>
+                    <span class="spacer"></span>
+                    <div>
+                      <i class="socicon-facebook text-primary icon-3x"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col text-center border rounded mx-2 d-flex trending-header">
+                  <div class="d-flex w-100 p-1">
+                    <div class="m-auto">
+                      <strong class="text-primary h3">Instagram</strong>
+                    </div>
+                    <span class="spacer"></span>
+                    <div>
+                      <i class="socicon-instagram text-primary icon-3x"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col text-center border rounded mx-2 d-flex trending-header">
+                  <div class="d-flex w-100 p-1">
+                    <div class="m-auto">
+                      <strong class="text-primary h3">Reddit</strong>
+                    </div>
+                    <span class="spacer"></span>
+                    <div>
+                      <i class="socicon-reddit text-primary icon-3x"></i>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col text-center border rounded mx-2 d-flex trending-header">
+                  <div class="d-flex w-100 p-1">
+                    <div class="m-auto">
+                      <strong class="text-primary h3">YouTube</strong>
+                    </div>
+                    <span class="spacer"></span>
+                    <div>
+                      <i class="socicon-youtube text-primary icon-3x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div> -->

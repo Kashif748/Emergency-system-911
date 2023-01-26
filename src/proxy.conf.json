@@ -1,0 +1,74 @@
+{
+  "/ecms/*": {
+    "target": "http://10.21.13.245:8080",
+    "pathRewrite": { "^/ecms": "ecms" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/admgis/*": {
+    "target": "http://10.24.10.55",
+    "pathRewrite": { "^/admgis": "admgis" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/agsupc/*": {
+    "target": "https://geosmart.dmt.gov.ae",
+    "pathRewrite": { "^/agsupc": "agsupc" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/onwaniapi/*": {
+    "target": "https://onwani.abudhabi.ae",
+    "pathRewrite": { "^/onwaniapi": "onwaniapi" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/arcgis/*": {
+    "target": "https://onwani.abudhabi.ae",
+    "pathRewrite": { "^/arcgis": "arcgis" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/dpmags/*": {
+    "target": "https://myland.dmt.gov.ae/proxy.ashx?https://smarthub.dpm.abudhabi.ae",
+    "pathRewrite": { "^/dpmags": "dpmags" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/proxy-gis-imgupc/*": {
+    "target": "https://myland.dmt.gov.ae/proxy.ashx?https://gisserver.dpm.abudhabi.ae",
+    "pathRewrite": { "^/proxy-gis-imgupc": "imgupc" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+
+  "/geosmart-imgupc/*": {
+    "target": "https://geosmart.dmt.gov.ae",
+    "pathRewrite": { "^/geosmart-imgupc": "imgupc" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/geoserver/*": {
+    "target": "https://geosmart.dmt.gov.ae",
+    "pathRewrite": { "^/geoserver": "geoserver" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+
+  "/gateway/*": {
+    "target": "http://10.21.10.245:4200/",
+    "pathRewrite": { "^/gateway": "gateway" },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

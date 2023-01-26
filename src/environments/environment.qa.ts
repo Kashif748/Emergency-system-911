@@ -1,0 +1,26 @@
+export const environment = {
+  NAME: 'QA',
+  production: true,
+  appVersion: 'v712demo1',
+  USERDATA_KEY: 'authf649fc9a5f55',
+  isMockEnabled: true,
+  apiUrl: 'ecms/v1',
+  apiUrlNoV1: 'ecms',
+  apiUrlV2: 'ecms/v2',
+  SOCKET_ENDPOINT: 'ecms/ecms-websocket',
+  // SOCKET_ENDPOINT: "http://10.24.13.245:8080/ecms/ecms-websocket",
+  UAE_PASS_HOST: 'https://qa-id.uaepass.ae',
+  UAE_PASS_CLIENT_ID: 'adcmcm_web_stage',
+  UAE_PASS_ROUTE: '',
+  ADMGIS_ROOT_ROUTE: 'https://geosmart.dmt.gov.ae/admgis',
+  firebase: {
+    apiKey: 'AIzaSyBXj0wavO5PMs_vzOA3dxjaatWGGoE1yBQ',
+    authDomain: 'ecms-dev-75719.firebaseapp.com',
+    projectId: 'ecms-dev-75719',
+    storageBucket: 'ecms-dev-75719.appspot.com',
+    messagingSenderId: '219094975807',
+    appId: '1:219094975807:web:c46b7a14ef56203acfff8a',
+    vapidKey:
+      'BKFJp9wQN4w9lMshYt5rOkT4BWxQVxryqgl-c-AzVBRrxtsYD9V79FtzPCBz0_Fh69hQ6R5y6vaWux8zD9O39o4',
+  },
+};

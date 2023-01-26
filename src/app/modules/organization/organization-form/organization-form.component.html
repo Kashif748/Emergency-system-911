@@ -1,0 +1,767 @@
+<div class="main-content border">
+  <button
+    (click)="dialogRef.close()"
+    class="btn btn-icon btn-sm btn-light-primary close-btn"
+  >
+    <i class="ki ki-close icon-nm"></i>
+  </button>
+  <mat-tab-group [selectedIndex]="tabIndex">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Home/Building.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+        {{ "ORGANIZATIONS.ORG_FORM" | translate }}
+      </ng-template>
+      <div
+        *ngIf="codeUsed"
+        class="
+          alert alert-custom alert-outline-primary
+          fade
+          h-40px
+          show
+          m-1
+          p-0
+        "
+        role="alert"
+      >
+        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+        <div class="alert-text">
+          {{ "ORGANIZATIONS.DUP_ORG_CODE" | translate }}
+        </div>
+      </div>
+      <perfect-scrollbar style="height: 500px">
+        <ng-container *ngTemplateOutlet="orgForm"></ng-container>
+      </perfect-scrollbar>
+      <div class="d-flex flex-column justify-content-end p-2 border-top">
+        <div>
+          <button
+            cdkFocusInitial
+            [disabled]="form.invalid || companyInfo.hasError('maxlength')"
+            (click)="onSubmit()"
+            class="
+              btn btn-md btn-primary
+              font-weight-bolder
+              mx-3
+              py-2
+              px-5
+              cursor-pointer
+            "
+          >
+            {{ "ACTIONS.SAVE" | translate }}
+            <span
+              [inlineSVG]="'/assets/media/svg/icons/General/Save.svg'"
+              cacheSVG="true"
+              class="svg-icon svg-icon-md"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab
+      [disabled]="disabledModulesTab"
+      *ngIf="
+        display &&
+        ![entityTypesCodes.CONTRACTOR.toString(), entityTypesCodes.Division.toString(), entityTypesCodes.Municipality_Center.toString()].includes(
+          entityTypes[form.get(organizationFormFields.ENTITY_TYPE).value]?.entityType
+        )
+      "
+    >
+      <ng-template mat-tab-label>
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Text/Bullet-list.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+        {{ "ORGANIZATIONS.ORG_MODULES" | translate }}
+      </ng-template>
+      <app-org-modules
+        [orgData]="data"
+        (close)="closeDialog($event)"
+        [isAddMode]="isAddMode"
+      ></app-org-modules>
+    </mat-tab>
+    <mat-tab
+      [disabled]="
+        ![entityTypesCodes.CONTRACTOR.toString(), entityTypesCodes.Division.toString(), entityTypesCodes.Municipality_Center.toString()].includes(
+          entityTypes[form.get(organizationFormFields.ENTITY_TYPE).value]?.entityType
+        ) && disabledModulesTab
+      "
+    >
+      <ng-template mat-tab-label>
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Design/Magic.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+        {{ "ORGANIZATIONS.ORG_MANAGEMENT" | translate }}
+      </ng-template>
+
+      <perfect-scrollbar style="height: 500px" class="container">
+        <div class="spinner-container" *ngIf="!display">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+        <div [formGroup]="mgmtForm">
+          <h4 class="mb-10">
+            {{ "ORGANIZATIONS.ORG_MANAGEMENT_HEADER" | translate }}
+          </h4>
+          <div class="row">
+            <div class="col-md-12">
+              <app-user-input
+                [appearance]="'fill'"
+                [placeholder]="'ORGANIZATIONS.MANAGER' | translate"
+                formControlName="managerId"
+                id="managerId"
+              ></app-user-input>
+            </div>
+
+            <div class="col-md-12">
+              <app-user-input
+                [appearance]="'fill'"
+                [placeholder]="'ORGANIZATIONS.ASSISTANT_MANAGER' | translate"
+                formControlName="specialistId"
+                id="specialistId"
+              ></app-user-input>
+            </div>
+          </div>
+        </div>
+      </perfect-scrollbar>
+
+      <div class="d-flex flex-column justify-content-end p-2 border-top">
+        <div>
+          <button
+            *ngIf="disabledModulesTab"
+            cdkFocusInitial
+            class="
+              btn btn-md btn-primary
+              font-weight-bolder
+              mx-3
+              py-2
+              px-5
+              cursor-pointer
+            "
+            [disabled]="form.invalid || companyInfo.hasError('maxlength')"
+            (click)="onSubmit()"
+          >
+            {{ "ACTIONS.SAVE" | translate }}
+            <span
+              [inlineSVG]="'/assets/media/svg/icons/General/Save.svg'"
+              cacheSVG="true"
+              class="svg-icon svg-icon-md"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #orgForm>
+  <div class="row px-5">
+    <div class="spinner-container" *ngIf="!display">
+      <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+    </div>
+    <div class="col-md-12">
+      <div class="card-custom gutter-b">
+        <div class="d-flex">
+          <h4 *ngIf="isAddMode" class="card-title m-0">
+            {{ "ORGANIZATIONS.ADD" | translate }}
+          </h4>
+          <h4 *ngIf="!isAddMode" class="card-title">
+            {{ "ORGANIZATIONS.EDIT" | translate }}
+          </h4>
+        </div>
+        <div *ngIf="isAddMode">
+          <mat-form-field
+            [hintLabel]="'ORGANIZATIONS.MAX_10_CHARACTERS' | translate"
+            class="example-full-width"
+            [dir]="direction.value"
+          >
+            <mat-label>{{
+              "TRADE_LICENSE.ENTER_TRADE_LICENSE_NO" | translate
+              }}</mat-label>
+            <span matPrefix>CN- &nbsp;</span>
+            <input
+              #cn
+              type="text"
+              matInput
+              placeholder="5551234"
+              [formControl]="companyInfo"
+              id="companyInfo"
+            />
+            <button
+              matSuffix
+              mat-icon-button
+              color="primary"
+              (click)="getCompanyInfo()"
+              [disabled]="companyInfo.invalid"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+        <div>
+          <form [formGroup]="form">
+            <div class="row my-3">
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  appearance="fill"
+                >
+                  <mat-label
+                  >{{ "ORGANIZATIONS.CODE" | translate }}
+                    <span class="required-asterisk">*</span>
+                  </mat-label>
+                  <input type="text" [id]="organizationFormFields.CODE" [name]="organizationFormFields.CODE" matInput
+                         [formControlName]="organizationFormFields.CODE"/>
+                  <mat-error *appFormErrors="form.get(organizationFormFields.CODE)">
+                    {{ "ORGANIZATIONS.THIS_FIELD_IS_REQUIRED" | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  appearance="fill"
+                >
+                  <mat-label
+                  >{{ "ORGANIZATIONS.ENTITY_TYPE" | translate }}
+                    <span class="required-asterisk">*</span>
+                  </mat-label>
+                  <mat-select
+                    name="entity"
+                    [id]="organizationFormFields.ENTITY_TYPE"
+                    [formControlName]="organizationFormFields.ENTITY_TYPE"
+                    [compareWith]="compareEntityTypes"
+                  >
+                    <mat-option
+                      *ngFor="let type of entityTypes$ | async"
+                      [value]="type.id"
+
+                    >
+                      {{ type | propTranslator: "label" }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6"
+                   *ngIf="
+              form.get(organizationFormFields.ENTITY_TYPE).value == organizationFormConstants.Municipality_Center_ID ||
+              form.get(organizationFormFields.ENTITY_TYPE).value?.id == organizationFormConstants.Municipality_Center_ID"
+              >
+                <mat-form-field
+                  appearance="fill"
+                  [dir]="direction.value"
+                >
+                  <mat-label
+                  > {{ 'ORGANIZATIONS.ORGANIZATION_CENTER' | translate}}
+                    <span class="required-asterisk">*</span>
+                  </mat-label>
+                  <mat-select
+                    name="center"
+                    [id]="organizationFormFields.ORGANIZATION_CENTER"
+                    [formControlName]="organizationFormFields.ORGANIZATION_CENTER"
+                    [compareWith]="compareCenters"
+                  >
+                    <mat-option
+                      *ngFor="let center of centerList$ | async"
+                      [value]="center.id"
+                    >
+                      {{ center | propTranslator: "name" }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+            <div class="row mx-1 mb-3">
+              <div class="col-12 bg-white rounded px-4">
+                <div class="d-flex">
+                  <button
+                    class="
+                      btn btn-md btn-light-primary
+                      font-weight-bolder
+                      cursor-pointer
+                      mx-auto
+                    "
+                    (click)="onNewLocationChange($event)"
+                    [id]="organizationFormFields.LOCATION"
+                  >
+                    {{ "INCIDENTS.NEW_LOCATION" | translate }}
+                    <span *ngIf="!!addLocationToMapFunc || this.form.get(organizationFormFields.IS_LOCATION_SELECTED).value">
+                      ({{ "COMMON.SELECTED" | translate }})
+                    </span>
+                   <span
+                      [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'"
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-md"
+                    ></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  appearance="fill"
+                >
+                  <mat-label
+                  >{{ "ORGANIZATIONS.NAME_EN" | translate }}
+                    <span class="required-asterisk">*</span>
+                  </mat-label>
+                  <input type="text" [id]="organizationFormFields.NAME_EN" matInput [formControlName]="organizationFormFields.NAME_EN"/>
+                  <mat-error *appFormErrors="form.get(organizationFormFields.NAME_EN)">
+                    {{ "ORGANIZATIONS.THIS_FIELD_IS_REQUIRED" | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  appearance="fill"
+                >
+                  <mat-label
+                  >{{ "ORGANIZATIONS.NAME_AR" | translate }}
+                    <span class="required-asterisk">*</span>
+                  </mat-label>
+                  <input type="text" matInput [id]="organizationFormFields.NAME_AR" [formControlName]="organizationFormFields.NAME_AR"/>
+                  <mat-error *appFormErrors="form.get(organizationFormFields.NAME_AR)">
+                    {{ "ORGANIZATIONS.THIS_FIELD_IS_REQUIRED" | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  appearance="fill"
+                >
+                  <mat-label>{{
+                    "ORGANIZATIONS.PARENT" | translate
+                    }}</mat-label>
+                  <mat-select
+                    name="entity"
+                    [id]="organizationFormFields.PARENT_ORG"
+                    [disabled]="id == org?.id"
+                    [formControlName]="organizationFormFields.PARENT_ORG"
+                  >
+                    <mat-option
+                      *ngFor="let org of organizations"
+                      [value]="org.id"
+                    >
+                      {{ org | propTranslator: "name" }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field appearance="fill" [dir]="direction.value">
+                  <mat-label>{{
+                    "ORGANIZATIONS.OFFICIAL_MOBILE" | translate
+                    }}</mat-label>
+                  <ngx-mat-intl-tel-input
+                    [onlyCountries]="['ae']"
+                    [enablePlaceholder]="true"
+                    [enableSearch]="false"
+                    [name]="organizationFormFields.MOBILE_NO"
+                    [formControlName]="organizationFormFields.MOBILE_NO"
+                    placeholder="{{ 'ORGANIZATIONS.OFFICIAL_MOBILE' | translate }}"
+                  ></ngx-mat-intl-tel-input>
+
+                  <mat-error>
+                    {{ "SHARED.PHONE_ERR_MSG" | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Eamil -->
+              <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                  appearance="fill"
+                  class="form-element example-full-width"
+                >
+                  <mat-label
+                  >{{ "ORGANIZATIONS.OFFICIAL_EMAIL" | translate }}
+                    <span *ngIf="validator" class="required-asterisk">*</span>
+                  </mat-label>
+                  <input
+                    matInput
+                    [id]="organizationFormFields.OFFICIAL_EMAIL"
+                    placeholder="{{
+                      'ORGANIZATIONS.OFFICIAL_EMAIL' | translate
+                    }}"
+                    type="email"
+                    [formControlName]="organizationFormFields.OFFICIAL_EMAIL"
+                  />
+                </mat-form-field>
+              </div>
+
+              <!-- Start ADCDA feilds -->
+              <ng-container *ngIf="checkIfParentADCDA()">
+                <!-- area   -->
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    appearance="fill"
+                    [dir]="direction.value"
+                  >
+                    <mat-label>{{
+                      "ORGANIZATIONS.area" | translate
+                      }}</mat-label>
+                    <mat-select name="area" [id]="organizationFormFields.AREA" [formControlName]="organizationFormFields.AREA">
+                      <mat-option
+                        *ngFor="let area of areas | async"
+                        [value]="area.id"
+                      >
+                        {{ area | propTranslator: "name" }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <!--  classification -->
+
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    appearance="fill"
+                    [dir]="direction.value"
+                  >
+                    <mat-label>
+                      {{ "ORGANIZATIONS.classification" | translate }}
+                    </mat-label>
+                    <mat-select
+                      name="category"
+                      [id]="organizationFormFields.ADCDA_CLASSIFICATION"
+                      [formControlName]="organizationFormFields.ADCDA_CLASSIFICATION"
+                    >
+                      <!-- <mat-option
+                        *ngFor="let class of classifications | async"
+                        [value]="class.id"
+                      >
+                        {{ class | propTranslator: "name" }}
+                      </mat-option> -->
+
+                      <mat-option
+                        *ngFor="let class of classificationsFinalData"
+                        [value]="class.id"
+                      >
+                        {{ class | propTranslator: "name" }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <!-- sector -->
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field
+                    appearance="fill"
+                    [dir]="direction.value"
+                  >
+                    <mat-label>{{
+                      "ORGANIZATIONS.sector" | translate
+                      }}</mat-label>
+                    <mat-select
+                      name="sector"
+                      [id]="organizationFormFields.SECTOR"
+                      [formControlName]="organizationFormFields.SECTOR"
+                    >
+                      <mat-option
+                        *ngFor="let sector of sectors | async"
+                        [value]="sector.id"
+                      >
+                        {{ sector | propTranslator: "name" }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <!-- category -->
+                <div class="col-sm-12 col-md-6">
+                  <mat-label class="d-block">
+                    {{ "ORGANIZATIONS.category" | translate }}:
+                  </mat-label>
+                  <mat-radio-group
+                    color="primary"
+                    aria-label="Select an option"
+                    [id]="organizationFormFields.ADCDA_PRIMARY"
+                    [formControlName]="organizationFormFields.ADCDA_PRIMARY"
+                  >
+                    <mat-radio-button [value]="true">{{
+                      "ORGANIZATIONS.main" | translate
+                      }}</mat-radio-button>
+                    <mat-radio-button [value]="false">{{
+                      "ORGANIZATIONS.sub" | translate
+                      }}</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </ng-container>
+              <!--End  ADCDA feilds -->
+
+              <div class="col-6 d-flex">
+                <label class="checkbox checkbox-square">
+                  <input
+                  [id]="organizationFormFields.IS_ACTIVE"
+                    [formControlName]="organizationFormFields.IS_ACTIVE"
+                    type="checkbox"
+                    name="active"
+                  />
+                  <span class="mx-3"></span>
+                  {{ "ORGANIZATIONS.IS_ACTIVE" | translate }}
+                </label>
+
+                <label class="checkbox checkbox-square">
+                  <input
+                  [id]="organizationFormFields.INTERNAL"
+                    [formControlName]="organizationFormFields.INTERNAL"
+                    type="checkbox"
+                    name="internal"
+                  />
+                  <span class="mx-3"></span>
+                  {{ "ORGANIZATIONS.IS_INTERNAL" | translate }}
+                </label>
+              </div>
+
+              <!-- Start Conractor Fields -->
+              <ng-container
+                *ngIf="
+                  entityTypes[form.get(organizationFormFields.ENTITY_TYPE).value]?.entityType == 'CON'
+                "
+              >
+                <div class="col-sm-12 mb-5">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        {{ "ORGANIZATIONS.CONTRACT_INFO" | translate }}
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <mat-form-field
+                          [dir]="direction.value"
+                          appearance="fill"
+                        >
+                          <mat-label
+                          >{{ "ORGANIZATIONS.CONTRACTOR_NUMBER" | translate }}
+                            <!-- <span class="required-asterisk">*</span> -->
+                          </mat-label>
+                          <input
+                            matInput
+                            placeholder="{{
+                              'ORGANIZATIONS.CONTRACTOR_NUMBER' | translate
+                            }}"
+                            [id]="organizationFormFields.CONTRACTOR_CONTRACT_NO"
+                            [formControlName]="organizationFormFields.CONTRACTOR_CONTRACT_NO"
+                          />
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-sm-12 col-md-6">
+                        <mat-form-field
+                          [dir]="direction.value"
+                          appearance="fill"
+                        >
+                          <mat-label
+                          >{{
+                            "ORGANIZATIONS.CONTRACTOR_ENDDATE" | translate
+                            }}
+                            <!-- <span class="required-asterisk">*</span> -->
+                          </mat-label>
+                          <input
+                            matInput
+                            placeholder="{{
+                              'ORGANIZATIONS.CONTRACTOR_ENDDATE' | translate
+                            }}"
+                            [id]="organizationFormFields.CONTRACTOR_EXPIRE_DATE"
+                            [formControlName]="organizationFormFields.CONTRACTOR_EXPIRE_DATE"
+                            [matDatepicker]="contractorExpDatePicker"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="contractorExpDatePicker"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker
+                            #contractorExpDatePicker
+                          ></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+              </ng-container>
+              <!-- End Conractor Fields -->
+            </div>
+            <div
+              class="row mb-5"
+              *ngIf="
+                !['CON', 'DIV', 'MUCENTER'].includes(
+                  entityTypes[form.get(organizationFormFields.ENTITY_TYPE).value]?.entityType
+                )
+              "
+            >
+              <div class="col-sm-12">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ "ORGANIZATIONS.MORE_OPTIONS" | translate }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="d-flex">
+                    <div class="d-flex-column w-50 p-1">
+                      <div class="justify-content-between d-flex px-3 mb-2">
+                        <label class="col-form-label">UAE Pass</label>
+                        <div class="">
+                          <span class="switch switch-icon">
+                            <label>
+                              <input
+                              [id]="organizationFormFields.LOGIN_UAE_PASS"
+                                type="checkbox"
+                                [formControlName]="organizationFormFields.LOGIN_UAE_PASS"
+                                name="loginUaePass"
+                              />
+                              <span></span>
+                            </label>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="justify-content-between d-flex px-3 mb-2">
+                        <label class="col-form-label">{{
+                          "ORGANIZATIONS.systemUser" | translate
+                          }}</label>
+                        <div class="">
+                          <span class="switch switch-icon">
+                            <label>
+                              <input
+                                [id]="organizationFormFields.SYSTEM_USER"
+                                [formControlName]="organizationFormFields.SYSTEM_USER"
+                                type="checkbox"
+                                name="select"
+                              />
+                              <span></span>
+                            </label>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex-column w-50">
+                      <div class="justify-content-between d-flex px-4 mb-2">
+                        <label class="col-form-label">{{
+                          "ORGANIZATIONS.ldapUser" | translate
+                          }}</label>
+                        <div class="">
+                          <span class="switch switch-icon">
+                            <label>
+                              <input
+                                [id]="organizationFormFields.LDAP_USER"
+                                [formControlName]="organizationFormFields.LDAP_USER"
+                                type="checkbox"
+                                name="select"
+                              />
+                              <span></span>
+                            </label>
+                          </span>
+                        </div>
+                      </div>
+                      <div *ngIf="form.get(organizationFormFields.LDAP_USER).value" class="m-0">
+                        <input
+                          type="number"
+                          class="form-control form-control-solid"
+                          placeholder="{{ 'ORGANIZATIONS.ldapId' | translate }}"
+                          [readonly]="data.type == 'edit'"
+                          [id]="organizationFormFields.LDAP_ORG_ID"
+                          [formControlName]="organizationFormFields.LDAP_ORG_ID"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="
+                      d-flex
+                      align-items-center
+                      justify-content-center
+                      mb-4
+                    "
+                  >
+                    <div
+                      *ngIf="
+                        form.get('systemUser').value ||
+                        form.get('ldapUser').value
+                      "
+                      class="d-flex"
+                    >
+                      <div>
+                        <label class="checkbox checkbox-square">
+                          <input
+                            [formControlName]="organizationFormFields.LOGIN_OTP"
+                            type="checkbox"
+                            name="loginOtp"
+                            [id]="organizationFormFields.LOGIN_OTP"
+                          />
+                          <span class="mx-3"></span>
+                          OTP
+                        </label>
+                      </div>
+
+                      <div class="col-6">
+                        <label class="checkbox checkbox-square">
+                          <input
+                            [formControlName]="organizationFormFields.LOGIN_CAPTCHA"
+                            type="checkbox"
+                            name="loginCaptcha"
+                            [id]="organizationFormFields.LOGIN_CAPTCHA"
+                          />
+                          <span class="mx-3"></span>
+                          Capatcha
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <mat-card class="d-flex-column p-1 my-2">
+                    <div class="logo-card">
+                      <img
+                        *ngIf="signatureImgUUID"
+                        class="img img-fluid"
+                        [attr.src]="signatureImgUUID | secure"
+                      />
+                      <img
+                        *ngIf="!signatureImgUUID && imageUrl"
+                        class="img img-fluid"
+                        [src]="imageUrl"
+                      />
+                    </div>
+                    <mat-card-actions class="p-2">
+                      <div class="row">
+
+                        <div class="col-sm-12 col-md-12">
+                          <label
+                            for="signature-input"
+                            class="
+                              btn btn-lg btn-light-primary
+                              font-weight-bolder
+                              py-2
+                              px-5
+                              cursor-pointer
+                              btn-block
+                              text-center
+                            "
+                          >{{
+                            "ACTIONS.IMG_UPLOAD" | translate
+                            }}</label
+                          >
+                          <input
+                            id="signature-input"
+                            type="file"
+                            (change)="pickFile($event.target.files)"
+                            accept=".jpeg,.png,.jpg"
+                          />
+                        </div>
+                      </div>
+                    </mat-card-actions>
+                  </mat-card>
+                </mat-expansion-panel>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

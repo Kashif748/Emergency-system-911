@@ -1,0 +1,22 @@
+<div class="container mat-elevation-z8 p-0" style="overflow: hidden">
+  <mat-toolbar class="bg-white px-3 border-bottom">
+    <app-breadcrumbs></app-breadcrumbs>
+    <div class="spacer"></div>
+    <!--<button
+      class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+      routerLink="view"
+      routerLinkActive="active"
+    >
+      {{ "EXERCISEIS.new_item" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>-->
+  </mat-toolbar>
+
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

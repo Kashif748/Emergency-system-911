@@ -1,0 +1,62 @@
+<div class="container d-flex flex-wrap w-100 pb-8 px-0 mb-10">
+  <!-- Communication Officer Efficiency -->
+  <ng-container *ngFor="let config of pieChartData">
+    <div class="chart-item  p-5" *ngIf="config.configId == 1">
+      <h3 class="survey-header py-3">
+        {{ lang === "en" ? config.nameEn : config.nameAr }}
+      </h3>
+      <div class="card h-100">
+        <div *ngIf="loading" class="spinner-container m-auto p-10">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+        <apx-chart
+          *ngIf="!loading"
+          style="width: fit-content; margin: auto"
+          [series]="chartOptions_H1.series"
+          [chart]="chartOptions_H1.chart"
+          [labels]="chartOptions_H1.labels"
+          [legend]="chartOptions_H1.legend"
+          [tooltip]="chartOptions_H1.tooltip"
+        ></apx-chart>
+      </div>
+    </div>
+    <div class="chart-item   p-5" *ngIf="config.configId == 2">
+      <h3 class="survey-header py-3">
+        {{ lang === "en" ? config.nameEn : config.nameAr }}
+      </h3>
+      <div class="card h-100">
+        <div *ngIf="loading" class="spinner-container m-auto p-10">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+        <apx-chart
+          *ngIf="!loading"
+          style="width: fit-content; margin: auto"
+          [series]="chartOptions_H2.series"
+          [chart]="chartOptions_H2.chart"
+          [labels]="chartOptions_H2.labels"
+          [legend]="chartOptions_H2.legend"
+          [tooltip]="chartOptions_H2.tooltip"
+        ></apx-chart>
+      </div>
+    </div>
+    <div class=" chart-item   p-5" *ngIf="config.configId == 3">
+      <h3 class="survey-header py-3">
+        {{ lang === "en" ? config.nameEn : config.nameAr }}
+      </h3>
+      <div class="card h-100">
+        <div *ngIf="loading" class="spinner-container m-auto p-10">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+        <apx-chart
+          *ngIf="!loading"
+          style="width: fit-content; margin: auto"
+          [series]="chartOptions_H3.series"
+          [chart]="chartOptions_H3.chart"
+          [labels]="chartOptions_H3.labels"
+          [legend]="chartOptions_H3.legend"
+          [tooltip]="chartOptions_H3.tooltip"
+        ></apx-chart>
+      </div>
+    </div>
+  </ng-container>
+</div>

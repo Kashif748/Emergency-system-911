@@ -1,0 +1,255 @@
+<div class="container-xxl">
+  <mat-toolbar class="custom-toolbar">
+    <button
+      class="btn btn-sm btn-clean btn-icon mx-2"
+      (click)="drawer.toggle()"
+    >
+      <span
+        [inlineSVG]="'./assets/media/svg/icons/Text/Menu.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-lg svg-icon-primary"
+      ></span>
+    </button>
+
+    <app-breadcrumbs></app-breadcrumbs>
+    <span class="spacer"></span>
+    <button
+      class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+      (click)="add()"
+      *appPrivileges="'PRIV_CR_CORR'"
+    >
+      {{ "CORRERSPONDENCE.ADD_CORRESPONDENCE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Communication/Sending mail.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </mat-toolbar>
+
+  <mat-drawer-container autosize>
+    <mat-drawer #drawer class="sidenav" mode="side" opened>
+      <app-correspondence-list-menu
+        (tabChanged)="typeChanged($event)"
+      ></app-correspondence-list-menu>
+    </mat-drawer>
+
+    <div class="sidenav-content">
+      <as-split
+        direction="horizontal"
+        [dir]="splitScreenDirection"
+        [unit]="'pixel'"
+      >
+        <as-split-area [size]="350" minSize="250" maxSize="350">
+          <div [formGroup]="criteria" class="filter">
+            <mat-form-field appearance="fill" class="table-filter mb-3">
+              <mat-label>{{ "NEWS.FILTER" | translate }}</mat-label>
+              <input
+                matInput
+                formControlName="filter"
+                (keyup.enter)="loadCorrPage(type)"
+                #input
+              />
+              <button mat-icon-button matSuffix [matMenuTriggerFor]="menu">
+                <mat-icon>filter_list</mat-icon>
+              </button>
+              <mat-hint>
+                <span class="mb-2 d-inline-block" style="font-size: 1rem">
+                  {{ "CORRERSPONDENCE.FILTER_BY" | translate }} :
+                  {{ searchType.label | translate }}
+                </span>
+              </mat-hint>
+            </mat-form-field>
+            <div class="spinner-container m-auto p-10" *ngIf="!displayMessage">
+              <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+            </div>
+          </div>
+          <div
+            class="ps card-container overflow-hiddin border-left max-h-900"
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)="onScroll()"
+            [scrollWindow]="false"
+            style="
+              position: relative;
+              max-height: 900px;
+              scroll-behavior: smooth;
+            "
+            [perfectScrollbar]
+          >
+            <mat-card
+              *ngFor="let item of displayedMessages; let id = index"
+              class="message-card"
+              [ngClass]="{
+                unread:
+                  !item.readingStatus &&
+                  (type == 'IN' || type == 'IN_WITH_CIRCULAR'),
+                cardSelected: id == selectedMessageId
+              }"
+              (click)="setSelectedMessage(id)"
+            >
+              <mat-card-content class="message-card__body">
+                <div class="left">
+                  <div class="symbol symbol-40 symbol-light-primary mr-2 ml-2">
+                    <span class="symbol-label">
+                      <span
+                        class="symbol-label font-size-h5 font-weight-bold"
+                        *ngIf="item?.user?.photo; else defaultPhoto"
+                      >
+                        <img [src]="item.user.photo | secure" />
+                      </span>
+                      <ng-template #defaultPhoto>
+                        <span
+                          class="symbol-label font-size-h5 font-weight-bold"
+                        >
+                          <img src="./assets/media/users/default.jpg" />
+                        </span>
+                      </ng-template>
+                    </span>
+                  </div>
+                  <div class="w-100">
+                    <div class="d-flex align-items-center">
+                      <div class="w-100">
+                        <span class="c-text"
+                          >{{ item.user | propTranslator: "fullName" }}/{{
+                            item.user.orgStructure | propTranslator: "name"
+                          }}</span
+                        >
+                        <h6 href="#" class="text-dark mb-1 font-size-lg">
+                          {{ item?.subject }}
+                        </h6>
+                      </div>
+                    </div>
+                    <span
+                      class="svg-icon svg-icon-md"
+                      *ngIf="item?.isRepliedByOther"
+                    >
+                      <span
+                        inlineSVG="./assets/media/svg/icons/Communication/replyed-email.svg"
+                        cacheSVG="true"
+                        class="svg-icon svg-icon-sm replyed-email-icon"
+                      ></span>
+                    </span>
+                    <div>
+                      <p class="p-0 m-0" *ngIf="!item.external">
+                        {{ item?.body | textCut }}
+                      </p>
+                      <p class="p-0 m-0" *ngIf="item.external">
+                        {{ "CORRERSPONDENCE.EXTERNAL" | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+              <mat-card-actions
+                class="d-flex justify-content-between align-items-center message-card__footer"
+              >
+                <div class="d-flex">
+                  <span
+                    [matTooltip]="'CORRERSPONDENCE.CONFIDENTIALITY' | translate"
+                    class="label label-lg label-light-warning label-inline mb-1"
+                  >
+                    {{ item?.confidentialty | propTranslator: "name" }}
+                  </span>
+                  <span
+                    [matTooltip]="'CORRERSPONDENCE.INCIDENT' | translate"
+                    class="label label-lg label-light-success label-inline mx-1"
+                  >
+                    {{ item?.incident?.subject | textCut: "5" }}
+                  </span>
+                </div>
+                <span
+                  [matTooltip]="'CORRERSPONDENCE.CREATED_ON_DATE' | translate"
+                >
+                  {{ item?.createdOn | customDate | date: "medium" }}
+                </span>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </as-split-area>
+        <as-split-area>
+          <div *ngIf="selectedMessage">
+            <app-message
+              (reply)="reply($event)"
+              [message]="selectedMessage"
+            ></app-message>
+          </div>
+          <ng-template #noMessageSelected>
+            <div class="p-2">
+              <span>{{
+                "CORRERSPONDENCE.NO_SELECTED_MESSAGE_YET" | translate
+              }}</span>
+            </div>
+          </ng-template>
+        </as-split-area>
+        <as-split-area [size]="0" minSize="0" maxSize="300">
+          <div class="sender" *ngIf="selectedMessage">
+            <div class="sender__header">
+              <div class="symbol-box">
+                <div class="symbol symbol-40 symbol-light-primary">
+                  <span class="symbol-label">
+                    <span
+                      class="symbol-label font-size-h5 font-weight-bold"
+                      *ngIf="selectedMessage?.user?.photo; else defaultPhoto"
+                    >
+                      <img [src]="selectedMessage.user.photo | secure" />
+                    </span>
+                    <ng-template #defaultPhoto>
+                      <span class="symbol-label font-size-h5 font-weight-bold">
+                        <img src="./assets/media/users/default.jpg" />
+                      </span>
+                    </ng-template>
+                  </span>
+                </div>
+                <h5 class="title">
+                  {{ selectedMessage.user | propTranslator: "fullName" }}
+                </h5>
+                <p>
+                  {{
+                    selectedMessage.user.orgStructure | propTranslator: "name"
+                  }}
+                </p>
+              </div>
+            </div>
+            <div class="sender__body">
+              <div class="info">
+                <div>
+                  <mat-icon color="primary">phone</mat-icon>
+                  <span>{{ selectedMessage.user.mobile }}</span>
+                </div>
+                <div>
+                  <mat-icon color="primary">email</mat-icon>
+                  <span>{{ selectedMessage.user.email }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </as-split-area>
+      </as-split>
+      <nodata-table
+        *ngIf="displayedMessages.length == 0 && displayMessage"
+      ></nodata-table>
+    </div>
+  </mat-drawer-container>
+
+  <mat-menu #menu="matMenu">
+    <mat-selection-list
+      [multiple]="false"
+      (selectionChange)="filterTypeChanged($event)"
+    >
+      <mat-list-option value="filter" class="mat-menu-item">
+        {{ "CORRERSPONDENCE.SUBJECT_AND_BODY" | translate }}
+      </mat-list-option>
+      <mat-list-option value="orgMail" class="mat-menu-item">
+        {{ "CORRERSPONDENCE.ORGANIZATION_MAIL" | translate }}
+      </mat-list-option>
+      <mat-list-option value="circularNumber" class="mat-menu-item">
+        {{ "CORRERSPONDENCE.CIRCULAR_NUMBER" | translate }}
+      </mat-list-option>
+      <mat-list-option value="createdByName" class="mat-menu-item">
+        {{ "CORRERSPONDENCE.SENDER" | translate }}
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-menu>
+</div>

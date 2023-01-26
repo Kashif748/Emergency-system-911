@@ -1,0 +1,55 @@
+<div
+  class="card card-custom"
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  style="overflow: hidden"
+>
+  <div class="card-header p-2">
+    <div class="card-title">
+      <span>{{ "INCIDENTS.ESCALATE_TO_ORGANIZATION" | translate }}</span>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary">
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body px-3">
+    <form [formGroup]="formGroup">
+
+      <section class="example-section">
+        <label class="example-margin">{{ "TASK.ASSIGNED_TO" | translate }}</label>
+        <mat-radio-group [(ngModel)]="orgn" [ngModelOptions]="{standalone: true}">
+          <mat-radio-button class="example-margin" [checked]="true" value="primary">
+            {{ "INCIDENTS.PARENT_ORGANIZATION" | translate }}
+          </mat-radio-button>
+          <mat-radio-button class="example-margin" value="secondary">
+            {{ "INCIDENTS.SUB_ORGANIZATION" | translate }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </section>
+
+      <mat-form-field appearance="fill" class="w-100" *ngIf="orgn == 'secondary'">
+        <mat-label> {{ "AUTH.LOGIN.Organizations" | translate }} </mat-label>
+        <input matInput [matAutocomplete]="auto" formControlName="org" disabled/>
+        <mat-spinner *ngIf="orgsSpinner" matSuffix [diameter]="18" style="float: right; margin-left: 8px"></mat-spinner>
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let org of filterOrgsList" [value]="org">
+            <span>{{ org.nameEn + " - " + org.nameAr }}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="card-footer p-5 d-flex justify-content-between">
+
+    <button
+      (click)="onSubmit()"
+      type="submit"
+      mat-dialog-close tabindex="-1"
+      class="btn btn-primary font-weight-bold">
+      {{ "ACTIONS.UPDATE" | translate }}
+    </button>
+  </div>
+</div>

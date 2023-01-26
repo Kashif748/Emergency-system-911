@@ -1,0 +1,63 @@
+<h1 *ngIf="!data?.isEdit" mat-dialog-title>{{'LIBRARY.CREATE_FOLDER' | translate}}</h1>
+<h1 *ngIf="data?.isEdit" mat-dialog-title>{{'LIBRARY.EDIT_FOLDER' | translate}}</h1>
+
+<div class="mt-5" mat-dialog-content>
+    <form [formGroup]="form">
+        <div class="row">
+            <div class="col-md">
+
+                <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+                    <mat-label>{{'LIBRARY.NAME' | translate}}</mat-label>
+
+                    <input matInput formControlName="name" />
+
+                    <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+            <div class="col-md">
+                <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+                    <mat-label>{{'LIBRARY.LIBRARY_ACCESS_TYPE' | translate}}</mat-label>
+
+                    <mat-select formControlName="libraryAccessType">
+
+                        <mat-option *ngFor="let per of accessType$ | async" [value]="per.id">
+
+                            {{lang === 'en' ? per.nameEn : per.nameAr }}
+
+                        </mat-option>
+
+                    </mat-select>
+                    <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+
+                </mat-form-field>
+            </div>
+        </div>
+
+
+    </form>
+
+
+
+</div>
+<div mat-dialog-actions class="row text-center">
+    <div class="col-12">
+        <button *ngIf="!data.isEdit" app-throttle-click (ThrottleClick)="onSubmit()" [disabled]="!form.valid"
+            class="w-md-50 btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+            routerLinkActive="active" matTooltip="Add New Item">
+            {{'SHARED.CREATE' | translate}}
+        </button>
+
+        <button *ngIf="data.isEdit" app-throttle-click (ThrottleClick)="onSubmit()" [disabled]="!form.valid"
+            class="w-md-50 btn btn-lg btn-light-danger font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+            routerLinkActive="active" matTooltip="Add New Item">
+            {{'ACTIONS.UPDATE' | translate}}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+form {
+  margin-top: 30px;
+  mat-form-field {
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #ccc !important;
+}

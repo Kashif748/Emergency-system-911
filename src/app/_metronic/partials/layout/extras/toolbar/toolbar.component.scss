@@ -1,0 +1,76 @@
+.float-btn {
+  position: fixed;
+  bottom: 5%;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  z-index: 95;
+  display: flex;
+  justify-content: center;
+
+  flex-direction: column;
+  border-top-left-radius: 0.42rem;
+  border-bottom-left-radius: 0.42rem;
+
+  button,
+  a {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 5px -1px,
+      rgba(0, 0, 0, 0.14) 0px 6px 10px 0px, rgba(0, 0, 0, 0.12) 0px 1px 18px 0px !important;
+  }
+
+  .title {
+    background-color: #666666;
+    border-radius: 5px;
+    align-self: center;
+    color: whitesmoke;
+  }
+}
+
+// .model-3 {
+//   background: #90a4ae;
+//   .float-btn-group {
+//     float: none;
+//     width: 50px;
+//     margin: auto;
+//     .icon-bars {
+//       transition:  all ease-in-out 0.3s;
+//     }
+//     .btn-list {
+//       background: #fff;
+//       @include border-radius(50px);
+//       width: 50px;
+//       height: 50px;
+//       left: 0;
+//       overflow: hidden;
+//       opacity: 0;
+//       .btn-float {
+//         @include transition(0.2s);
+//         position: absolute;
+//         top: 0;
+//         left: 0;
+//         @include scale(0);
+//         &:nth-child(2) {
+//           left: 50px;
+//         }
+//         &:nth-child(3) {
+//           left: 160px;
+//         }
+//         &:nth-child(4) {
+//           left: 215px;
+//         }
+//       }
+//     }
+
+//     &.open {
+//       .btn-list {
+//         width: 270px;
+//         left: -110px;
+//         opacity: 1;
+//         .btn-float {
+//           transition: transition(0.2s 0.3s);
+//           scale: scale(0.9);
+//         }
+//       }
+//     }
+//   }
+// }

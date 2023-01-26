@@ -1,0 +1,87 @@
+<button [dir]="lang === 'en' ? 'ltr' : 'rtl'" class="close-btn text-center" mat-icon-button [matDialogClose]="true"
+    [disabled]="uploading">
+    <mat-icon>close</mat-icon>
+</button>
+<h1 *ngIf="!data.isEdit" mat-dialog-title>{{'LIBRARY.CREATE_FILE' | translate}}</h1>
+<h1 *ngIf="data.isEdit" mat-dialog-title>{{'LIBRARY.EDIT_FILE' | translate}}</h1>
+
+<div class="mt-5" mat-dialog-content>
+    <form [formGroup]="form">
+        <div class="row">
+            <div class="col-md">
+                <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+                    <mat-label>{{'LIBRARY.LIBRARY_ACCESS_TYPE' | translate}}</mat-label>
+
+                    <mat-select formControlName="libraryAccessType">
+
+                        <mat-option *ngFor="let per of acessTypes$ | async" [value]="per.id">
+
+                            {{lang === 'en' ? per.nameEn : per.nameAr }}
+
+                        </mat-option>
+
+                    </mat-select>
+
+                    <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md">
+                <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+                    <mat-label>{{'LIBRARY.CATEGORY' | translate}}</mat-label>
+
+                    <mat-select formControlName="category">
+
+                        <mat-option *ngFor="let cat of category" [value]="cat.id">
+
+                            {{cat.nameAr }}
+
+                        </mat-option>
+
+                    </mat-select>
+
+                    <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div *ngIf="!data.isEdit" class="col-md">
+                <div class="row">
+                    <input #csvInput class="form-control" hidden type="file" (change)="onChange($event)">
+                    <button mat-flat-button class="mt-3" color="primary" (click)="csvInput.click()">{{'LIBRARY.FILE.BTN'
+                        | translate}}
+                    </button>
+                    <span class="ml-5 mt-5 text-success">{{file?.name || this.data?.data?.name}}</span>
+                </div>
+                <div class="row" *ngIf="!file && form.touched">
+                    <mat-error>{{ 'LIBRARY.FILE.ERROR' | translate}}</mat-error>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+</div>
+<div mat-dialog-actions class="row text-center">
+    <div class="col-12">
+        <button *ngIf="!data.isEdit" app-throttle-click (ThrottleClick)="onSubmit()" [ThrottleTime]="2000"
+            [disabled]="uploading || !form.valid"
+            class="w-md-50 btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+            routerLinkActive="active">
+            {{'SHARED.CREATE' | translate}}
+        </button>
+
+        <button *ngIf="data.isEdit" app-throttle-click (ThrottleClick)="onSubmit()" [disabled]="!form.valid"
+            class="w-md-50 btn btn-lg btn-light-danger font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+            routerLinkActive="active">
+            {{'ACTIONS.UPDATE' | translate}}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+
+.navi.navi-active .navi-item .navi-link.active {
+  background-color: #3699ff;
+
+  .navi-text {
+    color: whitesmoke !important;
+  }
+}
+
+::ng-deep .adnoc-theme {
+  .navi.navi-active .navi-item .navi-link.active {
+    background-color: #1947ba !important;
+
+    .navi-text {
+      color: whitesmoke !important;
+    }
+  }
+}
+
+.mat-drawer.mat-drawer-side{
+  z-index: 0 !important;
+}

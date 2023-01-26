@@ -1,0 +1,124 @@
+<div class="app-container">
+  <div class="pb-5 d-flex w-100 search-bar">
+    <div style="width: 60%">
+      <div class="input-icon table-filter">
+        <input #input (keyup)="applyFilter($event)" class="form-control form-control-solid"
+          placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}" />
+        <span><i class="flaticon2-search-1 icon-md"></i></span>
+      </div>
+    </div>
+    <div class="spacer"></div>
+
+  </div>
+
+  <div *ngIf="itemView">
+    <div class="d-flex align-items-center bg-light rounded p-5 mb-9">
+      <!--begin::Icon-->
+      <!-- <div class="symbol symbol-light-primary mr-3">
+        <span class="symbol-label font-size-h5">{{
+            currentItem?.serialNumber
+            }}</span>
+      </div> -->
+      <!--end::Icon-->
+      <!--begin::Title-->
+      <div class="d-flex flex-column flex-grow-1 mr-2">
+        <p class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">
+          {{ currentItem?.nameAr }}
+        </p>
+        <span class="text-muted font-weight-bold">{{
+            currentItem?.nameEn
+            }}</span>
+      </div>
+
+      <!--end::Title-->
+
+
+
+
+
+
+
+
+      <!--begin::Lable-->
+      <span *ngIf="currentItem?.isActive"
+        class="label label-rounded label-pill label-inline label-light-success mr-2">{{ "ACTIONS.ACTIVE" | translate }}</span>
+      <span *ngIf="!currentItem?.isActive"
+        class="label label-rounded label-light-warning label-pill label-inline mr-2">{{ "ACTIONS.INACTIVE" | translate }}</span>
+
+      <!--end::Lable-->
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+
+  <table mat-table [dataSource]="dataSource"
+    class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+    [class]="itemChildrenView ? '' : 'hover-row'">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element" class="p-3 w-75px">
+        <span class="font-weight-bolder"># {{ element.id }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nameAr">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "EVENTSMODULES.itemNameAr" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.nameAr }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="nameEn">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "EVENTSMODULES.itemNameEn" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.nameEn }}</td>
+    </ng-container>
+
+
+
+
+    <ng-container matColumnDef="isActive">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "ACTIONS.ACTIVE_STATUS" | translate }}
+      </th>
+
+      <td mat-cell *matCellDef="let element" class="w-100px">
+        <span *ngIf="element?.isActive"
+          class="label label-rounded label-pill label-inline label-light-success ">{{ "ACTIONS.ACTIVE" | translate }}</span>
+        <span *ngIf="!element?.isActive"
+          class="label label-rounded label-light-warning label-pill label-inline">{{ "ACTIONS.INACTIVE" | translate }}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <div class="spacer"></div>
+      <th mat-header-cell *matHeaderCellDef style="min-width: 120px">
+        <button *ngIf="itemView" class="btn btn-sm p-2 btn-primary cursor-pointer" (click)="viewList()">
+          {{ lang == "en" ? "Back" : "عودة" }}
+          <span [inlineSVG]="'/assets/media/svg/icons/Navigation/Left-2.svg'" cacheSVG="true"
+            class="svg-icon svg-icon-md"></span>
+        </button>
+      </th>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="8">
+        <nodata-table [input]="input"></nodata-table>
+      </td>
+    </tr>
+  </table>
+  <mat-paginator [length]="this.data.length" [pageSize]="10" (page)="pageChanged($event)">
+  </mat-paginator>
+</div>

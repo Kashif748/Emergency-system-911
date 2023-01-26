@@ -1,0 +1,29 @@
+<div class="rounded-lg bg-white shadow-sm h-100 mb-3 py-4" [dir]="dir$ | async">
+  <div class="px-2 border-0 mx-2">
+    <div class="card-title m-0 my-2">
+      <p class="text-dark-50 font-size-lg m-0">
+        {{'Incident.EventsFlow' | translate}}
+      </p>
+    </div>
+  </div>
+  <div class="px-2 py-0 my-2">
+    <div class="item w-100" [dir]="dir$ | async">
+      <div id="timeline">
+        <perfect-scrollbar class="timeline-body" (psYReachEnd)="_nextWorkLogPage()">
+          <div>
+            <section class="year" 
+              *ngFor="let log of workLogs$ | async; let i = index">
+              <mat-checkbox class="mx-3" (change)="onCheck($event, log)"></mat-checkbox>
+              <h3>{{ log.createdOn | customDate | date: "hh:mm" }}</h3>
+              <section>
+                <ul>
+                  <li>{{ log.notes }}</li>
+                </ul>
+              </section>
+            </section>
+          </div>
+        </perfect-scrollbar>
+      </div>
+    </div>
+  </div>
+</div>

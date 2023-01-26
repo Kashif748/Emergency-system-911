@@ -1,0 +1,126 @@
+<div class="mat-elevation-z8 container my-5 overflow-auto">
+  <div class="row mt-4 px-2">
+    <div class="col-md-4">
+      <button class="btn btn-md btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer" routerLink="add"
+        routerLinkActive="active" matTooltip="Add New Item">
+        {{ "DAILY_REPORT.NEW_REPORT.BTN" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"
+          title="Edit"></span>
+      </button>
+    </div>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="my-4">
+
+    <div class="row">
+
+      <mat-form-field appearance="fill" class=" col-12 mt-5">
+        <mat-label>{{ "ACTIONS.FILTER_PLACEHOLDER" | translate }}</mat-label>
+        <input matInput formControlName="search" #input />
+        <mat-icon matSuffix color="primary">search</mat-icon>
+      </mat-form-field>
+      <div class="form-group col-lg-6 pl-4 pr-4">
+        <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill" class="form-element example-full-width">
+          <mat-label>{{
+            "INCIDENTS.START_DATE" | translate
+            }}</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" formControlName="fromDate" [matDatepicker]="picker" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="form-group col-lg-6 pl-4 pr-4">
+        <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill" class="form-element example-full-width">
+          <mat-label>{{ "INCIDENTS.END_DATE" | translate }}</mat-label>
+
+          <input matInput [min]="minDate" [max]="maxDate" formControlName="toDate" [matDatepicker]="picker1" />
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+
+    </div>
+
+    <div class="row">
+
+    </div>
+    <div class="row justify-content-end align-items-center">
+      <div class="col-sm-4 d-flex justify-content-end">
+        <button mat-raised-button color="primary">
+          {{ "TASK.SEARCH" | translate }}
+        </button>
+        <button class="mx-2" mat-raised-button color="primary" (click)="clearSearch();">
+          {{ "INCIDENTS.CLEAR" | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="ReporterName">
+      <th mat-header-cell *matHeaderCellDef>{{'DAILY_REPORT.REPORTER.NAME' | translate }}</th>
+      <td mat-cell *matCellDef="let row">
+        <span class="font-weight-bolder">{{
+          lang == "en" ?
+          row?.createdBy?.firstNameEn + ' ' + row?.createdBy?.lastNameEn :
+          row?.createdBy?.firstNameAr + ' ' + row?.createdBy?.lastNameAr
+          }}</span>
+      </td>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="CreatedOn">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "SHARED.CREATION_DATE" | translate }}
+      </th>
+
+      <td mat-cell *matCellDef="let row" [ngClass]="{ 'td-arabic': lang === 'ar' }">
+        <span class="label label-lg label-light-primary label-inline">{{
+          row.createdOn | date: 'dd/MM/yyyy'
+          }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Status">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "SHARED.STATUS" | translate }}
+      </th>
+
+      <td mat-cell *matCellDef="let row" [ngClass]="{ 'td-arabic': lang === 'ar' }">
+        <span class="label label-lg label-light-primary label-inline">{{ lang == 'en' ? row.status.nameEn :
+          row.status.nameAr }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+
+      <td mat-cell *matCellDef="let row">
+        <button class="btn btn-sm btn-clean btn-icon mr-1">
+          <span [inlineSVG]="'/assets/media/svg/icons/Files/Download.svg'" cacheSVG="true"
+            class="svg-icon svg-icon-md svg-icon-primary" title="download" (click)="review(row?.id)"></span>
+        </button>
+
+        <button class="btn btn-sm btn-clean btn-icon mr-1" [routerLink]="['edit', row.id]">
+          <span [inlineSVG]="'./assets/media/svg/icons/Design/Edit.svg'" cacheSVG="true"
+            class="svg-icon svg-icon-md svg-icon-primary" title="edit"></span>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-paginator [length]="totalElements" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 30]"
+        (page)="onPagination($event)" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</div>

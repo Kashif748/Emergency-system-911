@@ -1,0 +1,793 @@
+<div class="container-fluid">
+  <div class="py-4 my-3 d-flex align-item-center justify-content-center">
+    <button
+      (click)="back()"
+      class="btn btn-link-primary btn-sm font-weight-bold cursor-pointer mx-4"
+      matTooltip="{{ 'SHARED.BACK' | translate }}"
+    >
+      <span
+        inlineSVG="{{
+          lang == 'en'
+            ? '/assets/media/svg/icons/Navigation//Angle-left.svg'
+            : '/assets/media/svg/icons/Navigation//Angle-right.svg'
+        }}"
+        cacheSVG="true"
+        class="svg-icon svg-icon-2x"
+        title="{{ 'SHARED.BACK' | translate }}"
+      ></span>
+    </button>
+    <button
+      (click)="drawer.toggle()"
+      class="btn btn-primary border btn-sm mx-2 d-none d-md-block"
+    >
+      <span
+        inlineSVG="/assets/media/svg/icons/Text/Menu.svg"
+        cacheSVG="true"
+        class="svg-icon svg-icon-lg m-0"
+      ></span>
+    </button>
+
+    <h2 class="card-title m-0 d-flex align-items-center">
+      {{ incidentDetails?.subject }}
+    </h2>
+    <div class="spacer"></div>
+
+    <ng-container
+      *ngIf="incidentDetails?.status?.id == 1"
+    >
+      <button
+        *appPrivileges="['PRIV_CR_INC','PRIV_AR_INT_INC']"
+        class="btn btn-md btn-square btn-primary font-weight-bold cursor-pointer py-2"
+        [routerLink]="['/incidents/report-interim', incidentDetails?.id]"
+      >
+        {{ "INCIDENTS.ACCEPT_INCIDENT" | translate }}
+      </button>
+      <button
+      *appPrivileges="'PRIV_AR_INT_INC'"
+        class="btn btn-md btn-square btn-danger font-weight-bold cursor-pointer py-2 mx-2 px-6"
+        (click)="changeStatus($event, incidentDetails.id)"
+      >
+        {{ "INCIDENTS.DECLINE_INCIDENT" | translate }}
+      </button>
+    </ng-container>
+    <ng-container
+      *ngIf="incidentDetails?.status?.id == 2"
+    >
+
+      <a
+        class="btn btn-md btn-square btn-primary font-weight-bold cursor-pointer py-2 mx-2 px-6"
+        routerLink="../../view/{{incidentDetails.incidentId}}"
+      >
+       {{'INCIDENTS.ID' | translate}}  {{incidentDetails.incidentId}}/{{incidentDetails?.createdOn | customDate | date: "yyyy"}}
+      </a>
+    </ng-container>
+  </div>
+
+  <div class="d-flex flex-row">
+    <!-- on  mobile -->
+    <button
+      (click)="drawer.toggle()"
+      class="btn btn-primary border btn-sm mx-2 d-block d-md-none"
+    >
+      <span
+        inlineSVG="/assets/media/svg/icons/Text/Menu.svg"
+        cacheSVG="true"
+        class="svg-icon svg-icon-lg m-0"
+      ></span>
+    </button>
+
+    <mat-drawer-container autosize class="w-100">
+      <mat-drawer
+        #drawer
+        class="sidenav-fixed"
+        [mode]="isMobileView ? 'over' : 'side'"
+      >
+        <div class="flex-row-auto w-200px w-xxl-275px h-100 side-menu">
+          <!--begin::Card-->
+          <div class="card card-custom card-stretch pb-10">
+            <!--begin::Body-->
+            <div class="card-body px-3 pt-0">
+              <!--begin::Navigations-->
+
+              <h5 class="m-0 p-3 d-flex font-weight-normal align-items-center">
+                {{ "ACTIONS.ChooseOption" | translate }}
+              </h5>
+
+              <perfect-scrollbar
+                style="
+                  max-width: 600px;
+                  max-height: 750px;
+                  padding-bottom: 10px;
+                "
+              >
+                <div
+                  class="navi navi-hover navi-active navi-link-rounded navi-bold scroll scroll-pull"
+                  perfectScrollbar
+                  data-scroll="true"
+                  data-wheel-propagation="true"
+                >
+                  <!--begin::Item-->
+                  <div
+                    *ngFor="let item of tabs"
+                    (click)="changeCurrentTab(item)"
+                    class="navi-item my-4 cursor-pointer"
+                  >
+                    <div>
+                      <a
+                        class="navi-link border px-1"
+                        [class]="item.index == currentTab ? 'active' : ''"
+                      >
+                        <span class="navi-icon mx-2">
+                          <span class="svg-icon svg-icon-md">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/' + item.icon + '.svg'
+                              "
+                              cacheSVG="true"
+                              class="svg-icon svg-icon-lg"
+                              [class]="
+                                item.index == currentTab
+                                  ? 'svg-icon-light'
+                                  : 'svg-icon-dark-50'
+                              "
+                            ></span>
+                          </span>
+                        </span>
+                        <span class="navi-text font-weight-bold font-size-md">{{
+                          item.key | translate
+                        }}</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </perfect-scrollbar>
+
+              <!--end::Navigations-->
+            </div>
+            <!--end::Body-->
+          </div>
+          <!--end::Card-->
+        </div>
+      </mat-drawer>
+      <!-- blank div  just to make  space instaed of  using margin or padding -->
+      <div *ngIf="!isMobileView" class="w-20px d-block"></div>
+
+      <div
+        class="card min-h-500px card-custom flex-row-fluid d-block spin-overlay"
+        [class]="lang == 'en' ? 'ml-7' : 'mr-7'"
+      >
+        <div class="overlay-wrapper h-100">
+          <div
+            class="overlay-layer rounded bg-primary-o-20"
+            [ngClass]="{ 'overlay-spining': loading }"
+          >
+            <div class="spinner spinner-primary spinner-lg spinner-left"></div>
+          </div>
+
+          <div class="d-flex flex-column list-content">
+            <!-- tab : info -->
+            <div
+              *ngIf="currentTab == 0"
+              [dir]="directionality.value"
+              class="w-100"
+            >
+              <div class="card card-custom card-stretch px-4 shadow-none">
+                <!-- Header -->
+                <h5
+                  class="card-title font-weight-normal border-bottom m-0 mb-3 p-3 pb-6 d-flex align-items-center"
+                >
+                  {{ tabs[0]?.key | translate }}
+                </h5>
+                <!-- Body -->
+                <div class="card-body px-0 pt-4 incident-view-info">
+                  <div class="row">
+                    <!--row  -->
+
+                    <!-- Incidint Number-->
+                    <div class="col-md-4 col-sm-6 info-item p-3">
+                      <div
+                        class="d-flex w-100 h-100 align-items-center mb-10 border rounded"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Custome/hashtag.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.SR_NO" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{ incidentDetails?.id }}
+                              <!-- /{{
+                              incidentDetails?.createdOn | date: "yyyy"
+                            }} -->
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!-- Incidint Main Category -->
+                    <div class="col-md-4 col-sm-6 info-item p-3">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Media/grid_view.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.MAIN_CATEGORY" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              <!-- {{incidentDetails?.city}} -->
+                              {{ mainCategory | propTranslator:'name' }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!-- Incidint Sub Category -->
+                    <div class="col-md-4 col-sm-6 info-item p-3">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Communication/Dial-numbers.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.SUBCATEGORY" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              <!-- {{incidentDetails?.city}} -->
+                              {{ category | propTranslator:'name' }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!-- incident Date -->
+                    <div class="col-md-4 col-sm-6 info-item p-3">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Code/Time-schedule.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.DATE" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{
+                                incidentDetails?.createdOn
+                                  | customDate
+                                  | date: "medium"
+                              }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!--Incidint status -->
+                    <div class="col-md-4 col-sm-6 info-item p-3">
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Custome/status.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.STATUS" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{
+                                getStatusVia(incidentDetails?.status?.id)
+                              }}
+                              <!-- {{ getStatusId(incidentDetails?.status?.id) }} -->
+                            </p>
+
+                            <div class="spacer"></div>
+
+                            <!-- <p
+                              *ngIf="
+                                incidentDetails?.status?.statusEn == 'Declined'
+                              "
+                              class="text-light-50"
+                            >
+                              Reason - {{ incidentDetails?.reason }}
+                            </p> -->
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!-- Incidint Region-->
+                    <div class="col-md-4 col-sm-6 info-item p-3">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center mb-10 border py-4 rounded"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-3">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Map/Marker1.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-2x p-3 svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.CITY" | translate }}
+                          </a>
+                          <div class=" text-dark-75 font-weight-bolder mb-1 font-size-lg">
+                            {{ getcityId(incidentDetails?.city?.id) }}
+                          </div>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                      <!--end::Item-->
+                    </div>
+
+                    <!--Incident Action Time and Date-->
+                    <div class="col-md-4 col-sm-6 info-item p-3"
+                    *ngIf="incidentDetails?.lastActionDate">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Code/Time-schedule.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.ACTION_DATE" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{
+                                incidentDetails?.lastActionDate
+                                  | customDate
+                                  | date: "medium"
+                              }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!--Incident Action done By-->
+                    <div class="col-md-4 col-sm-6 info-item p-3"
+                    *ngIf="incidentDetails?.lastActionBy">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/General/User.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ 'INCIDENTS.ACTION_TAKEN_BY' | translate}}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{
+                                getActionDoneByFullName(
+                                  incidentDetails?.lastActionBy
+                                )
+                              }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+                    <!--Incident Rejection Reason-->
+                    <div class="col-md-4 col-sm-6 info-item p-3"
+                      *ngIf="incidentDetails?.reason">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Map/Marker1.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ 'INCIDENTS.REJECTION_REASON' | translate}}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{
+                                incidentDetails?.reason
+                              }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+
+                    <!-- Incidents Location Url -->
+                    <div
+                      class="col-12 mt-5 info-item"
+                    >
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center mb-10 border py-4 rounded"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-3">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Map/Marker1.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-2x p-3 svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1 text-size-sm">
+                            {{ "INCIDENTS.LOCATION_LINK" | translate }}
+                          </a>
+                          <div
+                            class="text-dark font-size-h5"
+                            style="line-break: anywhere"
+                          >
+                            <a [href]="incidentDetails?.location" target="_blank">{{incidentDetails?.location}}</a>
+                          </div>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                      <!--end::Item-->
+                    </div>
+
+                    <!-- Incidents Desc -->
+                    <div
+                      class="col-12 mt-5 info-item"
+                    >
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center mb-10 border py-4 rounded"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-3">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Files/Selected-file.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-2x p-3 svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1 text-size-sm">
+                            {{ "INCIDENTS.DESCRIPTION" | translate }}
+                          </a>
+                          <div
+                            class="text-dark font-size-h5"
+                            style="line-break: anywhere"
+                          >
+                            {{ incidentDetails?.description }}
+                          </div>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                      <!--end::Item-->
+                    </div>
+
+                    <!-- reported By -->
+                    <h5
+                      class="card-title font-weight-normal border-bottom w-100 m-3 p-3 pt-6 d-flex align-items-center"
+                    >
+                      {{ "INCIDENTS.relatedUser" | translate }}
+                    </h5>
+                    <!-- reportedByMobile -->
+                    <div class="col-md-6 col-sm-6 info-item p-3">
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Communication/phone_iphone.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.REPORTER_MOBILE" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{ incidentDetails?.reporterContact }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!-- reportedByName -->
+                    <div class="col-md-6 col-sm-6 info-item p-3">
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Communication/phone_iphone.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{ "INCIDENTS.REPORTINGVIA" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{
+                                getReportedVia(
+                                  incidentDetails?.reportingVia?.id
+                                )
+                              }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+
+                    <!-- row -->
+                    <!--Organization-->
+                    <div *ngIf="false" class="col-md-6 col-sm-6 info-item p-3">
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5 text-primary">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Custome/government.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1">
+                            {{
+                              "INCIDENTS.RESPONSIBLE_ORGANIZATION" | translate
+                            }}
+                          </a>
+                          <span class="text-muted">
+                            <p
+                              class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                            >
+                              {{
+                                lang == "en"
+                                  ? incidentDetails?.org?.nameEn
+                                  : incidentDetails?.org?.nameAr
+                              }}
+                            </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- tab : Map information -->
+            <div
+              *ngIf="currentTab == 1"
+              [dir]="directionality.value"
+              class="w-100"
+            >
+              <div class="card-body pt-0 map-card">
+                <div class="row border-bottom mb-3 p-2 pb-4 align-items-center">
+                  <div class="col">
+                    <h5 class="card-title font-weight-normal mb-0">
+                      {{ tabs[1]?.key | translate }}
+                    </h5>
+                  </div>
+                  <!-- <button
+                    class="btn btn-primary btn-sm"
+                    (click)="openShareMapLocationDialog()"
+                  >
+                    {{ "INCIDENTS.SHARE_LOCATION_GOOGLE_MAPS" | translate }}
+                    <span class="fa fa-share-alt text-white"></span>
+                  </button> -->
+                </div>
+                <!-- <app-map
+                  *ngIf="incidentDetails"
+                  [config]="{
+                    mapType: 'incident',
+                    zoomModel: {
+                      referenceId: incidentDetails?.id,
+                      featureName: incidentDetails?.featureName || 'Inc_point'
+                    },
+                    viewOnly: true,
+                    showLayers: false
+                  }"
+                >
+                </app-map> -->
+              </div>
+            </div>
+
+            <!-- tab: list Of files -->
+            <div
+              *ngIf="currentTab == 2"
+              [dir]="directionality.value"
+              class="w-100"
+            >
+              <app-files-list [recordId]="incidentDetails?.id" [tagId]="28">
+              </app-files-list>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-drawer-container>
+  </div>
+</div>

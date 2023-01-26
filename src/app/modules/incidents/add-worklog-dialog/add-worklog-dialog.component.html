@@ -1,0 +1,18 @@
+<div mat-dialog-title class="d-flex">
+  <h2>
+    {{ 'TASK.WORKLOG.NEW' | translate}}
+  </h2>
+  <div class="spacer"></div>
+  <button [dir]="lang === 'en' ? 'ltr' : 'rtl'" class="close-btn text-center mt-4 mx-4" mat-icon-button [matDialogClose]="true"
+    [disabled]="upload">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="mat-typography container-fluid">
+  <div class="row mt-4">
+    <div class="col-12">
+      <app-worklog (completed)="complete()" (uploading)="uploading($event)" [tId]="taskId"></app-worklog>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,240 @@
+
+<div>
+  <app-inquires-charts></app-inquires-charts>
+</div>
+<div class="mat-elevation-z8 container px-8 overflow-hidden">
+  <section class="d-flex py-4 my-2 mx-4 ">
+    <div class="spacer"></div>
+
+
+    <div>
+      <button *appPrivileges="'PRIV_INQ_RPT'"
+        class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+        (click)="downloadPDF()"
+        [disabled]="isLoading$ | async"
+      >
+        {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+      </button>
+      <button *appPrivileges="'PRIV_INQ_RPT'"
+        class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+        (click)="downloadXlsx()"
+        [disabled]="isLoading$ | async"
+      >
+        {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+      </button>
+    </div>
+  </section>
+  <div class="col-xxl-12 order-2 order-xxl-1">
+    <div class="row p-8">
+      <div class="col-12">
+        <mat-accordion style="width: 100% !important">
+          <mat-expansion-panel
+            [(expanded)]="panelOpenState"
+            #mep="matExpansionPanel"
+            class="shadow-sm"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title color="primary">
+                {{ "INQUIRIY.ADVANCED_SEARCH" | translate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="form"  class="mt-4">
+              <div class="row">
+                <div class="form-group col-lg-6 pl-4 pr-4">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="fill"
+                    class="form-element example-full-width"
+                  >
+                    <mat-label>{{
+                      "INCIDENTS.START_DATE" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      formControlName="fromDate"
+                      [matDatepicker]="createdDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="createdDate"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #createdDate></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="form-group col-lg-6 pl-4 pr-4">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="fill"
+                    class="form-element example-full-width"
+                  >
+                    <mat-label>{{
+                      "INCIDENTS.END_DATE" | translate
+                    }}</mat-label>
+
+                    <input
+                      matInput
+                      formControlName="toDate"
+                      [matDatepicker]="endDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="endDate"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-lg-6 pl-4 pr-4">
+                  <mat-form-field
+                    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                    appearance="fill"
+                    class="form-element example-full-width"
+                  >
+                    <mat-label> {{ "INQUIRIY.SUBJECT" | translate }}</mat-label>
+                    <input matInput type="text" formControlName="subject" />
+                  </mat-form-field>
+                </div>
+                <div class="form-group col-lg-6 pl-4 pr-4">
+                  <app-user-input
+                    appearance="fill"
+                    formControlName="userId"
+                    placeholder="{{ 'SHARED.CREATED_BY' | translate }}"
+                  >
+                  </app-user-input>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 d-flex">
+                  <button class="btn btn-primary w-100" (click)="onSubmit()">  
+                    {{ "ACTIONS.FILTER" | translate }}
+                    <span
+                      [inlineSVG]="'/assets/media/svg/icons/General/Search.svg'"
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-md"
+                    ></span>
+                  </button>
+                </div>
+
+                <div class="col-6 d-flex">
+                  <button
+                    class="btn btn-light-primary w-100"
+                    (click)="clearSearch(); mep.expanded = false"
+                  >
+                    {{ "ACTIONS.CLEAR" | translate }}
+                    <span
+                      [inlineSVG]="'/assets/media/svg/icons/Media/Repeat.svg'"
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-md"
+                    ></span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+
+    <div class="table-responsive table-container">
+      <table
+        id="inquiries-table"
+        matSort
+        (matSortChange)="customSort($event)"
+        class="table table-head-custom table-head-bg table-borderless table-vertical-center"
+      >
+        <thead>
+          <tr>
+            <!-- 1 -->
+            <th mat-sort-header="id">
+              {{ "INQUIRIY.ID" | translate }}
+            </th>
+            <!-- 2 -->
+            <th mat-sort-header="subject">
+              {{ "INQUIRIY.SUBJECT" | translate }}
+            </th>
+            <!-- 4 -->
+            <th mat-sort-header="createdDate">
+              {{ "INQUIRIY.CREATED_DATE" | translate }}
+            </th>
+            <!-- 7 -->
+            <th mat-sort-header="createdBy">
+              {{ "INQUIRIY.CREATED_BY" | translate }}
+            </th>
+            <!-- 8 -->
+            <th>
+              {{ "INQUIRIY.DURATION" | translate }}
+            </th>
+            <!-- 9 -->
+            <th>
+              {{ "INQUIRIY.ORGANIZATION" | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let element of inquiries | paginate: paginationConfig"
+            class="cursor-pointer"
+          >
+            <!-- 1 -->
+            <td>
+              {{ element?.id }}
+            </td>
+            <!-- 2 -->
+            <td>
+              {{ element?.subject }}
+            </td>
+            <!-- 4 -->
+            <td>
+              {{ element?.createdDate }}
+            </td>
+            <!-- 7 -->
+            <td>
+              {{ element?.reporterName }}
+            </td>
+            <!-- 8 -->
+            <td>
+              <span class="label label-lg label-inline">
+                {{ element?.callDurationInMinutes }}
+              </span>
+            </td>
+            <!-- 9 -->
+            <td>
+              <span class="label label-lg label-inline">
+                {{
+                  lang == "en"
+                    ? element?.orgStructure.nameEn
+                    : element?.orgStructure.nameAr
+                }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <pagination-controls
+        previousLabel="Prev"
+        nextLabel="Next"
+        responsive="true"
+        id="pagination"
+        (pageChange)="pageChanged($event)"
+      ></pagination-controls>
+
+      <div class="spinner-container m-auto p-10" *ngIf="isLoading$ | async">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+    </div>
+  </div>
+</div>

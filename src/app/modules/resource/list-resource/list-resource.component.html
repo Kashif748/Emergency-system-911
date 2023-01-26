@@ -1,0 +1,363 @@
+<!--  Back button -->
+<div class="container-fluid">
+  <section class="d-flex py-4 my-2">
+    <!-- <app-breadcrumbs  eadcrumbs></app-breadcrumbs> -->
+    <div class="spacer"></div>
+  </section>
+</div>
+<!-- Back button-->
+
+<!--  charts  -->
+<div class="container resources-charts">
+  <div class="row">
+    <!-- <div class="col-md-6">
+      <div class="card card-custom gutter-b">
+        <div class="card-header">
+          <div class="card-title">
+            <h3 class="card-label">
+              {{ "RESOURCE.PUBLIC_CHART" | translate }}
+            </h3>
+          </div>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loading" class="spinner spinner-primary spinner-lg mr-15"></div>
+          <apx-chart [series]="publicChartOptions.series" [chart]="publicChartOptions.chart"
+            [labels]="publicChartOptions.labels"></apx-chart>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="col-md-6">
+      <div class="card card-custom gutter-b">
+        <div class="card-header">
+          <div class="card-title">
+            <h3 class="card-label">
+              {{ "RESOURCE.DETAILED_CHART" | translate }}
+            </h3>
+          </div>
+          <div class="spacer"></div>
+
+          <div ngbDropdown class="dropdown" style="display: flex !important; align-items: center">
+            <button class="btn btn-sm btn-light-primary dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle>
+              {{ selectedCat }}
+              <i class="fas fa-angle-down ml-2 mr-2"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdown-menu dropdown-menu-anim-up">
+              <button (click)="
+                  changeSelectedChart(cat['id'], cat['nameAr'], cat['nameEn'])
+                " class="dropdown-item" *ngFor="let cat of categories">
+                {{ lang === "en" ? cat.nameEn : cat.nameAr }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body" dir="ltr">
+          <div *ngIf="loading" class="spinner spinner-primary spinner-lg mr-15"></div>
+
+          <apx-chart [series]="selectedChartOptions.series" [chart]="selectedChartOptions.chart"
+            [xaxis]="selectedChartOptions.xaxis" [yaxis]="selectedChartOptions.yaxis"
+            [labels]="selectedChartOptions.labels" [tooltip]="selectedChartOptions.tooltip"
+            [plotOptions]="selectedChartOptions.plotOptions"></apx-chart>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card card-custom gutter-b">
+        <div class="card-header">
+          <div class="card-title">
+            <h3 class="card-label">
+              {{ "RESOURCE.ORANIZATION_CHART" | translate }}
+            </h3>
+          </div>
+        </div>
+        <div class="card-body" dir="ltr">
+          <div *ngIf="loading" class="spinner spinner-primary spinner-lg mr-15"></div>
+
+          <apx-chart [plotOptions]="ownerOrgChart.plotOptions" [xaxis]="ownerOrgChart.xaxis"
+            [yaxis]="selectedChartOptions.yaxis" [series]="ownerOrgChart.series" [chart]="ownerOrgChart.chart"
+            [labels]="ownerOrgChart.labels"></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="">
+    <div class="d-flex align-items-center border-bottom p-3 m-0">
+      <h5 class="card-title font-weight-bolder m-0">
+        {{ "REPORTS.RESOURCES_REPORT" | translate }}
+      </h5>
+      <button [routerLink]="['/resources-management/resources/add']" class="
+          btn btn-icon btn-primary btn-sm btn-circle
+          font-weight-bolder
+          cursor-pointer
+          mx-3
+        ">
+        <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"></span>
+      </button>
+
+
+      <div class="spacer"></div>
+        <!-- export  menu -->
+    <div
+    class="dropdown"
+    ngbDropdown
+    [placement]="lang == 'en' ? 'bottom-right' : 'bottom-left'"
+  >
+    <button
+      class="btn btn-primary font-weight-bolder dropdown-toggle"
+      data-toggle="dropdown"
+      data-offset="0px,0px"
+      ngbDropdownToggle
+    >
+      {{ "ACTIONS.EXPORT" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-anim-up ">
+      <button class="dropdown-item p-2 font-size-sm" (click)="downloadXlsx()">
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Custome/csv.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-lg"
+        ></span>
+        {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+      </button>
+      <button class="dropdown-item p-2 font-size-sm" (click)="downloadPDF()">
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Custome/pdf.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-lg"
+        ></span>
+        {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+      </button>
+    </div>
+  </div>
+ 
+    </div>
+
+    <div class="d-flex m-0">
+      <mat-accordion style="width: 100% !important">
+        <mat-expansion-panel [(expanded)]="panelOpenState" #mep="matExpansionPanel" class="shadow-sm">
+          <mat-expansion-panel-header>
+            <mat-panel-title color="primary">
+              {{ "TASK.ADVANCED_SEARCH" | translate }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-4">
+            <div class="row">
+              <div class="form-group col-lg-6 pl-4 pr-4">
+                <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                  class="form-element example-full-width">
+                  <mat-label> {{ "RESOURCE.NAME" | translate }}</mat-label>
+                  <input matInput type="text" formControlName="nameEn" />
+                </mat-form-field>
+              </div>
+              <div class="form-group col-lg-6 pl-4 pr-4">
+                <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                  class="form-element example-full-width">
+                  <mat-label>{{ "RESOURCE.CATEGORY" | translate }}</mat-label>
+                  <mat-select formControlName="category">
+                    <mat-option *ngFor="let cat of categories$ | async" [value]="cat.id">
+                      {{ lang === "en" ? cat.nameEn : cat.nameAr }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+           
+              <div class="form-group col-lg-6 pl-4 pr-4">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>
+                    {{ "AUTH.LOGIN.Organizations" | translate }}
+                    <!-- <span class="required-asterisk">*</span> -->
+                  </mat-label>
+
+                  <mat-select formControlName="organization">
+                    <mat-option *ngFor="let org of orgs$ | async" [value]="org.id">
+                      <span *ngIf="lang == 'en'">
+                        {{ org.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                      </span>
+                      <span *ngIf="lang == 'ar'">
+                        {{ org.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                      </span>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-6  d-flex justify-content-end align-items-center">
+                <button mat-raised-button color="primary">
+                  {{ "TASK.SEARCH" | translate }}
+                </button>
+                <button class="mx-2" mat-raised-button color="primary" (click)="clearSearch(); mep.expanded = false">
+                  {{ "INCIDENTS.CLEAR" | translate }}
+                </button>
+              </div>
+            </div>
+
+         
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div *ngIf="alertState !== alertsStates.Hide" class="alert alert-custom p-0 fade show m-auto mb-5" [class]="
+        alertState == alertsStates.HasError
+          ? 'alert-light-danger'
+          : 'alert-light-primary'
+      " role="alert" style="
+        max-width: 500px;
+        position: absolute;
+        top: 70px;
+        left: 45%;
+        min-width: 250px;
+      ">
+      <div class="alert-icon"><i class="flaticon-warning"></i></div>
+      <div class="alert-text">
+        {{ "COMMON." + alertMsg | translate }}
+      </div>
+      <div class="alert-close">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+          (click)="alertState = alertsStates.Hide">
+          <span aria-hidden="true"><i class="ki ki-close"></i></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="col-xxl-12 order-2 order-xxl-1 p-0">
+      <div class="table-container">
+        <table matSort (matSortChange)="customSort($event)" class="
+            table
+            table-head-custom
+            table-head-bg
+            table-borderless
+            table-vertical-center
+          ">
+          <thead>
+            <tr>
+              <!-- 1 -->
+              <th mat-sort-header="ASSET_CATEGORY">
+                {{ "RESOURCE.CATEGORY" | translate }}
+              </th>
+              <!-- 2 -->
+              <th mat-sort-header="name">
+                {{ "RESOURCE.NAME" | translate }}
+              </th>
+              <!-- 3 -->
+              <th mat-sort-header="quantity" class="w-130px">
+                {{ "RESOURCE.QUANTITY" | translate }}
+              </th>
+              <!-- 4 -->
+              <th mat-sort-header="MEASURING_TYPE">
+                {{ "RESOURCE.MEASURING_TYPE" | translate }}
+              </th>
+              <!-- 5 -->
+              <th mat-sort-header="ORG_ID">
+                {{ "INCIDENTS.ORGANIZATION" | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngIf="dataSource.filteredData.length">
+            <tr *ngFor="
+                let row of dataSource.filteredData | paginate: paginationConfig
+              " class="bg-white rounded shadow-sm">
+              <!-- 1 -->
+              <td [class]="'bg-' + row.category?.color">
+                <span style="margin-right: 5px;  ">
+                  <img *ngIf="row.category?.icon" src="assets/media/svg/icons/{{row.category?.icon}}.svg" />
+                  {{ lang === "en" ? row.category?.nameEn : row.category?.nameAr}}
+
+
+                </span>
+              </td>
+
+              <!-- 2 -->
+              <td>
+                <span>{{ lang === "en" ? row.nameEn : row.nameAr }}</span>
+              </td>
+              <!-- 3 -->
+
+              <td>
+                <span class="label label-lg label-light-primary label-inline">
+                  {{ row.quantity }}
+                </span>
+              </td>
+              <td>
+                <span>
+                  {{
+                    lang === "en"
+                      ? row.assetMeasuringType.nameEn
+                      : row.assetMeasuringType.nameAr
+                  }}
+                </span>
+              </td>
+
+              <!-- 6 -->
+              <td>
+                <span class="
+                    text-dark-75
+                    font-weight-bolder
+                    label label-lg label-light-primary label-inline
+                  ">
+                  {{
+                    lang === "en"
+                      ? row.organization.nameEn
+                      : row.organization.nameAr
+                  }}
+                </span>
+              </td>
+
+              <!-- 7 -->
+
+              <!-- 8 -->
+              <td class="w-200px">
+                <ng-container *appPrivileges="'PRV_ED_ASST'">
+                  <button class="btn btn-sm btn-clean btn-icon mr-2" [routerLink]="['edit', row.id]"
+                    matTooltip="{{ 'ACTIONS.UPDATE' | translate }}">
+                    <span class="svg-icon svg-icon-md">
+                      <span [inlineSVG]="
+                          './assets/media/svg/icons/Communication/Write.svg'
+                        " [cacheSVG]="true" title="{{ 'ACTIONS.UPDATE' | translate }}"></span>
+                    </span>
+                  </button>
+                </ng-container>
+
+                <ng-container *appPrivileges="'PRV_ED_ASST'">
+                  <button class="btn btn-sm btn-clean btn-icon mr-2" (click)="deleteResource(row?.id)"
+                    data-toggle="tooltip" data-theme="dark" matTooltip="{{ 'ACTIONS.DELETE' | translate }}">
+                    <span class="svg-icon svg-icon-md">
+                      <span [inlineSVG]="
+                          './assets/media/svg/icons/General/Trash.svg'
+                        " cacheSVG="true" class="svg-icon svg-icon-md svg-icon-danger"
+                        title="{{ 'ACTIONS.DELETE' | translate }}"></span>
+                    </span>
+                  </button>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="!dataSource.filteredData.length">
+            <tr>
+              <td colspan="5" style="text-align: center">
+                {{ "RESOURCE.NO_DATA" | translate }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <pagination-controls previousLabel="Prev" nextLabel="Next" responsive="true" id="first"
+          (pageChange)="pageChanged($event)"></pagination-controls>
+
+        <div class="spinner-container m-auto p-10" *ngIf="loading">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

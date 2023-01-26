@@ -1,0 +1,23 @@
+.circle-key {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin: 5px;
+  background-color: #7e8299;
+  border-radius: 20px;
+}
+
+
+.progress-row:last-of-type {
+  border-radius: 0 0 5px 5px;
+}
+
+.progress-row:first-of-type {
+  border-radius: 5px 5px 0 0;
+
+}
+
+.progress-item {
+  display: flex;
+  align-items: center;
+}

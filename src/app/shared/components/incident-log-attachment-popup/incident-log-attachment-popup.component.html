@@ -1,0 +1,139 @@
+<ng-wizard [config]="config" (stepChanged)="stepChanged($event)" >
+  <ng-wizard-step [title]="'ACTIONS.STEP_ONE' | translate" [description]="'INCIDENTS.WORKLOG.LABEL' | translate">
+    <ng-container *ngIf="data?.worklogs?.length">
+
+
+      
+      <div @fadeSlideInOut class="media media-chat"  *ngFor="let log of data?.worklogs" [id]="'msg-' + log.id" (click)="checkWorkLogModel(log.id)" [ngClass]="{'selected': selectedWorkLogs.includes(log.id)}">
+        <!-- <label [for]="'log-check-'+log.id"> -->
+        <div class="symbol symbol-circle p-2 bg-gray-200 symbol-65">
+          <img *ngIf="!log?.createdBy?.photo" class="avatar align-self-end" src="./assets/media/users/default.jpg"
+            alt="..." />
+          <img class="avatar align-self-end" *ngIf="log?.createdBy?.photo"
+            [attr.src]="log?.createdBy?.photo | secure" />
+        </div>
+        <div class="media-body">
+          <div class="d-flex">
+            <div class="col">
+              <h5 class="msg text-break" [ngClass]="{ 'collapsed-msg': !log.show }">
+                <span *ngFor="
+              let item of log?.notes?.split('\<br>');
+              let index = index;
+              let count = count
+            " (click)="log.show = !log.show">
+                  {{ !log.show ? item.substr(0, 180) : item }}
+                  <a class="cursor-pointer" *ngIf="(item.length > 180 || count > 1) && !log.show">{{ "SHARED.SHOW_MORE"
+                    | translate }}</a>
+                  <br />
+
+                  <span *ngIf="index == 0 && !log.show">
+                    <br />
+                    <br />
+                    <br />
+                  </span>
+                </span>
+              </h5>
+            </div>
+
+          </div>
+
+          <div class="msg d-flex align-items-center text-muted">
+            <span class="btn btn-sm p-1 btn-light-primary" *ngIf="log?.hasAttachments"
+              (click)="openBottomSheet(log?.id)">
+              <i class="fa fa-paperclip file-browser"></i>
+            </span>
+            <span class="mx-2">{{ log?.createdOn | customDate | date: "short" }}
+            </span>
+            -
+            <span class="mx-2">
+              {{ log.createdBy | propTranslator: "firstName" }}
+              {{ log.createdBy | propTranslator: "lastName" }}
+            </span>
+            -
+            <span class="font-weight-bold ml-2 font-size-sm">
+              {{ log.createdBy?.orgStructure | propTranslator:'name' }}
+            </span>
+            <div class="spacer"></div>
+
+            <!-- <ng-container
+            [ngTemplateOutlet]="privilageCheck"
+            [ngTemplateOutletContext]="{ log: log }"
+          >
+          </ng-container> -->
+            <div></div>
+          </div>
+        </div>
+       
+      <!-- <input type="checkbox" (change)="checkWorkLogModel($event, log.id)" [id]="'log-check-'+log.id"> -->
+      </div>
+      
+
+    </ng-container>
+    <mat-hint *ngIf="data?.worklogs?.length == 0">{{'SHARED.EMPTY_SELECTION' | translate }}</mat-hint>
+  </ng-wizard-step>
+  <ng-wizard-step [title]="'ACTIONS.STEP_TWO' | translate" [description]="'INCIDENTS.LIST_OF_FILES' | translate">
+    <ng-container *ngIf="data?.files?.length">
+      <div class="d-flex flex-wrap flex-row">
+        <div *ngFor="let file of data?.files; let i = index" [class]="'grid-item grid-item-'+(i+1)" (click)="checkFileModel(file.uuid)" [ngClass]="{'selected': selectedFiles.includes(file.uuid)}">
+          <label class="d-flex flex-column" [for]="'fileUuid' + file?.uuid">
+            <span>{{file?.descrtiption | slice:0:25}}</span>
+            <img style="object-fit: fill;" [src]="file['uuid'] | secure">
+          </label>
+        </div>
+      </div>
+    </ng-container>
+    <mat-hint *ngIf="data?.files?.length == 0">{{'CORRERSPONDENCE.THERE_IS_NO_ATTACHMENTS' | translate}}</mat-hint>
+  </ng-wizard-step>
+
+
+
+</ng-wizard>
+
+
+
+
+
+<!-- <div mat-dialog-actions class="row">
+
+  <div class="col-6 text-center">
+    <button (click)="cancel()" mat-button app-throttle-click>{{'ACTIONS.CANCEL' | translate}}</button>
+  </div>
+
+  <div class="col-6 text-center">
+    <button (click)="confirm()" mat-button app-throttle-click>{{'ACTIONS.CONFIRM' | translate}}</button>
+  </div>
+</div> -->
+
+
+
+<!-- <ng-template #privilageCheck let-log="log">
+  <ng-container *ngIf="log?.createdBy?.id == currentUserId && log.modifiable ; else elseTemplate">
+    <ng-container
+      [ngTemplateOutlet]="actions"
+      [ngTemplateOutletContext]="{ log: log }"
+    >
+    </ng-container>
+  </ng-container>
+
+  <ng-template #elseTemplate>
+    <div *ngIf="currentOrg?.id == log.createdBy?.orgStructure?.id && log.modifiable">
+      <div *ngIf="type == 'task'">
+        <ng-container
+          *appPrivileges="'PRIV_ED_TSK_WL'"
+          [ngTemplateOutlet]="actions"
+          [ngTemplateOutletContext]="{ log: log }"
+        >
+        </ng-container>
+      </div>
+
+      <div *ngIf="type == 'incident'">
+        <ng-container
+          *appPrivileges="'PRIV_ED_INC_WL'"
+          [ngTemplateOutlet]="actions"
+          [ngTemplateOutletContext]="{ log: log }"
+        >
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+</ng-template> -->

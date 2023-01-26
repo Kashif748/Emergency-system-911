@@ -1,0 +1,8 @@
+::ng-deep .modal {
+  max-width: 500px !important;
+  height: fit-content !important;
+  padding: 0 !important;
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+}

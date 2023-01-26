@@ -1,0 +1,16 @@
+.mat-elevation-z8 {
+  max-width: 1200px;
+  margin: auto;
+}
+.active-scroll {
+  color: #ffffff;
+  background-color: #3699ff;
+  border-color: transparent;
+}
+
+::ng-deep .dark-mode {
+  .card-header {
+    background-color: var(--background-secondary-color) !important;
+    border-bottom: 1px solid var(--separator-color) !important;
+  }
+}

@@ -1,0 +1,391 @@
+<div class="container-fluid" [class]="'p-' + (isMobileView ? '0' : '5')">
+  <div class="pb-4 d-flex align-item-center justify-content-center">
+    <button
+      (click)="backClicked()"
+      class="btn btn btn-lg btn-icon cursor-pointer"
+      matTooltip="{{ 'SHARED.BACK' | translate }}"
+    >
+      <span
+        inlineSVG="{{
+          lang == 'en'
+            ? '/assets/media/svg/icons/Navigation//Angle-left.svg'
+            : '/assets/media/svg/icons/Navigation//Angle-right.svg'
+        }}"
+        cacheSVG="true"
+        class="svg-icon svg-icon-2x svg-icon-primary"
+        title="{{ 'SHARED.BACK' | translate }}"
+      ></span>
+    </button>
+    <button
+      (click)="drawer.toggle()"
+      class="btn btn-primary border btn-sm mx-4"
+      matTooltip="{{ 'SHARED.BACK' | translate }}"
+    >
+      <span
+        inlineSVG="/assets/media/svg/icons/Text/Menu.svg"
+        cacheSVG="true"
+        class="svg-icon svg-icon-lg m-0"
+      ></span>
+    </button>
+    <h2 class="card-title m-0 d-flex align-items-center">
+      {{ "GROUP.VIEW_GROUP" | translate }}
+    </h2>
+    <div class="spacer"></div>
+    <button
+      *appPrivileges="'PRIV_UP_GRP'"
+      [routerLink]="['/groups-management/groups/edit', this.id]"
+      class="btn btn-md btn-square btn-primary font-weight-bold cursor-pointer py-2"
+      matTooltip="{{ 'TASK.UPDATE_TASK' | translate }}"
+    >
+      {{ "GROUP.EDIT_GROUP" | translate }}
+    </button>
+  </div>
+
+  <!-- content -->
+  <div class="d-flex flex-row">
+    <mat-drawer-container class="example-container" autosize>
+      <mat-drawer
+        #drawer
+        class="sidenav-fixed"
+        [mode]="isMobileView ? 'over' : 'side'"
+      >
+        <div class="flex-row-auto w-200px w-xxl-275px h-100 side-menu">
+          <!-- side  nav -->
+          <div class="card card-custom card-stretch m-0">
+            <div class="card-body px-3 pt-0">
+              <!--begin::tabs-->
+              <div class="d-flex justify-content-between">
+                <h5 class="m-0 p-3 font-weight-normal align-items-center">
+                  {{ "ACTIONS.ChooseOption" | translate }}
+                </h5>
+              </div>
+
+              <div
+                class="navi navi-hover navi-active navi-link-rounded navi-bold scroll scroll-pull"
+              >
+                <!--begin::Item for loop-->
+                <div
+                  *ngFor="let item of tabs; let i = index"
+                  class="navi-item my-4 cursor-pointer"
+                  (click)="changeCurrentTab(item)"
+                >
+                  <a
+                    class="navi-link border px-1"
+                    [class]="item.index == currentTab ? 'active' : ''"
+                  >
+                    <span class="navi-icon mx-2">
+                      <span class="svg-icon svg-icon-md">
+                        <span
+                          [inlineSVG]="
+                            './assets/media/svg/icons/' + item.icon + '.svg'
+                          "
+                          cacheSVG="true"
+                          class="svg-icon svg-icon-lg"
+                          [class]="
+                            item.index == currentTab
+                              ? 'svg-icon-light'
+                              : 'svg-icon-dark-50'
+                          "
+                        ></span>
+                      </span>
+                    </span>
+                    <span class="navi-text font-weight-bold font-size-md">{{
+                      item.key | translate
+                    }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-drawer>
+      <!-- tabs content -->
+      <div *ngIf="!isMobileView" class="w-20px d-block"></div>
+      <div
+        class="card card-custom flex-row-fluid min-h-500px d-block spin-overlay m-0" style="overflow: hidden"
+      >
+        <div [dir]="lang === 'en' ? 'ltr' : 'rtl'" class="w-100">
+          <div [ngSwitch]="currentTab">
+            <!-- tasks tab -->
+            <ng-container *ngSwitchCase="0">
+
+
+              <div class="row ">
+                <div class="col-md-12">
+                  <div class="container-fluid card card-custom m-0">
+                    <div
+                      class="card-title font-weight-normal border-bottom m-0 mb-10 p-3 pb-6 d-flex align-items-center"
+                      style="align-content: center;">
+                      <h3 class="card-title align-items-start flex-column my-auto">
+            <span class="card-label font-weight-bolder">{{
+              "GROUP.VIEW" | translate
+            }}</span>
+                      </h3>
+                      <div class="spacer"></div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <!-- name -->
+                        <div class="col-md-6 col-sm-6 info-item p-3">
+                          <!--begin::Item-->
+                          <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                            <!--begin::Symbol-->
+                            <div class="symbol symbol-40 mx-5">
+                  <span class="">
+                    <span
+                      [inlineSVG]="
+                        './assets/media/svg/icons/Communication/Group.svg'
+                      "
+                      class="svg-icon svg-icon-lg svg-icon-primary"
+                    ></span>
+                  </span>
+                            </div>
+                            <!--end::Symbol-->
+
+                            <!--begin::Text-->
+                            <div class="d-flex flex-column font-weight-bold">
+                              <a class="text-dark mb-1 text-size-sm">
+                                {{ "SHARED.NAME" | translate }}
+                              </a>
+                              <span class="text-muted">
+                    <p
+                      class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                    >
+                      {{ group | propTranslator: "name" }}
+                    </p>
+                  </span>
+                            </div>
+                            <!--end::Text-->
+                          </div>
+                        </div>
+
+                        <!-- org -->
+                        <div class="col-md-6 col-sm-6 info-item p-3">
+                          <!--begin::Item-->
+                          <div
+                            class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                            <!--begin::Symbol-->
+                            <div class="symbol symbol-40 mx-5">
+                  <span class="">
+                    <span
+                      [inlineSVG]="'./assets/media/svg/icons/Home/Building.svg'"
+                      class="svg-icon svg-icon-lg svg-icon-primary"
+                    ></span>
+                  </span>
+                            </div>
+                            <!--end::Symbol-->
+
+                            <!--begin::Text-->
+                            <div class="d-flex flex-column font-weight-bold">
+                              <a class="text-dark mb-1 text-size-sm">
+                                {{ "SHARED.ORG" | translate }}
+                              </a>
+                              <span class="text-muted">
+                    <p
+                      class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                    >
+                      <span>
+                        {{ group?.orgStructure | propTranslator:'name'}}
+                      </span>
+                    </p>
+                  </span>
+                            </div>
+                            <!--end::Text-->
+                          </div>
+                        </div>
+
+                        <!-- desc -->
+                        <div class="col-md-12 col-sm-12 info-item p-3">
+                          <!--begin::Item-->
+                          <div
+                            class="
+                  d-flex
+                  w-100
+                  h-100
+                  align-items-center
+                  border
+                  rounded
+                  mb-10
+                "
+                          >
+                            <!--begin::Symbol-->
+                            <div class="symbol symbol-40 mx-5">
+                  <span class="">
+                    <span
+                      [inlineSVG]="'./assets/media/svg/icons/Text/Article.svg'"
+                      class="svg-icon svg-icon-lg svg-icon-primary"
+                    >
+                    </span>
+                  </span>
+                            </div>
+                            <!--end::Symbol-->
+
+                            <!--begin::Text-->
+                            <div class="d-flex flex-column font-weight-bold">
+                              <a class="text-dark mb-1 text-size-sm">
+                                {{ "SHARED.DESC" | translate }}
+                              </a>
+                              <span class="text-muted">
+                    <p
+                      class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                    >
+                      {{ group | propTranslator: "desc" }}
+                    </p>
+                  </span>
+                            </div>
+                            <!--end::Text-->
+                          </div>
+                        </div>
+
+                        <!-- users -->
+                        <div class="col-md-12">
+                          <mat-divider class="mt-4 mb-2"></mat-divider>
+                          <h3>{{ "GROUP.MEMBERS" | translate }}</h3>
+                          <div class="row">
+                            <div class="col-md-4 col-sm-6 info-item p-1" *ngFor="let userObj of users">
+                              <!--begin::Item-->
+                              <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                                <!--begin::Symbol-->
+                                <div class="symbol symbol-40 mx-5">
+                                  <span class="">
+                                    <span
+                                      [inlineSVG]="'./assets/media/svg/icons/General/User.svg'"
+                                      class="svg-icon svg-icon-lg svg-icon-primary"
+                                    ></span>
+                                  </span>
+                                </div>
+                                <!--end::Symbol-->
+                                <!--begin::Text-->
+                                <div class="d-flex flex-column font-weight-bold">
+                                  <span class="text-muted">
+                                    <p
+                                      class="text-dark-75 font-weight-bolder mb-1 font-size-lg">
+                                      {{ userObj?.user | propTranslator: "firstName" }}
+                                      {{ "" }}
+                                      {{ userObj?.user | propTranslator: "lastName" }}
+                                    </p>
+                                  </span>
+                                  <a class="mb-1 user-phone text-size-sm">
+                                    {{ userObj?.user?.mobile }}
+                                  </a>
+                                  <a class="text-dark mb-1 text-size-sm">
+                                    {{ userObj?.user?.email }}
+                                  </a>
+                                  <span
+                                    class="text-dark mb-1 text-size-md font-weight-500 label label-rounded label-inline"
+                                    [ngClass]="{'label-success': userObj.type == userTypes.MANAGER,
+                                    'label-light-primary': userObj.type.MEMBER}">
+                                      {{
+                                        userObj.type == userTypes.MANAGER
+                                          ? ("SHARED.MANAGER" | translate)
+                                          : ("SHARED.MEMBER" | translate)
+                                      }}
+                                  </span>
+                                </div>
+                                <!--end::Text-->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </ng-container>
+            <!-- worklog tab -->
+
+            <!-- map  tab -->
+            <ng-container *ngSwitchCase="1">
+              <div class="px-5">
+                <div class="row">
+                  <div class="col-12">
+                    <h5 class="card-title font-weight-bold border-bottom m-0 mb-10 p-3 pb-6 d-flex align-items-center">
+                      {{ "GROUP.CATEGORIES_LOCATIONS" | translate }}
+                    </h5>
+                  </div>
+                  <div class="col-md-12 col-sm-12 info-item p-3">
+                    <!--begin::Item-->
+                    <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                      <!--begin::Symbol-->
+                      <div class="symbol symbol-40 mx-5">
+                        <span class="">
+                          <span [inlineSVG]="'./assets/media/svg/icons/Layout/Layout-grid.svg'"
+                                class="svg-icon svg-icon-lg svg-icon-primary">
+                          </span>
+                        </span>
+                      </div>
+                      <!--end::Symbol-->
+                      <!--begin::Text-->
+                      <div class="d-flex flex-column font-weight-bold">
+                        <a class="text-dark mb-1 text-size-sm">
+                          {{ "GROUP.INCIDENT_CATEGORIES" | translate }}
+                        </a>
+                        <span *ngIf="categoryName" class="text-muted">
+                          <div class="mr-4 alert alert-danger" style="display: inline-block"
+                               *ngFor="let categ of categoryName">
+                              {{ categ }}
+                          </div>
+                        </span>
+                        <span *ngIf="groupIncidentLocationInfo?.centers" class="text-muted">
+                          <span>
+                            <div class="mr-4 alert alert-danger" style="display: inline-block"
+                                 *ngFor="let categ of groupIncidentLocationInfo?.centers[0]?.category">
+                                {{ categ?.categoryObj | propTranslator: "name" }}
+                            </div>
+                          </span>
+                        </span>
+                      </div>
+                      <!--end::Text-->
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 info-item p-3">
+                    <!--begin::Item-->
+                    <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                      <!--begin::Symbol-->
+                      <div class="symbol symbol-40 mx-5">
+                        <span class="">
+                          <span [inlineSVG]="'./assets/media/svg/icons/Map/Marker1.svg'"
+                                class="svg-icon svg-icon-lg svg-icon-primary">
+                          </span>
+                        </span>
+                      </div>
+                      <!--end::Symbol-->
+                      <!--begin::Text-->
+                      <div class="d-flex flex-column font-weight-bold"
+                           [ngClass]="{'mapWidth' : groupConfig && groupConfig.length > 0}">
+                        <a class="text-dark mb-1 text-size-sm">
+                          {{ "GROUP.INCIDENT_LOCATION" | translate }}
+                        </a>
+                        <span *ngIf="groupIncidentLocationInfo?.centers" class="text-muted">
+                          <span *ngFor="let location of groupIncidentLocationInfo?.centers">
+                            <div class="mr-4 alert alert-primary" style="display: inline-block">
+                                {{ location.Center | propTranslator: "name" }}
+                            </div>
+                            <div class="mr-4 alert alert-primary" *ngFor="let zone of location?.category[0]?.zonesObj"
+                                 style="display: inline-block; color: #3699ff !important; background-color: #d7ebff !important; border: none">
+                                {{ zone | propTranslator: "name" }}
+                            </div><br/>
+                          </span>
+                        </span>
+                        <app-map [smallSize]="true" *ngIf="groupConfig && groupConfig.length > 0"
+                                 [config]="groupConfig"></app-map>
+                      </div>
+                      <!--end::Text-->
+                    </div>
+                  </div>
+                  <!--begin::Item-->
+                </div>
+
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-drawer-container>
+  </div>
+</div>

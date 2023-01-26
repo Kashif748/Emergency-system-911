@@ -1,0 +1,114 @@
+.resources-charts {
+    .card-custom {
+      min-height: 400px;
+    }
+  }
+  
+  .resources {
+    margin: auto;
+    mat-toolbar {
+      border-radius: 10px 10px 0 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 2px;
+    }
+  
+    .table-filter {
+      display: block !important;
+      margin: 29px;
+      max-width: 800px !important;
+      margin: auto;
+    }
+  
+    table {
+      width: 100%;
+      box-shadow: none;
+      border-top: 1px solid #eee;
+    }
+  
+    .td-arabic {
+      text-align: right;
+    }
+  }
+  
+  ::ng-deep .mat-list-item {
+    background-color: #e5ecfa;  
+    }
+
+    ::ng-deep .mat-list-base .mat-list-option {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+  ::ng-deep .mat-column-actions {
+    max-width: 60px !important;
+    padding: 5px !important;
+    text-align: center !important;
+  }
+  
+  ::ng-deep .modal {
+    max-width: 400px !important;
+    height: fit-content !important;
+    padding: 0 !important;
+    .mat-dialog-container {
+      padding: 0 !important;
+    }
+
+  
+  }
+  
+
+  .form {
+    margin: 0 auto;
+    min-width: 150px;
+    // max-width: 1000px;
+    width: 100%;
+    margin-top: 50px;
+  }
+  
+  .form-element {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    display: inline !important;
+  }
+  
+ 
+  .mat-toolbar {
+    background: #3aa0b7 !important;
+    margin-top: 10px;
+    border-radius: 10px;
+    color: white;
+  }
+
+  ::ng-deep .card-title span {
+    padding: 10px;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #36aef4;
+  }
+  
+  .searbtn {
+    width: 25%;
+    margin-left: 37%;
+    margin-right: 37%;
+    margin-bottom: 2%;
+  }
+  mat-form-field {
+    width: 100%;
+  }
+
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    
+    margin: 0 !important;
+  
+  }
+  
+  ::ng-deep .mat-form-field-wrapper {
+  
+    padding-bottom:1rem !important;
+  
+  }
+  

@@ -1,0 +1,727 @@
+
+<div class="container">
+	<!-- <div>
+        <ul class="top-statistics block-separator without-activecases print-in-dashboard  with-doses">
+            <li class="doses" *ngIf="covidTestData && covidTestDataTotal>0">
+
+                <div class="mb-5">
+                    <div class="icon doses-icon"></div>
+                    <label class="total-doses" title="Conducted Tests">{{covidTestData[0]?.emirates}}</label>
+                    <span class="counter" data-toggle="counter">{{'DOH.TOTAL_TESTS' | translate}} - {{covidTestDataTotal}}</span>
+                </div>
+                    <div class="new-cases">
+                        <span class="doses">{{'DOH.DATE' | translate}} : {{covidTestData[0]?.resultDate}}</span>
+                    </div>
+             </li>  
+           
+             <li class="volunteers" >
+
+                <div class="mb-5">
+                    <div class="icon doses-icon volunteers" style="background-image: url(../../../../assets/images/icon_2.png);"></div>
+                    <label class="total-doses" title="Conducted Tests">{{'DOH.TOTAL_VOLUNTEERS' | translate}}</label>
+                    <span class="counter" data-toggle="counter">{{'DOH.VOLUNTEERS' | translate}} - {{dataVol?.length}}</span>
+                </div>
+                    <div class="new-cases">
+                        <span class="volunteers">{{'DOH.DATE' | translate}}: {{myDate | date:'fullDate'}}</span>
+                    </div>
+             </li> 
+
+             <li class="bed" >
+
+                <div class="mb-5">
+                    <div class="icon doses-icon bed" style="background-image: url(../../../../assets/images/icon_3.png);"></div>
+                    <label class="total-doses" title="Conducted Tests">{{'DOH.TOTAL_CAPACITY' | translate}}</label>
+                    <span class="counter" data-toggle="counter">{{'DOH.BED_CAPACITY' | translate}} - {{dataBed?.length}}</span>
+                </div>
+                    <div class="new-cases">
+                        <span class="bed">{{'DOH.DATE' | translate}}: {{myDate | date:'fullDate'}}</span>
+                    </div>
+             </li> 
+
+             <li class="tests">
+
+                <div class="mb-5">
+                    <div class="icon doses-icon tests" style="background-image: url(../../../../assets/images/icon_4.png);"></div>
+                    <label class="total-doses" title="Conducted Tests">{{'DOH.TOTAL_INCIDENTS' | translate}}</label>
+                    <span class="counter" data-toggle="counter">{{'DOH.INCIDENTS' | translate}} - {{dataShared?.length}}</span>
+                </div>
+                    <div class="new-cases">
+                        <span class="tests">{{'DOH.DATE' | translate}}: {{myDate | date:'fullDate'}}</span>
+                    </div>
+             </li>  
+
+             <li class="vaccinated" >
+
+                <div class="mb-5">
+                    <div class="icon doses-icon vaccinated"></div>
+                    <label class="total-doses" title="Conducted Tests">{{'DOH.TOTAL_CASES' | translate}}</label>
+                    <span class="counter" data-toggle="counter">{{'DOH.TOTAL_CASES' | translate}} - {{covidData?.length}}</span>
+                </div>
+                    <div class="new-cases">
+                        <span class="vaccinated">{{'DOH.DATE' | translate}}: {{myDate | date:'fullDate'}}</span>
+                    </div>
+             </li> 
+        </ul>
+    </div> -->
+   
+
+
+   
+
+
+    <div>
+       
+
+    
+           
+     <div class="d-flex flex-column list-content">
+        <div [dir]="lang === 'en' ? 'ltr' : 'rtl'" class="w-100">
+          <div class="row">
+            <div class="col-lg-12 col-xxl-12 order-1 order-xxl-1">
+              <div class="card card-custom card-stretch gutter-b">
+
+                <div class="card-title" style="margin-bottom: 0px;">
+                 
+                  <span class="card-title-content1">
+                    {{'DOH.COVID19_INFORMATION' | translate}}
+                  </span>
+               
+                </div>
+
+                <div class="card-body pt-8">
+                    <div class="row  my-3">
+                        <div class="col-12 mt-5">
+
+        <div class="container-fluid mt-5">
+
+            <!-- <div class="row">
+          
+                  <div class="col-md-3">
+            
+                <div class="card">
+                  <h5 class="card-header">
+                            <h5 class="text-success font-weight-bolder font-size-h5">{{'DOH.TOTAL_TESTS' | translate}}</h5>
+                            <h3 class="text-dark-75 font-weight-bolder font-size-h3" *ngIf="covidTestDataTotal>0"> {{covidTestDataTotal | number}}</h3>
+                  </h5>
+                  <div class="card-body custom-scrollbar-css" style="max-height: 650px; overflow: auto;">
+                              <ul class="list-group" style="padding: 0px;">
+                                  <li class="list-group-item list-group-item-success" *ngFor="let item of covidTestData">
+                                     {{item?.resultDate}} <span class="badge badge-light"> {{item?.totalTest}} </span> 
+                                  </li>  
+                              </ul>
+                  </div>
+                  
+                </div>
+              </div>
+          
+                   
+                   <div class="col-md-4">
+               
+                      <div>
+          
+                        <div class="row mt-1">
+                          <div class="col-md-12">
+                              <div class="card" >
+                                  <h5 class="card-header" >
+                                    <h5 class="text-danger font-weight-bolder font-size-h5">{{'DOH.GRAPHICAL_DATA' | translate}}</h5>
+                                  </h5>
+                                  <div *ngIf="chart1options" class="card-body custom-scrollbar-css" style="max-height: 400px; overflow: auto; overflow-x: hidden;" >
+                  
+                                      <apx-chart
+                                      [series]="chart1options.series"
+                                      [chart]="chart1options.chart"
+                                      [colors]="chart1options.colors"
+                                      [yaxis]="chart1options.yaxis"
+                                      [dataLabels]="commonOptions.dataLabels"
+                                      [markers]="commonOptions.markers"
+                                      [stroke]="chart1options.stroke"
+                                      [grid]="commonOptions.grid"
+                                      [xaxis]="chart1options.xaxis"
+                                      [fill]="chart1options.fill"
+                                    ></apx-chart>
+                                      </div>
+                                      </div>
+                            
+                          </div>
+         
+                      </div>
+          
+                      </div>
+                    </div>
+          
+          
+                   <div class="col-md-5">
+                <div class="row">
+                  <div class="col-md-6">
+                              <div class="card" >
+                                  <h5 class="card-header">
+                                    <h5 class="text-primary font-weight-bolder font-size-h5">{{'DOH.TOTAL_POSITIVE' | translate}}</h5>
+                                    <h3 class="text-dark-75 font-weight-bolder font-size-h3"> {{covidTestDataPositive | number}}</h3>
+                                  </h5>
+                                  <div class="card-body custom-scrollbar-css" style="max-height: 200px; overflow: auto;">
+                                      <ul class="list-group" style="padding: 0px;" *ngIf="covidDataPositive">
+                                          <li class="list-group-item list-group-item-success" *ngFor="let item of covidDataPositive">
+                                         
+                                              {{item?.resultDate}} <span class="badge badge-light" *ngIf="(item?.outcome == 'Positive')">{{item?.cases}} - {{item?.outcome}}</span> 
+                                          </li>
+                                         
+                                      </ul>
+                                  </div>
+                                 
+                              </div>
+                  </div>
+                  <div class="col-md-6">
+                              <div class="card">
+                                  <h5 class="card-header" >
+                                    <h5 class="text-danger font-weight-bolder font-size-h5">{{'DOH.TOTAL_RECOVERED' | translate}}</h5>
+                                    <h3 class="text-dark-75 font-weight-bolder font-size-h3"> {{covidTestDataRecovred | number}}</h3>
+                                  </h5>
+                                  <div class="card-body custom-scrollbar-css" style="max-height: 200px; overflow: auto;" >
+                                      <ul class="list-group" style="padding: 0px;" *ngIf="covidDataRecovred">
+                                          <li class="list-group-item list-group-item-success" *ngFor="let item of covidDataRecovred" >
+                                              {{item?.resultDate}} <span class="badge badge-light" *ngIf="item?.outcome == 'Recovered'">{{item?.cases}} - {{item?.outcome}}</span> 
+                                          </li>
+                                        
+                                      </ul>
+                                  </div>
+                                 
+                              </div>
+                  </div>
+                </div>
+               
+              </div>
+
+            </div>    -->
+
+            <div class="row mt-2">
+              <div class="col-md-12">
+      
+              <mat-card >
+              
+                <section class='statis text-center'>
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="box bg-primary">
+                          <!-- <i class="fa fa-eye"></i> -->
+                          <h3>{{covidTestDataTotal | number}} </h3>
+                          <p class="lead">{{'DOH.TOTAL_TESTS' | translate}}</p>
+                        </div>
+
+                        <section>
+
+                          <mat-form-field appearance="fill">
+                            <mat-label>{{'DOH.DATE_RANGE' | translate}}</mat-label>
+                            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                              <input class="date-color" matStartDate formControlName="start" placeholder="{{'DOH.START_DATE' | translate}}">
+                              <input class="date-color" matEndDate formControlName="end" placeholder="{{'DOH.END_DATE' | translate}}">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                          
+                            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">{{'DOH.INVALID_START_DATE' | translate}}</mat-error>
+                            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">{{'DOH.INVALID_END_DATE' | translate}}</mat-error>
+                          </mat-form-field>
+                          
+                          <button mat-raised-button color="primary" (click)="getTestData(range.value.start ,range.value.end)">{{'DOH.SEARCH' | translate}}</button>
+                          <!-- <p>Selected range: {{range.value | json}}</p> -->
+
+                          <!-- <app-date-range-picker (emitRange)="getDateOne($event)"></app-date-range-picker> -->
+                      </section>
+
+
+                      </div>
+                      <div class="col-md-6">
+                        <div class="box danger">
+                          <!-- <i class="fa fa-user-o"></i> -->
+                          <h3>{{covidCasesDataTotal | number}}</h3>
+                          <p class="lead">{{'DOH.TOTAL_CASES' | translate}}</p>
+                        </div>
+
+                        <section>
+
+                          <mat-form-field appearance="fill">
+                            <mat-label>{{'DOH.DATE_RANGE' | translate}}</mat-label>
+                            <mat-date-range-input [formGroup]="Casesrange" [rangePicker]="picker1">
+                              <input class="date-color" matStartDate formControlName="start" placeholder="{{'DOH.START_DATE' | translate}}">
+                              <input class="date-color" matEndDate formControlName="end" placeholder="{{'DOH.END_DATE' | translate}}">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker1></mat-date-range-picker>
+                          
+                            <mat-error *ngIf="Casesrange.controls.start.hasError('matStartDateInvalid')">{{'DOH.INVALID_START_DATE' | translate}}</mat-error>
+                            <mat-error *ngIf="Casesrange.controls.end.hasError('matEndDateInvalid')">{{'DOH.INVALID_END_DATE' | translate}}</mat-error>
+                          </mat-form-field>
+                          
+                          <button mat-raised-button color="warn" (click)="getCasesData(Casesrange.value.start ,Casesrange.value.end)">{{'DOH.SEARCH' | translate}}</button>
+                      </section>
+
+
+                      </div>
+                      <!-- <div class="col-md-3">
+                        <div class="box warning">
+                          <i class="fa fa-shopping-cart"></i>
+                          <h3>5,154</h3>
+                          <p class="lead">{{'DOH.TOTAL_CASES' | translate}}</p>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="box success">
+                          <i class="fa fa-handshake-o"></i>
+                          <h3>5,154</h3>
+                          <p class="lead">{{'DOH.TOTAL_CASES' | translate}}</p>
+                        </div> 
+                      </div> -->
+                    </div>
+                  </div>
+                </section>
+
+              </mat-card>
+             
+       
+          </div>
+          </div>
+
+            <div class="row mt-4">
+              <div class="col-md-12">
+                  <div class="card" >
+                      <h5 class="card-header" >
+                        <h5 style="color: #3699FE;" class="font-weight-bolder font-size-h5">{{'DOH.TOTAL_TESTS' | translate}}</h5>
+                      </h5>
+                      <div *ngIf="chart3options" class="card-body" style="max-height: 400px; overflow: auto; overflow-x: hidden;" >
+      
+                          <apx-chart
+                          [series]="chart3options.series"
+                          [chart]="chart3options.chart"
+                          [colors]="chart3options.colors"
+                          [yaxis]="chart3options.yaxis"
+                          [plotOptions]="chart3options.plotOptions"
+                          [legend]="chart3options.legend"
+                          [markers]="commonOptions.markers"
+                          [stroke]="chart3options.stroke"
+                          [grid]="commonOptions.grid"
+                          [xaxis]="chart3options.xaxis"
+                          [fill]="chart3options.fill"
+                        ></apx-chart>       
+                          </div>
+                          </div>
+                
+              </div>
+      
+              <div class="col-md-12">
+                <div class="card" >
+                    <h5 class="card-header" >
+                      <h5 style="color: #3699FE;" class="font-weight-bolder font-size-h5">{{'DOH.TOTAL_CASES' | translate}}</h5>
+                    </h5>
+                    <div *ngIf="chart2options" class="card-body" style="max-height: 400px; overflow: auto; overflow-x: hidden;" >
+                       <apx-chart
+                        [series]="chart2options.series"
+                        [chart]="chart2options.chart"
+                        [colors]="chart2options.colors"
+                        [yaxis]="chart2options.yaxis"  
+                        [stroke]="chart2options.stroke"
+                        [labels]="chart2options.labels"
+                        [xaxis]="chart2options.xaxis"
+                       
+                      ></apx-chart>
+                      
+                        </div>
+                        </div>
+              
+            </div>
+          </div>
+
+          <div class="row">
+
+
+            <div class="col-md-3">
+              <input type="text" class="form-control mb-2" placeholder="Search" [(ngModel)]="query" id="listSearch">
+                                  <mat-selection-list #hspD [multiple]="false" (selectionChange)="onGroupsChange(hspD?.selectedOptions?.selected[0]?.value)">
+                                      <mat-list-option *ngFor="let hsp of hospitals[0] | LockFilter: query" [value]="hsp">
+                                        {{hsp}}
+                                      </mat-list-option>
+                                    </mat-selection-list>
+                              </div>
+
+            <div class="col-md-9">
+               
+
+                <div class="card card-custom gutter-b">
+                    
+                    <div class="card-body">
+                      <!-- <div 
+                      *ngIf="loading"
+                        class="spinner spinner-primary spinner-lg mr-15"
+                      ></div> -->
+                      <div id="chart" *ngIf="chartOptions1">
+                      <apx-chart
+                      [series]="chartOptions1.series"
+                      [chart]="chartOptions1.chart"
+                      [dataLabels]="chartOptions1.dataLabels"
+                      [yaxis]="chartOptions1.yaxis"
+                      [xaxis]="chartOptions1.xaxis"
+                      [colors]="chartOptions1.colors"
+                      [stroke]="chartOptions1.stroke"
+                      [grid]="chartOptions1.grid"
+                      [fill]="chartOptions1.fill"
+                    ></apx-chart>
+                    </div>
+
+                    </div>
+                  </div>
+
+            </div>
+
+        </div>
+
+
+          <div class="mt-4">
+            <ul class="top-statistics block-separator without-activecases print-in-dashboard  with-doses">
+                 <li class="volunteers" >
+    
+                    <div class="mb-5">
+                        <!-- <div class="icon doses-icon volunteers" style="background-image: url(../../../../assets/images/icon_4.png);"></div> -->
+                        <label class="total-doses" title="Conducted Tests">{{'DOH.TOTAL_VOLUNTEERS' | translate}}</label>
+                        <span class="counter" data-toggle="counter">{{'DOH.VOLUNTEERS' | translate}} - {{dataVol?.length}}</span>
+                    </div>
+                        <!-- <div class="new-cases">
+                            <span class="volunteers">{{'DOH.DATE' | translate}}: {{myDate | date:'fullDate'}}</span>
+                        </div> -->
+                 </li> 
+    
+                 <li class="bed" >
+    
+                    <div class="mb-5">
+                        <!-- <div class="icon doses-icon bed" style="background-image: url(../../../../assets/images/icon_3.png);"></div> -->
+                        <label class="total-doses" title="Conducted Tests">{{'DOH.TOTAL_CAPACITY' | translate}}</label>
+                        <span class="counter" data-toggle="counter">{{'DOH.BED_CAPACITY' | translate}} - {{dataBed?.length}}</span>
+                    </div>
+                        <!-- <div class="new-cases">
+                            <span class="bed">{{'DOH.DATE' | translate}}: {{myDate | date:'fullDate'}}</span>
+                        </div> -->
+                 </li> 
+    
+                 <li class="tests">
+    
+                    <div class="mb-5">
+                        <!-- <div class="icon doses-icon tests" style="background-image: url(../../../../assets/images/icon_2.png);"></div> -->
+                        <label class="total-doses" title="Conducted Tests">{{'DOH.TOTAL_INCIDENTS' | translate}}</label>
+                        <span class="counter" data-toggle="counter">{{'DOH.INCIDENTS' | translate}} - {{dataShared?.length}}</span>
+                    </div>
+                        <!-- <div class="new-cases">
+                            <span class="tests">{{'DOH.DATE' | translate}}: {{myDate | date:'fullDate'}}</span>
+                        </div> -->
+                 </li> 
+              </ul>
+          </div>
+
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12 mb-5">
+                    <div class="titles">{{'DOH.VOLUNTEERS' | translate}}</div>
+                </div>
+    
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                    <div class="app-container table-infos">
+                        <div class="pb-5 d-flex w-100 search-bar">
+                          <div style="width: 50%">
+                            <div class="input-icon table-filter">
+                              <input
+                                #input
+                                (keyup)="applyFilter($event)"
+                                class="form-control form-control-solid"
+                                placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+                              />
+                              <span><i class="flaticon2-search-1 icon-md"></i></span>
+                            </div>
+                          </div>
+    
+                        </div>
+                      
+                        <table
+                          mat-table
+                          [dataSource]="dataSource"
+                          class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+                        >
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.ID' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">
+                              <span class="font-weight-bolder"># {{ element.dataid }}</span>
+                            </td></ng-container
+                          >
+                      
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{'DOH.FULL_NAME' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.FullName }}</td>
+                          </ng-container>
+                      
+                      
+                          <ng-container matColumnDef="gender">
+                            <th mat-header-cell *matHeaderCellDef> {{'DOH.GENDER' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Gender }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="nationality">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.NATIONALITY' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Nationality }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.EMAIL' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Email }}</td>
+                          </ng-container> 
+                          
+                          <ng-container matColumnDef="mobile">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.MOBILE' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Mobile1 }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="interest">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.INTERESTS' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Interest1 }}</td>
+                          </ng-container>
+                  
+             
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                      
+                          <!-- Row shown when there is no matching data. -->
+                          <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="8">
+                              <!-- <nodata-table [input]="input"></nodata-table> -->
+                            </td>
+                          </tr>
+                        </table>
+                        <mat-paginator
+                          [length]="dataVol?.length"
+                          [pageSize]="10"
+                          (page)="pageChanged($event)"
+                        >
+                        </mat-paginator>
+                      </div>
+                 </div>
+            </div>
+         </div>
+    
+         <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12 mb-5">
+                    <div class="titles">{{'DOH.BED_CAPACITY' | translate}}</div>
+                </div>
+    
+                <!-- bed capacity -->
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                    <div class="app-container table-infos">
+                        <div class="pb-5 d-flex w-100 search-bar">
+                          <div style="width: 50%">
+                            <div class="input-icon table-filter">
+                              <input
+                                #input
+                                (keyup)="applyFilter1($event)"
+                                class="form-control form-control-solid"
+                                placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+                              />
+                              <span><i class="flaticon2-search-1 icon-md"></i></span>
+                            </div>
+                          </div>
+    
+                        </div>
+                      
+                        
+                        <table
+                          mat-table
+                          [dataSource]="dataSourceBED"
+                          class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+                        >
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.ID' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">
+                              <span class="font-weight-bolder"># {{ element.BedCapacityId }}</span>
+                            </td></ng-container
+                          >
+                      
+                          <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{'DOH.TYPE' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.BedTypeAgeName }}</td>
+                          </ng-container>
+                      
+                      
+                          <ng-container matColumnDef="occupied">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.OCCUPIED_BEDS' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Occupied }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="available">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.AVAILABLE_BEDS' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.AvailableBeds }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="facility">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.FACILITY' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.FacilityName }}</td>
+                          </ng-container> 
+                          
+                          <ng-container matColumnDef="region">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.REGION' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Region }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.LAST_UPDATE_DATE' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.LastUpdateDate }}</td>
+                          </ng-container>
+                  
+             
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsBed"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsBed"></tr>
+                      
+                          <!-- Row shown when there is no matching data. -->
+                          <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="8">
+                            <!-- <nodata-table [input]="input"></nodata-table> -->
+                            </td>
+                          </tr>
+                        </table>
+                        <mat-paginator
+                          #bedPaginator
+                          [length]="dataBed?.length"
+                          [pageSize]="10"
+                          (page)="pageChanged($event)"
+                        >
+                        </mat-paginator>
+                      </div>
+                 </div>
+    
+                
+            </div>
+         </div>
+         
+        <!-- shared info  -->
+         <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12 mb-5">
+                    <div class="titles">{{'DOH.EVENT_INFORMATION' | translate}} </div>
+                </div>
+    
+                <!-- bed capacity -->
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                    <div class="app-container table-infos">
+                        <div class="pb-5 d-flex w-100 search-bar">
+                          <div style="width: 50%">
+                            <div class="input-icon table-filter">
+                              <input
+                                #input
+                                (keyup)="applyFilter2($event)"
+                                class="form-control form-control-solid"
+                                placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+                              />
+                              <span><i class="flaticon2-search-1 icon-md"></i></span>
+                            </div>
+                          </div>
+    
+                        </div>
+                      
+                        
+                        <table
+                          mat-table
+                          [dataSource]="dataSourceSHARED"
+                          class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+                        >
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.ID' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">
+                              <span class="font-weight-bolder"># {{ element.dataid }}</span>
+                            </td></ng-container
+                          >
+                      
+                          <ng-container matColumnDef="record_no">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{'DOH.RECORD_NUMBER' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.record_number }}</td>
+                          </ng-container>
+                      
+                      
+                          <ng-container matColumnDef="incident_name">
+                            <th mat-header-cell *matHeaderCellDef> {{'DOH.INCIDENTS' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.IncidentName }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="inserted_emp">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.EMPLOYEE_NAME' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.InsertedEmployeeNAme }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="position_emp">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.EMPLOYEE_POSITION' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.InsertedPositionName }}</td>
+                          </ng-container> 
+                          
+                          <ng-container matColumnDef="contact">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.CONTACT_NO' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.ContactPhoneNumber }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.STATUS' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.EventStatus }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="dept">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.ASSIGNED_DEPARTMENT' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.AssignedDepartment }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="region">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.REGION' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.Region }}</td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="dateNtime">
+                            <th mat-header-cell *matHeaderCellDef>{{'DOH.EVENT_DATE' | translate}}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.EventDateTime }}</td>
+                          </ng-container>
+                  
+             
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsShared"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsShared"></tr>
+                      
+                          <!-- Row shown when there is no matching data. -->
+                          <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="8">
+                            <!-- <nodata-table [input]="input"></nodata-table> -->
+                            </td>
+                          </tr>
+                        </table>
+                        <mat-paginator
+                          #sharedPaginator
+                          [length]="dataShared?.length"
+                          [pageSize]="10"
+                          (page)="pageChanged($event)"
+                        >
+                        </mat-paginator>
+                      </div>
+                 </div>
+    
+                
+            </div>
+         </div>
+    </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+
+
+    </div>
+</div>
+
+
+

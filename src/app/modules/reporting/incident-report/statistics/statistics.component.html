@@ -1,0 +1,24 @@
+<div class="rounded-lg bg-white shadow-sm mb-3 h-100 py-4">
+  <div class="px-2 border-0 mx-2">
+    <div class="card-title m-0 my-2">
+      <p class="text-dark-50 font-size-lg m-0">{{ 'Incident.Statistics' | translate}}</p>
+    </div>
+  </div>
+  <div class="px-5 py-0">
+    <div class="progress my-5" dir="ltr" style="height: 7px">
+      <div *ngFor="let item of stats" class="progress-bar" [class]="'bg-' + item.color" role="progressbar"
+        [style.width.%]="item.percent" [attr.aria-valuenow]="item.value" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="properity d-flex justify-content-between align-items-center my-3" *ngFor="let item of stats">
+      <span class="text-muted">
+        <!-- <span
+          class="label label-dot label-lg"
+          [class]="'label-' + item.color"
+        ></span> -->
+        {{ item.key | propTranslator : '' }}
+      </span>
+      <span class="font-weight-bolder text-white px-1 w-20px rounded text-center" [class]="'bg-' + item.color">{{
+        item.value }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="container mat-elevation-z8">
+  <mat-toolbar class="bg-white p-0 border-bottom">
+    <app-breadcrumbs></app-breadcrumbs>
+    <div class="spacer"></div>
+    <button
+      class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+      [routerLink]="['/suggestions/make']"
+      routerLinkActive="active"
+    >
+      {{ "SUGGESTION.NEW_SUGG" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </mat-toolbar>
+  <div class="row mt-5">
+    <div class="col-12">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>{{ "ACTIONS.FILTER_PLACEHOLDER" | translate }}</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input />
+        <mat-icon matSuffix color="primary">search</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="table-container table-responsive" *ngIf="vm$ | async as vm">
+        <table
+          matSort
+          class="table table-head-custom table-head-bg table-borderless table-vertical-center"
+        >
+          <thead>
+            <tr>
+              <!-- 1 -->
+              <th mat-sort-header="id">
+                {{ "SHARED.NUMBER" | translate }}
+              </th>
+              <!-- 2 -->
+              <th mat-sort-header="title">
+                {{ "SHARED.TITLE" | translate }}
+              </th>
+              <!-- 3 -->
+              <th mat-sort-header="createdOn">
+                {{ "SHARED.CREATION_DATE" | translate }}
+              </th>
+              <!-- 4 -->
+              <th mat-sort-header="status">
+                {{ "SHARED.STATUS" | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let element of vm.dataSource.filteredData
+                  | paginate: paginationConfig
+              "
+            >
+              <!-- 1 -->
+              <td>
+                <span class="font-weight-bolder"># {{ element.id }}</span>
+              </td>
+              <!-- 2 -->
+              <td>{{ element.title }}</td>
+              <!-- 3 -->
+              <td>{{ element.createdOn | customDate }}</td>
+              <!-- 4 -->
+              <td>{{ element.suggestionStatus.nameEN }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="spinner-container m-auto p-10" *ngIf="loading">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+        <pagination-controls
+          previousLabel="Prev"
+          nextLabel="Next"
+          responsive="true"
+          id="paging"
+          (pageChange)="pageChanged($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<ng-container>
+  <!-- logo  wrapper -->
+  <ng-container *ngIf="isMobileView">
+    <div class="p-2">
+      <app-logo-wrapper [isMobileView]="isMobileView"></app-logo-wrapper>
+    </div>
+    <div class="spacer"></div>
+  </ng-container>
+
+  <!-- notifications Toggle -->
+  <ng-container>
+    <div class="d-flex align-items-center justify-content-center dropdown ml-3">
+      <app-notifications-dropdown></app-notifications-dropdown>
+    </div>
+  </ng-container>
+
+  <!-- dark theme , language ,  setting  Toggle -->
+  <ng-container>
+    <div
+      class="d-flex align-items-center justify-content-center dropdown ml-3"
+      ngbDropdown
+      [placement]="dir == 'ltr' ? 'bottom-right' : 'bottom-left'"
+    >
+      <button
+        class="btn btn-sm btn-icon btn-circle btn-default"
+        data-toggle="dropdown"
+        data-offset="0px,0px"
+        ngbDropdownToggle
+      >
+        <i
+          class="flaticon2-back-1 icon-nm"
+          [ngStyle]="{
+            transform: true ? 'rotate(-90deg)' : 'rotate(90deg)',
+            transition: '0.2s'
+          }"
+        ></i>
+      </button>
+      <div
+        ngbDropdownMenu
+        class="
+          dropdown-menu
+          p-0
+          m-0
+          dropdown-menu-left dropdown-menu-anim-up dropdown-menu-md
+          p-0
+        "
+      >
+        <ul class="navi navi-hover py-4">
+          <app-language-selector></app-language-selector>
+          <ng-container>
+            <li class="navi-item">
+              <a
+                (click)="changeTheme()"
+                class="navi-link px-0 py-2 cursor-pointer"
+              >
+                <ng-container *ngIf="currentTheme == 'light'">
+                  <span
+                    class="symbol symbol-20 symbol-circle bg-secondary mx-2 p-1"
+                  >
+                    <span
+                      [inlineSVG]="'/assets/media/svg/icons/Weather/Moon.svg'"
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-lg svg-icon-dark"
+                    ></span>
+                  </span>
+
+                  <span>{{ "ACTIONS.darkMode" | translate }}</span>
+                </ng-container>
+
+                <ng-container *ngIf="currentTheme == 'dark'">
+                  <span
+                    class="symbol symbol-20 symbol-circle bg-secondary mx-2 p-1"
+                  >
+                    <span
+                      [inlineSVG]="'/assets/media/svg/icons/Weather/Sun.svg'"
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-lg svg-icon-warning"
+                    ></span>
+                  </span>
+
+                  <span>{{ "ACTIONS.lightMode" | translate }}</span>
+                </ng-container>
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- user Toggle -->
+  <ng-container *ngIf="extrasUserLayout === 'offcanvas'">
+    <div
+      *ngIf="!isMobileView"
+      class="d-flex align-items-center justify-content-center dropdown ml-3"
+    >
+      <app-user-dropdown-inner
+        [isMobileView]="isMobileView"
+        [dir]="dir"
+      ></app-user-dropdown-inner>
+    </div>
+
+    <!--end::Topbar-->
+  </ng-container>
+
+  <ng-container>
+    <div *ngIf="isMobileView" class="mobile-btn align-items-center justify-content-center ml-3">
+      <button
+        (click)="sideMenu()"
+        class="btn btn-sm btn-icon btn-circle btn-default"
+      >
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Text/Menu.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-lg svg-icon-primary"
+        ></span>
+      </button>
+    </div>
+  </ng-container>
+</ng-container>

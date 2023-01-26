@@ -1,0 +1,130 @@
+<div id="incident-report" [class]="{
+    'col-12': (dir$ | async) == 'rtl',
+    'container-fluid': (dir$ | async) != 'rtl'
+  }" style="background-color: #f3f6f9;max-width: 1600px">
+  <div class="row mt-5">
+    <div class="col-md-6 py-2">
+      <div class="row ">
+        <div class="col-12">
+          <div class="row h-50">
+            <div class="col-md-6">
+              <div class=" shadow-sm rounded-lg w-100 d-flex  p-4"
+                   style="color: #7b9cbf ; background-color: white">
+                <h6 class="my-auto">{{'Incident.Sr' | translate}}</h6>
+                <div class="spacer"></div>
+                <h6 class="my-auto">{{ incidents?.id }}/{{ incidents?.createdOn | customDate | date: "yyyy" }}</h6>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class=" shadow-sm rounded-lg w-100 d-flex  p-4"
+                   style="color: #7b9cbf; background-color: white">
+                <h6 class="my-auto">{{'Incident.Date' | translate}}</h6>
+                <div class="spacer"></div>
+                <h6 class="my-auto">{{ incidents?.incidentDate | customDate | date: "medium"}}</h6>
+              </div>
+            </div>
+            <div class="col-md-6 mt-2">
+              <div class=" shadow-sm rounded-lg w-100 text-white d-flex  p-4" style="background-color: #127faf">
+                <h6 class="my-auto">{{'Incident.ArriveToLocation' | translate}}</h6>
+                <div class="spacer"></div>
+                <h6 class="my-auto">{{ incidents?.locationReachedDate | customDate | date: "medium" }}</h6>
+              </div>
+            </div>
+            <div class="col-md-6 mt-2">
+              <div class=" shadow-sm rounded-lg w-100 text-white d-flex  p-4" style="background-color: #1ca38a">
+                <h5 class="my-auto">{{ 'Incident.Containment' | translate }}</h5>
+                <div class="spacer"></div>
+                <h5 class="my-auto">{{ incidents?.containedDate | customDate | date: "medium" }}</h5>
+              </div>
+            </div>
+            <div class="col-md-6 mt-2">
+              <div class=" shadow-sm rounded-lg w-100 text-white d-flex  p-4" style="background-color: #f3ac5b">
+                <h6 class="my-auto">{{'Incident.Completed' | translate}}</h6>
+                <div class="spacer"></div>
+                <h6 class="my-auto">{{ incidents?.closedDate | customDate | date: "medium"}}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 h-auto px-4 py-2">
+      <div class="w-100 shadow-sm rounded-lg text-white p-2" style="background-color: #7b9cbf">
+        <h3>{{ incidents?.subject }}</h3>
+        <p>
+          {{ incidents?.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5 px-4" *ngIf="assets$ | async as assets">
+    <div class="col-12">
+      <div class="rounded-lg row bg-white">
+        <div class="card-header px-5 mx-5 border-0">
+          <div class="card-title m-0">
+            <p class="text-dark-50">{{'Incident.MainResources' | translate}}</p>
+          </div>
+          <div class="card-toolbar"></div>
+        </div>
+        <div class="card-body pt-0 col-12">
+          <div class="row">
+            <div class="col-2 mb-2" *ngFor="let item of assets">
+              <div class="shadow-sm rounded-lg p-4 mb-2 border">
+                <div class="mb-3">
+                  <span class="text-muted">
+                    {{ item.asset | propTranslator : 'name' }}
+                  </span>
+                  <!-- <button mat-icon-button>
+                    <i class="ki ki-bold-more-hor"></i>
+                  </button> -->
+                </div>
+                <div class="">
+                  <p class="
+                      text-dark-75 text-hover-primary
+                      font-weight-bolder font-size-h1
+                      m-0
+                    ">
+                    {{ item.quantity }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row h-100 mt-5 px-2 d-flex">
+    <div class="col-4 p-2">
+      <div class="w-100 bg-white shadow-sm rounded-lg p-3" *ngIf="incident$ | async as incident">
+        <app-map [config]="{
+            mapType: 'incident',
+            zoomModel: {
+              referenceId: incident?.id,
+              featureName: incident?.featureName
+            },
+            viewOnly: true,
+            showLayers: false,
+            showLocInfo: false
+          }" [smallSize]="true">
+        </app-map>
+      </div>
+    </div>
+    <div class="col-3 p-2">
+      <div class="h-100 w-100">
+        <app-statistics [statistics]="statistics" *ngIf="statistics" class="h-100"></app-statistics>
+      </div>
+    </div>
+
+    <div class="col-5 p-2">
+      <div class="h-100 w-100">
+        <app-logs [incidentId]="incidentId" *ngIf="incidentId" class="h-100"></app-logs>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+#chart {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+::ng-deep .dark-mode {
+  .labels-bar,
+  .apexcharts-legend-text,
+  .apexcharts-text {
+    fill: var(--text-primary-color) !important;
+    color: var(--text-primary-color) !important;
+  }
+  .apexcharts-menu {
+    background-color: var(--background-primary-color) !important;
+  }
+  .apexcharts-menu-item:hover {
+    background-color: var(--background-secondary-color) !important;
+  }
+}

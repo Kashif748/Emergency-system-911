@@ -1,0 +1,44 @@
+.toggle-theme {
+  transition: all 0.5s;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  background-color: #ebedf3;
+  align-self: center;
+  margin: 0;
+  height: 20px;
+  width: 50px;
+  border-radius: 20px;
+
+  .toggle-icon {
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    left: 0;
+    top: -4px;
+    transition: all 0.5s;
+    border-radius: 20px;
+  }
+
+  .light {
+    left: 0px !important;
+  }
+
+  .dark {
+    left: 25px !important;
+    color: #b18217 !important;
+    background-color: #f3c459 !important;
+  }
+}
+
+.mobile-btn {
+  display: flex !important;
+}
+
+@media (max-width: 991.98px) {
+  
+  :host{
+    height: 65px !important;
+  }
+}
+ 

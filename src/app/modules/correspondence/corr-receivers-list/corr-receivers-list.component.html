@@ -1,0 +1,67 @@
+<!--begin::List Widget 3-->
+<div [dir]="lang == 'ar' ? 'rtl' : 'ltr'" class="card card-custom card-stretch">
+  <!--begin::Header-->
+  <div class="card-header border-0">
+    <h3 class="card-title font-weight-bolder text-dark">
+      {{ "CORRERSPONDENCE.RECEIVERS" | translate }}
+    </h3>
+
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary mr-2"
+      >
+        <i class="flaticon-close"></i>
+      </button>
+    </div>
+  </div>
+  <!--end::Header-->
+  <!--begin::Body-->
+  <div class="card-body p-2">
+    <!--begin::Item-->
+    <div *ngFor="let item of data" class="d-flex align-items-center mb-7">
+      <!--begin::Symbol-->
+      <div class="symbol symbol-40 symbol-light-primary mr-2 ml-2">
+        <span class="symbol-label">
+          <span class="symbol-label font-size-h5 font-weight-bold">
+            {{ item?.toNameEn | firstLetter }}
+          </span>
+        </span>
+      </div>
+      <!--end::Symbol-->
+      <!--begin::Text-->
+      <div
+        *ngIf="lang == 'en'"
+        class="d-flex flex-column flex-grow-1 font-weight-bold"
+      >
+        <p href="#" class="text-dark mb-1 font-size-lg">
+          {{ item?.toNameEn }}
+        </p>
+        <span class="text-muted"> {{ item?.toNameAr }}</span>
+      </div>
+      <div
+        *ngIf="lang == 'ar'"
+        class="d-flex flex-column flex-grow-1 font-weight-bold"
+      >
+        <p class="text-dark mb-1 font-size-lg">
+          {{ item?.toNameAr }}
+        </p>
+        <span class="text-muted"> {{ item?.toNameEn }}</span>
+      </div>
+
+      <span
+        class="label label-lg label-light-primary label-inline font-weight-bold p-1"
+        [ngClass]="{
+          'label-light-primary': item.status.id !== 1,
+          'label-light-warning': item.status.id === 1
+        }"
+      >
+        {{ item?.status?.name }}</span
+      >
+      <!--end::Text-->
+    </div>
+    <!--end::Item-->
+  </div>
+  <!--end::Body-->
+</div>
+<!--end::List Widget 3-->

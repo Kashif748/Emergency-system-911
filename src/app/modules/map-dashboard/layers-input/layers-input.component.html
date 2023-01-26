@@ -1,0 +1,19 @@
+<mat-form-field class="w-100" appearance="{{appearance}}">
+  <mat-label>{{ label }}</mat-label>
+  <mat-chip-list #chipList aria-label="layer selection">
+    <mat-chip *ngFor="let item of selectedLayers" [value]="item.value" [selectable]="selectable" [removable]="removable"
+      (removed)="remove(item.value)">{{
+      item.text | translate
+      }}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+
+    <input [disabled]="disabled" [matChipInputAddOnBlur]="false" placeholder="{{ placeholder }}" #layerInput
+      [formControl]="control" [matAutocomplete]="auto" [matChipInputFor]="chipList">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option [disabled]="disabled" *ngFor="let layer of remainingLayers" [value]="layer.value">
+      {{layer.text | translate}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

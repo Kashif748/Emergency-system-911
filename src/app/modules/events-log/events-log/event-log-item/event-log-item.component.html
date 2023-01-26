@@ -1,0 +1,63 @@
+<div class="timeline-media">
+  <span class="symbol symbol-45 symbol-circle mx-2 symbol-light-primary">
+    <span class="symbol-label font-size-h5 font-weight-bold">
+      {{ item.createdBy?.orgStructure?.nameEn | firstLetter }}
+    </span>
+  </span>
+</div>
+<div class="timeline-content px-3">
+  <div class="d-flex align-items-center justify-content-between mb-5">
+    <div class="m-0">
+      <p
+        class="text-dark-75 text-hover-primary font-weight-bold d-inline-block m-0"
+      >
+        <span class="label label-xl label-light-primary">
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/General/User.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md svg-icon-primary"
+          ></span>
+        </span>
+
+        <span *ngIf="lang == 'en'" class="mx-2">
+          {{ item.createdBy?.firstNameEn }} ;
+          {{ item.createdBy?.lastNameEn }}
+        </span>
+
+        <span *ngIf="lang == 'ar'" class="mx-2">
+          {{ item.createdBy?.firstNameAr }} {{ item.createdBy?.lastNameAr }}
+        </span>
+      </p>
+      <span class="text-muted mx-2">
+        {{ item["createdOn"] | customDate }}
+      </span>
+
+      <span
+        class="label font-weight-bolder label-inline ml-2"
+        [ngClass]="{
+          'label-light-success': item['isPublic'],
+          'label-light-danger': !item['isPublic']
+        }"
+      >
+        <span *ngIf="item['isPublic']">
+          {{ "EVENT_LOG.PUBLIC" | translate }}</span
+        >
+        <span *ngIf="!item['isPublic']">
+          {{ "EVENT_LOG.PRIVATE" | translate }}</span
+        >
+      </span>
+    </div>
+    <span
+      class="label font-weight-bold label-inline ml-2 label-rounded label-outline-primary h-auto"
+    >
+      <span *ngIf="lang == 'en'">
+        {{ item.createdBy?.orgStructure?.nameEn }}
+      </span>
+
+      <span *ngIf="lang == 'ar'">
+        {{ item.createdBy?.orgStructure?.nameAr }}
+      </span>
+    </span>
+  </div>
+  <p class="p-0">{{ item["notes"] }}</p>
+</div>

@@ -1,0 +1,587 @@
+<div class="card card-custom gutter-b">
+  <div class="card-header d-flex">
+    <mat-toolbar class="bg-white">
+      <div>
+        <button
+          [routerLink]="['/daily-management/list']"
+          class="
+            btn btn-sm btn-light-primary
+            font-weight-bolder
+            cursor-pointer
+            mx-2
+          "
+          matTooltip="{{ 'SHARED.BACK' | translate }}"
+        >
+          <span
+            inlineSVG="{{
+              lang == 'en'
+                ? '/assets/media/svg/icons/Navigation/Arrow-left.svg'
+                : '/assets/media/svg/icons/Navigation/Arrow-right.svg'
+            }}"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+            title="{{ 'SHARED.BACK' | translate }}"
+          ></span>
+        </button>
+      </div>
+      <h3 class="card-label">{{ "DAILY_BREVITY.HEADER" | translate }}</h3>
+
+      <div class="spacer"></div>
+      <div dir="ltr" class="btn-group float-btn-group" role="group">
+        <button
+          (click)="accordion.closeAll(); openAll = false"
+          type="button"
+          class="btn {{ openAll ? '' : 'active' }} btn-light-primary"
+        >
+          {{ "SHARED.EXPANSION_PANEL.CLOSE_ALL" | translate }}
+        </button>
+        <button
+          (click)="accordion.openAll(); openAll = true"
+          type="button"
+          class="btn {{ openAll ? 'active' : '' }} btn-light-primary"
+        >
+          {{ "SHARED.EXPANSION_PANEL.OPEN_ALL" | translate }}
+        </button>
+      </div>
+    </mat-toolbar>
+  </div>
+
+  <div class="card-body">
+    <form class="mb-5" [formGroup]="form">
+      <mat-accordion #accordion="matAccordion" multi>
+        <mat-expansion-panel class="mb-5">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <h4>
+                {{ "DAILY_REPORT.CITY_SECURITY.HEADER" | translate }}
+              </h4>
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+                            {{'DAILY_REPORT.CITY_SECURITY.DESC' | translate }}
+                            <mat-icon>security</mat-icon>
+                        </mat-panel-description> -->
+          </mat-expansion-panel-header>
+          <!-- dailySumariesReportCitySecurity -->
+
+          <div
+            #citySecurityForm
+            [scrollTop]="citySecurityForm.scrollHeight"
+            formArrayName="dailySumariesReportCitySecurity"
+          >
+            <div
+              class="row border rounded my-3 py-3 bg-white shadow-sm"
+              *ngFor="
+                let _ of dailySumariesReportCitySecurity.controls;
+                let i = index
+              "
+            >
+              <div class="col-12" [formGroupName]="i">
+                <div class="row d-flex" formGroupName="city">
+                  <div class="col-12">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      [appearance]="appearance"
+                    >
+                      <mat-label
+                        >{{
+                          "DAILY_REPORT.CITY_SECURITY.CITY.LABEL" | translate
+                        }}
+                      </mat-label>
+                      <mat-select formControlName="id" required>
+                        <mat-option
+                          *ngFor="let city of cities$ | async"
+                          [value]="city.id"
+                        >
+                          {{ lang =="en" ? city.nameEn : city.nameAr  }}
+                        </mat-option>
+                      </mat-select>
+
+                      <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      [appearance]="appearance"
+                    >
+                      <mat-label
+                        >{{
+                          "DAILY_REPORT.CITY_SECURITY.DESCRIPTION.LABEL"
+                            | translate
+                        }}
+                      </mat-label>
+                      <textarea
+                        matInput
+                        rows="7"
+                        formControlName="description"
+                        required
+                      ></textarea>
+
+                      <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row" *ngIf="Report?.status?.id != 2">
+                  <div class="col-6 text-center">
+                    <button
+                      [disabled]="
+                        dailySumariesReportCitySecurity.controls.length <= 1
+                      "
+                      class="
+                        text-center
+                        btn
+                        w-md-50
+                        btn-md btn-light-danger
+                        font-weight-bolder
+                        py-2
+                        px-5
+                        cursor-pointer
+                      "
+                      (click)="removeCitySecurity(i)"
+                    >
+                      {{ "ACTIONS.DELETE" | translate }}
+                      <span
+                        [inlineSVG]="
+                          '/assets/media/svg/icons/General/Trash.svg'
+                        "
+                        cacheSVG="true"
+                        class="svg-icon svg-icon-md"
+                        title="Delete"
+                      ></span>
+                    </button>
+                  </div>
+                  <div class="col-6 text-center">
+                    <button
+                      class="
+                        btn btn-md
+                        w-md-50
+                        btn-light-primary
+                        font-weight-bolder
+                        py-2
+                        px-5
+                        cursor-pointer
+                      "
+                      (click)="addCitySecurity()"
+                    >
+                      {{ "ACTIONS.NEW_SECTION" | translate }}
+                      <span
+                        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+                        cacheSVG="true"
+                        class="svg-icon svg-icon-md"
+                        title="Add"
+                      ></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="mb-5">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <h4>
+                {{ "DAILY_REPORT.REPORT_NEWS.HEADER" | translate }}
+              </h4>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div
+            #reportNewsForm
+            [scrollTop]="reportNewsForm.scrollHeight"
+            formArrayName="dailySummariesReportNews"
+          >
+            <div
+              class="row border rounded my-3 py-3 bg-white shadow-sm"
+              *ngFor="let _ of dailySummariesReportNews.controls; let i = index"
+            >
+              <div class="col-12" [formGroupName]="i">
+                <!-- news -->
+                <!-- <div class="row" formGroupName="news">
+                                    <div class="col-12">
+                                        <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" [appearance]="appearance">
+                                            <mat-label>{{'DAILY_REPORT.REPORT_NEWS.NEWS.LABEL' | translate}}
+                                            </mat-label>
+                                            <mat-select formControlName="id" required>
+                                                <mat-option [value]="154">None</mat-option>
+
+                                                <mat-option *ngFor="let city of cities$ | async" [value]="city.id">
+                                                    {{city.nameAr || city.nameEn}}
+                                                </mat-option>
+                                            </mat-select>
+
+                                            <mat-error>
+                                                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div> -->
+                <!-- newtype -->
+                <div class="row" formGroupName="newtype">
+                  <div class="col-12">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      [appearance]="appearance"
+                    >
+                      <mat-label
+                        >{{
+                          "DAILY_REPORT.REPORT_NEWS.NEWS_TYPE.LABEL" | translate
+                        }}
+                      </mat-label>
+                      <mat-select formControlName="id" required>
+                        <!-- <mat-option [value]="1">None</mat-option> -->
+                        <mat-option
+                          *ngFor="let type of newsTypes"
+                          [value]="type.id"
+                        >
+                          {{ lang == "ar" ? type.nameAr : type.nameEn }}
+                        </mat-option>
+                      </mat-select>
+
+                      <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- news -->
+                <div class="row" formGroupName="news">
+                  <div class="col-12">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      [appearance]="appearance"
+                    >
+                      <mat-label
+                        >{{ "DAILY_REPORT.REPORT_NEWS.NEWS.LABEL" | translate }}
+                      </mat-label>
+                      <mat-select formControlName="id">
+                        <mat-option
+                          *ngFor="let type of news$ | async"
+                          [value]="type.id"
+                        >
+                          {{ type.title }}
+                        </mat-option>
+                      </mat-select>
+
+                      <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- description -->
+                <div class="row">
+                  <div class="col-12">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      [appearance]="appearance"
+                    >
+                      <mat-label
+                        >{{
+                          "DAILY_REPORT.CITY_SECURITY.DESCRIPTION.LABEL"
+                            | translate
+                        }}
+                      </mat-label>
+                      <textarea
+                        matInput
+                        rows="7"
+                        formControlName="description"
+                        required
+                      ></textarea>
+
+                      <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row" *ngIf="Report?.status?.id != 2">
+                  <div class="col-6 text-center">
+                    <button
+                      [disabled]="dailySummariesReportNews.controls.length <= 1"
+                      class="
+                        text-center
+                        btn
+                        w-md-50
+                        btn-md btn-light-danger
+                        font-weight-bolder
+                        py-2
+                        px-5
+                        cursor-pointer
+                      "
+                      (click)="removeReportNews(i)"
+                    >
+                      {{ "ACTIONS.DELETE" | translate }}
+                      <span
+                        [inlineSVG]="
+                          '/assets/media/svg/icons/General/Trash.svg'
+                        "
+                        cacheSVG="true"
+                        class="svg-icon svg-icon-md"
+                        title="Delete"
+                      ></span>
+                    </button>
+                  </div>
+                  <div class="col-6 text-center">
+                    <button
+                      class="
+                        btn btn-md
+                        w-md-50
+                        btn-light-primary
+                        font-weight-bolder
+                        py-2
+                        px-5
+                        cursor-pointer
+                      "
+                      (click)="addReportNews()"
+                    >
+                      {{ "ACTIONS.NEW_SECTION" | translate }}
+                      <span
+                        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+                        cacheSVG="true"
+                        class="svg-icon svg-icon-md"
+                        title="Add"
+                      ></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="mb-5">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <h4>
+                {{ "DAILY_REPORT.REPORT_OPERATINAL.HEADER" | translate }}
+              </h4>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div #reportOptForm formArrayName="dailySumariesReportOpt">
+            <div
+              class="row border rounded my-3 py-3 bg-white shadow-sm"
+              *ngFor="let _ of dailySumariesReportOpt.controls; let i = index"
+            >
+              <div class="col-12" [formGroupName]="i">
+                <!-- Operatianl Report Type -->
+                <div class="row" formGroupName="dailySumariesReportOptType">
+                  <div class="col-md">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      [appearance]="appearance"
+                    >
+                      <mat-label
+                        >{{
+                          "DAILY_REPORT.REPORT_OPERATINAL.TYPE.LABEL"
+                            | translate
+                        }}
+                      </mat-label>
+                      <mat-select formControlName="id" required>
+                        <mat-option
+                          *ngFor="let type of optTypes"
+                          [value]="type.id"
+                        >
+                          {{ lang == "ar" ? type.nameAr : type.nameEn }}
+                        </mat-option>
+                      </mat-select>
+
+                      <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!-- description -->
+                <div class="row">
+                  <div class="col-12">
+                    <mat-form-field
+                      [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                      [appearance]="appearance"
+                    >
+                      <mat-label
+                        >{{
+                          "DAILY_REPORT.CITY_SECURITY.DESCRIPTION.LABEL"
+                            | translate
+                        }}
+                      </mat-label>
+                      <textarea
+                        matInput
+                        rows="7"
+                        formControlName="description"
+                        required
+                      ></textarea>
+
+                      <mat-error>
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div
+                    class="col-6 text-center"
+                    *ngIf="Report?.status?.id != 2"
+                  >
+                    <button
+                      [disabled]="dailySumariesReportOpt.controls.length <= 1"
+                      class="
+                        text-center
+                        btn
+                        w-md-50
+                        btn-md btn-light-danger
+                        font-weight-bolder
+                        py-2
+                        px-5
+                        cursor-pointer
+                      "
+                      (click)="removeReportOpt(i)"
+                    >
+                      {{ "ACTIONS.DELETE" | translate }}
+                      <span
+                        [inlineSVG]="
+                          '/assets/media/svg/icons/General/Trash.svg'
+                        "
+                        cacheSVG="true"
+                        class="svg-icon svg-icon-md"
+                        title="Delete"
+                      ></span>
+                    </button>
+                  </div>
+                  <div class="col-6 text-center">
+                    <button
+                      class="
+                        btn
+                        w-md-50
+                        btn-md btn-light-primary
+                        font-weight-bolder
+                        py-2
+                        px-5
+                        cursor-pointer
+                      "
+                      (click)="addReportOpt()"
+                    >
+                      {{ "ACTIONS.NEW_SECTION" | translate }}
+                      <span
+                        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+                        cacheSVG="true"
+                        class="svg-icon svg-icon-md"
+                        title="Add"
+                      ></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="mb-5">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <h4>
+                {{ "DAILY_REPORT.STATISTICS.HEADER" | translate }}
+              </h4>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row" *ngIf="Report?.status?.id != 2">
+            <div class="col-md-6 uploader">
+              <angular-file-uploader
+                #fileUploader
+                [config]="afuConfig"
+                class="col-12"
+                (ApiResponse)="attUploaded($event)"
+              >
+              </angular-file-uploader>
+            </div>
+            <div class="col-md-6">
+              <div *ngIf="id" class="row border rounded my-4">
+                <div class="col-12 pt-1">
+                  <h5>
+                    {{ "DAILY_REPORT.STATISTICS.ATTACHMENTS" | translate }}
+                  </h5>
+                  <h4 class="mt-3" *ngIf="attachments?.length == 0">
+                    {{ "DAILY_REPORT.STATISTICS.NO_ATTACHMENTS" | translate }}
+                  </h4>
+                  <div *ngFor="let att of attachments">
+                    {{ att.fileName }}
+                    <a
+                      mat-icon-button
+                      (click)="download(att)"
+                      app-throttle-click
+                      [ThrottleTime]="2000"
+                    >
+                      <mat-icon>download</mat-icon>
+                    </a>
+                    <mat-divider></mat-divider>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+
+    <!-- actions -->
+    <div class="row m-auto mt-4">
+      <div *ngIf="!!id && Report?.status?.id == 1" class="col-6 text-center">
+        <button
+          mat-stroked-button
+          class="w-md-50"
+          color="primary"
+          (click)="archive()"
+        >
+          {{ "ACTIONS.SEND_ARCHIVE" | translate }}
+        </button>
+      </div>
+
+      <div *ngIf="id" class="col-6 text-center">
+        <button
+          *ngIf="!!id && Report?.status?.id == 1"
+          mat-stroked-button
+          class="w-md-50"
+          color="warn"
+          [disabled]="!form.valid"
+          (click)="onSubmit()"
+        >
+          {{ "ACTIONS.UPDATE" | translate }}
+        </button>
+      </div>
+
+      <div class="col-12 text-center">
+        <button
+          *ngIf="!id"
+          mat-stroked-button
+          class="w-md-50"
+          color="primary"
+          (click)="onSubmit()"
+          [disabled]="!form.valid"
+        >
+          {{ "SHARED.SAVE" | translate }}
+        </button>
+      </div>
+
+      <div class="col-12 text-center">
+        <button
+          *ngIf="!!id && Report?.status?.id == 2"
+          mat-stroked-button
+          class="w-md-50"
+          color="primary"
+          (click)="review()"
+          [disabled]="!form.valid"
+        >
+          {{ "ACTIONS.REVIEW" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

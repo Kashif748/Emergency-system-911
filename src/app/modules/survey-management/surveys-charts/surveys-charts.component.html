@@ -1,0 +1,40 @@
+<div class="container d-flex w-100 pb-8 px-0">
+  <div class="w-50 min-h-350px">
+    <div class="card h-100">
+      <div *ngIf="loading" class="spinner-container m-auto p-10">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+      <apx-chart
+        *ngIf="!loading"
+        style="width: fit-content; margin: auto"
+        [series]="chartOptions_H.series"
+        [chart]="chartOptions_H.chart"
+        [labels]="chartOptions_H.labels"
+        [legend]="chartOptions_H.legend"
+        [tooltip]="chartOptions_H.tooltip"
+      ></apx-chart>
+    </div>
+  </div>
+  <div class="d-block w-30px"></div>
+  <div class="w-50 min-h-350px" dir="ltr">
+    <div class="card h-100">
+      <div *ngIf="loading" class="spinner-container m-auto p-10">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+      <apx-chart
+        *ngIf="!loading"
+        [series]="chartOptions_R.series"
+        [chart]="chartOptions_R.chart"
+        [dataLabels]="chartOptions_R.dataLabels"
+        [plotOptions]="chartOptions_R.plotOptions"
+        [yaxis]="chartOptions_R.yaxis"
+        [xaxis]="chartOptions_R.xaxis"
+        [stroke]="chartOptions_R.stroke"
+        [grid]="chartOptions_R.grid"
+        [fill]="chartOptions_R.fill"
+        [annotations]="chartOptions_R.annotations"
+        [tooltip]="chartOptions_R.tooltip"
+      ></apx-chart>
+    </div>
+  </div>
+</div>

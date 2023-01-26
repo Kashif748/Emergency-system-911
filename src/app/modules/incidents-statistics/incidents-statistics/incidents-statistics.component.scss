@@ -1,0 +1,41 @@
+.default-date-hint {
+  flex: auto;
+  margin: 0 !important;
+  font-style: italic;
+}
+:host {
+  mat-button-toggle-group {
+    width: 100%;
+    padding: 4px;
+    border-radius: 10px !important;
+    gap: 5px;
+    mat-button-toggle {
+      flex: auto;
+      border: none !important;
+      border-radius: 10px !important;
+      overflow: hidden;
+    }
+    .mat-button-toggle-checked {
+      background-color: #3699ff !important;
+      color: white !important;
+      font-weight: bold;
+      i {
+        color: white;
+      }
+    }
+  }
+  ::ng-deep {
+    .mat-button-toggle-label-content {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      i {
+        display: flex;
+        padding: 0 5px;
+      }
+    }
+    .mat-button-toggle-focus-overlay {
+      border: none !important;
+    }
+  }
+}

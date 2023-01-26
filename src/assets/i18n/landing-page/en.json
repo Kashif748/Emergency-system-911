@@ -1,0 +1,16 @@
+{
+  "LANDING": {
+    "About": "About",
+    "Features": "features",
+    "Modules": "Modules",
+    "Partners": "Partners",
+    "ResearchColleges": "Research Colleges",
+    "Statistics": "Statistics",
+    "Contact": "Contact Us",
+    "Login": "Login",
+    "title": "منصة  إدارة  الطوارئ  والأزمات ",
+    "subtitle":" منظومة حكومية موحدة وشاملة بين البلديات والجهات الحكومية المختلفة لادارة البلاغات والطوارئ اليومية على المستوى المؤسسي",
+     "platform_sections" :"Platform Sections",
+       "platform_sections_desc" : "الانظمة الداخلية المدرجة في المنصة لتغطية احتياجات الجهات كاملة من جاهزية واستعداد الى استجابة وتعافي"
+  }
+}

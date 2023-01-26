@@ -1,0 +1,239 @@
+<div class="container-fluid">
+  <div
+    class="
+      py-4
+      my-3
+      d-flex
+      align-item-center
+      justify-content-center
+      align-items-center
+    "
+  >
+    <button
+      (click)="back()"
+      class="btn btn-link-primary btn-sm font-weight-bold cursor-pointer mx-4"
+      matTooltip="{{ 'SHARED.BACK' | translate }}"
+    >
+      <span
+        inlineSVG="{{
+          lang == 'en'
+            ? '/assets/media/svg/icons/Navigation//Angle-left.svg'
+            : '/assets/media/svg/icons/Navigation//Angle-right.svg'
+        }}"
+        cacheSVG="true"
+        class="svg-icon svg-icon-2x"
+        title="{{ 'SHARED.BACK' | translate }}"
+      ></span>
+    </button>
+    <h2 class="card-title m-0 d-flex align-items-center">
+      {{ "AVAILABILITY.title" | translate }}
+    </h2>
+    <div class="spacer"></div>
+    <h5 class="m-0 label label-primary label-inline">
+      {{ "AVAILABILITY.activeShift" | translate }} :
+      <span>{{ getActiveShift() }}</span>
+    </h5>
+  </div>
+
+  <div class="d-flex flex-row">
+    <div
+      class="flex-row-auto offcanvas-mobile w-200px w-xxl-275px side-menu"
+      id="kt_inbox_aside"
+    >
+      <!--begin::Card-->
+      <div class="card card-custom card-stretch">
+        <!--begin::Body-->
+        <div class="card-body px-3 pt-0">
+          <!--begin::Navigations-->
+
+          <h5 class="m-0 p-3 d-flex font-weight-normal align-items-center">
+            {{ "AVAILABILITY.chooseArea" | translate }}
+          </h5>
+
+          <perfect-scrollbar style="max-width: 600px; max-height: 550px">
+            <div
+              class="
+                navi navi-hover navi-active navi-link-rounded navi-bold
+                scroll scroll-pull
+              "
+              perfectScrollbar
+              data-scroll="true"
+              data-wheel-propagation="true"
+            >
+              <!--begin::Item-->
+              <div
+                *ngFor="let area of availabilityList; let i = index"
+                (click)="changeCurrentTab(area)"
+                class="navi-item my-4 cursor-pointer"
+              >
+                <div>
+                  <ng-container>
+                    <a
+                      class="navi-link border px-1"
+                      [class]="area.area == currentTab ? 'active' : ''"
+                    >
+                      <span class="navi-text font-weight-bold font-size-md">{{
+                        area.area | translate
+                      }}</span>
+                    </a>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </perfect-scrollbar>
+
+          <!--end::Navigations-->
+        </div>
+        <!--end::Body-->
+      </div>
+      <!--end::Card-->
+    </div>
+
+    <div
+      class="card card-custom flex-row-fluid d-block"
+      [class]="lang == 'en' ? 'ml-7' : 'mr-7'"
+    >
+      <div class="h-100">
+        <div class="d-flex flex-column list-content">
+          <div [dir]="lang === 'en' ? 'ltr' : 'rtl'" class="w-100">
+            <div class="card card-custom card-stretch px-4 shadow-none">
+              <!-- Body -->
+              <div class="card-body px-0 pt-0">
+                <ng-container *ngTemplateOutlet="area"></ng-container>
+
+                <button
+                  *ngIf="false"
+                  class="btn btn-primary font-weight-bold cursor-pointer mt-10"
+                >
+                  {{ "AVAILABILITY.newReport" | translate }}
+                  <span
+                    [inlineSVG]="'/assets/media/svg/icons/Files/File-plus.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md"
+                  ></span>
+                </button>
+
+                <button
+                  (click)="proccessReport()"
+                  class="btn btn-primary font-weight-bold cursor-pointer mt-10"
+                >
+                  {{ "AVAILABILITY.updateShifts" | translate }}
+                  <span
+                    [inlineSVG]="'/assets/media/svg/icons/Code/Git4.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md"
+                  ></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sector Template  (tables) -->
+<ng-template #area>
+  <mat-tab-group class="min-h-400px" dynamicHeight>
+    <mat-tab
+      [label]="sector.key"
+      *ngFor="let sector of areaSectors$ | async | keyvalue"
+    >
+      <app-area-chart [sector]="sector.value"></app-area-chart>
+      <table
+        class="
+          table
+          table
+          table-head-custom
+          table-head-bg
+          table-borderless
+          table-vertical-center
+        "
+      >
+        <thead>
+          <tr>
+            <th scope="col">{{ "AVAILABILITY.org" | translate }}</th>
+            <th scope="col">{{ "AVAILABILITY.frequency" | translate }}</th>
+            <th scope="col" class="text-center">
+              {{ "AVAILABILITY.primary" | translate }}
+            </th>
+            <th scope="col" class="text-center">
+              {{ "AVAILABILITY.shift1" | translate }}
+            </th>
+            <th scope="col" class="text-center">
+              {{ "AVAILABILITY.shift2" | translate }}
+            </th>
+            <th scope="col" class="text-center">
+              {{ "AVAILABILITY.shift3" | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let org of sector.value">
+            <td scope="row">{{ org.orgNameAr }}</td>
+            <td>{{ org.orgFrequency }}</td>
+            <td class="text-center">
+              <span class="svg-icon svg-icon-md">
+                <span
+                  [inlineSVG]="
+                    './assets/media/svg/icons/' +
+                    (true ? 'Code/Done-circle' : 'Code/Error-circle') +
+                    '.svg'
+                  "
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-lg"
+                ></span>
+              </span>
+            </td>
+            <td class="text-center">
+              <!-- selection template -->
+              <ng-container
+                [ngTemplateOutlet]="selectShift"
+                [ngTemplateOutletContext]="{ org: org, shiftNo: 'shift1' }"
+              ></ng-container>
+            </td>
+            <td class="text-center">
+              <!-- selection template -->
+              <ng-container
+                [ngTemplateOutlet]="selectShift"
+                [ngTemplateOutletContext]="{ org: org, shiftNo: 'shift2' }"
+              ></ng-container>
+            </td>
+            <td class="text-center">
+              <!-- selection template -->
+              <ng-container
+                [ngTemplateOutlet]="selectShift"
+                [ngTemplateOutletContext]="{ org: org, shiftNo: 'shift3' }"
+              ></ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template>
+
+<!-- selection  shift value  -->
+<ng-template #selectShift let-org="org" let-shiftNo="shiftNo">
+  <mat-select
+    *ngIf="this.activeShift != shiftNo"
+    [disabled]="true"
+    [value]="0"
+    class="border"
+  >
+    <mat-option [value]="0">
+      {{ "AVAILABILITY.wait" | translate }}
+    </mat-option>
+  </mat-select>
+  <mat-select
+    *ngIf="this.activeShift == shiftNo"
+    [class]="shiftsValues[org[shiftNo]].color"
+    (selectionChange)="changeShift($event, org, shiftNo)"
+    [(value)]="org[shiftNo]"
+  >
+    <mat-option *ngFor="let shift of shiftsValues; let m = index" [value]="m">
+      {{ "AVAILABILITY." + shift.title | translate }}
+    </mat-option>
+  </mat-select>
+</ng-template>

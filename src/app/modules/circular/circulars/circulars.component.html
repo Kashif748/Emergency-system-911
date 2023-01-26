@@ -1,0 +1,221 @@
+<div class="mat-elevation-z8 container">
+  <mat-toolbar class="bg-white p-0 border-bottom">
+    <app-breadcrumbs></app-breadcrumbs>
+    <div class="spacer"></div>
+    <button
+      *appPrivileges="'PRIV_CR_CIRC'"
+      class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+      routerLink="add"
+      routerLinkActive="active"
+    >
+      {{ "CIRCULARS.NEW_ITEM" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </mat-toolbar>
+
+  <div class="row mt-5">
+    <mat-form-field appearance="fill" class="col-12">
+      <mat-label>{{ "ACTIONS.FILTER_PLACEHOLDER" | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input />
+      <mat-icon matSuffix color="primary">search</mat-icon>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="table-container table-responsive">
+        <table
+          matSort
+          (matSortChange)="customSort($event)"
+          class="
+            table
+            table-head-custom
+            table-head-bg
+            table-borderless
+            table-vertical-center
+          "
+        >
+          <thead>
+            <tr>
+              <!-- 1 -->
+              <th mat-sort-header="number">
+                {{ "CIRCULARS.NUMBER" | translate }}
+              </th>
+              <!-- 2 -->
+              <th mat-sort-header="confidentialty">
+                {{ "CIRCULARS.CONFIDENTIALITY" | translate }}
+              </th>
+              <!-- 3 -->
+              <th mat-sort-header="date">
+                {{ "CIRCULARS.Date" | translate }}
+              </th>
+              <!-- 4 -->
+              <th mat-sort-header="priority">
+                {{ "CORRERSPONDENCE.PRIORITY" | translate }}
+              </th>
+              <!-- 5 -->
+              <th mat-sort-header="status">
+                {{ "CIRCULARS.STATUS" | translate }}
+              </th>
+              <!-- 6 -->
+              <th mat-sort-header="receivers">
+                {{ "CIRCULARS.RECEIVERS" | translate }}
+              </th>
+              <!-- 7 -->
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let row of dataSource.filteredData | paginate: paginationConfig
+              "
+            >
+              <!-- 1 -->
+              <td>
+                <span class="font-weight-bold">{{ row.number }}</span>
+              </td>
+              <!-- 2 -->
+              <td>
+                <span
+                  class="label label-lg label-light-{{
+                    row.confidentialty?.id == 2
+                      ? 'danger'
+                      : row.confidentialty?.id == 1
+                      ? 'warning'
+                      : 'primary'
+                  }} label-inline"
+                >
+                  <span *ngIf="lang == 'en'">
+                    {{
+                      getConfidentialty(row["confidentialty"])["nameEn"] ||
+                        ("CIRCULARS.NO_VALUE" | translate)
+                    }}
+                  </span>
+                  <span *ngIf="lang == 'ar'">
+                    {{
+                      getConfidentialty(row["confidentialty"])["nameAr"] ||
+                        ("CIRCULARS.NO_VALUE" | translate)
+                    }}
+                  </span>
+                </span>
+              </td>
+              <!-- 3 -->
+              <td>
+                {{ row.date | customDate | date: "yyyy/M/dd" }}
+              </td>
+              <!-- 4 -->
+              <td>
+                <span
+                  class="{{
+                    'label label-lg label-light-' +
+                      priorities[row.priority.id]?.color +
+                      ' label-inline'
+                  }}"
+                >
+                  {{ priorities[row.priority.id] | propTranslator: "name" }}
+                </span>
+              </td>
+              <!-- 5 -->
+              <td>
+                <span
+                  *ngIf="lang === 'ar'"
+                  class="label label-lg label-light-primary label-inline"
+                >
+                  {{ getCircularStatus(row["status"])["nameAr"] }}
+                </span>
+                <span
+                  *ngIf="lang === 'en'"
+                  class="label label-lg label-light-primary label-inline"
+                >
+                  {{ getCircularStatus(row["status"])["nameEn"] }}
+                </span>
+              </td>
+              <!-- 6 -->
+              <td>
+                <button class="btn btn-sm" (click)="openModal(row)">
+                  <span class="label label-lg label-inline">
+                    {{ "CIRCULARS.VIEW" | translate }}
+                  </span>
+                </button>
+              </td>
+              <!-- 7 -->
+              <td>
+                <ng-container *appPrivileges="'PRIV_APRV_CIRC'">
+                  <button
+                    *ngIf="[1, 2, 8, 6].includes(row?.status.id)"
+                    class="btn btn-sm btn-clean btn-icon mr-1"
+                    [routerLink]="['edit', row.id]"
+                    matTooltip="{{ 'CIRCULARS.UPDATE' | translate }}"
+                  >
+                    <span
+                      [inlineSVG]="'./assets/media/svg/icons/Design/Edit.svg'"
+                      cacheSVG="true"
+                      class="svg-icon svg-icon-md svg-icon-primary"
+                    ></span>
+                  </button>
+                </ng-container>
+
+                <!--  this  is Send   to  aprroval   action  status  : [1,2]    -->
+                <button
+                  *ngIf="row?.status.id == 2 || row?.status.id == 1"
+                  class="btn btn-sm btn-clean btn-icon mr-1"
+                  (click)="sendCircular(row)"
+                  matTooltip="{{ 'CIRCULARS.SEND' | translate }}"
+                >
+                  <span
+                    [inlineSVG]="
+                      '/assets/media/svg/icons/Communication/Sending mail.svg'
+                    "
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md svg-icon-primary"
+                  ></span>
+                </button>
+
+                <!--  this  is Review   to  aprroval   action  status  : always    -->
+                <button
+                  class="btn btn-sm btn-clean btn-icon mr-1"
+                  (click)="review(row?.id)"
+                  matTooltip="{{ 'CIRCULARS.REVIEW' | translate }}"
+                >
+                  <span
+                    [inlineSVG]="'/assets/media/svg/icons/Files/Download.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md svg-icon-primary"
+                  ></span>
+                </button>
+
+                <!--  this  is Publish   to  aprroval   action  status  :  3   -->
+                <button
+                  *ngIf="row?.status.id == 3"
+                  class="btn btn-sm btn-clean btn-icon mr-1"
+                  (click)="publish(row.id)"
+                  matTooltip="{{ 'CIRCULARS.PUBLISH' | translate }}"
+                >
+                  <span
+                    [inlineSVG]="'./assets/media/svg/icons/Devices/LTE2.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md svg-icon-primary"
+                  ></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="spinner-container m-auto p-10" *ngIf="loading$ | async">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+        <pagination-controls
+          previousLabel="Prev"
+          nextLabel="Next"
+          responsive="true"
+          id="paging"
+          (pageChange)="pageChanged($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

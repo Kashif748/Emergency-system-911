@@ -1,0 +1,14 @@
+<div class="container d-flex w-100 pb-8 px-0">
+  <div class="w-100 min-h-350px" dir="ltr">
+    <div class="card h-100">
+      <div *ngIf="loading" class="spinner-container m-auto p-10">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+      <apx-chart *ngIf="!loading" [series]="chartOptions_R.series" [chart]="chartOptions_R.chart"
+        [plotOptions]="chartOptions_R.plotOptions" [yaxis]="chartOptions_R.yaxis" [xaxis]="chartOptions_R.xaxis"
+        [stroke]="chartOptions_R.stroke" [grid]="chartOptions_R.grid" [fill]="chartOptions_R.fill"
+        [annotations]="chartOptions_R.annotations" [tooltip]="chartOptions_R.tooltip"></apx-chart>
+
+    </div>
+  </div>
+</div>

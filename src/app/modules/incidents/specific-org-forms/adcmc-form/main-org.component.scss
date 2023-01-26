@@ -1,0 +1,227 @@
+@import url("https://js.arcgis.com/4.10/esri/css/main.css");
+
+.example-container {
+  // height: 500px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.example-sidenav-content {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  user-select: none;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.menu-button {
+  transition: 300ms ease-in-out;
+  transform: rotate(0deg);
+}
+
+.menu-button.rotated {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  overflow-y: hidden;
+  transition: transform 300ms ease;
+  transform: scaleY(0);
+  transform-origin: top;
+  padding-left: 30px;
+}
+
+.submenu.expanded {
+  transform: scaleY(1);
+}
+
+.status {
+  &.open:before {
+    background-color: #94e185;
+    border-color: #78d965;
+    box-shadow: 0px 0px 4px 1px #94e185;
+  }
+
+  &.in-progress:before {
+    background-color: #ffc182;
+    border-color: #ffb161;
+    box-shadow: 0px 0px 4px 1px #ffc182;
+  }
+
+  &.dead:before {
+    background-color: #c9404d;
+    border-color: #c42c3b;
+    box-shadow: 0px 0px 4px 1px #c9404d;
+  }
+
+  &:before {
+    content: " ";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 10px;
+    border: 1px solid #000;
+    border-radius: 7px;
+  }
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fill-space {
+  // This fills the remaining space, by using flexbox.
+  // Every toolbar row uses a flexbox row layout.
+  flex: 1 1 auto;
+}
+
+.example-card {
+  // max-width: 500px;
+  margin: 4px;
+}
+
+.example-header-image {
+  background-image: url("../../../../../assets/images/user.png");
+  background-size: cover;
+}
+
+.form {
+  margin: 0 auto;
+  min-width: 150px;
+  // max-width: 1000px;
+  width: 100%;
+  margin-top: 50px;
+}
+
+.form-element {
+  width: 100%;
+}
+
+.mat-form-field {
+  display: inline !important;
+}
+
+.esri-view {
+  height: 100%;
+  width: 100%;
+  outline: none;
+}
+
+.mat-toolbar {
+  background: #3aa0b7 !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #36aef4;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.has-changed-direction {
+  direction: rtl;
+}
+
+.example-section {
+  margin: 12px 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.example-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.card-custom1 {
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.row {
+  margin: 5px;
+}
+
+.mat-divider {
+  border-top-color: black;
+}
+
+.asterisk_input::after {
+  content: " *";
+  color: red;
+}
+
+.card.card-custom {
+  margin: 0 17% 0 17%;
+}
+
+
+.section {
+
+  padding-top: .5rem;
+
+  .title > h3 {
+
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+
+  }
+
+  .timer {
+    text-align: end;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+  }
+
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+
+  margin: 0 !important;
+
+}
+
+::ng-deep .mat-form-field-wrapper {
+
+  padding-bottom: 1rem !important;
+
+}
+
+.spinner-container {
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(243, 243, 243);
+  opacity: .5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+::ng-deep .mat-figure {
+  .card {
+    width: 100%;
+    height: 100%;
+  }
+}

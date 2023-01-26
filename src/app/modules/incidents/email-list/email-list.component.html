@@ -1,0 +1,45 @@
+<div class="card card-custom gutter-b">
+
+  <div class="card-header d-flex">
+    <div class="card-title">
+      <h3 class="card-label">{{'INCIDENTS.ADD_EMAIL'| translate}} </h3>
+    </div>
+  </div>
+
+
+  <div class="card-body">
+
+    <form [formGroup]="form">
+      <div class="row">
+        <h4 class="col-auto mt-4">{{'INCIDENTS.TO'|translate}}</h4>
+        <mat-form-field class="w-100 col">
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let email of emailReceivers;let i = index"
+                      [removable]="true"
+                      (removed)="removeEmail(i)">
+              {{email}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input
+              matInput
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="false"
+              (matChipInputTokenEnd)="addEmail($event)">
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+
+      <div class="row" style="margin-top: 45px;">
+        <div class="col-md text-center">
+          <button mat-raised-button style="width: 70%;" color="primary"
+                  (click)="onSubmit()">{{'INCIDENTS.SEND_EMAIL'| translate}}</button>
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

@@ -1,0 +1,23 @@
+{
+  "Survey": {
+    "Satisfaction": "How  satisfied  are you with  our emergency services?  ",
+    "Reason": "Please  provide us  with  the  reason of  your  evaluation",
+    "otherReason": "Feedback (Thanks/Complaint)",
+    "Submit": "Send",
+    "PleaseWait": "Please  wait ,processing... ",
+    "InvalidUUID": "This  survey  has already been applyed",
+    "SuccessMSG": "Your  Survey  has been  saved ....Thank you ",
+    "SurvyReport": "Happiness Reports",
+    "Table": {
+      "happiness": "happiness",
+      "other": "other",
+      "reason": "reason",
+      "incident": "incident Id",
+      "createdDate": "created date",
+      "incidentSubject": "incident subject  ",
+
+      "fromDate": "From Date",
+      "toDate": "To  Date"
+    }
+  }
+}

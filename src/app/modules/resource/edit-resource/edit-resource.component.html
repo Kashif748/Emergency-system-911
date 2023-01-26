@@ -1,0 +1,320 @@
+<div class="card card-custom mat-elevation-z4">
+  <div class="card-header d-flex" style="align-content: center">
+    <div class="card-title">
+      <h3 class="card-label">
+        {{
+          (id ? "RESOURCE.UPDATE_RESOURCE" : "RESOURCE.CREATE_RESOURCE")
+            | translate
+        }}
+      </h3>
+    </div>
+    <div class="spacer"></div>
+
+    <button
+      class="btn btn-icon btn-sm btn-light-primary"
+      (click)="backClicked()"
+    >
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Navigation/Left-2.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </div>
+
+  <div class="card-body">
+    <form [formGroup]="form" (onSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+            <mat-label
+              >{{ "RESOURCE.NAME_EN" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <input
+              matInput
+              [formControlName]="EditResourceFormFields.NAME_EN"
+              [id]="EditResourceFormFields.NAME_EN"
+            />
+            <mat-error
+              *ngIf="handleError(EditResourceFormFields.NAME_EN, 'required')"
+            >
+              {{ "SHARED.REQUIRED_FIELD" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+            <mat-label
+              >{{ "RESOURCE.NAME_AR" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <input
+              matInput
+              [formControlName]="EditResourceFormFields.NAME_AR"
+              [id]="EditResourceFormFields.NAME_AR"
+            />
+            <mat-error
+              *ngIf="handleError(EditResourceFormFields.NAME_AR, 'required')"
+            >
+              {{ "SHARED.REQUIRED_FIELD" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+            <mat-label>{{ "RESOURCE.SR_NO" | translate }} </mat-label>
+            <input
+              matInput
+              [formControlName]="EditResourceFormFields.SERIAL_NUMBER"
+              [id]="EditResourceFormFields.SERIAL_NUMBER"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" appearance="outline">
+            <mat-label>
+              {{ "RESOURCE.CATEGORY" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <mat-select
+              [formControlName]="EditResourceFormFields.CATEGORY"
+              [id]="EditResourceFormFields.CATEGORY"
+            >
+              <mat-optgroup
+                *ngFor="let mainCategory of assetMainCategories"
+                [label]="mainCategory | propTranslator: 'name'"
+              >
+                <mat-option
+                  *ngFor="let assetCategory of mainCategory.children"
+                  [value]="assetCategory.id"
+                >
+                  {{ assetCategory | propTranslator: "name" }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md">
+          <mat-form-field appearance="outline">
+            <mat-label>
+              {{ "AUTH.LOGIN.Organizations" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+
+            <ng-container [formGroupName]="EditResourceFormFields.ORGANIZATION">
+              <mat-select
+                formControlName="id"
+                [id]="EditResourceFormFields.ORGANIZATION"
+              >
+                <mat-option *ngFor="let org of orgs$ | async" [value]="org.id">
+                  <span *ngIf="lang == 'en'">
+                    {{ org.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                  </span>
+                  <span *ngIf="lang == 'ar'">
+                    {{ org.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                  </span>
+                </mat-option>
+              </mat-select>
+            </ng-container>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- <div class="col-md">
+          <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+            <mat-label>{{ "RESOURCE.CATEGORY" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <mat-select [formControlName]="EditResourceFormFields.CATEGORY">
+              <mat-option *ngFor="let cat of categories$ | async" [value]="cat.id">
+                <span [class]="'bg-' +cat?.color"
+                  style="display: flex; justify-content: space-between;padding: 0 16px;">
+                  {{ lang === 'en' ? cat.nameEn: cat.nameAr }}
+                  <span *ngIf="cat?.icon && cat?.icon != 'null'"><img src="assets/media/svg/icons/{{cat?.icon}}.svg"
+                      alt=""></span>
+                </span>
+
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="handleError(EditResourceFormFields.CATEGORY, 'required')">
+              {{ "SHARED.REQUIRED_FIELD" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div> -->
+        <ng-container
+          [formGroupName]="EditResourceFormFields.ASSETS_GROUP"
+          *ngIf="currentOrg.code == 'ADCDA'"
+        >
+          <div class="col-md">
+            <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+              <mat-label>{{ "RESOURCE.ASSETSGroup" | translate }} </mat-label>
+              <mat-select
+                [formControlName]="EditResourceFormFields.ID"
+                [id]="EditResourceFormFields.ASSETS_GROUP"
+              >
+                <mat-option
+                  *ngFor="let cat of assets$ | async"
+                  [value]="cat.id"
+                >
+                  {{ lang === "en" ? cat.nameEn : cat.nameAr }}
+                </mat-option>
+              </mat-select>
+
+              <mat-error
+                *ngIf="handleError(EditResourceFormFields.CATEGORY, 'required')"
+              >
+                {{ "SHARED.REQUIRED_FIELD" | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </ng-container>
+
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+            <mat-label
+              >{{ "RESOURCE.QUANTITY" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <input
+              matInput
+              [formControlName]="EditResourceFormFields.QUANTITY"
+              type="number"
+              [id]="EditResourceFormFields.QUANTITY"
+            />
+            <mat-error
+              *ngIf="handleError(EditResourceFormFields.QUANTITY, 'required')"
+            >
+              {{ "SHARED.REQUIRED_FIELD" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+            <mat-label
+              >{{ "RESOURCE.TYPE" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <mat-select
+              [formControlName]="EditResourceFormFields.MEASURING_TYPE"
+              [id]="EditResourceFormFields.MEASURING_TYPE"
+            >
+              <mat-option *ngFor="let type of types" [value]="type.nameEn">
+                {{ lang == "en" ? type.nameEn : type.nameAr }}
+              </mat-option>
+            </mat-select>
+
+            <mat-error
+              *ngIf="
+                handleError(EditResourceFormFields.MEASURING_TYPE, 'required')
+              "
+            >
+              {{ "SHARED.REQUIRED_FIELD" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md">
+          <mat-checkbox (change)="editCheckBox($event)"
+            [formControlName]="
+              EditResourceFormFields.HAS_SAME_ORGANIZATION_LOCATION
+            "
+            [id]="EditResourceFormFields.HAS_SAME_ORGANIZATION_LOCATION"
+            >{{ "RESOURCE.SAME_LOCATION" | translate }}</mat-checkbox
+          >
+        </div>
+      </div>
+      <div class="row">
+        <div
+          class="row mx-1 mb-3"
+          *ngIf="
+            !this.form.get(
+              EditResourceFormFields.HAS_SAME_ORGANIZATION_LOCATION
+            ).value
+          "
+        >
+          <div class="col-12 bg-white rounded px-4">
+            <div class="d-flex">
+              <button
+                class="btn btn-md btn-light-primary font-weight-bolder cursor-pointer mx-auto"
+                (click)="onNewLocationChange($event)"
+              >
+                {{ "INCIDENTS.NEW_LOCATION" | translate }}
+                <span
+                  *ngIf="
+                    this.form.get(EditResourceFormFields.IS_LOCATION_SELECTED)
+                      .value
+                  "
+                >
+                  ({{ "COMMON.SELECTED" | translate }})
+                </span>
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" [appearance]="appearancetype">
+            <mat-label
+              >{{ "RESOURCE.DESC" | translate
+              }}<span class="required-asterisk">*</span></mat-label
+            >
+
+            <textarea
+              matInput
+              rows="10"
+              [formControlName]="EditResourceFormFields.DESCRIPTION"
+              [id]="EditResourceFormFields.DESCRIPTION"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <!--begin::Text-->
+      <div class="d-flex flex-column font-weight-bold">
+        <app-files-list
+          #filesList
+          [recordId]="id"
+          [tagId]="29"
+          [inline]="true"
+        ></app-files-list>
+      </div>
+      <!--end::Text-->
+
+      <div class="row">
+        <div class="d-flex justify-content-center">
+          <button
+            (click)="onSubmit()"
+            [disabled]="form.invalid"
+            class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+            matTooltip="Add New Item"
+          >
+            <span *ngIf="!id">{{
+              "RESOURCE.CREATE_RESOURCE" | translate
+            }}</span>
+            <span *ngIf="id">{{ "RESOURCE.UPDATE_RESOURCE" | translate }}</span>
+            <span
+              [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+              cacheSVG="true"
+              class="svg-icon svg-icon-md"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

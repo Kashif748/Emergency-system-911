@@ -1,0 +1,160 @@
+<div class="d-flex align-items-center border-bottom mb-3 p-3">
+  <h5 class="card-title font-weight-normal m-0">
+    {{ "INCIDENTS.TASKS_FOR_THIS_INCIDENT" | translate }}
+  </h5>
+  <button
+    [hidden]="incidentDetails.status.id === 2"
+    *appPrivileges="'PRIV_CR_TASK'"
+    matTooltip="{{ 'TASK.CREATE_TASK' | translate }} "
+    class="btn btn-icon btn-primary btn-sm btn-circle font-weight-bolder cursor-pointer mx-3"
+    (click)="createTasks(incidentId)"
+  >
+    <span
+      [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+      cacheSVG="true"
+      class="svg-icon svg-icon-md"
+    ></span>
+  </button>
+</div>
+
+<ng-container>
+  <app-task-charts [incidentId]="incidentId"></app-task-charts>
+</ng-container>
+
+<div>
+  <div class="table-responsive table-container">
+    <table class="table table-head-custom table-head-bg table-vertical-center">
+      <thead>
+        <tr class="text-center text-uppercase">
+          <!-- 1 -->
+          <th style="min-width: 100px">
+            <span class="text-dark-75"
+              >{{ "INCIDENTS.SUBJECT" | translate }}
+            </span>
+          </th>
+          <!-- 2 -->
+          <th style="min-width: 100px">
+            {{ "INCIDENTS.PRIORITY" | translate }}
+          </th>
+          <!-- 3 -->
+          <th style="min-width: 100px">
+            {{ "TASK.TASK_TYPE" | translate }}
+          </th>
+          <!-- 4 -->
+          <th style="min-width: 100px">
+            {{ "TASK.DUE_DATE" | translate }}
+          </th>
+          <!-- 5 -->
+          <th style="min-width: 130px">
+            {{ "INCIDENTS.STATUS" | translate }}
+          </th>
+          <!-- 6 -->
+          <th [style.min-width]="'200px'">
+            {{ "INCIDENTS.ASSIGNED" | translate }}
+          </th>
+          <!-- 7 -->
+          <th style="actions bg-white">
+            {{ "INCIDENTS.ACTIONS" | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of incidentTasks | paginate: paginationConfig;
+            let i = index
+          "
+          matTooltip="{{ 'TASK.VIEW' | translate }}"
+          matTooltipPosition="{{ lang == 'en' ? 'left' : 'right' }}"
+          (click)="viewTask(item?.id)"
+          class="cursor-pointer text-center"
+        >
+          <!-- 1 -->
+          <td>
+            <span class="text-dark-75 font-weight-bold m-0">
+              {{ item.title }}
+            </span>
+          </td>
+          <!-- 2 -->
+          <td>
+            <span
+              *ngIf="item?.priority?.id"
+              class="label label-inline"
+              [ngClass]="{
+                'label-danger ': item?.priority?.id == 3,
+                'label-light-warning': item?.priority?.id == 2,
+                'label-light-primary': item?.priority.id == 1
+              }"
+            >
+              {{ item?.priority?.name }}
+            </span>
+          </td>
+          <!-- 3 -->
+          <td>
+            <span class="text-dark-75 font-weight-bold">
+              {{ item?.taskType?.name }}
+            </span>
+          </td>
+          <!-- 4 -->
+          <td>
+            <span class="text-dark-75 font-weight-bold">
+              {{ item?.dueDate | customDate | date: "short" }}
+            </span>
+          </td>
+          <!-- 5 -->
+          <td>
+            <span class="label label-lg label-light-primary label-inline">{{
+              item?.status?.name
+            }}</span>
+          </td>
+          <!-- 6 -->
+          <td>
+            <span class="text-muted mx-2">{{
+              lang == "en" ? item.assignTo?.nameEn : item.assignTo?.nameAr
+            }}</span>
+
+            <span
+              class="label label-inline label-light-primary text-dark rounded-sm mr-2"
+            >
+              <span *ngIf="item.assignTo?.type == 'group'">
+                {{ "SHARED.GROUP" | translate }}</span
+              >
+              <span *ngIf="item.assignTo?.type == 'user'">
+                {{ "SHARED.USER" | translate }}</span
+              >
+              <span *ngIf="item.assignTo?.type == 'org'">
+                {{ "SHARED.ORGANIZATION" | translate }}</span
+              >
+            </span>
+          </td>
+          <!-- 7 -->
+          <td class="actions bg-white">
+            <button
+              (click)="updateTask(item.id)"
+              class="btn btn-sm btn-clean btn-icon mr-2"
+              matTooltip="{{ 'TASK.UPDATE_TASK' | translate }}"
+            >
+              <span class="svg-icon svg-icon-md">
+                <span
+                  [inlineSVG]="
+                    './assets/media/svg/icons/Communication/Write.svg'
+                  "
+                  [cacheSVG]="true"
+                ></span>
+              </span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <mat-paginator
+    class="rounded rounded-top-0 border-top"
+    *ngIf="this.paginationConfig.totalItems > 0"
+    (page)="pageChangedForMyTasks($event)"
+    [pageSizeOptions]="[10, 30, 60]"
+    showFirstLastButtons
+    [length]="this.paginationConfig.totalItems"
+  >
+  </mat-paginator>
+</div>

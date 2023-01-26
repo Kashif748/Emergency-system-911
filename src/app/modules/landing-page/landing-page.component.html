@@ -1,0 +1,468 @@
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky header-top">
+  <div class="container m-auto">
+    <div class="row">
+      <div class="col-12">
+        <nav class="main-nav d-flex align-items-center">
+          <!-- ***** Logo Start ***** -->
+          <a class="logo px-5">
+            <img src="assets/logos/{{ logo }}.png" alt="Softy Pinko" class="max-w-150px" />
+          </a>
+          <!-- ***** Logo End ***** -->
+          <div class="spacer"></div>
+
+          <!-- ***** Menu Start ***** -->
+          <ul class="nav">
+            <li>
+              <a (click)="scroll(welcome)" class="active">{{
+                "LANDING.About" | translate
+                }}</a>
+            </li>
+            <li>
+              <a (click)="scroll(partners)">{{
+                "LANDING.Partners" | translate
+                }}</a>
+            </li>
+            <li>
+              <a (click)="scroll(features)">
+                {{ "LANDING.Features" | translate }}</a>
+            </li>
+            <li>
+              <a (click)="scroll(workProcess)">{{
+                "LANDING.Modules" | translate
+                }}</a>
+            </li>
+
+            <li>
+              <a (click)="scroll(universities)">{{
+                "LANDING.ResearchColleges" | translate
+                }}</a>
+            </li>
+            <li>
+              <a (click)="scroll(statistics)">{{
+                "LANDING.Statistics" | translate
+                }}</a>
+            </li>
+            <li>
+              <a (click)="scroll(contactUs)">{{
+                "LANDING.Contact" | translate
+                }}</a>
+            </li>
+
+            <li ngbDropdown [placement]="lang == 'en' ? 'bottom' : 'bottom'">
+              <a data-toggle="dropdown" data-offset="10px,40px" ngbDropdownToggle>{{ "LANDING.Login" | translate }}</a>
+              <div ngbDropdownMenu class="
+                  dropdown-menu
+                  p-0
+                  m-0
+                  dropdown-menu-left dropdown-menu-anim-up dropdown-menu-lg
+                  p-0
+                  min-h-500px
+                  p-5
+                  pt-10
+                  mt-5
+                ">
+                <div class="tail"></div>
+                <app-login></app-login>
+              </div>
+            </li>
+          </ul>
+
+          <!-- ***** Menu End ***** -->
+          <!-- language  selector -->
+          <app-language-select></app-language-select>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<!-- ***** Welcome Area Start ***** -->
+<div class="welcome-area" #welcome id="welcome">
+  <!-- Swiper -->
+  <swiper class="w-100 h-100 max-h-800px" [slidesPerView]="1" [autoplay]="true">
+    <ng-template swiperSlide *ngFor="let image of galaryImages">
+      <img src="assets/landing/images/{{ image }}" class="h-100 w-100 max-h-800px" style="object-fit: cover" />
+    </ng-template>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </swiper>
+  <!-- end Swiper -->
+  <!-- ***** Header Text Start ***** -->
+  <div class="header-text">
+    <div class="container m-auto">
+      <div class="row">
+        <div class="w-100 max-w-600px">
+          <h1>
+            {{ "LANDING.title" | translate }}
+          </h1>
+          <p>
+            {{ "LANDING.subtitle" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Header Text End ***** -->
+</div>
+<!-- ***** Welcome Area End ***** -->
+
+<!-- ***** Features Small Start ***** -->
+<section #partners class="section home-feature">
+  <div class="container m-auto">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <!-- ***** Features Small Item Start ***** -->
+          <div class="
+              col-lg-4
+              p-4
+              col-md-6 col-sm-6 col-12
+              p-5
+              d-flex
+              align-self-end
+              h-325px
+            ">
+            <div class="features-small-item m-0">
+              <div class="text-center px-10 pb-20">
+                <img src="assets/logos/Tadweer.png" alt="" class="w-150px" />
+              </div>
+              <h5 class="features-title">Modern Strategy</h5>
+              <p>
+                Customize anything in this template to fit your website needs
+              </p>
+            </div>
+          </div>
+          <!-- ***** Features Small Item End ***** -->
+
+          <!-- ***** Features Small Item Start ***** -->
+          <div class="
+              col-lg-4
+              p-4
+              col-md-6 col-sm-6 col-12
+              p-5
+              d-flex
+              align-self-end
+            ">
+            <div class="features-small-item">
+              <div class="text-center px-10 pb-20">
+                <img src="assets/logos/Civil defense.png" alt="" class="w-150px" />
+              </div>
+              <h5 class="features-title">Best Relationship</h5>
+              <p>Contact us immediately if you have a question in mind</p>
+            </div>
+          </div>
+          <!-- ***** Features Small Item End ***** -->
+
+          <!-- ***** Features Small Item Start ***** -->
+          <div class="
+              col-lg-4
+              p-4
+              col-md-6 col-sm-6 col-12
+              p-5
+              d-flex
+              align-self-end
+              h-325px
+            ">
+            <div class="features-small-item m-0">
+              <div class="text-center px-10 pb-20">
+                <img src="assets/logos/DMT_H.png" alt="" class="w-150px" />
+              </div>
+              <h5 class="features-title">Ultimate Marketing</h5>
+              <p>You just need to tell your friends about our free templates</p>
+            </div>
+          </div>
+          <!-- ***** Features Small Item End ***** -->
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <swiper class="w-100 h-100 max-h-300px" [slidesPerView]="6" [autoplay]="true" [spaceBetween]="25">
+        <ng-template swiperSlide *ngFor="let image of orgsLogos">
+          <div class="d-flex h-180px rounded-lg p-5 border bg-white">
+            <img src="assets/logos/{{ image }}" class="m-auto w-100" style="object-fit: cover" />
+          </div>
+        </ng-template>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </swiper>
+    </div>
+  </div>
+</section>
+
+<section class="section padding-top-70 my-40 padding-bottom-0" #features id="features">
+  <div class="container m-auto">
+    <div class="row">
+      <div class="
+          col-lg-7 col-md-12 col-sm-12
+          align-self-center
+          rounded-lg
+          video-wrapper
+          h-400px
+        ">
+        <img src="assets/landing/images/city-5.jpg" alt="" class="thumbline" />
+        <button (click)="openVideoPlayer()" class="btn btn-icon btn-primary btn-circle mr-2 play-btn">
+          <span class="svg-icon svg-icon-5x">
+            <span [inlineSVG]="'./assets/media/svg/icons/Media/DVD.svg'" [cacheSVG]="true"></span>
+          </span>
+        </button>
+      </div>
+
+      <div class="
+          col-lg-5 col-md-12 col-sm-12
+          align-self-center
+          mobile-top-fix
+          p-5
+        ">
+        <div class="left-heading">
+          <h2 class="section-title">Let’s discuss about you project</h2>
+        </div>
+        <div class="left-text">
+          <p>
+            Nullam sit amet purus libero. Etiam ullamcorper nisl ut augue
+            blandit, at finibus leo efficitur. Nam gravida purus non sapien
+            auctor, ut aliquam magna ullamcorper.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="hr"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** Features Big Item End ***** -->
+
+<!-- ***** Home Parallax Start ***** -->
+<section class="mini my-40" #workProcess id="work-process">
+  <div class="mini-content">
+    <div class="container m-auto">
+      <div class="row">
+        <div class="offset-lg-3 col-lg-6">
+          <div class="info">
+            <h1> {{'LANDING.platform_sections' | translate}}</h1>
+            <p>
+              {{'LANDING.platform_sections_desc'| translate}}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ***** Mini Box Start ***** -->
+      <div class="row">
+        <div class="col-lg-2 p-4 col-md-3 col-sm-6 col-6">
+          <a href="#" class="mini-box">
+            <i><img src="assets/landing/images/work-process-item-01.png" alt="" /></i>
+            <strong> المراكز والمقاولين</strong>
+            <span>Godard pabst prism fam cliche.</span>
+          </a>
+        </div>
+        <div class="col-lg-2 p-4 col-md-3 col-sm-6 col-6">
+          <a href="#" class="mini-box">
+            <i><img src="assets/landing/images/work-process-item-01.png" alt="" /></i>
+            <strong> الموارد والامكانيات </strong>
+            <span>Godard pabst prism fam cliche.</span>
+          </a>
+        </div>
+        <div class="col-lg-2 p-4 col-md-3 col-sm-6 col-6">
+          <a href="#" class="mini-box">
+            <i><img src="assets/landing/images/work-process-item-01.png" alt="" /></i>
+            <strong>البلاغات والمهام </strong>
+            <span>Godard pabst prism fam cliche.</span>
+          </a>
+        </div>
+        <div class="col-lg-2 p-4 col-md-3 col-sm-6 col-6">
+          <a href="#" class="mini-box">
+            <i><img src="assets/landing/images/work-process-item-01.png" alt="" /></i>
+            <strong>المراسلات والتعاميم </strong>
+            <span>Godard pabst prism fam cliche.</span>
+          </a>
+        </div>
+        <div class="col-lg-2 p-4 col-md-3 col-sm-6 col-6">
+          <a href="#" class="mini-box">
+            <i><img src="assets/landing/images/work-process-item-01.png" alt="" /></i>
+            <strong>لوحات تحكم وتقارير </strong>
+            <span>Godard pabst prism fam cliche.</span>
+          </a>
+        </div>
+        <div class="col-lg-2 p-4 col-md-3 col-sm-6 col-6">
+          <a href="#" class="mini-box">
+            <i><img src="assets/landing/images/work-process-item-01.png" alt="" /></i>
+            <strong>الفرق والمناوبات</strong>
+            <span>Godard pabst prism fam cliche.</span>
+          </a>
+        </div>
+      </div>
+      <!-- ***** Mini Box End ***** -->
+    </div>
+  </div>
+</section>
+<!-- ***** Home Parallax End ***** -->
+
+
+
+
+
+<!-- ***** Counter Parallax Start ***** -->
+<section class="counter my-40" #statistics>
+  <div class="content">
+    <div class="container m-auto">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="count-item decoration-bottom">
+            <strong>126</strong>
+            <span>Projects</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="count-item decoration-top">
+            <strong>63</strong>
+            <span>Happy Clients</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="count-item decoration-bottom">
+            <strong>18</strong>
+            <span>Awards Wins</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="count-item">
+            <strong>27</strong>
+            <span>Countries</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** Counter Parallax End ***** -->
+
+<!-- ***** Blog Start ***** -->
+<section class="section mt-40" #universities id="blog">
+  <div class="container m-auto">
+    <swiper class="w-100 h-100 max-h-300px" [slidesPerView]="5" [autoplay]="true" [spaceBetween]="25">
+      <ng-template swiperSlide *ngFor="let image of universitiesList">
+        <div class="d-flex h-180px rounded-lg p-5 border bg-white">
+          <img src="assets/landing/images/universities/{{ image }}" class="m-auto w-100" style="object-fit: cover" />
+        </div>
+      </ng-template>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </swiper>
+  </div>
+</section>
+<!-- ***** Blog End ***** -->
+
+<!-- ***** Contact Us Start ***** -->
+<section class="section colored" #contactUs id="contact-us">
+  <div class="container m-auto">
+    <!-- ***** Section Title Start ***** -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="center-heading">
+          <h2 class="section-title">Talk To Us</h2>
+        </div>
+      </div>
+      <div class="offset-lg-3 col-lg-6">
+        <div class="center-text">
+          <p>
+            Maecenas pellentesque ante faucibus lectus vulputate sollicitudin.
+            Cras feugiat hendrerit semper.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- ***** Section Title End ***** -->
+
+    <div class="row">
+      <!-- ***** Contact Text Start ***** -->
+      <div class="col-lg-4 p-4 col-md-6 col-sm-12">
+        <h5 class="margin-bottom-30">Keep in touch</h5>
+        <div class="contact-text">
+          <p>
+            110-220 Quisque diam odio, maximus ac consectetur eu, 10260
+            <br />auctor non lorem
+          </p>
+          <p>
+            You are NOT allowed to re-distribute Softy Pinko template on any
+            template collection websites. Thank you.
+          </p>
+        </div>
+      </div>
+      <!-- ***** Contact Text End ***** -->
+
+      <!-- ***** Contact Form Start ***** -->
+      <div class="col-lg-8 col-md-6 col-sm-12">
+        <div class="contact-form">
+          <form id="contact" action="" method="get">
+            <div class="row">
+              <div class="col-lg-6 col-md-12 col-sm-12">
+                <fieldset>
+                  <input name="name" type="text" class="form-control" id="name" placeholder="Full Name" required="" />
+                </fieldset>
+              </div>
+              <div class="col-lg-6 col-md-12 col-sm-12">
+                <fieldset>
+                  <input name="email" type="email" class="form-control" id="email" placeholder="E-Mail Address"
+                    required="" />
+                </fieldset>
+              </div>
+              <div class="col-lg-12">
+                <fieldset>
+                  <textarea name="message" rows="6" class="form-control" id="message" placeholder="Your Message"
+                    required=""></textarea>
+                </fieldset>
+              </div>
+              <div class="col-lg-12">
+                <fieldset>
+                  <button type="submit" id="form-submit" class="main-button">
+                    Send Message
+                  </button>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- ***** Contact Form End ***** -->
+    </div>
+  </div>
+</section>
+<!-- ***** Contact Us End ***** -->
+
+<!-- ***** Footer Start ***** -->
+<footer>
+  <div class="container m-auto">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <ul class="social">
+          <li>
+            <a href="#"><i class="fa fa-facebook"></i></a>
+          </li>
+          <li>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+          </li>
+          <li>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+          </li>
+          <li>
+            <a href="#"><i class="fa fa-rss"></i></a>
+          </li>
+          <li>
+            <a href="#"><i class="fa fa-dribbble"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <p class="copyright">Copyright &copy; 2021 SALAMA</p>
+      </div>
+    </div>
+  </div>
+</footer>

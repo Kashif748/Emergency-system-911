@@ -1,0 +1,35 @@
+<h2 mat-dialog-title> {{'REPORTS.EDIT_MOBILE_NUMBER' |translate}}</h2>
+<mat-dialog-content class="mat-typography">
+	<div class="container">
+    <div class="row pt-3 pb-3">
+      <div class="col-sm-12">
+        <label for="mob"> {{'REPORTS.EDIT_MOBILE_NUMBER' |translate}}</label>
+        <br>
+        <input type="text" class="form-control" [formControl]="sms">
+      </div>
+    </div>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<div class="d-flex justify-content-between" style="width: 100%">
+		<div style="width: 150px"  class="d-flex justify-content-between">
+			<button
+				mat-button
+				mat-dialog-close
+				class="mat-accent"
+			>
+		 {{'ACTIONS.CANCEL' | translate}}
+			</button>
+		</div>
+
+		<div style="width: 150px" class="d-flex justify-content-between">
+			<button
+				mat-button
+				(click)="edit()"
+				class="mat-accent"
+			>
+			   {{'ACTIONS.SEND' | translate}}
+			</button>
+		</div>
+	</div>
+</mat-dialog-actions>

@@ -1,0 +1,12 @@
+{
+  "Incident": {
+    "Sr": "SR NO.",
+    "Date": "Incident Date",
+    "ArriveToLocation": "Arrive To The Location",
+    "Containment": "Accident Containment",
+    "Completed": "Incident Completed",
+    "MainResources": "Main Resources",
+    "Statistics": "Statistics",
+    "EventsFlow": "Events Flow for the Civil Defense"
+  }
+}

@@ -1,0 +1,39 @@
+<div class="card card-custom rounded-lg shadow-sm mb-3">
+  <div class="card-header px-2 border-0">
+    <div class="card-title m-0">
+      <p class="text-dark-50 font-size-lg m-0">
+        {{ "PUBLIC_POSITION.centersChart.title" | translate }}
+      </p>
+    </div>
+    <div class="card-toolbar">
+      <button
+        class="btn btn-hover-light-primary btn-sm btn-icon"
+        [matMenuTriggerFor]="menu"
+      >
+        <i class="ki ki-bold-more-hor"></i>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="card-body">
+    <ng-container *ngIf="centers.length>0 ; else noDataFound">
+      <div id="chart">
+        <apx-chart
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [plotOptions]="chartOptions.plotOptions"
+          [labels]="chartOptions.labels"
+          [legend]="chartOptions.legend">
+        </apx-chart>
+      </div>
+    </ng-container>
+    <ng-template #noDataFound>
+      <p class="text-dark-50 font-size-lg m-0">
+        {{ "PUBLIC_POSITION.messages.noData"  | translate }}
+      </p>
+    </ng-template>
+  </div>
+</div>

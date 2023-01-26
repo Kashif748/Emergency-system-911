@@ -1,0 +1,77 @@
+<div class="container" style="background-color: white">
+  <ng-container *ngFor="let language of languages; let isLast = last">
+    <div *ngIf="!language.active" class="navi-item">
+      <a
+        href="javascript:;"
+        (click)="setLanguageWithRefresh(language.lang)"
+        class="navi-link px-0 py-2">
+      <span class="symbol symbol-20 mx-2 p-2">
+        <img src="{{ language.flag }}" />
+      </span>
+      </a>
+    </div>
+    <hr class="m-auto" style="width: 90%" />
+
+  </ng-container>
+  <div
+    [ngStyle]="{'height':(status$ | async) == locationStatus.PREVIOUS_SET ? '40rem' : (status$ | async) == locationStatus.JUST_SEND ? '40rem' : 'auto'}"
+    class="row fluid-container bg-white d-flex flex-column justify-content-center align-items-center ">
+    <h3 class="m-6" *ngIf="(status$ | async) == locationStatus.NOT_SEND">
+      {{'INCIDENTS.REPORTER_GREETING_MSG_NEW' | translate }}
+    </h3>
+    <h5 class="m-6" *ngIf="(status$ | async) == locationStatus.NOT_SEND">
+      {{'INCIDENTS.REPORTER_GREETING_INCIDENT_LOCATION_MSG' | translate }}
+    </h5>
+    <h5 class="text-success" *ngIf="(status$ | async) == locationStatus.PREVIOUS_SET">
+      {{'INCIDENTS.REPORTER_WARNING_MSG' | translate}}
+    </h5>
+
+    <h5 class="text-success" *ngIf="(status$ | async) == locationStatus.JUST_SEND">
+      <h5 class="text-center">{{lang == 'en' ? 'Thank you.' : 'شكرا جزيلا.'}}</h5>
+      {{'INCIDENTS.REPORTER_THANKS_MSG' | translate}}
+    </h5>
+  </div>
+
+  <div *ngIf="(status$ | async) == locationStatus.NOT_SEND">
+
+    <div class="text-center mb-5">
+      <button [disabled]="!disableUserSelection"
+              class="btn btn-primary customButton font-weight-bold font-size-md mr-1"
+              (click)="currentLocation()"
+              [class]="currentLoc === true ? 'active' : ''">
+        {{'INCIDENTS.CURRENT_LOCATION' | translate}}
+          <i class="flaticon-placeholder-2"></i>
+      </button>
+      <button class="btn btn-primary customButton font-weight-bold font-size-md"
+              (click)="locationFromMap()"
+              [class]="mapLoc === true ? 'active' : ''">
+        {{'INCIDENTS.CHOOSE_MAP' | translate}}
+        <i class="flaticon-map-location"></i></button>
+    </div>
+    <div *ngIf="currentLoc" class="text-center mt-5">
+      <p>[{{lat}} , {{lng}}]</p>
+    </div>
+    <div *ngIf="hideMap && !currentLoc">
+      <app-map style="width: 95%; height: 50%;" (OnSaveMap)="OnSaveMap($event)"
+               [configData]="mapConfigData" [currentLocationOfUser]="currentLocationOfUser">
+      </app-map>
+    </div>
+    <br>
+    <br>
+    <div class="mt-5 text-center">
+      <h5>{{'INCIDENTS.IMAGE' | translate}}</h5>
+    </div>
+    <ng-container>
+      <div class="DashboardContainer">
+      </div>
+    </ng-container>
+    <div class="text-center">
+      <button style="height: auto; border: none; color: #3699ff;"
+              class="font-weight-bold mb-5 text-center mt-5 label label-lg label-light-success label-inline"
+              (click)="sendDetails($event)">
+        {{'INCIDENTS.SENT_DETAILS' | translate}}
+      </button>
+    </div>
+
+  </div>
+</div>

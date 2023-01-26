@@ -1,0 +1,26 @@
+mat-form-field {
+  width: 100%;
+}
+
+::ng-deep {
+  .modal {
+    max-width: 600px !important;
+    height: fit-content !important;
+    padding: 0 !important;
+
+    .mat-dialog-container {
+      padding: 0 !important;
+    }
+  }
+  .mat-progress-bar-buffer {
+    background-color: #a5d2ff !important;
+  }
+}
+
+@media (max-width: 900px) {
+  ::ng-deep {
+    .modal {
+      height: 80% !important;
+    }
+  }
+}

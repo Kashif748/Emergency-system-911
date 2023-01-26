@@ -1,0 +1,350 @@
+<form [formGroup]="advncedFilterForm" class="mt-4">
+  <div class="row">
+    <!-- subject -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.SUBJECT"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label> {{ "INCIDENTS.SUBJECT" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          [placeholder]="'INCIDENTS.SUBJECT' | translate"
+          [id]="advancedSearchFields.SUBJECT"
+          [formControlName]="advancedSearchFields.SUBJECT"
+        />
+      </mat-form-field>
+    </div>
+    <!-- id -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.SR_NO"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.SR_NO" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="{{ 'INCIDENTS.SR_NO' | translate }}"
+          [formControlName]="advancedSearchFields.SR_NO"
+          [id]="advancedSearchFields.SR_NO"
+        />
+      </mat-form-field>
+    </div>
+
+    <div
+      class="col-md-6"
+      *ngIf="formFields | showFormControl: advancedSearchFields.CREATED_BY"
+    >
+      <app-user-input
+        [appearance]="'fill'"
+        [id]="advancedSearchFields.CREATED_BY"
+        [formControlName]="advancedSearchFields.CREATED_BY"
+        placeholder="{{ 'SHARED.CREATED_BY' | translate }}"
+      >
+      </app-user-input>
+    </div>
+
+    <!-- status -->
+
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.STATUS"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.STATUS" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'INCIDENTS.STATUS' | translate }}"
+          [id]="advancedSearchFields.STATUS"
+          [formControlName]="advancedSearchFields.STATUS"
+          multiple
+        >
+          <mat-option
+            *ngFor="let stat of dataLists| extractDataList: advancedSearchFields.STATUS" [value]="stat.id">
+            {{ stat | propTranslator: "name" }}
+            <!-- <ng-container *ngIf="lang=='en'">{{ stat.nameEn }}</ng-container>
+            <ng-container *ngIf="lang=='ar'">{{ stat.nameAr }}</ng-container> -->
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- start date -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.CREATED_DATE"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.START_DATE" | translate }}</mat-label>
+        <input
+          matInput
+          [min]="minDate"
+          [max]="maxDate"
+          [id]="advancedSearchFields.CREATED_DATE"
+          [formControlName]="advancedSearchFields.CREATED_DATE"
+          [matDatepicker]="createdDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="createdDate"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #createdDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <!-- end date -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.END_DATE"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.END_DATE" | translate }}</mat-label>
+
+        <input
+          matInput
+          [min]="minDate"
+          [max]="maxDate"
+          [id]="advancedSearchFields.END_DATE"
+          [formControlName]="advancedSearchFields.END_DATE"
+          [matDatepicker]="endDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="endDate"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <!-- priority -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.PRIORITY"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.PRIORITY" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'INCIDENTS.PRIORITY' | translate }}"
+          [id]="advancedSearchFields.PRIORITY"
+          [formControlName]="advancedSearchFields.PRIORITY"
+        >
+          <mat-option
+            *ngFor="
+              let priority of dataLists
+                | extractDataList: advancedSearchFields.PRIORITY
+            "
+            [value]="priority.id"
+          >
+            {{ priority | propTranslator: "name" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- city -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.CITY"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.CITY" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'INCIDENTS.CITY' | translate }}"
+          [id]="advancedSearchFields.CITY"
+          [formControlName]="advancedSearchFields.CITY"
+        >
+          <mat-option
+            *ngFor="
+              let city of dataLists | extractDataList: advancedSearchFields.CITY
+            "
+            [value]="city.id"
+          >
+            {{ city | propTranslator: "name" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- category -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.CATEGORY"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.CATEGORY" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
+          [id]="advancedSearchFields.CATEGORY"
+          [formControlName]="advancedSearchFields.CATEGORY"
+        >
+          <mat-option
+            *ngFor="
+              let category of dataLists
+                | extractDataList: advancedSearchFields.CATEGORY
+            "
+            [value]="category.id"
+          >
+            {{ category | propTranslator: "name" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- reporting via -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.REPORTING_VIA"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "SHARED.REPORTING_VIA" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'SHARED.REPORTING_VIA' | translate }}"
+          [id]="advancedSearchFields.REPORTING_VIA"
+          [formControlName]="advancedSearchFields.REPORTING_VIA"
+        >
+          <mat-option
+            *ngFor="
+              let rv of dataLists
+                | extractDataList: advancedSearchFields.REPORTING_VIA
+            "
+            [value]="rv.id"
+          >
+            {{ rv | propTranslator: "name" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl: advancedSearchFields.IS_KPI_EXPIRED"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="form-element example-full-width"
+      >
+        <mat-label>{{ "INCIDENTS.IsExpired" | translate }}</mat-label>
+        <mat-select
+          [id]="advancedSearchFields.IS_KPI_EXPIRED"
+          placeholder="{{ 'INCIDENTS.IsExpired' | translate }}"
+          [formControlName]="advancedSearchFields.IS_KPI_EXPIRED"
+        >
+          <mat-option
+            *ngFor="let option of isExpiredFilterOptions"
+            [value]="option.value"
+            >{{ option.labelKey | translate }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Reporter Contant-->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="
+        formFields | showFormControl: advancedSearchFields.REPORTING_CONTACT
+      "
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.REPORTER_MOBILE" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="{{ 'INCIDENTS.REPORTER_MOBILE' | translate }}"
+          [formControlName]="advancedSearchFields.REPORTING_CONTACT"
+          [id]="advancedSearchFields.REPORTING_CONTACT"
+        />
+      </mat-form-field>
+    </div>
+
+    <div
+      class="col-6"
+      *ngIf="formFields | showFormControl: advancedSearchFields.RESPONSIBLE_ORG"
+    >
+      <app-pick-org
+        [id]="advancedSearchFields.RESPONSIBLE_ORG"
+        [multipleSelection]="false"
+        [formControl]="
+          advncedFilterForm.get(advancedSearchFields.RESPONSIBLE_ORG)
+        "
+        [label]="'INCIDENTS.RESPONSIBLE_ORG'"
+        [childrenOfCurrentOrg]="true"
+      ></app-pick-org>
+    </div>
+
+    <div
+      class="col-6"
+      *ngIf="formFields | showFormControl: advancedSearchFields.LEADING_ORG"
+    >
+      <app-pick-org
+        [id]="advancedSearchFields.LEADING_ORG"
+        [multipleSelection]="false"
+        [formControl]="advncedFilterForm.get(advancedSearchFields.LEADING_ORG)"
+        [label]="'INCIDENTS.SPECIALIZED_CENTER' | translate"
+        [childrenOfCurrentOrg]="true"
+      ></app-pick-org>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-6 d-flex">
+      <button class="btn btn-primary w-100" (click)="search()">
+        {{ "ACTIONS.FILTER" | translate }}
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/General/Search.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+      </button>
+    </div>
+
+    <div class="col-6 d-flex">
+      <button class="btn btn-light-primary w-100" (click)="clear()">
+        {{ "ACTIONS.CLEAR" | translate }}
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Media/Repeat.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+      </button>
+    </div>
+  </div>
+</form>

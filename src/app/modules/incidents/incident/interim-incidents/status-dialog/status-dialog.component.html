@@ -1,0 +1,16 @@
+<mat-dialog-content style="overflow: hidden !important;">
+	<p>
+		{{message}}
+	</p>
+
+    <!-- <textarea class="form-control form-control-lg mb-3" rows="3" placeholder="zxcxzxczxczxczxczcx Large textarea">
+        </textarea> -->
+    <textarea matInput class="texta"
+    [(ngModel)]="reason"
+     placeholder="{{'INCIDENTS.SPECIFY_REASON' | translate}}"></textarea>
+
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+	<button mat-raised-button color="primary" (click)="onSubmit()" tabindex="1">{{ "ACTIONS.YES" | translate}}</button>
+	<button mat-raised-button mat-dialog-close tabindex="-1">{{ "ACTIONS.NO" | translate}}</button>
+</mat-dialog-actions>

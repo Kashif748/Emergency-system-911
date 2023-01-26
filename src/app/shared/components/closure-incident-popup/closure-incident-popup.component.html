@@ -1,0 +1,36 @@
+<div class="container ">
+
+  <div class="d-flex justify-content-between align-items-center">
+  <h1 mat-dialog-title class="d-inline my-4">
+    {{'SHARED.DIALOG.CLOSE_INCIDENT.MESSAGE' | translate}}
+  </h1>
+
+  <span class="d-icon" (click)="cancelDialog()">
+    <mat-icon color="primary">close</mat-icon>
+  </span>
+  </div>
+
+  <div mat-dialog-content>
+    <form [formGroup]="closeIncidentForm" class="mt-6">
+      <ngx-select-dropdown [classList]="" [options]="this.data?.incidentStatus"
+        [formControlName]="closureFormFields.STATUS" [config]="dropdownConfig"></ngx-select-dropdown>
+        <mat-error *ngIf="closeIncidentForm.touched && closeIncidentForm.get(closureFormFields.STATUS)?.errors?.required">{{'INCIDENTS.THIS_FIELD_IS_REQUIRED' | translate}}</mat-error>
+      <div>
+        <textarea matInput class="form-control my-4 textarea" [formControlName]="closureFormFields.FINAL_STATEMENT"></textarea>
+        <mat-error *ngIf="closeIncidentForm.touched && closeIncidentForm.get(closureFormFields.FINAL_STATEMENT)?.errors?.required">{{'INCIDENTS.THIS_FIELD_IS_REQUIRED' | translate}}</mat-error>
+      </div>
+
+    </form>
+
+  </div>
+
+  <div mat-dialog-actions class="row">
+
+    <div class="col-6 text-center">
+      <button (click)="closeDialog()" [disabled]="closeIncidentForm.touched && closeIncidentForm.invalid" mat-raised-button color="primary">{{ 'ACTIONS.CONFIRM' | translate }}</button>
+    </div>
+    <div class="col-6 text-center">
+      <button (click)="cancelDialog()" mat-button app-throttle-click>{{'ACTIONS.CANCEL' | translate}}</button>
+    </div>
+  </div>
+</div>

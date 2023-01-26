@@ -1,0 +1,18 @@
+::ng-deep .dark-mode {
+  .timeline.timeline-3 .timeline-items .timeline-item {
+    .timeline-content {
+      background-color: #4b5a61 !important;
+      &:before {
+        border-right-color: #4b5a61 !important;
+      }
+    }
+    .timeline-media {
+      background-color: #4b5a61 !important;
+      border-color: var(--separator-color) !important ;
+    }
+
+    .label-light-primary {
+      background-color: var(--background-secondary-color) !important;
+    }
+  }
+}

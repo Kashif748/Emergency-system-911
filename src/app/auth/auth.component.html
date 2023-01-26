@@ -1,0 +1,38 @@
+<div class="login-page" id="kt_login_wrapper">
+  <div id="kt_login">
+    <div class="login-table">
+      <div class="login-table-cell">
+        <div class="login-holder">
+          <div class="logo-holder d-flex">
+            <div class="d-flex px-3" [class]="showSubLogo ? 'w-50' : 'w-100'">
+              <img
+                [src]="
+                  'assets/logos/' + (lang == 'en' ? 'H-En.png' : 'H-Ar.png')
+                "
+                alt=""
+                width="100%"
+                class="max-w-200px m-auto"
+              />
+            </div>
+            <div *ngIf="showSubLogo" class="ecdmc-logo px-3 logo-block">
+              <a [href]="'https://adcmc.gov.ae/'" [target]="'_blank'">
+                <img
+                  [src]="orgLogo"
+                  alt=""
+                  width="100%"
+                  style="mix-blend-mode: multiply"
+                />
+              </a>
+            </div>
+          </div>
+          <div class="login-content">
+            <router-outlet (activate)="onActivate($event)"></router-outlet>
+          </div>
+          <div class="mt-3">
+            <app-lang-select></app-lang-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<div
+  class="d-flex align-items-center justify-content-center dropdown ml-3"
+  ngbDropdown
+  #myDrop="ngbDropdown"
+  [placement]="lang == 'en' ? 'bottom-right' : 'bottom-left'"
+>
+  <button
+    class="btn btn-sm btn-icon btn-circle btn-default pulse pulse-primary pulse-danger"
+    data-toggle="dropdown"
+    data-offset="0px,0px"
+    ngbDropdownToggle
+    (click)="panelOpened()"
+  >
+    <i class="flaticon2-bell"></i>
+    <ng-container *ngIf="(notifCount$ | async) > 0" >
+      <span class="badge badge-light"
+        >{{ notifCount$ | async }}
+      </span>
+      <span class="pulse-ring"></span>
+    </ng-container>
+  </button>
+  <div
+    ngbDropdownMenu
+    class="dropdown-menu p-0 m-0 dropdown-menu-left dropdown-menu-anim-up dropdown-menu-lg p-0"
+  >
+    <ng-container *ngTemplateOutlet="noti"></ng-container>
+  </div>
+</div>
+
+<!-- id="kt_quick_notifications_toggle" -->
+
+<ng-template #noti>
+  <!--begin::Nav-->
+  <h4 class="font-weight-bold m-0 d-flex align-items-center p-4">
+    <span>{{ "NOTIFICATIONS.NOTIFICATIONS" | translate }}</span>
+    <div class="spacer"></div>
+    <a
+      class="btn btn-link-primary"
+      *ngIf="(notifCount$ | async) > 0"
+      (click)="makeAllAsRead()"
+    >
+      {{ "ACTIONS.markAllAsRead" | translate }}</a
+    >
+    <div class="spacer"></div>
+    <a
+      id="kt_quick_notifications_toggle"
+      (click)="myDrop.toggle()"
+      class="btn btn-link-primary"
+    >
+      {{ "ACTIONS.seeAll" | translate }}
+      <i
+        class="text-primary icon-sm"
+        [class]="
+          lang == 'en' ? 'flaticon2-right-arrow' : 'flaticon2-left-arrow'
+        "
+      ></i>
+    </a>
+  </h4>
+  <div class="navi navi-hover">
+    <!--begin::Item-->
+    <a
+      *ngFor="let item of notification$ | async"
+      (click)="redirect(item)"
+      class="navi-item cursor-pointer"
+      [ngClass]="{ 'bg-light-primary': !item.read }"
+    >
+      <div class="navi-link px-2">
+        <div class="symbol symbol-light-success symbol-40 mx-1 symbol-circle">
+          <span class="symbol-label font-size-h5">
+            <i class="flaticon-bell text-success icon-lg"></i
+          ></span>
+        </div>
+
+        <div class="navi-text d-flex flex-column px-4">
+          <p class="font-weight-bold mb-1">{{ item?.message[lang]?.title }}</p>
+          <p style="word-break: break-word">{{ item?.message[lang]?.body }}</p>
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <div class="text-muted">
+              {{ item?.createdAt | customDate | date: "short" }}
+            </div>
+            <button
+              class="btn btn-sm btn-link-primary"
+              *ngIf="!item.read"
+              (click)="markAsRead(item.id)"
+            >
+              {{ "SHARED.MARK_AS_READ" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </a>
+    <!--end::Item-->
+  </div>
+
+  <!--end::Nav-->
+</ng-template>

@@ -1,0 +1,112 @@
+<div class="card card-custom card-stretch">
+  <!--begin::Header-->
+  <div class="card-header px-2">
+    <h3 class="card-title text-dark">
+      {{ "EVENTSMODULES.KPI_INFO" | translate }}
+      <span class="label label-lg label-primary label-inline mx-4 p-2">
+        {{ "EVENTSMODULES.version" | translate }}
+        {{ kpiElement?.version }}
+      </span>
+    </h3>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+      >
+        <i class="flaticon-circle"></i>
+      </button>
+    </div>
+  </div>
+  <!--end::Header-->
+  <!--begin::Body-->
+  <perfect-scrollbar style="height: 500px" class="card-body pt-0 px-4">
+    <div class="d-flex justify-content-between">
+      <div class="px-2 py-5 rounded-lg">
+        <span class="font-weight-bold font-size-h4">
+          {{ lang == "en" ? kpiElement?.nameEn : kpiElement?.nameAr }}
+        </span>
+        <p
+          class="font-weight-bold my-3 font-size-sm mx-5 px-2"
+          [style]="
+            lang == 'en'
+              ? 'border-right: 3px solid #ccc;'
+              : 'border-right: 3px solid #ccc;'
+          "
+        >
+          {{
+            lang == "en" ? kpiElement?.descriptionEn : kpiElement?.descriptionAr
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between border rounded-lg">
+      <div class="px-2 py-5" style="width: 49%">
+        <span class="text-muted font-weight-bold">
+          {{ "INCIDENTS.CATEGORY" | translate }}</span
+        >
+        <p class="font-weight-bold font-size-h6 mt-4 mb-0">
+          {{
+            lang == "en"
+              ? kpiElement?.ParentIncidentCategory?.nameEn
+              : kpiElement?.ParentIncidentCategory?.nameAr
+          }}
+        </p>
+      </div>
+
+      <div class="px-2 py-5" style="width: 49%">
+        <span class="text-muted font-weight-bold">
+          {{ "INCIDENTS.SUB_CATEGORY" | translate }}</span
+        >
+        <p class="font-weight-bold font-size-h6 mt-4 mb-0">
+          {{
+            lang == "en"
+              ? kpiElement?.incidentCategory?.nameEn
+              : kpiElement?.incidentCategory?.nameAr
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="proirites-list">
+      <div
+        *ngFor="let priority of kpiPriorities"
+        class="
+          proirity-item
+          d-flex
+          align-items-center
+          flex-wrap
+          m-4
+          p-2
+          border
+          rounded-lg
+        "
+      >
+        <!--begin::Symbol-->
+        <!-- <div class="symbol symbol-50 symbol-light mr-5">
+        <span class="symbol-label"> </span>
+      </div> -->
+        <!--end::Symbol-->
+        <!--begin::Text-->
+        <div class="d-flex flex-column flex-grow-1 mr-2">
+          <p class="font-weight-bold text-dark-75 font-size-lg mb-1">
+            {{ lang === "en" ? priority?.nameEn : priority?.nameAr }}
+          </p>
+          <span class="text-muted font-weight-bold">{{
+            lang === "en" ? priority?.nameAr : priority?.nameEn
+          }}</span>
+        </div>
+        <!--end::Text-->
+        <span
+          class="label label-xl label-inline my-lg-0 my-2 font-weight-bolder"
+          [class]="'label-light-' + priority?.color"
+        >
+          {{ priority.period }}</span
+        >
+      </div>
+    </div>
+
+    <p *ngIf="this.kpiPriorities.length == 0" class="p-10 text-center">
+      {{ "EVENTSMODULES.NO_PRIORITY_LIST" | translate }}
+    </p>
+  </perfect-scrollbar>
+</div>

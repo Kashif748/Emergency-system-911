@@ -1,0 +1,10 @@
+{
+  "AGENDA": {
+    "new_item": "New Agenda",
+    "nameAr": "Arabic name",
+    "nameEn": "English name",
+    "shiftsNumber": "Shifts number",
+    "isActive": "Active",
+    "actions": "Actions"
+  }
+}

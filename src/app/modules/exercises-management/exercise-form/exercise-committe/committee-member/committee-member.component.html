@@ -1,0 +1,68 @@
+<div [dir]="dir" class="card card-custom" id="kt_card_3">
+  <div class="card-header">
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <form
+      [formGroup]="exerciseForm"
+      (ngSubmit)="onSubmit()"
+      class="flex-column"
+    >
+      <div>
+        <app-user-input
+          [appearance]="'fill'"
+          formControlName="memberName"
+          placeholder="{{ 'EXERCISEIS.member_name' | translate }}"
+        ></app-user-input>
+      </div>
+
+      <div>
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label> {{ "EXERCISEIS.committee_role" | translate }}</mat-label>
+          <mat-select formControlName="committeeRole">
+            <mat-option> option </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-label class="d-block my-2 font-weight-bold"
+          >{{ "EXERCISEIS.member_role" | translate }} :</mat-label
+        >
+        <mat-radio-group
+          aria-label="Select an option"
+          formControlName="memberRole"
+        >
+          <mat-radio-button value="member">
+            {{ "EXERCISEIS.member" | translate }}</mat-radio-button
+          >
+          <mat-radio-button value="director">
+            {{ "EXERCISEIS.director" | translate }}</mat-radio-button
+          >
+          <mat-radio-button value="deputy_director">
+            {{ "EXERCISEIS.deputy_director" | translate }}</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer p-5 d-flex justify-content-between">
+    <button class="btn btn-primary font-weight-bold">
+      {{ "EXERCISEIS.new_committee_member" | translate }}
+    </button>
+
+    <button
+      class="btn btn-light-danger font-weight-bold"
+      (click)="dialogRef.close()"
+    >
+      {{ "ACTIONS.CANCEL" | translate }}
+    </button>
+  </div>
+</div>

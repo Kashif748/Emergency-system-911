@@ -1,0 +1,87 @@
+ table {
+     width: 100%;
+     border-spacing: 0 5px !important;
+     border-collapse: separate;
+
+     tr {
+         transition: all 0.2s;
+
+         &:hover {
+             background-color: rgb(245, 245, 245);
+             cursor: pointer;
+         }
+     }
+
+     td {
+         padding: 8px 0 8px 0;
+         border-bottom: 1px solid #ebedf3 !important;
+         border-top: 1px solid #ebedf3 !important;
+     }
+
+     td:first-child {
+         border-right: 1px solid #ebedf3 !important;
+         border-bottom-right-radius: 10px;
+         border-top-right-radius: 10px;
+     }
+
+     td:last-child {
+         border-left: 1px solid #ebedf3 !important;
+         border-bottom-left-radius: 10px;
+         border-top-left-radius: 10px;
+     }
+
+
+
+ }
+
+ .table-container {
+    padding: 0 10px; 
+  }
+ @media (max-width: 1100px) {
+ 
+    .table-container {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 0!important;
+    }
+  
+    table {
+      width: 1140px;
+      border-spacing: 0 !important;
+      border-collapse: separate !important;
+  
+      tbody tr {
+        box-shadow: none !important;
+      }
+  
+      .actions {
+        position: sticky;
+        left: 0;
+       
+        border-right: 1px solid #eee;
+        .title {
+          display: none !important;
+        }
+      }
+      :lang(en) {
+        .actions {
+          right: 0 !important;
+          border-left: 1px solid #eee;
+          border-radius: 0 !important;
+        }
+      }
+    }
+
+    ::ng-deep {
+        .mat-paginator-page-size-label {
+          display: none !important;
+        }
+        td.mat-column-actions {
+          max-width: 30px !important;
+          align-self: stretch;
+          border-right: 1px solid #eee !important;
+        }
+      }
+  }
+  

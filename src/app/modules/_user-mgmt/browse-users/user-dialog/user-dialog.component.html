@@ -1,0 +1,468 @@
+<p-dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
+  [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
+  [resizable]="false">
+  <ng-template pTemplate="header">
+    <h3>
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+        {{'SHARED.USERS.EDIT.TITLE' | translate}}
+
+      </ng-container>
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+        {{'USER_MANAGEMENT.USERS.CREATE.TITLE' | translate}}
+      </ng-container>
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'USER_MANAGEMENT.USERS.VIEW.TITLE' | translate}}
+      </ng-container>
+    </h3>
+  </ng-template>
+  <div class="w-100 pt-2">
+    <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
+      <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <p-tabView #tabv [(activeIndex)]="activeTab">
+
+      <p-tabPanel header="{{'SHARED.USERS.ACCOUNT_INFO' | translate }}">
+        <ng-template pTemplate="content">
+          <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+
+                <p-treeSelect [options]="orgsTree" display="comma" [filter]="true"
+                  [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single" formControlName="orgStructure"
+                  appendTo="body">
+                  <ng-template let-option pTemplate="value">
+                    {{ option | translateObj : 'label' }}
+                  </ng-template>
+                </p-treeSelect>
+                <label>
+                  {{'SHARED.ORG' | translate}}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container
+                *ngIf="form.controls['orgStructure'].touched && !form.controls['orgStructure'].valid && form.controls['orgStructure'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['orgStructure'].hasError('required')">
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="userName" pInputText autocomplete="new-password" name="_username"
+                  id="_username">
+                <label>{{ 'SHARED.USERNAME' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container
+                *ngIf="form.controls['userName'].touched && !form.controls['userName'].valid && form.controls['userName'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['userName'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+
+                <p class="p-error mb-0" *ngIf="form.controls['userName'].hasError('pattern')">
+                  {{ "VALIDATION_MSG.USERNAME.INVALID" | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+            <div class="p-field p-col-12 p-md-4" *ngIf="passwordControl">
+              <span class="p-float-label">
+                <p-password inputId="_password" [mediumRegex]="RegxConst.PASSWORD_REGEX" formControlName="password"
+                  appendTo="body" autocomplete="new-password"></p-password>
+                <label>
+                  {{'USER_MANAGEMENT.PASSWORD' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container *ngIf="passwordControl?.touched && !passwordControl?.valid && passwordControl?.dirty">
+                <p class="p-error mb-0" *ngIf="passwordControl?.hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+
+                <p class="p-error mb-0" *ngIf="passwordControl?.hasError('pattern')">
+                  {{ "VALIDATION_MSG.PASSWORD.INVALID" | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+            <div class="p-field p-col-12 p-md-4">
+              <div class="p-inputgroup">
+                <span class="p-float-label">
+                  <input type="text" formControlName="emiratesId" pInputText>
+                  <label>
+                    {{'USER_MANAGEMENT.EMIRATES_ID' | translate }}
+                    <strong class="required-asterisk"> * </strong>
+                  </label>
+                </span>
+                <button type="button" pButton pRipple icon="pi pi-search" (click)="emiratesIdSearch()"
+                  [disabled]="viewOnly$ | async"></button>
+              </div>
+              <ng-container
+                *ngIf="form.controls['emiratesId'].touched && !form.controls['emiratesId'].valid && form.controls['emiratesId'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['emiratesId'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+                <p class="p-error mb-0" *ngIf="form.controls['emiratesId'].hasError('pattern')">
+                  {{ "VALIDATION_MSG.EMIRATE_ID.INVALID" | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="email" pInputText>
+                <label>
+                  {{ 'SHARED.EMAIL' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container
+                *ngIf="form.controls['email'].touched && !form.controls['email'].valid && form.controls['email'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['email'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+
+                <p class="p-error mb-0" *ngIf="form.controls['email'].hasError('pattern')">
+                  {{ 'VALIDATION_MSG.EMAIL.INVALID' | translate }} </p>
+
+                <p class="p-error mb-0" *ngIf="form.controls['email'].hasError('alreadyInUse')">
+                  {{ 'VALIDATION_MSG.EMAIL.INUSE' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <p-calendar appendTo="body" [disabled]="viewOnly$ | async" [minDate]="minDate"></p-calendar>
+                <label>{{ 'SHARED.EXPIRE_DATE' | translate }}</label>
+              </span>
+            </div>
+
+            <div class="p-col-12">
+              <p-divider align="left">
+                <div class="p-d-inline-flex p-ai-center">
+                  <i class="pi pi-id-card p-mx-2"></i>
+                  <b>
+                    {{ "SHARED.USERS.PERSONAL_INFO" | translate }}
+                  </b>
+                </div>
+              </p-divider>
+            </div>
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="firstNameEn" pInputText>
+                <label>
+                  {{ 'SHARED.FN_EN' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container
+                *ngIf="form.controls['firstNameEn'].touched && !form.controls['firstNameEn'].valid && form.controls['firstNameEn'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['firstNameEn'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+
+                <p class="p-error mb-0" *ngIf="form.controls['firstNameEn'].hasError('english')">
+                  {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="middleNameEn" pInputText>
+                <label>{{ 'SHARED.MN_EN' | translate }}</label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['middleNameEn'].touched && !form.controls['middleNameEn'].valid && form.controls['middleNameEn'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['middleNameEn'].hasError('english')">
+                  {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="lastNameEn" pInputText>
+                <label>{{ 'SHARED.LN_EN' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['lastNameEn'].touched && !form.controls['lastNameEn'].valid && form.controls['lastNameEn'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['lastNameEn'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+
+                <p class="p-error mb-0" *ngIf="form.controls['lastNameEn'].hasError('english')">
+                  {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="firstNameAr" pInputText>
+                <label>{{ 'SHARED.FN_AR' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['firstNameAr'].touched && !form.controls['firstNameAr'].valid && form.controls['firstNameAr'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['firstNameAr'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+
+                <p class="p-error mb-0" *ngIf="form.controls['firstNameAr'].hasError('arabic')">
+                  {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="middleNameAr" pInputText>
+                <label>{{ 'SHARED.MN_AR' | translate }}</label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['middleNameAr'].touched && !form.controls['middleNameAr'].valid && form.controls['middleNameAr'].dirty">
+
+                <p class="p-error mb-0" *ngIf="form.controls['middleNameAr'].hasError('arabic')">
+                  {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="lastNameAr" pInputText>
+                <label>{{ 'SHARED.LN_AR' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['lastNameAr'].touched && !form.controls['lastNameAr'].valid && form.controls['lastNameAr'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['lastNameAr'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+
+                <p class="p-error mb-0" *ngIf="form.controls['lastNameAr'].hasError('arabic')">
+                  {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4">
+              <span class="p-float-label">
+                <input type="text" formControlName="title" pInputText>
+                <label>{{ 'SHARED.JOB_TITLE' | translate }}</label>
+              </span>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-4" *ngIf="rankControl">
+              <span class="p-float-label">
+                <p-dropdown [options]="ranks$ | async" [autoDisplayFirst]="false" [formControl]="rankControl"
+                  [filter]="true" filterBy="nameAr,nameEn" dataKey="id" [showClear]="true" appendTo="body"
+                  [disabled]="viewOnly$ | async">
+                  <ng-template let-option pTemplate="selectedItem">
+                    {{ option | translateObj : 'name' }}
+                  </ng-template>
+                  <ng-template let-option pTemplate="item">
+                    {{ option | translateObj : 'name' }}
+                  </ng-template>
+                </p-dropdown>
+                <label>
+                  {{'USER_MANAGEMENT.USERS.RANK' | translate}}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container *ngIf="rankControl?.touched && !rankControl?.valid && rankControl?.dirty">
+                <p class="p-error mb-0" *ngIf="rankControl?.hasError('required')">
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+            <ng-container formArrayName="mobiles">
+              <div class="p-field p-col-12 p-md-4" *ngFor="let _ of form.get('mobiles')['controls'];let i = index"
+                [formGroupName]="i">
+                <div class="d-flex">
+                  <div class="w-100">
+                    <span class="p-float-label w-100" dir="ltr">
+                      <ngx-intl-tel-input cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
+                        formControlName="mobile" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
+                      </ngx-intl-tel-input>
+                      <label class="dir-text">
+                        {{ "SHARED.MOB_NO" | translate }}
+                        <ng-container *ngIf="i == 0">
+                          ({{ "SHARED.PRIMARY" | translate }})
+                          <strong class="required-asterisk"> * </strong>
+                        </ng-container>
+                        <ng-container *ngIf="i > 0">
+                          ({{ "SHARED.SECONDARY" | translate }})
+                        </ng-container>
+
+                      </label>
+                    </span>
+                    <ng-container
+                      *ngIf="this.form.get('mobiles')['controls'][i]?.get('mobile').touched && !this.form.get('mobiles')['controls'][i]?.get('mobile').valid && this.form.get('mobiles')['controls'][i]?.get('mobile').dirty">
+                      <p class="dir-text" class="p-error mb-0"
+                        *ngIf="this.form.get('mobiles')['controls'][i]?.get('mobile').hasError('required')">
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </p>
+                      <p class="dir-text" class="p-error mb-0"
+                        *ngIf="this.form.get('mobiles')['controls'][i]?.get('mobile').hasError('validatePhoneNumber')">
+                        {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+                      </p>
+                    </ng-container>
+                  </div>
+
+                  <ng-container *ngIf="i === form.get('mobiles')['controls'].length - 1">
+                    <span class="ml-1"></span>
+                    <p-button [disabled]="viewOnly$ | async" title="{{ 'ACTIONS.ADD' | translate }}" icon="pi pi-plus"
+                      (onClick)="addMobile()" class=""></p-button>
+                  </ng-container>
+                  <ng-container *ngIf="i <= form.get('mobiles')['controls'].length - 1 && i > 0">
+                    <span class="ml-1"></span>
+                    <p-button [disabled]="viewOnly$ | async" title="{{ 'ACTIONS.DELETE' | translate }}"
+                      icon="pi pi-trash" (onClick)="removeMobile(i)" class=""></p-button>
+                  </ng-container>
+
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="p-col-12">
+
+              <p-divider align="left">
+                <div class="p-d-inline-flex p-ai-center">
+                  <i class="pi pi-sliders-v p-mx-2"></i>
+                  <b>
+                    {{ "USER_MANAGEMENT.USERS.CONTROL_INFO" | translate }}
+                  </b>
+                </div>
+              </p-divider>
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-9">
+              <span class="p-float-label">
+                <p-multiSelect [options]="roles$ | async" [filter]="true" filterBy="nameAr,nameEn"
+                  formControlName="roleIds" dataKey="id" display="chip" appendTo="body">
+                  <ng-template let-options pTemplate="selectedItems">
+                    <ng-container *ngFor="let option of options">
+                      <div class="p-multiselect-token">
+                        <span class="p-multiselect-token-label">
+                          {{ option | translateObj : 'name' }}
+                        </span>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="!options || options.length === 0">
+                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
+                    </ng-container>
+                  </ng-template>
+                  <ng-template let-option pTemplate="item">
+                    {{ option | translateObj : 'name' }}
+                  </ng-template>
+                </p-multiSelect>
+                <label>
+                  {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
+                </label>
+              </span>
+
+            </div>
+
+            <div class="p-field p-col-12 p-md-3">
+              <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                iconPos="right"></p-toggleButton>
+            </div>
+          </form>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="{{'USER_MANAGEMENT.SIGNATURE' | translate }}" [disabled]="!editMode">
+        <ng-template pTemplate="content">
+          <div class="container mx-auto p-4" style="background-color: var(--background-secondary-color);">
+            <div>
+              <div class="d-flex justify-content-center align-items-center p-10 min-h-350px text-center">
+                <div *ngIf="!signatureImg" class="text-center">
+                  <p-fileUpload #simg mode="basic" accept="image/*" [maxFileSize]="1024 * 1024"
+                    (onSelect)="signatureImgChange($event);simg.clear();" [auto]="false"
+                    chooseLabel="{{ 'ACTIONS.BROWSE' | translate }}" chooseIcon="pi pi-image"
+                    invalidFileSizeMessageSummary="{{ 'VALIDATION_MSG.INVALID_FILE_SIZE' | translate }}"
+                    invalidFileSizeMessageDetail="{{ 'VALIDATION_MSG.MAX_UPLOAD_SIZE' | translate }}"></p-fileUpload>
+                </div>
+                <img *ngIf="signatureImg" class="max-h-300px max-w-100" [src]="signatureImg.base64 | url" alt="">
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="{{'USER_MANAGEMENT.PROFILE_PHOTO' | translate }}" [disabled]="!editMode">
+        <ng-template pTemplate="content">
+          <div class="container mx-auto p-4" style="background-color: var(--background-secondary-color);">
+            <div>
+              <div class="d-flex justify-content-center align-items-center p-10 min-h-350px text-center">
+                <div class="text-center">
+                  <ng-container *ngIf="!profileImg && _userId === loggedinUserId">
+                    <p-fileUpload #pimg mode="basic" accept="image/*" [maxFileSize]="1024 * 1024"
+                      (onSelect)="profileImgChange($event);pimg.clear();" [auto]="false"
+                      chooseLabel="{{ 'ACTIONS.BROWSE' | translate }}" chooseIcon="pi pi-image"
+                      invalidFileSizeMessageSummary="{{ 'VALIDATION_MSG.INVALID_FILE_SIZE' | translate }}"
+                      invalidFileSizeMessageDetail="{{ 'VALIDATION_MSG.MAX_UPLOAD_SIZE' | translate }}"></p-fileUpload>
+                  </ng-container>
+
+                  <h2 *ngIf="!profileImg && _userId !== loggedinUserId">
+                    {{ 'SHARED.NO_IMAGE' | translate }}
+                  </h2>
+                </div>
+                <img *ngIf="profileImg" class="max-h-300px max-w-100" [src]="profileImg?.base64 | url" alt="">
+              </div>
+
+            </div>
+          </div>
+        </ng-template>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="p-col p-d-flex">
+      <button pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
+      <div class="ml-dir-auto"></div>
+      <ng-container *ngIf="!(viewOnly$ | async)">
+        <div class="mx-1" *ngIf="activeTab !== 2 || loggedinUserId == _userId">
+          <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
+            class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"
+            [disabled]="(activeTab === 1 && !signatureImg) || (activeTab === 2 && !profileImg)"></button>
+        </div>
+        <div class="mx-1" *ngIf="activeTab !== 2 || loggedinUserId == _userId">
+          <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+            (click)="submit()"
+            [disabled]="(activeTab === 1 && !signatureImg?.file) || (activeTab === 2 && !profileImg?.file)"></button>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,10 @@
+::ng-deep {
+  .export-modal {
+    width: 100%;
+    height: fit-content !important;
+    padding: 0 !important;
+    .mat-dialog-container {
+      padding: 0 !important;
+    }
+  }
+}

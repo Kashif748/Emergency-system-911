@@ -1,0 +1,13 @@
+
+<div class="row">
+        <div class="col-sm-2">
+            <span>{{'CORRERSPONDENCE.PRIORITY' | translate}}</span>
+        </div>
+    <div class="col-sm-10">
+        <mat-radio-group (change) = "valueChanged($event)" class="w-100">
+            <mat-radio-button *ngFor="let priority of priorities" [value]="priority">
+                {{priority | propTranslator:'name'}}
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+</div>

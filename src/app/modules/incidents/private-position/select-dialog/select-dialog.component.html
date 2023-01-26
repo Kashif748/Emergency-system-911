@@ -1,0 +1,27 @@
+<mat-dialog-content>
+    <form *ngIf="formGroup" [formGroup]="formGroup">
+              <div class="row">
+                <div class="form-group col-lg-12 mb-0">
+    <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline" class="d-inline">
+        <mat-label>{{'INCIDENTS.SUBJECT' | translate}}</mat-label>
+          <input matInput placeholder="State" aria-label="State" [matAutocomplete]="auto" [formControl]="incidentSearchCtrl" (input)="filterIncidents($event.target.value)">
+          <mat-autocomplete #auto="matAutocomplete" (opened)="autocompleteScroll()">
+            <mat-option *ngIf="(incidents$ | async)?.length == 0">
+              {{'NO_DATA_FILTER' | translate}}
+            </mat-option>
+            <mat-option *ngFor="let type of incidents$ | async" (onSelectionChange)="getInc(type)" [value]="type?.subject">
+              {{ lang === 'en' ? type?.subject : type?.subject}}
+            </mat-option>
+          </mat-autocomplete>
+      </mat-form-field>
+
+      </div>
+      <div mat-dialog-actions>
+        <button mat-raised-button color="warn" mat-dialog-close tabindex="-1" >{{'ACTIONS.CANCEL' | translate}}</button>
+        <button mat-raised-button color="primary"  (click)="redirect()" mat-dialog-close tabindex="-1" cdkFocusInitial>{{'ACTIONS.SUBMIT' |
+          translate}}</button>
+      </div>
+      </div>
+
+</form>
+</mat-dialog-content>

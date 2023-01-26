@@ -1,0 +1,317 @@
+<div>
+  <app-surveys-charts-report></app-surveys-charts-report>
+</div>
+
+<div class="mat-elevation-z8 container p-0 overflow-hidden">
+  <mat-progress-bar
+    *ngIf="loading || downloading"
+    mode="query"
+  ></mat-progress-bar>
+
+  <mat-toolbar class="bg-white px-8 border-bottom">
+    <app-breadcrumbs></app-breadcrumbs>
+    <div class="spacer"></div>
+
+    <!-- export  menu -->
+    <div
+      class="dropdown"
+      ngbDropdown
+      [placement]="lang == 'en' ? 'bottom-right' : 'bottom-left'"
+    >
+      <button
+        class="btn btn-light-primary font-weight-bolder dropdown-toggle"
+        data-toggle="dropdown"
+        data-offset="0px,0px"
+        ngbDropdownToggle
+        [disabled]="downloading"
+      >
+        {{ "ACTIONS.EXPORT" | translate }}
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu dropdown-menu-anim-up">
+        <button class="dropdown-item p-2 font-size-sm" (click)="downloadXlsx()">
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Custome/csv.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+          {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+        </button>
+        <button class="dropdown-item p-2 font-size-sm" (click)="downloadPDF()">
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Custome/pdf.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+          {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <div class="row p-5">
+    <mat-accordion class="col-12">
+      <mat-expansion-panel class="shadow-none border my-4">
+        <mat-expansion-panel-header>
+          <mat-panel-title color="primary">
+            {{ "TASK.ADVANCED_SEARCH" | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="filtersForm" class="mt-4">
+          <div class="d-flex flex-wrap">
+            <div class="px-2 w-100">
+              <mat-form-field
+                appearance="fill"
+                class="form-element example-full-width"
+              >
+                <mat-label>
+                  {{ "Survey.Table.incident" | translate }}</mat-label
+                >
+                <input matInput type="text" formControlName="incident" />
+              </mat-form-field>
+            </div>
+
+            <div class="px-2 w-50">
+              <mat-form-field
+                appearance="fill"
+                class="form-element example-full-width"
+              >
+                <mat-label
+                  >{{ "Survey.Table.fromDate" | translate }}
+                </mat-label>
+                <input
+                  matInput
+                  formControlName="fromDate"
+                  [matDatepicker]="pickerFrom"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="pickerFrom"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="px-2 w-50">
+              <mat-form-field
+                appearance="fill"
+                class="form-element example-full-width"
+              >
+                <mat-label>{{ "Survey.Table.toDate" | translate }} </mat-label>
+                <input
+                  matInput
+                  formControlName="toDate"
+                  [matDatepicker]="picker"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row justify-content-end align-items-center">
+            <div class="col-sm-4 d-flex justify-content-end">
+              <button (click)="onSubmit()" mat-raised-button color="primary">
+                {{ "TASK.SEARCH" | translate }}
+              </button>
+              <button
+                class="mx-2"
+                (click)="reset()"
+                mat-raised-button
+                color="primary"
+              >
+                {{ "INCIDENTS.CLEAR" | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <ng-container *ngIf="dataLength > 0">
+      <div class="col-12">
+        <table
+          mat-table
+          matSort
+          (matSortChange)="sortData($event)"
+          [dataSource]="dataSource"
+          class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+        >
+          <ng-container matColumnDef="createdDate">
+            <th
+              class="setCenter"
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 8% !important"
+            >
+              {{ "Survey.Table.createdDate" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="setCenter">
+              <span class="font-weight-bolder"> {{ element.createdDate }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="incidentId">
+            <th
+              class="setCenter"
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 7%"
+            >
+              {{ "Survey.Table.incident" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="setCenter">
+              <span class="font-weight-bolder">{{ element.incident?.id }}</span>
+            </td></ng-container
+          >
+
+          <ng-container matColumnDef="incidentSubject">
+            <th
+              style="text-align: center"
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 15%; text-align: center"
+            >
+              {{ "Survey.Table.incidentSubject" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="setCenter">
+              <span class="font-weight-bolder">{{
+                element.incident?.subject
+              }}</span>
+            </td></ng-container
+          >
+
+          <ng-container matColumnDef="reportingVia">
+            <th
+              class="setCenter"
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 8%"
+            >
+              {{ "Survey.Table.reportingVia" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="setCenter">
+              <span class="font-weight-bold">
+                {{
+                  lang == "en"
+                    ? element.incident.reportingVia.nameEn
+                    : element.incident.reportingVia.nameAr
+                }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="reporterSurveyAnswers">
+            <th
+              class="setCenter"
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 35%"
+            >
+              {{ "Survey.Table.ReporterSurveyAnswers" | translate }}
+            </th>
+
+            <td mat-cell *matCellDef="let element" class="feel-col py-2">
+              <p>
+                <span
+                  class="feel-reason"
+                  *ngIf="element.CommunicationOfficerEfficiency != ''"
+                >
+                  {{
+                    "Survey.Table.CommunicationOfficerEfficiency" | translate
+                  }}
+                  :
+                </span>
+                <span class="imoji">
+                  <angular-emojis
+                    [name]="element.CommunicationOfficerEfficiencyIcon"
+                    [size]="25"
+                  ></angular-emojis
+                ></span>
+                <span class="feel-type">{{
+                  element.CommunicationOfficerEfficiency
+                }}</span>
+              </p>
+
+              <p>
+                <span
+                  class="feel-reason"
+                  *ngIf="element.SpeedResponseIncidentIcon != ''"
+                >
+                  {{ "Survey.Table.SpeedResponseIncident" | translate }} :
+                </span>
+                <span class="imoji">
+                  <angular-emojis
+                    [name]="element.SpeedResponseIncidentIcon"
+                    [size]="25"
+                  ></angular-emojis>
+                </span>
+                <span class="feel-type">{{
+                  element.SpeedResponseIncident
+                }}</span>
+              </p>
+
+              <p>
+                <span
+                  class="feel-reason"
+                  *ngIf="element.EaseReportingProcedures != ''"
+                >
+                  {{ "Survey.Table.EaseReportingProcedures" | translate }} :
+                </span>
+                <span class="imoji">
+                  <angular-emojis
+                    [name]="element.EaseReportingProceduresIcon"
+                    [size]="25"
+                  ></angular-emojis
+                ></span>
+                <span class="feel-type">{{
+                  element.EaseReportingProcedures
+                }}</span>
+              </p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="notes">
+            <th
+              class="setCenter"
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 27%"
+            >
+              {{ "Survey.Table.notes" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.notes }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="8">
+              <nodata-table></nodata-table>
+            </td>
+          </tr>
+        </table>
+        <mat-paginator
+          #paginator
+          [length]="paginationState?.length"
+          [pageIndex]="paginationState?.pageIndex"
+          [pageSize]="paginationState?.pageSize"
+          [pageSizeOptions]="[10, 20, 50]"
+          (page)="onPagination($event)"
+        >
+        </mat-paginator>
+      </div>
+    </ng-container>
+  </div>
+</div>

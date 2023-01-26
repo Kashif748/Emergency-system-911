@@ -1,0 +1,5 @@
+<mat-form-field class="w-100" appearance="fill" [dir]="dir">
+  <mat-label>{{ lable }}</mat-label>
+  <input matInput type="number" [formControl]="control" />
+  <mat-hint *ngIf="showHint"> {{ hint }} {{ _max }} </mat-hint>
+</mat-form-field>

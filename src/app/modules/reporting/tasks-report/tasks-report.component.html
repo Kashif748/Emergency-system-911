@@ -1,0 +1,517 @@
+<div class="container-fluid">
+  <!-- charts -->
+  <div class="container-fluid my-4" *ngIf="!loadingCharts">
+    <!-- categories chart -->
+
+    <div class="row mb-5 align-items-stretch" dir="ltr">
+
+      <!-- task status chart -->
+      <div class="col-md-4 py-4 px-3">
+        <div class="bg-white rounded border w-100 text-center">
+          <apx-chart
+            [chart]="chart9Options.chart"
+            [series]="chart9Options.series"
+            [plotOptions]="chart9Options.plotOptions"
+            [labels]="chart9Options.labels"
+            [title]="chart9Options.title"
+          >
+          </apx-chart>
+          <span class="text-size-h4">
+            {{ "REPORTING.TOTAL" | translate }} :
+            {{ paginationConfig.totalItems }}
+          </span>
+        </div>
+      </div>
+
+      <!-- task types chart -->
+      <div class="col-md-4 py-4 px-3">
+        <div class="bg-white rounded border w-100 h-100">
+          <apx-chart
+            [chart]="chart7Options.chart"
+            [series]="chart7Options.series"
+            [plotOptions]="chart7Options.plotOptions"
+            [grid]="chart7Options.grid"
+            [labels]="chart7Options.labels"
+            [legend]="chart7Options.legend"
+            [title]="chart7Options.title"
+          >
+          </apx-chart>
+        </div>
+      </div>
+      <!-- task priorities chart -->
+      <div class="col-md-4 py-4 px-3">
+        <div class="bg-white rounded border w-100 h-100">
+          <apx-chart
+            [chart]="chart4Options.chart"
+            [series]="chart4Options.series"
+            [dataLabels]="chart4Options.dataLabels"
+            [plotOptions]="chart4Options.plotOptions"
+            [colors]="chart4Options.colors"
+            [title]="chart4Options.title"
+            [labels]="chart4Options.labels"
+            [legend]="chart4Options.legend"
+          >
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- table -->
+  <div>
+    <div class="mat-elevation-z8">
+      <div class="card-body pt-3 pb-0">
+        <div class="eaton mat-typography" style="overflow-x: hidden">
+          <section class="d-flex pt-4 pb-1">
+            <div class="spacer"></div>
+            <div>
+              <button
+                class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+                (click)="downloadPDF()"
+                [disabled]="loading"
+              >
+                {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md"
+                ></span>
+              </button>
+              <button
+                class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+                (click)="downloadXlsx()"
+                [disabled]="loading"
+              >
+                {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md"
+                ></span>
+              </button>
+            </div>
+          </section>
+          <form [formGroup]="form">
+            <div class="row">
+              <div class="col-md mt-3">
+                <mat-accordion *ngIf="commonData">
+                  <mat-expansion-panel expanded="false" class="mb-5">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title color="primary">
+                        {{ "TASK.ADVANCED_SEARCH" | translate }}
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row">
+                      <div class="form-group col-lg-6 pl-4 pr-4">
+                        <mat-form-field
+                          [dir]="dir$ | async"
+                          appearance="outline"
+                          class="w-100"
+                        >
+                          <mat-label>{{
+                            "TASK.TASK_TITLE" | translate
+                            }}</mat-label>
+                          <input
+                            matInput
+                            type="text"
+                            placeholder="{{ 'TASK.TASK_TITLE' | translate }}"
+                            formControlName="title"
+                          />
+                        </mat-form-field>
+                      </div>
+
+                      <div class="form-group col-lg-6 pl-4 pr-4">
+                        <mat-form-field
+                          [dir]="dir$ | async"
+                          appearance="outline"
+                          class="w-100"
+                        >
+                          <mat-label>{{
+                            "TASK.PRIORITY" | translate
+                            }}</mat-label>
+                          <mat-select
+                            placeholder="{{ 'TASK.PRIORITY' | translate }}"
+                            formControlName="priority"
+                          >
+                            <mat-option
+                              *ngFor="let priority of commonData?.priorities"
+                              [value]="priority.id"
+                            >
+                              {{
+                              lang === "en"
+                                ? priority?.nameEn
+                                : priority?.nameAr
+                              }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 pl-4 pr-4">
+                        <mat-form-field
+                          [dir]="dir$ | async"
+                          appearance="outline"
+                          class="w-100"
+                        >
+                          <mat-label>{{ "TASK.STATUS" | translate }}</mat-label>
+                          <mat-select multiple
+                            placeholder="{{ 'TASK.STATUS' | translate }}"
+                            formControlName="status"
+                          >
+                            <mat-option
+                              *ngFor="let stat of commonData?.taskStatus"
+                              [value]="stat.id"
+                            >
+                              {{ lang === "en" ? stat?.nameEn : stat?.nameAr }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-6">
+                        <app-user-input
+                          appearance="outline"
+                          formControlName="createdByUser"
+                          placeholder="{{ 'SHARED.CREATED_BY' | translate }}"
+                        ></app-user-input>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-6 pl-4 pr-4">
+                        <mat-form-field
+                          [dir]="dir$ | async"
+                          appearance="outline"
+                          [floatLabel]="'never'"
+                          class="w-100"
+                        >
+                          <mat-label>{{
+                            "TASK.FROM_DUE_DATE" | translate
+                            }}</mat-label>
+
+                          <input
+                            matInput
+                            type="date"
+                            [min]="minDate"
+                            [max]="maxDate"
+                            formControlName="startDueDate"
+                          />
+                        </mat-form-field>
+                      </div>
+
+                      <div class="form-group col-lg-6 pl-4 pr-4">
+                        <mat-form-field
+                          [dir]="dir$ | async"
+                          appearance="outline"
+                          class="w-100"
+                        >
+                          <mat-label>{{
+                            "TASK.TO_DUE_DATE" | translate
+                            }}</mat-label>
+
+                          <input
+                            matInput
+                            type="date"
+                            [min]="minDate"
+                            [max]="maxDate"
+                            formControlName="endDueDate"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 pl-4 pr-4">
+                        <mat-form-field
+                          [dir]="dir$ | async"
+                          appearance="outline"
+                          class="w-100"
+                        >
+                          <mat-label>{{
+                            "TASK.TASK_DESCRIPTION" | translate
+                            }}</mat-label>
+                          <input
+                            matInput
+                            type="text"
+                            placeholder="{{
+                              'TASK.TASK_DESCRIPTION' | translate
+                            }}"
+                            formControlName="desc"
+                          />
+                        </mat-form-field>
+                      </div>
+
+                      <div class="form-group col-lg-6 pl-4 pr-4">
+                        <app-oug-input
+                          label="{{ 'INCIDENTS.ASSIGNED' | translate }}"
+                          placeholder="{{ 'INCIDENTS.ASSIGNED' | translate }}"
+                          searchPlaceholder="{{
+                            'SHARED.SEARCH.HINT' | translate
+                          }}"
+                          waitLabel="{{
+                            'TASK.ASSIGNED.EMPTY_OPT' | translate
+                          }}"
+                          noDataLabel="{{ 'NO_DATA_FILTER' | translate }}"
+                          formControlName="assignedTo"
+                        >
+                        </app-oug-input>
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-6 d-flex">
+                        <button
+                          class="btn btn-primary w-100"
+                          (click)="search()"
+                        >
+                          {{ "ACTIONS.FILTER" | translate }}
+                          <span
+                            [inlineSVG]="
+                              '/assets/media/svg/icons/General/Search.svg'
+                            "
+                            cacheSVG="true"
+                            class="svg-icon svg-icon-md"
+                          ></span>
+                        </button>
+                      </div>
+
+                      <div class="col-6 d-flex">
+                        <button
+                          class="btn btn-light-primary w-100"
+                          (click)="clear()"
+                        >
+                          {{ "ACTIONS.CLEAR" | translate }}
+                          <span
+                            [inlineSVG]="
+                              '/assets/media/svg/icons/Media/Repeat.svg'
+                            "
+                            cacheSVG="true"
+                            class="svg-icon svg-icon-md"
+                          ></span>
+                        </button>
+                      </div>
+
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card-body pt-3 pb-0">
+        <!--begin::Table-->
+        <div class="table-responsive table-container">
+          <table
+            id="tasks-table"
+            matSort
+            (matSortChange)="sortChange($event)"
+            class="
+              table
+              table-head-custom
+              table-head-bg
+              table-borderless
+              table-vertical-center
+            "
+          >
+            <thead>
+            <tr class="">
+              <!-- 2 -->
+              <th
+                mat-sort-header="title"
+                class="m-auto"
+                [style.min-width]="'100px'"
+              >
+                {{ "TASK.TASK_TITLE" | translate }}
+              </th>
+              <!-- 3 -->
+              <th
+                class="p-0 mr-3"
+                [style.min-width]="'200px'"
+              >
+                {{ "TASK.TASK_DESCRIPTION" | translate }}
+              </th>
+              <!-- 4 -->
+              <th
+                mat-sort-header="priority"
+                class="p-0"
+                [style.min-width]="'125px'"
+              >
+                {{ "TASK.PRIORITY" | translate }}
+              </th>
+              <!-- 5 -->
+              <th
+                mat-sort-header="dueDate"
+                class="m-auto"
+                [style.min-width]="'110px'"
+              >
+                {{ "TASK.DUE_DATE" | translate }} 
+              </th>
+              <!-- 6 -->
+              <th
+                mat-sort-header="status"
+                class="p-0"
+                [style.min-width]="'110px'"
+              >
+                {{ "TASK.STATUS" | translate }}
+              </th>
+              <!-- 7 -->
+              <th [style.min-width]="'200px'">
+                {{ "SHARED.CREATED_BY" | translate }}
+              </th>
+              <!-- 8 -->
+              <th [style.min-width]="'200px'">
+                {{ "INCIDENTS.ASSIGNED" | translate }}
+              </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr
+              *ngFor="
+                  let task of tasks | paginate: paginationConfig;
+                  let index = index
+                "
+              class="tasklist cursor-pointer"
+            >
+              <!-- 2 -->
+              <td class="pl-0">
+                <p
+                  class="
+                      text-dark-75
+                      font-weight-bolder
+                      text-hover-primary
+                      mb-1
+                      font-size-lg
+                    "
+                >
+                  {{ task?.title }}
+                </p>
+              </td>
+              <!-- 3 -->
+              <td>
+                {{ task?.body }}
+              </td>
+              <!-- 4 -->
+              <td>
+                  <span
+                    *ngIf="task?.priority?.id"
+                    class="font-weight-500 label label-lg label-inline"
+                    [class]="'label-' + task?.priority.color"
+                  >
+                    {{
+                    this.lang === "en"
+                      ? task.priority?.nameEn
+                      : task.priority?.nameAr
+                    }}
+                  </span>
+              </td>
+              <!-- 5 -->
+              <td>
+                <!-- {{ task?.dueDate | date: "yyyy/MM/dd" }} -->
+                <span
+                  class="label label-lg label-inline"
+                  [ngClass]="{
+                      'label-light-primary': task?.dueDate > currentDate,
+                      'label-light-warn': task?.dueDate == currentDate,
+                      'label-light-danger': task?.dueDate < currentDate
+                    }"
+                >
+                    {{ task?.dueDate | customDate | date: "yyyy/MM/dd h:mm:ss a" }}</span
+                >
+              </td>
+              <!-- 6 -->
+              <td>
+                  <span class="label label-lg label-inline">{{
+                    task?.status?.name
+                    }}</span>
+              </td>
+              <!-- 7 -->
+              <td>
+                  <span>
+                    {{ task.createdBy | propTranslator: "firstName" }}
+                    {{ task.createdBy | propTranslator: "lastName" }}
+
+                    <span
+                      class="
+                        label label-rounded label-pill label-inline label-info
+                        mr-2
+                      "
+                    >{{ "SHARED.USER" | translate }}</span
+                    >
+                  </span>
+                <br/>
+                <span matBadgeColor="accent"
+                >{{
+                  lang == "ar"
+                    ? task?.createdBy?.orgStructure?.nameAr
+                    : task?.createdBy?.orgStructure?.nameEn
+                  }}
+
+                  <span
+                    class="
+                        label
+                        label-rounded
+                        label-pill
+                        label-inline
+                        label-success
+                        mr-2
+                      "
+                  >{{ "SHARED.ORGANIZATION" | translate }}</span
+                  >
+                  </span>
+              </td>
+              <!-- 8 -->
+              <td>
+                  <span class="text-muted mx-2">
+                    {{ task.assignTo | propTranslator: "name" }}
+                  </span>
+                <span
+                  *ngIf="task.assignTo?.type == 'org'"
+                  class="
+                      label label-rounded label-pill label-inline label-success
+                      mr-2
+                    "
+                >{{ "SHARED.ORGANIZATION" | translate }}</span
+                >
+
+                <span
+                  *ngIf="task.assignTo?.type == 'user'"
+                  class="
+                      label label-rounded label-pill label-inline label-info
+                      mr-2
+                    "
+                >{{ "SHARED.USER" | translate }}</span
+                >
+
+                <span
+                  *ngIf="task.assignTo?.type == 'group'"
+                  class="
+                      label label-rounded label-pill label-inline label-warning
+                      mr-2
+                    "
+                >{{ "SHARED.GROUP" | translate }}</span
+                >
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="spinner-container m-auto p-10" *ngIf="loading">
+            <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+          </div>
+        </div>
+        <!--end::Table-->
+
+        <pagination-controls
+          previousLabel="Prev"
+          nextLabel="Next"
+          responsive="true"
+          id="pagination"
+          (pageChange)="pageChanged($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<div class="card card-custom gutter-b">
+
+    <div class="card-header d-flex">
+
+        <div class="card-title">
+            <h3 class="card-label">{{'CIRCULARS.HEADER' | translate }}</h3>
+        </div>
+
+    </div>
+
+
+
+    <div class="card-body">
+
+        <form [formGroup]="form" (onSubmit)="onSubmit()">
+
+            <div class="row">
+
+                <div class="col-md">
+                    <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+                        <mat-label>{{'CIRCULARS.CONFIDENTIALITY' | translate}}</mat-label>
+
+                        <mat-select formControlName="confidentialtyID">
+
+                            <mat-option *ngFor="let con of confidentialty " [value]="con.id">
+                                {{con.nameEn}}
+                            </mat-option>
+
+                        </mat-select>                        <mat-error *ngIf="handleError('confidentialtyID', 'required')">
+                            your confidentialtyID field is required
+                        </mat-error>
+
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md">
+                    <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+                        <mat-label>{{'REPORTS.INCIDENTS' | translate}}</mat-label>
+
+                        <mat-select formControlName="incidentId">
+
+                            <mat-option *ngFor="let incident of incidents$ | async" [value]="incident.id">
+                                {{incident.subject}}
+                            </mat-option>
+
+                        </mat-select>
+
+                        <mat-error *ngIf="handleError('incidentId', 'required')">
+                            your incident field is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+
+                <div class="col-md">
+                    <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+
+                        <mat-label>{{'REPORTS.UPDATE' | translate}}</mat-label>
+
+                       <textarea matInput formControlName="update" rows="7"></textarea>
+
+                        <mat-error *ngIf="handleError('update', 'required')">
+                            your Update field is required
+                        </mat-error>
+
+                    </mat-form-field>
+                </div>
+            </div>
+
+        
+            <div class="row m-auto">
+                <div class="col-md">
+                    <button mat-button style="width: 50%;" color="primary" [disabled]="!form.valid"
+                        (click)="onSubmit()">{{'ACTIONS.SEND' | translate}}</button>
+                </div>
+
+                <div class="col-md">
+                    <button mat-button style="width: 50%;" color="warn"
+                        [disabled]="!form.valid">{{'ACTIONS.SEND_ARCHIVE' | translate}}</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

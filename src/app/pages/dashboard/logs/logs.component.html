@@ -1,0 +1,80 @@
+<div class="card timeline timeline-3">
+  <div class="timeline-items">
+    <div *ngIf="loading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    <perfect-scrollbar
+      #scroll
+      [config]="{ wheelSpeed: 2 }"
+      class="ps-container ps-theme-default ps-active-y p-4"
+      style="
+        scroll-behavior: smooth;
+        scroll-snap-type: proximity;
+        height: 500px !important;
+      "
+    >
+      <div class="timeline-item pl-10" *ngFor="let log of logs">
+        <div class="timeline-media">
+          <div class="symbol symbol-circle symbol-45 symbol-light-primary">
+            <span class="symbol-label">
+              {{ log.createdBy?.orgStructure?.nameEn | firstLetter }}
+            </span>
+          </div>
+        </div>
+        <div
+          class="timeline-content pulse"
+          [ngClass]="{
+            'pulse ': log['isNew']
+          }"
+        >
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+              <a
+                [routerLink]="log.redirect"
+                class="label label-outline-primary label-inline mr-2"
+              >
+                {{ log?.label }}
+              </a>
+            </div>
+            <span class="label label-light-primary label-inline mr-2">
+              {{ "DASHBOARD." + log?.type | translate }}
+            </span>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="mr-2">
+              <p class="text-dark-75 font-weight-bold msg"  [ngClass]="{ 'collapsed-msg': !log.show }">
+                <span
+                  *ngFor="
+                    let item of log?.notes?.split('\<br>');
+                    let index = index;
+                    let count = count
+                  "
+                  (click)="log.show = !log.show"
+                >
+                  {{ !log.show ? item.substr(0, 280) : item }}
+                  <a
+                    class="cursor-pointer"
+                    *ngIf="(item.length > 280 || count > 1) && !log.show"
+                    >{{ "SHARED.SHOW_MORE" | translate }}</a
+                  >
+                  <br />
+                </span>
+              </p>
+            </div>
+          </div>
+          <p class="p-0 m-0">
+            <span class="text-muted ml-2">
+              {{ log?.createdOn | customDate | date : "short" }} |
+              {{
+                lang == "ar"
+                  ? log.createdBy?.orgStructure?.nameAr
+                  : log.createdBy?.orgStructure?.nameEn
+              }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </div>
+</div>

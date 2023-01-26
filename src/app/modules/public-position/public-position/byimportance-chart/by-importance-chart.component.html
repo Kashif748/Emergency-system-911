@@ -1,0 +1,37 @@
+<div class="card card-custom rounded-lg shadow-sm mb-3">
+  <div class="card-header px-2 border-0">
+    <div class="card-title m-0">
+      <p class="text-dark-50 font-size-lg m-0">
+        {{ "PUBLIC_POSITION.priorityChart.title"  | translate }}
+      </p>
+    </div>
+    <div class="card-toolbar">
+      <button
+        class="btn btn-hover-light-primary btn-sm btn-icon"
+        [matMenuTriggerFor]="menu"
+      >
+        <i class="ki ki-bold-more-hor"></i>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="card-body p-3">
+    <ng-container *ngIf="priorities.length>0;else noDataFound">
+      <div *ngFor="let priority of priorities" class="my-4">
+        <div class="d-flex justify-content-between">
+          <span>{{ lang === "ar" ? priority.nameAr : priority.nameEn }}</span>
+          <span>{{ priority.percentage }}%</span>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="priority.percentage"></mat-progress-bar>
+      </div>
+    </ng-container>
+    <ng-template #noDataFound>
+      <p class="text-dark-50 font-size-lg m-0">
+        {{ "PUBLIC_POSITION.messages.noData"  | translate }}
+      </p>
+    </ng-template>
+  </div>
+</div>

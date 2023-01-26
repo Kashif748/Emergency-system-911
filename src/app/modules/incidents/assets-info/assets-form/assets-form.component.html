@@ -1,0 +1,92 @@
+<div [dir]="lang == 'en' ? 'ltr' : 'rtl'" class="card card-custom" style="overflow: hidden">
+  <div class="card-header px-4">
+    <div class="card-title">
+      <h4 class="card-label">
+        <span *ngIf="type == 'add'">{{
+          "INCIDENTS.ADD_ASSETS" | translate
+          }}</span>
+        <span *ngIf="type == 'edit'">{{
+          "INCIDENTS.EDIT_ASSETS" | translate
+          }}</span>
+      </h4>
+    </div>
+    <div class="card-toolbar">
+      <button (click)="matDialogRef.close()" class="btn btn-icon btn-sm btn-light-primary">
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body px-4">
+    <div class="row" [formGroup]="form">
+      <div class="col-sm-6">
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "INCIDENTS.ORGANIZATION" | translate }}</mat-label>
+          <mat-select formControlName="orgStructure" *ngIf="type === 'add'">
+            <mat-option *ngFor="let org of organizationsI"  [value]="org.id">
+              {{org.name}}
+            </mat-option>
+          </mat-select>
+          <mat-select formControlName="orgStructure" *ngIf="type === 'edit'">
+            <mat-option   [value]="organizationsI['id']">
+              {{lang == 'en' ? organizationsI['nameEn'] : organizationsI['nameAr'] }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6">
+        <div class="spinner-container" *ngIf="loading">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "RESOURCE.CATEGORY" | translate }}</mat-label>
+          <mat-select formControlName="category">
+            <mat-optgroup *ngFor="let mainCategory of selectedAsset.organization?.mainCategories"
+                          [label]="lang ==='ar' ? mainCategory.nameAr: mainCategory.nameEn">
+              <mat-option *ngFor="let cat of mainCategory.categories" [value]="cat.id">
+              <span [class]="'bg-' +cat?.color" style="display: flex; justify-content: space-between;padding: 0 16px;">
+                {{ lang === 'en' ? cat.nameEn : cat.nameAr }}
+                <span *ngIf="cat?.icon && cat?.icon != 'null'">
+                  <img src="assets/media/svg/icons/{{cat?.icon}}.svg" alt=""></span>
+              </span>
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6">
+        <mat-form-field class="w-100" appearance="fill" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+          <mat-label>{{ "TASK.ASSETS" | translate }}</mat-label>
+          <mat-select formControlName="asset" placeholder="{{ 'TASK.ASSETS' | translate }}">
+            <mat-option *ngFor="let asset of selectedAsset.category?.assets" [value]="asset.id">
+              {{ lang === "en" ? asset?.nameEn : asset?.nameAr }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6">
+        <app-number-input formControlName="quantity" lable="{{ 'TASK.REQUIRED_QUANTITY' | translate }}"
+                          hint="{{ 'TASK.AVAILABLE_QUANTITY' | translate }}" [showHint]="form.get('asset').valid"
+                          [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                          [max]="selectedAsset.asset?.quantity || 0"></app-number-input>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer p-2 px-4 d-flex justify-content-between">
+    <button cdkFocusInitial *ngIf="type == 'add'" [disabled]="form.invalid"
+            class="btn btn-sm btn-primary font-weight-bold" app-throttle-click [ThrottleTime]="2000"
+            (ThrottleClick)="submit()">
+      {{ "ACTIONS.SAVE" | translate }}
+      <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"></span>
+    </button>
+
+    <button cdkFocusInitial *ngIf="type == 'edit'" [disabled]="form.invalid"
+            class="btn btn-sm btn-primary font-weight-bold" app-throttle-click [ThrottleTime]="2000"
+            (ThrottleClick)="submit()">
+      {{ "ACTIONS.UPDATE" | translate }}
+      <span [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'" cacheSVG="true"
+            class="svg-icon svg-icon-md"></span>
+    </button>
+  </div>
+</div>

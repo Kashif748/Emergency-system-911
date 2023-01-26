@@ -1,0 +1,84 @@
+<div class="d-flex justify-content-end align-items-start">
+  <div class="w-50 px-2">
+    <div class="card card-custom card-stretch border">
+      <div class="card-header p-0">
+        <div class="form-group border-0 m-0 p-2 w-100">
+          <div class="input-icon">
+            <input
+              (keydown.enter)="onKeydown($event)"
+              type="email"
+              class="form-control form-control-solid w-100"
+              placeholder="{{ 'EXERCISEIS.search_gaol' | translate }}"
+            />
+            <span><i class="flaticon2-search-1 icon-md"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-2">
+        <ul
+          class="navi navi-hover navi-active navi-accent navi-link-rounded-lg"
+        >
+          <li
+            @fadeSlideInOut
+            *ngFor="let item of goals; let i = index"
+            class="navi-item cursor-pointer"
+            (click)="activeGoal = i"
+          >
+            <div class="navi-link" [ngClass]="{ active: activeGoal == i }">
+              <span class="navi-icon text-hover-danger text-muted">
+                <i
+                  class="flaticon2-rubbish-bin-delete-button icon-nm"
+                  (click)="deleteGoal(i)"
+                ></i>
+              </span>
+
+              <span class="navi-text"> {{ item }}</span>
+            </div>
+          </li>
+        </ul>
+        <div
+          *ngIf="goals.length == 0"
+          class="empty w-100 rouded p-5 text-center"
+        >
+          <span class="font-size-lg text-muted text-center">
+            {{ "EXERCISEIS.no_goals" | translate }}
+            <i class="flaticon2-information icon-md"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-50 px-2">
+    <div class="card card-custom card-stretch border">
+      <div class="card-header p-0">
+        <h4 class="m-0 px-3 py-4 text-muted">
+          {{ "EXERCISEIS.leasons_list" | translate }}
+        </h4>
+      </div>
+
+      <div class="card-body p-2">
+        <ul
+          @animateStagger
+          class="navi navi-hover navi-active navi-accent navi-link-rounded-lg"
+        >
+          <li
+            *ngFor="let item of [1, 2, 2, 3, 4]"
+            class="navi-item cursor-pointer"
+          >
+            <div class="navi-link">
+              <span class="navi-icon text-hover-danger text-muted">
+                <i class="flaticon2-rubbish-bin-delete-button icon-nm"></i
+              ></span>
+
+              <span class="navi-text"> Goal Title</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <span class="bullet bullet-bar align-self-stretch mx-2"></span> -->

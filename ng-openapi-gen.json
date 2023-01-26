@@ -1,0 +1,7 @@
+{
+  "$schema": "./node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
+  "input": "http://10.21.13.245:8080/ecms/v3/api-docs",
+  "output": "src/app/api",
+  "ignoreUnusedModels": true,
+  "templates": "api-templates"
+}

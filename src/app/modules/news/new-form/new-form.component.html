@@ -1,0 +1,109 @@
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-custom gutter-b">
+          <div class="card-header card-header-danger d-flex align-content-center">
+            <!-- <div class="card-header d-flex" style="align-content: center"> -->
+            <div class="card-title">
+              <h4 *ngIf="isAddMode" class="card-label">
+                {{ "NEWS.CREATE" | translate }}
+              </h4>
+              <h4 *ngIf="!isAddMode" class="card-label">
+                {{ "NEWS.EDIT" | translate }}
+              </h4>
+            </div>
+            <div class="spacer"></div>
+            <button class="btn btn-icon btn-sm btn-light-primary" (click)="backClicked()">
+              <span [inlineSVG]="'/assets/media/svg/icons/Navigation/Left-2.svg'" cacheSVG="true"
+                class="svg-icon svg-icon-md"></span>
+            </button>
+            <!-- </div> -->
+          </div>
+          <form [formGroup]="formGroup">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field appearance="outline" [dir]="direction.value">
+                    <mat-label>{{ "NEWS.TITLE" | translate }}</mat-label>
+                    <input matInput formControlName="title" [placeholder]="'NEWS.TITLE' | translate" />
+                    <mat-error *appFormErrors="formGroup.get('title')">
+                      {{ "NEWS.THIS_FIELD_IS_REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field appearance="outline" [dir]="direction.value">
+                    <mat-label>{{ "NEWS.EXPIREDATE" | translate }}</mat-label>
+                    <input matInput [matDatepicker]="picker" [min]="currentDate"
+                      [placeholder]="'NEWS.EXPIREDATE' | translate" formControlName="expireDate" />
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *appFormErrors="formGroup.get('expireDate')">
+                      {{ "NEWS.THIS_FIELD_IS_REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field appearance="outline" [dir]="direction.value">
+                    <mat-label>{{ "NEWS.ORGINIZATION" | translate }}</mat-label>
+                    <mat-select name="orgs" id="orgs" formControlName="newsOrgs" multiple>
+                      <mat-option *ngFor="let org of orgs$ | async" [value]="org.id">
+                        {{ org | propTranslator: "name" }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *appFormErrors="formGroup.get('newsOrgs')">
+                      {{ "NEWS.THIS_FIELD_IS_REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <mat-form-field appearance="outline" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+                    <mat-label>{{ "NEWS.NEWS_TYPES" | translate }}</mat-label>
+                    <mat-select name="types" id="types" formControlName="type">
+                      <mat-option *ngFor="let type of newsTypes" [value]="type.id">
+                        {{ type | propTranslator: "name" }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *appFormErrors="formGroup.get('type')">
+                      {{ "NEWS.THIS_FIELD_IS_REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <mat-form-field appearance="outline" [dir]="lang === 'en' ? 'ltr' : 'rtl'">
+                    <mat-label>{{ "NEWS.BODY" | translate }}</mat-label>
+                    <textarea name="body" id="body" rows="10" matInput formControlName="body"
+                      [placeholder]="'NEWS.BODY' | translate"></textarea>
+                    <mat-error *appFormErrors="formGroup.get('body')">
+                      {{ "NEWS.THIS_FIELD_IS_REQUIRED" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col-sm-3">
+                  <mat-checkbox formControlName="isActive">{{
+                    "NEWS.IS_ACTIVE" | translate
+                    }}</mat-checkbox>
+                </div>
+              </div> -->
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer" color="primary"
+                app-throttle-click (ThrottleClick)="onSubmit()" [disabled]="formGroup.invalid" type="submit">
+                {{ "NEWS.SUBMIT" | translate }}
+                <span [inlineSVG]="'/assets/media/svg/icons/General/Save.svg'" cacheSVG="true"
+                  class="svg-icon svg-icon-md"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

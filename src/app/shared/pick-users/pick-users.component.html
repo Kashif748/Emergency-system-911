@@ -1,0 +1,201 @@
+ <ng-template #usersListView>
+  <div class="users-list">
+    <div class="p-0 d-flex w-100 search-bar">
+      <div class="m-auto w-100 px-5">
+        <div class="form-group" [class]="isModal ? 'm-0' : 'mt-4'">
+          <div class="input-icon">
+            <input
+              [formControl]="searchControl"
+              type="email"
+              class="form-control form-control-solid w-100"
+              placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER_LIST' | translate }}"
+            />
+            <span><i class="flaticon2-search-1 icon-md"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="list-item px-3"
+      [class]="isModal ? 'py-2 border-bottom' : 'py-5'"
+    >
+      <span class="mx-4"
+        >{{ users.selectedOptions.selected.length }}
+        {{ "CALL_DUTY.ITEMS" | translate }}</span
+      >
+      <div class="spacer"></div>
+      <ng-container *ngIf="multipleSelection">
+        <span class="pl-3 pr-3"> {{ "CALL_DUTY.SELECT_ALL" | translate }}</span>
+        <mat-checkbox
+          [checked]="false"
+          (change)="selectAllChange()"
+          color="primary"
+        >
+        </mat-checkbox>
+      </ng-container>
+    </div>
+    <mat-selection-list
+      #users
+      [class]="isModal ? 'p-0' : ''"
+      (selectionChange)="getAllSelectedData()"
+      [multiple]="multipleSelection"
+    >
+      <perfect-scrollbar
+        (psYReachEnd)="nextPage($event)"
+        class="h-400px overflow-scroll"
+      >
+        <mat-list-option
+          *ngFor="let user of users$ | async"
+          [value]="user.id"
+          color="primary"
+          #optionItem
+          [disabled]="isDisabled(user.id)"
+          [selected]="isSelected(user.id) || optionItem.disabled"
+          [ngClass]="{ 'hide-checkbox': optionItem.disabled }"
+          [dir]="lang == 'en' ? 'rtl' : 'ltr'"
+        >
+          <div class="list-item" [dir]="lang == 'en' ? 'ltr' : 'rtl'">
+            <div
+              *ngIf="optionItem.disabled && multipleSelection"
+              class="disabled-icon"
+            >
+              <span
+                [inlineSVG]="'/assets/media/svg/icons/Code/Stop.svg'"
+                cacheSVG="true"
+                class="svg-icon svg-icon-md svg-icon-danger d-flex"
+              ></span>
+            </div>
+
+            <div
+              *ngIf="lang == 'ar'"
+              class="d-flex flex-column flex-grow-1 w-100"
+              [class]="optionItem.disabled ? 'text-muted' : 'text-dark'"
+            >
+              <div class="d-flex w-100">
+                <span class="mb-1 text-size-sm">
+                  {{ user.nameAr }}
+                  <span
+                    *ngIf="optionItem.selected && !multipleSelection"
+                    [inlineSVG]="'/assets/media/svg/icons/Navigation/Check.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md svg-icon-primary"
+                  ></span>
+                  <span
+                    *ngIf="optionItem.disabled && !multipleSelection"
+                    [inlineSVG]="'/assets/media/svg/icons/Code/Stop.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md svg-icon-danger"
+                  ></span>
+                </span>
+                <span class="spacer"></span>
+                <span class="label label-inline label-outline-primary py-0">
+                  {{ user?.orgStructure?.nameAr }}
+                </span>
+              </div>
+
+              <span class="font-size-sm">
+                <span
+                  *ngFor="let item of user.roles"
+                  class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
+                >
+                  {{ item.nameAr }}
+                </span>
+              </span>
+            </div>
+            <div *ngIf="lang == 'en'" class="d-flex flex-column flex-grow-1">
+              <div class="d-flex w-100">
+                <span class="mb-1 text-size-sm">
+                  {{ user.nameEn }}
+                  <span
+                    *ngIf="optionItem.selected && !multipleSelection"
+                    [inlineSVG]="'/assets/media/svg/icons/Navigation/Check.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md svg-icon-primary"
+                  ></span>
+                  <span
+                    *ngIf="optionItem.disabled && !multipleSelection"
+                    [inlineSVG]="'/assets/media/svg/icons/Code/Stop.svg'"
+                    cacheSVG="true"
+                    class="svg-icon svg-icon-md svg-icon-danger"
+                  ></span>
+                </span>
+                <span class="spacer"></span>
+                <span class="label label-inline label-outline-primary py-0">
+                  {{ user?.orgStructure?.nameEn }}
+                </span>
+              </div>
+
+              <span class="text-muted font-size-sm">
+                <span
+                  *ngFor="let item of user.roles"
+                  class="label label-inline font-weight-lighter mr-1 py-0 mb-1"
+                >
+                  {{ item.nameEn }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </mat-list-option>
+        <div class="spinner-container m-auto p-10" *ngIf="usersLoading">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+      </perfect-scrollbar>
+    </mat-selection-list>
+  </div>
+</ng-template>
+
+<div
+  *ngIf="isModal"
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  class="card card-custom"
+  id="kt_card_3"
+>
+  <div class="card-header px-2">
+    <div *ngIf="correrspondenceMode" class="card-title">
+      {{ "CORRERSPONDENCE.USER" | translate }}
+    </div>
+    <div *ngIf="!correrspondenceMode" class="card-title">
+      {{ "USER.USERS" | translate }}
+    </div>
+
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body" [class]="isModal ? 'p-1' : 'p-3'">
+    <div *ngTemplateOutlet="usersListView"></div>
+  </div>
+  <div class="d-flex flex-column justify-content-end p-2 border-top">
+    <div>
+      <button
+        (click)="saveAndClose()"
+        cdkFocusInitial
+        type="submit"
+        class="
+          btn btn-md btn-primary
+          font-weight-bolder
+          mx-3
+          py-2
+          px-5
+          cursor-pointer
+        "
+      >
+        {{ "ACTIONS.SAVE" | translate }}
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/General/Save.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isModal">
+  <div *ngTemplateOutlet="usersListView"></div>
+</div>

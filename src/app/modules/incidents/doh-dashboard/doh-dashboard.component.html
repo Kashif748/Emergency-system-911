@@ -1,0 +1,423 @@
+   
+     <div class="d-flex flex-column list-content">
+        <div [dir]="lang === 'en' ? 'ltr' : 'rtl'" class="w-100">
+          <div class="row">
+            <div class="col-lg-12 col-xxl-12 order-1 order-xxl-1">
+              <div class="card card-custom card-stretch gutter-b">
+                <div class="card-body pt-8">
+                    <div class="row  my-3">
+                        <div class="col-12 mt-5">
+   <div class="updates">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="title">LATEST DOH INFORMATION &amp;UPDATES</div>
+            </div>
+        </div>
+        </div>
+    
+   
+        <div class="row">
+          
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="row update_boxes">
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-6 p-0">
+                        <div class="box one">
+                            <div class="left">
+                                <div class="heading">Total Volunteers</div>
+                                <div class="number" covid-totalnumber="">{{data?.length}}</div>
+                                <div style="margin-top:15px;">
+                                    <div style="display:inline">Daily Volunteers: </div>
+                                    <div style="display:inline; font-weight:bold" covid-dailynumber="">2084</div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="icon">
+                                    <img class="general1" src="../../../../assets/images/icon_1.png" alt="Icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-6 p-0">
+                        <div class="box two">
+                            <div id="TotalTestsText" class="left" style="opacity: 1;">
+                                <div class="heading">Total BED Capacity</div>
+                                <div class="number" covid-criticalcases="">{{dataBed?.length}}</div>
+                                <div style="margin-top:15px;">
+                                    <div style="display:inline"> BED Capacity: </div>
+                                    <div style="display:inline; font-weight:bold" covid-dailytests="">252243</div>
+                                </div>
+                            </div>
+                            <div id="totalTestsIcon" class="right" style="opacity: 1;">
+                                <div class="icon">
+                                    <img class="general1" src="../../../../assets/images/icon_2.png" alt="Icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-6 p-0">
+                        <div class="box three">
+                            <div class="left">
+                                <div class="heading">Total Events</div>
+                                <div class="number" covid-totaldeaths="">{{dataShared?.length}}</div>
+                                <div style="margin-top:15px;">
+                                    <div style="display:inline">Sharing INFO: </div>
+                                    <div style="display:inline; font-weight:bold" covid-dailydeaths="">2</div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="icon">
+                                    <img class="general1" src="../../../../assets/images/icon_3.png" alt="Icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-6 p-0">
+                        <div class="box four">
+                            <div class="left">
+                                <div class="heading">Total Recovered</div>
+                                <div class="number" covid-totalrecovered="">45600</div>
+                                <div style="margin-top:15px;">
+                                    <div style="display:inline">Daily Recovered: </div>
+                                    <div style="display:inline; font-weight:bold" covid-dailyrecovered="">2210</div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="icon">
+                                    <img class="general1" src="../../../../assets/images/icon_4.png" alt="Icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12 p-0">
+                <div class="colored_bar">
+                    <div class="heading">Incident Health data timeline</div>
+                    <ul class="timeline" covid-casestimeline="">
+                                                        
+                    <li>
+                        <div class="date">3 Apr</div><div class="numbers">2084</div>
+                        <div class="labels">New<br>cases</div>
+                    </li>
+                        <li>
+                            <div class="date">2 Apr</div>
+                            <div class="numbers">2180</div><div class="labels">New<br>cases</div>
+                        </li>
+                        <li>
+                            <div class="date">1 Apr</div><div class="numbers">2315</div><div class="labels">New<br>cases</div></li>
+                            <li><div class="date">31 Mar</div><div class="numbers">2084</div><div class="labels">New<br>cases</div></li>
+                            <li><div class="date">30 Mar</div><div class="numbers">2289</div><div class="labels">New<br>cases</div></li>
+                            <li><div class="date">29 Mar</div><div class="numbers">1874</div><div class="labels">New<br>cases</div></li>
+                            <li><div class="date">28 Mar</div><div class="numbers">2128</div><div class="labels">New<br>cases</div></li>
+                        </ul>
+                      
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="titles">Volunteers</div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="app-container table-infos">
+                    <div class="pb-5 d-flex w-100 search-bar">
+                      <div style="width: 50%">
+                        <div class="input-icon table-filter">
+                          <input
+                            #input
+                            (keyup)="applyFilter($event)"
+                            class="form-control form-control-solid"
+                            placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+                          />
+                          <span><i class="flaticon2-search-1 icon-md"></i></span>
+                        </div>
+                      </div>
+
+                    </div>
+                  
+                    <table
+                      mat-table
+                      [dataSource]="dataSource"
+                      class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+                    >
+                      <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let element">
+                          <span class="font-weight-bolder"># {{ element.dataid }}</span>
+                        </td></ng-container
+                      >
+                  
+                      <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>
+                        Full Name
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.FullName }}</td>
+                      </ng-container>
+                  
+                  
+                      <ng-container matColumnDef="gender">
+                        <th mat-header-cell *matHeaderCellDef>Gender</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Gender }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="nationality">
+                        <th mat-header-cell *matHeaderCellDef>Nationality</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Nationality }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef>Email</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Email }}</td>
+                      </ng-container> 
+                      
+                      <ng-container matColumnDef="mobile">
+                        <th mat-header-cell *matHeaderCellDef>mobile</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Mobile1 }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="interest">
+                        <th mat-header-cell *matHeaderCellDef>Interests</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Interest1 }}</td>
+                      </ng-container>
+              
+         
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                  
+                      <!-- Row shown when there is no matching data. -->
+                      <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="8">
+                          <nodata-table [input]="input"></nodata-table>
+                        </td>
+                      </tr>
+                    </table>
+                    <mat-paginator
+                      [length]="this.data.length"
+                      [pageSize]="10"
+                      (page)="pageChanged($event)"
+                    >
+                    </mat-paginator>
+                  </div>
+             </div>
+        </div>
+     </div>
+
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="titles">Bed Capacity </div>
+            </div>
+
+            <!-- bed capacity -->
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="app-container table-infos">
+                    <div class="pb-5 d-flex w-100 search-bar">
+                      <div style="width: 50%">
+                        <div class="input-icon table-filter">
+                          <input
+                            #input
+                            (keyup)="applyFilter1($event)"
+                            class="form-control form-control-solid"
+                            placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+                          />
+                          <span><i class="flaticon2-search-1 icon-md"></i></span>
+                        </div>
+                      </div>
+
+                    </div>
+                  
+                    
+                    <table
+                      mat-table
+                      [dataSource]="dataSourceBED"
+                      class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+                    >
+                      <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let element">
+                          <span class="font-weight-bolder"># {{ element.BedCapacityId }}</span>
+                        </td></ng-container
+                      >
+                  
+                      <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef>
+                       Type
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.BedTypeAgeName }}</td>
+                      </ng-container>
+                  
+                  
+                      <ng-container matColumnDef="occupied">
+                        <th mat-header-cell *matHeaderCellDef>Occupied Beds</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Occupied }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="available">
+                        <th mat-header-cell *matHeaderCellDef>Available Beds</th>
+                        <td mat-cell *matCellDef="let element">{{ element.AvailableBeds }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="facility">
+                        <th mat-header-cell *matHeaderCellDef>Facility</th>
+                        <td mat-cell *matCellDef="let element">{{ element.FacilityName }}</td>
+                      </ng-container> 
+                      
+                      <ng-container matColumnDef="region">
+                        <th mat-header-cell *matHeaderCellDef>Region</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Region }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>Last Update Date</th>
+                        <td mat-cell *matCellDef="let element">{{ element.LastUpdateDate }}</td>
+                      </ng-container>
+              
+         
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsBed"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsBed"></tr>
+                  
+                      <!-- Row shown when there is no matching data. -->
+                      <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="8">
+                          <nodata-table [input]="input"></nodata-table>
+                        </td>
+                      </tr>
+                    </table>
+                    <mat-paginator
+                      #bedPaginator
+                      [length]="this.dataBed.length"
+                      [pageSize]="10"
+                      (page)="pageChanged($event)"
+                    >
+                    </mat-paginator>
+                  </div>
+             </div>
+
+            
+        </div>
+     </div>
+     
+    <!-- shared info  -->
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="titles">Event Info </div>
+            </div>
+
+            <!-- bed capacity -->
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="app-container table-infos">
+                    <div class="pb-5 d-flex w-100 search-bar">
+                      <div style="width: 50%">
+                        <div class="input-icon table-filter">
+                          <input
+                            #input
+                            (keyup)="applyFilter2($event)"
+                            class="form-control form-control-solid"
+                            placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+                          />
+                          <span><i class="flaticon2-search-1 icon-md"></i></span>
+                        </div>
+                      </div>
+
+                    </div>
+                  
+                    
+                    <table
+                      mat-table
+                      [dataSource]="dataSourceSHARED"
+                      class="table table-head-custom table-head-bg table-borderless table-vertical-center mat-elevation-z8 m-0"
+                    >
+                      <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let element">
+                          <span class="font-weight-bolder"># {{ element.dataid }}</span>
+                        </td></ng-container
+                      >
+                  
+                      <ng-container matColumnDef="record_no">
+                        <th mat-header-cell *matHeaderCellDef>
+                       Record Number
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.record_number }}</td>
+                      </ng-container>
+                  
+                  
+                      <ng-container matColumnDef="incident_name">
+                        <th mat-header-cell *matHeaderCellDef>Incident</th>
+                        <td mat-cell *matCellDef="let element">{{ element.IncidentName }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="inserted_emp">
+                        <th mat-header-cell *matHeaderCellDef>Employee Name</th>
+                        <td mat-cell *matCellDef="let element">{{ element.InsertedEmployeeNAme }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="position_emp">
+                        <th mat-header-cell *matHeaderCellDef>Employee Position</th>
+                        <td mat-cell *matCellDef="let element">{{ element.InsertedPositionName }}</td>
+                      </ng-container> 
+                      
+                      <ng-container matColumnDef="contact">
+                        <th mat-header-cell *matHeaderCellDef>Contact No</th>
+                        <td mat-cell *matCellDef="let element">{{ element.ContactPhoneNumber }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                        <td mat-cell *matCellDef="let element">{{ element.EventStatus }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="dept">
+                        <th mat-header-cell *matHeaderCellDef>Assigned Department</th>
+                        <td mat-cell *matCellDef="let element">{{ element.AssignedDepartment }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="region">
+                        <th mat-header-cell *matHeaderCellDef>Region</th>
+                        <td mat-cell *matCellDef="let element">{{ element.Region }}</td>
+                      </ng-container>
+                      
+                      <ng-container matColumnDef="dateNtime">
+                        <th mat-header-cell *matHeaderCellDef>Event Date</th>
+                        <td mat-cell *matCellDef="let element">{{ element.EventDateTime }}</td>
+                      </ng-container>
+              
+         
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsShared"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsShared"></tr>
+                  
+                      <!-- Row shown when there is no matching data. -->
+                      <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="8">
+                          <nodata-table [input]="input"></nodata-table>
+                        </td>
+                      </tr>
+                    </table>
+                    <mat-paginator
+                      #sharedPaginator
+                      [length]="this.dataShared.length"
+                      [pageSize]="10"
+                      (page)="pageChanged($event)"
+                    >
+                    </mat-paginator>
+                  </div>
+             </div>
+
+            
+        </div>
+     </div>
+</div>
+              </div>
+              </div>
+              </div>
+              </div>
+              </div>
+              </div>
+              </div>

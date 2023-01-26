@@ -1,0 +1,93 @@
+.users-list {
+  max-width: 700px;
+  border-radius: 10px;
+  min-height: 200px;
+  margin: auto;
+  mat-toolbar {
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .list-item {
+    display: flex;
+    align-items: center;
+  }
+}
+.card-body {
+  max-height: 500px;
+  overflow-x: hidden;
+}
+.table-filter {
+  display: block !important;
+  margin: 29px;
+  max-width: 800px !important;
+  margin: auto;
+}
+
+.mat-list-base .mat-list-item,
+.mat-list-base .mat-list-option {
+  min-height: 60px !important;
+  height: fit-content !important;
+}
+
+::ng-deep {
+  .pick-user-modal {
+    max-width: 550px !important;
+    width: 100%;
+    height: fit-content !important;
+    padding: 0 !important;
+    .mat-dialog-container {
+      padding: 0 !important;
+    }
+
+    .mat-list-item-content {
+      min-height: 60px !important;
+    }
+    .mat-pseudo-checkbox {
+      width: 30px !important;
+      height: 30px !important;
+      background-color: #c3e1ff !important;
+      color: transparent !important;
+      border-radius: 0.42rem !important;
+    }
+    .mat-pseudo-checkbox.mat-pseudo-checkbox-checked,
+    .mat-pseudo-checkbox.mat-pseudo-checkbox-indeterminate {
+      width: 30px !important;
+      height: 30px !important;
+      background-color: #c3e1ff !important;
+      color: transparent !important;
+      border-radius: 0.42rem !important;
+    }
+    .mat-pseudo-checkbox-checked::after {
+      width: 15px !important;
+      height: 4px !important;
+      border-left: 4px solid #3799ff !important;
+      transform: rotate(-45deg) !important;
+      border-bottom: 4px solid #3799ff !important;
+      border-radius: 2px !important;
+      top: 6.4px !important;
+      left: 3px !important;
+    }
+
+    .mat-list-text {
+      padding: 0 !important;
+    }
+    .mat-pseudo-checkbox {
+      margin: 0 10px !important;
+    }
+
+    .hide-checkbox .mat-pseudo-checkbox {
+      display: none;
+    }
+  }
+}
+
+.disabled-icon {
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eb969f;
+  border-radius: 5px;
+  height: 30px;
+  margin: 0 10px !important;
+}

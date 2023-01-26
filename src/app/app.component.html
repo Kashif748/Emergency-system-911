@@ -1,0 +1,27 @@
+<app-splash-screen></app-splash-screen>
+<div class="h-100">
+  <router-outlet></router-outlet>
+</div>
+<!-- alert messages -->
+<p-toast position="bottom-right"></p-toast>
+<p-toast position="bottom-right" key="confirm_dialog" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="p-flex p-flex-column text-center" style="flex: 1">
+      <div class="">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+        <h4>{{ message.summary | translate }}</h4>
+        <p>{{ message.detail | translate }}</p>
+      </div>
+      <div class="p-grid p-fluid">
+        <div class="p-col-6">
+          <button type="button" pButton label="{{'SHARED.DIALOG.NO' | translate}}"
+            class="p-button-secondary" (click)="message.data.noCommand()"></button>
+        </div>
+        <div class="p-col-6">
+          <button type="button" pButton label="{{'SHARED.DIALOG.YES' | translate}}" (click)="message.data.yesCommand()"
+            class="p-button-secondary p-button-outlined font-weight-bolder"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>

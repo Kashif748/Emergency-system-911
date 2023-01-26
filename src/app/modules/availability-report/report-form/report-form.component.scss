@@ -1,0 +1,41 @@
+ .form-control {
+     padding: 0;
+     height: calc(1.1em + 1.1rem) !important;
+ }
+
+
+
+ table {
+     width: 100%;
+     border-spacing: 0 3px !important;
+     border-collapse: separate;
+
+     td {
+         padding: 8px;
+         border-bottom: 1px solid #ebedf3 !important;
+         border-top: 1px solid #ebedf3 !important;
+     }
+
+     td:first-child {
+         border-right: 1px solid #ebedf3 !important;
+         border-bottom-right-radius: 10px;
+         border-top-right-radius: 10px;
+     }
+
+     td:last-child {
+         border-left: 1px solid #ebedf3 !important;
+         border-bottom-left-radius: 10px;
+         border-top-left-radius: 10px;
+     }
+ }
+
+
+ .form-control {
+     width: 60% !important;
+ }
+
+ mat-select {
+     width: 150px;
+     padding: 5px;
+     border-radius: 10px;
+ }

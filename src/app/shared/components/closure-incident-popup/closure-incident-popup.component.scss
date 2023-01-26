@@ -1,0 +1,15 @@
+.textarea {
+    border: 1px solid gray;
+    min-height: 200px;
+    text-indent: 20px;
+}
+
+
+
+
+:host ::ng-deep .ngx-dropdown-container {
+    .ngx-dropdown-button {
+        display: flex !important;
+    }
+
+}

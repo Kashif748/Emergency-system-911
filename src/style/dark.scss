@@ -1,0 +1,333 @@
+@import "~@angular/material/theming";
+
+$accent-color: #00b283;
+$accent-color-dark: #58d3b3;
+$accent-hover-color: lighten (#00b283 10%);
+$accent-hover-color-dark: darken(#58d3b3, 10%);
+$background-primary-color: #ffffff;
+$background-primary-color-dark: #263238;
+$background-secondary-color: #e9eef4;
+$background-secondary-color-dark: #37474f;
+$text-primary-color: #454545;
+$text-primary-color-dark: #c6c6c6;
+$text-secondary-color: #868686;
+$text-secondary-color-dark: #bcc3cd;
+$text-tertiary-color: #bfbfbf;
+$text-tertiary-color-dark: #bfbfbf;
+$link-default-color: $text-primary-color;
+$link-default-color-dark: $text-primary-color-dark;
+$link-default-color-hover: lighten($text-primary-color, 10%);
+$link-default-color-hover-dark: darken($text-primary-color-dark, 10%);
+$separator-color: #e4e7f4;
+$separator-color-dark: #405471;
+$panel-background-color: $background-primary-color;
+$panel-background-color-dark: $background-primary-color-dark;
+$toolbar-background-color: $background-primary-color;
+$toolbar-background-color-dark: $background-primary-color-dark;
+$toolbar-link-text-color: #797e95;
+$toolbar-link-text-color-dark: #9bb5db;
+$loading-indicator-color: $accent-color;
+$colors: (
+  --accent-color: (
+    $accent-color,
+    $accent-color-dark,
+  ),
+  --accent-hover-color: (
+    $accent-hover-color,
+    $accent-hover-color-dark,
+  ),
+  --background-primary-color: (
+    $background-primary-color,
+    $background-primary-color-dark,
+  ),
+  --background-secondary-color: (
+    $background-secondary-color,
+    $background-secondary-color-dark,
+  ),
+  --text-primary-color: (
+    $text-primary-color,
+    $text-primary-color-dark,
+  ),
+  --text-secondary-color: (
+    $text-secondary-color,
+    $text-secondary-color-dark,
+  ),
+  --text-tertiary-color: (
+    $text-tertiary-color,
+    $text-tertiary-color-dark,
+  ),
+  --link-default-color: (
+    $link-default-color,
+    $link-default-color-dark,
+  ),
+  --link-default-color-hover: (
+    $link-default-color-hover,
+    $link-default-color-hover-dark,
+  ),
+  --separator-color: (
+    $separator-color,
+    $separator-color-dark,
+  ),
+  --panel-background-color: (
+    $panel-background-color,
+    $panel-background-color-dark,
+  ),
+  --toolbar-background-color: (
+    $toolbar-background-color,
+    $toolbar-background-color-dark,
+  ),
+  --toolbar-link-text-color: (
+    $toolbar-link-text-color,
+    $toolbar-link-text-color-dark,
+  ),
+);
+
+.mat-app-background {
+  /* styles angular material */
+  color: var(--text-primary-color);
+  $dark-primary: mat-palette($mat-blue);
+  $dark-accent: mat-palette($mat-amber, A400, A100, A700);
+  $dark-warn: mat-palette($mat-red);
+
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+  @include angular-material-color($dark-theme);
+
+  /* style  menualy for theme */
+  @each $name, $color in $colors {
+    #{$name}: nth($color, 2);
+  }
+
+  background-color: var(--background-primary-color) !important;
+
+  // scrollbars
+  ::-webkit-scrollbar-track {
+    background-color: #4b5a61 !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #77848e !important;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #5b91ca !important;
+  }
+
+  .ps {
+    .ps__rail-x,
+    .ps__rail-y,
+    .ps--clicking,
+    .ps--scrolling {
+      background-color: #4b5a61 !important;
+
+      &:focus,
+      &:hover {
+        background-color: #4b5a61 !important;
+      }
+    }
+  }
+
+  .ps__rail-y.ps--clicking .ps__thumb-y,
+  .ps__rail-y:focus > .ps__thumb-y,
+  .ps__rail-y:hover > .ps__thumb-y {
+    background-color: #77848e !important;
+  }
+
+  // elemants
+
+  .header,
+  .card,
+  .container,
+  .dropdown-menu,
+  .menu,
+  .mat-paginator,
+  .offcanvas,
+  table,
+  .mat-expansion-panel,
+  .mat-dialog-container,
+  .mat-elevation-z8,
+  .p-paginator div {
+    transition: background-color 1s;
+    background-color: var(--background-secondary-color);
+    border-color: var(--separator-color);
+    color: var(--text-primary-color);
+  }
+
+  .mat-toolbar,
+  .bg-white,
+  .news-bar,
+  .publisher,
+  .mat-expansion-panel-header {
+    transition: background-color 1s;
+
+    background-color: var(--background-secondary-color) !important;
+    border-color: var(--separator-color) !important;
+    color: var(--text-primary-color) !important;
+  }
+
+  .border-right,
+  .border-left,
+  .border,
+  .border-bottom,
+  .border-top {
+    border-color: var(--separator-color) !important;
+  }
+
+  .list-group-item {
+    background-color: var(--background-secondary-color);
+    border-color: var(--background-primary-color);
+    color: var(--text-primary-color);
+  }
+
+  .card-header {
+    border-bottom: var(--separator-color) !important;
+  }
+
+  table {
+    box-shadow: none !important;
+  }
+
+  .menu-text,
+  // p,
+  h1,
+  h2,
+  h3,
+  // h4,
+  h5,
+  h6,
+  pre {
+    color: var(--text-primary-color);
+  }
+
+  .text-dark,
+  .text-dark-75,
+  .card-title,
+  .card-title .card-label {
+    color: var(--text-primary-color) !important;
+  }
+
+  .form-control {
+    background-color: #4b5a61 !important;
+    border-color: var(--separator-color);
+    color: var(--text-primary-color);
+  }
+
+  .dropdown-menu {
+    box-shadow: 0px 0px 50px 0px #2e2e2e !important;
+  }
+
+  .table.table-head-bg thead tr,
+  .table.table-head-bg thead th,
+  .p-datatable .p-datatable-thead > tr > th {
+    background-color: var(--background-primary-color) !important;
+  }
+
+  table tr {
+    background-color: #4b5a61 !important;
+  }
+
+  table tr:hover,
+  .hoverable:hover {
+    background-color: #2a32369e !important;
+  }
+
+  .navi .navi-item .navi-link,
+  .navi .navi-item .navi-text,
+  .dropdown-item,
+  .dropdown-item,
+  .table.table-head-bg thead tr,
+  .table.table-head-bg thead th,
+  .p-datatable .p-datatable-thead > tr > th {
+    color: var(--text-primary-color) !important;
+  }
+
+  .navi.navi-active .navi-item .navi-link.active,
+  .navi.navi-hover .navi-item .navi-link:hover,
+  .dropdown-item:hover,
+  .dropdown-item:focus {
+    background-color: var(--background-primary-color) !important;
+    color: var(--text-primary-color) !important;
+  }
+
+  // lebels
+  .label-light-primary,
+  .bg-light-primary,
+  .checkbox > span,
+  .switch input:checked ~ span:before,
+  .switch input:empty ~ span:before,
+  .toggle-theme {
+    background-color: #4b5a61 !important;
+    color: var(--text-primary-color) !important;
+  }
+
+  .label-light-success {
+    background-color: var(--accent-color) !important;
+
+    span {
+      color: var(--background-primary-color) !important;
+    }
+  }
+
+  .label-light-danger {
+    background-color: #b06868 !important;
+
+    span {
+      color: var(--background-primary-color) !important;
+    }
+  }
+
+  .symbol .symbol-label {
+    background-color: var(--background-primary-color) !important;
+  }
+
+  .navi.navi-hover .navi-item .navi-link:hover,
+  .navi .navi-item .navi-link.active {
+    .symbol .symbol-label {
+      background-color: var(--background-secondary-color) !important;
+    }
+  }
+
+  .menu-text {
+    color: var(--text-primary-color) !important;
+  }
+
+  //buttons
+  .btn-light-primary,
+  .btn-light-primary:hover,
+  .btn-light-primary:focus,
+  .btn-light,
+  .btn.btn-clean:hover:not(.btn-text):not(:disabled):not(.disabled),
+  .btn.btn-clean:focus:not(.btn-text),
+  .btn.btn-clean.focus:not(.btn-text) {
+    background-color: var(--background-primary-color) !important;
+    color: var(--text-primary-color) !important;
+    border-color: #5e6972 !important;
+  }
+
+  .ngx-pagination {
+    a,
+    button,
+    .current {
+      border-radius: 5px;
+      transition: 0.3s;
+      margin-left: 4px;
+    }
+
+    a:hover,
+    button:hover {
+      color: var(--text-primary-color) !important;
+
+      background: var(--background-primary-color) !important;
+    }
+  }
+
+  // alerts
+  .alert.alert-custom.alert-light-primary {
+    background: var(--background-primary-color) !important;
+  }
+  .p-tag-value,
+  .p-tag-icon {
+    color: white;
+  }
+}
+@import "~primeng/resources/themes/arya-blue/theme.css";

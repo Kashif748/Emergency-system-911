@@ -1,0 +1,113 @@
+<mat-card class="example-card " *ngFor="let element of incidentsData">
+  <div class="card-header">
+    <div class="main">
+      <mat-card-title>{{ element.subject}}</mat-card-title>
+      <mat-card-subtitle> {{ element?.id }}/{{
+        element?.createdOn | customDate | date: "yyyy"
+        }} </mat-card-subtitle>
+    </div>
+    <div class="side">
+      <button *ngIf="status == incidentStatus.IN_PROCESSING" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <div class="responsive-menu">
+          <ng-container *appPrivileges="'PRIV_SHR_INC'">
+            <button mat-menu-item (click)="sendMail($event, element.id)" class="btn btn-sm btn-clean btn-icon mr-2">
+              <span class="svg-icon svg-icon-md">
+                <span title="  {{ 'INCIDENTS.SHARE_VIA_EMAIL' | translate }}" [inlineSVG]="
+                      './assets/media/svg/icons/Communication/Outgoing-mail.svg'
+                    " [cacheSVG]="true"></span>
+              </span>
+
+              <span class="menu-text text-dark-50">
+                {{ "INCIDENTS.SHARE_VIA_EMAIL" | translate }}</span>
+            </button>
+          </ng-container>
+          <ng-container *appPrivileges="'PRV_ED_INC'">
+            <button mat-menu-item *ngIf="
+          canUserUpdate(element?.primaryOrgId, element?.responsibleOrg?.id)
+        " (click)="updateIncident(element.id)" class="btn btn-sm btn-clean btn-icon mr-2">
+              <span class="svg-icon svg-icon-md">
+                <span title="{{ 'INCIDENTS.UPDATE_INCIDENT' | translate }}"
+                  [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'" [cacheSVG]="true"></span>
+              </span>
+              <span class="menu-text text-dark-50">
+                {{ "INCIDENTS.UPDATE_INCIDENT" | translate }}</span>
+            </button>
+          </ng-container>
+
+          <ng-container *appPrivileges="'PRIV_CR_TASK'">
+            <button mat-menu-item *ngIf="canUserTaskUpdate(element?.responsibleOrg?.id)"
+              (click)="createTask(element.subject, element.id)" class="btn btn-sm btn-clean btn-icon mr-2"
+              data-toggle="tooltip" data-theme="dark">
+              <span class="svg-icon svg-icon-md">
+                <span title="{{ 'INCIDENTS.CREATE_TASK' | translate }}"
+                  [inlineSVG]="'./assets/media/svg/icons/Files/File-plus.svg'" [cacheSVG]="true"></span>
+              </span>
+              <span class="menu-text text-dark-50">
+                {{ "INCIDENTS.CREATE_TASK" | translate }}</span>
+            </button>
+          </ng-container>
+
+          <ng-container *appPrivileges="'PRIV_ESC_INC'">
+            <button mat-menu-item *ngIf="canEditResponsibleOrg(element)" (click)="
+          openModal('edit', element?.responsibleOrg?.id, element?.id);
+          $event.stopPropagation()
+        " class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="tooltip" data-theme="dark">
+              <span class="svg-icon svg-icon-md dir-icon">
+                <span title="{{ 'INCIDENTS.ESCALATE_TO_ORGANIZATION' | translate }}"
+                  [inlineSVG]="'./assets/media/svg/icons/Communication/Sending.svg'" [cacheSVG]="true"></span>
+              </span>
+              <span class="menu-text text-dark-50">
+                {{ "INCIDENTS.ESCALATE_TO_ORGANIZATION" | translate }}</span>
+            </button>
+          </ng-container>
+        </div>
+      </mat-menu>
+      <span *ngIf="helperData[0] | extractValue: element?.priority?.id"
+        class="text-dark font-weight-500 label label-lg label-inline text-black" [ngClass]="
+                'label-' +
+                (helperData[0] | extractValue: element?.priority?.id)?.color
+              ">
+        {{
+        helperData[0]
+        | extractValue: element?.priority?.id
+        | propTranslator: "name"
+        }}</span>
+    </div>
+  </div>
+  <mat-card-content>
+
+    <div class="card-content">
+      <div>
+        <div>{{'INCIDENTS.CATEGORY' | translate}}: {{ element?.incidentParentCategory | propTranslator: "name" }} </div>
+        <div> {{'INCIDENTS.CENTER' | translate}}:{{ this.getCenter(element.center)| propTranslator: "name" }}</div>
+      </div>
+      <div>
+        <div><span>{{'INCIDENTS.START_DATE' | translate}}: </span><br />
+          <span>{{ element?.incidentDate | customDate | date: "medium" }}</span>
+        </div>
+        <div>{{'INCIDENTS.GROUPS' | translate}}:
+          <div>
+            <button class="btn  btn-sm font-weight-bolder dropdown-toggle py-1   " data-toggle="dropdown"
+              data-offset="0px,0px" [ngbTooltip]="tipContent" (click)="$event.stopPropagation()">
+              <span inlineSVG="./assets/media/svg/icons/Communication/Group.svg" cacheSVG="true"
+                class="svg-icon svg-icon-md svg-icon-primary"></span>
+              <span class="font-weight-bolder font-size-lg mx-4" style="vertical-align: sub;">{{
+                element?.incidentGroups?.length
+                }}</span>
+            </button>
+            <ng-template #tipContent class="dropdown-menu dropdown-menu-anim-up">
+              <span *ngFor="let item of element?.incidentGroups" class="dropdown-item">
+                <span class="text-dark-75 font-weight-bolder label label-lg label-light-primary label-inline">
+                  {{ item?.group | propTranslator: "name" }} </span><br />
+              </span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>

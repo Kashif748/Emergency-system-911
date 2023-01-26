@@ -1,0 +1,364 @@
+<section class="d-flex p-4 my-2">
+  <app-breadcrumbs></app-breadcrumbs>
+  <div *ngIf="!showErrorMSG" class="spacer"></div>
+  <div
+    *ngIf="showErrorMSG"
+    class="alert alert-custom m-auto p-0 min-w-400px alert-secondary fade show"
+    role="alert"
+  >
+    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+    <div class="alert-text">
+      {{ "CALL_DUTY.ERR_MSG" | translate }}
+    </div>
+    <div class="alert-close">
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close"
+        (click)="showErrorMSG = false"
+      >
+        <span aria-hidden="true"><i class="ki ki-close"></i></span>
+      </button>
+    </div>
+  </div>
+  <button
+    class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+    (click)="openModal()"
+  >
+    {{ "CALL_DUTY.SEND_SMS" | translate }}
+    <span
+      [inlineSVG]="'/assets/media/svg/icons/Communication/Outgoing-mail.svg'"
+      cacheSVG="true"
+      class="svg-icon svg-icon-md ml-2 mr-2"
+    ></span>
+  </button>
+</section>
+
+<div class="container-fluid">
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab
+      class="text-dark-75"
+      label=" {{ 'CALL_DUTY.USERS_LIST' | translate }}"
+    >
+      <ng-container [ngTemplateOutlet]="usersList"></ng-container>
+    </mat-tab>
+
+    <mat-tab
+      class="text-dark-75"
+      label="{{ 'CALL_DUTY.GROUPS_LIST' | translate }}"
+    >
+      <ng-container [ngTemplateOutlet]="groupsList"></ng-container>
+    </mat-tab>
+    <mat-tab
+      class="text-dark-75"
+      label="  {{ 'CALL_DUTY.INCIDENTS_LIST' | translate }}"
+    >
+      <ng-container [ngTemplateOutlet]="incidentsList"></ng-container>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #usersList>
+  <div>
+    <div class="card card-custom card-stretch gutter-b border search-header">
+      <div dir="rtl" class="card-body d-flex align-items-center py-4 px-0">
+        <div class="px-3 w-25 d-flex">
+          <mat-checkbox
+            [checked]="false"
+            (change)="
+              selectAllUsers ? users.deselectAll() : users.selectAll();
+              selectAllUsers = !selectAllUsers;
+              getAllSelectedData()
+            "
+            color="primary"
+          >
+            <span class="pl-3 pr-3 font-weight-bold">
+              {{ "CALL_DUTY.SELECT_ALL" | translate }}</span
+            >
+          </mat-checkbox>
+
+          <div class="spacer"></div>
+
+          <span class="m-auto px-4 font-weight-bold"
+            >{{ users.selectedOptions.selected.length }}
+            {{ "CALL_DUTY.ITEMS" | translate }}</span
+          >
+        </div>
+        <div class="m-auto w-75 px-5">
+          <div class="form-group m-0">
+            <div class="input-icon">
+              <input
+                (keyup)="applyUsersFilter($event.target.value)"
+                type="email"
+                class="form-control form-control-solid w-100"
+                placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+              />
+              <span><i class="flaticon2-search-1 icon-md"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-selection-list #users (selectionChange)="getAllSelectedData()">
+      <perfect-scrollbar
+        (psYReachEnd)="nextUsersPage($event)"
+        class="overflow-scroll h-600px"
+      >
+        <div class="us-list">
+          <div
+            *ngFor="let user of users$ | async"
+            class="list-item card card-custom card-stretch gutter-b border"
+          >
+            <mat-list-option
+              [value]="user"
+              color="primary"
+              dir="ltr"
+              [selected]="selectAllUsers"
+            >
+              <div class="card-body d-flex list-item align-items-center py-0">
+                <div class="d-flex flex-column flex-grow-1">
+                  <p *ngIf="lang == 'ar'" class="text-dark mb-1">
+                    {{ user.nameAr }}
+                  </p>
+                  <p *ngIf="lang == 'en'" class="text-dark mb-1">
+                    {{ user.nameEn }}
+                  </p>
+                  <span class="text-muted font-size-sm">
+                    {{ user?.title }}</span
+                  >
+                  <span class="font-weight-bold text-primary font-size-sm">
+                    {{ user?.mobile }}
+                  </span>
+                  <span class="font-weight-bold text-primary font-size-sm">
+                    {{ user?.email }}
+                  </span>
+                </div>
+              </div>
+            </mat-list-option>
+          </div>
+
+          <div class="spinner-container m-auto p-10 w-100" *ngIf="usersLoading">
+            <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+          </div>
+        </div>
+      </perfect-scrollbar>
+    </mat-selection-list>
+  </div>
+</ng-template>
+
+<ng-template #groupsList>
+  <div class="card card-custom card-stretch gutter-b border search-header">
+    <div dir="rtl" class="card-body d-flex align-items-center py-4 px-0">
+      <div class="px-3 w-25 d-flex">
+        <mat-checkbox
+          value="false"
+          [checked]="false"
+          (change)="
+            selectAllGroups ? groups.deselectAll() : groups.selectAll();
+            selectAllGroups = !selectAllGroups
+          "
+          color="primary"
+        >
+          <span class="pl-3 pr-3 font-weight-bold">
+            {{ "CALL_DUTY.SELECT_ALL" | translate }}</span
+          >
+        </mat-checkbox>
+
+        <div class="spacer"></div>
+
+        <span class="m-auto px-4 font-weight-bold"
+          >{{ groups.selectedOptions.selected.length }}
+          {{ "CALL_DUTY.ITEMS" | translate }}</span
+        >
+      </div>
+      <div class="m-auto w-75 px-5">
+        <div
+          class="form-group m-0"
+          [ngClass]="{
+            'spinner spinner-primary spinner-right': groupsSearching
+          }"
+        >
+          <div class="input-icon">
+            <input
+              (keyup)="applyGroupsFilter($event.target.value)"
+              type="email"
+              class="form-control form-control-solid w-100"
+              placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+            />
+            <span><i class="flaticon2-search-1 icon-md"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-selection-list #groups>
+    <perfect-scrollbar
+      (psYReachEnd)="groupsNextPage($event)"
+      class="overflow-scroll h-600px"
+    >
+      <div class="groups-list">
+        <div
+          *ngFor="let group of groups$ | async"
+          class="list-item card card-custom card-stretch gutter-b border"
+        >
+          <div class="card-header m-0 px-2">
+            <!-- <div class="d-flex flex-column flex-grow-1">
+              <p *ngIf="lang == 'ar'" class="text-dark mb-1">
+                {{ group?.manager?.firstNameAr }}
+                {{ group?.manager?.lastNameAr }}
+              </p>
+              <p *ngIf="lang == 'en'" class="text-dark mb-1">
+                {{ group?.manager?.firstNameEn }}
+                {{ group?.manager?.lastNameEn }}
+              </p>
+            </div> -->
+            <div class="spacer"></div>
+            <span
+              (click)="openUsersModal(group)"
+              class="symbol symbol-35 symbol-light text-primary cursor-pointer"
+            >
+              <span class="symbol-label font-size-h5 font-weight-bold">
+                <span
+                  [inlineSVG]="'/assets/media/svg/icons/General/User.svg'"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-primary"
+                ></span>
+                {{ group?.users.length }}
+              </span>
+            </span>
+          </div>
+          <mat-list-option
+            [value]="group"
+            color="primary"
+            [selected]="selectAllGroups"
+            dir="ltr"
+          >
+            <div dir="rtl" class="card-body d-flex align-items-center py-0">
+              <div
+                class="
+                  d-flex
+                  flex-column flex-grow-1
+                  font-weight-bold
+                  text-center
+                "
+              >
+                <p *ngIf="lang == 'ar'" class="text-dark mb-1">
+                  {{ group.nameAr }}
+                </p>
+
+                <p class="text-dark mb-1" *ngIf="lang == 'en'">
+                  {{ group.nameEn }}
+                </p>
+              </div>
+            </div>
+          </mat-list-option>
+        </div>
+
+        <div class="spinner-container m-auto p-10 w-100" *ngIf="groupsLoading">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </mat-selection-list>
+</ng-template>
+
+<ng-template #incidentsList>
+  <div class="card card-custom card-stretch gutter-b border search-header">
+    <div dir="rtl" class="card-body d-flex align-items-center py-4 px-0">
+      <div class="px-3 w-25 d-flex">
+        <mat-checkbox
+          value="false"
+          [checked]="false"
+          (change)="
+            selectAllIncidents
+              ? incidents.deselectAll()
+              : incidents.selectAll();
+            selectAllIncidents = !selectAllIncidents
+          "
+          color="primary"
+        >
+          <span class="pl-3 pr-3 font-weight-bold">
+            {{ "CALL_DUTY.SELECT_ALL" | translate }}</span
+          >
+        </mat-checkbox>
+
+        <div class="spacer"></div>
+
+        <span class="m-auto px-4 font-weight-bold"
+          >{{ incidents.selectedOptions.selected.length }}
+          {{ "CALL_DUTY.ITEMS" | translate }}</span
+        >
+      </div>
+      <div class="m-auto w-75 px-5">
+        <div
+          class="form-group m-0"
+          [ngClass]="{
+            'spinner spinner-primary spinner-right': incidentsSearching
+          }"
+        >
+          <div class="input-icon">
+            <input
+              (keyup)="applyIncidentsFilter($event.target.value)"
+              type="email"
+              class="form-control form-control-solid w-100"
+              placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER' | translate }}"
+            />
+            <span><i class="flaticon2-search-1 icon-md"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-selection-list #incidents>
+    <perfect-scrollbar
+      (psYReachEnd)="incidentsNextPage($event)"
+      class="h-600px overflow-scroll"
+    >
+      <div class="inc-list">
+        <div
+          *ngFor="let incident of incidents$ | async"
+          class="list-item card card-custom card-stretch gutter-b border"
+        >
+          <mat-list-option
+            color="primary"
+            [value]="incident"
+            [selected]="selectAllIncidents"
+            dir="ltr"
+          >
+            <div dir="rtl" class="card-body py-0">
+              <span class="text-dark-75 font-weight-bold font-size-md">
+                {{ incident?.subject }}
+              </span>
+              <p class="text-dark-75 inc-cat">
+                {{ getCategory(incident?.incidentCategory?.id, false) }}
+              </p>
+              <div class="d-flex align-items-center">
+                <span
+                  *ngIf="getPriorityNameId(incident?.priority?.id)"
+                  [class]="ProBackstyle"
+                >
+                  {{ getPriorityNameId(incident?.priority?.id) }}
+                </span>
+                <span
+                  class="label label-lg label-light-secodary label-inline mx-2"
+                  >{{ getStatusId(incident?.status?.id) }}</span
+                >
+              </div>
+            </div>
+          </mat-list-option>
+        </div>
+
+        <div
+          class="spinner-container m-auto p-10 w-100"
+          *ngIf="incidentsLoading"
+        >
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </mat-selection-list>
+</ng-template>

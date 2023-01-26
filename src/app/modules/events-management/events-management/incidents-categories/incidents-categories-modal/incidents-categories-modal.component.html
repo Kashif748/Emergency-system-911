@@ -1,0 +1,137 @@
+<div
+  class="card card-custom"
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  style="overflow: hidden"
+>
+  <div class="card-header p-2">
+    <div class="card-title">
+      <span>{{
+        (data["parentId"] != null
+          ? "EVENTSMODULES.INCIDENTS_SUB_CATEGORIES"
+          : "EVENTSMODULES.incidentCategories"
+        ) | translate
+      }}</span>
+
+      <span
+        *ngIf="isAddMode"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="!isAddMode"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body px-3">
+    <form [formGroup]="formGroup">
+
+
+
+   <!-- local risks dropdown -->
+
+   <mat-form-field appearance="fill">
+    <mat-label class="asterisk_input">
+      {{ "EVENTSMODULES.localRisks" | translate }}
+    </mat-label>
+    <mat-select formControlName="localRisk">
+      <mat-option *ngFor="let cat of localRisks " [value]="cat.id">
+        {{ lang === "en" ? cat.nameEn : cat.nameAr }}
+      </mat-option>
+    </mat-select>
+
+  </mat-form-field>
+
+
+
+
+      <mat-form-field appearance="fill">
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.itemNameAr' | translate }}"
+          type="text"
+          formControlName="nameAr"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.itemNameEn' | translate }}"
+          type="text"
+          formControlName="nameEn"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.serialNumber' | translate }} "
+          type="number"
+          formControlName="serialNumber"
+        />
+      </mat-form-field>
+      <div class="row">
+        <div class="col-4">
+          <mat-slide-toggle
+          color="primary"
+          formControlName="isActive"
+          class="ml-auto"
+        >
+          <span class="mx-4"> {{ "ACTIONS.ACTIVE" | translate }}</span>
+        </mat-slide-toggle>
+        </div>
+        <div class="col-8">
+          <mat-slide-toggle
+          color="primary"
+          formControlName="chatBotEnabled"
+          class="m-auto"
+        >
+          <span class="mx-4"> {{ "EVENTSMODULES.enableChatBoot" | translate }}</span>
+        </mat-slide-toggle>
+        </div>
+       
+      </div>
+      
+
+    </form>
+  </div>
+  <div class="card-footer p-5 d-flex justify-content-between">
+    <button
+      (click)="onSubmit()"
+      type="submit"
+      *ngIf="isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.CREATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+
+    <button
+      (click)="onSubmit()"
+      type="submit"
+      *ngIf="!isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.UPDATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </div>
+</div>

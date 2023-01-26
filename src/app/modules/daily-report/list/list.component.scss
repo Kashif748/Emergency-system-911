@@ -1,0 +1,26 @@
+.td-arabic {
+  text-align: right;
+}
+
+.table-filter {
+  display: block !important;
+  margin: 29px;
+  max-width: 800px !important;
+  margin: auto;
+}
+
+table {
+  width: 100%;
+  box-shadow: none;
+  border-top: 1px solid #eee;
+}
+
+.td-arabic {
+  text-align: right;
+}
+
+::ng-deep .mat-column-actions {
+  max-width: 40px !important;
+  padding: 5px !important;
+  text-align: center !important;
+}

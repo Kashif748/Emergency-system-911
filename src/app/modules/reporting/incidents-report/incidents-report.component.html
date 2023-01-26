@@ -1,0 +1,239 @@
+<div class="container-fluid">
+  <div class="container-fluid my-4">
+    <div class="row mb-5" dir="ltr">
+      <!-- status chart -->
+      <div class="col-md-6 py-4 px-3">
+        <div class="bg-white rounded border w-100">
+          <mat-progress-bar *ngIf="loadingCharts" mode="indeterminate">
+          </mat-progress-bar>
+          <apx-chart
+            [chart]="chart8Options.chart"
+            [series]="chart8Options.series"
+            [labels]="chart8Options.labels"
+            [legend]="chart8Options.legend"
+            [title]="chart8Options.title"
+            [dataLabels]="chart8Options.dataLabels"
+          >
+          </apx-chart>
+        </div>
+      </div>
+      <!-- priorities chart -->
+      <div class="col-md-6 py-4 px-3">
+        <div class="bg-white rounded border w-100">
+          <mat-progress-bar *ngIf="loadingCharts" mode="indeterminate">
+          </mat-progress-bar>
+          <apx-chart
+            [chart]="chart4Options.chart"
+            [series]="chart4Options.series"
+            [dataLabels]="chart4Options.dataLabels"
+            [plotOptions]="chart4Options.plotOptions"
+            [colors]="chart4Options.colors"
+            [title]="chart4Options.title"
+            [labels]="chart4Options.labels"
+            [legend]="chart4Options.legend"
+          >
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-5" dir="ltr">
+      <!-- categories chart -->
+      <div class="col-12">
+        <div class="bg-white rounded border w-100 px-3">
+          <mat-progress-bar *ngIf="loadingCharts" mode="indeterminate">
+          </mat-progress-bar>
+          <apx-chart
+            [chart]="chart5Options.chart"
+            [series]="chart5Options.series"
+            [dataLabels]="chart5Options.dataLabels"
+            [plotOptions]="chart5Options.plotOptions"
+            [colors]="chart5Options.colors"
+            [title]="chart5Options.title"
+            [stroke]="chart5Options.stroke"
+            [xaxis]="chart5Options.xaxis"
+            [legend]="chart5Options.legend"
+            [yaxis]="chart5Options.yaxis"
+            [subtitle]="chart5Options.subtitle"
+            [tooltip]="chart5Options.tooltip"
+          >
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <section class="d-flex py-4">
+      <div class="spacer"></div>
+      <app-export-dialog (exportReport)="export($event)"></app-export-dialog>
+    </section>
+    <div class="col-xxl-12 order-2 order-xxl-1">
+      <div class="row">
+        <div class="col-12">
+          <mat-accordion class="m-4">
+            <mat-expansion-panel #panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title color="primary">
+                  {{ "TASK.ADVANCED_SEARCH" | translate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <!-- filters -->
+              <app-advanced-search
+                [dataLists]="advancedSearchDataList"
+                [formFields]="formFields"
+                (filterChanged$)="onFilterChanged($event)"
+              ></app-advanced-search>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div class="table-responsive table-container" #content>
+        <table
+          id="incidents-table"
+          matSort
+          (matSortChange)="customSort($event)"
+          class="table table-head-custom table-head-bg table-borderless table-vertical-center"
+        >
+          <thead>
+            <tr>
+              <!-- 1 -->
+              <th mat-sort-header="id">
+                {{ "INCIDENTS.SR_NO" | translate }}
+              </th>
+              <!-- 2 -->
+              <th mat-sort-header="subject">
+                {{ "INCIDENTS.SUBJECT" | translate }}
+              </th>
+              <!-- 3 -->
+              <!-- <th mat-sort-header="emergencyLevel">
+              {{ "INCIDENTS.EMERGENCYLEVELS" | translate }}
+            </th> -->
+              <!-- 4 -->
+              <th mat-sort-header="priority">
+                {{ "INCIDENTS.PRIORITY" | translate }}
+              </th>
+              <!-- 7 -->
+              <th mat-sort-header="status">
+                {{ "INCIDENTS.STATUS" | translate }}
+              </th>
+              <!-- 8 -->
+              <th>
+                {{ "SHARED.CREATED_BY" | translate }}
+              </th>
+              <!-- 9 -->
+              <th>
+                {{ "INCIDENTS.RESPONSIBLE_ORG" | translate }}
+              </th>
+              <!-- 10 -->
+              <th>
+                {{ "SHARED.CITY" | translate }}
+              </th>
+              <!-- 11 -->
+              <th>
+                {{ "SHARED.REPORTING_VIA" | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let element of incidents | paginate : paginationConfig"
+              class="cursor-pointer"
+              matTooltip="{{ 'INCIDENTS.VIEW_INCIDENT_LOC' | translate }}"
+              matTooltipPosition="{{ lang == 'en' ? 'left' : 'right' }}"
+              (click)="openIncident(element)"
+            >
+              <!-- 1 -->
+              <td>
+                {{ element?.id }} /
+                {{ element?.createdOn | customDate | date : "yyyy" }}
+              </td>
+              <!-- 2 -->
+              <td>
+                {{ element.subject }}
+              </td>
+              <!-- 4 -->
+              <td>
+                <span
+                  *ngIf="
+                    advancedSearchDataList[0]
+                      | extractValue : element?.priority?.id
+                  "
+                  class="text-dark font-weight-500 label label-lg label-inline text-white"
+                  [ngClass]="
+                    'label-' +
+                    (
+                      advancedSearchDataList[0]
+                      | extractValue : element?.priority?.id
+                    )?.color
+                  "
+                >
+                  {{
+                    advancedSearchDataList[0]
+                      | extractValue : element?.priority?.id
+                      | propTranslator : "name"
+                  }}
+                </span>
+              </td>
+              <!-- 7 -->
+              <td>
+                <span class="label label-lg label-light-primary label-inline">
+                  {{
+                    advancedSearchDataList[4]
+                      | extractValue : element?.status?.id
+                      | propTranslator : "name"
+                  }}</span
+                >
+              </td>
+              <!-- 8 -->
+              <td>
+                <span class="label label-lg label-inline">
+                  {{ element?.createdBy | propTranslator : "firstName" }}
+
+                  {{ element?.createdBy | propTranslator : "lastName" }}
+                </span>
+              </td>
+              <!-- 9 -->
+              <td>
+                <span class="label label-lg label-inline">
+                  {{ element?.responsibleOrg | propTranslator : "name" }}
+                </span>
+              </td>
+              <!-- 10 -->
+              <td>
+                <span class="label label-lg label-inline">
+                  {{
+                    advancedSearchDataList[1]
+                      | extractValue : element?.city?.id
+                      | propTranslator : "name"
+                  }}
+                </span>
+              </td>
+              <!-- 12 -->
+              <td>
+                <span class="label label-lg label-inline">
+                  {{
+                    advancedSearchDataList[3]
+                      | extractValue : element?.reportingVia?.id
+                      | propTranslator : "name"
+                  }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <pagination-controls
+          previousLabel="Prev"
+          nextLabel="Next"
+          responsive="true"
+          id="pagination"
+          (pageChange)="pageChanged($event)"
+        ></pagination-controls>
+
+        <div class="spinner-container m-auto p-10" *ngIf="loading">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+/* Border */
+
+.responsive-map {
+  overflow: hidden;
+  padding-bottom: 16.25%;
+  height: 0;
+}
+
+.responsive-map iframe {
+  left: 0;
+  width: 100%;
+}
+
+.card.card-custom {
+  margin: 0 6% 0 6%;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #36aef4;
+}
+
+.navi.navi-active .navi-item .navi-link.active {
+  background-color: #3699ff;
+
+  .navi-text {
+    color: whitesmoke !important;
+  }
+}
+
+.navi .navi-item:last-child .navi-link {
+  border-bottom: auto !important;
+}
+
+::ng-deep .adnoc-theme {
+  .navi.navi-active .navi-item .navi-link.active {
+    background-color: #1947ba !important;
+
+    .navi-text {
+      color: whitesmoke !important;
+    }
+  }
+}
+
+
+:host {
+  .mat-drawer-container {
+    width: 100% !important;
+    background-color: transparent !important;
+
+    .mat-drawer {
+      background-color: transparent !important;
+    }
+
+    ::ng-deep .mat-drawer-content {
+      display: flex !important;
+    }
+  }
+
+  .mat-drawer.mat-drawer-side {
+    z-index: 1;
+  }
+
+  .set_share_google_map_location{
+    text-align: end;
+    padding: 0px;
+  }
+}
+.mapWidth{
+  width: inherit;
+}

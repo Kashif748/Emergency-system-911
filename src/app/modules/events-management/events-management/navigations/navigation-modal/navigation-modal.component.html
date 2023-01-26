@@ -1,0 +1,157 @@
+<div
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  class="card card-custom"
+  style="overflow: hidden"
+>
+  <div class="card-header px-3">
+    <div class="card-title">
+      <h4 class="card-label">
+        <span>{{ "EVENTSMODULES.HEADER_MENU" | translate }}</span>
+        <span
+          *ngIf="isAddMode"
+          class="label label-lg label-light-primary label-inline"
+        >
+          {{ "ACTIONS.NEW_ITEM" | translate }}
+        </span>
+        <span
+          *ngIf="!isAddMode"
+          class="label label-lg label-light-success label-inline"
+        >
+          {{ "ACTIONS.UPDATE_ITEM" | translate }}
+        </span>
+      </h4>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body px-3 py-0">
+    <form [formGroup]="formGroup">
+      <div class="d-flex">
+        <mat-form-field appearance="fill">
+          <mat-label
+            >{{ "EVENTSMODULES.itemNameAr" | translate }}
+            <span class="required-asterisk">*</span>
+          </mat-label>
+          <input matInput type="text" formControlName="nameAr" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label
+            >{{ "EVENTSMODULES.itemNameEn" | translate }}
+            <span class="required-asterisk">*</span>
+          </mat-label>
+
+          <input matInput type="text" formControlName="nameEn" />
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex">
+        <mat-form-field appearance="fill">
+          <mat-label
+            >{{ "EVENTSMODULES.CODE" | translate }}
+            <span class="required-asterisk">*</span>
+          </mat-label>
+          <input matInput type="text" formControlName="code" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ "EVENTSMODULES.ICON" | translate }}</mat-label>
+
+          <input matInput type="text" formControlName="icon" />
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ "EVENTSMODULES.ROUTING" | translate }}</mat-label>
+
+          <input matInput type="text" formControlName="routing" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>
+            {{ "EVENTSMODULES.parentModules" | translate }}
+          </mat-label>
+          <input matInput [matAutocomplete]="auto" formControlName="parent" />
+          <mat-spinner
+            *ngIf="modulesSpinner"
+            matSuffix
+            [diameter]="18"
+            style="float: right; margin-left: 8px"
+          ></mat-spinner>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let org of filterModules" [value]="org">
+              <div *ngIf="lang == 'ar'" class="d-flex">
+                <p class="text-dark font-size-lg mx-3">{{ org.nameAr }} -</p>
+                <span class="text-muted font-size-sm"> {{ org.nameEn }}</span>
+              </div>
+              <div *ngIf="lang == 'en'" class="d-flex">
+                <p class="text-dark">
+                  {{ org.nameEn }}
+                </p>
+                <span class="text-muted font-size-sm">
+                  {{ org.nameAr }}
+                </span>
+              </div>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex">
+        <mat-form-field appearance="fill">
+          <mat-label>
+            {{ "EVENTSMODULES.descAr" | translate }}
+          </mat-label>
+          <textarea formControlName="descAr" matInput rows="3"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>
+            {{ "EVENTSMODULES.descEn" | translate }}
+          </mat-label>
+          <textarea formControlName="descEn" matInput rows="3"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex">
+        <!-- <mat-slide-toggle formControlName="active" class="m-auto">
+          <span class="mx-4"> {{ "ACTIONS.ACTIVE" | translate }}</span>
+        </mat-slide-toggle> -->
+        <mat-divider></mat-divider>
+        <mat-slide-toggle formControlName="isPublic" class="m-auto">
+          <span class="mx-4"> {{ "ACTIONS.PUBLIC" | translate }}</span>
+        </mat-slide-toggle>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer p-3 d-flex justify-content-between">
+    <button
+      (click)="onSubmit()"
+      *ngIf="isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.CREATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+
+    <button
+      (click)="onSubmit()"
+      *ngIf="!isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.UPDATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </div>
+</div>

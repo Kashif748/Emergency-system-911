@@ -1,0 +1,85 @@
+<form [formGroup]="exerciseForm" (ngSubmit)="onSubmit()">
+  <div class="flex-column justify-content-end align-items-center">
+    <div class="row px-4">
+      <mat-form-field
+        [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+        appearance="fill"
+        class="form-element example-full-width"
+      >
+        <mat-label>{{ "EXERCISEIS.exercise_plan" | translate }}</mat-label>
+        <textarea
+          matInput
+          type="text"
+          formControlName="plan"
+          rows="6"
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <div class="row px-4">
+      <mat-form-field
+        [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+        appearance="fill"
+        class="form-element example-full-width"
+      >
+        <mat-label>{{ "EXERCISEIS.exercise_security" | translate }}</mat-label>
+        <textarea
+          matInput
+          type="text"
+          formControlName="security"
+          rows="6"
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <div class="row px-4">
+      <mat-form-field
+        [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+        appearance="fill"
+        class="form-element example-full-width"
+      >
+        <mat-label>{{ "EXERCISEIS.exercise_safety" | translate }}</mat-label>
+        <textarea
+          matInput
+          type="text"
+          formControlName="seafty"
+          rows="6"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <div class="col-6 m-0 d-flex flex-column">
+        <div class="justify-content-center align-items-center d-flex px-3 mb-2">
+          <label class="col-form-label mx-3">{{
+            "EXERCISEIS.exercise_word" | translate
+          }}</label>
+          <div class="mx-4">
+            <span class="switch switch-icon">
+              <label>
+                <input
+                  type="checkbox"
+                  name="select"
+                  formControlName="exercisWord"
+                />
+                <span></span>
+              </label>
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="form-group"
+          *ngIf="exerciseForm.get('exercisWord').value"
+          @expandCollapse
+        >
+          <mat-form-field class="example-full-width" appearance="fill">
+            <textarea
+              rows="3"
+              matInput
+              placeholder="{{ 'EXERCISEIS.the_word' | translate }}"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

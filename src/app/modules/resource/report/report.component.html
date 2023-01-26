@@ -1,0 +1,16 @@
+<mat-dialog-content>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Categories</th>
+            <th scope="col">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cat of data">
+            <td>{{cat.nameAr || cat.nameEn}}</td>
+            <td>{{cat.count}}</td>
+          </tr>
+        </tbody>
+      </table>
+</mat-dialog-content>

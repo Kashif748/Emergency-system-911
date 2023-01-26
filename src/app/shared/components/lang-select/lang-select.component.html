@@ -1,0 +1,25 @@
+<div class="dropdown" ngbDropdown #myDrop="ngbDropdown" placement="bottom-right" [autoClose]="true">
+  <div ngbDropdownToggle class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
+    <div class="btn btn-secondary btn-clean btn-dropdown w-100">
+      <img class="h-25px w-25px rounded " src="{{ language?.flag }}" alt="language" />
+      <span class="mx-2">
+        {{ language?.name }}
+      </span>
+    </div>
+  </div>
+  <div ngbDropdownMenu class="dropdown-menu p-0 m-0 dropdown-menu-anim-up dropdown-menu-sm dropdown-menu-right w-100">
+    <ul class="navi navi-hover py-4">
+      <ng-container *ngFor="let language of languages">
+        <li class="navi-item" [ngClass]="{ active: language.active }">
+          <a  (click)="setLanguageWithRefresh(language.lang)" [ngClass]="{ active: language.active }"
+            class="navi-link">
+            <span class="symbol symbol-20 m-2">
+              <img src="{{ language.flag }}" />
+            </span>
+            <span class="navi-text">{{ language.name }}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,149 @@
+<div
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  class="card card-custom"
+  id="kt_card_3"
+>
+  <div class="card-header">
+    <div class="card-title">
+      <span class="card-icon">
+        <i class="flaticon2-chat-1 text-primary"></i>
+      </span>
+      <h3 class="card-label">
+        {{ "CALL_DUTY.MESSAGE" | translate }}
+      </h3>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <perfect-scrollbar style="height: 500px">
+    <div class="card-body">
+      <form *ngIf="messageForm" [formGroup]="messageForm" class="w-100">
+        <div class="p-5 text-center">
+          <mat-button-toggle-group formControlName="isSms">
+            <mat-button-toggle [value]="true">
+              {{ "CALL_DUTY.sms" | translate }}
+              <i class="flaticon2-chat-1 text-primary px-1"></i>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="false">
+              {{ "CALL_DUTY.Email" | translate }}
+              <i class="flaticon-mail-1 text-primary px-1"></i>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <ng-container [ngTemplateOutlet]="selectedOptionsTemp"></ng-container>
+
+        <mat-form-field
+          [@fader]
+          *ngIf="!messageForm.get('isSms').value"
+          appearance="fill"
+          style="width: 100%; display: inline"
+        >
+          <mat-label>
+            {{ "CALL_DUTY.smsTitle" | translate }}
+          </mat-label>
+          <input formControlName="subject" matInput />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="width: 100%; display: inline">
+          <mat-label>
+            {{ "CALL_DUTY.INPUT_LABEL" | translate }}
+          </mat-label>
+          <textarea formControlName="content" matInput rows="10"></textarea>
+          <mat-hint
+            *ngIf="showHint"
+            [class]="
+              bodyMaxLength < messageForm.get('content').value?.length
+                ? 'text-danger'
+                : 'text-dark-75'
+            "
+            >{{ bodyMaxLength }} /
+            {{ messageForm.get("content").value?.length }}
+          </mat-hint>
+        </mat-form-field>
+      </form>
+    </div>
+  </perfect-scrollbar>
+
+  <div class="card-footer p-5 d-flex justify-content-between">
+    <button
+      (click)="sendSMS()"
+      [disabled]="messageForm.invalid"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "CALL_DUTY.SEND_SMS" | translate }}
+    </button>
+  </div>
+</div>
+
+<ng-template #selectedOptionsTemp>
+  <mat-accordion>
+    <mat-expansion-panel class="mb-10">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="d-flex align-items-center justify-content-between">
+            <span>
+              {{ "CALL_DUTY.selectedList" | translate }}
+            </span>
+            <span
+              class="
+                label label-rounded label-inline label-light-primary
+                mr-2
+                text-dark
+              "
+            >
+              {{ data?.users?.length }}
+              {{ "CALL_DUTY.user" | translate }}
+            </span>
+            <span class="label label-rounded label-inline bg-light-dark mr-2">
+              {{ data?.groups?.length }}
+              {{ "CALL_DUTY.group" | translate }}
+            </span>
+            <span
+              class="label label-rounded label-inline label-light-warning mr-2"
+            >
+              {{ data?.incidents?.length }}
+              {{ "CALL_DUTY.incident" | translate }}
+            </span>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-chip-list>
+        <!-- users -->
+        <mat-chip *ngFor="let user of data?.users" class="bg-light-primary">
+          <ng-container *ngIf="lang == 'ar'; else elseTemplate">
+            {{ user?.firstNameAr }} {{ user?.lastNameAr }}
+          </ng-container>
+          <ng-template #elseTemplate>
+            {{ user?.firstNameEn }} {{ user?.lastNameEn }}
+          </ng-template>
+        </mat-chip>
+
+        <!-- groups -->
+        <mat-chip *ngFor="let group of data?.groups" class="bg-light-dark">
+          <ng-container *ngIf="lang == 'ar'; else elseTemplate">
+            {{ group?.nameAr }}
+          </ng-container>
+          <ng-template #elseTemplate>
+            {{ group?.nameEn }}
+          </ng-template>
+        </mat-chip>
+
+        <!-- users -->
+        <mat-chip
+          *ngFor="let incident of data?.incidents"
+          class="bg-light-warning"
+        >
+          {{ incident?.subject }}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>

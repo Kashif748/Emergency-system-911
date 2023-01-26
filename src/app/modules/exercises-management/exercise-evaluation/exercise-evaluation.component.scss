@@ -1,0 +1,88 @@
+.chips-user {
+    border-radius: 30px;
+}
+
+.evaluation-table {
+
+    .ev-header {
+        display: flex;
+
+        span:first-child,
+        .question-title {
+            max-width: 40%;
+            width: 100%;
+
+        }
+
+        span:not(:first-child) {
+            width: 15% !important;
+            text-align: center;
+            width: 100%;
+
+        }
+
+    }
+
+    .ev-row {
+        &:hover {
+
+            transition: all ease-in-out 0.2s;
+
+            .question-title {
+                color: #3699ff !important;
+
+            }
+        }
+
+
+
+        .question-title {
+            max-width: 40%;
+            width: 100%;
+            font: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        mat-radio-group {
+            display: flex;
+            width: 100%;
+
+            mat-radio-button {
+                width: 15%;
+                text-align: center;
+                display: flex;
+
+                ::ng-deep .mat-radio-label {
+                    display: flex !important;
+                    justify-content: center;
+                }
+            }
+        }
+
+
+    }
+
+    .even-row {
+        background-color: #eee;
+    }
+
+
+
+
+
+
+
+
+
+}
+
+
+::ng-deep .dark-mode {
+
+    .ev-user,
+    .even-row {
+        background-color: #32383e !important;
+
+    }
+}

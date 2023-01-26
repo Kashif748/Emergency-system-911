@@ -1,0 +1,99 @@
+<div
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  class="card card-custom"
+  id="kt_card_3"
+>
+  <div class="card-header">
+    <div class="card-title">
+      <span class="card-icon">
+        <i class="flaticon-users text-primary"></i>
+      </span>
+      <h3 class="card-label">
+        {{ "CALL_DUTY.users_list" | translate }}
+      </h3>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <perfect-scrollbar
+    style="max-height: 500px; height: 400px"
+    class="card-body pt-3 px-0"
+  >
+    <div
+      *ngIf="loading"
+      class="spinner spinner-primary spinner-lg m-auto"
+      style="top: 175px; left: 50%"
+    ></div>
+
+    <div
+      *ngIf="users?.length != 0 && !loading"
+      class="flex flex-column w-100 m-auto"
+    >
+      <div
+        *ngFor="let userObj of users"
+        class="d-flex align-items-center flex-wrap py-1 px-2"
+        [class]="!userObj.user.isActive ? 'inactive-user' : ''"
+      >
+        <!--begin::Symbol-->
+        <div class="symbol symbol-50 symbol-light-primary">
+          <span class="symbol-label">
+            {{ userObj.user?.firstNameEn | firstLetter }}
+          </span>
+        </div>
+        <!--end::Symbol-->
+        <!--begin::Text-->
+        <div class="d-flex flex-column flex-grow-1 px-4">
+          <p *ngIf="lang == 'ar'" class="text-dark m-0">
+            {{ userObj.user?.firstNameAr }} {{ userObj.user?.lastNameAr }}
+          </p>
+          <p *ngIf="lang == 'en'" class="text-dark m-0">
+            {{ userObj.user?.firstNameEn }} {{ userObj.user?.lastNameEn }}
+          </p>
+          <span
+            class="
+              text-dark
+              mb-1
+              text-size-md
+              font-weight-500
+              label label-rounded label-inline
+            "
+            [ngClass]="{
+              'label-light-danger': userObj.type == userTypes.MANAGER,
+              'label-light-primary': userObj.type == userTypes.MEMBER
+            }"
+          >
+            {{
+              userObj.type == userTypes.MANAGER
+                ? ("SHARED.MANAGER" | translate)
+                : ("SHARED.MEMBER" | translate)
+            }}
+          </span>
+        </div>
+        <div *ngIf="!userObj.user.isActive">
+          <span
+            class="
+              label label-rounded label-light-warning label-pill label-inline
+              mr-2
+            "
+            >{{ "ACTIONS.INACTIVE" | translate }}</span
+          >
+        </div>
+
+        <!--end::Text-->
+      </div>
+
+      <div *ngIf="users?.length == 0 && !loading" class="text-center">
+        <p class="text-center font-size-h5">
+          {{ "CALL_DUTY.NO_USERS" | translate }}
+        </p>
+        <i class="flaticon-users-1 icon-xxl"></i>
+      </div>
+    </div>
+  </perfect-scrollbar>
+</div>

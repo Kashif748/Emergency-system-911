@@ -1,0 +1,44 @@
+table {
+    width: 100%;
+    border-spacing: 0 5px !important;
+    border-collapse: separate;
+
+
+
+    td {
+        padding: 5px 0 5px 0;
+        border-bottom: 1px solid #ebedf3 !important;
+        border-top: 1px solid #ebedf3 !important;
+    }
+
+    td:first-child {
+        border-right: 1px solid #ebedf3 !important;
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    td:last-child {
+        border-left: 1px solid #ebedf3 !important;
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px;
+    }
+
+
+
+}
+
+::ng-deep {
+    .mat-progress-bar-buffer {
+        background-color: #a5d2ff !important;
+    }
+
+    .modal {
+        max-width: 475px !important;
+        height: fit-content !important;
+        padding: 0 !important;
+
+        .mat-dialog-container {
+            padding: 0 !important;
+        }
+    }
+}

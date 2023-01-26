@@ -1,0 +1,219 @@
+<div class="container-fluid">
+  <div class="col-xxl-12 order-2 order-xxl-1 p-0">
+    <div class="table-container">
+      <table
+      (matSortChange)="onSortChanged($event)"
+        matSort
+        class="table table-head-custom table-head-bg table-borderless table-vertical-center"
+      >
+        <thead>
+          <tr>
+            <!-- 1 -->
+            <th mat-sort-header="id">
+              {{ "INCIDENTS.SR_NO" | translate }}
+              <!-- System Incident id -->
+            </th>
+            <!-- 2 -->
+            <!-- <th mat-sort-header="subject">
+              {{ "INCIDENTS.SUBJECT" | translate }}
+            </th> -->
+            <!-- 3 -->
+            <!-- <th mat-sort-header="emergencyLevel" class="w-130px">
+                {{ "INCIDENTS.EMERGENCYLEVELS" | translate }}
+              </th> -->
+            <!-- 4 -->
+            <th mat-sort-header="reporterContact">
+              <!-- {{ "INCIDENTS.PRIORITY" | translate }} -->
+              {{ "INCIDENTS.REPORTER_MOBILE" | translate }}
+            </th>
+            <!-- 5 -->
+            <th mat-sort-header="createdOn">
+              {{ "INCIDENTS.DATE" | translate }}
+            </th>
+
+            <!-- 6 -->
+            <th mat-sort-header="reportingVia">
+              {{ "INCIDENTS.REPORTINGVIA" | translate }}
+            </th>
+
+            <!-- 7 -->
+            <th mat-sort-header="status">
+              {{ "INCIDENTS.STATUS" | translate }}
+            </th>
+            <!-- 8 -->
+            <th>
+              <!-- {{ "INCIDENTS.ACTIONS" | translate }} -->
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let element of interimIncidents | paginate: paginationInterim
+            "
+            (click)="viewInterimIncident(element.id)"
+            class="bg-white rounded shadow-sm"
+          >
+            <td>
+              <!-- [ngClass]="{'highlight': element.isExpiry == true}" -->
+              <span style="margin-right: 5px"> {{ element?.id }}</span>
+            </td>
+            <!-- 2 -->
+            <!-- <td>
+              {{ element.subject }}
+            </td> -->
+            <!-- 3 -->
+            <td>
+              <!-- <span
+                  class="label label-dot label-xl rounded-sm w-15px h-15px">
+                </span> -->
+
+              <span class="text-dark font-weight-bold">
+                {{ element?.reporterContact }}
+              </span>
+            </td>
+            <!-- 4 -->
+            <td>
+              <span>
+                {{ element?.createdOn | customDate | date: "yyyy/MM/dd" }}
+              </span>
+            </td>
+            <!-- 5 -->
+            <td>
+              <span
+                class="text-dark-75 font-weight-bolder label label-lg label-light-primary label-inline"
+              >
+                {{ getReportedVia(element?.reportingVia?.id) }}
+              </span>
+            </td>
+            <!-- 6 -->
+            <td>
+              <span
+                [ngClass]="{
+                  'text-success':
+                    element?.status?.statusEn === 'Under Evaluation',
+                  'text-primary': element?.status?.statusEn === 'Approved',
+                  'text-danger': element?.status?.statusEn === 'Declined',
+                  'text-warning': element?.status?.statusEn === 'Transferred'
+                }"
+              >
+                <strong
+                  >{{
+                    getStatusVia(element?.status?.id)
+                  }}
+                </strong>
+              </span>
+            </td>
+
+            <!-- 7 -->
+            <!-- <td>
+                <span class="font-weight-bold">
+                 </span>
+              </td> -->
+            <!-- 8 -->
+            <td class="actions">
+              <!-- load actions Interim  template   -->
+              <!-- on larg screens -->
+              <div class="d-none d-lg-block">
+                <ng-container
+                  [ngTemplateOutlet]="actionsInterim"
+                  [ngTemplateOutletContext]="{ element: element }"
+                >
+                </ng-container>
+              </div>
+
+              <!-- menu  actions on small - mobile view -->
+              <button
+                class="d-lg-none btn btn-sm btn-clean btn-icon mr-1"
+                [matMenuTriggerFor]="menu"
+                (click)="$event.stopPropagation()"
+              >
+                <span
+                  inlineSVG="./assets/media/svg/icons/General/Other1.svg"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md svg-icon-primary"
+                ></span>
+              </button>
+              <mat-menu #menu="matMenu">
+                <ng-container
+                  [ngTemplateOutlet]="actionsInterim"
+                  [ngTemplateOutletContext]="{ element: element }"
+                >
+                </ng-container>
+              </mat-menu>
+
+              <!-- end  load  actions  template   -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <mat-paginator [length]="paginationInterim.totalItems" [pageSize]="10" showFirstLastButtons
+          (page)="pageChanged($event)">
+        </mat-paginator> -->
+
+
+
+      <div class="spinner-container m-auto p-10" *ngIf="loading">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+    </div>
+    <pagination-controls
+    previousLabel="Prev"
+    nextLabel="Next"
+    responsive="true"
+    id="interpage"
+    (pageChange)="pageChanged($event)"
+  ></pagination-controls>
+  </div>
+</div>
+
+<!-- table  one (showInterim)  actions  template -->
+<ng-template #actionsInterim let-element="element">
+  <div class="responsive-menu">
+    <ng-container *ngIf="element?.status?.statusEn == 'Under Evaluation'">
+      <button
+        (click)="changeStatus($event, element.id)"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="{{ 'INCIDENTS.DECLINE_INCIDENT' | translate }}"
+        class="btn btn-sm btn-clean btn-icon mr-2"
+      >
+        <mat-icon style="padding: 3px">cancel</mat-icon>
+        <span class="menu-text text-dark-50">
+          {{ "INCIDENTS.DECLINE_INCIDENT" | translate }}</span
+        >
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="element?.status?.statusEn == 'Under Evaluation'">
+      <button
+        (click)="reportIncident(element.id)"
+        *appPrivileges="'PRIV_CR_INC'"
+        class="btn btn-sm btn-clean btn-icon mr-2"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="{{ 'INCIDENTS.ACCEPT_INCIDENT' | translate }}"
+      >
+        <mat-icon style="padding: 3px">add_task</mat-icon>
+        <span class="menu-text text-dark-50">
+          {{ "INCIDENTS.ACCEPT_INCIDENT" | translate }}</span
+        >
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="element?.incidentId">
+      <button
+        (click)="viewncident(element?.incidentId)"
+        class="btn btn-sm btn-clean btn-icon mr-2"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="{{ 'INCIDENTS.VIEW_INCIDENT' | translate }}"
+      >
+        <mat-icon style="padding: 3px">preview</mat-icon>
+        <span class="menu-text text-dark-50">
+          {{ "INCIDENTS.VIEW_INCIDENT" | translate }}</span
+        >
+      </button>
+    </ng-container>
+  </div>
+</ng-template>

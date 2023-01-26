@@ -1,0 +1,49 @@
+<ng-container *ngIf="multiple">
+  <mat-form-field
+    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+    class="w-100"
+    [appearance]="appearance"
+  >
+    <mat-label>{{ placeholder }} <span class="required-asterisk" *ngIf="isRequired">*</span>
+    </mat-label>
+    <mat-chip-list #chipList aria-label="to users">
+      <mat-chip
+        *ngFor="let org of orgs"
+        [selectable]="multiple"
+        removable="true"
+        (removed)="remove(org)"
+      >
+        {{ org | propTranslator: "name" }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        autocomplete="off"
+        [formControl]="Ctrl"
+        [placeholder]="'COMMON.ADD' | translate"
+        #Input
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+    
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selected($event)"
+    >
+      <mat-option *ngFor="let org of filteredOrgs | async" [value]="org">
+        {{ org | propTranslator: "name" }}
+      </mat-option>
+    </mat-autocomplete>
+    <button
+      *ngIf="hasCCbutton"
+      matSuffix
+      (click)="toggleDisplayCC($event)"
+      mat-button
+    >
+      CC
+    </button>
+    <span matSuffix *ngIf="hasCClabel">CC</span>
+  </mat-form-field>
+</ng-container>

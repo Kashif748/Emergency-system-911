@@ -1,0 +1,22 @@
+{
+  "Survey": {
+    "Satisfaction": "ما  مدى  رضاكم  عن  خدمات  الطوارئ؟",
+    "Reason": "يرجى  تزويدنا  بسبب  هذا التقييم",
+    "otherReason": "ملاحظات (شُكر/شكوى)",
+    "Submit": "إرسال",
+    "PleaseWait": "جار  المعالجة  يرجى اﻹنتظار",
+    "InvalidUUID": "لقد  تم  تعبئة  الإستطلاع  مسبقاً",
+    "SuccessMSG": "لقد  تم  الحفظ ...شكرا  لوقتك",
+    "SurvyReport": "تقارير  السعادة",
+    "Table": {
+      "happiness": "مدى  السعادة",
+      "other": "أخرى",
+      "reason": "السبب",
+      "incident": "رقم البلاغ",
+      "incidentSubject": "عنوان البلاغ",
+      "createdDate": "تاريخ  اﻹنشاء",
+      "fromDate": "منذ",
+      "toDate": "حتى"
+    }
+  }
+}

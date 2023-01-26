@@ -1,0 +1,62 @@
+.collapsed-msg {
+  height: 34.49px;
+  overflow: hidden;
+}
+.msg {
+  position: relative;
+  padding: 6px 8px;
+  font-weight: 100;
+  margin: 0;
+  padding: 5px;
+  line-height: 27px;
+}
+.pulse {
+  border: 1px solid rgba(54, 153, 255, 0.4);
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(54, 153, 255, 0.4);
+  animation: pulse 2s infinite;
+}
+
+.pulse:hover {
+  animation: none;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(54, 153, 255, 0.4);
+  }
+
+  70% {
+    -webkit-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+  }
+
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(54, 153, 255, 0.4);
+    box-shadow: 0 0 0 0 rgba(54, 153, 255, 0.4);
+  }
+
+  70% {
+    -moz-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+  }
+
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+
+::ng-deep {
+  .ps {
+    .ps-content {
+      padding: 10px;
+    }
+  }
+}

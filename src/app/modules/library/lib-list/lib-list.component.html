@@ -1,0 +1,159 @@
+<div class="card card-custom gutter-b container">
+  <div class="container-fluid">
+    <div class="row mt-3">
+      <mat-toolbar class="bg-white">
+        <button *ngIf="breadcrumb?.length > 1" app-throttle-click (ThrottleClick)="
+            getAttachments(breadcrumb[breadcrumb.length - 2], true)
+          " class="btn btn-sm btn-light-primary font-weight-bolder cursor-pointer mx-2"
+          matTooltip="{{ 'SHARED.BACK' | translate }}">
+          <span inlineSVG="{{
+              lang == 'en'
+                ? '/assets/media/svg/icons/Navigation/Arrow-left.svg'
+                : '/assets/media/svg/icons/Navigation/Arrow-right.svg'
+            }}" cacheSVG="true" class="svg-icon svg-icon-lg" title="{{ 'SHARED.BACK' | translate }}"></span>
+        </button>
+        <ol class="breadcrumb m-0">
+          <li *ngFor="let item of breadcrumb" (click)="getAttachments(item, true)"
+            class="breadcrumb-item cursor-pointer">
+            <app-breadcrumbs *ngIf="item.id == null"></app-breadcrumbs>
+            <a *ngIf="item.id">{{ item.name }}</a>
+          </li>
+        </ol>
+      </mat-toolbar>
+    </div>
+    <div class="row mt-2">
+      <mat-toolbar class="col-12 bg-white p-0">
+        <mat-toolbar-row class="p-0">
+          <div [ngClass]="{ 'col-md-6': !(isSmall$ | async) }" [ngClass]="{
+              'col-md-6': !(isSmall$ | async),
+              'col-12': (isSmall$ | async)
+            }">
+            <mat-form-field class="w-100">
+              <mat-label>{{ "LIBRARY.FILTER" | translate }}</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'SHARED.NAME' | translate }}" #input />
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="!isRoot && !(isSmall$ | async)" [ngClass]="{
+              'col-md-6': !(isSmall$ | async),
+              'col-12': (isSmall$ | async)
+            }">
+            <button (click)="createFolder()"
+              class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+              routerLinkActive="active" matTooltip="Add New Item">
+              {{ "LIBRARY.CREATE_FOLDER" | translate }}
+              <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"
+                title="Edit"></span>
+            </button>
+
+            <button (click)="createFile()"
+              class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+              routerLinkActive="active" matTooltip="Add New Item">
+              {{ "LIBRARY.CREATE_FILE" | translate }}
+              <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"
+                title="Edit"></span>
+            </button>
+          </div>
+        </mat-toolbar-row>
+        <mat-toolbar-row class="p-0" *ngIf="!isRoot && (isSmall$ | async)">
+          <div class="col-md-6">
+            <button (click)="createFolder()"
+              class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+              routerLinkActive="active" matTooltip="Add New Item">
+              {{ "LIBRARY.CREATE_FOLDER" | translate }}
+              <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"
+                title="Edit"></span>
+            </button>
+
+            <button (click)="createFile()"
+              class="btn btn-lg btn-light-primary font-weight-bolder py-2 px-5 cursor-pointer mx-2"
+              routerLinkActive="active" matTooltip="Add New Item">
+              {{ "LIBRARY.CREATE_FILE" | translate }}
+              <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"
+                title="Edit"></span>
+            </button>
+          </div>
+        </mat-toolbar-row>
+      </mat-toolbar>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="isLoading" class="block-table">
+      <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+
+          <th scope="col">{{ "LIBRARY.NAMEANDDATE" | translate }}</th>
+
+          <th scope="col">{{ "LIBRARY.LIBRARY_ACCESS_TYPE" | translate }}</th>
+
+          <th scope="col">{{ "LIBRARY.ORGANIZATION" | translate }}</th>
+
+          <th scope="col">{{ "LIBRARY.ACTIONS" | translate }}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let lib of obs | async">
+          <th class="cursor-pointer" app-throttle-click [ThrottleTime]="2000"
+            (ThrottleClick)="getAttachments(lib, false)">
+            <mat-icon class="icon-display" color="primary">
+              {{
+              lib.itemType.value === "Folder" ? "folder" : "insert_drive_file"
+              }}
+            </mat-icon>
+          </th>
+
+          <td>
+            <h5 class="d-block">{{ lib.name }}</h5>
+            <div *ngIf="!lib.createdOn" class="text-success">11/12/2020</div>
+            <div *ngIf="lib.createdOn" class="text-success">
+              {{ lib.createdOn | customDate | date: "dd/MM/yyyy" }}
+            </div>
+          </td>
+
+          <td>
+            <h4 class="label label-lg label-light-danger label-inline">
+              {{
+              lang === "en"
+              ? lib.libraryAccessType?.nameEn
+              : lib.libraryAccessType?.nameAr
+              }}
+            </h4>
+          </td>
+
+          <td>
+            <h4 class="label label-lg label-light-primary label-inline">
+              {{
+              lang === "en"
+              ? lib.organization?.nameEn
+              : lib.organization?.nameAr
+              }}
+            </h4>
+          </td>
+
+          <td>
+            <button mat-icon-button color="primary" (click)="open(lib)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" *ngIf="lib.parent && lib.createdOn" (click)="deleteLibrary(lib.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button *ngIf="lib.itemType.value != 'Folder'" mat-icon-button color="warn"
+              (ThrottleClick)="downloadFile(lib.id)" app-throttle-click [ThrottleTime]="2000">
+              <mat-icon>download</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <mat-paginator #paginator (page)="onPagination($event)" [pageSizeOptions]="[15, 25, 50]"
+      [length]="paginationConfig.length" [pageSize]="paginationConfig.pageSize">
+    </mat-paginator>
+  </div>
+</div>

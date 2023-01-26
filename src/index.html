@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en" dir="ltr" direction="ltr" style="direction: ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title> ECMS </title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link id="esri_map_style" rel="stylesheet" href="./assets/css/esri.min.css">
+  <link rel="icon" type="image/svg+xml" href="./assets/media/logos/ecms-logo.svg" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #splash-screen {
+      position: absolute;
+      z-index: 1000;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-color: #f2f3f8;
+    }
+
+    #splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .splash-spinner {
+      animation: rotate 2s linear infinite;
+      margin-left: calc(100vw - 100%);
+      width: 50px;
+      height: 50px;
+    }
+
+    .splash-spinner .path {
+      stroke: #5d78ff;
+      stroke-linecap: round;
+      animation: dash 1.5s ease-in-out infinite;
+    }
+
+    @keyframes rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes dash {
+      0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+      }
+
+      50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+      }
+
+      100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+      }
+    }
+  </style>
+</head>
+
+<body root id="kt_body" class="en mat-app-background">
+  <style>
+    #splash-screen {
+      position: absolute;
+      top: 25vh;
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-color: #f2f3f8;
+    }
+
+    #splash-screen>.unsupported-brwoser {
+      filter: grayscale(1) opacity(0.3);
+    }
+
+    #splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .splash-spinner {
+      animation: rotate 2s linear infinite;
+      margin-left: calc(100vw - 100%);
+      width: 50px;
+      height: 50px;
+    }
+
+    .splash-spinner .path {
+      stroke: #5d78ff;
+      stroke-linecap: round;
+      animation: dash 1.5s ease-in-out infinite;
+    }
+
+    @keyframes rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes dash {
+      0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+      }
+
+      50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+      }
+
+      100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+      }
+    }
+  </style>
+  <div id="splash-screen">
+    <div class="d-flex flex-column">
+      <div id="ar">
+        <h1 class="font-weight-bold text-center">
+          يبدو أنك تستخدم متصفحًا غير مدعوم
+        </h1>
+        <p class="text-center font-size-lg">
+          لتحقيق أقصى استفادة من استخدام
+          <span class="font-weight-bold">منصة سلامه </span>، يرجى الدخول إلى
+          التجربة الجديدة باستخدام متصفح مدعوم.
+        </p>
+      </div>
+      <div id="en">
+        <h1 class="font-weight-bold text-center">
+          You seem to be using an unsupported browser
+        </h1>
+        <p class="text-center font-size-lg">
+          To get the most out of using the new Return Path please login to the new
+          experience with a supported browser
+        </p>
+      </div>
+
+      <div class="d-flex mb-10">
+        <!--'chrome', 'edge', 'safari', 'firefox', 'unsupported-brwoser','IE', 'opera'-->
+        <div class="p-5 mx-5 max-w-100px font-weight-bold text-center ">
+          <img class="w-100 m-0" src="./assets/browsers-logos/chrome.png" />
+          <span class="py-4">chrome</span>
+        </div>
+        <div class="p-5 mx-5 max-w-100px font-weight-bold text-center ">
+          <img class="w-100 m-0 " src="./assets/browsers-logos/edge.png" />
+          <span class="py-4">edge</span>
+        </div>
+        <div class="p-5 mx-5 max-w-100px font-weight-bold text-center ">
+          <img class="w-100 m-0 " src="./assets/browsers-logos/safari.png" />
+          <span class="py-4">safari</span>
+        </div>
+        <div class="p-5 mx-5 max-w-100px font-weight-bold text-center ">
+          <img class="w-100 m-0 " src="./assets/browsers-logos/firefox.png" />
+          <span class="py-4">firefox</span>
+        </div>
+        <div class="p-5 mx-5 max-w-100px font-weight-bold text-center ">
+          <img class="w-100 m-0  unsupported-brwoser" style="filter: grayscale(1); opacity: 0.3;"
+            src="./assets/browsers-logos/IE.png" />
+          <span class="py-4">IE</span>
+        </div>
+        <div class="p-5 mx-5 max-w-100px font-weight-bold text-center ">
+          <img class="w-100 m-0  unsupported-brwoser" style="filter: grayscale(1); opacity: 0.3;"
+            src="./assets/browsers-logos/opera.png" />
+          <span class="py-4">opera</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <script src="./assets/fonts/tajawal/tajawal-normal.js"></script> -->
+  <script>
+    if (navigator.appVersion.indexOf('Trident/7') == -1) {
+      document.getElementById('splash-screen').style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

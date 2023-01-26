@@ -1,0 +1,35 @@
+<div class="w-100 h-100 position-relative min-w-500px min-h-500px">
+  <div *ngIf="imageLoading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+
+  <div
+    *ngIf="imageLoading"
+    class="spinner spinner-primary spinner-lg m-auto"
+    style="top: 235px; left: 50%"
+  ></div>
+  <button
+    *ngIf="imageLoadingFail"
+    (click)="reloadImage()"
+    class="btn btn-sm btn-primary btn-circle btn-icon position-absolute"
+    style="left: 50%; position: absolute; top: 45%"
+  >
+    <i class="flaticon2-reload-1 text-white font-size-h6"></i>
+  </button>
+
+  <button
+    (click)="dialogRef.close()"
+    class="btn btn-sm btn-primary btn-icon position-absolute"
+    style="right: 5px; position: absolute; top: 10px"
+  >
+    <i class="flaticon-circle text-white font-size-h6"></i>
+  </button>
+  <img
+    alt=""
+    class="w-100"
+    style="object-fit: contain"
+    [src]="imageUUID | secure"
+    (load)="imageLoading = false; imageLoadingFail = false"
+    (error)="loadingFail($event)"
+  />
+</div>

@@ -1,0 +1,95 @@
+:host {
+  padding: 10px;
+  display: block;
+  max-width: 350px;
+}
+
+.single-item{
+  
+  border-radius: 10px !important;
+}
+.mat-expansion-panel {
+  box-shadow: none;
+  margin: 0 !important;
+  ::ng-deep {
+    .mat-expansion-panel-header {
+      border-radius: 10px !important;
+    }
+    .mat-expansion-panel-header.mat-expanded {
+      height: 48px !important;
+    }
+    .mat-expansion-panel-body {
+      padding: 0 8px 16px;
+    }
+  }
+}
+
+:not(.dark-mode)
+  .navi.navi-hover
+  .navi-item
+  .navi-link:hover
+  .symbol
+  .symbol-label {
+  background-color: white;
+}
+
+.symbol.symbol-50 .symbol-label {
+  width: 40px;
+  height: 40px;
+}
+
+.symbol.symbol-50 .symbol-label {
+  width: 40px;
+  height: 40px;
+}
+
+.navi .navi-item .navi-link {
+  padding: 10px;
+}
+
+// .navi {
+//   overflow: auto;
+//   max-height: 25em;
+// }
+
+.menu-subnav {
+  padding: 0 30px;
+
+  display: flex;
+  justify-content: space-evenly;
+
+  a {
+    margin: 5px;
+  }
+}
+
+.menu-nav {
+  mat-divider {
+    height: 60%;
+    align-self: center;
+    border-right-color: #badafb !important;
+  }
+
+  .menu-link {
+    width: 100%;
+    height: 100%;
+    border-radius: 0 !important;
+    border-bottom: 3px solid white !important;
+    transition: 0.3s;
+  }
+
+  .menu-link:hover {
+    border-bottom: 3px solid #666 !important;
+
+    .mneu-text {
+      color: #333 !important;
+    }
+  }
+
+  //  overflow-x: scroll;
+  // overflow-y: hidden;
+  li {
+    position: static !important;
+    z-index: 10;
+  }
+}

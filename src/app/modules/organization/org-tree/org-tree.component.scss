@@ -1,0 +1,61 @@
+:host {
+  height: 100%;
+}
+
+::ng-deep {
+  .org-modal .mat-dialog-container {
+    padding: 0 !important;
+  }
+
+  .orgchart.org-chart {
+    background-image: none !important;
+  }
+
+  .orgchart.org-chart .oc-node .header {
+    box-sizing: border-box;
+    background-color: #215a88;
+    color: #fff;
+    width: 300px;
+    height: 65px;
+    padding: 2px;
+  }
+
+  .orgchart.org-chart .oc-node .body {
+    box-sizing: border-box;
+    color: #215a88;
+    background-color: #fff;
+    width: 300px;
+    height: 65px;
+    padding: 2px;
+    border: 1px solid #215a88;
+  }
+
+  .orgchart.org-chart > orgchart-node > .oc-node::after {
+    background-color: rgba(33, 90, 136, 0.8) !important;
+  }
+
+  .orgchart.org-chart .oc-group::before {
+    border-color: rgba(33, 90, 136, 0.8) !important;
+  }
+
+  .orgchart.org-chart .oc-group > orgchart-node::before {
+    border-color: rgba(33, 90, 136, 0.8) !important;
+  }
+
+  .orgchart.org-chart orgchart-node::after {
+    border-color: rgba(33, 90, 136, 0.8) !important;
+  }
+
+  #oc-1 .body {
+    color: blue;
+  }
+}
+
+mat-card {
+  border-radius: 15px !important;
+}
+
+::ng-deep .mat-card-header-text {
+  margin: 0 !important;
+  text-align: center !important;
+}

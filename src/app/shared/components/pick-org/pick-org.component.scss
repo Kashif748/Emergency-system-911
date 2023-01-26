@@ -1,0 +1,94 @@
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+.orgs-list {
+  max-width: 700px;
+  border-radius: 10px;
+  min-height: 200px;
+  margin: auto;
+  mat-toolbar {
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #ccc;
+  }
+}
+.card-body {
+  max-height: 500px;
+  overflow-x: hidden;
+}
+.table-filter {
+  display: block;
+  margin: 29px;
+  max-width: 800px;
+  margin: auto;
+}
+
+::ng-deep {
+  .pick-orgs-modal {
+    max-width: 550px !important;
+    width: 100%;
+    height: fit-content;
+    padding: 0;
+    .mat-dialog-container {
+      padding: 0;
+    }
+
+    mat-checkbox {
+      .mat-checkbox-inner-container {
+        width: 20px;
+        height: 20px;
+        background-color: #8fc7ff;
+        border-radius: 0.42rem;
+        .mat-checkbox-checkmark-path {
+          stroke: #1683f8 !important;
+        }
+        .mat-checkbox-mixedmark {
+          background-color: #1683f8;
+        }
+
+        .mat-checkbox-background {
+          background-color: #8fc7ff;
+        }
+        .mat-checkbox-background,
+        .mat-checkbox-frame {
+          border-radius: 0.42rem;
+        }
+      }
+      .mat-checkbox-label {
+        margin: auto;
+      }
+    }
+    .hide-checkbox .mat-pseudo-checkbox {
+      display: none;
+    }
+  }
+}
+
+.disabled-icon {
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eb969f;
+  border-radius: 5px;
+  height: 30px;
+  margin: 0 10px;
+}
+
+.mat-tree-node {
+  .check-icon {
+    visibility: hidden;
+  }
+  &:hover {
+    .check-icon {
+      visibility: visible;
+    }
+  }
+}

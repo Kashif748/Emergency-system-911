@@ -1,0 +1,34 @@
+<div
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  class="card card-custom"
+  style="overflow: hidden"
+>
+  <div class="card-header px-4">
+    <div class="card-title">
+      <h4 class="card-label">
+        <span  *ngIf="mode == 'emailBody'"> {{ "INCIDENTS.INCIDENT_NOTIFICATIONS.BODY" | translate }}</span>
+        <span  *ngIf="mode == 'recivers'"> {{ "INCIDENTS.INCIDENT_NOTIFICATIONS.RECEIVERS" | translate }}
+
+        </span>
+      </h4>
+    </div>
+    <div class="card-toolbar">
+      <button mat-dialog-close class="btn btn-icon btn-sm btn-light-primary">
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div
+    *ngIf="mode === 'emailBody'"
+    class="card-body px-4 email-body"
+    #emailBody
+    dir="ltr"
+    [innerHTML]="body"
+  ></div>
+
+  <div *ngIf="mode == 'recivers'" class="card-body px-4">
+    <p class="reciver-email label label-inline" *ngFor="let item of recivers">
+      {{ item.email }}
+    </p>
+  </div>
+</div>

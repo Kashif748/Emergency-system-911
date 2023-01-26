@@ -1,0 +1,22 @@
+form {
+      mat-form-field {
+      display: block !important;
+    }
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #ccc !important;
+  }
+  
+  .asterisk_input::after {
+    content: " *";
+    color: red;
+  }
+
+  .scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}

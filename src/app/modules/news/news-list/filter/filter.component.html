@@ -1,0 +1,6 @@
+
+<mat-form-field appearance="fill" class="table-filter">
+  <mat-label>{{"NEWS.FILTER" | translate}}</mat-label>
+  <input matInput (keyup)="applyFilter$.emit($event)" #input />
+  <mat-icon matSuffix color="primary">search</mat-icon>
+</mat-form-field>

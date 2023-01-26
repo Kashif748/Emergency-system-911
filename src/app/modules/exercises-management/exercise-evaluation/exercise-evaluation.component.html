@@ -1,0 +1,136 @@
+<div class="card card-custom">
+  <div class="card-body d-flex flex-column">
+    <!-- evaluators list -->
+    <div class="d-flex flex-column mb-10">
+      <h4 class="mb-5">{{ "EXERCISEIS.evaluators" | translate }}</h4>
+      <div class="d-flex">
+        <div
+          class="d-flex align-items-center max-w-175px bg-gray-200 chips-user mx-3 ev-user"
+          *ngFor="let item of [1, 2, 3, 4]"
+        >
+          <div class="symbol symbol-circle symbol-40 symbol-primary ml-2">
+            <span class="symbol-label">
+              {{ "A" }}
+            </span>
+          </div>
+          <div class="d-flex flex-column text-right pl-8">
+            <span class="font-weight-bold">arabic name</span>
+
+            <span class="text-muted font-weight-bold">english name</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- evaluation  inputs -->
+    <div class="d-flex flex-column p-5">
+      <h4 class="mb-5 w-100">
+        {{ "EXERCISEIS.evaluations_standards" | translate }} :
+      </h4>
+      <!-- evaluation  table -->
+      <div class="d-flex flex-column w-100 evaluation-table border rounded-lg">
+        <!-- table header  -->
+        <div class="ev-header p-5 rounded-lg font-weight-bolder">
+          <span> {{ "EXERCISEIS.question" | translate }}</span>
+          <span>
+            {{ "EXERCISEIS.exceeded_expectations" | translate }}
+          </span>
+          <span>{{ "EXERCISEIS.satisfy" | translate }}</span>
+          <span>{{ "EXERCISEIS.weak" | translate }}</span>
+          <span>{{ "EXERCISEIS.not_achieved" | translate }}</span>
+        </div>
+        <!--    table body -->
+        <div
+          class="ev-row w-100 d-flex flex-column p-4 border-top"
+          *ngFor="
+            let formRow of evaluationsForm.controls;
+            let i = index;
+            let isEven = even
+          "
+          [class]="isEven ? 'even-row' : ''"
+        >
+          <!-- table  row  form   -->
+          <ng-container [formGroup]="formRow">
+            <mat-radio-group
+              aria-label="Select an option"
+              formControlName="answer"
+            >
+              <div class="question-title">
+                <span class="label label-success ml-2">
+                  <i
+                    class="flaticon2-check-mark text-white icon-sm"
+                    style="line-height: 0"
+                  ></i>
+                </span>
+
+                <span> {{ questionsList[lang][i].question }}</span>
+              </div>
+
+              <mat-radio-button value="expectations"> </mat-radio-button>
+
+              <mat-radio-button value="satisfy"> </mat-radio-button>
+
+              <mat-radio-button value="weak"> </mat-radio-button>
+
+              <mat-radio-button value="notAchieved"> </mat-radio-button>
+            </mat-radio-group>
+
+            <div
+              class="form-group pl-10 pb-0 pt-5 my-0"
+              style="overflow: hidden"
+              *ngIf="
+                formRow.get('answer').value == 'expectations' ||
+                formRow.get('answer').value == 'notAchieved'
+              "
+              @expandCollapse
+            >
+              <textarea
+                rows="3"
+                formControlName="reason"
+                placeholder="{{ 'EXERCISEIS.reason' | translate }}"
+                class="form-control"
+              ></textarea>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- evaluation  other question -->
+      <div class="d-flex d-flex flex-wrap mt-10">
+        <h4 class="mb-5 w-100">
+          {{ "EXERCISEIS.evaluators_notice" | translate }} :
+        </h4>
+        <div class="form-group px-2 my-0 w-50">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <textarea
+              rows="3"
+              matInput
+              placeholder="{{ 'EXERCISEIS.strengths' | translate }}"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <!--  -->
+        <div class="form-group px-2 my-0 w-50">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <textarea
+              rows="3"
+              matInput
+              placeholder="{{ 'EXERCISEIS.opportunities' | translate }}"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <!--  -->
+      </div>
+
+      <!-- evaluation  actions -->
+      <div class="d-flex pt-6 w-100">
+        <button
+          type="button"
+          class="btn btn-md btn-primary font-weight-bold text-uppercase px-6 py-2 mx-4"
+        >
+          {{ "ACTIONS.SAVE" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

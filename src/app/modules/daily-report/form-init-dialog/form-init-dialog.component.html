@@ -1,0 +1,67 @@
+<h1>
+  <span
+    [inlineSVG]="'./assets/media/svg/icons/Code/Info-circle.svg'"
+    class="svg-icon svg-icon-lg svg-icon-5x svg-icon-primary"
+  ></span>
+</h1>
+<div class="my-4 container-fluid">
+  <div class="row mt-3">
+    <div class="col-md-12 border rounded" [formGroup]="form">
+      <div class="row">
+        <div class="h-55px d-flex text-center col-12 mb-2">
+          <h4 class="m-auto">
+            {{ "DAILY_REPORT_ADCDA.START_DIALOG.MESSAGE" | translate }}
+          </h4>
+        </div>
+
+        <app-user-input
+          class="col-12"
+          appearance="fill"
+          formControlName="approvedBy"
+          placeholder="{{'DAILY_REPORT_ADCDA.START_DIALOG.APPROVED_BY' | translate}}"
+          [withFullName]="true"
+          [required]="true"
+          [privilege]="'PRIV_APR_DLY'"
+        ></app-user-input>
+
+        <mat-form-field appearance="fill" class="col-12">
+          <mat-label>{{'DAILY_REPORT_ADCDA.START_DIALOG.DATE' | translate}}</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="date"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div mat-dialog-actions class="col-md-12">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row d-flex text-center">
+              <button
+                class="btn btn-md btn-primary px-5 cursor-pointer m-auto"
+                (click)="continue()"
+                [disabled]="!form.valid"
+              >
+                {{ "ACTIONS.CONTINUE" | translate }}
+              </button>
+            </div>
+          </div>
+  
+          <div class="col-md-6">
+            <div class="row d-flex text-center">
+              <button
+                (click)="cancel()"
+                class="btn btn-md btn-light-danger px-5 cursor-pointer m-auto"
+              >
+                {{ "ACTIONS.CANCEL" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

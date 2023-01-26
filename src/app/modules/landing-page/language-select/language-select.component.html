@@ -1,0 +1,48 @@
+<ng-container>
+  <div
+    class="d-flex align-items-center justify-content-center dropdown px-2"
+    ngbDropdown
+    [placement]="direction == 'rtl' ? 'bottom-right' : 'bottom-left'"
+  >
+    <button
+      class="btn btn-icon btn-circle"
+      data-toggle="dropdown"
+      data-offset="0px,0px"
+      ngbDropdownToggle
+    >
+      <span class="symbol symbol-30 symbol-circle">
+        <img src="{{ language.flag }}" style="border-radius: 20px" />
+      </span>
+    </button>
+    <div
+      ngbDropdownMenu
+      class="
+        dropdown-menu
+        p-0
+        m-0
+        dropdown-menu-left dropdown-menu-anim-up dropdown-menu-md
+        p-0
+      "
+    >
+      <ul class="navi navi-hover py-4">
+        <ng-container *ngFor="let language of languages; let isLast = last">
+          <li class="navi-item">
+            <a
+              href="javascript:;"
+              (click)="setLanguageWithRefresh(language.lang)"
+              class="navi-link px-0 py-2"
+            >
+              <span
+                class="symbol symbol-20 symbol-circle bg-secondary mx-2 p-2"
+              >
+                <img src="{{ language.flag }}" style="border-radius: 20px" />
+              </span>
+              <span class="navi-text">{{ language.name }}</span>
+            </a>
+          </li>
+          <hr *ngIf="!isLast" class="m-auto" style="width: 90%" />
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</ng-container>

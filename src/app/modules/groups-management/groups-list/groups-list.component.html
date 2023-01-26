@@ -1,0 +1,415 @@
+<div class="container-fluid">
+  <section class="d-flex py-4 my-2">
+    <mat-accordion style="width: 100% !important">
+      <mat-expansion-panel
+        [(expanded)]="panelOpenState"
+        #mep="matExpansionPanel"
+        class="shadow-sm"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title color="primary">
+            {{ "TASK.ADVANCED_SEARCH" | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-4">
+          <div class="row">
+            <!-- group name -->
+            <div class="form-group col-md-6 pl-4 pr-4">
+              <mat-form-field
+                [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                appearance="fill"
+                class="form-element example-full-width"
+              >
+                <mat-label> {{ "GROUP.GROUP_NAME" | translate }}</mat-label>
+                <input matInput type="text" formControlName="name"/>
+              </mat-form-field>
+            </div>
+
+            <!-- group org -->
+            <div class="form-group col-md-6 pl-4 pr-4">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>
+                  {{ "AUTH.LOGIN.Organizations" | translate }}
+                  <!-- <span class="required-asterisk">*</span> -->
+                </mat-label>
+
+                <mat-select formControlName="orgId">
+                  <mat-option
+                    *ngFor="let org of orgs$ | async"
+                    [value]="org.id"
+                  >
+                    <span *ngIf="lang == 'en'">
+                      {{ org.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                    <span *ngIf="lang == 'ar'">
+                      {{ org.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- center  filter -->
+
+            <div class="form-group col-md-6 pl-4 pr-4">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>
+                  {{ "INCIDENTS.CENTER" | translate }}
+                  <!-- <span class="required-asterisk">*</span> -->
+                </mat-label>
+
+                <mat-select formControlName="incidentLocation">
+                  <mat-option
+                    *ngFor="let center of centers "
+                    [value]="center.id"
+                  >
+                    <span *ngIf="lang == 'en'">
+                      {{ center.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                    <span *ngIf="lang == 'ar'">
+                      {{ center.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- insidents  filter -->
+            <div class="form-group col-md-6 pl-4 pr-4">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>
+                  {{ "INCIDENTS.MAIN_CAT" | translate }}
+                  <!-- <span class="required-asterisk">*</span> -->
+                </mat-label>
+
+                <mat-select formControlName="incidentCategoryId">
+                  <mat-option *ngFor="let item of categories" [value]="item.id">
+                    <span *ngIf="lang == 'en'">
+                      {{ item.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                    <span *ngIf="lang == 'ar'">
+                      {{ item.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- has members -->
+            <div class="form-group col-md-6 pl-4 pr-4">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>
+                  {{ "GROUP.groupsMembers" | translate }}
+                </mat-label>
+
+                <mat-select formControlName="hasMembers">
+                  <mat-option [value]="'null'">
+                    <span> {{ "GROUP.all" | translate }} </span>
+                  </mat-option>
+                  <mat-option [value]="true">
+                    <span> {{ "GROUP.hasMembers" | translate }} </span>
+                  </mat-option>
+                  <mat-option [value]="false">
+                    <span> {{ "GROUP.noMembers" | translate }} </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- actions -->
+            <div class="row col-12">
+              <div class="col-6 d-flex">
+                <button class="btn btn-primary w-100" (click)="onSubmit()">
+                  {{ "ACTIONS.FILTER" | translate }}
+                  <span [inlineSVG]="
+              '/assets/media/svg/icons/General/Search.svg'
+            " cacheSVG="true" class="svg-icon svg-icon-md"></span>
+                </button>
+              </div>
+
+              <div class="col-6 d-flex">
+                <button class="btn btn-light-primary w-100" (click)="clearSearch(); mep.expanded = false">
+                  {{ "ACTIONS.CLEAR" | translate }}
+                  <span [inlineSVG]="'/assets/media/svg/icons/Media/Repeat.svg'" cacheSVG="true"
+                        class="svg-icon svg-icon-md"></span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </section>
+</div>
+
+<div class="mat-elevation-z8 container">
+  <mat-toolbar class="bg-white p-0">
+    <app-breadcrumbs></app-breadcrumbs>
+    <button
+      *appPrivileges="'PRIV_CR_GRP'"
+      (click)="addGroup()"
+      class="btn btn-icon btn-primary btn-sm btn-circle font-weight-bolder cursor-pointer mx-3"
+    >
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+    <div class="spacer"></div>
+
+    <!-- export  menu -->
+    <div
+      class="dropdown"
+      ngbDropdown
+      [placement]="lang == 'en' ? 'bottom-right' : 'bottom-left'"
+    >
+      <button
+        class="btn btn-light-primary font-weight-bolder dropdown-toggle"
+        data-toggle="dropdown"
+        data-offset="0px,0px"
+        ngbDropdownToggle
+      >
+        {{ "ACTIONS.EXPORT" | translate }}
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu dropdown-menu-anim-up">
+        <button class="dropdown-item p-2 font-size-sm" (click)="downloadXlsx()">
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Custome/csv.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+          {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+        </button>
+        <button class="dropdown-item p-2 font-size-sm" (click)="downloadPDF()">
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Custome/pdf.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+          {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive table-container">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="table table-head-custom table-head-bg table-borderless table-vertical-center m-0"
+        >
+          <ng-container matColumnDef="nameAr">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "GROUP.NAME_AR" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="truncate">{{ element.nameAr }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="nameEn">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "GROUP.NAME_EN" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="truncate">{{ element.nameEn }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Organization">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "GROUP.ORGANIZATION" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="truncate">
+              <span *ngIf="lang == 'ar'">
+                {{ element.orgStructure.nameAr }}
+              </span>
+              <span *ngIf="lang == 'en'">
+                {{ element.orgStructure.nameEn }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Manager">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "GROUP.LEADER" | translate }}
+            </th>
+
+            <td mat-cell *matCellDef="let element" class="truncate">
+              <p *ngIf="lang == 'ar'" class="text-dark m-0">
+                {{ element?.manager?.firstNameAr }}
+                {{ element?.manager?.lastNameAr }}
+              </p>
+              <p *ngIf="lang == 'en'" class="text-dark m-0">
+                {{ element?.manager?.firstNameEn }}
+                {{ element?.manager?.lastNameEn }}
+              </p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="usersNumber">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "GROUP.USERS_NO" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="truncate">
+              {{ element.users?.length }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions" stickyEnd>
+            <div class="spacer"></div>
+            <th mat-header-cell *matHeaderCellDef></th>
+
+            <td mat-cell *matCellDef="let element" class="truncate">
+              <!-- actions  template -->
+              <div class="d-none d-lg-block">
+                <ng-container
+                  [ngTemplateOutlet]="actions"
+                  [ngTemplateOutletContext]="{ element: element }"
+                >
+                </ng-container>
+              </div>
+
+              <!-- menu  actions on mobile view -->
+              <button
+                class="d-lg-none btn btn-sm btn-clean btn-icon mr-1"
+                [matMenuTriggerFor]="menu"
+              >
+                <span
+                  inlineSVG="./assets/media/svg/icons/General/Other1.svg"
+                  cacheSVG="true"
+                  class="svg-icon svg-icon-md svg-icon-primary"
+                ></span>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <ng-container
+                  [ngTemplateOutlet]="actions"
+                  [ngTemplateOutletContext]="{ element: element }"
+                >
+                </ng-container>
+              </mat-menu>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="8">
+              <nodata-table [loading]="groupsLoading"></nodata-table>
+            </td>
+          </tr>
+        </table>
+
+        <div class="spinner-container" *ngIf="groupsLoading">
+          <mat-spinner class="m-auto" diameter="40"></mat-spinner>
+        </div>
+      </div>
+      <mat-paginator
+        [length]="paginationState?.length"
+        [pageIndex]="paginationState?.pageIndex"
+        [pageSize]="paginationState?.pageSize"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="pageChanged($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<ng-template #actions let-element="element">
+  <div class="responsive-menu">
+    <!-- view group  details  button -->
+    <button
+      class="btn btn-sm btn-clean btn-icon mr-1"
+      [routerLink]="['/groups-management/groups/view', element.id]"
+      *appPrivileges="['PRIV_VW_MNG_GRP', 'PRIV_VW_GRP']"
+    >
+      <span
+        title="{{ 'ACTIONS.VIEW' | translate }}"
+        [inlineSVG]="'/assets/media/svg/icons/General/Visible.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md svg-icon-primary"
+      ></span>
+      <span class="menu-text text-dark-50">
+        {{ "ACTIONS.VIEW" | translate }}</span
+      >
+    </button>
+
+    <!-- update  group  button -->
+    <button
+      class="btn btn-sm btn-clean btn-icon mr-1"
+      (click)="editGroup(element.id)"
+      *appPrivileges="'PRIV_UP_GRP'"
+    >
+      <span
+        title="{{ 'ACTIONS.UPDATE' | translate }}"
+        [inlineSVG]="'/assets/media/svg/icons/Communication/Write.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md svg-icon-primary"
+      ></span>
+      <span class="menu-text text-dark-50">
+        {{ "ACTIONS.UPDATE" | translate }}</span
+      >
+    </button>
+
+    <!-- view-update  groups  members   -->
+    <button
+      *appPrivileges="'PRIV_ED_USR_GRP'"
+      (click)="openUsersModal(element)"
+      class="btn btn-sm btn-clean btn-icon mr-1"
+    >
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Communication/Group.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md svg-icon-primary"
+      ></span>
+      <span class="menu-text text-dark-50">
+        {{ "GROUP.groupsMembers" | translate }}</span
+      >
+    </button>
+
+    <!-- view-update groups  centers ,  incidents categoreis -->
+    <button
+      *appPrivileges="'PRIV_ED_LOC_INC_GRP'"
+      (click)="openModal(element.id)"
+      class="btn btn-sm btn-clean btn-icon mr-1"
+    >
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Git4.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md svg-icon-primary"
+      ></span>
+      <span class="menu-text text-dark-50">
+        {{ "INCIDENTS.MAIN_CAT" | translate }}</span
+      >
+    </button>
+
+    <!-- Delete  group -->
+    <button
+      *appPrivileges="'PRIV_UP_GRP'"
+      class="btn btn-sm btn-clean btn-icon mr-1"
+      (click)="deleteGroup(element)"
+    >
+      <span
+        title="{{ 'ACTIONS.DELETE' | translate }}"
+        [inlineSVG]="'./assets/media/svg/icons/General/Trash.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md svg-icon-danger"
+      ></span>
+      <span class="menu-text text-dark-50">
+        {{ "ACTIONS.DELETE" | translate }}</span
+      >
+    </button>
+  </div>
+</ng-template>

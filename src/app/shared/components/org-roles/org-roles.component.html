@@ -1,0 +1,25 @@
+<mat-form-field 
+    class="w-100"
+    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+    [appearance] = 'appearance'
+>
+    <mat-label>{{placeholder}}</mat-label>
+    <input 
+           type="text"
+           autocomplete="off"
+           [placeholder]="'CORRERSPONDENCE.PICK_ONE' | translate"
+           aria-label="Text"
+           matInput
+           [formControl]="control"
+           [matAutocomplete]="auto"
+           >
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" 
+    (optionSelected) = "onChange($event.option.value);getSelectedOrg($event.option.value);"
+    [displayWith] = 'displayWith'
+    >
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option | propTranslator:'name'}}
+
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>

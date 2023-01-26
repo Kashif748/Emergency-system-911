@@ -1,0 +1,47 @@
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #0f80b2;
+  //   background-color: #0f80b2;
+  //   width: auto;
+  //   height: auto;
+}
+// ::ng-deep .mat-select-arrow {
+// //   display: none;
+// }
+
+.trending-header {
+  width: 12rem !important;
+  height: 4rem !important;
+}
+::ng-deep .mat-select-arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  border-top: 5px solid transparent !important;
+  margin: 0 4px;
+}
+
+::ng-deep .mat-tab-group .mat-tab-header,
+.mat-tab-group .mat-tab-links,
+.mat-tab-group .mat-tab-header-pagination,
+.mat-tab-nav-bar .mat-tab-header,
+.mat-tab-nav-bar .mat-tab-links,
+.mat-tab-nav-bar .mat-tab-header-pagination {
+  background-color: white !important;
+}
+
+::ng-deep .chart {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+::ng-deep .mat-form-field-wrapper,
+::ng-deep .mat-form-field-flex {
+  height: 100% !important;
+}
+
+.cov-19-img {
+  min-height: 300px;
+  background-size: cover;
+  background-image: url('/assets/images/covd-19.jpg');
+}

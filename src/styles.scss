@@ -1,0 +1,94 @@
+@import "~perfect-scrollbar/css/perfect-scrollbar.css";
+@import "./assets/sass/style.angular.scss";
+
+// files attachment component
+@import url("https://transloadit.edgly.net/releases/uppy/v1.21.1/uppy.min.css");
+@import "@uppy/core/dist/style.css";
+@import "@uppy/dashboard/dist/style.css";
+
+// Global fonts
+@import "fonts";
+@import "~socicon/css/socicon.css";
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import "./assets/plugins/flaticon/flaticon.css";
+@import "./assets/plugins/flaticon2/flaticon.css";
+@import "./assets/plugins/keenthemes-icons/font/ki.css";
+
+// scroll-bar
+@import "style/scroll-bar";
+
+@import "~swiper/swiper";
+
+* {
+  font-family: $font-family;
+  // font-weight: 500;
+}
+
+@import "style/fixed.scss";
+
+@import "./assets/sass/themes/layout/header/base/light.scss";
+@import "./assets/sass/themes/layout/header/menu/light.scss";
+
+.html2pdf__overlay {
+  // position: relative !important;
+  z-index: -1000 !important;
+  inset: unset !important;
+}
+
+.bg-grd-golden {
+  background-image: linear-gradient(
+    180deg,
+    #fbb0348f 0%,
+    #ffdd0017 10%
+  ) !important;
+}
+.bg-grd-silver {
+  background-image: linear-gradient(
+    180deg,
+    #5b64678f 0%,
+    #8b939a17 10%
+  ) !important;
+}
+.bg-grd-bronze {
+  background-image: linear-gradient(
+    180deg,
+    #804a008f 0%,
+    #b08d5717 10%
+  ) !important;
+}
+.border-bottom-golden {
+  border-bottom: 3px solid #fbb034 !important;
+  border-image-slice: 1 !important;
+  border-image-source: linear-gradient(
+    315deg,
+    #fbb034 0%,
+    #ffdd00 74%
+  ) !important;
+}
+
+.border-bottom-silver {
+  border-bottom: 3px solid #5b6467 !important;
+  border-image-slice: 1 !important;
+  border-image-source: linear-gradient(
+    315deg,
+    #5b6467 0%,
+    #8b939a 74%
+  ) !important;
+}
+
+.border-bottom-bronze {
+  border-bottom: 3px solid #804a00 !important;
+  border-image-slice: 1 !important;
+  border-image-source: linear-gradient(
+    315deg,
+    #804a00 0%,
+    #b08d57 74%
+  ) !important;
+}
+
+@import "~intl-tel-input/build/css/intlTelInput.css";
+// primeng
+@import "~primeicons/primeicons.css";
+@import "~primeng/resources/primeng.min.css";
+@import "~primeflex/primeflex.scss";
+@import "primeng";

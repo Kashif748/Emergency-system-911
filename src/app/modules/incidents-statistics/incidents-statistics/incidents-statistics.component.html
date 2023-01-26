@@ -1,0 +1,251 @@
+<div class="mat-elevation-z8 container">
+  <h2 class="card-title d-flex align-items-start my-6">
+    <span class="card-label font-weight-bold"
+      >{{ "IncidentsStatistics.IncidentsStatisticsTitle" | translate }}
+    </span>
+  </h2>
+
+  <form [formGroup]="filterForm" class="my-4">
+    <div class="d-flex flex-wrap">
+      <div class="px-2 w-50">
+        <mat-form-field
+          appearance="fill"
+          class="form-element example-full-width"
+        >
+          <mat-label
+            >{{ "IncidentsStatistics.fromDate" | translate }}
+          </mat-label>
+          <input
+            matInput
+            formControlName="fromDate"
+            [matDatepicker]="pickerFrom"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="pickerFrom"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #pickerFrom></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="px-2 w-50">
+        <mat-form-field
+          appearance="fill"
+          class="form-element example-full-width"
+        >
+          <mat-label>{{ "IncidentsStatistics.toDate" | translate }} </mat-label>
+          <input matInput formControlName="toDate" [matDatepicker]="picker" />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row justify-content-end align-items-center">
+      <p class="text-muted px-5 default-date-hint">
+        <i class="flaticon-questions-circular-button"></i>
+        {{ "IncidentsStatistics.defaultDate" | translate }}
+      </p>
+      <div class="col-sm-4 d-flex justify-content-end">
+        <button (click)="onSubmit()" mat-raised-button color="primary">
+          {{ "TASK.SEARCH" | translate }}
+        </button>
+        <button
+          class="mx-2"
+          (click)="reset()"
+          mat-raised-button
+          color="primary"
+        >
+          {{ "INCIDENTS.CLEAR" | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+  <div class="py-3">
+    <mat-button-toggle-group
+      [disabled]="loading == true"
+      [formControl]="activeTable"
+    >
+      <mat-button-toggle [value]="formType.CENTER">
+        <i class="flaticon-chat"></i>
+        <span>
+          {{ "IncidentsStatistics.locationReportTitle" | translate }}
+        </span>
+      </mat-button-toggle>
+
+      <mat-button-toggle [value]="formType.MAIN_ORG">
+        <i class="flaticon-bell"></i>
+        {{
+          "IncidentsStatistics.mainOrgReportTitle" | translate
+        }}</mat-button-toggle
+      >
+    </mat-button-toggle-group>
+  </div>
+  <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+
+  <div *ngIf="dataCharts.length > 0">
+    <app-statistics-card [data]="dataCharts"></app-statistics-card>
+  </div>
+
+  <mat-toolbar class="bg-white p-0 border-bottom">
+    <div class="spacer"></div>
+    <button
+      class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+      (click)="downloadPDF()"
+    >
+      {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+    <button
+      class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+      (click)="downloadXlsx()"
+    >
+      {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </mat-toolbar>
+  <div class="row">
+    <div class="col-12">
+      <table
+        mat-table
+        matSort
+        [dataSource]="dataSource"
+        class="table table-head-custom table-head-bg table-borderless table-vertical-center m-0"
+      >
+        <ng-container matColumnDef="org">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            <ng-container
+              *ngIf="activeTable.value == formType.MAIN_ORG; else elseTemplate"
+            >
+              {{ "IncidentsStatistics.mainOrg" | translate }}
+            </ng-container>
+            <ng-template #elseTemplate>
+              {{ "IncidentsStatistics.centerName" | translate }}
+            </ng-template>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="font-weight-bolder"> {{ element.org }}</span>
+          </td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            <ng-container
+              *ngIf="activeTable.value == formType.MAIN_ORG; else elseTemplate"
+            >
+              {{ "IncidentsStatistics.allOrgs" | translate }}
+            </ng-container>
+            <ng-template #elseTemplate>
+              {{ "IncidentsStatistics.allCenters" | translate }}
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="deleted">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            {{ "IncidentsStatistics.deleted" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="font-weight-bolder"> {{ element.deleted }}</span>
+          </td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            {{ getTotalCost(dataSource, "deleted") }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rejected">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            {{ "IncidentsStatistics.rejected" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="font-weight-bolder"> {{ element.rejected }}</span>
+          </td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            {{ getTotalCost(dataSource, "rejected") }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inProgress">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            {{ "IncidentsStatistics.inProgress" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.inProgress }}
+          </td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            {{ getTotalCost(dataSource, "inProgress") }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delayed">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            {{ "IncidentsStatistics.delayed" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="font-weight-bold">{{ element.delayed }}</span>
+          </td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            {{ getTotalCost(dataSource, "delayed") }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="closed">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ "IncidentsStatistics.closed" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span>
+              {{ element.closed }}
+            </span>
+          </td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            {{ getTotalCost(dataSource, "closed") }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="log">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ "IncidentsStatistics.log" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.log }}</td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            {{ getTotalCost(dataSource, "log") }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="average">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ "IncidentsStatistics.average" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.average | number : "1.2-2" }}%
+          </td>
+          <td mat-footer-cell class="font-weight-bolder" *matFooterCellDef>
+            {{ getTotalCostOrg() | number : "1.2-2" }}%
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-footer-row
+          *matFooterRowDef="displayedColumns"
+          class="example-first-footer-row"
+        ></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="8">
+            <nodata-table [loading]="loading"></nodata-table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

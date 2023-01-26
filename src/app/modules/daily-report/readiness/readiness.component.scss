@@ -1,0 +1,46 @@
+.bg-main-color {
+  background-color: #145c76;
+}
+
+.bg-readiness-th-1 {
+  background-color: #f2eed3;
+}
+
+.bg-readiness-th-2 {
+  background-color: #dce6db;
+}
+
+.bg-readiness-th-t {
+  background-color: #e8eff5;
+}
+
+.bg-readiness-th-b {
+  background-color: #d7d6dc;
+}
+
+.bg-readiness-red {
+  background-color: #a63a3b;
+}
+
+.border-readiness-red {
+  border-color: #a63a3b !important;
+}
+:lang(ar) {
+  .custom-badge {
+    transform: translateX(-14px);
+  }
+}
+:lang(en) {
+  .custom-badge {
+    transform: translateX(14px);
+  }
+}
+
+.input-custom {
+  background: none;
+  width: 100%;
+  margin: 0.3rem;
+  outline: none;
+  border: none;
+  height: 100%;
+}

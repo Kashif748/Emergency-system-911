@@ -1,0 +1,69 @@
+<div class="my-6 d-flex align-items-stretch ">
+  <div class="col-md-6 col-sm-12">
+    <div id="chart1" class="rounded-lg border p-2 h-100">
+      <div
+        class="spinner-container m-auto p-2 h-100"
+        *ngIf="taskTypeChartLoading"
+      >
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+      <apx-chart
+        *ngIf="!taskTypeChartLoading"
+        [series]="taskTypeChartOptions.series"
+        [chart]="taskTypeChartOptions.chart"
+        [labels]="taskTypeChartOptions.labels"
+        [title]="taskTypeChartOptions.title"
+        [theme]="taskTypeChartOptions.theme"
+        [fill]="taskTypeChartOptions.fill"
+        [yaxis]="taskTypeChartOptions.yaxis"
+        [stroke]="taskTypeChartOptions.stroke"
+        [legend]="taskTypeChartOptions.legend"
+        [plotOptions]="taskTypeChartOptions.plotOptions"
+      >
+      </apx-chart>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-sm-12">
+    <div id="chart2" class="rounded-lg border p-2 py-8">
+      <div
+        class="spinner-container m-auto p-2 h-100"
+        *ngIf="taskStatusChartLoading"
+      >
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+
+      <div class="d-flex flex-wrap" *ngIf="!taskStatusChartLoading">
+        <div
+          *ngFor="let item of taskStatusChartOptions.series; let i = index"
+          class="d-flex w-50 mb-4"
+        >
+          <span
+            class="label label-dot rounded-sm mx-3 w-20px h-20px"
+            [class]="'bg-' + svgColoersClasses[i]"
+          >
+          </span>
+          <span>{{ taskStatusChartOptions.labels[i] }} </span>
+          <span class="mx-4 font-weight-bold">
+            {{ item | number: "1.0-0" }}%
+          </span>
+        </div>
+      </div>
+
+      <apx-chart
+        *ngIf="false"
+        [series]="taskStatusChartOptions.series"
+        [chart]="taskStatusChartOptions.chart"
+        [labels]="taskStatusChartOptions.labels"
+        [title]="taskStatusChartOptions.title"
+        [theme]="taskStatusChartOptions.theme"
+        [fill]="taskStatusChartOptions.fill"
+        [yaxis]="taskStatusChartOptions.yaxis"
+        [stroke]="taskStatusChartOptions.stroke"
+        [legend]="taskStatusChartOptions.legend"
+        [plotOptions]="taskStatusChartOptions.plotOptions"
+      >
+      </apx-chart>
+    </div>
+  </div>
+</div>

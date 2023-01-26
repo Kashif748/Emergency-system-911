@@ -1,0 +1,59 @@
+<mat-form-field
+  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+  class="w-100"
+  [appearance]="appearance"
+>
+  <mat-label
+    >{{ placeholder }}
+    <span class="required-asterisk" *ngIf="isRequired">*</span>
+  </mat-label>
+  <mat-chip-list #chipList aria-label="to users">
+    <mat-chip
+      *ngFor="let user of selectedUsers"
+      selectable="true"
+      removable="true"
+      (removed)="remove(user)"
+    >
+      {{ user | propTranslator: "firstName" }}  {{ user | propTranslator:'lastName' }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input
+      [formControl]="Ctrl"
+      [placeholder]="'CORRERSPONDENCE.ADD_USER' | translate"
+      #userInput
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)"
+    />
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <perfect-scrollbar
+      (psYReachEnd)="auto.isOpen ? nextPage($event) : ''"
+      class="h-500px overflow-scroll"
+    >
+      <mat-option *ngFor="let user of users$ | async; let i = index"  [value]="user">
+        <div class="d-flex align-items-center">
+          <span class="text-size-sm truncate">{{ user | propTranslator:'firstName' }} {{ user | propTranslator:'lastName' }}</span>
+          <span class="spacer"></span>
+          <span class="label label-inline label-outline-primary py-0" *ngIf="user.orgStructure">
+                          {{ getUserGroupOrg(i) }}
+                        </span>
+        </div>
+      </mat-option>
+      <div class="spinner-container m-auto p-10" *ngIf="usersLoading">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+    </perfect-scrollbar>
+  </mat-autocomplete>
+
+  <button
+    *ngIf="hasCCbutton"
+    matSuffix
+    (click)="toggleDisplayCC($event)"
+    mat-icon-button
+  >
+    CC
+  </button>
+  <span matSuffix *ngIf="hasCClabel">CC</span>
+</mat-form-field>

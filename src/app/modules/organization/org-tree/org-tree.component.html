@@ -1,0 +1,92 @@
+<organization-chart
+  *ngIf="ds"
+  chartClass="org-chart"
+  dir="ltr"
+  [datasource]="ds"
+  [nodeTemplate]="orgTemplate"
+  [pan]="true"
+  [zoom]="true"
+  [groupScale]="1"
+  [zoomoutLimit]="0.2"
+>
+</organization-chart>
+
+<ng-template #orgTemplate let-nodeData="datasource">
+  <mat-card class="w-100" *ngIf="!nodeData.parentNode?.collapse">
+    <mat-card-header class="mx-0 justify-content-center">
+      <mat-card-title class="mx-0 text-center">
+        {{ nodeData | propTranslator: "name" }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="d-flex justify-content-center">
+      <div id="node-id-{{ nodeData.id }}"></div>
+      <img
+        *ngIf="!nodeData.logoImage"
+        class="max-w-100px"
+        src="/assets/logos/ecms-logo.svg"
+      />
+
+      <img
+        class="img-fluid"
+        *ngIf="nodeData.logoImage"
+        [attr.src]="nodeData.logoImage | secure"
+      />
+    </mat-card-content>
+
+    <mat-card-actions class="d-flex justify-content-end" *appPrivileges="['PRV_CR_ORG', 'PRV_ED_ORG']">
+      <button
+        [matMenuTriggerFor]="menu"
+        class="btn btn-icon btn-lg btn-primary"
+      >
+        <span
+          [inlineSVG]="'/assets/media/svg/icons/General/Other1.svg'"
+          cacheSVG="true"
+          class="svg-icon svg-icon-lg"
+        ></span>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button
+          mat-menu-item
+          (click)="addOrg(nodeData)"
+          *appPrivileges="'PRV_CR_ORG'"
+          class="dir-text"
+        >
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+          <span>{{ "ORGANIZATIONS.ADD" | translate }}</span>
+        </button>
+        <button
+          mat-menu-item
+          (click)="editOrg(nodeData)"
+          *appPrivileges="'PRV_ED_ORG'"
+          class="dir-text"
+        >
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Design/Edit.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+          <span>{{ "ORGANIZATIONS.EDIT" | translate }}</span>
+        </button>
+        <button
+          mat-menu-item
+          (click)="deleteOrg(nodeData)"
+          *appPrivileges="'PRV_ED_ORG'"
+          class="dir-text"
+        >
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/General/Trash.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-lg"
+          ></span>
+          <span>{{ "ORGANIZATIONS.DELETE" | translate }}</span>
+        </button>
+      </mat-menu>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

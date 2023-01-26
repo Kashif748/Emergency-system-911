@@ -1,0 +1,12 @@
+{
+  "Incident": {
+    "Sr": "رقم البلاغ",
+    "Date": "وقت البلاغ",
+    "ArriveToLocation": "الوصول للموقع",
+    "Containment": "احتواء الحادث",
+    "Completed": "الانتهاء من البلاغ",
+    "MainResources": "الموارد الرئيسية",
+    "Statistics": "الإحصائيات",
+    "EventsFlow": "مجريات سير الأحداث للدفاع المدني"
+  }
+}

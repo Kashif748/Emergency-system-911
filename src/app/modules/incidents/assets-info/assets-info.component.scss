@@ -1,0 +1,110 @@
+table {
+    width: 100%;
+    border-spacing: 0 3px !important;
+    border-collapse: separate;
+
+    td.mat-cell {
+        padding: 8px 0 8px 0;
+        border-bottom: 1px solid #ebedf3 !important;
+        border-top: 1px solid #ebedf3 !important;
+    }
+
+    // td.mat-cell:first-child {
+    //     border-right: 1px solid #ebedf3 !important;
+    //     border-bottom-right-radius: 10px;
+    //     border-top-right-radius: 10px;
+    // }
+
+    // td.mat-cell:last-child {
+    //     border-left: 1px solid #ebedf3 !important;
+    //     border-bottom-left-radius: 10px;
+    //     border-top-left-radius: 10px;
+    // }
+}
+
+
+
+::ng-deep {
+    .mat-column-actions {
+        width: 90px !important;
+        padding: 5px !important;
+        text-align: center !important;
+    }
+
+    tr.mat-header-row {
+        height: 45px !important;
+    }
+
+    .mat-progress-bar-buffer {
+        background-color: #a5d2ff !important;
+    }
+
+    .modal {
+        max-width: 600px !important;
+        height: fit-content !important;
+        padding: 0 !important;
+
+        .mat-dialog-container {
+            padding: 0 !important;
+        }
+    }
+
+
+}
+
+
+
+.table-responsive {
+    padding: 0 7px; 
+  }
+  
+  
+  @media (max-width: 900px) {
+    .table-responsive {
+      padding: 0 !important;
+    }
+  
+    table {
+      width: 1140px;
+      border-spacing: 0 !important;
+      border-collapse: separate !important;
+    }
+    ::ng-deep {
+      .mat-paginator-page-size-label {
+        display: none !important;
+      }
+      td.mat-column-actions {
+        max-width: 30px !important;
+        align-self: stretch;
+        border-right: 1px solid #eee !important;
+      }
+    }
+  
+    .responsive-menu {
+      display: flex;
+      flex-direction: column;
+      padding: 5px !important;
+      .btn-icon {
+        width: 100%;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 16px;
+        margin: 0 !important;
+        padding: 0 10px !important;
+  
+        .menu-text {
+          display: block !important;
+          padding: 0 10px;
+        }
+      }
+    }
+  }
+  
+  
+ 
+  
+  
+  mat-paginator {
+    box-shadow: 0 -12px 14px -6px #d8d8d8;
+  }
+  

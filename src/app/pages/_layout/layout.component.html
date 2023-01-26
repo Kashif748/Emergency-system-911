@@ -1,0 +1,33 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="sidenav-fixed" mode="over">
+    <button (click)="drawer.close()" class="close-btn btn btn-xs btn-icon btn-light">
+      <i class="ki ki-close icon-xs text-muted"></i>
+    </button>
+    <app-header-mobile *ngIf="isMobileView"> </app-header-mobile>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <div [class]="wrapperCss" id="kt_wrapper">
+      <app-header (openSideMenu)="drawer.toggle()" [isMobileView]="isMobileView" #ktHeader id="kt_header"
+        class="{{ headerCss }}" [ngClass]="headerCSSClasses" [isSideDisplay]="isSideDisplay"></app-header>
+      <div class="custom-main-content content d-flex flex-column flex-column-fluid h-100 mat-app-background"
+        id="kt_content" [ngClass]="contentClasses" (click)="onSideMenuClosed()">
+        <div class="anime-container" [@fader]="prepareRoute(outlet)">
+          <router-outlet #outlet="outlet"></router-outlet>
+        </div>
+      </div>
+    </div>
+
+    <app-toolbar></app-toolbar>
+
+    <ng-template #blankLayout>
+      <div [@routeAnimations] class="d-flex flex-column flex-root h-100">
+        <router-outlet></router-outlet>
+      </div>
+    </ng-template>
+    <app-scripts-init></app-scripts-init>
+    <ng-container>
+      <app-notifications-offcanvas></app-notifications-offcanvas>
+    </ng-container>
+  </div>
+</mat-drawer-container>

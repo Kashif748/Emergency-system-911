@@ -1,0 +1,34 @@
+{
+  "MAP_DASHBOARD": {
+    "SHOW_CHARTS": "Show Charts",
+    "FILTERS": {
+      "LAYERS": "Layers",
+      "ORGS": "Organziations",
+      "FROM_DUE+INC_DATE": "From Due/Incident Date & Time",
+      "TO_DUE+INC_DATE": "To Due/Incident Date & Time",
+      "EMERGENCY_LEVEL": "Emergency Level (for incident)"
+    },
+    "LAYERS": {
+      "INCIDENT": {
+        "POINT": "Incident Point Layer",
+        "LINE": "Incident Polyline Layer",
+        "POLYGON": "Incident Polygon Layer"
+      },
+      "TASK": {
+        "POINT": "Task Points Layer",
+        "LINE": "Task Polyline Layer",
+        "POLYGON": "Task Polygon Layer"
+      }
+    },
+    "STATISTICS": {
+      "TOTAL_INCIDENTS": {
+        "TITLE": "Incidents",
+        "SUB_TITLE": "Total Number Of Incidents Locations On Map"
+      },
+      "TOTAL_TASKS": {
+        "TITLE": "Tasks",
+        "SUB_TITLE": "Total Number Of Tasks Locations On Map"
+      }
+    }
+  }
+}

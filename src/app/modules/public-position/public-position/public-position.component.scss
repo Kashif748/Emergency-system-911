@@ -1,0 +1,27 @@
+.resources-card {
+  width: 17%;
+}
+
+.map-card {
+  width: 64% !important;
+}
+
+.card.card-custom > .card-header {
+  min-height: auto;
+}
+
+.card-map {
+  position: relative;
+  overflow: hidden;
+
+  .card-header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+::ng-deep .mat-progress-bar-buffer {
+  background: #E4E8EB !important;
+}
+

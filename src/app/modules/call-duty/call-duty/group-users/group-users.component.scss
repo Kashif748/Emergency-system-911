@@ -1,0 +1,12 @@
+.label {
+  width: fit-content !important;
+}
+
+::ng-deep .modal {
+  max-width: 400px !important;
+  height: fit-content !important;
+  padding: 0 !important;
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+}

@@ -1,0 +1,49 @@
+// TODO: Need to filter this scss file later
+
+
+  :host {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+ 
+ 
+  
+  
+
+  .responsive-menu {
+    .menu-text {
+      display: none;
+    }
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.2rem;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .card-content > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main , .side {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .example-card {
+    width: 30%;
+    margin: 0.25rem 0.5rem;
+  }
+  

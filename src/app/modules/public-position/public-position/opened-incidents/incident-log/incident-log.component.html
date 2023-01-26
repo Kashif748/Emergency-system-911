@@ -1,0 +1,29 @@
+<div class="log">
+  <div class="mb-1">
+    <div class="row">
+      <div class="col">
+        <div class="d-inline-block">
+          <img
+            *ngIf="!log?.createdBy?.photo"
+            class="rounded-circle" style="width: 50px;height: 50px"
+            src="https://img.icons8.com/color/36/000000/administrator-male.png"
+            alt="..."
+          />
+          <img
+            class="rounded-circle" style="width: 50px;height: 50px"
+            *ngIf="log?.createdBy?.photo"
+            [attr.src]="log?.createdBy?.photo | secure"
+          />
+        </div>
+        <h6 class="d-inline-block mx-1" style="color: #5d6170; font-weight: bold">{{getLogCreatedBy()}}</h6>
+        <h6 class="d-inline-block mx-1" style="color: #c0c1cc">{{getCreationTime()}}</h6>
+        <span class="badge"
+              style="background-color: #c9f7f5 ; color:#4ecec6">{{(log.isPublic ? "ACTIONS.PUBLIC" : "ACTIONS.PRIVATE")|translate}}</span>
+      </div>
+      <div class="col-md-3 log-org text-center">
+        <p>{{getCreatorOrg()}}</p>
+      </div>
+    </div>
+  </div>
+  <h4>{{log.notes}}</h4>
+</div>

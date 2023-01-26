@@ -1,0 +1,41 @@
+<section class="mt-2">
+  <div class="row">
+    <div class="col-12 h-100">
+      <div class="d-flex align-items-center border-bottom p-3">
+        <h5 class="card-title font-weight-normal m-0">
+          {{ "INCIDENTS.STATISTICS_INFO" | translate }}
+        </h5>
+        <button
+          class="
+            btn btn-icon btn-primary btn-sm btn-circle
+            font-weight-bolder
+            cursor-pointer
+            mx-3
+          "
+          (click)="openHospitalForm()"
+        >
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md"
+          ></span>
+        </button>
+      </div>
+      <div *ngIf="loading">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <!-- {{ Hospitals.length }} -->
+      <app-hospitals-statistics #hospitalStatistics> </app-hospitals-statistics>
+
+      <form [formGroup]="form">
+        <app-hospitals
+          #hospitalEl
+          class="h-75"
+          formControlName="incidentHospitals"
+          (saveNewHospital)="update($event)"
+        >
+        </app-hospitals>
+      </form>
+    </div>
+  </div>
+</section>

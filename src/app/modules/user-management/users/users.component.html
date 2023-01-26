@@ -1,0 +1,234 @@
+
+
+
+
+
+<div>
+  <section class="d-flex py-4 my-2 mx-4">
+    <mat-accordion style="width: 100% !important">
+      <mat-expansion-panel [(expanded)]="panelOpenState" #mep="matExpansionPanel" class="shadow-sm">
+        <mat-expansion-panel-header>
+          <mat-panel-title color="primary">
+            {{ "TASK.ADVANCED_SEARCH" | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-4">
+          <div class="row">
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                class="form-element example-full-width">
+                <mat-label>
+                  {{ "USER_MANAGEMENT.FIRST_LAST_NAME" | translate }}</mat-label>
+                <input matInput type="text" formControlName="name" />
+              </mat-form-field>
+            </div>
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                class="form-element example-full-width">
+                <mat-label>
+                  {{ "USER_MANAGEMENT.EMIRATES_ID" | translate }}</mat-label>
+                <input matInput type="text" formControlName="emiratesId" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                class="form-element example-full-width">
+                <mat-label>
+                  {{ "SHARED.USERNAME" | translate }}</mat-label>
+                <input matInput type="text" formControlName="userName" />
+              </mat-form-field>
+            </div>
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field appearance="fill" style="width: 100%">
+                <mat-label>
+                  {{ "AUTH.LOGIN.Organizations" | translate }}
+                </mat-label>
+
+                <mat-select formControlName="orgName">
+                  <mat-option *ngFor="let org of orgs$ | async" [value]="org.nameEn">
+                    <span *ngIf="lang == 'en'">
+                      {{ org.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                    <span *ngIf="lang == 'ar'">
+                      {{ org.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                    </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field appearance="fill" style="width: 100%">
+                <mat-label>
+                  {{ "USER_MANAGEMENT.ROLE" | translate }}
+                </mat-label>
+
+                <input type="text" placeholder="{{'USER_MANAGEMENT.PLACEHOLDER' | translate}}"
+                aria-label="Select Roles" matInput [matAutocomplete]="auto"
+                formControlName="roleName"
+               >
+
+
+                <mat-autocomplete #auto="matAutocomplete"  >
+                   <perfect-scrollbar   (psYReachEnd)="nextPage($event)">
+                    <mat-option   *ngFor="let role of filteredRoles" [value]="lang == 'en'? role.nameEn : role.nameAr">
+                      <span *ngIf="lang == 'en'">
+                        {{ role.nameEn|| ("CIRCULARS.NO_VALUE" | translate) }}
+                      </span>
+                      <span *ngIf="lang == 'ar'">
+                        {{ role.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                      </span>
+                    </mat-option>
+                   </perfect-scrollbar>
+
+
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-6 d-flex">
+              <button class="btn btn-primary w-100" (click)="onSubmit()">
+                {{ "ACTIONS.FILTER" | translate }}
+                <span [inlineSVG]="
+              '/assets/media/svg/icons/General/Search.svg'
+            " cacheSVG="true" class="svg-icon svg-icon-md"></span>
+              </button>
+            </div>
+
+            <div class="col-6 d-flex">
+              <button class="btn btn-light-primary w-100" (click)="clearSearch(); mep.expanded = false">
+                {{ "ACTIONS.CLEAR" | translate }}
+                <span [inlineSVG]="'/assets/media/svg/icons/Media/Repeat.svg'" cacheSVG="true"
+                  class="svg-icon svg-icon-md"></span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </section>
+</div>
+
+<div class="mat-elevation-z8 mx-4">
+  <mat-toolbar class="bg-white border-bottom p-0">
+    <app-breadcrumbs></app-breadcrumbs>
+    <button *appPrivileges="'PRIV_CR_USR'" (click)="addUser()"
+      class="btn btn-icon btn-primary btn-sm btn-circle font-weight-bolder cursor-pointer mx-3">
+      <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"></span>
+    </button>
+    <div class="spacer"></div>
+    <!-- export  menu -->
+    <div class="dropdown mx-2" ngbDropdown [placement]="lang == 'en' ? 'bottom-right' : 'bottom-left'">
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" data-offset="0px,0px" ngbDropdownToggle>
+        {{ "ACTIONS.EXPORT" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu dropdown-menu-anim-up">
+        <button class="dropdown-item p-2 font-size-sm" (click)="downloadXlsx()">
+          <span [inlineSVG]="'/assets/media/svg/icons/Custome/csv.svg'" cacheSVG="true"
+            class="svg-icon svg-icon-lg"></span>
+          {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+        </button>
+        <button class="dropdown-item p-2 font-size-sm" (click)="downloadPDF()">
+          <span [inlineSVG]="'/assets/media/svg/icons/Custome/pdf.svg'" cacheSVG="true"
+            class="svg-icon svg-icon-lg"></span>
+          {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive table-container">
+        <table matSort (matSortChange)="sortChange($event)"
+          class="table table-head-custom table-head-bg table-borderless table-vertical-center">
+          <thead>
+            <tr>
+              <!-- 1 -->
+              <th mat-sort-header="first_name_ar,middle_name_ar,last_name_ar">
+                {{ "USER_MANAGEMENT.USERS.NAME_AR" | translate }}
+              </th>
+              <!-- 2 -->
+              <th mat-sort-header="first_name_en,middle_name_en,last_name_en">
+                {{ "USER_MANAGEMENT.USERS.NAME_EN" | translate }}
+              </th>
+              <!-- 3 -->
+              <th mat-sort-header="{{ 'org.name_' + lang }}">
+                {{ "SHARED.ORG" | translate }}
+              </th>
+              <!-- 4 -->
+              <th mat-sort-header="title">
+                {{ "SHARED.JOB_TITLE" | translate }}
+              </th>
+              <!-- 5 -->
+              <th mat-sort-header="is_active">
+                {{ "SHARED.ACTIVE" | translate }}
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="
+                let element of users$ | async | paginate: paginationConfig
+              ">
+              <!-- 1 -->
+              <td>{{ element.nameAr }}</td>
+              <!-- 2 -->
+              <td>{{ element.nameEn }}</td>
+              <!-- 3 -->
+              <td>
+                {{ element.orgStructure | propTranslator: "name" }}
+              </td>
+              <!-- 4 -->
+              <td>{{ element.title }}</td>
+
+              <!-- 5 -->
+              <td>
+                <span *ngIf="element?.isActive"
+                  class="label label-rounded label-pill label-inline label-success mr-2">{{ "ACTIONS.ACTIVE" | translate
+                  }}</span>
+                <span *ngIf="!element?.isActive"
+                  class="label label-rounded label-warning label-pill label-inline mr-2">{{ "ACTIONS.INACTIVE" |
+                  translate }}</span>
+              </td>
+              <!-- 6 -->
+              <td *ngIf="element.isActive">
+                <button *appPrivileges="'PRIV_ED_USR'" class="btn btn-sm btn-clean btn-icon mr-1"
+                  (click)="editUser(element.id)">
+                  <span [inlineSVG]="
+                      '/assets/media/svg/icons/Communication/Write.svg'
+                    " cacheSVG="true" class="svg-icon svg-icon-md svg-icon-primary"
+                    matTooltip="{{ 'ACTIONS.EDIT' | translate }}"></span>
+                </button>
+              </td>
+              <td *ngIf="!element.isActive">
+                <button *appPrivileges="'PRIV_ED_USR'" class="btn btn-sm btn-clean btn-icon mr-1"
+                  (click)="activateUser(element.id)" matTooltip="{{ 'ACTIONS.ACTIVATE' | translate }}">
+                  <span [inlineSVG]="
+                      '/assets/media/svg/icons/Navigation/Double-check.svg'
+                    " cacheSVG="true" class="svg-icon svg-icon-md svg-icon-success"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="spinner-container m-auto p-10" *ngIf="loading$ | async">
+          <mat-spinner class="m-auto" style="top: 20%"></mat-spinner>
+        </div>
+        <pagination-controls previousLabel="Prev" nextLabel="Next" responsive="true" id="paging"
+          (pageChange)="onPagination($event)"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

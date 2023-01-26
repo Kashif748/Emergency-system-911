@@ -1,0 +1,116 @@
+<div class="col-xxl-12 order-2 order-xxl-1 p-0">
+    <div class="table-container">
+      <table
+        matSort
+        (matSortChange)="customSort($event)"
+        class="table table-head-custom table-head-bg table-borderless table-vertical-center"
+      >
+        <thead>
+        <tr>
+          <th
+            *ngFor="let column of displayedColumns"
+            [mat-sort-header]="column.id"
+          >
+            {{ column.keyTranslate | translate }}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let element of inquiriesData | paginate: paginationConfig"
+          title="{{ 'INCIDENTS.VIEW_INCIDENT' | translate }}"
+          class="bg-white rounded shadow-sm"
+          [ngClass]="{ highlight: element.isExpiry === true }"
+        >
+          
+          <td>
+            {{element?.id}}
+          </td>
+          <!-- 2 -->
+          <td>
+            {{ element.subject }}
+          </td>
+          <td>
+              <span class="font-weight-bold">
+                {{ element?.createdDate | customDate |date: "yyyy/MM/dd h:mm:ss a" }}</span
+              >
+          </td>
+          <td>
+            {{ element?.reportedByMobile }}
+          </td>
+          
+          <td class="actions">
+            <!-- load actions Interim  template   -->
+            <!-- on larg screens -->
+            <div class="d-none d-lg-block">
+              <ng-container
+                [ngTemplateOutlet]="actionsInterim"
+                [ngTemplateOutletContext]="{ element: element }"
+              >
+              </ng-container>
+            </div>
+  
+            <!-- menu  actions on small - mobile view -->
+            <button
+            class="d-lg-none btn btn-sm btn-clean btn-icon mr-1"
+            [matMenuTriggerFor]="menu"
+            (click)="$event.stopPropagation()"
+          >
+              <span
+                inlineSVG="./assets/media/svg/icons/General/Other1.svg"
+                cacheSVG="true"
+                class="svg-icon svg-icon-md svg-icon-primary"
+              ></span>
+          </button>
+          <mat-menu #menu="matMenu">
+            <ng-container
+              [ngTemplateOutlet]="actionsInterim"
+              [ngTemplateOutletContext]="{ element: element }"
+            >
+            </ng-container>
+          </mat-menu>
+  
+            <!-- end  load  actions  template   -->
+          </td>
+          
+        </tr>
+        </tbody>
+      </table>
+  
+      <div class="spinner-container m-auto p-10" *ngIf="loading | async">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+    </div>
+    <pagination-controls
+      previousLabel="Prev"
+      nextLabel="Next"
+      responsive="true"
+      [id]="id"
+      (pageChange)="pageChanged($event)"
+    >
+    </pagination-controls>
+  </div>
+  
+  <ng-template #actionsInterim let-element="element">
+    <div class="responsive-menu">
+
+      <ng-container>
+        <button
+          (click)="updateInquiry(element.id)"
+          class="btn btn-sm btn-clean btn-icon mr-2"
+        >
+          <span class="svg-icon svg-icon-md">
+            <span
+              title="{{ 'INCIDENTS.UPDATE_INCIDENT' | translate }}"
+              [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'"
+              [cacheSVG]="true"
+            ></span>
+          </span>
+          <span class="menu-text text-dark-50">
+            {{ "INCIDENTS.UPDATE_INCIDENT" | translate }}</span
+          >
+        </button>
+      </ng-container>
+    </div>
+  </ng-template>
+  

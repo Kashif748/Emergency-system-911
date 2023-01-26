@@ -1,0 +1,55 @@
+<!-- begin::Notifications Panel-->
+<div id="kt_quick_notifications" class="offcanvas p-2" [ngClass]="extrasNotificationsOffcanvasDirectionCSSClass">
+  <!--begin::Header-->
+  <div class="
+      offcanvas-header
+      d-flex
+      align-items-center
+      justify-content-between
+      m-5
+    ">
+    <h3 class="font-weight-bold m-0">
+      {{ "NOTIFICATIONS.NOTIFICATIONS" | translate }}
+      <small class="text-muted font-size-sm ml-2">
+        {{ "NOTIFICATIONS.NEW" | translate }}</small>
+    </h3>
+    <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_notifications_close">
+      <i class="ki ki-close icon-xs text-muted"></i>
+    </a>
+  </div>
+  <!--end::Header-->
+
+  <!--begin::Content-->
+  <div class="offcanvas-content pr-5 mr-n5">
+    <!--begin::Nav-->
+    <perfect-scrollbar class="navi navi-icon-circle navi-spacer-x-0" #perfectScroll (psYReachEnd)="getNext()">
+      <div class="navi navi-hover">
+        <!--begin::Item-->
+        <a *ngFor="let item of notification$ | async" (click)="redirect(item)" class="navi-item cursor-pointer"
+           [ngClass]="{ 'bg-light-primary': !item.read }">
+          <div class="navi-link px-2">
+            <div class="symbol symbol-light-success symbol-40 mx-1 symbol-circle">
+              <span class="symbol-label font-size-h5">
+                <i class="flaticon-bell text-success icon-lg"></i></span>
+            </div>
+    
+            <div class="navi-text d-flex flex-column px-4">
+              <p class="font-weight-bold mb-1">{{ item?.message[lang]?.title }}</p>
+              <p>{{ item?.message[lang]?.body }}</p>
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="text-muted">{{ item?.createdAt | customDate | date: "short" }}</div>
+                <button class="btn btn-sm btn-link-primary" *ngIf="!item.read" (click)="markAsRead(item.id)">
+                  {{ "SHARED.MARK_AS_READ" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <!--end::Item-->
+      </div>
+    </perfect-scrollbar>
+    <!--end::Nav-->
+  </div>
+  <!--end::Content-->
+</div>
+<!-- end::Notifications Panel-->

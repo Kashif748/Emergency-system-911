@@ -1,0 +1,167 @@
+<div class="mat-elevation-z8 pb-1">
+  <div class="d-flex flex-row">
+    <div
+      class="flex-row-auto offcanvas-mobile w-200px w-xxl-275px"
+      id="kt_inbox_aside"
+    >
+      <!--begin::Card-->
+      <div class="card card-custom card-stretch">
+        <!--begin::Body-->
+        <div class="card-body px-0 pt-4 pb-0">
+          <!--begin::Navigations-->
+
+          <div
+            class="input-icon mb-5 mx-4"
+            [ngClass]="{ 'spinner spinner-primary spinner-right': listSpinner }"
+          >
+            <input
+              (keyup)="applyFilter($event)"
+              class="form-control form-control-solid"
+              placeholder="{{ 'ACTIONS.FILTER_PLACEHOLDER_LIST' | translate }}"
+            />
+            <span><i class="flaticon2-search-1 icon-md"></i></span>
+          </div>
+
+          <perfect-scrollbar style="max-width: 600px; max-height: 550px">
+            <div
+              class="navi navi-hover navi-active navi-accent navi-link-rounded navi-bold px-4"
+            >
+              <!--begin::Item-->
+              <div
+                *ngFor="let item of filteredIncidents; let i = index"
+                #item
+                (click)="changeCurrentLog(item)"
+                class="navi-item my-2 cursor-pointer"
+              >
+                <a
+                  class="navi-link px-1"
+                  [class]="item.id == currentTab ? 'active' : ''"
+                >
+                  <span class="navi-text font-weight-bold font-size-md">{{
+                    item["subject"]
+                  }}</span>
+                  <span
+                    class="navi-label"
+                    [ngClass]="{
+                      'spinner spinner-primary spinner-left':
+                        loading && item.id == currentTab
+                    }"
+                  >
+                  </span>
+                </a>
+              </div>
+
+              <div
+                *ngIf="!isLastPage"
+                (click)="loadMore()"
+                class="navi-item my-2 cursor-pointer"
+              >
+                <a class="navi-link px-1 active">
+                  <span class="navi-text font-weight-bold font-size-md">{{
+                    "EVENT_LOG.LOAD_MORE" | translate
+                  }}</span>
+                  <span
+                    class="navi-label"
+                    [ngClass]="{
+                      'spinner spinner-primary spinner-left': loadMoreStatus
+                    }"
+                  >
+                  </span>
+                </a>
+              </div>
+            </div>
+          </perfect-scrollbar>
+
+          <!--end::Navigations-->
+        </div>
+        <!--end::Body-->
+      </div>
+      <!--end::Card-->
+    </div>
+
+    <div class="flex-row-fluid py-4 d-block spin-overlay">
+      <div class="card-header p-0 px-5">
+        <div class="card-title my-3 d-flex">
+          <h3 class="card-label m-0">{{ currentIncidentTitle }}</h3>
+          <div class="spacer"></div>
+          <div class="btn-group mr-2" dir="ltr">
+            <button
+              (click)="replayScroll()"
+              type="button"
+              class="btn btn-light-primary btn-sm btn-icon"
+              [ngClass]="{
+                'active-scroll': scrollingStatus == 0
+              }"
+            >
+              <span
+                [inlineSVG]="'/assets/media/svg/icons/General/Update.svg'"
+                cacheSVG="true"
+                class="svg-icon svg-icon-md"
+                [ngClass]="{
+                  'svg-icon-light': scrollingStatus == 0
+                }"
+              ></span>
+            </button>
+            <button
+              (click)="scrollToBottom()"
+              type="button"
+              class="btn btn-light-primary btn-sm btn-icon"
+              [ngClass]="{
+                'active-scroll': scrollingStatus == 1
+              }"
+            >
+              <span
+                [inlineSVG]="'/assets/media/svg/icons/Media/Play.svg'"
+                cacheSVG="true"
+                class="svg-icon svg-icon-md"
+                [ngClass]="{
+                  'svg-icon-light': scrollingStatus == 1
+                }"
+              ></span>
+            </button>
+            <button
+              (click)="pauseScrolling()"
+              type="button"
+              class="btn btn-light-primary btn-sm btn-icon"
+              [ngClass]="{
+                'active-scroll': scrollingStatus == -1
+              }"
+            >
+              <span
+                [inlineSVG]="'/assets/media/svg/icons/Media/Pause.svg'"
+                cacheSVG="true"
+                class="svg-icon svg-icon-md"
+                [ngClass]="{
+                  'svg-icon-light': scrollingStatus == -1
+                }"
+              ></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <perfect-scrollbar
+        [dir]="'rtl'"
+        class="overlay-wrapper"
+        style="max-height: 600px"
+        #scroll
+        (psYReachEnd)="scrollFinish($event)"
+      >
+        <div
+          class="overlay-layer rounded bg-primary-o-20"
+          [ngClass]="{ ' overlay-spining ': loading }"
+        >
+          <div class="spinner spinner-primary spinner-left"></div>
+        </div>
+        <div class="timeline timeline-3 mb-4 p-6">
+          <div class="timeline-items">
+            <ng-container *ngIf="currentLog.length > 0">
+              <div class="timeline-item" *ngFor="let item of currentLog">
+                <app-event-log-item [item]="item"> </app-event-log-item>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </perfect-scrollbar>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="card-body pt-0 pb-3 px-2">
+  <div class="d-flex align-items-center border-bottom py-3">
+    <h5 class="card-title align-items-start flex-column m-0">
+      {{ "INCIDENTS.LIST_OF_FILES" | translate }}
+    </h5>
+    <button
+      *ngIf="!inline"
+      [ngClass]="{'d-none':tagId ==  uploadTagConst.INTERIM_INCIDENT}"
+      (click)="openUploadModal()"
+      class="btn btn-icon btn-primary btn-sm btn-circle font-weight-bolder cursor-pointer mx-3"
+    >
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </div>
+  <div *ngIf="loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+
+  <ng-container>
+    <div id="files-list">
+      <div *ngFor="let parentGroup of filesGroupedByType" class="d-flex flex-column mt-2">
+        <h2 class="mt-8">{{parentGroup.title}}</h2>
+        <div class="d-flex flex-row flex-wrap">
+          <div *ngFor="let group of parentGroup.groups" class="mt-2">
+            <div
+              class="card card-custom card-stretch border rounded-lg p-2 m-2 shadow-sm d-flex flex-wrap align-self-start">
+              <div class="d-flex justify-content-between">
+                <h4 class="text-center">{{ group.description | slice: 0 : 30 }}</h4>
+              <span *ngIf="group.isLogAttachment" [inlineSVG]="'/assets/media/svg/icons/Communication/Chat6.svg'" cacheSVG="true"
+                  class="svg-icon log-attachment-icon svg-icon-primary svg-icon-lg"></span>
+              </div>
+              
+              <div class="d-flex flex-wrap">
+                <div
+                  class="group-item m-2"
+                  *ngFor="let fileItem of group.files"
+                >
+                
+                  <div class="overlay-btn">
+                    <!-- download btn -->
+                    <button
+                      (click)="download(fileItem['uuid'], fileItem['fileName'])"
+                      class="btn btn-sm btn-icon text-hover-primary"
+                    >
+                      <i class="flaticon2-download-2 text-white"></i>
+                    </button>
+                    <!-- View Image -->
+                    <button
+                      *ngIf="fileItem['mimeType']?.includes('image')"
+                      (click)="viewImage(fileItem['uuid'])"
+                      class="btn btn-sm btn-icon text-hover-primary"
+                      style="right: 30px"
+                    >
+                      <i class="flaticon-eye font-size-h6 text-white"></i>
+                    </button>
+
+                    <!-- delete btn -->
+                    <button
+                      (click)="deleteFile(fileItem['uuid'])"
+                      [hidden]="tagId == 28"
+                      class="btn btn-sm btn-icon text-hover-danger"
+                      style="right: 30px"
+                    >
+                      <i class="flaticon-delete-1 font-size-h6 text-white"></i>
+                    </button>
+                  </div>
+
+                  <ng-container
+                    *ngIf="fileItem['mimeType']?.includes('image') || fileItem['mimeType']?.includes('application/json') ; else elseTemplate"
+                  >
+                    <div class="h-100 border overflow-hidden">
+                      <img
+                        alt=""
+                        class="h-100 w-100"
+                        style="object-fit: cover"
+                        [src]="fileItem['uuid'] | secure"
+                      />
+                    </div>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <div
+                      class="d-flex flex-column align-items-end px-4 rounded-lg border"
+                    >
+                      <img
+                        alt=""
+                        class="max-h-40px"
+                        src="assets/media/svg/files/{{
+                    getFileExtension(fileItem['fileName'])
+                  }}.svg"
+                      />
+
+                      <!--begin: Tite-->
+                      <p
+                        class="file-name w-100 text-dark-75 font-weight-bold mt-7 text-left"
+                      >
+                        {{ fileItem["fileName"] }}
+                      </p>
+
+                      <span class="text-muted">
+                  {{ formatBytes(fileItem["size"]) }}
+                </span>
+                      <span class="text-muted">
+                  {{ fileItem["description"] }}
+                </span>
+                      <!--end: Title-->
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="DashboardContainer" class="DashboardContainer"></div>
+    </div>
+  </ng-container>
+</div>

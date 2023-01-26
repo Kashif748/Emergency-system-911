@@ -1,0 +1,33 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 mb-5 d-flex">
+      <button class="btn btn-link-primary btn-sm font-weight-bold cursor-pointer" *ngIf="dir$ | async as dir"
+              (click)="back()">
+        <span inlineSVG="{{
+            dir == 'ltr'
+              ? '/assets/media/svg/icons/Navigation/Angle-left.svg'
+              : '/assets/media/svg/icons/Navigation/Angle-right.svg'
+          }}" cacheSVG="true" class="svg-icon svg-icon-2x" title="{{ 'SHARED.BACK' | translate }}"></span>
+      </button>
+      <div class="d-flex text-center">
+        <span class="font-size-h3 m-auto">
+          {{ "SHARED.BACK" | translate }}
+        </span>
+      </div>
+      <div class="spacer"></div>
+      <button class="
+          btn btn-primary
+          btn-square
+          mx-2
+        " (click)="exportPDF();" [disabled]="isLoading">
+        {{ "ACTIONS.EXPORT_PDF" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-pdf-template *ngIf="(dir$ | async) != 'rtl'" [incidentId]="incidentId">
+</app-pdf-template>
+<div class="container-fluid" style="background-color: #f3f6f9;" *ngIf="(dir$ | async) == 'rtl'">
+  <app-pdf-template [incidentId]="incidentId"></app-pdf-template>
+</div>

@@ -1,0 +1,427 @@
+<div class="container-fluid">
+  <section class="d-flex py-4 my-2">
+    <button (click)="back()" class="btn btn-link-primary btn-sm font-weight-bold cursor-pointer"
+      matTooltip="{{ 'SHARED.BACK' | translate }}">
+      <span inlineSVG="{{
+          lang == 'en'
+            ? '/assets/media/svg/icons/Navigation/Angle-left.svg'
+            : '/assets/media/svg/icons/Navigation/Angle-right.svg'
+        }}" cacheSVG="true" class="svg-icon svg-icon-2x" title="{{ 'SHARED.BACK' | translate }}"></span>
+    </button>
+
+    <app-breadcrumbs [title]="'SHARED.BACK' | translate"></app-breadcrumbs>
+    <div class="spacer"></div>
+    <div>
+      <button class="btn btn-primary btn-square font-weight-bold cursor-pointer"
+        [routerLink]="['/incidents/createTask']" *appPrivileges="'PRIV_CR_TASK'">
+        {{ "TASK.NEW_TASK" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Files/File-plus.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+    </div>
+  </section>
+
+  <div class="row my-4 filter-section">
+    <mat-accordion class="col-lg-9 col-md-12">
+      <mat-expansion-panel expanded="false" class="shadow-sm">
+        <mat-expansion-panel-header>
+          <mat-panel-title color="primary">
+            {{ "TASK.ADVANCED_SEARCH" | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="filterTasksForm">
+          <div class="row mt-3">
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline"
+                class="form-element example-full-width">
+                <mat-label>{{ "TASK.TASK_TITLE" | translate }}</mat-label>
+                <input matInput type="text" placeholder="{{ 'TASK.TASK_TITLE' | translate }}" formControlName="title" />
+              </mat-form-field>
+            </div>
+
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline"
+                class="form-element example-full-width">
+                <mat-label>{{ "TASK.PRIORITY" | translate }}</mat-label>
+                <mat-select placeholder="{{ 'TASK.PRIORITY' | translate }}" formControlName="priority">
+                  <mat-option *ngFor="let priority of priorities$ | async" [value]="priority.id">
+                    {{ lang === "en" ? priority?.nameEn : priority?.nameAr }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field
+                [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+                appearance="outline"
+                class="form-element example-full-width"
+              >
+                <mat-label>{{ "TASK.STATUS" | translate }}</mat-label>
+                <mat-select
+                  placeholder="{{ 'TASK.STATUS' | translate }}"
+                  formControlName="status"
+                >
+                  <mat-option
+                    *ngFor="let stat of status$ | async"
+                    [value]="stat.id"
+                  >
+                    {{ lang === "en" ? stat?.nameEn : stat?.nameAr }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div> -->
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline" class="w-100">
+                <mat-label>{{ "TASK.STATUS" | translate }}</mat-label>
+                <mat-select multiple placeholder="{{ 'TASK.STATUS' | translate }}" formControlName="status">
+                  <mat-option *ngFor="let stat of commonData?.taskStatus" [value]="stat.id">
+                    {{ lang === "en" ? stat?.nameEn : stat?.nameAr }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline"
+                class="form-element example-full-width">
+                <mat-label>{{ "TASK.DUE_DATE" | translate }}</mat-label>
+
+                <input matInput [min]="minDate" [max]="maxDate" formControlName="dueDate" [matDatepicker]="picker" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline"
+                class="form-element example-full-width">
+                <mat-label>{{ "TASK.TASK_DESCRIPTION" | translate }}</mat-label>
+                <input matInput type="text" placeholder="{{ 'TASK.TASK_DESCRIPTION' | translate }}"
+                  formControlName="desc" />
+              </mat-form-field>
+            </div>
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline"
+                class="form-element example-full-width">
+                <mat-label>{{ "TASK.TASK_INCIDENT_ID" | translate }}</mat-label>
+                <input matInput type="text" placeholder="{{ 'TASK.TASK_INCIDENT_ID' | translate }}"
+                  formControlName="incidentId" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6 d-flex">
+              <button class="btn btn-primary w-100" (click)="onSubmit()">
+                {{ "ACTIONS.FILTER" | translate }}
+                <span [inlineSVG]="
+              '/assets/media/svg/icons/General/Search.svg'
+            " cacheSVG="true" class="svg-icon svg-icon-md"></span>
+              </button>
+            </div>
+
+            <div class="col-6 d-flex">
+              <button class="btn btn-light-primary w-100" (click)="clearFilterAndLoadTasks()">
+                {{ "ACTIONS.CLEAR" | translate }}
+                <span [inlineSVG]="'/assets/media/svg/icons/Media/Repeat.svg'" cacheSVG="true"
+                  class="svg-icon svg-icon-md"></span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="col-lg-3 col-md-12 py-2">
+      <mat-form-field appearance="outline">
+        <mat-label> {{ "TASK.Tasks_type" | translate }}</mat-label>
+        <mat-select (selectionChange)="selectionChange($event)" [value]="filterTasksType">
+          <!--  incoming tasks -->
+          <mat-option [value]="1">
+            {{ "TASK.TO_ME_TASKS" | translate }}
+          </mat-option>
+
+          <!--  outgoing tasks -->
+          <mat-option [value]="2">
+            {{ "TASK.ORGS_TASKS" | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+<!--if 2 means show outgoing tasks  , else incoming tasks.-->
+<ng-container *ngIf="filterTasksType == 2; else incomingTasksTemplate">
+  <div class="container-fluid">
+    <!--begin::Table-->
+    <div class="table-container table-responsive">
+      <table matSort (matSortChange)="sortChange($event)"
+        class="table table-head-custom table-head-bg table-borderless table-vertical-center mb-0 px-3">
+        <thead>
+          <tr>
+            <!-- 2 -->
+            <th mat-sort-header="title" class="m-auto" [style.min-width]="'140px'">
+              {{ "TASK.TASK_TITLE" | translate }}
+            </th>
+            <!-- 3 -->
+            <th class="p-0 mr-3" [style.min-width]="'200px'">
+              {{ "TASK.TASK_DESCRIPTION" | translate }}
+            </th>
+            <!-- 3 -->
+            <th class="p-0 mr-3" [style.min-width]="'200px'">
+              {{ "TASK.TASK_INCIDENT_ID" | translate }}
+            </th>
+            <!-- 4 -->
+            <th mat-sort-header="priority" class="p-0" [style.min-width]="'125px'">
+              {{ "TASK.PRIORITY" | translate }}
+            </th>
+            <!-- 5 -->
+            <th mat-sort-header="dueDate" class="m-auto" [style.min-width]="'180px'">
+              {{ "TASK.DUE_DATE" | translate }}
+            </th>
+            <!-- 6 -->
+            <th mat-sort-header="status" class="p-0" [style.min-width]="'110px'">
+              {{ "TASK.STATUS" | translate }}
+            </th>
+            <!-- 7 -->
+            <th [style.min-width]="'200px'">
+              {{ "SHARED.CREATED_BY" | translate }}
+            </th>
+            <!-- 8 -->
+            <th [style.min-width]="'200px'">
+              {{ "INCIDENTS.ASSIGNED" | translate }}
+            </th>
+            <!-- 9 -->
+            <th class="p-0 text-center actions" [style.min-width]="'65px'">
+              <span class="title">
+                {{ "INCIDENTS.ACTIONS" | translate }}
+              </span>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr matTooltip="{{ 'TASK.VIEW' | translate }}" matTooltipPosition="{{ lang == 'en' ? 'left' : 'right' }}"
+            *ngFor="
+              let task of createdByMyOrgTasks
+                | paginate: createdByMyOrgPaginationConfig;
+              let index = index
+            " class="tasklist cursor-pointer bg-white" (click)="viewTasks(task.id)"
+            [ngClass]="{ ghost: updatedTask?.id == task?.id }">
+            <!-- 2 -->
+            <td class="pl-0">
+              <p class="mb-0 font-size-lg">
+                {{ task?.title }}
+              </p>
+            </td>
+            <!-- 3 -->
+            <td>
+              <p class="max-lines-2">
+                {{ task?.body }}
+              </p>
+            </td>
+            <td class="pl-0">
+              <p class="mb-0 font-size-lg">
+                {{ task?.incident.id }}
+              </p>
+            </td>
+            <!-- 4 -->
+            <td>
+              <span *ngIf="task?.priority?.id" class="font-weight-500 label label-lg label-inline"
+                [class]="'label-' + task?.priority.color">
+                {{
+                this.lang === "en"
+                ? task.priority?.nameEn
+                : task.priority?.nameAr
+                }}
+              </span>
+            </td>
+            <!-- 5 -->
+            <td>
+              <span class="font-weight-500 label label-lg label-inline" appDueDateColor  [closedDate]="task?.closedDate" [date]="task?.dueDate">
+                {{ task?.dueDate | customDate | date: "yyyy/MM/dd h:mm:ss a" }}
+              </span>
+            </td>
+            <!-- 6 -->
+            <td>
+              <span class="label label-lg label-inline">{{
+                task?.status?.name
+                }}</span>
+            </td>
+            <!-- 7 -->
+            <td>
+              <span>
+                {{ getTaskCreatorAndOrgName(task) }}
+              </span>
+            </td>
+            <!-- 8 -->
+            <td>
+              <span class="mx-2">{{ getTaskAssignedTo(task) }}</span>
+              <span *ngIf="task.assignTo?.type == 'org'"
+                class="label label-rounded label-pill label-inline label-success mr-2">{{ "SHARED.ORGANIZATION" |
+                translate }}</span>
+
+              <span *ngIf="task.assignTo?.type == 'user'"
+                class="label label-rounded label-pill label-inline label-info mr-2">{{ "SHARED.USER" | translate
+                }}</span>
+
+              <span *ngIf="task.assignTo?.type == 'group'"
+                class="label label-rounded label-pill label-inline label-warning mr-2">{{ "SHARED.GROUP" | translate
+                }}</span>
+            </td>
+            <!-- 9 -->
+            <td class="text-center pr-0 actions">
+              <button *appPrivileges="'PRIV_UP_TASK'" (click)="updateTask(task.id)"
+                class="btn btn-sm btn-clean btn-icon mr-2" matTooltip="{{ 'TASK.UPDATE_TASK' | translate }}">
+                <span class="svg-icon svg-icon-md">
+                  <span [inlineSVG]="
+                      './assets/media/svg/icons/Communication/Write.svg'
+                    " [cacheSVG]="true"></span>
+                </span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="spinner-container m-auto p-10" *ngIf="loadingCreatedByMyOrg">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+    </div>
+
+    <pagination-controls previousLabel="Prev" nextLabel="Next" responsive="true" id="first"
+      (pageChange)="pageChanged($event)"></pagination-controls>
+    <!--end::Table-->
+  </div>
+</ng-container>
+<ng-template #incomingTasksTemplate>
+  <div class="container-fluid">
+    <!--begin::Table-->
+    <div class="table-container table-responsive">
+      <table matSort (matSortChange)="sortChangeAssignedToMe($event)"
+        class="table table-head-custom table-head-bg table-borderless table-vertical-center mb-0 px-3">
+        <thead>
+          <tr class="">
+            <!-- 2 -->
+            <th mat-sort-header="title" class="m-auto" [style.min-width]="'140px'">
+              {{ "TASK.TASK_TITLE" | translate }}
+            </th>
+            <!-- 3 -->
+            <th class="p-0 mr-3" [style.min-width]="'200px'">
+              {{ "TASK.TASK_DESCRIPTION" | translate }}
+            </th>
+            <th class="p-0 mr-3" [style.min-width]="'200px'">
+              {{ "TASK.TASK_INCIDENT_ID" | translate }}
+            </th>
+            <!-- 4 -->
+            <th mat-sort-header="priority" class="p-0" [style.min-width]="'125px'">
+              {{ "TASK.PRIORITY" | translate }}
+            </th>
+            <!-- 5 -->
+            <th mat-sort-header="dueDate" class="m-auto" [style.min-width]="'180px'">
+              {{ "TASK.DUE_DATE" | translate }}
+            </th>
+            <!-- 6 -->
+            <th mat-sort-header="status" class="p-0" [style.min-width]="'110px'">
+              {{ "TASK.STATUS" | translate }}
+            </th>
+            <!-- 7 -->
+            <th [style.min-width]="'200px'">
+              {{ "SHARED.CREATED_BY" | translate }}
+            </th>
+            <!-- 8 -->
+            <th [style.min-width]="'200px'">
+              {{ "INCIDENTS.ASSIGNED" | translate }}
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr matTooltip="{{ 'TASK.VIEW' | translate }}" matTooltipPosition="{{ lang == 'en' ? 'left' : 'right' }}"
+            *ngFor="
+              let task of assignedToMeTasks
+                | paginate: assignedToMePaginationConfig;
+              let index = index
+            " class="tasklist cursor-pointer tasklist cursor-pointer bg-white rounded shadow-sm" [ngClass]="{
+              ghost: updatedTask?.id == task?.id,
+              highlight: isDateElapsed(task)
+            }" (click)="viewTasks(task.id)">
+            <!-- 2 -->
+            <td class="pl-0">
+              <p class="mb-0 font-size-lg">
+                {{ task?.title }}
+              </p>
+            </td>
+            <!-- 3 -->
+            <td>
+              <p class="max-lines-2">
+                {{ task?.body }}
+              </p>
+            </td>
+            <td class="pl-0">
+              <p class="mb-0 font-size-lg">
+                {{ task?.incident.id }}
+              </p>
+            </td>
+            <!-- 4 -->
+            <td>
+              <span *ngIf="task?.priority?.id" class="font-weight-500 label label-lg label-inline"
+                [class]="'label-' + task?.priority.color">
+                {{
+                this.lang === "en"
+                ? task.priority?.nameEn
+                : task.priority?.nameAr
+                }}
+              </span>
+            </td>
+            <!-- 5 -->
+            <td>
+              <span class="font-weight-500 label label-lg label-inline" appDueDateColor [closedDate]="task?.closedDate" [date]="task?.dueDate">
+                {{ task?.dueDate | customDate | date: "yyyy/MM/dd h:mm:ss a" }}
+              </span>
+            </td>
+            <!-- 6 -->
+            <td>
+              <span class="label label-lg label-inline">{{
+                task?.status?.name
+                }}</span>
+            </td>
+            <!-- 7 -->
+            <td>
+              <span>
+                {{ getTaskCreatorAndOrgName(task) }}
+              </span>
+            </td>
+            <!-- 8 -->
+            <td>
+              <span class="text-muted mx-2">{{
+                lang == "en" ? task.assignTo?.nameEn : task.assignTo?.nameAr
+                }}</span>
+              <span *ngIf="task.assignTo?.type == 'org'"
+                class="label label-rounded label-pill label-inline label-success mr-2">{{ "SHARED.ORGANIZATION" |
+                translate }}</span>
+
+              <span *ngIf="task.assignTo?.type == 'user'"
+                class="label label-rounded label-pill label-inline label-info mr-2">{{ "SHARED.USER" | translate
+                }}</span>
+
+              <span *ngIf="task.assignTo?.type == 'group'"
+                class="label label-rounded label-pill label-inline label-warning mr-2">{{ "SHARED.GROUP" | translate
+                }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="spinner-container m-auto p-10" *ngIf="loadingAssignedToMe">
+        <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+      </div>
+    </div>
+    <pagination-controls previousLabel="Prev" nextLabel="Next" responsive="true" id="second"
+      (pageChange)="pageChangeForMyTasks($event)"></pagination-controls>
+    <!--end::Table-->
+  </div>
+</ng-template>

@@ -1,0 +1,91 @@
+<button
+  (click)="openDialog()"
+  class="btn btn-md btn-primary font-weight-bolder mx-3 py-2 px-5 cursor-pointer"
+>
+  {{ "INCIDENTS.EXPORT_DIALOG.EXPORT" | translate }}
+  <span
+    [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+    cacheSVG="true"
+    class="svg-icon svg-icon-md"
+  ></span>
+</button>
+
+<ng-template #exportDialog>
+  <div [dir]="lang == 'en' ? 'ltr' : 'rtl'" class="card card-custom">
+    <div class="card-header px-2">
+      <div class="card-title">
+        {{ "INCIDENTS.EXPORT_DIALOG.DIALOG_TITLE" | translate }}
+      </div>
+      <div class="card-toolbar">
+        <button
+          (click)="dialogRef.close()"
+          class="btn btn-icon btn-sm btn-light-primary"
+        >
+          <i class="ki ki-close icon-nm"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-5">
+      <div class="list-item border-bottom d-flex">
+        <span class="mx-4"
+          >{{ selectedColumns.selectedOptions.selected.length }}
+          {{ "CALL_DUTY.ITEMS" | translate }}</span
+        >
+        <div class="spacer"></div>
+        <ng-container>
+          <span class="pl-3 pr-3">
+            {{ "CALL_DUTY.SELECT_ALL" | translate }}</span
+          >
+          <mat-checkbox
+            [checked]="true"
+            (change)="selectAllStatus(selectedColumns, $event)"
+            color="primary"
+          >
+          </mat-checkbox>
+        </ng-container>
+      </div>
+
+      <perfect-scrollbar class="h-400px overflow-scroll">
+        <mat-selection-list #selectedColumns class="px-4">
+          <mat-list-option
+            *ngFor="let column of columns"
+            [selected]="true"
+            [value]="column.key"
+            color="primary"
+            class="rounded-lg"
+          >
+            {{lang ==='ar' ? column?.nameAr : column?.nameEn }}
+          </mat-list-option>
+        </mat-selection-list>
+      </perfect-scrollbar>
+    </div>
+    <div class="d-flex flex-column justify-content-end p-2 border-top">
+      <div>
+        <button
+          [disabled]="selectedColumns.selectedOptions.selected.length === 0"
+          (click)="export(selectedColumns.selectedOptions.selected, true)"
+          class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+        >
+          {{ "ACTIONS.EXPORT_TO_PDF" | translate }}
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md"
+          ></span>
+        </button>
+        <button
+          [disabled]="selectedColumns.selectedOptions.selected.length === 0"
+          (click)="export(selectedColumns.selectedOptions.selected, false)"
+          class="btn btn-primary font-weight-bold cursor-pointer mx-1"
+        >
+          {{ "ACTIONS.EXPORT_TO_XLSX" | translate }}
+          <span
+            [inlineSVG]="'/assets/media/svg/icons/Files/Export.svg'"
+            cacheSVG="true"
+            class="svg-icon svg-icon-md"
+          ></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

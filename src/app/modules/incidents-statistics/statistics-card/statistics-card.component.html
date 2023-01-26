@@ -1,0 +1,13 @@
+<div id="chart" class="container card" [dir]="directionality.value">
+  <apx-chart
+  dir="{{directionality.value}}"
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [dataLabels]="chartOptions.dataLabels"
+    [plotOptions]="chartOptions.plotOptions"
+    [responsive]="chartOptions.responsive"
+    [xaxis]="chartOptions.xaxis"
+    [legend]="chartOptions.legend"
+    [fill]="chartOptions.fill"
+  ></apx-chart>
+</div>
