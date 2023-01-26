@@ -59,8 +59,6 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "Deploying application..."
     - docker save -o $IMG_NAME $IMG_NAME:$CI_PIPELINE_IID
     - scp $IMG_NAME $SERVER:~/docker-images
-    - ssh $SERVER
-    - docker load -i ~/docker-images/$IMG_NAME
-    - docker run -p 3001:80 -d $IMG_NAME:$CI_PIPELINE_IID
-    - exit
+    - ssh $SERVER 'docker load -i ~/docker-images/$IMG_NAME'
+    - ssh $SERVER 'docker run -p 3001:80 -d $IMG_NAME:$CI_PIPELINE_IID'
     - echo "Application successfully deployed."
