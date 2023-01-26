@@ -552,6 +552,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   }
 
   loadInquiries() {
+    this.mapView = false
     this.currentView = IncidentViewsEnum.INQUIRIES;
     this.showIncidentsMenuDisplay(this.currentView);
     this.tableTitle = this.translateService.instant(
@@ -614,6 +615,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   }
 
   loadInterimIncidents() {
+    this.mapView = false
     this.currentView = IncidentViewsEnum.INTERIM_INCIDENTS;
     this.showIncidentsMenuDisplay(this.currentView);
     this.tableTitle = this.translateService.instant(

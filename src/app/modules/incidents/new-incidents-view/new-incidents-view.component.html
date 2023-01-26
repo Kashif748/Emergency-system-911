@@ -233,7 +233,9 @@
     </div>
 
   </div>
-  <div class="table-responsive container-fluid my-2 px-1 mapView" *ngIf="mapView" id="mapView">
+  <div class="table-responsive container-fluid my-2 px-1 mapView"
+       *ngIf="mapView && currentView !== incidentViews.INTERIM_INCIDENTS
+       && currentView !== incidentViews.INQUIRIES" id="mapView">
     <app-map #mapContainer id="mapContainer" [config]="{ viewOnly: true, showLayers: false }" [dashboardMode]="false"
              [showLayers]="false">
     </app-map>
