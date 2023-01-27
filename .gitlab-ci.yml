@@ -59,14 +59,8 @@ lint-test-job:   # This job also runs in the test stage.
     # - sleep 10
     - echo "No lint issues found."
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  tags:
-    - autobot
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "stg"
-      variables:
-        SERVER: administrator@10.21.10.245
+
+.deploy-script:
   script:
     - echo "Deploying application..."
     - docker save -o $IMG_NAME $IMG_NAME:$TAG
@@ -86,3 +80,22 @@ deploy-job:      # This job runs in the deploy stage.
     - ssh $SERVER "sed -i 's/#{TAG}#/$TAG/g' ~/$PROJ_NAME/docker-compose.yml"
     - ssh $SERVER "cd ~/$PROJ_NAME && docker-compose up -d"
     - echo "Application successfully deployed."
+
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - autobot
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "stg"
+      variables:
+        SERVER: administrator@10.21.10.245
+  extends: .deploy-script
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - autobot
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "dev"
+  extends: .deploy-script
