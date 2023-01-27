@@ -79,7 +79,10 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   tags:
     - autobot
-  extends: .only-dev-and-stg
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "stg"
+      variables:
+        SERVER: administrator@10.21.10.245
   script:
     - echo "Deploying application..."
     - docker save -o $IMG_NAME $IMG_NAME:$TAG
