@@ -21,29 +21,15 @@ variables:
   SERVER: administrator@10.24.10.245
   TAG: $CI_PIPELINE_IID
 
-
-
 .only-dev-and-stg:
   only:
    - dev
    - stg
 
 stages:          # List of stages for jobs, and their order of execution
-  - init
   - build
   - test
   - deploy
-
-init-job:
-  stage: init  # It only runs when *both* jobs in the test stage complete successfully.
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "stg"
-      variables:
-        SERVER: administrator@10.21.10.245
-  tags:
-    - autobot
-  script:
-    - echo "init env"
     
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -53,8 +39,6 @@ build-job:       # This job runs in the build stage, which runs first.
   script:
     - docker build -t $IMG_NAME:$TAG .
     - echo "build docker image completed."
-
-
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
