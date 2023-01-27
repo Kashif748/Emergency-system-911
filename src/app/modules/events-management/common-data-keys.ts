@@ -171,4 +171,12 @@ export const commonDataItem = [
     hidden: true,
     endPoint: 'mobile-versions',
   },
+  {
+    key: 'NOTIFICATIONS',
+    icon: 'General/Notifications1',
+    type: '',
+    customTemplate: true,
+    hidden: true,
+    endPoint: 'mobile-versions',
+  },
 ];
