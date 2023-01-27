@@ -20,13 +20,34 @@ variables:
   PROJ_NAME: Slamah-FE
   SERVER: administrator@10.24.10.245
   TAG: $CI_PIPELINE_IID
+
+
+
+.only-dev-and-stg:
+  only:
+   - dev
+   - stg
+
 stages:          # List of stages for jobs, and their order of execution
+  - init
   - build
   - test
   - deploy
 
+init-job:
+  stage: init  # It only runs when *both* jobs in the test stage complete successfully.
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "stg"
+      variables:
+        SERVER: administrator@10.21.10.245
+  tags:
+    - autobot
+  script:
+    - echo "init env"
+    
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
+  extends: .only-dev-and-stg
   tags:
     - autobot
   script:
@@ -37,6 +58,7 @@ build-job:       # This job runs in the build stage, which runs first.
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
+  extends: .only-dev-and-stg
   tags:
     - autobot
   script:
@@ -45,6 +67,7 @@ unit-test-job:   # This job runs in the test stage.
 
 lint-test-job:   # This job also runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
+  extends: .only-dev-and-stg
   tags:
     - autobot
   script:
@@ -54,9 +77,9 @@ lint-test-job:   # This job also runs in the test stage.
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: dev
   tags:
     - autobot
+  extends: .only-dev-and-stg
   script:
     - echo "Deploying application..."
     - docker save -o $IMG_NAME $IMG_NAME:$TAG
