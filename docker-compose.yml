@@ -1,0 +1,7 @@
+version: "3.4"
+services:
+  slamah-fe:
+    restart: always
+    image: $${IMG_NAME}:$$TAG
+    ports:
+      - "3001:80"
