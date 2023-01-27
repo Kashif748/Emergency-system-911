@@ -65,6 +65,14 @@ deploy-job:      # This job runs in the deploy stage.
     - scp $IMG_NAME $SERVER:~/docker-images/
     - scp docker-compose.yml $SERVER:~/$PROJ_NAME/
     - scp docker-compose.override.yml $SERVER:~/$PROJ_NAME/
+
+    - echo "clear old images"
+    - ssh $SERVER "(sudo docker system prune -f) || true"
+    - ssh $SERVER "(sudo docker rmi  $(sudo docker images -a -q) -f) || true"
+
+    - echo "run docker compose"
     - ssh $SERVER "docker load -i ~/docker-images/$IMG_NAME"
-    - ssh $SERVER "cd ~/$PROJ_NAME && docker compose up -d"
+    - ssh $SERVER "sed -i 's/#{IMG_NAME}#/$IMG_NAME/g' ~/$PROJ_NAME/docker-compose.yml"
+    - ssh $SERVER "sed -i 's/#{TAG}#/$TAG/g' ~/$PROJ_NAME/docker-compose.yml"
+    - ssh $SERVER "cd ~/$PROJ_NAME && docker-compose up -d"
     - echo "Application successfully deployed."
