@@ -67,8 +67,8 @@ deploy-job:      # This job runs in the deploy stage.
     - scp docker-compose.override.yml $SERVER:~/$PROJ_NAME/
 
     - echo "clear old images"
-    - ssh $SERVER "(sudo docker system prune -f) || true"
-    - ssh $SERVER "(sudo docker rmi  $(sudo docker images -a -q) -f) || true"
+    - ssh $SERVER "(docker system prune -f) || true"
+    - ssh $SERVER '(docker rmi  $(docker images -a -q) -f) || true'
 
     - echo "run docker compose"
     - ssh $SERVER "docker load -i ~/docker-images/$IMG_NAME"
