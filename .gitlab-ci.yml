@@ -82,20 +82,20 @@ lint-test-job:   # This job also runs in the test stage.
     - echo "Application successfully deployed."
 
 
-deploy-job:      # This job runs in the deploy stage.
+deploy-stg-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   tags:
     - autobot
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "stg"
-      variables:
-        SERVER: administrator@10.21.10.245
+  only: 
+    - stg
+  variables:
+    SERVER: administrator@10.21.10.245
   extends: .deploy-script
 
-deploy-job:      # This job runs in the deploy stage.
+deploy-dev-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   tags:
     - autobot
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "dev"
+  only: 
+    - dev
   extends: .deploy-script
