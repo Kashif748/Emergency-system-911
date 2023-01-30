@@ -27,15 +27,7 @@
             style="max-width: 600px; max-height: 550px"
           >
             <div
-              class="
-                navi
-                navi-hover
-                navi-active
-                navi-accent
-                navi-link-rounded
-                navi-bold
-                scroll scroll-pull
-              "
+              class="navi navi-hover navi-active navi-accent navi-link-rounded navi-bold scroll scroll-pull"
               perfectScrollbar
               data-scroll="true"
               data-wheel-propagation="true"
@@ -68,10 +60,7 @@
                   <span class="navi-label">
                     <span
                       *ngIf="item.type == 'commonPublic'"
-                      class="
-                        label label-rounded label-light-primary
-                        font-weight-bolder
-                      "
+                      class="label label-rounded label-light-primary font-weight-bolder"
                       >{{ commonDataLengths[i] }}</span
                     >
                   </span>
@@ -129,15 +118,14 @@
             <app-incidents-categories></app-incidents-categories>
           </div>
           <div>
-            <div  *ngIf="currentTab == 'localRisks'"
-            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            class="w-100">
-            
-            <app-local-risks></app-local-risks>
+            <div
+              *ngIf="currentTab == 'localRisks'"
+              [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+              class="w-100"
+            >
+              <app-local-risks></app-local-risks>
             </div>
           </div>
-        
-
 
           <div
             *ngIf="currentTab == 'HEADER_MENU'"
@@ -173,6 +161,13 @@
             class="w-100"
           >
             <app-mobile-versions></app-mobile-versions>
+          </div>
+          <div
+            *ngIf="currentTab == 'NOTIFICATIONS'"
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            class="w-100"
+          >
+            <app-notifications></app-notifications>
           </div>
         </div>
       </div>

@@ -1,0 +1,115 @@
+<div
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  class="card card-custom"
+  style="overflow: hidden"
+>
+  <div class="card-header px-3">
+    <div class="card-title">
+      <h4 class="card-label">
+        <span>{{ "EVENTSMODULES.NOTIFICATIONS" | translate }}</span>
+        <span
+          *ngIf="isAddMode"
+          class="label label-lg label-light-primary label-inline"
+        >
+          {{ "ACTIONS.NEW_ITEM" | translate }}
+        </span>
+        <span
+          *ngIf="!isAddMode"
+          class="label label-lg label-light-success label-inline"
+        >
+          {{ "ACTIONS.UPDATE_ITEM" | translate }}
+        </span>
+      </h4>
+    </div>
+    <div class="card-toolbar">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body p-4">
+    <form [formGroup]="formGroup">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label
+          >{{ "EVENTSMODULES.NAME" | translate }}
+          <span class="required-asterisk">*</span>
+        </mat-label>
+        <input matInput type="text" formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label
+          >{{ "EVENTSMODULES.CODE" | translate }}
+          <span class="required-asterisk">*</span>
+        </mat-label>
+        <input matInput type="text" formControlName="code" />
+      </mat-form-field>
+
+      <div class="d-flex flex-column">
+        <div class="d-flex py-3">
+          <span class="mx-4"> {{ "ACTIONS.ACTIVE_STATUS" | translate }}</span>
+          <span class="spacer"></span>
+          <mat-slide-toggle formControlName="active" class="m-auto">
+          </mat-slide-toggle>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div class="d-flex p-2 px-4">
+          <span class="mx-4">
+            {{ "EVENTSMODULES.EMAIL_NOTI" | translate }}</span
+          >
+          <span class="spacer"></span>
+
+          <mat-slide-toggle formControlName="emailNotif" class="m-auto">
+          </mat-slide-toggle>
+        </div>
+
+        <div class="d-flex p-2 px-4">
+          <span class="mx-4"> {{ "EVENTSMODULES.SMS_NOTI" | translate }}</span>
+          <span class="spacer"></span>
+
+          <mat-slide-toggle formControlName="smsNotif" class="m-auto">
+          </mat-slide-toggle>
+        </div>
+
+        <div class="d-flex p-2 px-4">
+          <span class="mx-4"> {{ "EVENTSMODULES.PUSH_NOTI" | translate }}</span>
+          <span class="spacer"></span>
+
+          <mat-slide-toggle formControlName="pushNotif" class="m-auto">
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer p-3 d-flex justify-content-between">
+    <button
+      (click)="onSubmit()"
+      *ngIf="isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.CREATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+
+    <button
+      (click)="onSubmit()"
+      *ngIf="!isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
+      {{ "ACTIONS.UPDATE" | translate }}
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
+    </button>
+  </div>
+</div>

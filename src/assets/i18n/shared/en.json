@@ -40,24 +40,8 @@
         "Friday",
         "Saturday"
       ],
-      "dayNamesShort": [
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat"
-      ],
-      "dayNamesMin": [
-        "Su",
-        "Mo",
-        "Tu",
-        "We",
-        "Th",
-        "Fr",
-        "Sa"
-      ],
+      "dayNamesShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      "dayNamesMin": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
       "monthNames": [
         "January",
         "February",
@@ -1311,7 +1295,13 @@
       "RELEASE_LINK": "Release link",
       "RELEASE_NOTE": "Release note",
       "VERSION_NAME": "Version name",
-      "VERSION_NUMBER": "Version number"
+      "VERSION_NUMBER": "Version number",
+      "NOTIFICATIONS": "Notifications Events",
+      "EMAIL_NOTI": "Email Notification",
+      "SMS_NOTI": "SMS Notification",
+      "PUSH_NOTI": "Push Notification",
+      "NAME": "Name",
+      "LAST_UPDATE_DATE": "Last Update Date"
     },
     "NEWS": {
       "NEWS": "News",

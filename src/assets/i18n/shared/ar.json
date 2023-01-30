@@ -1328,7 +1328,13 @@
       "RELEASE_LINK": "رابط الإصدار",
       "RELEASE_NOTE": "معلومات الإصدار",
       "VERSION_NAME": "إسم النسخة",
-      "VERSION_NUMBER": "رقم النسخة"
+      "VERSION_NUMBER": "رقم النسخة",
+      "NOTIFICATIONS": "أحداث التنبيهات ",
+      "EMAIL_NOTI": "إشعارات البريد",
+      "SMS_NOTI": "إشعارات الرسائل القصيرة",
+      "PUSH_NOTI": "إشعارات في الخلفية",
+      "NAME": "الاسم",
+      "LAST_UPDATE_DATE": "اخر تاريخ تحديث"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",

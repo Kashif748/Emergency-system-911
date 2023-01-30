@@ -21,29 +21,15 @@ variables:
   SERVER: administrator@10.24.10.245
   TAG: $CI_PIPELINE_IID
 
-
-
 .only-dev-and-stg:
   only:
    - dev
    - stg
 
 stages:          # List of stages for jobs, and their order of execution
-  - init
   - build
   - test
   - deploy
-
-init-job:
-  stage: init  # It only runs when *both* jobs in the test stage complete successfully.
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "stg"
-      variables:
-        SERVER: administrator@10.21.10.245
-  tags:
-    - autobot
-  script:
-    - echo "init env"
     
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -53,8 +39,6 @@ build-job:       # This job runs in the build stage, which runs first.
   script:
     - docker build -t $IMG_NAME:$TAG .
     - echo "build docker image completed."
-
-
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
@@ -75,14 +59,8 @@ lint-test-job:   # This job also runs in the test stage.
     # - sleep 10
     - echo "No lint issues found."
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  tags:
-    - autobot
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "stg"
-      variables:
-        SERVER: administrator@10.21.10.245
+
+.deploy-script:
   script:
     - echo "Deploying application..."
     - docker save -o $IMG_NAME $IMG_NAME:$TAG
@@ -102,3 +80,22 @@ deploy-job:      # This job runs in the deploy stage.
     - ssh $SERVER "sed -i 's/#{TAG}#/$TAG/g' ~/$PROJ_NAME/docker-compose.yml"
     - ssh $SERVER "cd ~/$PROJ_NAME && docker-compose up -d"
     - echo "Application successfully deployed."
+
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - autobot
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "stg"
+      variables:
+        SERVER: administrator@10.21.10.245
+  extends: .deploy-script
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - autobot
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "dev"
+  extends: .deploy-script

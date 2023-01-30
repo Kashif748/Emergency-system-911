@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {TranslationService} from "../../i18n/translation.service";
@@ -7,6 +7,7 @@ import {OrgService} from "../../../core/api/services/org.service";
 import {Observable, Subject} from "rxjs";
 import {LoginAttemptsService} from "../login-attempts.service";
 import {AdvancedSearchFieldsEnum} from "@shared/components/advanced-search/advancedSearch.model";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-login-attempts-list',
@@ -38,6 +39,7 @@ export class LoginAttemptsListComponent implements OnInit {
   maxDate: Date;
   minDate: Date;
   lang = "en";
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   constructor(
     private translationService: TranslationService,
@@ -85,8 +87,27 @@ export class LoginAttemptsListComponent implements OnInit {
   }
 
   onChangeTable(e) {
+    this.pageSize = 10;
+    const fromDate = this.searchForm.get('fromDate').value;
+    const toDate = this.searchForm.get('toDate').value;
+    if (fromDate) {
+      this.searchForm
+        .get('fromDate')
+        .patchValue(
+          fromDate ? new Date(fromDate).toLocaleDateString('en-CA') : null
+        );
+    }
+    if (toDate) {
+      this.searchForm
+        .get('toDate')
+        .patchValue(
+          toDate ? new Date(toDate).toLocaleDateString('en-CA') : null
+        );
+    }
     const {pageSize, pageIndex} = e;
-    this.getLoginAttemptsList('', '', '', '', pageIndex, pageSize);
+    this.getLoginAttemptsList(this.searchForm.get('orgId').value ? this.searchForm.get('orgId').value : '',
+      this.searchForm.get('userName').value ? this.searchForm.get('userName').value : '',
+      fromDate ? fromDate : '', toDate ? toDate : '', pageIndex, pageSize);
   }
 
   save(org: any) {
@@ -106,6 +127,7 @@ export class LoginAttemptsListComponent implements OnInit {
   }
 
   onSubmit() {
+    this.paginator.pageIndex = 0;
     const fromDate = this.searchForm.get('fromDate').value;
     const toDate = this.searchForm.get('toDate').value;
     if (fromDate) {
@@ -129,6 +151,6 @@ export class LoginAttemptsListComponent implements OnInit {
   resetSearchForm() {
     this.getLoginAttemptsList();
     this.searchForm.reset();
-    this.pageSize = 10;
+    this.paginator.pageIndex = 0;
   }
 }
