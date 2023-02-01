@@ -156,7 +156,7 @@ export class BrowseUsersComponent implements OnInit, OnDestroy {
     this.page$ = this.store.select(UserState.page).pipe(
       skipWhile((p) => !p),
       map((page) =>
-        page.map((u) => {
+        page?.map((u) => {
           return {
             ...u,
             actions: [
