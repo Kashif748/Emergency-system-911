@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiHelper } from '@core/helpers/api.helper';
@@ -15,7 +14,7 @@ import {
 } from '@ngxs/store';
 import { iif, patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { BrowseUsersAction } from './browse-users.action';
 
 export interface BrowseUsersStateModel {

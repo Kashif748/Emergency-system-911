@@ -7,13 +7,11 @@ import { IAuthService } from '@core/services/auth.service';
 import { OrgAction, OrgState, RoleAction, RoleState } from '@core/states';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import * as _ from 'lodash';
 import { LazyLoadEvent, MenuItem, TreeNode } from 'primeng/api';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { filter, map, skipWhile, takeUntil, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import {
   OrgStructure,
-  OrgStructureProjection,
   RoleProjection,
 } from 'src/app/api/models';
 import { BrowseRolesAction } from '../states/browse-roles.action';
@@ -139,7 +137,7 @@ export class BrowseRolesComponent implements OnInit, OnDestroy {
     ] as MenuItem[];
 
     this.page$ = this.store.select(RoleState.page).pipe(
-      skipWhile((p) => !p),
+      filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
           return {

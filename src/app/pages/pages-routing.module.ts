@@ -132,18 +132,18 @@ const routes: Routes = [
             '../modules/exercises-management/exercises-management.module'
           ).then((m) => m.ExercisesManagementModule),
       },
-      // {
-      //   path: 'user-management',
-      //   loadChildren: () =>
-      //     import('../modules/user-management/user-management.module').then(
-      //       (m) => m.UserManagementModule
-      //     ),
-      // },
       {
         path: 'user-management',
         loadChildren: () =>
           import('../modules/_user-mgmt/user-mgmt.module').then(
             (m) => m.UserManagementModule
+          ),
+      },
+      {
+        path: 'task-management',
+        loadChildren: () =>
+          import('../modules/_task-mgmt/task-mgmt.module').then(
+            (m) => m.TaskMgmtModule
           ),
       },
       {
