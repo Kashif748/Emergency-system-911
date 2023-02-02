@@ -12,12 +12,12 @@ import {
   BrowseUsersStateModel,
 } from '../states/browse-users.state';
 import { TranslateService } from '@ngx-translate/core';
-import { filter, map, skipWhile, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { UserAction } from '@core/states/user/user.action';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { IAuthService } from '@core/services/auth.service';
-import { OrgState, RoleAction, RoleState } from '@core/states';
+import { OrgState, RoleState } from '@core/states';
 import { TreeHelper } from '@core/helpers/tree.helper';
 
 @Component({
@@ -154,7 +154,7 @@ export class BrowseUsersComponent implements OnInit, OnDestroy {
     ] as MenuItem[];
 
     this.page$ = this.store.select(UserState.page).pipe(
-      skipWhile((p) => !p),
+      filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
           return {
