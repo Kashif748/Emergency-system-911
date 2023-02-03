@@ -311,7 +311,7 @@
     },
     "MAP": {
       "TOP_BAR": {
-        "ADDRESS_SEARCH": "اسم القطاع و عنوان القسيمة في بلدية مدينة العين [DID-CID-RID-PID]"
+        "ADDRESS_SEARCH": "اسم القطاع ، القسيمة ، الشارع "
       }
     },
     "DASHBOARD": {
@@ -593,6 +593,7 @@
       "DATE": "تاريخ ووقت البلاغ",
       "DESCRIPTION": "الوصف",
       "SR_NO": "الرقم",
+      "SERIAL": " الرقم التسلسلي",
       "ACTIONS": "الاجراء",
       "SUBMIT": "انشاء",
       "REPORT_INCIDENT": "البلاغات",

@@ -29,6 +29,7 @@ export class LogsComponent implements OnInit {
     this.lang = this.translationService.getSelectedLanguage();
     this.dashboardService.workogsChange$
       .pipe(
+        skip(1),
         map((data) => {
           this.logs = this.checkChanges(this.logs, data);
           this.cdr.detectChanges();

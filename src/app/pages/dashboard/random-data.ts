@@ -24,7 +24,7 @@ export const data = {
       color: 'text-primary',
       url: null,
       privileges: ['PRIV_VW_INC', 'PRIV_VW_GRP_INC'],
-      changed : false
+      changed: false,
     },
     {
       title: 'UNDER_EVALUATION_INCIDENTS',
@@ -33,8 +33,7 @@ export const data = {
       color: 'text-muted',
       url: '../incidents/dashboard/' + IncidentViewsEnum.INTERIM_INCIDENTS,
       privileges: ['PRIV_VW_INT_INC'],
-      changed : false
-
+      changed: false,
     },
     {
       title: 'IN_PROGRESS_INCIDENTS',
@@ -43,8 +42,7 @@ export const data = {
       color: 'text-muted',
       url: '../incidents/dashboard/' + IncidentViewsEnum.IN_PROGRESS_INCIDENTS,
       privileges: ['PRIV_VW_INC', 'PRIV_VW_GRP_INC'],
-      changed : false
-
+      changed: false,
     },
 
     {
@@ -54,31 +52,27 @@ export const data = {
       color: 'text-primary',
       url: null,
       privileges: ['PRIV_VW_INC', 'PRIV_VW_GRP_INC'],
-      changed : false
-
+      changed: false,
     },
     {
       title: 'COMPLETED_INCIDENTS',
       icon: 'Custome/completed-incidents',
       value: 'closedIncidents',
       color: 'text-primary',
-      url: null,
+      url: '../incidents/dashboard/' + IncidentViewsEnum.COMPLETED_INCIDENTS,
       privileges: ['PRIV_VW_INC', 'PRIV_VW_GRP_INC'],
-      changed : false
-
+      changed: false,
     },
 
-    {
-      title: 'INCOMING_TSKS',
-      icon: 'Communication/Clipboard-list',
-      value: 'incomingTasks',
-      color: 'text-primary',
-      url: '/incidents/tasks/incoming',
-      privileges: ['PRIV_VW_TASK'],
-      changed : false
-
-
-    },
+    // {
+    //   title: 'INCOMING_TSKS',
+    //   icon: 'Communication/Clipboard-list',
+    //   value: 'incomingTasks',
+    //   color: 'text-primary',
+    //   url: '/incidents/tasks/incoming',
+    //   privileges: ['PRIV_VW_TASK'],
+    //   changed: false,
+    // },
     // {
     //   title: 'OUTCOMING_TASKS',
     //   icon: 'Custome/daily-tasks',
@@ -88,17 +82,15 @@ export const data = {
     //   privileges: ['PRIV_VW_TASK'],
     //   changed : false
 
-
     // },
-    // {
-    //   title: 'OUTDATE_TASKS',
-    //   icon: 'Custome/Group 1139',
-    //   value: 'delayedTasks',
-    //   color: 'text-dark-75',
-    //   url: '/incidents/tasks/outdate',
-    //   changed : false
-
-    // },
+    {
+      title: 'OUTDATE_TASKS',
+      icon: 'Custome/Group 1139',
+      value: 'delayedTasks',
+      color: 'text-dark-75',
+      url: '/incidents/tasks/outdate',
+      changed: false,
+    },
     {
       title: 'INCOMING_CORRERSPONDENCE',
       icon: 'Communication/Incoming-box',
@@ -106,8 +98,7 @@ export const data = {
       color: 'text-dark-65',
       url: '/correspondences-management/correspondences/incoming',
       privileges: ['PRIV_VW_PUB_CORR'],
-      changed : false
-
+      changed: false,
     },
     // {
     //   title: 'OUTCOMING_CORRERSPONDENCE',

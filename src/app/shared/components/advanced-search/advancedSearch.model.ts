@@ -1,5 +1,6 @@
 export enum AdvancedSearchFieldsEnum {
   SR_NO = 'id',
+  SERIAL ='serial',
   SUBJECT = 'subject',
   CREATED_BY = 'createdByUser',
   STATUS = 'status',

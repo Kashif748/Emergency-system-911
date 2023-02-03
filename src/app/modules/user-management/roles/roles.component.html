@@ -1,0 +1,244 @@
+<div class="container-fluid">
+  <section class="d-flex py-4 my-2">
+    <mat-accordion style="width: 100% !important">
+      <mat-expansion-panel [(expanded)]="panelOpenState" #mep="matExpansionPanel" class="shadow-sm">
+        <mat-expansion-panel-header>
+          <mat-panel-title color="primary">
+            {{ "TASK.ADVANCED_SEARCH" | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-4">
+          <div class="row">
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                              class="form-element example-full-width">
+                <mat-label> {{ "ROLES.ROLE_NAME" | translate }}</mat-label>
+                <input matInput type="text" formControlName="roleName"/>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field style="width:100%;" appearance="fill">
+                <mat-label>
+                  {{ "AUTH.LOGIN.Organizations" | translate }}
+                  <!-- <span class="required-asterisk">*</span> -->
+                </mat-label>
+
+                <mat-select formControlName="orgName">
+                  <mat-option *ngFor="let org of orgs$ | async" [value]="org.nameEn">
+                      <span *ngIf="lang == 'en'">
+                        {{ org.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                      </span>
+                    <span *ngIf="lang == 'ar'">
+                        {{ org.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                      </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                              class="form-element example-full-width">
+                <mat-label> {{ "ROLES.INHERTITED" | translate }}</mat-label>
+                <mat-select formControlName="inherited">
+                  <mat-option *ngFor="let org of allOrgs" [value]="org.value">
+                      <span span *ngIf="lang == 'en'">
+                        {{ org.nameEn  }}
+                      </span>
+                    <span *ngIf="lang == 'ar'">
+                        {{ org.nameAr  }}
+                      </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+            </div>
+            <div class="form-group col-lg-6 pl-4 pr-4">
+              <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill"
+                              class="form-element example-full-width">
+                <mat-label> {{ "ROLES.STATUS" | translate }}</mat-label>
+
+                <mat-select formControlName="status">
+                  <mat-option *ngFor="let org of status" [value]="org.value">
+                      <span *ngIf="lang == 'en'">
+                        {{ org.nameEn }}
+                      </span>
+                    <span *ngIf="lang == 'ar'">
+                        {{ org.nameAr  }}
+                      </span>
+                  </mat-option>
+                </mat-select>
+
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6 d-flex">
+              <button class="btn btn-primary w-100" (click)="onSubmit()">
+                {{ "ACTIONS.FILTER" | translate }}
+                <span [inlineSVG]="
+              '/assets/media/svg/icons/General/Search.svg'
+            " cacheSVG="true" class="svg-icon svg-icon-md"></span>
+              </button>
+            </div>
+
+            <div class="col-6 d-flex">
+              <button class="btn btn-light-primary w-100" (click)="clearSearch(); mep.expanded = false">
+                {{ "ACTIONS.CLEAR" | translate }}
+                <span [inlineSVG]="'/assets/media/svg/icons/Media/Repeat.svg'" cacheSVG="true"
+                      class="svg-icon svg-icon-md"></span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </section>
+</div>
+
+
+<div class="mat-elevation-z8 container">
+  <mat-toolbar class="bg-white p-0 border-bottom">
+    <app-breadcrumbs></app-breadcrumbs>
+    <div class="spacer"></div>
+    <button *appPrivileges="'PRV_CR_ROL'" class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+            routerLink="add" routerLinkActive="active" matTooltip="Add New Item">
+      {{ "USER_MANAGEMENT.ROLES.NEW.BTN" | translate }}
+      <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"
+            title="Edit"></span>
+    </button>
+  </mat-toolbar>
+  <!-- <div class="row mt-5">
+    <div class="col-12">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>{{
+        "USER_MANAGEMENT.ROLES.FILTER_PLACEHOLDER" | translate
+      }}</mat-label>
+        <input matInput [formControl]="filterCrtl" #input />
+        <mat-icon matSuffix color="primary">search</mat-icon>
+      </mat-form-field>
+    </div>
+  </div> -->
+  <div class="row">
+    <div class="col-12">
+      <div class="table-container table-responsive">
+        <table class="
+            table
+            table-head-custom
+            table-head-bg
+            table-borderless
+            table-vertical-center
+          " matSort (matSortChange)="sortChange($event)">
+          <thead>
+          <tr>
+            <!-- 1 -->
+            <th mat-sort-header="nameAr">
+              {{ "SHARED.NAME_AR" | translate }}
+            </th>
+            <!-- 2 -->
+            <th mat-sort-header="nameEn">
+              {{ "SHARED.NAME_EN" | translate }}
+            </th>
+            <th mat-sort-header="inherited">
+              {{"RESOURCE.ALL_ORGANIZATIONS" | translate}}
+            </th>
+            <!-- 3 -->
+            <th mat-sort-header="orgId">
+              {{ "RESOURCE.ORGANIZATION" | translate }}
+            </th>
+            <th mat-sort-header="isActive">
+              {{ "RESOURCE.STATUS" | translate }}
+            </th>
+            <!-- 4 -->
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="
+                let row of dataSource.filteredData | paginate: paginationConfig
+              ">
+            <!-- 1 -->
+            <td [ngClass]="{ 'td-arabic': lang === 'ar' }">
+              <span>{{ row.nameAr }}</span>
+            </td>
+            <!-- 2 -->
+            <td [ngClass]="{ 'td-arabic': lang === 'ar' }">
+              <span>{{ row.nameEn }}</span>
+            </td>
+
+            <td [ngClass]="{ 'td-arabic': lang === 'ar' }">
+              <span *ngIf="row.inherited ==0">{{lang == "en" ? "No" : "لا"}}</span>
+              <span *ngIf="row.inherited ==1"> {{lang == "en" ? "Yes" : "نعم"}}</span>
+
+            </td>
+
+
+            <!-- 3 -->
+            <td [ngClass]="{ 'td-arabic': lang === 'ar' }">
+                  <span class="label label-lg label-light-danger label-inline">
+                    {{
+                    lang == "ar"
+                      ? row.orgId?.nameAr || "عامة"
+                      : row.orgId?.nameEn || "public"
+                    }}
+                  </span>
+            </td>
+
+            <!-- <td>
+            <div class="row">
+              <div class="col-md-12">
+                <mat-slide-toggle formControlName="isActive" class="m-auto">
+                   <span class="mx-4"> {{ "ACTIONS.ACTIVE" | translate }}</span>
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </td> -->
+
+            <td>
+                  <span *ngIf="row?.isActive" class="
+                    label label-rounded label-pill label-inline label-success
+                    mr-2
+                  ">{{ "ACTIONS.ACTIVE" | translate }}</span>
+              <span *ngIf="!row?.isActive" class="
+                    label label-rounded label-warning label-pill label-inline
+                    mr-2
+                  ">{{ "ACTIONS.INACTIVE" | translate }}</span>
+            </td>
+
+            <!-- 4 -->
+            <td>
+              <!-- <button
+              *appPrivileges="'PRV_ED_ROL'"
+              class="btn btn-sm btn-clean btn-icon mr-1">
+              <span [inlineSVG]="'/assets/media/svg/icons/General/Trash.svg'" cacheSVG="true"
+                class="svg-icon svg-icon-md svg-icon-danger" (click)="deleteRole(row?.id)"></span>
+            </button> -->
+
+              <button *appPrivileges="'PRV_ED_ROL'" class="btn btn-sm btn-clean btn-icon mr-1"
+                      [routerLink]="['edit', row.id]">
+                    <span [inlineSVG]="'./assets/media/svg/icons/Design/Edit.svg'" cacheSVG="true"
+                          class="svg-icon svg-icon-md svg-icon-primary"></span>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="spinner-container m-auto p-10" *ngIf="loading">
+          <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+        </div>
+        <pagination-controls previousLabel="Prev" nextLabel="Next" responsive="true" id="paging"
+                             (pageChange)="pageChange($event)"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

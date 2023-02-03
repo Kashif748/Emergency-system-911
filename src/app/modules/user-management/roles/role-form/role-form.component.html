@@ -1,0 +1,226 @@
+<div class="container">
+  <div class="card card-custom gutter-b">
+    <div class="card-header d-flex">
+      <mat-toolbar class="bg-white">
+        <button [routerLink]="['/user-management/roles']" class="
+            btn btn-sm btn-light-primary
+            font-weight-bolder
+            cursor-pointer
+            mx-2
+          " matTooltip="{{ 'SHARED.BACK' | translate }}">
+          <span inlineSVG="{{
+              lang == 'en'
+                ? '/assets/media/svg/icons/Navigation/Arrow-left.svg'
+                : '/assets/media/svg/icons/Navigation/Arrow-right.svg'
+            }}" cacheSVG="true" class="svg-icon svg-icon-lg" title="{{ 'SHARED.BACK' | translate }}"></span>
+        </button>
+        <div>
+          <h3 *ngIf="!id" class="card-title">
+            {{ "USER_MANAGEMENT.ROLES.CREATE.TITLE" | translate }}
+          </h3>
+          <h3 *ngIf="id" class="card-title">
+            {{ "USER_MANAGEMENT.ROLES.EDIT.TITLE" | translate }}
+          </h3>
+        </div>
+      </mat-toolbar>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (onSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-md">
+            <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+              <mat-label>{{ "ROLES.N_En" | translate }}
+                <span class="required-asterisk">*</span>
+              </mat-label>
+              <input matInput formControlName="nameEn" type="text" />
+              <mat-error *ngIf="handleError('nameEn', 'required')">
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md">
+            <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+              <mat-label>{{ "ROLES.N_Ar" | translate }}
+                <span class="required-asterisk">*</span>
+              </mat-label>
+
+              <input matInput formControlName="nameAr" type="text" />
+              <mat-error *ngIf="handleError('nameAr', 'required')">
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md">
+            <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+              <mat-label>{{ "ROLES.D_En" | translate }}
+                <span class="required-asterisk">*</span>
+              </mat-label>
+
+              <textarea matInput formControlName="desEn" rows="7"></textarea>
+
+              <mat-error *ngIf="handleError('desEn', 'required')">
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md">
+            <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="outline">
+              <mat-label>{{ "ROLES.D_Ar" | translate }}
+                <span class="required-asterisk">*</span>
+              </mat-label>
+
+              <textarea matInput formControlName="desAr" rows="7"></textarea>
+
+              <mat-error *ngIf="handleError('desAr', 'required')">
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>
+                {{ "AUTH.LOGIN.Organizations" | translate }}
+                <span class="required-asterisk">*</span>
+              </mat-label>
+
+              <mat-select formControlName="orgId" (selectionChange)="getPrivileges(form.get('orgId').value)">
+                <mat-option *ngFor="let org of orgs$ | async" [value]="org.id">
+                  <span *ngIf="lang == 'en'">
+                    {{ org.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                  </span>
+                  <span *ngIf="lang == 'ar'">
+                    {{ org.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                  </span>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <div class="row align-items-center h-100p">
+              <div class="col-md-4">
+                <mat-slide-toggle formControlName="isActive" class="m-auto">
+                  <span class="mx-4">
+                    {{
+                      (form.get("isActive").value
+                        ? "ACTIONS.ACTIVE"
+                        : "ACTIONS.INACTIVE"
+                      ) | translate
+                    }}</span>
+                </mat-slide-toggle>
+              </div>
+              <div class="col-md-8">
+                <mat-slide-toggle formControlName="inherited" class="m-auto">
+                  <span class="mx-4">
+                    {{
+                      "USER_MANAGEMENT.ROLES.PIVILEGES.INHERITED" | translate
+                    }}</span>
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-5">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true" formGroupName="privileges">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ "USER_MANAGEMENT.ROLES.PIVILEGES.TITLE" | translate }}
+                </mat-panel-title>
+                <mat-panel-description> </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div>
+                <div *ngIf="!(modules$ | async) && !loading">
+                  {{ "USER_MANAGEMENT.ROLES.PIVILEGES.SELECT_ORG" | translate }}
+                </div>
+                <div class="spinner-container m-auto p-10" *ngIf="loading">
+                  <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+                </div>
+                <div *ngIf="modules$ | async as modules">
+                  <div *ngIf="modules?.length == 0 && !loading">
+                    {{
+                      "USER_MANAGEMENT.ROLES.PIVILEGES.NO_PIVILEGES" | translate
+                    }}
+                  </div>
+                  <div *ngFor="let item of modules">
+                    <ng-container formGroupName="{{ item.module.id }}">
+                      <div class="card card-custom card-custom my-5">
+                        <div class="card-header d-flex">
+                          <div class="card-title">
+                            <h3 class="card-label text-success">
+                              {{ item.module | propTranslator: "name" }}
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                            <ng-container *ngFor="let privilege of item.privileges">
+                              <div class="py-2 col-lg-4 px-4">
+                                <mat-checkbox class="d-flex align-items-center" [id]="getcamelCase(privilege.nameEn)" (change)="
+                                    checkParent(
+                                      $event,
+                                      privilege,
+                                      item.module.id
+                                    )
+                                  " formControlName="{{ privilege.id }}">
+                                  {{ privilege | propTranslator: "name" }}
+                                </mat-checkbox>
+                              </div>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+        <div *ngIf="privilegesErrMsg" class="
+            alert alert-custom
+            mx-auto
+            p-0
+            max-w-400px
+            w-100
+            alert-secondary
+            fade
+            show
+            my-2
+          " role="alert">
+          <div class="alert-icon"><i class="flaticon-warning"></i></div>
+          <div class="alert-text">
+            {{ "USER_MANAGEMENT.ROLES.PIVILEGES.SELECT_ONE" | translate }}
+          </div>
+          <div class="alert-close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+              (click)="privilegesErrMsg = false">
+              <span aria-hidden="true"><i class="ki ki-close"></i></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 text-center">
+            <button mat-flat-button class="w-md-50" color="primary" *ngIf="!id" (click)="onSubmit()">
+              {{ "SHARED.CREATE" | translate }}
+            </button>
+            <button mat-flat-button class="w-md-50" color="warn" *ngIf="id" (click)="onSubmit()">
+              {{ "SHARED.UPDATE" | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -285,7 +285,7 @@
               <mat-icon *ngIf="row?.status?.id === 1">update</mat-icon>
             </span>
 
-            <span>{{ row[columnValues.SR_NO] }}</span>
+            <span dir="ltr">{{ row[columnValues.YEAR] }} / {{ row[columnValues.SERIAL] }}</span>
           </td>
           <td *ngIf="showRow(columnValues.SUBJECT)" class="subject">
             <span>

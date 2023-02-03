@@ -98,7 +98,7 @@
             <tr>
               <!-- 1 -->
               <th mat-sort-header="id">
-                {{ "INCIDENTS.SR_NO" | translate }}
+                {{ "INCIDENTS.SERIAL" | translate }}
               </th>
               <!-- 2 -->
               <th mat-sort-header="subject">
@@ -144,8 +144,8 @@
             >
               <!-- 1 -->
               <td>
-                {{ element?.id }} /
-                {{ element?.createdOn | customDate | date : "yyyy" }}
+                {{ element?.year }} /
+                {{ element?.serial }}
               </td>
               <!-- 2 -->
               <td>
