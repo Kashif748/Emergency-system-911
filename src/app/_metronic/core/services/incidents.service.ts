@@ -135,6 +135,7 @@ export class IncidentsService implements Resolve<any> {
       .append('emergencylevel', search.emergencyLevels ?? '')
       .append('fromDate', search.createdDate ?? '')
       .append('id', search.sr ?? '')
+      .append('serial', search.serial ?? '')
       .append('priority', search.priority ?? '')
       .append('status', search.status ?? '')
       .append('subject', search.subject ?? '')
@@ -785,6 +786,7 @@ export class IncidentsService implements Resolve<any> {
       .append('priority', search?.priority ?? '')
       .append('status', search?.status ?? '')
       .append('incidentId', search?.incidentId ?? '')
+      .append('serial', search?.serial ?? '')
       .append('page', page)
       .append('size', `${size ?? 10}`);
 
@@ -818,6 +820,7 @@ export class IncidentsService implements Resolve<any> {
       .append('priority', search?.priority ?? '')
       .append('status', search?.status ?? '')
       .append('incidentId', search?.incidentId ?? '')
+      .append('serial', search?.incidentId ?? '')
       .append('page', page)
       .append('size', `${size ?? 10}`);
 

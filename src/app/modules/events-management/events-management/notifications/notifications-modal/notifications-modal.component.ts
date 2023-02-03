@@ -38,9 +38,9 @@ export class NotificationsModalComponent implements OnInit {
 
   createForm() {
     this.formGroup = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      name: [{ value: '', disabled: true }, [Validators.required]],
       active: [true, [Validators.required]],
-      code: ['', Validators.required],
+      code: [{ value: '', disabled: true }, Validators.required],
       emailNotif: [true, Validators.required],
       smsNotif: [true, Validators.required],
       pushNotif: [true, Validators.required],
@@ -64,7 +64,7 @@ export class NotificationsModalComponent implements OnInit {
   }
 
   onSubmit() {
-    let newItem = this.formGroup.value;
+    let newItem = this.formGroup.getRawValue();
 
     if (this.formGroup.invalid) {
       return;

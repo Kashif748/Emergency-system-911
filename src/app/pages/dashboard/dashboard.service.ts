@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { map, switchMap, take, tap } from 'rxjs/operators';
-import { BehaviorSubject, forkJoin, Observable, Subject } from 'rxjs';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { Inew } from 'src/app/modules/news/models/new.interface';
 import { New } from 'src/app/modules/news/models/new.model';
 import { DataSourceService } from 'src/app/modules/services/data-source/data-source.service';
@@ -27,87 +27,93 @@ export class DashboardService extends DataSourceService {
 
   getIds() {
     return forkJoin({
-      incidentsLogs: this.getIncidents().pipe(
-        switchMap((tasks) => this.getIncidentsLogs(tasks))
+      incidentsLogs: this.getAll<any>(`incidents/search/list-ids`, {
+        status: 1,
+      }).pipe(
+        switchMap((ids) => this.getIncidentsLogs(ids)),
+        catchError((err) => of([]))
       ),
-      tasksLogs: this.getTasks().pipe(
-        switchMap((incidents) => this.getTasksLogs(incidents))
+      tasksForLogs: this.getAll<any>(`tasks/for-my-org/list-ids`, {}).pipe(
+        switchMap((ids) => this.getTasksLogs(ids)),
+        catchError((err) => of([]))
+      ),
+      tasksByLogs: this.getAll<any>(`tasks/by-my-org/list-ids`, {}).pipe(
+        switchMap((ids) => this.getTasksLogs(ids)),
+        catchError((err) => of([]))
       ),
     }).subscribe((res) => {
-      this.workLogs = res.incidentsLogs;
+      this.workLogs = [
+        ...res.incidentsLogs,
+        ...res.tasksByLogs,
+        ...res.tasksForLogs,
+      ];
       this.workogsChange$.next(this.workLogs);
     });
   }
-  getIncidents() {
-    return this.getAll<any>(`incidents/search`, {
-      status: 1,
-      page: 0,
-      size: 5,
-      sort: 'createdOn,desc',
-    }).pipe(map((result) => result['content']));
-  }
-  getTasks() {
-    return this.getAll<any>(`tasks/for-my-org`, {
-      status: 1,
-      page: 0,
-      size: 5,
-      sort: 'createdOn,desc',
-    }).pipe(map((result) => result['content']));
-  }
 
-  getIncidentsLogs(incidents: any[]) {
-    const ids = incidents.map((incident) => incident?.id);
-    const idsQuery = ids.join(',');
-    return this.getAll<any>(
-      `incidents/dashboard/logs?incidentIds=${idsQuery}`,
-      {
-        page: 0,
-        size: 5,
-        sort: 'createdOn,desc',
-      }
-    ).pipe(
-      map((result) => {
-        const logs = result['content'] as any[];
-        return logs.map((log) => {
-          const relatedTo = incidents.find(
-            (incident) => incident.id === log['incident']?.id
-          );
-          log['relatedTo'] = relatedTo;
-          log['type'] = 'INCIDENT';
-          log['redirect'] = '/incidents/view/' + relatedTo.id;
-          log['label'] = relatedTo?.subject;
-          log['isNew'] = false;
-          log['show'] = false;
+  getIncidentsLogs(ids: any[]) {
+    return this.http
+      .post<any>(
+        this.getFullUrl(`incidents/dashboard/logs`),
+        {
+          isAutoWorkLog: true,
+          incidentIds: ids,
+        },
+        {
+          params: {
+            page: '0',
+            size: '10',
+            sort: 'createdOn,desc',
+          },
+        }
+      )
+      .pipe(
+        map((response) => {
+          const logs = response?.result['content'] as any[];
+          return logs.map((log) => {
+            log['relatedTo'] = log?.incident;
+            log['type'] = 'INCIDENT';
+            log['redirect'] = '/incidents/view/' + log?.incident.id;
+            log['label'] = log?.incident?.subject;
+            log['isNew'] = false;
+            log['show'] = false;
 
-          return log;
-        });
-      })
-    );
+            return log;
+          });
+        })
+      );
   }
 
-  getTasksLogs(tasks: any[]) {
-    const ids = tasks.map((task) => task?.id);
-    const idsQuery = ids.join(',');
-    return this.getAll<any>(`tasks/dashboard/logs?taskIds=${idsQuery}`, {
-      page: 0,
-      size: 5,
-      sort: 'createdOn,desc',
-    }).pipe(
-      map((result) => {
-        const logs = result['content'] as any[];
-        return logs.map((log) => {
-          const relatedTo = tasks.find((task) => task.id === log['taskId']?.id);
-          log['relatedTo'] = relatedTo;
-          log['type'] = 'TASK';
-          log['redirect'] = '/tasks/view/' + relatedTo.id;
-          log['isNew'] = false;
-          log['label'] = relatedTo?.title;
-          log['show'] = false;
-
-          return log;
-        });
-      })
-    );
+  getTasksLogs(ids: any[]) {
+    return this.http
+      .post<any>(
+        this.getFullUrl(`tasks/dashboard/logs`),
+        {
+          isAutoWorkLog: true,
+          tasksIds: ids,
+        },
+        {
+          params: {
+            page: '0',
+            size: '10',
+            sort: 'createdOn,desc',
+          },
+        }
+      )
+      .pipe(
+        map((response) => {
+          const logs = response?.result['content'] as any[];
+          return logs.map((log) => {
+            log['relatedTo'] = log?.task;
+            log['type'] = 'TASK';
+            log['redirect'] = '/tasks/view/' + log?.task?.id;
+            log['isNew'] = false;
+            log['label'] = log?.task?.title;
+            log['show'] = false;
+            return log;
+          });
+        })
+      );
   }
 
   sortLogsByDate(logs: any[]) {

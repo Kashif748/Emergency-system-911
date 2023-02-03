@@ -130,6 +130,7 @@ export class TasksComponent implements OnInit, OnDestroy {
       dueDate: [''],
       desc: [''],
       incidentId:[''],
+      serial :['']
     });
   }
 
@@ -275,6 +276,7 @@ export class TasksComponent implements OnInit, OnDestroy {
       desc: '',
       title: '',
       incidentId:'',
+      serial: ''
     });
   }
 
@@ -285,7 +287,8 @@ export class TasksComponent implements OnInit, OnDestroy {
       dueDate: '',
       desc: '',
       title: '',
-      incidentId:''
+      incidentId:'',
+      serial :''
     });
   }
 

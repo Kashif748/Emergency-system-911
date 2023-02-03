@@ -1,0 +1,65 @@
+.card-item {
+  background: linear-gradient(60deg, #26c6da, #00acc1);
+  box-shadow: 0 3px 10px 3px rgb(0 0 0 / 14%), 0 7px 10px -8px rgb(0 188 212 / 40%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+
+  .item-icon {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 25px;
+    }
+  }
+
+  .item-text {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h5 {
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    h4 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+table {
+  width: 100%;
+}
+
+.failed-status, .success-status {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.failed-status {
+  background: #f24747;
+}
+
+.success-status {
+  background: #45d356;
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+  pointer-events: none !important;
+}

@@ -109,7 +109,7 @@
                 class="form-element example-full-width">
                 <mat-label>{{ "TASK.TASK_INCIDENT_ID" | translate }}</mat-label>
                 <input matInput type="text" placeholder="{{ 'TASK.TASK_INCIDENT_ID' | translate }}"
-                  formControlName="incidentId" />
+                  formControlName="serial" />
               </mat-form-field>
             </div>
           </div>
@@ -225,7 +225,8 @@
             </td>
             <td class="pl-0">
               <p class="mb-0 font-size-lg">
-                {{ task?.incident.id }}
+                {{ task?.incident.serial }}
+
               </p>
             </td>
             <!-- 4 -->
@@ -363,7 +364,7 @@
             </td>
             <td class="pl-0">
               <p class="mb-0 font-size-lg">
-                {{ task?.incident.id }}
+                {{ task?.incident.serial }}
               </p>
             </td>
             <!-- 4 -->

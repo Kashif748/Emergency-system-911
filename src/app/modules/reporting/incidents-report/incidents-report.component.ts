@@ -71,6 +71,7 @@ export class IncidentsReportComponent implements OnInit {
     { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
     { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
     { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+    { formControlName: AdvancedSearchFieldsEnum.SERIAL },
     { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
     { formControlName: AdvancedSearchFieldsEnum.END_DATE },
     { formControlName: AdvancedSearchFieldsEnum.SUBJECT },

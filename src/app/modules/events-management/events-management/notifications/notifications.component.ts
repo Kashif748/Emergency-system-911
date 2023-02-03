@@ -76,6 +76,7 @@ export class NotificationsComponent implements OnInit {
             this.data = response['result']?.content;
             this.dataSource.data = this.data;
           }
+          this.loading = false;
         });
       }
     });

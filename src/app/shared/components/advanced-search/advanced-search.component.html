@@ -3,7 +3,7 @@
     <!-- subject -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.SUBJECT"
+      *ngIf="formFields | showFormControl : advancedSearchFields.SUBJECT"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -23,7 +23,7 @@
     <!-- id -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.SR_NO"
+      *ngIf="formFields | showFormControl : advancedSearchFields.SR_NO"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -40,10 +40,29 @@
         />
       </mat-form-field>
     </div>
-
+    <!-- Serial No -->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl : advancedSearchFields.SERIAL"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.SERIAL" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="{{ 'INCIDENTS.SERIAL' | translate }}"
+          [formControlName]="advancedSearchFields.SERIAL"
+          [id]="advancedSearchFields.SERIAL"
+        />
+      </mat-form-field>
+    </div>
     <div
       class="col-md-6"
-      *ngIf="formFields | showFormControl: advancedSearchFields.CREATED_BY"
+      *ngIf="formFields | showFormControl : advancedSearchFields.CREATED_BY"
     >
       <app-user-input
         [appearance]="'fill'"
@@ -58,7 +77,7 @@
 
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.STATUS"
+      *ngIf="formFields | showFormControl : advancedSearchFields.STATUS"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -73,8 +92,13 @@
           multiple
         >
           <mat-option
-            *ngFor="let stat of dataLists| extractDataList: advancedSearchFields.STATUS" [value]="stat.id">
-            {{ stat | propTranslator: "name" }}
+            *ngFor="
+              let stat of dataLists
+                | extractDataList : advancedSearchFields.STATUS
+            "
+            [value]="stat.id"
+          >
+            {{ stat | propTranslator : "name" }}
             <!-- <ng-container *ngIf="lang=='en'">{{ stat.nameEn }}</ng-container>
             <ng-container *ngIf="lang=='ar'">{{ stat.nameAr }}</ng-container> -->
           </mat-option>
@@ -85,7 +109,7 @@
     <!-- start date -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.CREATED_DATE"
+      *ngIf="formFields | showFormControl : advancedSearchFields.CREATED_DATE"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -111,7 +135,7 @@
     <!-- end date -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.END_DATE"
+      *ngIf="formFields | showFormControl : advancedSearchFields.END_DATE"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -139,7 +163,7 @@
     <!-- priority -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.PRIORITY"
+      *ngIf="formFields | showFormControl : advancedSearchFields.PRIORITY"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -155,11 +179,11 @@
           <mat-option
             *ngFor="
               let priority of dataLists
-                | extractDataList: advancedSearchFields.PRIORITY
+                | extractDataList : advancedSearchFields.PRIORITY
             "
             [value]="priority.id"
           >
-            {{ priority | propTranslator: "name" }}
+            {{ priority | propTranslator : "name" }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -167,7 +191,7 @@
     <!-- city -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.CITY"
+      *ngIf="formFields | showFormControl : advancedSearchFields.CITY"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -182,11 +206,12 @@
         >
           <mat-option
             *ngFor="
-              let city of dataLists | extractDataList: advancedSearchFields.CITY
+              let city of dataLists
+                | extractDataList : advancedSearchFields.CITY
             "
             [value]="city.id"
           >
-            {{ city | propTranslator: "name" }}
+            {{ city | propTranslator : "name" }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -195,7 +220,7 @@
     <!-- category -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.CATEGORY"
+      *ngIf="formFields | showFormControl : advancedSearchFields.CATEGORY"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -211,11 +236,11 @@
           <mat-option
             *ngFor="
               let category of dataLists
-                | extractDataList: advancedSearchFields.CATEGORY
+                | extractDataList : advancedSearchFields.CATEGORY
             "
             [value]="category.id"
           >
-            {{ category | propTranslator: "name" }}
+            {{ category | propTranslator : "name" }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -223,7 +248,7 @@
     <!-- reporting via -->
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.REPORTING_VIA"
+      *ngIf="formFields | showFormControl : advancedSearchFields.REPORTING_VIA"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -239,18 +264,18 @@
           <mat-option
             *ngFor="
               let rv of dataLists
-                | extractDataList: advancedSearchFields.REPORTING_VIA
+                | extractDataList : advancedSearchFields.REPORTING_VIA
             "
             [value]="rv.id"
           >
-            {{ rv | propTranslator: "name" }}
+            {{ rv | propTranslator : "name" }}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl: advancedSearchFields.IS_KPI_EXPIRED"
+      *ngIf="formFields | showFormControl : advancedSearchFields.IS_KPI_EXPIRED"
     >
       <mat-form-field
         [dir]="directionality.value"
@@ -276,7 +301,7 @@
     <div
       class="form-group col-lg-6 pl-4 pr-4"
       *ngIf="
-        formFields | showFormControl: advancedSearchFields.REPORTING_CONTACT
+        formFields | showFormControl : advancedSearchFields.REPORTING_CONTACT
       "
     >
       <mat-form-field
@@ -297,7 +322,9 @@
 
     <div
       class="col-6"
-      *ngIf="formFields | showFormControl: advancedSearchFields.RESPONSIBLE_ORG"
+      *ngIf="
+        formFields | showFormControl : advancedSearchFields.RESPONSIBLE_ORG
+      "
     >
       <app-pick-org
         [id]="advancedSearchFields.RESPONSIBLE_ORG"
@@ -312,7 +339,7 @@
 
     <div
       class="col-6"
-      *ngIf="formFields | showFormControl: advancedSearchFields.LEADING_ORG"
+      *ngIf="formFields | showFormControl : advancedSearchFields.LEADING_ORG"
     >
       <app-pick-org
         [id]="advancedSearchFields.LEADING_ORG"

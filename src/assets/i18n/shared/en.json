@@ -278,7 +278,7 @@
     },
     "MAP": {
       "TOP_BAR": {
-        "ADDRESS_SEARCH": "Enter Building Address, Street Name, District Name, AAM PLOT Adrress [DID-CID-RID-PID]"
+        "ADDRESS_SEARCH": "Sector Name, District, Street"
       }
     },
     "DASHBOARD": {
@@ -291,7 +291,7 @@
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
       "OUTDATE_TASKS": "Outdate tasks",
-      "INCOMING_CORRERSPONDENCE": "Incoming correrspondence",
+      "INCOMING_CORRERSPONDENCE": "Incoming correspondence",
       "OUTCOMING_CORRERSPONDENCE": "Outgoing correrspondence",
       "CORRERSPONDENCE": "Correspondence",
       "NEW_TASK": "Add New Task",
@@ -560,6 +560,7 @@
       "DATE": "Incident Date",
       "DESCRIPTION": "Description",
       "SR_NO": "Sr no.",
+      "SERIAL": "Sequance Number",
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
       "REPORT_INCIDENT": "Incidents",
@@ -865,7 +866,7 @@
       "DUE_DATE": "Due Date & Time",
       "DUE_TIME": "Due Time",
       "STATUS": "Status",
-      "TASK_INCIDENT_ID": "Incident Id",
+      "TASK_INCIDENT_ID": "Incident Serial",
       "REQUIRED_QUANTITY": "Required Quantity",
       "AVAILABLE_QUANTITY": " Available Quantity",
       "PROVISIONAL_QUANTITY": "Provisional Qauntity",

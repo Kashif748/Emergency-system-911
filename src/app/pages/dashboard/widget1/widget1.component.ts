@@ -47,11 +47,10 @@ export class Widget1Component implements OnInit, OnDestroy {
         tap((data) => {
           this.checkChanges(this.statistics, this._dashboardService.statistics);
           this.statistics = this._dashboardService.statistics;
-          if (
-            this.statistics?.delayedTasks &&
-            !this.statistics?.delayedTasks.toString().includes('/')
-          ) {
-            this.statistics.delayedTasks = ` ${this.statistics?.incomingTasks} / ${this.statistics?.delayedTasks}`;
+          if (this.statistics['delayedTasks'] >= 0) {
+            this.statistics[
+              'delayedTasks'
+            ] = ` ${this.statistics?.incomingTasks} / ${this.statistics?.delayedTasks}`;
           }
           if (this.statistics !== null) {
             this.loadingSubject.next(true);
