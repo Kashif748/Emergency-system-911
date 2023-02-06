@@ -290,7 +290,7 @@
       "REJECTED_INCIDENTS": "Rejected Incidents",
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
-      "OUTDATE_TASKS": "Outdate tasks",
+      "OUTDATE_TASKS": "tasks / late tasks",
       "INCOMING_CORRERSPONDENCE": "Incoming correspondence",
       "OUTCOMING_CORRERSPONDENCE": "Outgoing correrspondence",
       "CORRERSPONDENCE": "Correspondence",
@@ -328,7 +328,7 @@
       "REGISTERED_INCIDENTS": "Registered Incidents (Today)",
       "UNDER_EVALUATION_INCIDENTS": "Under Evaluation Incidents",
       "LATE_INCIDENTS": "Late Incidents",
-      "COMPLETED_INCIDENTS": "Completed Incidents",
+      "COMPLETED_INCIDENTS": "Completed Incidents (today)",
       "INCOMING_LATE_TASK": "Incoming/Late Tasks",
       "TASK": "Task",
       "INCIDENT": "Incident"

@@ -42,11 +42,12 @@ export class DashboardService extends DataSourceService {
         catchError((err) => of([]))
       ),
     }).subscribe((res) => {
-      this.workLogs = [
+      const logs = [
         ...res.incidentsLogs,
         ...res.tasksByLogs,
         ...res.tasksForLogs,
       ];
+      this.workLogs = this.sortLogsByDate(logs);
       this.workogsChange$.next(this.workLogs);
     });
   }
@@ -56,7 +57,7 @@ export class DashboardService extends DataSourceService {
       .post<any>(
         this.getFullUrl(`incidents/dashboard/logs`),
         {
-          isAutoWorkLog: true,
+          isAutoWorkLog: null,
           incidentIds: ids,
         },
         {
@@ -89,7 +90,7 @@ export class DashboardService extends DataSourceService {
       .post<any>(
         this.getFullUrl(`tasks/dashboard/logs`),
         {
-          isAutoWorkLog: true,
+          isAutoWorkLog: null,
           tasksIds: ids,
         },
         {
@@ -104,11 +105,11 @@ export class DashboardService extends DataSourceService {
         map((response) => {
           const logs = response?.result['content'] as any[];
           return logs.map((log) => {
-            log['relatedTo'] = log?.task;
+            log['relatedTo'] = log?.taskId;
             log['type'] = 'TASK';
-            log['redirect'] = '/tasks/view/' + log?.task?.id;
+            log['redirect'] = '/incidents/viewTask/' + log?.taskId?.id;
             log['isNew'] = false;
-            log['label'] = log?.task?.title;
+            log['label'] = log?.taskId?.title;
             log['show'] = false;
             return log;
           });

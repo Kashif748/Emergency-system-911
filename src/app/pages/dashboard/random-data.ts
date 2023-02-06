@@ -85,7 +85,7 @@ export const data = {
     // },
     {
       title: 'OUTDATE_TASKS',
-      icon: 'Custome/Group 1139',
+      icon: 'Communication/Clipboard-list',
       value: 'delayedTasks',
       color: 'text-dark-75',
       url: '/incidents/tasks/outdate',
