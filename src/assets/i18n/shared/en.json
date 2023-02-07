@@ -559,7 +559,7 @@
       "REPORTINGVIA": "Reporting Via",
       "DATE": "Incident Date",
       "DESCRIPTION": "Description",
-      "SR_NO": "Sr no.",
+      "SR_NO": "Id",
       "SERIAL": "Sequance Number",
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
@@ -1356,6 +1356,7 @@
     "VALIDATION_MSG": {
       "INVALID_FILE_SIZE": "{0}: Invalid file size,",
       "MAX_UPLOAD_SIZE": "maximum upload size is {0}.",
+      "MAX_LENGHT": "The maximum number of characters allowed is {{max}}.",
       "REQUIRED": "This field is required.",
       "EMIRATE_ID": {
         "INVALID": "Emirate ID must be only 15 digit(0-9)."
