@@ -1,5 +1,6 @@
 export enum EditResourceFormField {
     CATEGORY = 'category',
+    MAIN_CATEGORY = 'main_category',
     ORGANIZATION_CATEGORY = 'organization_category',
     SERIAL_NUMBER = 'serialNo',
     IMAGE = 'image',

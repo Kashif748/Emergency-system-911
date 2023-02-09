@@ -1245,7 +1245,9 @@
       "DATAMESSAGE": "لا يوجد بيانات ",
       "SR_NO": "الرقم",
       "CREATE_ASSET_POINT": "انشاء نقاط المورد",
-      "SAME_LOCATION": "نفس موقع الجهة"
+      "SAME_LOCATION": "نفس موقع الجهة",
+      "MAIN_CATEGORY": "التصنيف الرئيسي",
+      "ORG_SUB_CATEGORY": "التصنيف المؤسسي الفرعي"
     },
     "EVENTSMODULES": {
       "correspondenceStatus": "حالات المراسلات",
@@ -1321,6 +1323,8 @@
       "RANKS": "الرتب",
       "ADD_RANK": "اضافة رتبة",
       "MOBILE_VERSIONS": "نسخة الهاتف",
+      "MODULE_NAME": "اسم الموديول",
+      "NOTIFICATION_MANAGEMENT": "ادارة التنبيهات",
       "ADD_MOBILE_VERSION": "إضافة نسخة",
       "IS_ACTIVE": "مفعل",
       "YES": "نعم",
@@ -1335,7 +1339,17 @@
       "SMS_NOTI": "إشعارات الرسائل القصيرة",
       "PUSH_NOTI": "إشعارات في الخلفية",
       "NAME": "الاسم",
-      "LAST_UPDATE_DATE": "اخر تاريخ تحديث"
+      "LAST_UPDATE_DATE": "اخر تاريخ تحديث",
+      "ID": "الرمز",
+      "TEMPLATE": "نموذج",
+      "TITLE_EN": "العنوان بالانجليزية",
+      "TITLE_AR": "العنوان بالعربي",
+      "BODY_En": "النص بالانجليزية",
+      "BODY_Ar": "النص بالعربية",
+      "COPY_CLIPBOARD": "حفظ",
+      "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
+      "PUSH_NOTIFICATION": "تنبيهات البرنامج",
+      "WORKLOG": "نموذج سجل المهمة/البلاغ"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",

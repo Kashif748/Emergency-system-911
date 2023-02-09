@@ -135,6 +135,13 @@
             <app-navigations></app-navigations>
           </div>
           <div
+            *ngIf="currentTab == 'NOTIFICATION_MANAGEMENT'"
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            class="w-100"
+          >
+            <app-notification-management></app-notification-management>
+          </div>
+          <div
             *ngIf="currentTab == 'kpi'"
             [dir]="lang === 'en' ? 'ltr' : 'rtl'"
             class="w-100"

@@ -79,24 +79,39 @@
         <div class="col-md">
           <mat-form-field [dir]="dir.value" appearance="outline">
             <mat-label>
-              {{ "RESOURCE.CATEGORY" | translate }}
+              {{ "RESOURCE.MAIN_CATEGORY" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+            <mat-select
+              (selectionChange)="mainOrgChange($event)"
+              [formControlName]="EditResourceFormFields.MAIN_CATEGORY"
+              [id]="EditResourceFormFields.MAIN_CATEGORY">
+                <mat-option
+                  *ngFor="let mainCategory of assetMainCategories"
+                  [value]="mainCategory.id">
+                  {{ mainCategory | propTranslator: "name" }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md">
+          <mat-form-field [dir]="dir.value" appearance="outline">
+            <mat-label>
+              {{ "RESOURCE.ORG_SUB_CATEGORY" | translate }}
               <span class="required-asterisk">*</span>
             </mat-label>
             <mat-select
               [formControlName]="EditResourceFormFields.CATEGORY"
-              [id]="EditResourceFormFields.CATEGORY"
-            >
-              <mat-optgroup
-                *ngFor="let mainCategory of assetMainCategories"
-                [label]="mainCategory | propTranslator: 'name'"
-              >
+              [id]="EditResourceFormFields.CATEGORY">
+              <div
+                *ngFor="let mainCategory of assetMainCategories">
                 <mat-option
                   *ngFor="let assetCategory of mainCategory.children"
-                  [value]="assetCategory.id"
-                >
+                  [value]="assetCategory.id">
                   {{ assetCategory | propTranslator: "name" }}
                 </mat-option>
-              </mat-optgroup>
+              </div>
             </mat-select>
           </mat-form-field>
         </div>

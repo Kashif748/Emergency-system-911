@@ -437,20 +437,22 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
           //     title: 'Municipality',
           //   },
           // ],
-          url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
+          // url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
+          url: `arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
           id: 'MunicipalityImage',
           title: 'Municipality',
           opacity: 0.5,
           sublayers: [
             {
-              id: 20,
+              id: 3,
               visible: true,
+              // title: 'Municipality Areas',
               title: 'Municipality Areas',
             },
           ],
         } as __esri.MapImageLayerProperties);
 
-      const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
+/*      const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
           id: 'TAWAJUDI_FACILITIES_IMAGE_LAYER',
@@ -463,10 +465,23 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               title: 'Tawajudi Facilities',
             },
           ],
-        } as __esri.MapImageLayerProperties);
+        } as __esri.MapImageLayerProperties);*/
 
       const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
+              new MapImageLayer({
+        url: `arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+        id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
+        tilte: 'Districts',
+        transparent: true,
+        minScale: 1155600,
+        sublayers: [
+          {
+            id: 2,
+            visible: true,
+          },
+        ],
+      } as __esri.MapImageLayerProperties);
+/*        new MapImageLayer({
           url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
             this.lang == 'ar' ? '_Ara' : '_Eng'
           }/MapServer`,
@@ -480,10 +495,24 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               visible: true,
             },
           ],
-        } as __esri.MapImageLayerProperties);
+        } as __esri.MapImageLayerProperties);*/
 
       const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
+          url: `arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+          id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
+          tilte: 'Plots',
+          transparent: true,
+          minScale: 10000,
+          sublayers: [
+            {
+              id: 0,
+              visible: true,
+              // tilte: 'Plots',
+            },
+          ],
+        } as __esri.MapImageLayerProperties);
+/*        new MapImageLayer({
           url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
           id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
           tilte: 'Plots',
@@ -496,7 +525,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               // tilte: 'Plots',
             },
           ],
-        } as __esri.MapImageLayerProperties);
+        } as __esri.MapImageLayerProperties);*/
 
       this.ONWANI_SEARCH_DZSP_IMAGE_LAYER = new MapImageLayer({
         // url: '/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer',
@@ -665,7 +694,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
           // ONWANI_ADDRESSING_IMAGE_LAYER,
           // DistrictMapLayer,
           // CommunityMapLayer,
-          TAWAJUDI_FACILITIES_IMAGE_LAYER,
+          // TAWAJUDI_FACILITIES_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER,
@@ -1947,13 +1976,16 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     if (close_Date == null) {
       close_Date = '';
     }
+    if (create_Date == null) {
+      create_Date = '';
+    }
     const dialogDesign = `<table class="table table-bordered">
     <thead></thead>
     <tbody>
       <tr>
         <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.SUBJECT'
-        )}:</th>
+      'INCIDENTS.SUBJECT'
+    )}:</th>
         <td>{NAME}</td>
       </tr>
       
@@ -1961,6 +1993,12 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
         <th scope="row">${this.translationService.translateAWord(
       'INCIDENTS.CREATION_DATE')}:</th>
         <td>${create_Date}</td>
+      </tr>
+      
+      <tr>
+        <th scope="row">${this.translationService.translateAWord(
+      'INCIDENTS.CLOSE_DATE')}:</th>
+        <td>${close_Date}</td>
       </tr>
       
       <tr>

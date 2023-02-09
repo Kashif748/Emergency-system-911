@@ -1212,7 +1212,9 @@
       "DATAMESSAGE": "No Data Found!",
       "SR_NO": "Serial Number",
       "SAME_LOCATION": "Same as Organization Location",
-      "CREATE_ASSET_POINT": "Create Asset Point"
+      "CREATE_ASSET_POINT": "Create Asset Point",
+      "MAIN_CATEGORY": "Main Category",
+      "ORG_SUB_CATEGORY": "Organizational Sub Category"
     },
     "EVENTSMODULES": {
       "correspondenceStatus": "Correspondence Status",
@@ -1288,6 +1290,7 @@
       "RANKS": "Ranks",
       "ADD_RANK": "Add Rank",
       "MOBILE_VERSIONS": "Mobile Version",
+      "NOTIFICATION_MANAGEMENT": "Notification Management",
       "ADD_MOBILE_VERSION": "Add version",
       "IS_ACTIVE": "Active",
       "YES": "Yes",
@@ -1297,12 +1300,26 @@
       "RELEASE_NOTE": "Release note",
       "VERSION_NAME": "Version name",
       "VERSION_NUMBER": "Version number",
-      "NOTIFICATIONS": "Notifications Events",
+	  "NOTIFICATIONS": "Notifications Events",
       "EMAIL_NOTI": "Email Notification",
       "SMS_NOTI": "SMS Notification",
       "PUSH_NOTI": "Push Notification",
       "NAME": "Name",
-      "LAST_UPDATE_DATE": "Last Update Date"
+      "LAST_UPDATE_DATE": "Last Update Date",
+	   "MODULE_NAME": "Module Name",
+      "ID": "id",
+      "TEMPLATE": "Template",
+      "TITLE_EN": "Title En",
+      "TITLE_AR": "Title Ar",
+      "BODY_En": "Body En",
+      "BODY_Ar": "Body Ar",
+      "NAME": "Name",
+      "NAME_En": "Name En",
+      "NAME_Ar": "Name Ar",
+      "SMS_NOTIFICATION": "SMS Notification",
+      "PUSH_NOTIFICATION": "Push Notification",
+      "WORKLOG": "Worklog Templates",
+      "COPY_CLIPBOARD": "Copy to clipboard"
     },
     "NEWS": {
       "NEWS": "News",
