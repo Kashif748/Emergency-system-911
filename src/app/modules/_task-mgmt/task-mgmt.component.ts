@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ILangFacade } from '@core/facades/lang.facade';
 
 @Component({
   selector: 'app-task-mgmt',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TaskMgmtComponent implements OnInit {
 
-  constructor() { }
+  constructor(private lang: ILangFacade) {}
+
 
   ngOnInit() {
   }

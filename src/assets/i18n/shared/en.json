@@ -1454,6 +1454,10 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "PRIORITY": "Priority",
+      "DUE_DATE":"Due Date & Time",
+      "ASSIGNEE": "Assignee",
+      "INCIDENT_ID": "Incident Id",
       "PHOTO_EDITOR": "Photo Editor",
       "PRIVILEGES": "Privileges",
       "NO_IMAGE": "No image",
