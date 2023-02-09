@@ -22,7 +22,7 @@
       "dateBefore": "التأريخ قبل",
       "dateAfter": "التأريخ بعد",
       "custom": "تخصيص",
-      "clear": "واضح",
+      "clear": "مسح",
       "apply": "أضافة",
       "matchAll": "يطابق الكل",
       "matchAny": "لا يطافق احد",
@@ -1447,6 +1447,10 @@
       "NEW_SUGG": "مقترح جديد"
     },
     "SHARED": {
+      "PRIORITY": "الاهمية",
+      "DUE_DATE":"تاريخ ووقت الاستحقاق",
+      "ASSIGNEE": "المحال إليه",
+      "INCIDENT_ID": "رقم البلاغ",
       "PHOTO_EDITOR": "محرر الصور",
       "PRIVILEGES": "الصلاحيات",
       "NO_IMAGE": "لا يوجد صورة",
