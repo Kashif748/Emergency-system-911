@@ -46,7 +46,11 @@ export class ExportDialogComponent implements OnInit {
     });
   }
   export(selectedColumns: MatListOption[], isPDF): void {
-    const options = selectedColumns.map((item) => item.value);
+    let options = selectedColumns.map((item) => item.value);
+    const keys = this.columns.map(col =>col.key);
+    options = options.sort(
+      (a, b) => keys.indexOf(a) - keys.indexOf(b)
+    );
     this.exportReport.emit({ selectedColumns: options, isPDF: isPDF });
     this.closeDialog();
   }

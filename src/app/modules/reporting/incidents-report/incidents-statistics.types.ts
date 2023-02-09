@@ -80,6 +80,11 @@ export const COLUMNS = [
     nameEn: 'CENTER',
   },
   {
+    key: 'locationUrl',
+    nameEn: 'LOCATION URL',
+    nameAr: 'رابط الموقع',
+  },
+  {
     key: 'reporterName',
     nameAr: 'اسم المبلغ',
     nameEn: 'REPORTER NAME',
