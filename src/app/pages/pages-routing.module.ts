@@ -261,6 +261,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'emergencies-phonebook',
+        loadChildren: () =>
+          import('../modules/emergencies-phonebook/emergencies-phonebook.module').then(
+            (m) => m.EmergenciesPhonebookModule
+          ),
+      },
+      {
         path: 'incidents',
         // canLoad: [PrivilegeGuard],
         // data: { permission: "PRIV_VW_INC" },
