@@ -95,11 +95,6 @@ export const COLUMNS = [
     nameEn: 'REPORTER NUMBER',
   },
   {
-    key: 'reportedBy',
-    nameEn: 'REPORTED BY',
-    nameAr: 'تم الإبلاغ عبر',
-  },
-  {
     key: 'timeTakenToCloseText',
     nameAr: 'الوقت المستغرق للاغلاق - نص',
     nameEn: 'TIME TAKEN TO CLOSE - Text',
