@@ -1291,7 +1291,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
                 const featureSet = await this.mapService.queryGraphic(
                   layer,
                   'incident',
-                  this.id
+                  this.incidentId
                 );
                 const graphics = featureSet?.features?.map((g) => {
                   g.setAttribute('NAME', prepareObj.subject);

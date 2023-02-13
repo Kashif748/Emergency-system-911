@@ -157,6 +157,13 @@ export const commonDataItem = [
     endPoint: '',
   },
   {
+    key: 'NOTIFICATION_MANAGEMENT',
+    icon: 'General/Notifications1',
+    type: '',
+    hidden: true,
+    endPoint: '',
+  },
+  {
     key: 'RANKS',
     icon: 'Media/DVD',
     type: '',

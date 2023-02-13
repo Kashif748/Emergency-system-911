@@ -77,7 +77,8 @@
   }
   .p-inputgroup-addon:first-child,
   .p-inputgroup button:first-child,
-  .p-inputgroup input:first-child {
+  .p-inputgroup input:first-child,
+  .p-calendar-w-btn .p-inputtext {
     border-radius: 0 !important;
     border-bottom-right-radius: 3px !important;
     border-top-right-radius: 3px !important;
@@ -88,7 +89,8 @@
   .p-inputgroup-addon:last-child,
   .p-inputgroup button:last-child,
   .p-inputgroup input:last-child,
-  .p-inputgroup .p-float-label:last-child input {
+  .p-inputgroup .p-float-label:last-child input,
+  .p-calendar-w-btn .p-datepicker-trigger {
     border-radius: 0 !important;
     border-top-left-radius: 3px !important;
     border-bottom-left-radius: 3px !important;

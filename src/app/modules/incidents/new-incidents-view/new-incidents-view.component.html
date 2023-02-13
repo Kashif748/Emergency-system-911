@@ -279,7 +279,7 @@
             class="kpi"
             [ngClass]="getKpiPeriodClass(row['timeTakenPercentage'])"
           ></td>
-          <td *ngIf="showRow(columnValues.SR_NO)" class="number">
+          <td *ngIf="showRow(columnValues.SERIAL)" class="number">
             <span>
               <mat-icon *ngIf="row?.status?.id === 2">task_alt</mat-icon>
               <mat-icon *ngIf="row?.status?.id === 1">update</mat-icon>
@@ -454,8 +454,9 @@
           *ngFor="let row of data | paginate: paginationConfig"
           (click)="navigateTo(navigationViews.VIEW_INQURY, row['id'])"
         >
-          <td *ngIf="showRow(columnValues.SR_NO)" class="id">
-            <span>{{ row[columnValues.SR_NO] }}</span>
+          <td *ngIf="showRow(columnValues.SERIAL)" class="id">
+
+            <span dir="ltr">{{ row[columnValues.YEAR] }} / {{ row[columnValues.SERIAL] }}</span>
           </td>
           <td *ngIf="showRow(columnValues.SUBJECT)" class="subject">
             <span>{{ row[columnValues.SUBJECT] }}</span>
@@ -505,8 +506,8 @@
             navigateTo(this.navigationViews.VIEW_INTERIM_INCIDENT, row['id'])
           "
         >
-          <td *ngIf="showRow(columnValues.SR_NO)" class="sr_no">
-            {{ row[columnValues.SR_NO] }}
+          <td *ngIf="showRow(columnValues.SERIAL)" class="sr_no">
+            <span dir="ltr">{{ row[columnValues.YEAR] }} / {{ row[columnValues.SERIAL] }}</span>
           </td>
           <td *ngIf="showRow(columnValues.DESCRIPTION)" class="subject">
             <span>{{ row[columnValues.DESCRIPTION] }}</span>

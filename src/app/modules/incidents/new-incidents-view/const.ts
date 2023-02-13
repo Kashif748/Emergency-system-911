@@ -37,7 +37,7 @@ export enum RowValueEnum {
 
 export const COLUMNS = {
   Incidents: [
-    { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
+    // { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
     { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
     {
       name: 'INCIDENTS.INCIDENT_SUBJECT',
@@ -62,7 +62,8 @@ export const COLUMNS = {
     { name: 'INCIDENTS.TASKS', value: 'tasks', order: 10 },
   ],
   Inquiries: [
-    { value: 'id', name: 'INCIDENTS.INQUIRIES.ID', order: 1 },
+    // { value: 'id', name: 'INCIDENTS.INQUIRIES.ID', order: 1 },
+    { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
     { value: 'subject', name: 'INCIDENTS.INQUIRIES.SUBJECT', order: 2 },
     {
       value: 'createdDate',
@@ -76,7 +77,8 @@ export const COLUMNS = {
     },
   ],
   InterimIncidents: [
-    { name: 'INCIDENTS.SR_NO', value: 'serial', order: 1 },
+    { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
+    // { name: 'INCIDENTS.SR_NO', value: 'serial', order: 1 },
     {
       name: 'INCIDENTS.INCIDENT_SUBJECT',
       value: 'description',

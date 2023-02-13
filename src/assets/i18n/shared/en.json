@@ -290,7 +290,7 @@
       "REJECTED_INCIDENTS": "Rejected Incidents",
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
-      "OUTDATE_TASKS": "Outdate tasks",
+      "OUTDATE_TASKS": "tasks / late tasks",
       "INCOMING_CORRERSPONDENCE": "Incoming correspondence",
       "OUTCOMING_CORRERSPONDENCE": "Outgoing correrspondence",
       "CORRERSPONDENCE": "Correspondence",
@@ -328,7 +328,7 @@
       "REGISTERED_INCIDENTS": "Registered Incidents (Today)",
       "UNDER_EVALUATION_INCIDENTS": "Under Evaluation Incidents",
       "LATE_INCIDENTS": "Late Incidents",
-      "COMPLETED_INCIDENTS": "Completed Incidents",
+      "COMPLETED_INCIDENTS": "Completed Incidents (today)",
       "INCOMING_LATE_TASK": "Incoming/Late Tasks",
       "TASK": "Task",
       "INCIDENT": "Incident"
@@ -559,7 +559,7 @@
       "REPORTINGVIA": "Reporting Via",
       "DATE": "Incident Date",
       "DESCRIPTION": "Description",
-      "SR_NO": "Sr no.",
+      "SR_NO": "Id",
       "SERIAL": "Sequance Number",
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
@@ -1212,7 +1212,9 @@
       "DATAMESSAGE": "No Data Found!",
       "SR_NO": "Serial Number",
       "SAME_LOCATION": "Same as Organization Location",
-      "CREATE_ASSET_POINT": "Create Asset Point"
+      "CREATE_ASSET_POINT": "Create Asset Point",
+      "MAIN_CATEGORY": "Main Category",
+      "ORG_SUB_CATEGORY": "Organizational Sub Category"
     },
     "EVENTSMODULES": {
       "correspondenceStatus": "Correspondence Status",
@@ -1288,6 +1290,7 @@
       "RANKS": "Ranks",
       "ADD_RANK": "Add Rank",
       "MOBILE_VERSIONS": "Mobile Version",
+      "NOTIFICATION_MANAGEMENT": "Notification Management",
       "ADD_MOBILE_VERSION": "Add version",
       "IS_ACTIVE": "Active",
       "YES": "Yes",
@@ -1297,12 +1300,26 @@
       "RELEASE_NOTE": "Release note",
       "VERSION_NAME": "Version name",
       "VERSION_NUMBER": "Version number",
-      "NOTIFICATIONS": "Notifications Events",
+	  "NOTIFICATIONS": "Notifications Events",
       "EMAIL_NOTI": "Email Notification",
       "SMS_NOTI": "SMS Notification",
       "PUSH_NOTI": "Push Notification",
       "NAME": "Name",
-      "LAST_UPDATE_DATE": "Last Update Date"
+      "LAST_UPDATE_DATE": "Last Update Date",
+	   "MODULE_NAME": "Module Name",
+      "ID": "id",
+      "TEMPLATE": "Template",
+      "TITLE_EN": "Title En",
+      "TITLE_AR": "Title Ar",
+      "BODY_En": "Body En",
+      "BODY_Ar": "Body Ar",
+      "NAME": "Name",
+      "NAME_En": "Name En",
+      "NAME_Ar": "Name Ar",
+      "SMS_NOTIFICATION": "SMS Notification",
+      "PUSH_NOTIFICATION": "Push Notification",
+      "WORKLOG": "Worklog Templates",
+      "COPY_CLIPBOARD": "Copy to clipboard"
     },
     "NEWS": {
       "NEWS": "News",
@@ -1356,6 +1373,7 @@
     "VALIDATION_MSG": {
       "INVALID_FILE_SIZE": "{0}: Invalid file size,",
       "MAX_UPLOAD_SIZE": "maximum upload size is {0}.",
+      "MAX_LENGHT": "The maximum number of characters allowed is {{max}}.",
       "REQUIRED": "This field is required.",
       "EMIRATE_ID": {
         "INVALID": "Emirate ID must be only 15 digit(0-9)."
@@ -1436,6 +1454,10 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "PRIORITY": "Priority",
+      "DUE_DATE":"Due Date & Time",
+      "ASSIGNEE": "Assignee",
+      "INCIDENT_ID": "Incident Id",
       "PHOTO_EDITOR": "Photo Editor",
       "PRIVILEGES": "Privileges",
       "NO_IMAGE": "No image",

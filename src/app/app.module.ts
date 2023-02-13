@@ -52,7 +52,7 @@ registerLocaleData(localeAr);
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
-import { OrgState, RoleState, UserState } from '@core/states';
+import { OrgState, RoleState, TaskState, UserState } from '@core/states';
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -105,7 +105,7 @@ export function getHighlightLanguages() {
     DropdownListModule,
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     //------------------
-    NgxsModule.forRoot([RootState, UserState, RoleState, OrgState], {
+    NgxsModule.forRoot([RootState, UserState, RoleState, OrgState, TaskState], {
       developmentMode: !environment.production,
     }),
     NgxsAsyncStoragePluginModule.forRoot(HyperStorageEngine, {

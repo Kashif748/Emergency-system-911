@@ -35,6 +35,8 @@ import { AddEditMobileVersionComponent } from './events-management/mobile-versio
 import { MobileVersionsComponent } from './events-management/mobile-versions/mobile-versions.component';
 import { NotificationsComponent } from './events-management/notifications/notifications.component';
 import { NotificationsModalComponent } from './events-management/notifications/notifications-modal/notifications-modal.component';
+import { NotificationManagementComponent } from './events-management/notification-management/notification-management.component';
+import { NotificationFormComponent } from './events-management/notification-management/notification-form/notification-form.component';
 
 @NgModule({
   declarations: [
@@ -59,9 +61,10 @@ import { NotificationsModalComponent } from './events-management/notifications/n
     MobileVersionsComponent,
     AddEditMobileVersionComponent,
     LocalRisksComponent,
-    NotificationsComponent,
-    NotificationsModalComponent,
-  ],
+	NotificationManagementComponent,
+    NotificationFormComponent,
+	NotificationsComponent,
+    NotificationsModalComponent  ],
   imports: [
     EventsManagementRoutingModule,
     ConfirmDialogModule,

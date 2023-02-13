@@ -86,6 +86,9 @@
                 <p class="p-error mb-0" *ngIf="passwordControl?.hasError('pattern')">
                   {{ "VALIDATION_MSG.PASSWORD.INVALID" | translate }}
                 </p>
+                <p class="p-error mb-0" *ngIf="form.controls['password'].hasError('maxlength')">
+                  {{ "VALIDATION_MSG.MAX_LENGHT" | translate : {max:32} }}
+                </p>
               </ng-container>
             </div>
 

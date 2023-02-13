@@ -134,7 +134,7 @@ export class EditResourceComponent implements OnInit, OnDestroy {
       assetCategories.map((v) => v.assetsMainCategory),
       'id'
     ) as AssetMainCategory[];
-    this.assetMainCategories.forEach((v) => {
+/*    this.assetMainCategories.forEach((v) => {
       v.children = assetCategories
         .filter(
           (vChild) => vChild.assetsMainCategory.id == v.id && vChild.isActive
@@ -142,16 +142,29 @@ export class EditResourceComponent implements OnInit, OnDestroy {
         .map((v) => {
           return { id: v.id, nameAr: v.nameAr, nameEn: v.nameEn };
         });
-    });
+    });*/
     this.id = this.route.snapshot.params.id;
     if (this.id == undefined) {
       this.id = 0;
     }
     if (this.id) {
       this.currentItem = this.assetsService.getSourceItemLocal(this.id);
+      this.assetMainCategories.forEach((v) => {
+        v.children = [];
+        if (v.id === this.currentItem.category?.assetsMainCategory?.id) {
+          v.children = assetCategories
+            .filter(
+              (vChild) => vChild.assetsMainCategory.id == v.id && vChild.isActive
+            )
+            .map((v) => {
+              return { id: v.id, nameAr: v.nameAr, nameEn: v.nameEn };
+            });
+        }
+      });
       if (this.currentItem) {
         let obj = {
           category: this.currentItem.category?.id,
+          main_category: this.currentItem.category?.assetsMainCategory?.id,
           nameEn: this.currentItem.nameEn,
           nameAr: this.currentItem.nameAr,
           quantity: this.currentItem.quantity,
@@ -201,9 +214,28 @@ export class EditResourceComponent implements OnInit, OnDestroy {
     );
   }
 
+  mainOrgChange(value) {
+    const assetCategories = this.storageService.getItem('commonData')
+      ?.assetsCategory as AssetCategory[];
+    const id = this.form.get(this.EditResourceFormFields.MAIN_CATEGORY).value;
+    this.assetMainCategories.forEach((v) => {
+      v.children = [];
+      if (v.id === id) {
+        v.children = assetCategories
+          .filter(
+            (vChild) => vChild.assetsMainCategory.id == v.id && vChild.isActive
+          )
+          .map((v) => {
+            return { id: v.id, nameAr: v.nameAr, nameEn: v.nameEn };
+          });
+      }
+    });
+  }
+
   createForm() {
     this.form = this.fb.group({
       [EditResourceFormField.CATEGORY]: [null, Validators.required],
+      [EditResourceFormField.MAIN_CATEGORY]: [null, Validators.required],
       [EditResourceFormField.NAME_EN]: [null, Validators.required],
       [EditResourceFormField.NAME_AR]: [null, Validators.required],
       [EditResourceFormField.SERIAL_NUMBER]: [null],

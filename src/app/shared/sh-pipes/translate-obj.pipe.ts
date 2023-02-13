@@ -9,11 +9,23 @@ export class TranslateObjPipe implements PipeTransform {
   constructor(private langFacade: ILangFacade) {}
 
   transform(value: unknown, ...args: unknown[]): unknown {
-    const lang = this.langFacade.stateSanpshot.ActiveLang.key;
-    const prop = args[0] as string;
-    if (!value) {
+    if (!value && typeof value !== 'object') {
       return '';
     }
+    const lang = this.langFacade.stateSanpshot.ActiveLang.key;
+    if (Array.isArray(args[0])) {
+      const props = args[0] as string[];
+      let result = '';
+      props.forEach((prop) => {
+        result +=
+          value[prop + lang[0].toUpperCase() + lang.slice(1)] ??
+          value[prop + lang.toUpperCase()] ??
+          value[prop] ??
+          '' + ' ';
+      });
+      return result;
+    }
+    const prop = (args[0] as string) ?? 'name';
     const result =
       value[prop + lang[0].toUpperCase() + lang.slice(1)] ??
       value[prop + lang.toUpperCase()];

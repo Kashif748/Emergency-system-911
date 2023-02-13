@@ -391,6 +391,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     this.passwordControl = this.formBuilder.control(null, [
       Validators.required,
       Validators.pattern(RegxConst.PASSWORD_REGEX),
+      Validators.maxLength(32)
     ]);
     this.form.addControl('password', this.passwordControl);
   }
