@@ -1,0 +1,16 @@
+{
+  "PHONEBOOK": {
+    "HEADER": "Emergencies Phonebook",
+    "NEW_ITEM": "New Item",
+    "TITLE": "Title",
+    "ID": "ID",
+    "FIRST_NAME": "First Name",
+    "MIDDLE_NAME": "Middle Name",
+    "LAST_NAME": "Last Name",
+    "ORG_NAME": "Org Name",
+    "MOBILE_NUMBER": "Mobile",
+    "PHONE_NUKBER": "Phone",
+    "IS_ACTIVE": "active",
+    "JOB_TITLE": "Job Title"
+  }
+}
