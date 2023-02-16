@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IncidentReportService } from '@core/api/services/incident-report.service';
 import { ILangFacade } from '@core/facades/lang.facade';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { forkJoin, iif } from 'rxjs';
 import { catchError, skip, startWith, switchMap, tap } from 'rxjs/operators';
 import { TranslationService } from '../../i18n/translation.service';
@@ -187,21 +188,13 @@ export class IncidentsStatisticsComponent implements OnInit {
   }
 
   proccessDate(form: FormGroup) {
-    let filtersForm = form.value;
-
-    if (form.get('fromDate').value != '') {
-      filtersForm['fromDate'] = new Date(
-        form.get('fromDate').value
-      ).toLocaleDateString('en-CA');
-    }
-    if (form.get('toDate').value != '') {
-      filtersForm['toDate'] = new Date(
-        form.get('toDate').value
-      ).toLocaleDateString('en-CA');
-    }
-    if (filtersForm['toDate'] == '1970-01-01') filtersForm['toDate'] = '';
-    if (filtersForm['fromDate'] == '1970-01-01') filtersForm['fromDate'] = '';
-
-    return filtersForm;
+    return {
+      ...form.value,
+      fromDate: DateTimeUtil.format(
+        form.value?.fromDate,
+        DateTimeUtil.DATE_FORMAT
+      ),
+      toDate: DateTimeUtil.format(form.value?.toDate, DateTimeUtil.DATE_FORMAT),
+    };
   }
 }
