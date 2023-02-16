@@ -23,6 +23,8 @@ export class ContentTasksComponent implements OnInit {
   totalRecords: number;
   @Input()
   pageRequest: PageRequestModel;
+  @Input()
+  type: 'BY_MY_ORG' | 'TO_MY_ORG';
 
   assigneeMap = {
     org: { text: 'ORGANIZATION', bg: 'success' },

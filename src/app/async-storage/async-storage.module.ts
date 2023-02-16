@@ -8,6 +8,7 @@ import { NGXS_PLUGINS } from '@ngxs/store';
 
 import { NgxsAsyncStoragePlugin } from './async-storage.plugin';
 import {
+  IGNORE_SYNC_STATES,
   NgxsStoragePluginOptions,
   NGXS_STORAGE_PLUGIN_OPTIONS,
   STORAGE_ENGINE,
@@ -22,7 +23,8 @@ export const USER_OPTIONS = new InjectionToken('USER_OPTIONS');
 export class NgxsAsyncStoragePluginModule {
   static forRoot(
     engine: TypeProvider,
-    options?: NgxsStoragePluginOptions
+    options?: NgxsStoragePluginOptions,
+    ignoreSyncStates?: string[]
   ): ModuleWithProviders<NgxsAsyncStoragePluginModule> {
     return {
       ngModule: NgxsAsyncStoragePluginModule,
@@ -46,6 +48,10 @@ export class NgxsAsyncStoragePluginModule {
           useClass: engine,
           deps: [UserPreferencesControllerService, IAuthService],
         },
+        {
+          provide: IGNORE_SYNC_STATES,
+          useValue: ignoreSyncStates
+        }
       ],
     };
   }

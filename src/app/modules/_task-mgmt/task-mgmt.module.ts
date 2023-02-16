@@ -41,6 +41,7 @@ import { CdateModule } from '@shared/sh-pipes/cdate.pipe';
 import { TagModule } from 'primeng/tag';
 import { DueDateDirectiveModule } from '@shared/sh-directives/due-date.directive';
 import { CalendarModule } from 'primeng/calendar';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/task-mgmt/', '.json');
@@ -82,6 +83,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     InputTextareaModule,
     TagModule,
     CalendarModule,
+    InputNumberModule,
     TranslateModule.forChild({
       extend: true,
       loader: {

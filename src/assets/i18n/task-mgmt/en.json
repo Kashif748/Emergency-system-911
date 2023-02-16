@@ -1,1 +1,21 @@
-{}
+{
+  "BY_MY_ORG": "By My Org",
+  "TO_MY_ORG": "To My Org",
+  "TASK_MANGEMENT": {
+    "CREATE": {
+      "TITLE": "Create Task"
+    },
+    "EDIT": {
+      "TITLE": "Edit Task"
+    },
+    "VIEW": {
+      "TITLE": "View Task"
+    },
+    "SUPPLIES_DETAILS": "Supplies Details"
+  },
+  "TASK_TITLE": "Task Title",
+  "TASK_DESCRIPTION": "Task Description",
+  "TASK_DETAILS": "Task Details",
+  "ASSIGNEE_TYPE": "Assignee Type",
+  "TASK_TYPE": "Task Type"
+}

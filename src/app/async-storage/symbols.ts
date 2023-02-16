@@ -46,6 +46,8 @@ export interface NgxsStoragePluginOptions {
   deserialize?(obj: any): any;
 }
 
+export const IGNORE_SYNC_STATES = new InjectionToken('IGNORE_SYNC_STATES');
+
 export const NGXS_STORAGE_PLUGIN_OPTIONS = new InjectionToken(
   'NGXS_STORAGE_PLUGIN_OPTION'
 );

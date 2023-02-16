@@ -103,6 +103,7 @@ export class BrowseTasksState {
           ...pageRequest.filters,
           priority: pageRequest.filters.priority?.id,
           status: pageRequest.filters.status?.map((o) => o.id),
+          type : this.route.snapshot.queryParams['_type']
         },
       })
     );
@@ -132,6 +133,7 @@ export class BrowseTasksState {
           ...pageRequest.filters,
           priority: pageRequest.filters.priority?.id,
           status: pageRequest.filters.status?.map((o) => o.id),
+          type : this.route.snapshot.queryParams['_type']
         },
       })
     );
@@ -175,11 +177,20 @@ export class BrowseTasksState {
             {},
             patch({
               ...payload,
+              type: undefined,
             })
           ),
         }),
       })
     );
+
+    return this.router.navigate([], {
+      queryParams: {
+        _type: payload?.type,
+      },
+      queryParamsHandling: 'merge',
+    });
+   
   }
 
   @Action(BrowseTasksAction.CreateTask)

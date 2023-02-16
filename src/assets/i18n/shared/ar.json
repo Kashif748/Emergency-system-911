@@ -1447,10 +1447,15 @@
       "NEW_SUGG": "مقترح جديد"
     },
     "SHARED": {
+      "PROVISIONAL_QUANTITY": "الكمية المزودة",
+      "QUANTITY": "الكمية",
+      "ASSETS": "الموارد",
+      "PERSON": "فرد",
       "PRIORITY": "الاهمية",
-      "DUE_DATE":"تاريخ ووقت الاستحقاق",
+      "DUE_DATE": "تاريخ ووقت الاستحقاق",
       "ASSIGNEE": "المحال إليه",
       "INCIDENT_ID": "رقم البلاغ",
+      "INCIDENT": "الحدث/البلاغ",
       "PHOTO_EDITOR": "محرر الصور",
       "PRIVILEGES": "الصلاحيات",
       "NO_IMAGE": "لا يوجد صورة",

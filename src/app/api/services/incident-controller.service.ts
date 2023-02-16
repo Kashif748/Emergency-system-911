@@ -640,7 +640,7 @@ export class IncidentControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
+      responseType: 'json',
       accept: '*/*'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
@@ -809,7 +809,7 @@ export class IncidentControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
+      responseType: 'json',
       accept: '*/*'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
@@ -1068,7 +1068,7 @@ export class IncidentControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
+      responseType: 'json',
       accept: '*/*'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
