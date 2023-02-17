@@ -1,0 +1,39 @@
+:host ::ng-deep {
+  .p-tag.p-button-sm > .p-button-label {
+    display: none;
+  }
+  .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
+    border-radius: 30px;
+  }
+  .p-fieldset .p-fieldset-legend {
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 30px;
+  }
+  .control-section {
+    .p-inputgroup-addon.p-0 {
+      background-color: transparent;
+      border: 0;
+    }
+    .p-dropdown.p-dropdown-clearable .p-dropdown-label {
+      width: 156px;
+    }
+  }
+}
+::ng-deep {
+  .new-item-modal {
+    max-width: 700px !important;
+    height: fit-content !important;
+    padding: 0 !important;
+  }
+
+  .modal {
+    max-width: 400px !important;
+    height: fit-content !important;
+    padding: 0 !important;
+  }
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+}
+

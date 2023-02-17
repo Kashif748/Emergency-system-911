@@ -8,6 +8,12 @@ import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { PhonebookDialogComponent } from './phonebook-dialog/phonebook-dialog.component';
+import { NgxIntlTelInputModule } from '@shared/sh-components/ngx-intl-tel-input/ngx-intl-tel-input.module';
+import { InputTextModule } from 'primeng/inputtext';
+import { FieldsetModule } from 'primeng/fieldset';
+import { ButtonModule } from 'primeng/button';
+
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -24,11 +30,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [EmergenciesPhonebookComponent],
+  declarations: [EmergenciesPhonebookComponent, PhonebookDialogComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
+    NgxIntlTelInputModule,
+    InputTextModule,
+    FieldsetModule,
+    ButtonModule,
+
     TranslateModule.forChild({
       extend: true,
       loader: {

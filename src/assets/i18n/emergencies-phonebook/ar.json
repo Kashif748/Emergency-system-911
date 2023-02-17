@@ -1,6 +1,6 @@
 {
   "PHONEBOOK": {
-    "HEADER": "هواتف الطوارئ",
+    "HEADER": "دليل هاتف الطوارئ",
     "NEW_ITEM": "عنصر جديد",
     "TITLE": "العنوان",
     "ID": "ID",
@@ -9,7 +9,7 @@
     "LAST_NAME": "الكنية",
     "ORG_NAME": "الجهة",
     "MOBILE_NUMBER": "الجوال",
-    "PHONE_NUKBER": "الهاتف الثابت",
+    "PHONE_NUMBER": "الهاتف الثابت",
     "IS_ACTIVE": "حالةالنشاط",
     "JOB_TITLE": "المسمى الوظيفي"
   }

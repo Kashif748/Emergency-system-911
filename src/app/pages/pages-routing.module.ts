@@ -262,6 +262,8 @@ const routes: Routes = [
       },
       {
         path: 'emergencies-phonebook',
+        canLoad: [PrivilegeGuard],
+        data: { permission: 'PRIV_VW_PHONEBOOK_ENTRY' },
         loadChildren: () =>
           import('../modules/emergencies-phonebook/emergencies-phonebook.module').then(
             (m) => m.EmergenciesPhonebookModule
