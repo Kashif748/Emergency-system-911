@@ -19,6 +19,7 @@ import { PhonebookTableComponent } from './phonebook-table/phonebook-table.compo
 import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { MenuModule } from 'primeng/menu';
+import { DialogModule } from 'primeng/dialog';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -49,6 +50,7 @@ const routes: Routes = [
     PaginatorModule,
     TableModule,
     MenuModule,
+    DialogModule,
     TranslateModule.forChild({
       extend: true,
       loader: {

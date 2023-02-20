@@ -1,8 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TranslationService } from '../../i18n/translation.service';
-import { EmergenciesPhonebookService } from '../emergencies-phonebook.service';
+import { ActivatedRoute } from '@angular/router';
+import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
+import { PhonebookState } from '@core/states/phonebook/phonebook.state';
+import { Store } from '@ngxs/store';
+import { Observable, Subject } from 'rxjs';
+import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
 
 @Component({
   selector: 'app-phonebook-dialog',
@@ -10,29 +14,52 @@ import { EmergenciesPhonebookService } from '../emergencies-phonebook.service';
   styleUrls: ['./phonebook-dialog.component.scss'],
 })
 export class PhonebookDialogComponent implements OnInit {
-  lang = 'en';
-  item: any;
-  isAddMode: boolean;
+  opened$: Observable<boolean>;
   form: FormGroup;
+  destroy$ = new Subject();
+  _phonebook: number;
 
-  //
+  @Input()
+  set phonebookId(v: number) {
+    this._phonebook = v;
+    this.createForm();
+    if (v === undefined || v === null) {
+      return;
+    }
+    this.store
+      .dispatch(new PhonebookAction.GetPhonebook({ id: v }))
+      .pipe(
+        switchMap(() => this.store.select(PhonebookState.phonebook)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((phonebook) => {
+          this.form.patchValue(phonebook);
+        })
+      )
+      .subscribe();
+  }
+  get editMode() {
+    return this._phonebook !== undefined && this._phonebook !== null;
+  }
   constructor(
     private formBuilder: FormBuilder,
-    private _service: EmergenciesPhonebookService,
-    private translationService: TranslationService,
-    public dialogRef: MatDialogRef<PhonebookDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+    private route: ActivatedRoute,
+    private store: Store
+  ) {
+    this.route.queryParams
+      .pipe(
+        map((params) => params['_id']),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((id) => {
+        this.phonebookId = id;
+      });
+  }
 
   ngOnInit(): void {
-    if (this.data['type'] == 'edit') {
-      this.item = this.data['item'];
-    }
-
-    this.isAddMode = !this.item;
-    this.lang = this.translationService.getSelectedLanguage();
-
-    this.createForm();
+    this.opened$ = this.route.queryParams.pipe(
+      map((params) => params['_dialog'] === 'opened')
+    );
   }
 
   createForm() {
@@ -51,44 +78,24 @@ export class PhonebookDialogComponent implements OnInit {
       isActive: [true, [Validators.required]],
       id: 0,
     });
-
-    if (!this.isAddMode) {
-      this.form.patchValue(this.item);
-    }
   }
-  private createItem(newItem) {
-    this._service.createPhoneItem(newItem).subscribe((res) => {
-      if (res && res['status']) {
-        this.dialogRef.close(true);
-      } else {
-        this.dialogRef.close(false);
-      }
-    });
+  close() {
+    this.store.dispatch(new BrowsePhonebookAction.ToggleDialog({}));
   }
 
-  private updateItem(newItem) {
-    this._service.updatePhoneItem(newItem).subscribe((res) => {
-      if (res && res['status']) {
-        this.dialogRef.close(true);
-      } else {
-        this.dialogRef.close(false);
-      }
-    });
-  }
+  // onSubmit() {
+  //   let newItem = {
+  //     ...this.form.value,
+  //     mobileNumber: this.form.get('mobileNumber').value?.number,
+  //   };
 
-  onSubmit() {
-    let newItem = {
-      ...this.form.value,
-      mobileNumber: this.form.get('mobileNumber').value?.number,
-    };
-
-    if (this.form.invalid) {
-      return;
-    }
-    if (this.isAddMode) {
-      this.createItem(newItem);
-    } else {
-      this.updateItem(newItem);
-    }
-  }
+  //   if (this.form.invalid) {
+  //     return;
+  //   }
+  //   if (this.isAddMode) {
+  //     this.createItem(newItem);
+  //   } else {
+  //     this.updateItem(newItem);
+  //   }
+  // }
 }

@@ -9,10 +9,9 @@ import {
 } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { ExternalPhonebook, PageExternalPhonebook } from 'src/app/api/models';
 import { ExternalPhonebookControllerService } from 'src/app/api/services';
-import { EmergenciesPhonebookService } from 'src/app/modules/emergencies-phonebook/emergencies-phonebook.service';
 import { PhonebookAction } from './phonebook.action';
 
 export interface PhonebookStateModel {
@@ -98,5 +97,30 @@ export class PhonebookState {
           );
         })
       );
+  }
+
+  @Action(PhonebookAction.GetPhonebook, { cancelUncompleted: true })
+  getPhonebook(
+    { setState }: StateContext<PhonebookStateModel>,
+    { payload }: PhonebookAction.GetPhonebook
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      setState(
+        patch<PhonebookStateModel>({
+          phonebook: undefined,
+        })
+      );
+      return;
+    }
+
+    return this.phonebookService.getById3({ id: payload.id }).pipe(
+      tap((res) => {
+        setState(
+          patch<PhonebookStateModel>({
+            phonebook: res.result,
+          })
+        );
+      })
+    );
   }
 }

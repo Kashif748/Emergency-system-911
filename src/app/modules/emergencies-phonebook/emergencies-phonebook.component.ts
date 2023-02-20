@@ -86,7 +86,7 @@ export class EmergenciesPhonebookComponent implements OnInit {
               {
                 ...userActions[0],
                 command: () => {
-                  this.openDialog(u);
+                  this.openDialog(u.id);
                 },
               },
               {
@@ -118,15 +118,10 @@ export class EmergenciesPhonebookComponent implements OnInit {
 
     // this.service.getPhonebook(20, 0, form).subscribe();
   }
-  openDialog(item): void {
-    this.DialogRef = this._matDialog.open(PhonebookDialogComponent, {
-      disableClose: false,
-      panelClass: 'new-item-modal',
-      data: {
-        type: item ? 'edit' : 'new',
-        item: item,
-      },
-    });
+  openDialog(id?: number) {
+    this.store.dispatch(
+      new BrowsePhonebookAction.ToggleDialog({ phonebookId: id })
+    );
   }
   delete(element) {
     this.DialogRef = this._matDialog.open(ConfirmDialogComponent, {

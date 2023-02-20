@@ -13,4 +13,16 @@ export namespace PhonebookAction {
       }
     ) {}
   }
+
+  export class GetPhonebook {
+    static readonly type = '[Phonebook] Get Phonebook';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

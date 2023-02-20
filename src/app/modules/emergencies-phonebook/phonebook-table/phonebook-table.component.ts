@@ -34,12 +34,21 @@ export class PhonebookTableComponent implements OnInit {
       rows: this.pageRequest?.rows,
     });
   }
+  openDialog(id?: number) {
+    this.store.dispatch(
+      new BrowsePhonebookAction.ToggleDialog({ phonebookId: id })
+    );
+  }
 
   openView(id?: number) {
-    this.store.dispatch(new BrowsePhonebookAction.OpenView({ userId: id }));
+    this.store.dispatch(
+      new BrowsePhonebookAction.OpenView({ phonebookId: id })
+    );
   }
 
   deleteItem(id?: number) {
-    this.store.dispatch(new BrowsePhonebookAction.OpenView({ userId: id }));
+    this.store.dispatch(
+      new BrowsePhonebookAction.OpenView({ phonebookId: id })
+    );
   }
 }

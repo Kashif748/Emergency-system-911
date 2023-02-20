@@ -1,9 +1,5 @@
 import { PageRequestModel } from '@core/models/page-request.model';
-import {
-  User,
-  UserInappAuthentication,
-  UserMiddlewareAuth,
-} from 'src/app/api/models';
+import { ExternalPhonebook } from 'src/app/api/models';
 export namespace BrowsePhonebookAction {
   export class LoadPhonebook {
     static readonly type = '[BrowsePhonebook] Load Phonebook';
@@ -12,15 +8,6 @@ export namespace BrowsePhonebookAction {
      */
     constructor(public payload?: { pageRequest: PageRequestModel }) {}
   }
-
-  export class LoadUsers {
-    static readonly type = '[BrowseUsers] Load Users';
-    /**
-     *
-     */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {}
-  }
-
   export class SortPhonebook {
     static readonly type = '[BrowsePhonebook] Sort Phonebook';
     /**
@@ -28,7 +15,6 @@ export namespace BrowsePhonebookAction {
      */
     constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
   }
-
 
   export class UpdateFilter {
     static readonly type = '[BrowsePhonebook] Update Filter';
@@ -43,14 +29,12 @@ export namespace BrowsePhonebookAction {
     constructor(public payload: { view: 'TABLE' | 'CARDS' }) {}
   }
 
-  export class CreateUser {
+  export class CreatePhonebook {
     static readonly type = '[BrowsePhonebook] Create Phonebook';
     /**
      *
      */
-    constructor(
-      public payload: User & UserInappAuthentication & UserMiddlewareAuth
-    ) {}
+    constructor(public payload: ExternalPhonebook) {}
   }
 
   export class UpdatePhonebook {
@@ -58,9 +42,7 @@ export namespace BrowsePhonebookAction {
     /**
      *
      */
-    constructor(
-      public payload: User & UserInappAuthentication & UserMiddlewareAuth
-    ) {}
+    constructor(public payload: ExternalPhonebook) {}
   }
 
   export class ToggleDialog {
@@ -68,7 +50,7 @@ export namespace BrowsePhonebookAction {
     /**
      *
      */
-    constructor(public payload: { userId?: number }) {}
+    constructor(public payload: { phonebookId?: number }) {}
   }
 
   export class OpenView {
@@ -76,6 +58,6 @@ export namespace BrowsePhonebookAction {
     /**
      *
      */
-    constructor(public payload: { userId: number }) {}
+    constructor(public payload: { phonebookId: number }) {}
   }
 }

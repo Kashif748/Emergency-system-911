@@ -33,13 +33,13 @@ export const BROWSE_PHONEBOOK_UI_STATE_TOKEN =
       rows: 10,
     },
     columns: [
-      'nameAr',
-      'nameEn',
-      'org',
-      'emiratesId',
-      'userName',
+      'firstName',
       'title',
-      'role',
+      'jobTitle',
+      'phoneNumber',
+      'mobileNumber',
+      'orgName',
+      'isActive',
     ],
     view: 'TABLE',
   },
@@ -88,5 +88,23 @@ export class BrowsePhonebookState {
         },
       })
     );
+  }
+
+  @Action(BrowsePhonebookAction.ToggleDialog, { cancelUncompleted: true })
+  openDialog(
+    {}: StateContext<BrowsePhonebookStateModel>,
+    { payload }: BrowsePhonebookAction.ToggleDialog
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'opened',
+        _id: payload.phonebookId,
+        _mode: undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }
