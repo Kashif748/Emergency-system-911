@@ -59,7 +59,7 @@ export const data = {
       icon: 'Custome/completed-incidents',
       value: 'closedIncidents',
       color: 'text-primary',
-      url: '../incidents/dashboard/' + IncidentViewsEnum.COMPLETED_INCIDENTS,
+      url: null,
       privileges: ['PRIV_VW_INC', 'PRIV_VW_GRP_INC'],
       changed: false,
     },
@@ -88,7 +88,7 @@ export const data = {
       icon: 'Communication/Clipboard-list',
       value: 'delayedTasks',
       color: 'text-dark-75',
-      url: '/incidents/tasks/outdate',
+      url: '/incidents/tasks/incoming',
       changed: false,
     },
     {
