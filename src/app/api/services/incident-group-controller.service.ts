@@ -22,21 +22,21 @@ export class IncidentGroupControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update41
+   * Path part for operation update42
    */
-  static readonly Update41Path = '/v1/incident-groups';
+  static readonly Update42Path = '/v1/incident-groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update41()` instead.
+   * To access only the response body, use `update42()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update41$Response(params: {
+  update42$Response(params: {
     body: IncidentGroup
   }): Observable<StrictHttpResponse<RestApiResponseIncidentGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Update41Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Update42Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -54,35 +54,35 @@ export class IncidentGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update41$Response()` instead.
+   * To access the full response (for headers, for example), `update42$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update41(params: {
+  update42(params: {
     body: IncidentGroup
   }): Observable<RestApiResponseIncidentGroup> {
 
-    return this.update41$Response(params).pipe(
+    return this.update42$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentGroup>) => r.body as RestApiResponseIncidentGroup)
     );
   }
 
   /**
-   * Path part for operation create37
+   * Path part for operation create38
    */
-  static readonly Create37Path = '/v1/incident-groups';
+  static readonly Create38Path = '/v1/incident-groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create37()` instead.
+   * To access only the response body, use `create38()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create37$Response(params: {
+  create38$Response(params: {
     body: IncidentGroup
   }): Observable<StrictHttpResponse<RestApiResponseIncidentGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Create37Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Create38Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -100,35 +100,35 @@ export class IncidentGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create37$Response()` instead.
+   * To access the full response (for headers, for example), `create38$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create37(params: {
+  create38(params: {
     body: IncidentGroup
   }): Observable<RestApiResponseIncidentGroup> {
 
-    return this.create37$Response(params).pipe(
+    return this.create38$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentGroup>) => r.body as RestApiResponseIncidentGroup)
     );
   }
 
   /**
-   * Path part for operation delete20
+   * Path part for operation delete21
    */
-  static readonly Delete20Path = '/v1/incident-groups/{id}';
+  static readonly Delete21Path = '/v1/incident-groups/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete20()` instead.
+   * To access only the response body, use `delete21()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete20$Response(params: {
+  delete21$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Delete20Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Delete21Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -146,15 +146,15 @@ export class IncidentGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete20$Response()` instead.
+   * To access the full response (for headers, for example), `delete21$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete20(params: {
+  delete21(params: {
     id: number;
   }): Observable<void> {
 
-    return this.delete20$Response(params).pipe(
+    return this.delete21$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

@@ -96,12 +96,14 @@ export class ServiceCenterAreaServiceControllerService extends BaseService {
    */
   getCommunityByDistrictName$Response(params?: {
     zoneId?: number;
+    cityId?: number;
     'district-name'?: string;
   }): Observable<StrictHttpResponse<RestApiResponseListCommunityNameProjection>> {
 
     const rb = new RequestBuilder(this.rootUrl, ServiceCenterAreaServiceControllerService.GetCommunityByDistrictNamePath, 'get');
     if (params) {
       rb.query('zoneId', params.zoneId, {});
+      rb.query('cityId', params.cityId, {});
       rb.query('district-name', params['district-name'], {});
     }
 
@@ -124,6 +126,7 @@ export class ServiceCenterAreaServiceControllerService extends BaseService {
    */
   getCommunityByDistrictName(params?: {
     zoneId?: number;
+    cityId?: number;
     'district-name'?: string;
   }): Observable<RestApiResponseListCommunityNameProjection> {
 

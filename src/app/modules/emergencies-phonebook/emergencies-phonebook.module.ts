@@ -13,6 +13,12 @@ import { NgxIntlTelInputModule } from '@shared/sh-components/ngx-intl-tel-input/
 import { InputTextModule } from 'primeng/inputtext';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ButtonModule } from 'primeng/button';
+import { BrowsePhonebookState } from './states/browse-phonebook.state';
+import { NgxsModule } from '@ngxs/store';
+import { PhonebookTableComponent } from './phonebook-table/phonebook-table.component';
+import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
+import { MenuModule } from 'primeng/menu';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -30,7 +36,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [EmergenciesPhonebookComponent, PhonebookDialogComponent],
+  declarations: [EmergenciesPhonebookComponent, PhonebookDialogComponent, PhonebookTableComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -38,8 +44,11 @@ const routes: Routes = [
     NgxIntlTelInputModule,
     InputTextModule,
     FieldsetModule,
+    NgxsModule.forFeature([BrowsePhonebookState]),
     ButtonModule,
-
+    PaginatorModule,
+    TableModule,
+    MenuModule,
     TranslateModule.forChild({
       extend: true,
       loader: {

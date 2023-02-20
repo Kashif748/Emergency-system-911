@@ -10,12 +10,14 @@ import {
 import { patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { ExternalPhonebook, PageExternalPhonebook } from 'src/app/api/models';
+import { ExternalPhonebookControllerService } from 'src/app/api/services';
 import { EmergenciesPhonebookService } from 'src/app/modules/emergencies-phonebook/emergencies-phonebook.service';
 import { PhonebookAction } from './phonebook.action';
 
 export interface PhonebookStateModel {
-  page: any; //PageUserAndRoleProjection
-  phonebook: any; //User
+  page: PageExternalPhonebook;
+  phonebook: ExternalPhonebook; //User
   loading: boolean;
   blocking: boolean;
 }
@@ -26,7 +28,7 @@ const PHONEBOOK_STATE_TOKEN = new StateToken<PhonebookStateModel>('phonebook');
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
 export class PhonebookState {
-  constructor(private phonebookService: EmergenciesPhonebookService) {}
+  constructor(private phonebookService: ExternalPhonebookControllerService) {}
   /* ************************ SELECTORS ******************** */
   @Selector([PhonebookState])
   static page(state: PhonebookStateModel) {
@@ -63,15 +65,13 @@ export class PhonebookState {
       })
     );
     return this.phonebookService
-      .getPhonebook({
+      .search1({
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
-        request: {
-          ...payload.filters,
-        },
+        ...payload.filters,
       })
       .pipe(
         tap((res) => {

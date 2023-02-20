@@ -55,6 +55,7 @@ import { ButtonModule } from 'primeng/button';
 import { OrgState, RoleState, UserState } from '@core/states';
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
+import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -105,9 +106,12 @@ export function getHighlightLanguages() {
     DropdownListModule,
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     //------------------
-    NgxsModule.forRoot([RootState, UserState, RoleState, OrgState], {
-      developmentMode: !environment.production,
-    }),
+    NgxsModule.forRoot(
+      [RootState, UserState, RoleState, OrgState, PhonebookState],
+      {
+        developmentMode: !environment.production,
+      }
+    ),
     NgxsAsyncStoragePluginModule.forRoot(HyperStorageEngine, {
       key: ['browse_users', 'browse_roles'],
     }),

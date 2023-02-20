@@ -1,4 +1,6 @@
 :host ::ng-deep {
+  display: block;
+  margin-bottom: 100px;
   .p-tag.p-button-sm > .p-button-label {
     display: none;
   }
@@ -36,4 +38,3 @@
     padding: 0 !important;
   }
 }
-

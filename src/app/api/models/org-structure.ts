@@ -13,8 +13,10 @@ export interface OrgStructure {
   code: string;
   contractorContractNo?: string;
   contractorExpDate?: string;
+  currentSerial?: number;
   entityType?: EntityType;
   id?: number;
+  initialSerial?: number;
   internal: boolean;
   isActive: boolean;
   location?: Geometry;

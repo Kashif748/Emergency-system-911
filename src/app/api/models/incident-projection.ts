@@ -51,6 +51,7 @@ export interface IncidentProjection {
   reportingVia?: IEntity;
   responsibleOrg?: OrgStructureMinimumProjection;
   sector?: number;
+  serial?: number;
   specialized?: UserWithoutPhotoMinimunProjection;
   specializedEmail?: string;
   specializedMobile?: string;
@@ -59,6 +60,7 @@ export interface IncidentProjection {
   subject?: string;
   timeTakenPercentage?: number;
   uuid?: string;
+  year?: number;
   zone?: number;
 }
 

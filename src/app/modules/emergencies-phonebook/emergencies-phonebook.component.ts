@@ -1,19 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
-import { Store } from '@ngrx/store';
-import { Select } from '@ngxs/store';
-import { LazyLoadEvent } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
+import { Select, Store } from '@ngxs/store';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
+import { ExternalPhonebook } from 'src/app/api/models';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { TranslationService } from '../i18n/translation.service';
 import { EmergenciesPhonebookService } from './emergencies-phonebook.service';
 import { PhonebookDialogComponent } from './phonebook-dialog/phonebook-dialog.component';
+import { BrowsePhonebookAction } from './states/browse-phonebook.action';
+import {
+  BrowsePhonebookState,
+  BrowsePhonebookStateModel,
+} from './states/browse-phonebook.state';
 
 @Component({
   selector: 'app-emergencies-phonebook',
@@ -21,21 +27,23 @@ import { PhonebookDialogComponent } from './phonebook-dialog/phonebook-dialog.co
   styleUrls: ['./emergencies-phonebook.component.scss'],
 })
 export class EmergenciesPhonebookComponent implements OnInit {
-  //MatPaginator is keyword here
-
-  public page$: Observable<any[]>;
   @Select(PhonebookState.loading)
   public loading$: Observable<boolean>;
   @Select(PhonebookState.totalRecords)
   public totalRecords$: Observable<number>;
-  // @Select(BrowseUsersState.state)
-  // public state$: Observable<BrowseUsersStateModel>;
+  @Select(BrowsePhonebookState.state)
+  public state$: Observable<BrowsePhonebookStateModel>;
 
-  // @Select(BrowseUsersState.hasFilters)
-  // public hasFilters$: Observable<boolean>;
-  public paginator$: Observable<PageEvent>;
-  public phonebook$: Observable<any[]>;
+  public page$: Observable<ExternalPhonebook[]>;
 
+  DialogRef: MatDialogRef<any>;
+
+  dataSource = new MatTableDataSource<any>();
+
+  searchForm: FormGroup;
+  maxDate: Date;
+  minDate: Date;
+  lang = 'en';
   displayedColumns: string[] = [
     'firstName',
     'title',
@@ -46,17 +54,9 @@ export class EmergenciesPhonebookComponent implements OnInit {
     'isActive',
     'actions',
   ];
-  DialogRef: MatDialogRef<any>;
-
-  loading: boolean = true;
-  dataSource = new MatTableDataSource<any>();
-
-  searchForm: FormGroup;
-  maxDate: Date;
-  minDate: Date;
-  lang = 'en';
   constructor(
     private translationService: TranslationService,
+    private translate: TranslateService,
     private service: EmergenciesPhonebookService,
     private fb: FormBuilder,
     public _matDialog: MatDialog,
@@ -66,16 +66,40 @@ export class EmergenciesPhonebookComponent implements OnInit {
 
   ngOnInit(): void {
     this.lang = this.translationService.getSelectedLanguage();
-
-    this.page$ = this.store.select(PhonebookState.page);
-
-    this.service.getPhonebook().subscribe();
-
-    this.phonebook$ = this.service.phonebookChange$.pipe(
-      tap((res) => (this.loading = false))
+    const userActions = [
+      {
+        label: this.translate.instant('ACTIONS.EDIT'),
+        icon: 'pi pi-pencil',
+      },
+      {
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi-trash',
+      },
+    ] as MenuItem[];
+    this.page$ = this.store.select(PhonebookState.page).pipe(
+      filter((p) => !!p),
+      map((page) =>
+        page?.map((u) => {
+          return {
+            ...u,
+            actions: [
+              {
+                ...userActions[0],
+                command: () => {
+                  this.openDialog(u);
+                },
+              },
+              {
+                ...userActions[1],
+                command: () => {
+                  this.delete(u);
+                },
+              },
+            ],
+          };
+        })
+      )
     );
-    this.paginator$ = this.service.paginatorChange$;
-
     this.createForm();
   }
 
@@ -91,10 +115,10 @@ export class EmergenciesPhonebookComponent implements OnInit {
       ...this.searchForm.value,
       mobileNumber: this.searchForm.get('mobileNumber').value?.number,
     };
-    this.loading = true;
-    this.service.getPhonebook(20, 0, form).subscribe();
+
+    // this.service.getPhonebook(20, 0, form).subscribe();
   }
-  addItem(item): void {
+  openDialog(item): void {
     this.DialogRef = this._matDialog.open(PhonebookDialogComponent, {
       disableClose: false,
       panelClass: 'new-item-modal',
@@ -104,7 +128,7 @@ export class EmergenciesPhonebookComponent implements OnInit {
       },
     });
   }
-  deleteItem(element) {
+  delete(element) {
     this.DialogRef = this._matDialog.open(ConfirmDialogComponent, {
       disableClose: false,
       panelClass: 'modal',
@@ -116,21 +140,30 @@ export class EmergenciesPhonebookComponent implements OnInit {
 
     this.DialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.loading = true;
         this.service.deletePhoneItem(element?.id).subscribe();
       }
       this.DialogRef = null;
     });
   }
   pageChange(event: PageEvent) {
-    this.loading = true;
     this.service.getPhonebook(event.pageSize, event.pageIndex).subscribe();
   }
   resetSearchForm() {
     this.searchForm.reset();
-    this.loading = true;
+
     this.service.getPhonebook().subscribe((res) => {
       this.dataSource.data = res.content;
     });
+  }
+
+  public loadPage(event: LazyLoadEvent) {
+    this.store.dispatch(
+      new BrowsePhonebookAction.LoadPhonebook({
+        pageRequest: {
+          first: event.first,
+          rows: event.rows,
+        },
+      })
+    );
   }
 }

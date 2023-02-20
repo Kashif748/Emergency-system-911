@@ -20,6 +20,7 @@ export { RanksControllerService } from './services/ranks-controller.service';
 export { PushNotificationBodyControllerService } from './services/push-notification-body-controller.service';
 export { PushNotificationActionControllerService } from './services/push-notification-action-controller.service';
 export { PriorityControllerService } from './services/priority-controller.service';
+export { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
 export { OrgStructureControllerService } from './services/org-structure-controller.service';
 export { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
 export { OperationalReportControllerService } from './services/operational-report-controller.service';
@@ -71,6 +72,7 @@ export { ExerciseGoalLessonControllerService } from './services/exercise-goal-le
 export { ExerciseCommitteeRoleControllerService } from './services/exercise-committee-role-controller.service';
 export { ExerciseCommitteeControllerService } from './services/exercise-committee-controller.service';
 export { EventsConfigControllerService } from './services/events-config-controller.service';
+export { EventsConfigSmsControllerService } from './services/events-config-sms-controller.service';
 export { EnviromentalImpactControllerService } from './services/enviromental-impact-controller.service';
 export { EmergencyLevelControllerService } from './services/emergency-level-controller.service';
 export { DmsControllerService } from './services/dms-controller.service';
@@ -87,6 +89,7 @@ export { CircularCcControllerService } from './services/circular-cc-controller.s
 export { CircularControllerService } from './services/circular-controller.service';
 export { CircularStatusControllerService } from './services/circular-status-controller.service';
 export { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+export { AvayaControllerService } from './services/avaya-controller.service';
 export { AssetControllerService } from './services/asset-controller.service';
 export { AssetsGroupControllerService } from './services/assets-group-controller.service';
 export { AssetsCategoryControllerService } from './services/assets-category-controller.service';
@@ -114,6 +117,7 @@ export { PrivilegeControllerService } from './services/privilege-controller.serv
 export { OrganizationTypesService } from './services/organization-types.service';
 export { OrganizationHierarchicalStructureService } from './services/organization-hierarchical-structure.service';
 export { NotificationTransactionControllerService } from './services/notification-transaction-controller.service';
+export { NotificationPlaceHolderControllerService } from './services/notification-place-holder-controller.service';
 export { InspectionControllerService } from './services/inspection-controller.service';
 export { MsMailJobService } from './services/ms-mail-job.service';
 export { DohControllerService } from './services/doh-controller.service';

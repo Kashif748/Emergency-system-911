@@ -662,6 +662,52 @@ export class TaskControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation getCreatedByOrgTasks
+   */
+  static readonly GetCreatedByOrgTasksPath = '/v1/tasks/by-my-org/list-ids';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCreatedByOrgTasks()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCreatedByOrgTasks$Response(params: {
+    filter: TaskCriteria;
+  }): Observable<StrictHttpResponse<RestApiResponseListLong>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskControllerService.GetCreatedByOrgTasksPath, 'get');
+    if (params) {
+      rb.query('filter', params.filter, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListLong>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getCreatedByOrgTasks$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCreatedByOrgTasks(params: {
+    filter: TaskCriteria;
+  }): Observable<RestApiResponseListLong> {
+
+    return this.getCreatedByOrgTasks$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListLong>) => r.body as RestApiResponseListLong)
+    );
+  }
+
+  /**
    * Path part for operation getCreatedByOrg
    */
   static readonly GetCreatedByOrgPath = '/v1/tasks/by-my-org';
