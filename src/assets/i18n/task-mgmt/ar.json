@@ -17,5 +17,8 @@
   "TASK_DESCRIPTION": "وصف المهمة",
   "TASK_DETAILS": "تفاصيل المهمة",
   "ASSIGNEE_TYPE": "صفة المحال إليه",
-  "TASK_TYPE": "نوع المهمة"
+  "TASK_TYPE": "نوع المهمة",
+  "TASK_INFO": "معلومات المهمة",
+  "TASK_LOCATION": "موقع المهمة",
+  "TASK_ATTACHMENTS": "مرفقات المهمة"
 }

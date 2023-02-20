@@ -1,4 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IAuthService } from '@core/services/auth.service';
@@ -15,13 +22,12 @@ import { IncidentAction } from '@core/states/incident/incident.action';
 import { IncidentState } from '@core/states/incident/incident.state';
 import { FormUtils } from '@core/utils/form.utils';
 import { Select, Store } from '@ngxs/store';
-import * as Task from 'esri/tasks/Task';
 import { TreeNode } from 'primeng/api';
+import { Dropdown } from 'primeng/dropdown';
 import { Observable, Subject } from 'rxjs';
 import {
   auditTime,
   distinctUntilChanged,
-  filter,
   map,
   switchMap,
   take,
@@ -35,6 +41,7 @@ import {
   OrgAssetsProjection,
   PriorityProjection,
   TaskDetails,
+  TaskStatus,
   TaskType,
 } from 'src/app/api/models';
 import { BrowseTasksAction } from '../../states/browse-tasks.action';
@@ -67,6 +74,9 @@ export class TaskDialogComponent implements OnInit {
   @Select(CommonDataState.taskTypes)
   public types$: Observable<TaskType[]>;
 
+  @Select(CommonDataState.taskStatuses)
+  public statuses$: Observable<TaskStatus[]>;
+
   @Select(CommonDataState.assetsCategories)
   public assetsCategories$: Observable<AssetsCategoryProjection[]>;
 
@@ -76,6 +86,10 @@ export class TaskDialogComponent implements OnInit {
   @Select(IncidentState.transLoading)
   incidentLoading$: Observable<boolean>;
 
+  @ViewChild('incidentId') incidentDropdown: Dropdown;
+  @ViewChild('assignTo') assigneeDropdown: Dropdown;
+
+  @ViewChildren(Dropdown) dropdowns: QueryList<Dropdown>;
   public get minDate() {
     return new Date();
   }
@@ -127,16 +141,56 @@ export class TaskDialogComponent implements OnInit {
           this.defaultFormValue = {
             ...this.defaultFormValue,
             ...task,
-            // orgId: {
-            //   key: task.orgId?.id,
-            //   labelAr: task.orgId?.nameAr,
-            //   labelEn: task.orgId?.nameEn,
-            // },
+            dueDate: new Date(task.dueDate),
+            assigneeType: task.assignTo?.type,
+            priorityId: { id: task.priorityId },
+            statusId: { id: task.statusId },
           };
           this.form.patchValue({
             ...this.defaultFormValue,
-            privileges: {},
           });
+
+          this.form.patchValue({
+            assignTo: task.assignTo,
+          });
+          // insure incident dropdown is in the right state
+          const incidentSubject = (task.incidentId as any)?.subject;
+          this.incidentDropdown.filterValue = incidentSubject;
+          this.loadIncidents(incidentSubject, true);
+
+          // insure assignee dropdown is in the right state
+          this.dropdowns.changes
+            .pipe(take(1))
+            .subscribe((dropdowns: QueryList<Dropdown>) => {
+              dropdowns
+                .filter((d) => d.inputId === 'assignTo')
+                .forEach((d) => {
+                  d.filterValue = task.assignTo?.nameEn;
+                });
+            });
+          switch (task.assignTo?.type) {
+            case 'user':
+              this.loadUsers(task.assignTo?.nameEn, true);
+              break;
+            case 'group':
+              this.loadGroups(task.assignTo?.nameEn, true);
+              break;
+            case 'org':
+              this.loadOrgs((task.incidentId as any)?.id);
+              break;
+            default:
+              break;
+          }
+
+          if (task.taskType?.type === 'supplies') {
+            this.addAssetFields({
+              asset: (task.taskType as any)?.asset,
+              category: (task.taskType as any)?.asset?.assetsCategory,
+              details: task.taskType?.desc,
+              requestQuantity: (task.taskType as any)?.requestQuantity,
+              provisionedQuantity: (task.taskType as any)?.provisionedQuantity,
+            });
+          }
         })
       )
       .subscribe();
@@ -299,9 +353,9 @@ export class TaskDialogComponent implements OnInit {
 
   addAssetFields(value?: {
     category?: any;
-    assets?: any;
-    qty?: number;
-    Pqty?: number;
+    asset?: any;
+    requestQuantity?: number;
+    provisionedQuantity?: number;
     details?: string;
   }) {
     !this.form.contains('category') &&
@@ -310,30 +364,56 @@ export class TaskDialogComponent implements OnInit {
         this.formBuilder.control(value?.category, [Validators.required])
       );
 
-    !this.form.contains('assets') &&
+    !this.form.contains('asset') &&
       this.form.addControl(
-        'assets',
-        this.formBuilder.control(value?.assets, [Validators.required])
+        'asset',
+        this.formBuilder.control(value?.asset, [Validators.required])
       );
 
-    !this.form.contains('qty') &&
+    if (value?.asset) {
+      // insure asset dropdown is in the right state
+      this.dropdowns.changes
+        .pipe(take(1))
+        .subscribe((dropdowns: QueryList<Dropdown>) => {
+          dropdowns
+            .filter((d) => d.inputId === 'asset')
+            .forEach((d) => {
+              d.filterValue = value.asset?.nameEn;
+            });
+        });
+      this.loadAssets(value.asset?.nameEn, true);
+    }
+
+    !this.form.contains('requestQuantity') &&
       this.form.addControl(
-        'qty',
-        this.formBuilder.control(value?.qty, [Validators.required])
+        'requestQuantity',
+        this.formBuilder.control(value?.requestQuantity, [Validators.required])
       );
 
-    !this.form.contains('Pqty') &&
-      this.form.addControl('Pqty', this.formBuilder.control(value?.Pqty));
+    !this.form.contains('provisionedQuantity') &&
+      this.form.addControl(
+        'provisionedQuantity',
+        this.formBuilder.control(value?.provisionedQuantity)
+      );
 
     !this.form.contains('details') &&
       this.form.addControl('details', this.formBuilder.control(value?.details));
+
+    this.form
+      .get('category')
+      .valueChanges.pipe(takeUntil(this.destroy$), distinctUntilChanged())
+      .subscribe(() => {
+        this.form.contains('asset') && this.form.get('asset').reset();
+      });
   }
 
   removeAssetFields() {
     this.form.contains('category') && this.form.removeControl('category');
-    this.form.contains('assets') && this.form.removeControl('assets');
-    this.form.contains('qty') && this.form.removeControl('qty');
-    this.form.contains('Pqty') && this.form.removeControl('Pqty');
+    this.form.contains('asset') && this.form.removeControl('asset');
+    this.form.contains('requestQuantity') &&
+      this.form.removeControl('requestQuantity');
+    this.form.contains('provisionedQuantity') &&
+      this.form.removeControl('provisionedQuantity');
     this.form.contains('details') && this.form.removeControl('details');
   }
 
@@ -341,23 +421,17 @@ export class TaskDialogComponent implements OnInit {
     this.activeTab = 0;
     this.form = this.formBuilder.group({
       title: [null, [Validators.required]],
-      priority: [null, [Validators.required]],
+      priorityId: [null, [Validators.required]],
       taskType: [null, [Validators.required]],
       assignTo: [null, [Validators.required]],
-      // assets: [null],
       dueDate: [new Date(), [Validators.required]],
-      status: [null],
-      // qty: [null],
-      // Pqty: [null],
-      // category: [null],
+      statusId: [null],
       newLocation: [false],
       modifiable: [true],
       featureName: [null],
       body: [null, [Validators.required]],
-      // details: [null],
       incidentId: [null, [Validators.required]],
-
-      assingeeType: [null, Validators.required],
+      assigneeType: [null, Validators.required],
     });
     this.defaultFormValue = { dueDate: new Date(), modifiable: true };
 
@@ -365,12 +439,12 @@ export class TaskDialogComponent implements OnInit {
       .get('incidentId')
       .valueChanges.pipe(takeUntil(this.destroy$), distinctUntilChanged())
       .subscribe(() => {
-        this.form.get('assingeeType').reset();
+        this.form.get('assigneeType').reset();
         this.form.get('assignTo').reset();
       });
 
     this.form
-      .get('assingeeType')
+      .get('assigneeType')
       .valueChanges.pipe(takeUntil(this.destroy$), distinctUntilChanged())
       .subscribe(() => {
         this.form.get('assignTo').reset();
@@ -397,8 +471,32 @@ export class TaskDialogComponent implements OnInit {
       return;
     }
 
-    const task = {
+    let task = {
       ...this.form.getRawValue(),
+    };
+
+    task = {
+      ...task,
+      assignTo: {
+        assigneeId: task.assignTo.id,
+        type: task.assigneeType,
+      },
+      incidentId: task.incidentId.id,
+      priorityId: task.priorityId.id,
+      statusId: task.statusId?.id ?? 2,
+      taskType: {
+        typeId: task.taskType?.id,
+        type: task.taskType?.type ?? task.taskType?.nameEn?.toLowerCase(),
+        desc: task.details,
+        requestQuantity: task.requestQuantity,
+        provisionedQuantity: task.provisionedQuantity,
+        asset: {
+          id: task.asset?.id,
+        },
+      },
+      //
+      asset: undefined,
+      category: undefined,
     };
 
     task.id = this._taskId;
@@ -410,11 +508,9 @@ export class TaskDialogComponent implements OnInit {
   }
 
   clear() {
-    this.store.dispatch(new TaskAction.GetTask({}));
-    this.form.reset();
-    this.form.patchValue({
-      ...this.defaultFormValue,
-    });
+    const taskId = this._taskId;
+    this.taskId = null;
+    this.taskId = taskId;
   }
 
   close() {

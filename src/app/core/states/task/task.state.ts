@@ -22,6 +22,7 @@ import {
   TaskType,
 } from 'src/app/api/models';
 import {
+  IncidentControllerService,
   ManageGroupsService,
   PriorityControllerService,
   TaskControllerService,
@@ -56,7 +57,8 @@ export class TaskState {
     private taskService: TaskControllerService,
     private priorityService: PriorityControllerService,
     private statusService: TaskStatusControllerService,
-    private groupService: ManageGroupsService
+    private groupService: ManageGroupsService,
+    private incidentService: IncidentControllerService
   ) {}
   /* ************************ SELECTORS ******************** */
   @Selector([TaskState])
@@ -217,10 +219,28 @@ export class TaskState {
       })
     );
     return this.taskService.getTaskDetails({ taskId: payload.id }).pipe(
-      tap((res) => {
+      switchMap(({ result: task }) => {
+        return this.incidentService.get16({ id: task.incidentId }).pipe(
+          map(({ result: incident }) => {
+            return {
+              ...task,
+              incidentId: incident,
+              taskType: {
+                ...task.taskType,
+                id: task.taskType?.typeId,
+              },
+              assignTo: {
+                ...task.assignTo,
+                id: task.assignTo?.assigneeId,
+              },
+            };
+          })
+        );
+      }),
+      tap((task) => {
         setState(
           patch<TaskStateModel>({
-            task: res.result,
+            task: task as any,
           })
         );
       }),

@@ -17,5 +17,8 @@
   "TASK_DESCRIPTION": "Task Description",
   "TASK_DETAILS": "Task Details",
   "ASSIGNEE_TYPE": "Assignee Type",
-  "TASK_TYPE": "Task Type"
+  "TASK_TYPE": "Task Type",
+  "TASK_INFO": "Task Info",
+  "TASK_LOCATION": "Task Location",
+  "TASK_ATTACHMENTS": "Task Attachments"
 }
