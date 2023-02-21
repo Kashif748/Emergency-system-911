@@ -13,6 +13,8 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { iif, patch } from '@ngxs/store/operators';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { BrowsePhonebookAction } from './browse-phonebook.action';
 
 export interface BrowsePhonebookStateModel {
@@ -89,6 +91,45 @@ export class BrowsePhonebookState {
       })
     );
   }
+  @Action(BrowsePhonebookAction.CreatePhonebook)
+  CreatePhonebook(
+    { dispatch }: StateContext<BrowsePhonebookStateModel>,
+    { payload }: BrowsePhonebookAction.CreatePhonebook
+  ) {
+    return dispatch(new PhonebookAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowsePhonebookAction.LoadPhonebook());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowsePhonebookAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowsePhonebookAction.UpdatePhonebook)
+  UpdatePhonebook(
+    { dispatch }: StateContext<BrowsePhonebookStateModel>,
+    { payload }: BrowsePhonebookAction.UpdatePhonebook
+  ) {
+    return dispatch(new PhonebookAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowsePhonebookAction.LoadPhonebook());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowsePhonebookAction.ToggleDialog({}));
+      })
+    );
+  }
 
   @Action(BrowsePhonebookAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
@@ -107,4 +148,26 @@ export class BrowsePhonebookState {
       queryParamsHandling: 'merge',
     });
   }
+
+  @Action(BrowsePhonebookAction.UpdateFilter, { cancelUncompleted: true })
+  updateFilter(
+    { setState }: StateContext<BrowsePhonebookStateModel>,
+    { payload }: BrowsePhonebookAction.UpdateFilter
+  ) {
+    setState(
+      patch<BrowsePhonebookStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: 0,
+          filters: iif(
+            payload.clear === true,
+            {},
+            patch({
+              ...payload,
+            })
+          ),
+        }),
+      })
+    );
+  }
+
 }

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { EmergenciesPhonebookComponent } from './emergencies-phonebook.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
-import { EmergenciesPhonebookService } from './emergencies-phonebook.service';
 import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -37,7 +36,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [EmergenciesPhonebookComponent, PhonebookDialogComponent, PhonebookTableComponent],
+  declarations: [
+    EmergenciesPhonebookComponent,
+    PhonebookDialogComponent,
+    PhonebookTableComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -61,9 +64,6 @@ const routes: Routes = [
       isolate: true,
     }),
   ],
-  providers: [
-    EmergenciesPhonebookService,
-    { provide: ILangFacade, useClass: LangFacade },
-  ],
+  providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
 export class EmergenciesPhonebookModule {}

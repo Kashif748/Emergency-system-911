@@ -3,7 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
-import { Store } from '@ngxs/store';
+import { FormUtils } from '@core/utils/form.utils';
+import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
@@ -18,6 +19,9 @@ export class PhonebookDialogComponent implements OnInit {
   form: FormGroup;
   destroy$ = new Subject();
   _phonebook: number;
+
+  @Select(PhonebookState.blocking)
+  blocking$: Observable<boolean>;
 
   @Input()
   set phonebookId(v: number) {
@@ -71,7 +75,7 @@ export class PhonebookDialogComponent implements OnInit {
       jobTitle: [null, [Validators.required]],
       phoneNumber: [
         null,
-        [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+        [Validators.required, Validators.pattern(/^-?([0-9]\d*)?$/)],
       ],
       mobileNumber: [null, [Validators.required]],
       title: [null, [Validators.required]],
@@ -81,6 +85,25 @@ export class PhonebookDialogComponent implements OnInit {
   }
   close() {
     this.store.dispatch(new BrowsePhonebookAction.ToggleDialog({}));
+  }
+  submit() {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      FormUtils.ForEach(this.form, (fc) => {
+        fc.markAsDirty();
+      });
+      return;
+    }
+    const phonebook = {
+      ...this.form.getRawValue(),
+    };
+    phonebook.mobileNumber = phonebook.mobileNumber?.number;
+    phonebook.id = this._phonebook;
+    if (this.editMode) {
+      this.store.dispatch(new BrowsePhonebookAction.UpdatePhonebook(phonebook));
+    } else {
+      this.store.dispatch(new BrowsePhonebookAction.CreatePhonebook(phonebook));
+    }
   }
 
   // onSubmit() {

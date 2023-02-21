@@ -123,4 +123,54 @@ export class PhonebookState {
       })
     );
   }
+
+  @Action(PhonebookAction.Create)
+  create(
+    { setState }: StateContext<PhonebookStateModel>,
+    { payload }: PhonebookAction.Create
+  ) {
+    setState(
+      patch<PhonebookStateModel>({
+        blocking: true,
+      })
+    );
+    return this.phonebookService
+      .create16({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<PhonebookStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(PhonebookAction.Update)
+  update(
+    { setState }: StateContext<PhonebookStateModel>,
+    { payload }: PhonebookAction.Update
+  ) {
+    setState(
+      patch<PhonebookStateModel>({
+        blocking: true,
+      })
+    );
+    return this.phonebookService
+      .update16({
+        body: { ...payload },
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<PhonebookStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
 }

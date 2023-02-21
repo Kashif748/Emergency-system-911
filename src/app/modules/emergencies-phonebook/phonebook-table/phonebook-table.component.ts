@@ -45,10 +45,4 @@ export class PhonebookTableComponent implements OnInit {
       new BrowsePhonebookAction.OpenView({ phonebookId: id })
     );
   }
-
-  deleteItem(id?: number) {
-    this.store.dispatch(
-      new BrowsePhonebookAction.OpenView({ phonebookId: id })
-    );
-  }
 }

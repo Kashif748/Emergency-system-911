@@ -1,4 +1,6 @@
-<div class="container mat-elevation-z8 p-0" style="overflow: hidden">
+<app-phonebook-dialog></app-phonebook-dialog>
+
+<div class="container-fluid">
   <mat-toolbar class="bg-white px-3 border-bottom">
     <h2>{{ "PHONEBOOK.HEADER" | translate }}</h2>
 
@@ -16,85 +18,84 @@
       ></span>
     </button>
   </mat-toolbar>
+  <div class="mx-4 my-10" *ngIf="state$ | async as state">
+    <div class="row mb-4">
+      <div class="col-12">
+        <p-fieldset
+          [toggleable]="true"
+          styleClass="px-3 py-2 search-section"
+          legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+          [collapsed]="true"
+        >
+          <form class="p-fluid p-grid">
+            <div class="p-field p-col-4 p-md-3">
+              <input
+                type="text"
+                pInputText
+                (keyup)="updateFilter({ name: $event.target.value }, $event)"
+                placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
+              />
+            </div>
+            <div class="p-field p-col-4 p-md-3">
+              <input
+                type="text"
+                pInputText
+                (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
+                placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
+              />
+            </div>
+            <div class="p-field p-col-4 p-md-3">
+              <ngx-intl-tel-input
+                cssClass="p-inputtext p-component p-text-left"
+                [onlyCountries]="['ae']"
+                (keyup)="
+                  updateFilter({ mobileNumber: $event.target.value }, $event)
+                "
+                [enablePlaceholder]="true"
+                [enableAutoCountrySelect]="true"
+                searchCountryPlaceholder="{{
+                  'PHONEBOOK.MOBILE_NUMBER' | translate
+                }}"
+              >
+              </ngx-intl-tel-input>
+            </div>
 
-  <div class="p-4">
-    <p-fieldset
-      [toggleable]="true"
-      styleClass="px-3 py-2 search-section"
-      legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
-      [collapsed]="true"
-    >
-      <form [formGroup]="searchForm" class="p-fluid p-grid">
-        <div class="p-field p-col-4 p-md-3">
-          <input
-            type="text"
-            pInputText
-            formControlName="name"
-            placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
-          />
-        </div>
-        <div class="p-field p-col-4 p-md-3">
-          <input
-            type="text"
-            pInputText
-            formControlName="orgName"
-            placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
-          />
-        </div>
-        <div class="p-field p-col-4 p-md-3">
-          <ngx-intl-tel-input
-            cssClass="p-inputtext p-component p-text-left"
-            [onlyCountries]="['ae']"
-            formControlName="mobileNumber"
-            [enablePlaceholder]="true"
-            [enableAutoCountrySelect]="true"
-            searchCountryPlaceholder="{{
-              'PHONEBOOK.MOBILE_NUMBER' | translate
-            }}"
-          >
-          </ngx-intl-tel-input>
-        </div>
-
-        <div class="p-col p-d-flex">
-          <div class="ml-dir-auto"></div>
-          <div class="mx-1">
-            <button
-              pButton
-              type="button"
-              label="{{ 'ACTIONS.CLEAR' | translate }}"
-              icon="pi pi-times"
-              class="p-button-outlined"
-              [loading]="loading$ | async"
-              (click)="resetSearchForm()"
-            ></button>
-          </div>
-          <div class="mx-1">
-            <button
-              pButton
-              label="{{ 'ACTIONS.SEARCH' | translate }}"
-              icon="pi pi-search"
-              [loading]="loading$ | async"
-              (click)="onSubmit()"
-            ></button>
-          </div>
-        </div>
-      </form>
-    </p-fieldset>
-    <div class="mt-4" *ngIf="state$ | async as state">
-      <mat-progress-bar
-        *ngIf="loading$ | async"
-        mode="query"
-      ></mat-progress-bar>
-      <app-phonebook-table
-        [page]="page$ | async"
-        [totalRecords]="totalRecords$ | async"
-        [loading]="loading$ | async"
-        [pageRequest]="state?.pageRequest"
-        [columns]="displayedColumns"
-        (onPageChange)="loadPage($event)"
-      ></app-phonebook-table>
+            <div class="p-col p-d-flex">
+              <div class="ml-dir-auto"></div>
+              <div class="mx-1">
+                <button
+                  pButton
+                  type="button"
+                  label="{{ 'ACTIONS.CLEAR' | translate }}"
+                  icon="pi pi-times"
+                  class="p-button-outlined"
+                  [loading]="loading$ | async"
+                  (click)="clear()"
+                ></button>
+              </div>
+              <div class="mx-1">
+                <button
+                  pButton
+                  label="{{ 'ACTIONS.SEARCH' | translate }}"
+                  icon="pi pi-search"
+                  [loading]="loading$ | async"
+                  (click)="search()"
+                ></button>
+              </div>
+            </div>
+          </form>
+        </p-fieldset>
+      </div>
     </div>
+
+    <mat-progress-bar *ngIf="loading$ | async" mode="query"></mat-progress-bar>
+    <app-phonebook-table
+      [page]="page$ | async"
+      [totalRecords]="totalRecords$ | async"
+      [loading]="loading$ | async"
+      [pageRequest]="state?.pageRequest"
+      [columns]="displayedColumns"
+      (onPageChange)="loadPage($event)"
+    ></app-phonebook-table>
   </div>
 </div>
-
-<app-phonebook-dialog></app-phonebook-dialog>

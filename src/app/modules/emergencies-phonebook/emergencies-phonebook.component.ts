@@ -1,20 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ExternalPhonebook } from 'src/app/api/models';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { TranslationService } from '../i18n/translation.service';
-import { EmergenciesPhonebookService } from './emergencies-phonebook.service';
-import { PhonebookDialogComponent } from './phonebook-dialog/phonebook-dialog.component';
 import { BrowsePhonebookAction } from './states/browse-phonebook.action';
 import {
   BrowsePhonebookState,
@@ -36,14 +28,6 @@ export class EmergenciesPhonebookComponent implements OnInit {
 
   public page$: Observable<ExternalPhonebook[]>;
 
-  DialogRef: MatDialogRef<any>;
-
-  dataSource = new MatTableDataSource<any>();
-
-  searchForm: FormGroup;
-  maxDate: Date;
-  minDate: Date;
-  lang = 'en';
   displayedColumns: string[] = [
     'firstName',
     'title',
@@ -55,27 +39,12 @@ export class EmergenciesPhonebookComponent implements OnInit {
     'actions',
   ];
   constructor(
-    private translationService: TranslationService,
     private translate: TranslateService,
-    private service: EmergenciesPhonebookService,
-    private fb: FormBuilder,
-    public _matDialog: MatDialog,
     private store: Store,
     private langFacade: ILangFacade
   ) {}
 
   ngOnInit(): void {
-    this.lang = this.translationService.getSelectedLanguage();
-    const userActions = [
-      {
-        label: this.translate.instant('ACTIONS.EDIT'),
-        icon: 'pi pi-pencil',
-      },
-      {
-        label: this.translate.instant('ACTIONS.DELETE'),
-        icon: 'pi pi-trash',
-      },
-    ] as MenuItem[];
     this.page$ = this.store.select(PhonebookState.page).pipe(
       filter((p) => !!p),
       map((page) =>
@@ -84,15 +53,10 @@ export class EmergenciesPhonebookComponent implements OnInit {
             ...u,
             actions: [
               {
-                ...userActions[0],
+                label: this.translate.instant('ACTIONS.EDIT'),
+                icon: 'pi pi-pencil',
                 command: () => {
                   this.openDialog(u.id);
-                },
-              },
-              {
-                ...userActions[1],
-                command: () => {
-                  this.delete(u);
                 },
               },
             ],
@@ -100,55 +64,30 @@ export class EmergenciesPhonebookComponent implements OnInit {
         })
       )
     );
-    this.createForm();
   }
 
-  createForm() {
-    this.searchForm = this.fb.group({
-      name: '',
-      orgName: '',
-      mobileNumber: '',
-    });
-  }
-  onSubmit() {
-    let form = {
-      ...this.searchForm.value,
-      mobileNumber: this.searchForm.get('mobileNumber').value?.number,
-    };
-
-    // this.service.getPhonebook(20, 0, form).subscribe();
-  }
   openDialog(id?: number) {
     this.store.dispatch(
       new BrowsePhonebookAction.ToggleDialog({ phonebookId: id })
     );
   }
-  delete(element) {
-    this.DialogRef = this._matDialog.open(ConfirmDialogComponent, {
-      disableClose: false,
-      panelClass: 'modal',
-    });
 
-    this.DialogRef.componentInstance.confirmMessage = 'GENERAL.DELETE_CONFIRM';
-    this.DialogRef.componentInstance.icon = 'error_outline';
-    this.DialogRef.componentInstance.actionName = 'ACTIONS.DELETE';
-
-    this.DialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.service.deletePhoneItem(element?.id).subscribe();
-      }
-      this.DialogRef = null;
-    });
+  search() {
+    this.store.dispatch(new BrowsePhonebookAction.LoadPhonebook());
   }
-  pageChange(event: PageEvent) {
-    this.service.getPhonebook(event.pageSize, event.pageIndex).subscribe();
-  }
-  resetSearchForm() {
-    this.searchForm.reset();
 
-    this.service.getPhonebook().subscribe((res) => {
-      this.dataSource.data = res.content;
-    });
+  clear() {
+    this.store.dispatch([
+      new BrowsePhonebookAction.UpdateFilter({ clear: true }),
+      new BrowsePhonebookAction.LoadPhonebook(),
+    ]);
+  }
+  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
+    if (event?.key === 'Enter') {
+      return this.search();
+    }
+
+    this.store.dispatch(new BrowsePhonebookAction.UpdateFilter(filter));
   }
 
   public loadPage(event: LazyLoadEvent) {
