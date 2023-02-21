@@ -106,7 +106,11 @@ export function getHighlightLanguages() {
     DropdownListModule,
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     //------------------
+<<<<<<< src/app/app.module.ts
     NgxsModule.forRoot([RootState, UserState, RoleState, OrgState, TaskState ,PhonebookState], {
+=======
+    NgxsModule.forRoot([RootState, UserState, RoleState, OrgState, TaskState], {
+>>>>>>> src/app/app.module.ts
       developmentMode: !environment.production,
     }),
     NgxsAsyncStoragePluginModule.forRoot(HyperStorageEngine, {
