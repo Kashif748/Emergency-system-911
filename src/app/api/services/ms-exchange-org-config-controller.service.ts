@@ -71,21 +71,21 @@ export class MsExchangeOrgConfigControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update22
+   * Path part for operation update23
    */
-  static readonly Update22Path = '/v1/ms-exchange-orgs';
+  static readonly Update23Path = '/v1/ms-exchange-orgs';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update22()` instead.
+   * To access only the response body, use `update23()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update22$Response(params: {
+  update23$Response(params: {
     body: MsExchangeOrgConfig
   }): Observable<StrictHttpResponse<RestApiResponseMsExchangeOrgConfig>> {
 
-    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Update22Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Update23Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -103,35 +103,35 @@ export class MsExchangeOrgConfigControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update22$Response()` instead.
+   * To access the full response (for headers, for example), `update23$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update22(params: {
+  update23(params: {
     body: MsExchangeOrgConfig
   }): Observable<RestApiResponseMsExchangeOrgConfig> {
 
-    return this.update22$Response(params).pipe(
+    return this.update23$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseMsExchangeOrgConfig>) => r.body as RestApiResponseMsExchangeOrgConfig)
     );
   }
 
   /**
-   * Path part for operation create20
+   * Path part for operation create21
    */
-  static readonly Create20Path = '/v1/ms-exchange-orgs';
+  static readonly Create21Path = '/v1/ms-exchange-orgs';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create20()` instead.
+   * To access only the response body, use `create21()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create20$Response(params: {
+  create21$Response(params: {
     body: MsExchangeOrgConfig
   }): Observable<StrictHttpResponse<RestApiResponseMsExchangeOrgConfig>> {
 
-    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Create20Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Create21Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -149,15 +149,15 @@ export class MsExchangeOrgConfigControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create20$Response()` instead.
+   * To access the full response (for headers, for example), `create21$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create20(params: {
+  create21(params: {
     body: MsExchangeOrgConfig
   }): Observable<RestApiResponseMsExchangeOrgConfig> {
 
-    return this.create20$Response(params).pipe(
+    return this.create21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseMsExchangeOrgConfig>) => r.body as RestApiResponseMsExchangeOrgConfig)
     );
   }
@@ -209,21 +209,21 @@ export class MsExchangeOrgConfigControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete11
+   * Path part for operation delete12
    */
-  static readonly Delete11Path = '/v1/ms-exchange-orgs/{id}';
+  static readonly Delete12Path = '/v1/ms-exchange-orgs/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete11()` instead.
+   * To access only the response body, use `delete12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete11$Response(params: {
+  delete12$Response(params: {
     id: MsExchangeOrgConfig;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Delete11Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Delete12Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -241,15 +241,15 @@ export class MsExchangeOrgConfigControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete11$Response()` instead.
+   * To access the full response (for headers, for example), `delete12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete11(params: {
+  delete12(params: {
     id: MsExchangeOrgConfig;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete11$Response(params).pipe(
+    return this.delete12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

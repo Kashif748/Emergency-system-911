@@ -15,6 +15,7 @@ import { RestApiResponseBoolean } from '../models/rest-api-response-boolean';
 import { RestApiResponsePageTaskWorkLogForDashboardProjection } from '../models/rest-api-response-page-task-work-log-for-dashboard-projection';
 import { RestApiResponsePageTaskWorkLogProjection } from '../models/rest-api-response-page-task-work-log-projection';
 import { RestApiResponseTaskWorkLogProjection } from '../models/rest-api-response-task-work-log-projection';
+import { TaskDashboardLogsRequest } from '../models/task-dashboard-logs-request';
 import { TaskWorkLog } from '../models/task-work-log';
 
 @Injectable()
@@ -286,19 +287,17 @@ export class TaskWorkLogControllerService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getTaskWorkLogForDashboard()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   getTaskWorkLogForDashboard$Response(params: {
-    isAutoWorkLog?: boolean;
-    taskIds: Array<number>;
     pageable: Pageable;
+    body: TaskDashboardLogsRequest
   }): Observable<StrictHttpResponse<RestApiResponsePageTaskWorkLogForDashboardProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, TaskWorkLogControllerService.GetTaskWorkLogForDashboardPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, TaskWorkLogControllerService.GetTaskWorkLogForDashboardPath, 'post');
     if (params) {
-      rb.query('isAutoWorkLog', params.isAutoWorkLog, {});
-      rb.query('taskIds', params.taskIds, {});
       rb.query('pageable', params.pageable, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
@@ -316,12 +315,11 @@ export class TaskWorkLogControllerService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getTaskWorkLogForDashboard$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   getTaskWorkLogForDashboard(params: {
-    isAutoWorkLog?: boolean;
-    taskIds: Array<number>;
     pageable: Pageable;
+    body: TaskDashboardLogsRequest
   }): Observable<RestApiResponsePageTaskWorkLogForDashboardProjection> {
 
     return this.getTaskWorkLogForDashboard$Response(params).pipe(

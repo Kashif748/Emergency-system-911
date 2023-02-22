@@ -208,21 +208,21 @@ export class HospitalControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete22
+   * Path part for operation delete23
    */
-  static readonly Delete22Path = '/v1/hospitals/{id}';
+  static readonly Delete23Path = '/v1/hospitals/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete22()` instead.
+   * To access only the response body, use `delete23()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete22$Response(params: {
+  delete23$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseHospital>> {
 
-    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.Delete22Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.Delete23Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -240,15 +240,15 @@ export class HospitalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete22$Response()` instead.
+   * To access the full response (for headers, for example), `delete23$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete22(params: {
+  delete23(params: {
     id: number;
   }): Observable<RestApiResponseHospital> {
 
-    return this.delete22$Response(params).pipe(
+    return this.delete23$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseHospital>) => r.body as RestApiResponseHospital)
     );
   }

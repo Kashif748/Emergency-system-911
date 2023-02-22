@@ -70,21 +70,21 @@ export class AssetsCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update76
+   * Path part for operation update79
    */
-  static readonly Update76Path = '/v1/assets-category';
+  static readonly Update79Path = '/v1/assets-category';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update76()` instead.
+   * To access only the response body, use `update79()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update76$Response(params: {
+  update79$Response(params: {
     body: AssetsCategory
   }): Observable<StrictHttpResponse<RestApiResponseAssetsCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Update76Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Update79Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class AssetsCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update76$Response()` instead.
+   * To access the full response (for headers, for example), `update79$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update76(params: {
+  update79(params: {
     body: AssetsCategory
   }): Observable<RestApiResponseAssetsCategory> {
 
-    return this.update76$Response(params).pipe(
+    return this.update79$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAssetsCategory>) => r.body as RestApiResponseAssetsCategory)
     );
   }
 
   /**
-   * Path part for operation create72
+   * Path part for operation create74
    */
-  static readonly Create72Path = '/v1/assets-category';
+  static readonly Create74Path = '/v1/assets-category';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create72()` instead.
+   * To access only the response body, use `create74()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create72$Response(params: {
+  create74$Response(params: {
     body: AssetsCategory
   }): Observable<StrictHttpResponse<RestApiResponseAssetsCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Create72Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Create74Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class AssetsCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create72$Response()` instead.
+   * To access the full response (for headers, for example), `create74$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create72(params: {
+  create74(params: {
     body: AssetsCategory
   }): Observable<RestApiResponseAssetsCategory> {
 
-    return this.create72$Response(params).pipe(
+    return this.create74$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAssetsCategory>) => r.body as RestApiResponseAssetsCategory)
     );
   }
@@ -208,21 +208,21 @@ export class AssetsCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete37
+   * Path part for operation delete39
    */
-  static readonly Delete37Path = '/v1/assets-category/{id}';
+  static readonly Delete39Path = '/v1/assets-category/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete37()` instead.
+   * To access only the response body, use `delete39()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete37$Response(params: {
+  delete39$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseAssetsCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Delete37Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Delete39Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -240,15 +240,15 @@ export class AssetsCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete37$Response()` instead.
+   * To access the full response (for headers, for example), `delete39$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete37(params: {
+  delete39(params: {
     id: number;
   }): Observable<RestApiResponseAssetsCategory> {
 
-    return this.delete37$Response(params).pipe(
+    return this.delete39$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAssetsCategory>) => r.body as RestApiResponseAssetsCategory)
     );
   }

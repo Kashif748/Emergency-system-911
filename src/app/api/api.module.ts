@@ -26,6 +26,7 @@ import { RanksControllerService } from './services/ranks-controller.service';
 import { PushNotificationBodyControllerService } from './services/push-notification-body-controller.service';
 import { PushNotificationActionControllerService } from './services/push-notification-action-controller.service';
 import { PriorityControllerService } from './services/priority-controller.service';
+import { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
 import { OrgStructureControllerService } from './services/org-structure-controller.service';
 import { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
 import { OperationalReportControllerService } from './services/operational-report-controller.service';
@@ -77,6 +78,7 @@ import { ExerciseGoalLessonControllerService } from './services/exercise-goal-le
 import { ExerciseCommitteeRoleControllerService } from './services/exercise-committee-role-controller.service';
 import { ExerciseCommitteeControllerService } from './services/exercise-committee-controller.service';
 import { EventsConfigControllerService } from './services/events-config-controller.service';
+import { EventsConfigSmsControllerService } from './services/events-config-sms-controller.service';
 import { EnviromentalImpactControllerService } from './services/enviromental-impact-controller.service';
 import { EmergencyLevelControllerService } from './services/emergency-level-controller.service';
 import { DmsControllerService } from './services/dms-controller.service';
@@ -93,6 +95,7 @@ import { CircularCcControllerService } from './services/circular-cc-controller.s
 import { CircularControllerService } from './services/circular-controller.service';
 import { CircularStatusControllerService } from './services/circular-status-controller.service';
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+import { AvayaControllerService } from './services/avaya-controller.service';
 import { AssetControllerService } from './services/asset-controller.service';
 import { AssetsGroupControllerService } from './services/assets-group-controller.service';
 import { AssetsCategoryControllerService } from './services/assets-category-controller.service';
@@ -120,6 +123,7 @@ import { PrivilegeControllerService } from './services/privilege-controller.serv
 import { OrganizationTypesService } from './services/organization-types.service';
 import { OrganizationHierarchicalStructureService } from './services/organization-hierarchical-structure.service';
 import { NotificationTransactionControllerService } from './services/notification-transaction-controller.service';
+import { NotificationPlaceHolderControllerService } from './services/notification-place-holder-controller.service';
 import { InspectionControllerService } from './services/inspection-controller.service';
 import { MsMailJobService } from './services/ms-mail-job.service';
 import { DohControllerService } from './services/doh-controller.service';
@@ -160,6 +164,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     PushNotificationBodyControllerService,
     PushNotificationActionControllerService,
     PriorityControllerService,
+    ExternalPhonebookControllerService,
     OrgStructureControllerService,
     OrgQuickLinkControllerService,
     OperationalReportControllerService,
@@ -211,6 +216,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     ExerciseCommitteeRoleControllerService,
     ExerciseCommitteeControllerService,
     EventsConfigControllerService,
+    EventsConfigSmsControllerService,
     EnviromentalImpactControllerService,
     EmergencyLevelControllerService,
     DmsControllerService,
@@ -227,6 +233,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     CircularControllerService,
     CircularStatusControllerService,
     ConfidentialtyControllerService,
+    AvayaControllerService,
     AssetControllerService,
     AssetsGroupControllerService,
     AssetsCategoryControllerService,
@@ -254,6 +261,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     OrganizationTypesService,
     OrganizationHierarchicalStructureService,
     NotificationTransactionControllerService,
+    NotificationPlaceHolderControllerService,
     InspectionControllerService,
     MsMailJobService,
     DohControllerService,

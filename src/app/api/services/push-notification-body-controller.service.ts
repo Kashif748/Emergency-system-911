@@ -12,7 +12,9 @@ import { map, filter } from 'rxjs/operators';
 import { Pageable } from '../models/pageable';
 import { PushNotificationBody } from '../models/push-notification-body';
 import { RestApiResponsePagePushNotificationBody } from '../models/rest-api-response-page-push-notification-body';
+import { RestApiResponsePagePushNotificationBodyProjection } from '../models/rest-api-response-page-push-notification-body-projection';
 import { RestApiResponsePushNotificationBody } from '../models/rest-api-response-push-notification-body';
+import { RestApiResponsePushNotificationBodyProjection } from '../models/rest-api-response-push-notification-body-projection';
 
 @Injectable()
 export class PushNotificationBodyControllerService extends BaseService {
@@ -82,7 +84,7 @@ export class PushNotificationBodyControllerService extends BaseService {
    */
   update13$Response(params: {
     body: PushNotificationBody
-  }): Observable<StrictHttpResponse<RestApiResponsePushNotificationBody>> {
+  }): Observable<StrictHttpResponse<RestApiResponsePushNotificationBodyProjection>> {
 
     const rb = new RequestBuilder(this.rootUrl, PushNotificationBodyControllerService.Update13Path, 'put');
     if (params) {
@@ -95,7 +97,7 @@ export class PushNotificationBodyControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponsePushNotificationBody>;
+        return r as StrictHttpResponse<RestApiResponsePushNotificationBodyProjection>;
       })
     );
   }
@@ -108,10 +110,10 @@ export class PushNotificationBodyControllerService extends BaseService {
    */
   update13(params: {
     body: PushNotificationBody
-  }): Observable<RestApiResponsePushNotificationBody> {
+  }): Observable<RestApiResponsePushNotificationBodyProjection> {
 
     return this.update13$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponsePushNotificationBody>) => r.body as RestApiResponsePushNotificationBody)
+      map((r: StrictHttpResponse<RestApiResponsePushNotificationBodyProjection>) => r.body as RestApiResponsePushNotificationBodyProjection)
     );
   }
 
@@ -204,6 +206,55 @@ export class PushNotificationBodyControllerService extends BaseService {
 
     return this.get6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePushNotificationBody>) => r.body as RestApiResponsePushNotificationBody)
+    );
+  }
+
+  /**
+   * Path part for operation getPushNotificationTemplates
+   */
+  static readonly GetPushNotificationTemplatesPath = '/v1/push-notificatios-body/templates';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPushNotificationTemplates()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPushNotificationTemplates$Response(params: {
+    moduleId?: Array<number>;
+    page: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePagePushNotificationBodyProjection>> {
+
+    const rb = new RequestBuilder(this.rootUrl, PushNotificationBodyControllerService.GetPushNotificationTemplatesPath, 'get');
+    if (params) {
+      rb.query('moduleId', params.moduleId, {});
+      rb.query('page', params.page, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePagePushNotificationBodyProjection>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getPushNotificationTemplates$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPushNotificationTemplates(params: {
+    moduleId?: Array<number>;
+    page: Pageable;
+  }): Observable<RestApiResponsePagePushNotificationBodyProjection> {
+
+    return this.getPushNotificationTemplates$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePagePushNotificationBodyProjection>) => r.body as RestApiResponsePagePushNotificationBodyProjection)
     );
   }
 

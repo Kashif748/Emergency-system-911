@@ -17,6 +17,7 @@ export interface IncidentStatisticsDataFilter {
   reporterContact?: number;
   reportingVia?: number;
   responsibleOrg?: number;
+  serial?: number;
   status?: number;
   subject?: string;
   toDate?: string;
