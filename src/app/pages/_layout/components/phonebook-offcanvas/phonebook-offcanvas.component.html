@@ -1,0 +1,170 @@
+<p-sidebar
+  [(visible)]="display"
+  [baseZIndex]="9999"
+  [modal]="false"
+  [position]="'right'"
+  [style]="{ width: '30em' }"
+  [showCloseIcon]="false"
+>
+  <div
+    class="p-d-flex justify-content-between align-items-center py-5 header border-bottom"
+  >
+    <h3 class="m-0">{{ "PHONEBOOK.HEADER" | translate }}</h3>
+    <button
+      pButton
+      pRipple
+      type="button"
+      icon="pi pi-times-circle"
+      (click)="display = false"
+      class="p-button-rounded p-button-secondary p-button-text copy-btn"
+    ></button>
+  </div>
+  <div *ngIf="state$ | async as state" class="pt-4" style="flex: auto">
+    <p-panel
+      header="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+      [toggleable]="true"
+      [collapsed]="true"
+    >
+      <form class="p-fluid p-grid">
+        <div class="p-field p-col-12">
+          <input
+            type="text"
+            pInputText
+            (keyup)="updateFilter({ name: $event.target.value }, $event)"
+            placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
+          />
+        </div>
+        <div class="p-field p-col-12">
+          <input
+            type="text"
+            pInputText
+            (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
+            placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
+          />
+        </div>
+        <div class="p-field p-col-12">
+          <ngx-intl-tel-input
+            cssClass="p-inputtext p-component p-text-left"
+            [onlyCountries]="['ae']"
+            (keyup)="
+              updateFilter({ mobileNumber: $event.target.value }, $event)
+            "
+            [enablePlaceholder]="true"
+            [enableAutoCountrySelect]="true"
+            searchCountryPlaceholder="{{
+              'PHONEBOOK.MOBILE_NUMBER' | translate
+            }}"
+          >
+          </ngx-intl-tel-input>
+        </div>
+
+        <div class="p-col p-d-flex justify-content-between">
+          <div class="mx-1">
+            <button
+              pButton
+              type="button"
+              label="{{ 'ACTIONS.CLEAR' | translate }}"
+              icon="pi pi-times"
+              class="p-button-outlined"
+              [loading]="loading$ | async"
+              (click)="clear()"
+            ></button>
+          </div>
+          <div class="mx-1">
+            <button
+              pButton
+              label="{{ 'ACTIONS.SEARCH' | translate }}"
+              icon="pi pi-search"
+              [loading]="loading$ | async"
+              (click)="search()"
+            ></button>
+          </div>
+        </div>
+      </form>
+    </p-panel>
+    <perfect-scrollbar class="overflow-scroll">
+      <ng-container *ngIf="!(loading$ | async); else loadingSkelton">
+        <ul class="navi navi-hover navi-active mt-4">
+          <li *ngFor="let item of page$ | async" class="navi-item">
+            <div class="navi-link rounded-lg">
+              <div class="navi-text d-flex flex-column">
+                <span class="d-block font-weight-bold">
+                  {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+                </span>
+                <div class="d-flex text-muted">
+                  <span class="">
+                    <i class="pi pi-mobile"></i>
+
+                    {{ item.mobileNumber }}
+                  </span>
+                  <span class="px-3">|</span>
+                  <span class="">
+                    <i class="pi pi-phone"></i>
+
+                    {{ item.phoneNumber }}
+                  </span>
+                </div>
+              </div>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-copy"
+                pTooltip="Copy Mobile Number"
+                (click)="copyToClipboard(item)"
+                class="p-button-rounded p-button-secondary p-button-text copy-btn"
+              ></button>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+    </perfect-scrollbar>
+    <div class="w-100 text-center border-top pg">
+      <p-paginator
+        [first]="state?.pageRequest?.first"
+        [rows]="state?.pageRequest?.rows"
+        [totalRecords]="totalRecords$ | async"
+        (onPageChange)="loadPage($event)"
+      ></p-paginator>
+    </div>
+  </div>
+</p-sidebar>
+
+<!-- float button -->
+<div class="float-phonebook d-flex flex-column shadow">
+  <button
+    type="button"
+    class="btn btn-icon btn-light mb-2"
+    [routerLink]="['/emergencies-phonebook']"
+  >
+    <span
+      inlineSVG="/assets/media/svg/icons/Communication/Call.svg"
+      cacheSVG="true"
+      class="svg-icon svg-icon-success"
+    ></span>
+  </button>
+  <button type="button" class="btn btn-icon btn-light" (click)="display = true">
+    <span
+      inlineSVG="/assets/media/svg/icons/Text/Bullet-list.svg"
+      cacheSVG="true"
+      class="svg-icon svg-icon-primary"
+    ></span>
+  </button>
+</div>
+
+<ng-template #loadingSkelton>
+  <div class="d-flex flex-column mt-4">
+    <div
+      class="w-100 p-3 d-fllex border-bottom"
+      *ngFor="let _ of [].constructor(10)"
+    >
+      <div class="d-flex align-items-center">
+        <div style="flex: 1">
+          <p-skeleton width="30%" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="75%"></p-skeleton>
+        </div>
+        <p-skeleton shape="circle" size="2rem" styleClass="ml-2"></p-skeleton>
+      </div>
+    </div>
+  </div>
+</ng-template>
