@@ -81,21 +81,21 @@ export class ManageGroupsService extends BaseService {
   }
 
   /**
-   * Path part for operation update48
+   * Path part for operation update49
    */
-  static readonly Update48Path = '/v1/groups';
+  static readonly Update49Path = '/v1/groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update48()` instead.
+   * To access only the response body, use `update49()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update48$Response(params: {
+  update49$Response(params: {
     body: Group
   }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Update48Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Update49Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -113,35 +113,35 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update48$Response()` instead.
+   * To access the full response (for headers, for example), `update49$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update48(params: {
+  update49(params: {
     body: Group
   }): Observable<RestApiResponseGroup> {
 
-    return this.update48$Response(params).pipe(
+    return this.update49$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }
 
   /**
-   * Path part for operation create44
+   * Path part for operation create45
    */
-  static readonly Create44Path = '/v1/groups';
+  static readonly Create45Path = '/v1/groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create44()` instead.
+   * To access only the response body, use `create45()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create44$Response(params: {
+  create45$Response(params: {
     body: Group
   }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Create44Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Create45Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -159,15 +159,15 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create44$Response()` instead.
+   * To access the full response (for headers, for example), `create45$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create44(params: {
+  create45(params: {
     body: Group
   }): Observable<RestApiResponseGroup> {
 
-    return this.create44$Response(params).pipe(
+    return this.create45$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }
@@ -271,23 +271,23 @@ export class ManageGroupsService extends BaseService {
   }
 
   /**
-   * Path part for operation delete23
+   * Path part for operation delete24
    */
-  static readonly Delete23Path = '/v1/groups/{id}';
+  static readonly Delete24Path = '/v1/groups/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete23()` instead.
+   * To access only the response body, use `delete24()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  delete23$Response(params: {
+  delete24$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Delete23Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Delete24Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -305,17 +305,17 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete23$Response()` instead.
+   * To access the full response (for headers, for example), `delete24$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  delete23(params: {
+  delete24(params: {
     id: number;
   }): Observable<RestApiResponseGroup> {
 
-    return this.delete23$Response(params).pipe(
+    return this.delete24$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }

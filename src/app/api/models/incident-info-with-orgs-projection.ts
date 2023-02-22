@@ -45,6 +45,7 @@ export interface IncidentInfoWithOrgsProjection {
   reportingVia?: IEntity;
   responsibleOrg?: OrgStructureMinimumProjection;
   sector?: number;
+  serial?: number;
   specialized?: UserWithoutPhotoMinimunProjection;
   specializedEmail?: string;
   specializedMobile?: string;
@@ -54,6 +55,7 @@ export interface IncidentInfoWithOrgsProjection {
   tasks?: TotalTasks;
   timeTakenPercentage?: number;
   uuid?: string;
+  year?: number;
   zone?: number;
 }
 

@@ -71,21 +71,21 @@ export class ExerciseCommitteeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update59
+   * Path part for operation update60
    */
-  static readonly Update59Path = '/v1/exercise-committee';
+  static readonly Update60Path = '/v1/exercise-committee';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update59()` instead.
+   * To access only the response body, use `update60()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update59$Response(params: {
+  update60$Response(params: {
     body: ExerciseCommittee
   }): Observable<StrictHttpResponse<RestApiResponseExerciseCommittee>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExerciseCommitteeControllerService.Update59Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ExerciseCommitteeControllerService.Update60Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -103,35 +103,35 @@ export class ExerciseCommitteeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update59$Response()` instead.
+   * To access the full response (for headers, for example), `update60$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update59(params: {
+  update60(params: {
     body: ExerciseCommittee
   }): Observable<RestApiResponseExerciseCommittee> {
 
-    return this.update59$Response(params).pipe(
+    return this.update60$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExerciseCommittee>) => r.body as RestApiResponseExerciseCommittee)
     );
   }
 
   /**
-   * Path part for operation create55
+   * Path part for operation create56
    */
-  static readonly Create55Path = '/v1/exercise-committee';
+  static readonly Create56Path = '/v1/exercise-committee';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create55()` instead.
+   * To access only the response body, use `create56()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create55$Response(params: {
+  create56$Response(params: {
     body: ExerciseCommittee
   }): Observable<StrictHttpResponse<RestApiResponseExerciseCommittee>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExerciseCommitteeControllerService.Create55Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ExerciseCommitteeControllerService.Create56Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -149,15 +149,15 @@ export class ExerciseCommitteeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create55$Response()` instead.
+   * To access the full response (for headers, for example), `create56$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create55(params: {
+  create56(params: {
     body: ExerciseCommittee
   }): Observable<RestApiResponseExerciseCommittee> {
 
-    return this.create55$Response(params).pipe(
+    return this.create56$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExerciseCommittee>) => r.body as RestApiResponseExerciseCommittee)
     );
   }
@@ -209,21 +209,21 @@ export class ExerciseCommitteeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete31
+   * Path part for operation delete32
    */
-  static readonly Delete31Path = '/v1/exercise-committee/{id}';
+  static readonly Delete32Path = '/v1/exercise-committee/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete31()` instead.
+   * To access only the response body, use `delete32()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete31$Response(params: {
+  delete32$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExerciseCommitteeControllerService.Delete31Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, ExerciseCommitteeControllerService.Delete32Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -241,15 +241,15 @@ export class ExerciseCommitteeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete31$Response()` instead.
+   * To access the full response (for headers, for example), `delete32$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete31(params: {
+  delete32(params: {
     id: number;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete31$Response(params).pipe(
+    return this.delete32$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

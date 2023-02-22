@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { DataOptions, FormFieldName } from '@shared/components/advanced-search/advanced-search.component';
 import { AdvancedSearchFieldsEnum } from '@shared/components/advanced-search/advancedSearch.model';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
@@ -72,15 +73,15 @@ export class InquiriesReportComponent implements OnInit {
   this.isLoading$.next(true);
   this.paginationConfig.currentPage = 0;
   if (this.form.value.fromDate != '') {
-    this.form.value.fromDate = new Date(
+    this.form.value.fromDate = DateTimeUtil.format(new Date(
       this.form.value.fromDate
-    ).toLocaleDateString('en-CA');
+    ), DateTimeUtil.DATE_FORMAT);
   }
 
   if (this.form.value.toDate != '') {
-    this.form.value.toDate = new Date(
+    this.form.value.toDate =DateTimeUtil.format( new Date(
       this.form.value.toDate
-    ).toLocaleDateString('en-CA');
+    ), DateTimeUtil.DATE_FORMAT);
   }
 
   this.inquiryServices.getInquiries

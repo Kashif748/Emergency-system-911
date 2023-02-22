@@ -12,6 +12,7 @@ import { map, filter } from 'rxjs/operators';
 import { EventsConfig } from '../models/events-config';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseEventsConfig } from '../models/rest-api-response-events-config';
+import { RestApiResponseListIdNameProjection } from '../models/rest-api-response-list-id-name-projection';
 import { RestApiResponsePageEventsConfig } from '../models/rest-api-response-page-events-config';
 
 @Injectable()
@@ -24,22 +25,22 @@ export class EventsConfigControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update60
+   * Path part for operation update61
    */
-  static readonly Update60Path = '/v1/events-config/{id}';
+  static readonly Update61Path = '/v1/events-config/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update60()` instead.
+   * To access only the response body, use `update61()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update60$Response(params: {
+  update61$Response(params: {
     id: number;
     body: EventsConfig
   }): Observable<StrictHttpResponse<RestApiResponseEventsConfig>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EventsConfigControllerService.Update60Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, EventsConfigControllerService.Update61Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
       rb.body(params.body, 'application/json');
@@ -58,16 +59,16 @@ export class EventsConfigControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update60$Response()` instead.
+   * To access the full response (for headers, for example), `update61$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update60(params: {
+  update61(params: {
     id: number;
     body: EventsConfig
   }): Observable<RestApiResponseEventsConfig> {
 
-    return this.update60$Response(params).pipe(
+    return this.update61$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseEventsConfig>) => r.body as RestApiResponseEventsConfig)
     );
   }
@@ -116,21 +117,64 @@ export class EventsConfigControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll9
+   * Path part for operation getAllEventModules
    */
-  static readonly GetAll9Path = '/v1/events-config';
+  static readonly GetAllEventModulesPath = '/v1/events-config/modules';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll9()` instead.
+   * To access only the response body, use `getAllEventModules()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll9$Response(params: {
+  getAllEventModules$Response(params?: {
+  }): Observable<StrictHttpResponse<RestApiResponseListIdNameProjection>> {
+
+    const rb = new RequestBuilder(this.rootUrl, EventsConfigControllerService.GetAllEventModulesPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListIdNameProjection>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllEventModules$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllEventModules(params?: {
+  }): Observable<RestApiResponseListIdNameProjection> {
+
+    return this.getAllEventModules$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListIdNameProjection>) => r.body as RestApiResponseListIdNameProjection)
+    );
+  }
+
+  /**
+   * Path part for operation search6
+   */
+  static readonly Search6Path = '/v1/events-config';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `search6()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  search6$Response(params: {
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageEventsConfig>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EventsConfigControllerService.GetAll9Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, EventsConfigControllerService.Search6Path, 'get');
     if (params) {
       rb.query('pageable', params.pageable, {});
     }
@@ -148,15 +192,15 @@ export class EventsConfigControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll9$Response()` instead.
+   * To access the full response (for headers, for example), `search6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll9(params: {
+  search6(params: {
     pageable: Pageable;
   }): Observable<RestApiResponsePageEventsConfig> {
 
-    return this.getAll9$Response(params).pipe(
+    return this.search6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageEventsConfig>) => r.body as RestApiResponsePageEventsConfig)
     );
   }
