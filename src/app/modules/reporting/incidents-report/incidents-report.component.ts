@@ -19,6 +19,7 @@ import { AppCommonData } from '@core/entities/AppCommonData';
 import { CommonService } from '@core/services/common.service';
 import { Router } from '@angular/router';
 import { INTERIM_STATUS } from '../../incidents/new-incidents-view/const';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-incidents-report',
@@ -582,15 +583,15 @@ export class IncidentsReportComponent implements OnInit {
     this.loading = true;
 
     if (this.form.value.createdDate != '') {
-      this.form.value.createdDate = new Date(
+      this.form.value.createdDate = DateTimeUtil.format(new Date(
         this.form.value.createdDate
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
 
     if (this.form.value.endDate != '') {
-      this.form.value.endDate = new Date(
+      this.form.value.endDate = DateTimeUtil.format(new Date(
         this.form.value.endDate
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
 
     this.pageChanged(1);

@@ -9,6 +9,7 @@ import { catchError, skip } from 'rxjs/operators';
 import { TranslationService } from '../../i18n/translation.service';
 import { FEELS, REASONS } from '../../survey/keys-data';
 import { ILangFacade } from '@core/facades/lang.facade';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-surveys-list-report',
@@ -153,14 +154,14 @@ export class SurveysListReportComponent implements OnInit {
   proccesDate() {
     const filterForm = this.filtersForm.value;
     if (this.filtersForm.get('fromDate').value != '') {
-      filterForm['fromDate'] = new Date(
+      filterForm['fromDate'] = DateTimeUtil.format(new Date(
         this.filtersForm.get('fromDate').value
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
     if (this.filtersForm.get('toDate').value != '') {
-      filterForm['toDate'] = new Date(
+      filterForm['toDate'] = DateTimeUtil.format( new Date(
         this.filtersForm.get('toDate').value
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
     if (filterForm['toDate'] == '1970-01-01') {
       filterForm['toDate'] = '';

@@ -306,7 +306,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     if (this.filterTasksType === FilterTaskType.OUTGOING) {
       if (this.filterTasksForm.value.dueDate !== '') {
         this.filterTasksForm.value.dueDate =
-          this.filterTasksForm.value.dueDate.toLocaleDateString('en-CA');
+          DateTimeUtil.format(this.filterTasksForm.value.dueDate, DateTimeUtil.DATE_FORMAT);
       }
       this.createdByMyOrgPaginationConfig.currentPage = 0;
       this.loadCreatedByMyOrgTasks(
@@ -323,7 +323,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   onMyTaskSubmit() {
     if (this.filterTasksForm.value.dueDate !== '') {
       this.filterTasksForm.value.dueDate =
-        this.filterTasksForm.value.dueDate.toLocaleDateString('en-CA');
+        DateTimeUtil.format(this.filterTasksForm.value.dueDate, DateTimeUtil.DATE_FORMAT);
     }
     this.assignedToMePaginationConfig.currentPage = 0;
     this.loadAssignedToMeTasks(1, this.filterTasksForm.value);

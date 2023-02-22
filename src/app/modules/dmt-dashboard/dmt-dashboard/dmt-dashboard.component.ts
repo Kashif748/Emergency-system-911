@@ -18,6 +18,7 @@ import {
   Inspection,
   InspectionCount,
 } from "@core/api/services/dmt.service";
+import { DateTimeUtil } from "@core/utils/DateTimeUtil";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -171,12 +172,12 @@ export class DmtDashboardComponent implements OnInit, AfterViewInit {
     let filter = {
       ...this.form.value,
       fromStartDate:
-        this.form?.value?.fromStartDate?.toLocaleDateString("en-CA"),
-      endStartDate: this.form?.value?.endStartDate?.toLocaleDateString("en-CA"),
+        DateTimeUtil.format(this.form?.value?.fromStartDate, DateTimeUtil.DATE_FORMAT),
+      endStartDate: DateTimeUtil.format(this.form?.value?.endStartDate, DateTimeUtil.DATE_FORMAT),
       inspectionEndDate:
-        this.form?.value?.inspectionEndDate?.toLocaleDateString("en-CA"),
+       DateTimeUtil.format( this.form?.value?.inspectionEndDate, DateTimeUtil.DATE_FORMAT),
       inspectionStartDate:
-        this.form?.value?.inspectionStartDate?.toLocaleDateString("en-CA"),
+        DateTimeUtil.format(this.form?.value?.inspectionStartDate, DateTimeUtil.DATE_FORMAT),
     } as DmtFilter;
     this.filter = {};
     Object.keys(filter).forEach((k) => {

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { UrlHelperService } from '@core/services/url-helper.service';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -85,7 +86,7 @@ export class TaskService {
       .append('title', search.title ?? '')
       .append(
         'dueDate',
-        search.dueDate ? new Date(search.dueDate).toLocaleString('en-CA') : ''
+        search.dueDate ? DateTimeUtil.format(new Date(search.dueDate), DateTimeUtil.DATE_FORMAT) : ''
       )
       .append('priority', search.priority ?? '')
       .append('status', search.status ?? '')
@@ -112,7 +113,7 @@ export class TaskService {
       .append('title', search.title ?? '')
       .append(
         'dueDate',
-        search.dueDate ? new Date(search.dueDate).toLocaleString('en-CA') : ''
+        search.dueDate ? DateTimeUtil.format(new Date(search.dueDate), DateTimeUtil.DATE_FORMAT) : ''
       )
       .append('priority', search.priority ?? '')
       .append('status', search.status ?? '')
