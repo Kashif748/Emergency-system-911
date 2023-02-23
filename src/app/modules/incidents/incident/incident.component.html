@@ -27,7 +27,7 @@
         (click)="reportIncident()"
         *appPrivileges="'PRIV_CR_INC'"
       >
-        {{ "INCIDENTS.NEW_INCIDENTS" | translate }} 
+        {{ "INCIDENTS.NEW_INCIDENTS" | translate }}
         <span
           [inlineSVG]="'/assets/media/svg/icons/Files/File-plus.svg'"
           cacheSVG="true"
@@ -147,7 +147,7 @@
                   }}</mat-label>
                 <mat-select
                   placeholder="{{ 'INCIDENTS.REPORTINGVIA' | translate }}"
-                  formControlName="rVia"
+                  formControlName="reportingVia"
                 >
                   <mat-option
                     *ngFor="let rVia of reportedVia"
