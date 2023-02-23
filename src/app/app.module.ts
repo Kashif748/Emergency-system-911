@@ -131,7 +131,7 @@ export function getHighlightLanguages() {
     NgxsAsyncStoragePluginModule.forRoot(
       HyperStorageEngine,
       {
-        key: ['browse_users', 'browse_roles', 'common_data'],
+        key: ['browse_users', 'browse_roles', 'common_data', 'browse_tasks'],
       },
       ['common_data']
     ),

@@ -1,5 +1,5 @@
 <p-dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
-  [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
+  [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
   [resizable]="false">
   <ng-template pTemplate="header">
 
@@ -15,12 +15,12 @@
       </ng-container>
     </h3>
   </ng-template>
-  <div class="w-100 pt-2">
+  <div class="w-100 pt-2" style="height: 65vh;">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
 
-    <p-tabView #tabv [(activeIndex)]="activeTab">
+    <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)">
       <p-tabPanel header="{{'TASK_INFO' | translate }}">
 
         <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
@@ -414,8 +414,18 @@
         </ng-template>
       </p-tabPanel>
       <p-tabPanel header="{{'TASK_ATTACHMENTS' | translate }}">
-        <ng-template pTemplate="content">
-        </ng-template>
+        <!-- <ng-template pTemplate="content"> -->
+        <div class="row">
+          <div class="col-12">
+            <!-- <app-files-list style="text-align: -webkit-center" #filesList [files]="(task$ | async)?.attachments"
+                [recordId]="_taskId" [tagId]="UploadTagIdConst.TASKS" [inline]="true">
+              </app-files-list> -->
+
+            <ng-container #attachContainer></ng-container>
+
+          </div>
+        </div>
+        <!-- </ng-template> -->
       </p-tabPanel>
     </p-tabView>
 

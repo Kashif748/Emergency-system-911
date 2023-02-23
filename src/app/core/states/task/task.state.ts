@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import {
@@ -22,6 +23,7 @@ import {
   TaskType,
 } from 'src/app/api/models';
 import {
+  DmsControllerService,
   IncidentControllerService,
   ManageGroupsService,
   PriorityControllerService,
@@ -31,11 +33,15 @@ import {
 } from 'src/app/api/services';
 import { TaskAction } from './task.action';
 
+export interface TaskModel extends TaskDetails {
+  attachments: any[];
+}
 export interface TaskStateModel {
   statuses: TaskStatus[];
   priorites: PriorityProjection[];
   page: PageIncidentTaskProjection;
   task: TaskDetails;
+  createdTask: TaskDetails;
   loading: boolean;
   blocking: boolean;
   types: TaskType[];
@@ -58,7 +64,8 @@ export class TaskState {
     private priorityService: PriorityControllerService,
     private statusService: TaskStatusControllerService,
     private groupService: ManageGroupsService,
-    private incidentService: IncidentControllerService
+    private incidentService: IncidentControllerService,
+    private dmsService: DmsControllerService
   ) {}
   /* ************************ SELECTORS ******************** */
   @Selector([TaskState])
@@ -73,6 +80,10 @@ export class TaskState {
   @Selector([TaskState])
   static task(state: TaskStateModel) {
     return state?.task;
+  }
+  @Selector([TaskState])
+  static createdTask(state: TaskStateModel) {
+    return state?.createdTask;
   }
 
   @Selector([TaskState])
@@ -219,8 +230,23 @@ export class TaskState {
       })
     );
     return this.taskService.getTaskDetails({ taskId: payload.id }).pipe(
-      switchMap(({ result: task }) => {
-        return this.incidentService.get16({ id: task.incidentId }).pipe(
+      switchMap(({ result: task }) =>
+        //   this.dmsService
+        //     .findAttachment({
+        //       entityId: payload.id,
+        //       entityTagId: UploadTagIdConst.TASKS,
+        //     })
+        //     .pipe(
+        //       map((a) => {
+        //         return {
+        //           ...task,
+        //           attachments: a.result,
+        //         } as TaskModel;
+        //       })
+        //     )
+        // ),
+        // switchMap((task) =>
+        this.incidentService.get16({ id: task.incidentId }).pipe(
           map(({ result: incident }) => {
             return {
               ...task,
@@ -235,8 +261,8 @@ export class TaskState {
               },
             };
           })
-        );
-      }),
+        )
+      ),
       tap((task) => {
         setState(
           patch<TaskStateModel>({
@@ -340,6 +366,13 @@ export class TaskState {
         body: payload,
       })
       .pipe(
+        tap(({ result: task }) => {
+          setState(
+            patch<TaskStateModel>({
+              createdTask: task,
+            })
+          );
+        }),
         finalize(() => {
           setState(
             patch<TaskStateModel>({

@@ -1,13 +1,18 @@
 import {
   Component,
+  ComponentFactoryResolver,
+  Injector,
   Input,
   OnInit,
   QueryList,
   ViewChild,
   ViewChildren,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
+import { MessageHelper } from '@core/helpers/message.helper';
 import { IAuthService } from '@core/services/auth.service';
 import {
   AssetAction,
@@ -20,14 +25,17 @@ import {
 } from '@core/states';
 import { IncidentAction } from '@core/states/incident/incident.action';
 import { IncidentState } from '@core/states/incident/incident.state';
+import { TaskModel } from '@core/states/task/task.state';
 import { FormUtils } from '@core/utils/form.utils';
 import { Select, Store } from '@ngxs/store';
+import { FilesListComponent } from '@shared/attachments-list/files-list/files-list.component';
 import { TreeNode } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
 import { Observable, Subject } from 'rxjs';
 import {
   auditTime,
   distinctUntilChanged,
+  filter,
   map,
   switchMap,
   take,
@@ -52,6 +60,7 @@ import { BrowseTasksAction } from '../../states/browse-tasks.action';
   styleUrls: ['./task-dialog.component.scss'],
 })
 export class TaskDialogComponent implements OnInit {
+  UploadTagIdConst = UploadTagIdConst;
   opened$: Observable<boolean>;
   @Input()
   activeTab: number = 0;
@@ -83,6 +92,9 @@ export class TaskDialogComponent implements OnInit {
   @Select(AssetState.assets)
   public assets$: Observable<OrgAssetsProjection[]>;
 
+  @Select(TaskState.task)
+  public task$: Observable<TaskModel>;
+
   @Select(IncidentState.transLoading)
   incidentLoading$: Observable<boolean>;
 
@@ -90,6 +102,12 @@ export class TaskDialogComponent implements OnInit {
   @ViewChild('assignTo') assigneeDropdown: Dropdown;
 
   @ViewChildren(Dropdown) dropdowns: QueryList<Dropdown>;
+
+  @ViewChild('filesList') attachComponent: FilesListComponent;
+
+  @ViewChild('attachContainer', { read: ViewContainerRef })
+  attachContainer: ViewContainerRef;
+
   public get minDate() {
     return new Date();
   }
@@ -200,7 +218,10 @@ export class TaskDialogComponent implements OnInit {
     private formBuilder: FormBuilder,
     private store: Store,
     private auth: IAuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageHelper: MessageHelper,
+    private injector: Injector,
+    private cfr: ComponentFactoryResolver
   ) {
     this.route.queryParams
       .pipe(
@@ -462,7 +483,7 @@ export class TaskDialogComponent implements OnInit {
       });
   }
 
-  submit() {
+  async submit() {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -502,8 +523,25 @@ export class TaskDialogComponent implements OnInit {
     task.id = this._taskId;
     if (this.editMode) {
       this.store.dispatch(new BrowseTasksAction.UpdateTask(task));
+      await this.attachComponent?.upload(this._taskId, false);
+      setTimeout(() => {
+        this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+      }, 1200);
     } else {
-      this.store.dispatch(new BrowseTasksAction.CreateTask(task));
+      this.store
+        .dispatch(new BrowseTasksAction.CreateTask(task))
+        .pipe(
+          takeUntil(this.destroy$),
+          switchMap(() => this.store.select(TaskState.createdTask)),
+          filter((t) => !!t),
+          take(1)
+        )
+        .subscribe(async (t) => {
+          await this.attachComponent?.upload(t.id, false);
+          setTimeout(() => {
+            this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+          }, 1200);
+        });
     }
   }
 
@@ -515,5 +553,33 @@ export class TaskDialogComponent implements OnInit {
 
   close() {
     this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+  }
+
+  async loadAttachComponent() {
+    this.attachContainer?.clear();
+    const { FilesListComponent } = await import(
+      '@shared/attachments-list/files-list/files-list.component'
+    );
+    const factory = this.cfr.resolveComponentFactory(FilesListComponent);
+
+    const { instance, changeDetectorRef: cdr } =
+      this.attachContainer.createComponent(factory, null, this.injector);
+
+    instance.recordId = this._taskId;
+    instance.tagId = UploadTagIdConst.TASKS;
+    instance.inline = true;
+    this.attachComponent = instance;
+    cdr.detectChanges();
+  }
+
+  tab(index: number) {
+    switch (index) {
+      case 2:
+        this.loadAttachComponent();
+        break;
+
+      default:
+        break;
+    }
   }
 }

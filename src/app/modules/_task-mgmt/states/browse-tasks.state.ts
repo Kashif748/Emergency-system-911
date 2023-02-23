@@ -103,7 +103,7 @@ export class BrowseTasksState {
           ...pageRequest.filters,
           priority: pageRequest.filters.priority?.id,
           status: pageRequest.filters.status?.map((o) => o.id),
-          type : this.route.snapshot.queryParams['_type']
+          type: this.route.snapshot.queryParams['_type'],
         },
       })
     );
@@ -133,7 +133,7 @@ export class BrowseTasksState {
           ...pageRequest.filters,
           priority: pageRequest.filters.priority?.id,
           status: pageRequest.filters.status?.map((o) => o.id),
-          type : this.route.snapshot.queryParams['_type']
+          type: this.route.snapshot.queryParams['_type'],
         },
       })
     );
@@ -190,7 +190,6 @@ export class BrowseTasksState {
       },
       queryParamsHandling: 'merge',
     });
-   
   }
 
   @Action(BrowseTasksAction.CreateTask)
@@ -206,10 +205,10 @@ export class BrowseTasksState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseTasksAction.ToggleDialog({}));
       })
+      // finalize(() => {
+      //   dispatch(new BrowseTasksAction.ToggleDialog({}));
+      // })
     );
   }
 
@@ -226,10 +225,10 @@ export class BrowseTasksState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseTasksAction.ToggleDialog({}));
       })
+      // finalize(() => {
+      //   dispatch(new BrowseTasksAction.ToggleDialog({}));
+      // })
     );
   }
 
