@@ -146,6 +146,52 @@ export class UserState {
       );
   }
 
+  @Action(UserAction.LoadUserPage, { cancelUncompleted: true })
+  LoadUserPage(
+    { setState }: StateContext<UserStateModel>,
+    { payload }: UserAction.LoadUserPage
+  ) {
+    setState(
+      patch<UserStateModel>({
+        loading: true,
+      })
+    );
+    return this.userService
+      .getAllForOrg({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+        },
+        name: payload.name,
+
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<UserStateModel>({
+              page: res.result,
+              loading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<UserStateModel>({
+              page: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<UserStateModel>({
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
   @Action(UserAction.GetUser, { cancelUncompleted: true })
   getUser(
     { setState }: StateContext<UserStateModel>,

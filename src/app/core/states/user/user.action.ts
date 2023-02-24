@@ -20,6 +20,20 @@ export namespace UserAction {
     ) {}
   }
 
+  export class LoadUserPage {
+    static readonly type = '[User] Load Page';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        name: string;
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+
   export class GetUser {
     static readonly type = '[User] Get User';
     /**

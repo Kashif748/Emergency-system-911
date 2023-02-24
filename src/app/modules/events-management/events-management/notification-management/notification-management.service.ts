@@ -93,7 +93,7 @@ export class NotificationManagementService extends DataSourceService {
     this.worklongTemplatesTotalElementChanged$ = this.worklongTemplateTotalElement$.asObservable();
   }
   getModules(){
-    return this.http.get<any>(`${environment.apiUrl}/modules`, {}).pipe();
+    return this.http.get<any>(`${environment.apiUrl}/events-config/modules`, {}).pipe();
   }
 
 /*  getNotificationPlaceHolders(id){

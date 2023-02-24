@@ -5,6 +5,7 @@ import { PrivilegeGuard } from '@shared/guards/privilege.guard';
 import { IncidentsService } from '../_metronic/core/services/incidents.service';
 import { LayoutComponent } from './_layout/layout.component';
 import { DashboardService } from './dashboard/dashboard.service';
+import {GroupsManagementModule} from "../modules/_team-mgmt/team-mgmt.module";
 
 const routes: Routes = [
   {
@@ -158,7 +159,7 @@ const routes: Routes = [
         canLoad: [PrivilegeGuard],
         data: { permission: ['PRIV_VW_GRP', 'PRIV_VW_MNG_GRP'], type: 'or' },
         loadChildren: () =>
-          import('../modules/groups-management/groups-management.module').then(
+          import('../modules/_team-mgmt/team-mgmt.module').then(
             (m) => m.GroupsManagementModule
           ),
       },
