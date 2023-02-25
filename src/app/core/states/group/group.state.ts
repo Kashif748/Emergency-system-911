@@ -16,7 +16,7 @@ import {
   RanksControllerService,
 } from 'src/app/api/services';
 import { GroupAction } from './group.action';
-import { patch } from '@ngxs/store/operators';
+import {patch, updateItem} from '@ngxs/store/operators';
 import { UrlHelperService } from '@core/services/url-helper.service';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { OrgState } from '../org/org.state';
@@ -28,6 +28,7 @@ import {Pageable, User, UserInappAuthentication, UserMiddlewareAuth} from "../..
 import {GroupProjection} from "../../../api/models/group-projection";
 import {UserGroupMapControllerService} from "../../../api/services/user-group-map-controller.service";
 import {GroupUser} from "../../../api/models/group-user";
+import {MessageHelper} from "@core/helpers/message.helper";
 
 export interface GroupStateModel {
   page: PageGroupProjection;
@@ -54,6 +55,7 @@ export class GroupState {
     private urlHelper: UrlHelperService,
     private langFacade: ILangFacade,
     private store: Store,
+    private messageHelper: MessageHelper,
     private createUserGroupMap: UserGroupMapControllerService
   ) {}
   /* ************************ SELECTORS ******************** */
@@ -205,24 +207,24 @@ export class GroupState {
       );
   }
 
- /* @Action(UserAction.Activate)
+  @Action(GroupAction.Activate)
   activate(
     { setState }: StateContext<GroupStateModel>,
-    { payload }: UserAction.Activate
+    { payload }: GroupAction.Activate
   ) {
-    return this.userService
-      .updateUserToActive({
-        userId: payload.id,
+    return this.groupService
+      .getActiveGroup({
+        id: payload.id,
       })
       .pipe(
         tap(() => {
           this.messageHelper.success();
           setState(
             patch<GroupStateModel>({
-              page: patch<PageUserAndRoleProjection>({
+              page: patch<PageGroupProjection>({
                 content: updateItem(
                   (u) => u.id === payload.id,
-                  patch<UserAndRoleProjection>({
+                  patch<GroupProjection>({
                     isActive: true,
                   })
                 ),
@@ -231,7 +233,7 @@ export class GroupState {
           );
         })
       );
-  }*/
+  }
 
   @Action(GroupAction.CreateUser)
   createUser(

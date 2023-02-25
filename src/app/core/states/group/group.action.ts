@@ -42,13 +42,13 @@ export namespace GroupAction {
     ) {}
   }
 
-/*  export class Activate {
-    static readonly type = '[User] Activate';
-    /!**
+  export class Activate {
+    static readonly type = '[Group] Activate';
+    /**
      *
-     *!/
+     */
     constructor(public payload: { id: number }) {}
-  }*/
+  }
 
   export class Create {
     static readonly type = '[Group] Create';
@@ -77,7 +77,6 @@ export namespace GroupAction {
      */
     constructor(
       public payload: {
-        groupId?: number,
         user: GroupUser[]
       }
     ) {}
