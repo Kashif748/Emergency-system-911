@@ -438,7 +438,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
           //   },
           // ],
           // url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
-          url: `arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
           id: 'MunicipalityImage',
           title: 'Municipality',
           opacity: 0.5,
@@ -469,7 +469,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
 
       const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
               new MapImageLayer({
-        url: `arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+        url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
         id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
         tilte: 'Districts',
         transparent: true,
@@ -499,7 +499,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
 
       const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
-          url: `arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
           id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
           tilte: 'Plots',
           transparent: true,
