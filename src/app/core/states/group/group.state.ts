@@ -247,7 +247,7 @@ export class GroupState {
     );
     return this.createUserGroupMap
       .createUserGroupMap({
-        groupId: getState().createdGroup.id,
+        groupId: getState().createdGroup.id || payload.groupId,
         body: payload.user,
       })
       .pipe(
@@ -260,6 +260,32 @@ export class GroupState {
         })
       );
   }
+
+ /* @Action(GroupAction.CreateGroupMapUser)
+  createGroupMapUser(
+    { setState, getState }: StateContext<GroupStateModel>,
+    { payload }: GroupAction.CreateGroupMapUser
+  ) {
+    setState(
+      patch<GroupStateModel>({
+        blocking: true,
+      })
+    );
+    return this.createUserGroupMap
+      .createUserGroupMap({
+        groupId: payload.groupId,
+        body: payload.user,
+      }).pipe(
+        finalize(() => {
+          setState(
+            patch<GroupStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }*/
+
 
   @Action(GroupAction.Create)
   create(

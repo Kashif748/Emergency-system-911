@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {TreeNode} from "primeng/api";
-import {OrgStructure, Ranks, Role, UserAndRoleProjection} from "../../../../api/models";
-import {catchError, distinctUntilChanged, filter, finalize, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {OrgStructure, UserAndRoleProjection} from "../../../../api/models";
+import {auditTime, catchError, distinctUntilChanged, filter, finalize, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {GroupAction, OrgAction, OrgState, RoleAction, RoleState, UserAction, UserState} from "@core/states";
 import {EMPTY, Observable, Subject} from "rxjs";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
@@ -16,7 +16,6 @@ import {BrowseGroupsAction} from "../../states/browse-groups.action";
 import {TranslationService} from "../../../i18n/translation.service";
 import {GroupState} from "@core/states/group/group.state";
 import {userType} from "../../../groups-management/group.model";
-import {GroupUser} from "../../../../api/models/group-user";
 
 @Component({
   selector: 'app-group-dialog',
@@ -24,11 +23,7 @@ import {GroupUser} from "../../../../api/models/group-user";
   styleUrls: ['./group-dialog.component.scss']
 })
 export class GroupDialogComponent implements OnInit, OnDestroy {
-  public get minDate() {
-    const date = new Date();
-    date.setDate(date.getDate() + 1);
-    return date;
-  }
+
   RegxConst = RegxConst;
 
   opened$: Observable<boolean>;
@@ -38,13 +33,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   @Select(OrgState.orgs)
   orgs$: Observable<OrgStructure[]>;
 
-
+  @Select(UserState.groupMapUsers)
   users$: Observable<UserAndRoleProjection[]>;
 
-/*  @Select(RoleState.roles)
-  roles$: Observable<Role[]>;*/
-  /*@Select(UserState.ranks)
-  ranks$: Observable<Ranks[]>;*/
+  // users$: Observable<UserAndRoleProjection[]>;
+
   @Select(GroupState.blocking)
   blocking$: Observable<boolean>;
 
@@ -54,14 +47,13 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   orgsTree: TreeNode[];
 
   form: FormGroup;
-  passwordControl: FormControl;
-  rankControl: FormControl;
   private defaultFormValue: { [key: string]: any } = {};
 
-  profileImg?: CroppedEvent;
-  signatureImg?: CroppedEvent;
+  userGroupForm: FormGroup;
+   private defaultUserFormValue: { [key: string]: any } = {};
 
   destroy$ = new Subject();
+  private LoadUsers$ = new Subject<string>();
   lang = 'en';
 
   _userId: number;
@@ -79,6 +71,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     if (v === undefined || v === null) {
       return;
     }
+    this.loadUsers('', true);
     this.store
       .dispatch(new GroupAction.GetGroup({ id: v }))
       .pipe(
@@ -86,17 +79,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         take(1),
         tap((user) => {
-          /*if (user['signature']) {
-            this.signatureImg = { base64: user['signature'] };
-          }
-          if (user['profileImg']) {
-            this.profileImg = { base64: user['profileImg'] };
-          }*/
-         //  const mobiles = user['mobiles'];
           this.form.patchValue({
             ...user,
-            // mobiles: [{ mobile: '' }],
-           // userName: user.samaccountname ?? user.userName,
             orgStructure: {
               key: user.orgStructure?.id,
               labelAr: user.orgStructure?.nameAr,
@@ -105,7 +89,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
             },
           });
           this.patchSelectedOrg(user.users);
-          // this.patchMobile(mobiles);
         })
       )
       .subscribe();
@@ -149,15 +132,43 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       map((params) => params['_dialog'] === 'opened')
     );
     this.buildForm();
+    this.buildUserForm();
     this.store.dispatch([
       new OrgAction.LoadOrgs({ orgId: this.auth.getClaim('orgId') }),
-      new UserAction.LoadUserPage({ name: '', page: 0, size: 10 })
+      // new UserAction.LoadUserPage({ name: '', page: 0, size: 10 })
     ]);
-    this.users$ = this.store.select(UserState.page).pipe(
+    this.LoadUsers$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((name) => {
+        this.store.dispatch(
+          new UserAction.LoadGroupMapUserPage({
+            name,
+            page: 0,
+            size: 15,
+          })
+        );
+      });
+
+ /*   this.users$ = this.store.select(UserState.page).pipe(
       filter((r) => !!r),
       take(1)
-    );
+    );*/
   }
+
+  loadUsers(name?: string, direct = false) {
+    if (direct) {
+      this.store.dispatch(
+        new UserAction.LoadGroupMapUserPage({
+          name,
+          page: 0,
+          size: 15,
+        })
+      );
+      return;
+    }
+    this.LoadUsers$.next(name);
+  }
+
 
   patchSelectedOrg(user: any) {
     const manager = user.find((item, index) => {
@@ -187,14 +198,13 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     this.activeTab = 0;
     const orgId = this.auth.getClaim('orgId');
     this.form = this.formBuilder.group({
-      orgStructure: [{ key: orgId }, [Validators.required]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       descEn: [null, [Validators.required, GenericValidators.english]],
       descAr: [null, [Validators.required, GenericValidators.arabic]],
+      orgStructure: [{ key: orgId }, [Validators.required]],
       userStructure: [undefined, [Validators.required]],
     });
-
     this.defaultFormValue = {
       ...this.defaultFormValue,
       isActive: true,
@@ -225,57 +235,22 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
 
     // this.addPassword();
 
-    this.form
+/*    this.form
       .get('orgStructure')
       .valueChanges.pipe(takeUntil(this.destroy$), distinctUntilChanged())
       .subscribe((org: TreeNode) => {
         this.store.dispatch(
           new RoleAction.LoadRoles({ orgId: org?.key as any })
         );
-        /*this.removeRank();
-        if (org?.data?.code == 'ADCDA' && !this.form.contains('rankId')) {
-          this.addRank();
-        }*/
-
-        // password form control decision
-        if (!this.form.contains('password') && !this._userId) {
-          // this.addPassword();
-        }
-
-        if (org?.data?.ldapOrgId || this._userId) {
-          // this.removePassword();
-        }
-      });
+      });*/
   }
 
-  /*emiratesIdSearch() {
-    const emiratesId = this.form.get('emiratesId').value;
-    this.piService
-      .getPersonalInfo(emiratesId)
-      .pipe(take(1))
-      .subscribe((ok) => {
-        const user = ok.result;
-        this.form.patchValue({
-          firstNameEn: user?.personName?.firstNameEnglish,
-          middleNameEn: user?.personName?.secondNameEnglish,
-          lastNameEn:
-            user?.personName?.familyNameEnglish ??
-              user?.personName?.fourthNameEnglish,
-          firstNameAr: user?.personName?.firstNameArabic,
-          middleNameAr: user?.personName?.secondNameArabic,
-          lastNameAr:
-            user?.personName?.familyNameArabic ??
-              user?.personName?.fourthNameArabic,
-          email: user?.addresses?.address[0]?.localAddress?.emailAddress,
-        });
-       /!* this.patchMobile([
-          {
-            main: true,
-            mobile: user?.addresses?.address[0]?.localAddress?.mobileNo,
-          },
-        ]);*!/
-      });
-  }*/
+  buildUserForm() {
+    this.userGroupForm = this.formBuilder.group({
+      usersIds: [undefined, [Validators.required]],
+    });
+  }
+
 
   submit() {
     if (!this.form.valid) {
@@ -285,20 +260,78 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       });
       return;
     }
-    const group = {
-      ...this.form.getRawValue(),
+
+    const groupUser = [{
+      id: 0,
+      type: 1,
+      user: null
+    }];
+
+    if (this.form.dirty) {
+      const group = {
+        ...this.form.getRawValue(),
+      };
+      group.orgStructure = {id: group.orgStructure?.key };
+      const groupUserValue = this.form.get('userStructure').value;
+      groupUser[0].user = {
+        id : groupUserValue.id
+      };
+
+      if (this.editMode) {
+        // this.store.dispatch(new BrowseGroupsAction.UpdateUser(user));
+      } else {
+        this.store.dispatch(new BrowseGroupsAction.CreateGroup(group)).pipe(
+          tap(() => {
+            this.store.dispatch(new BrowseGroupsAction.CreateUser({
+              user: groupUser
+            }));
+            takeUntil(this.destroy$);
+            take(1);
+          }),
+        ).subscribe();
+      }
+
+    } else if (this.userGroupForm.dirty) {
+      // Validation for user
+      if (!this.userGroupForm.valid) {
+        this.userGroupForm.markAllAsTouched();
+        FormUtils.ForEach(this.userGroupForm, (fc) => {
+          fc.markAsDirty();
+        });
+        return;
+      }
+      const groupUserValue = {
+        ...this.userGroupForm.getRawValue(),
+      };
+      groupUserValue.usersIds = groupUserValue.usersIds?.map((r) => r.id);
+      console.log(groupUserValue);
+      groupUserValue.usersIds.forEach((element, index) => {
+        groupUser[index] = {
+          id: 0,
+          type: 2,
+          user: {
+            id: groupUserValue.usersIds[index]
+          }
+        };
+      });
+      if (this._userId) {
+         this.store.dispatch(new BrowseGroupsAction.CreateUser({groupId: this._userId, user: groupUser}));
+      }
     }
-    const user = {
+
+
+
+  /*  const user = {
       ...this.form.getRawValue(),
-    };
+    };*/
     // user.roleIds = user.roleIds?.map((r) => r.id);
 
-    user.rankId = { id: user.rankId?.id };
+  /*  user.rankId = { id: user.rankId?.id };
     if (user.orgStructure?.data?.code != 'ADCDA') {
       delete user.rankId;
-    }
+    }*/
 
-    user.type = 'inapp';
+    // user.type = 'inapp';
     // check ldap user
  /*   if (
       user.orgStructure?.data?.ldapOrgId != undefined ||
@@ -309,36 +342,18 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       delete user.userName;
     }*/
 
-    user.orgStructure = { id: user.orgStructure?.key };
-    group.orgStructure = {id: group.orgStructure?.key };
-    user.id = this._userId;
-    const groupUserValue = this.form.get('userStructure').value
-    const groupUser = groupUserValue;
-      /*= [{
-      id: null,
-      type: null,
-      user: {
-        id: null
-      }
-    }]*/
-    if (this.editMode) {
-      // this.store.dispatch(new BrowseGroupsAction.UpdateUser(user));
-    } else {
-      this.store.dispatch(new BrowseGroupsAction.CreateGroup(group)).pipe(
-        switchMap(() => {
-            console.log();
-            return this.store.dispatch(new GroupAction.CreateUser(groupUser));
-      }),
-        catchError((err) => {
-          console.log(err);
-        // this.messageHelper.error({ error: err });
-          return EMPTY;
-      }),
-        finalize(() => {
-          // console.log("test ptab");
-          //  dispatch(new BrowseGroupsAction.ToggleDialog({}));
-        })
-    );
+    // user.orgStructure = { id: user.orgStructure?.key };
+
+    // user.id = this._userId;
+
+
+
+    if (this.activeTab === 0) {
+
+      return;
+    } else if (this.activeTab === 2) {
+      // this.profileImg = undefined;
+      return;
     }
   }
 
@@ -355,14 +370,13 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
 
   clear() {
     if (this.activeTab === 1) {
-      this.signatureImg = undefined;
+      // this.signatureImg = undefined;
       return;
     } else if (this.activeTab === 2) {
-      this.profileImg = undefined;
+      // this.profileImg = undefined;
       return;
     }
-    // this.removeRank();
-    this.store.dispatch(new UserAction.GetUser({}));
+    // this.store.dispatch(new UserAction.GetUser({}));
     // this.patchMobile([]);
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);

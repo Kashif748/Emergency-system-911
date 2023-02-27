@@ -77,10 +77,26 @@ export namespace GroupAction {
      */
     constructor(
       public payload: {
+        groupId?: number,
         user: GroupUser[]
       }
+
     ) {}
   }
+
+ /* export class CreateGroupMapUser {
+    static readonly type = '[Group] Create Group Map User';
+    /!**
+     *
+     *!/
+    constructor(
+      public payload: {
+        groupId: number,
+        user: GroupUser[]
+      }
+
+    ) {}
+  }*/
 
   export class Update {
     static readonly type = '[Group] Update';

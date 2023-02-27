@@ -20,7 +20,7 @@ export namespace UserAction {
     ) {}
   }
 
-  export class LoadUserPage {
+  export class LoadGroupMapUserPage {
     static readonly type = '[User] Load Page';
     /**
      *
@@ -30,6 +30,7 @@ export namespace UserAction {
         name: string;
         page: number;
         size: number;
+        sort?: string[];
       }
     ) {}
   }

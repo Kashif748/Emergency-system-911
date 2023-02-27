@@ -96,9 +96,25 @@ export namespace BrowseGroupsAction {
      *
      */
     constructor(
-      public payload: GroupUser[]
+      public payload: {
+        groupId?: number,
+        user: GroupUser[]
+      }
     ) {}
   }
+
+/*  export class CreateGroupMapUser {
+    static readonly type = '[BrowseGroups] Create User';
+    /!**
+     *
+     *!/
+    constructor(
+      public payload: {
+        groupId: number,
+        users: GroupUser[]
+      }
+    ) {}
+  }*/
 
 /*  export class UploadSignature {
     static readonly type = '[BrowseUsers] Upload Signature';

@@ -193,7 +193,8 @@ export class BrowseGroupsState {
     { payload }: BrowseGroupsAction.CreateUser
   ) {
     return dispatch(new GroupAction.CreateUser({
-      user: payload
+      groupId: payload.groupId,
+      user: payload.user
     })).pipe(
       tap(() => {
         this.messageHelper.success();
@@ -209,12 +210,15 @@ export class BrowseGroupsState {
     );
   }
 
-  @Action(BrowseGroupsAction.CreateGroup)
-  createGroup(
+ /* @Action(BrowseGroupsAction.CreateGroupMapUser)
+  createGroupMapUser(
     { dispatch }: StateContext<BrowseGroupsStateModel>,
-    { payload }: BrowseGroupsAction.CreateGroup
+    { payload }: BrowseGroupsAction.CreateGroupMapUser
   ) {
-    return dispatch(new GroupAction.Create(payload)).pipe(
+    return dispatch(new GroupAction.CreateGroupMapUser({
+      groupId: payload.groupId,
+      user: payload.users
+    })).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseGroupsAction.LoadGroups());
@@ -224,8 +228,29 @@ export class BrowseGroupsState {
         return EMPTY;
       }),
       finalize(() => {
-         dispatch(new BrowseGroupsAction.ToggleDialog({}));
+        dispatch(new BrowseGroupsAction.ToggleDialog({}));
       })
+    );
+  }*/
+
+
+  @Action(BrowseGroupsAction.CreateGroup)
+  createGroup(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.CreateGroup
+  ) {
+    return dispatch(new GroupAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        // dispatch(new BrowseGroupsAction.LoadGroups());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+     /* finalize(() => {
+         dispatch(new BrowseGroupsAction.ToggleDialog({}));
+      })*/
     );
   }
 

@@ -37,6 +37,7 @@ export interface UserStateModel {
   page: PageUserAndRoleProjection;
   user: User & UserInappAuthentication & UserMiddlewareAuth;
   ranks: Ranks[];
+  groupMapUser: UserAndRoleProjection[];
   loading: boolean;
   blocking: boolean;
 }
@@ -74,6 +75,12 @@ export class UserState {
   static user(state: UserStateModel) {
     return state?.user;
   }
+
+  @Selector([UserState])
+  static groupMapUsers(state: UserStateModel) {
+    return state?.groupMapUser;
+  }
+
 
   @Selector([UserState])
   static ranks(state: UserStateModel) {
@@ -146,10 +153,10 @@ export class UserState {
       );
   }
 
-  @Action(UserAction.LoadUserPage, { cancelUncompleted: true })
-  LoadUserPage(
+  @Action(UserAction.LoadGroupMapUserPage, { cancelUncompleted: true })
+  LoadGroupMapUserPage(
     { setState }: StateContext<UserStateModel>,
-    { payload }: UserAction.LoadUserPage
+    { payload }: UserAction.LoadGroupMapUserPage
   ) {
     setState(
       patch<UserStateModel>({
@@ -161,34 +168,43 @@ export class UserState {
         pageable: {
           page: payload.page,
           size: payload.size,
+          sort: payload.sort,
         },
         name: payload.name,
 
       })
       .pipe(
-        tap((res) => {
+        tap( ({result: {content: list}}) => {
+          setState(
+            patch<UserStateModel>({
+              groupMapUser: list,
+            })
+          );
+
+        }),
+        /*tap((res) => {
           setState(
             patch<UserStateModel>({
               page: res.result,
               loading: false,
             })
           );
-        }),
-        catchError(() => {
+        }),*/
+     /*   catchError(() => {
           setState(
             patch<UserStateModel>({
               page: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;
-        }),
-        finalize(() => {
+        }),*/
+       /* finalize(() => {
           setState(
             patch<UserStateModel>({
               loading: false,
             })
           );
-        })
+        })*/
       );
   }
 
