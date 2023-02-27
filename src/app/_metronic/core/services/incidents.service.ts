@@ -820,7 +820,7 @@ export class IncidentsService implements Resolve<any> {
       .append('priority', search?.priority ?? '')
       .append('status', search?.status ?? '')
       .append('incidentId', search?.incidentId ?? '')
-      .append('serial', search?.incidentId ?? '')
+      .append('serial', search?.serial ?? '')
       .append('page', page)
       .append('size', `${size ?? 10}`);
 
