@@ -9,7 +9,7 @@ export class TranslateObjPipe implements PipeTransform {
   constructor(private langFacade: ILangFacade) {}
 
   transform(value: unknown, ...args: unknown[]): unknown {
-    if (!value && typeof value !== 'object') {
+    if (!value || typeof value !== 'object') {
       return '';
     }
     const lang = this.langFacade.stateSanpshot.ActiveLang.key;

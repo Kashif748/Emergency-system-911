@@ -1,4 +1,4 @@
-import { IncidentTask, TaskDetails } from 'src/app/api/models';
+import { TaskDetails } from 'src/app/api/models';
 
 export namespace TaskAction {
   export class LoadTasks {
@@ -67,12 +67,28 @@ export namespace TaskAction {
      */
     constructor() {}
   }
-
+  export class LoadTypes {
+    static readonly type = '[Task] Load Types';
+    /**
+     *
+     */
+    constructor() {}
+  }
   export class LoadStatuses {
     static readonly type = '[Task] Load Statuses';
     /**
      *
      */
     constructor() {}
+  }
+
+  export class LoadGroups {
+    static readonly type = '[Task] Load Groups';
+    /**
+     *
+     */
+    constructor(
+      public payload: { search: string; page?: number; size?: number }
+    ) {}
   }
 }

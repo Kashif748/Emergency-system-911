@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from '@core/services/auth.service';
+import { AuthService, IAuthService } from '@core/services/auth.service';
 import { animations } from '@shared/animations/animation';
 import arabicLocale from '@uppy/locales/lib/ar_SA';
 import * as XHRUpload from '@uppy/xhr-upload';
@@ -22,6 +22,7 @@ import { concatMap, map, mergeMap, tap } from 'rxjs/operators';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { forkJoin, Observable } from 'rxjs';
 import { IncidentsService } from 'src/app/_metronic/core/services/incidents.service';
+import { MessageHelper } from '@core/helpers/message.helper';
 
 const Uppy = require('@uppy/core');
 const Dashboard = require('@uppy/dashboard');
@@ -107,13 +108,14 @@ export class FilesListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private attachmentsService: AttachmentsService,
-    private authService: AuthService,
+    private authService: IAuthService,
     private cd: ChangeDetectorRef,
     private langFacade: ILangFacade,
     private alertService: AlertsService,
     private translationService: TranslationService,
     private incidentService: IncidentsService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    private messageHelper: MessageHelper
   ) {}
 
   ngOnInit(): void {
@@ -149,7 +151,10 @@ export class FilesListComponent implements OnInit, AfterViewInit {
           proudlyDisplayPoweredByUppy: false,
           browserBackButtonClose: true,
           hideUploadButton: this.inline,
-          note: this.lang == 'ar' ? 'حجم الملف يجب ان لا يتعدى ٢٠ ميجابايت' : 'File Size should not exceed 20 MB',
+          note:
+            this.lang == 'ar'
+              ? 'حجم الملف يجب ان لا يتعدى ٢٠ ميجابايت'
+              : 'File Size should not exceed 20 MB',
           locale: this.lang == 'ar' ? arabicLocale : '',
           metaFields: [
             {
@@ -198,7 +203,7 @@ export class FilesListComponent implements OnInit, AfterViewInit {
         fieldName: 'file',
       });
     }
-    this.uppy.upload().then(
+    await this.uppy.upload().then(
       (result) => {
         if (result.failed.length > 0) {
           result.failed.forEach((file) => {
@@ -206,9 +211,8 @@ export class FilesListComponent implements OnInit, AfterViewInit {
           });
         }
       },
-      (e) => {
-        console.log(e);
-        this.alertService.openFailureSnackBar();
+      (err) => {
+        this.messageHelper.error({ error: err });
       }
     );
   }
@@ -312,11 +316,14 @@ export class FilesListComponent implements OnInit, AfterViewInit {
       incidentsAttachmentsRes: this.attachmentsService.getIncidentAttachments(
         this.recordId
       ),
-      incidentsReporterAttachmentsRes: this.attachmentsService.getReporterFilesList(
-        this.recordId
-      ),
+      incidentsReporterAttachmentsRes:
+        this.attachmentsService.getReporterFilesList(this.recordId),
     }).subscribe(
-      ({ logsAttachmentsRes, incidentsAttachmentsRes, incidentsReporterAttachmentsRes }) => {
+      ({
+        logsAttachmentsRes,
+        incidentsAttachmentsRes,
+        incidentsReporterAttachmentsRes,
+      }) => {
         this.fillAttachmentsList(
           logsAttachmentsRes,
           incidentsAttachmentsRes,
@@ -362,9 +369,15 @@ export class FilesListComponent implements OnInit, AfterViewInit {
   }
 
   private loadFiles() {
+    if ([null, undefined].includes(this.recordId)) {
+      this.loading = false;
+      return;
+    }
+
     this.loading = true;
     this.filesGroupedByType = [];
     this.cd.detectChanges();
+
     switch (this.tagId) {
       case UploadTagIdConst.INCIDENT:
         return this.loadIncidentFiles();
@@ -380,17 +393,15 @@ export class FilesListComponent implements OnInit, AfterViewInit {
   }
 
   private loadAsssestImageFiles() {
-    this.attachmentsService
-      .getAssestsFilesList(this.recordId)
-      .subscribe(
-        (data) => {
-          this.fillAttachmentsList(null, data);
-          this.groupAttachmentsForUI();
-          this.cd.detectChanges();
-        },
-        (err) => {},
-        () => (this.loading = false)
-      );
+    this.attachmentsService.getAssestsFilesList(this.recordId).subscribe(
+      (data) => {
+        this.fillAttachmentsList(null, data);
+        this.groupAttachmentsForUI();
+        this.cd.detectChanges();
+      },
+      (err) => {},
+      () => (this.loading = false)
+    );
   }
 
   private loadInterimIncidentFiles() {
@@ -609,12 +620,12 @@ export class FilesListComponent implements OnInit, AfterViewInit {
       ({
         logsAttachmentsRes,
         tasksAttachmentsRes,
-       // incidentsAttachmentsRes,
+        // incidentsAttachmentsRes,
       }) => {
         this.fillAttachmentsList(
           logsAttachmentsRes,
-          tasksAttachmentsRes,
-         // incidentsAttachmentsRes
+          tasksAttachmentsRes
+          // incidentsAttachmentsRes
         );
         this.groupAttachmentsForUI();
         this.cd.detectChanges();

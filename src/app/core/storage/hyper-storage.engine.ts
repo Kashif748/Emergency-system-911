@@ -1,8 +1,12 @@
+import { Inject } from '@angular/core';
 import { IAuthService } from '@core/services/auth.service';
 import { EMPTY, Observable, of, Subject } from 'rxjs';
 import { auditTime, catchError, map, take } from 'rxjs/operators';
 import { UserPreferencesControllerService } from 'src/app/api/services';
-import { AsyncStorageEngine } from 'src/app/async-storage/symbols';
+import {
+  AsyncStorageEngine,
+  IGNORE_SYNC_STATES,
+} from 'src/app/async-storage/symbols';
 
 export class HyperStorageEngine implements AsyncStorageEngine {
   private $$queue: { [key: string]: Subject<any> } = {};
@@ -11,7 +15,8 @@ export class HyperStorageEngine implements AsyncStorageEngine {
    */
   constructor(
     private preferences: UserPreferencesControllerService,
-    private auth: IAuthService
+    private auth: IAuthService,
+    @Inject(IGNORE_SYNC_STATES) private ignoreSyncStates: string[]
   ) {}
 
   length(): Observable<number> {
@@ -25,6 +30,9 @@ export class HyperStorageEngine implements AsyncStorageEngine {
     if (!this.auth.isAuthorized()) {
       return of(undefined);
     }
+    if (this.ignoreSyncStates?.includes(key)) {
+      return of(undefined);
+    }
     return this.preferences.getByStateKey({ stateKey: key }).pipe(
       map((r) => r.result.stateVal),
       catchError(() => of(undefined))
@@ -36,6 +44,9 @@ export class HyperStorageEngine implements AsyncStorageEngine {
       return;
     }
     localStorage.setItem(key, val);
+    if (this.ignoreSyncStates.includes(key)) {
+      return;
+    }
     if (!this.auth.isAuthorized()) {
       return;
     }

@@ -1,166 +1,433 @@
 <p-dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
-  [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
+  [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
   [resizable]="false">
   <ng-template pTemplate="header">
-    
+
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'USER_MANAGEMENT.ROLES.EDIT.TITLE' | translate}}
+        {{'TASK_MANGEMENT.EDIT.TITLE' | translate}}
       </ng-container>
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'USER_MANAGEMENT.ROLES.CREATE.TITLE' | translate}}
+        {{'TASK_MANGEMENT.CREATE.TITLE' | translate}}
       </ng-container>
       <ng-container *ngIf="viewOnly$ | async">
-        {{'USER_MANAGEMENT.ROLES.VIEW.TITLE' | translate}}
+        {{'TASK_MANGEMENT.VIEW.TITLE' | translate}}
       </ng-container>
     </h3>
   </ng-template>
-  <div class="w-100 pt-2">
-    <p-blockUI [target]="blockable" [blocked]="blocking$ | async">
+  <div class="w-100 pt-2" style="height: 65vh;">
+    <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <p-blockable-div #blockable>
-      <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
-        <div class="p-field p-col-12 p-md-6">
-          <span class="p-float-label">
-            <input type="text" formControlName="nameEn" pInputText>
-            <label>
-              {{ 'SHARED.NAME_EN' | translate }}
-              <strong class="required-asterisk"> * </strong>
-            </label>
-          </span>
-          <ng-container
-            *ngIf="form.controls['nameEn'].touched && !form.controls['nameEn'].valid && form.controls['nameEn'].dirty">
-            <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
-              {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-            </p>
 
-            <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
-              {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
-            </p>
-          </ng-container>
-        </div>
+    <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)">
+      <p-tabPanel header="{{'TASK_INFO' | translate }}">
 
-
-
-        <div class="p-field p-col-12 p-md-6">
-          <span class="p-float-label">
-            <input type="text" formControlName="nameAr" pInputText>
-            <label>{{ 'SHARED.NAME_AR' | translate }}
-              <strong class="required-asterisk"> * </strong>
-            </label>
-          </span>
-
-          <ng-container
-            *ngIf="form.controls['nameAr'].touched && !form.controls['nameAr'].valid && form.controls['nameAr'].dirty">
-            <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
-              {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-            </p>
-
-            <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
-              {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
-            </p>
-          </ng-container>
-        </div>
+        <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
+          <div class="p-field p-col-12 p-md-4" [ngClass]="{'p-md-6': editMode}">
+            <span class="p-float-label">
+              <p-dropdown #incidentId [options]="incidents$ | async" [autoDisplayFirst]="false"
+                formControlName="incidentId" [filter]="true" (onFilter)="loadIncidents($event?.filter)" dataKey="id"
+                (onShow)="loadIncidents(incidentId.filterValue, true)" [showClear]="true" appendTo="body"
+                optionLabel="subject"
+                [dropdownIcon]="(incidentLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
+              </p-dropdown>
+              <label>
+                {{ 'SHARED.INCIDENT' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
+            <ng-container
+              *ngIf="form.controls['incidentId'].touched && !form.controls['incidentId'].valid && form.controls['incidentId'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['incidentId'].hasError('required')">
+                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+              </p>
+            </ng-container>
+          </div>
 
 
 
+          <div class="p-field p-col-12 p-md-4" [ngClass]="{'p-md-6': editMode}">
+            <span class="p-float-label">
+              <input type="text" formControlName="title" pInputText>
+              <label>{{ 'TASK_TITLE' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
 
-        <div class="p-field p-col-12 p-md-6">
-          <span class="p-float-label">
-            <textarea formControlName="desEn" pInputTextarea
-              [ngClass]="{'p-filled': form.controls['desEn'].value}"></textarea>
-            <label>
-              {{ 'SHARED.DESCRIPTION_EN' | translate }}
-              <strong class="required-asterisk"> * </strong>
-            </label>
-          </span>
-          <ng-container
-            *ngIf="form.controls['desEn'].touched && !form.controls['desEn'].valid && form.controls['desEn'].dirty">
-            <p class="p-error mb-0" *ngIf="form.controls['desEn'].hasError('required')">
-              {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-            </p>
-
-            <p class="p-error mb-0" *ngIf="form.controls['desEn'].hasError('english')">
-              {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
-            </p>
-          </ng-container>
-        </div>
+            <ng-container
+              *ngIf="form.controls['title'].touched && !form.controls['title'].valid && form.controls['title'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['title'].hasError('required')">
+                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+              </p>
+            </ng-container>
+          </div>
 
 
 
-        <div class="p-field p-col-12 p-md-6">
-          <span class="p-float-label">
-            <textarea formControlName="desAr" pInputTextarea
-              [ngClass]="{'p-filled': form.controls['desAr'].value}"></textarea>
-            <label>{{ 'SHARED.DESCRIPTION_AR' | translate }}
-              <strong class="required-asterisk"> * </strong>
-            </label>
-          </span>
+          <div class="p-field p-col-12 p-md-6" *ngIf="editMode">
+            <span class="p-float-label">
+              <p-dropdown [options]="statuses$ | async" [autoDisplayFirst]="false" [showClear]="false" dataKey="id"
+                appendTo="body" formControlName="statusId">
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item | translateObj }}
+                </ng-template>
 
-          <ng-container
-            *ngIf="form.controls['desAr'].touched && !form.controls['desAr'].valid && form.controls['desAr'].dirty">
-            <p class="p-error mb-0" *ngIf="form.controls['desAr'].hasError('required')">
-              {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-            </p>
+                <ng-template let-item pTemplate="item">
+                  {{ item | translateObj }}
+                </ng-template>
+              </p-dropdown>
+              <label>{{ 'SHARED.STATUS' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
 
-            <p class="p-error mb-0" *ngIf="form.controls['desAr'].hasError('arabic')">
-              {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
-            </p>
-          </ng-container>
-        </div>
+            <ng-container
+              *ngIf="form.controls['statusId'].touched && !form.controls['statusId'].valid && form.controls['statusId'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['statusId'].hasError('required')">
+                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+              </p>
+            </ng-container>
+          </div>
 
 
-        <div class="p-col-12">
 
-          <p-divider align="left">
-            <div class="p-d-inline-flex p-ai-center">
-              <i class="pi pi-sliders-v p-mx-2"></i>
-              <b>
-                {{ "USER_MANAGEMENT.USERS.CONTROL_INFO" | translate }}
-              </b>
+          <div class="p-field p-col-12 p-md-4" [ngClass]="{'p-md-6': editMode}">
+            <span class="p-float-label">
+              <p-calendar formControlName="dueDate" [minDate]="minDate" [showIcon]="true" showButtonBar="true"
+                [showTime]="true" appendTo="body"></p-calendar>
+              <label>
+                {{ 'SHARED.DUE_DATE' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
+            <ng-container
+              *ngIf="form.controls['dueDate'].touched && !form.controls['dueDate'].valid && form.controls['dueDate'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['dueDate'].hasError('required')">
+                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+              </p>
+            </ng-container>
+          </div>
+
+
+
+          <div class="p-field p-col-12">
+            <span class="p-float-label">
+              <textarea formControlName="body" pInputTextarea
+                [ngClass]="{'p-filled': form.controls['body'].value}"></textarea>
+              <label>{{ 'TASK_DESCRIPTION' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
+
+            <ng-container
+              *ngIf="form.controls['body'].touched && !form.controls['body'].valid && form.controls['body'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['body'].hasError('required')">
+                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+              </p>
+            </ng-container>
+          </div>
+
+
+          <div class="p-col-12">
+
+            <p-divider align="left">
+              <div class="p-d-inline-flex p-ai-center">
+                <i class="pi pi-sliders-v p-mx-2"></i>
+                <b>
+                  {{ "TASK.TASK_DETAILS" | translate }}
+                </b>
+              </div>
+            </p-divider>
+          </div>
+
+
+          <ng-container *ngIf="![null, undefined].includes(form.get('incidentId').value)">
+            <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="[{label: 'SHARED.USER' | translate , value: 'user'}, {label: 'SHARED.GROUP' | translate , value: 'group'}, {label: 'SHARED.ORG' | translate, value: 'org'}]"
+                  [showClear]="true" [autoDisplayFirst]="false" appendTo="body"
+                  formControlName="assigneeType"></p-dropdown>
+                <label>{{ 'ASSIGNEE_TYPE' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['assigneeType'].touched && !form.controls['assigneeType'].valid && form.controls['assigneeType'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['assigneeType'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+              </ng-container>
             </div>
-          </p-divider>
-        </div>
+
+            <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <ng-container [ngSwitch]="form.get('assigneeType').value">
+                  <!-- assignee type = user -->
+                  <p-dropdown *ngSwitchCase="'user'" #assignTo [options]="users$ | async" [autoDisplayFirst]="false"
+                    [showClear]="true" dataKey="id" appendTo="body" formControlName="assignTo" [filter]="true"
+                    filterBy="nameAr,nameEn" (onFilter)="loadUsers($event?.filter)" dataKey="id" inputId="assignTo"
+                    (onShow)="loadUsers(assignTo.filterValue, true)" [showClear]="true">
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj }}
+                    </ng-template>
+                  </p-dropdown>
+                  <!-- assignee type = group -->
+                  <p-dropdown *ngSwitchCase="'group'" #assignTo [options]="groups$ | async" [autoDisplayFirst]="false"
+                    [showClear]="true" dataKey="id" appendTo="body" formControlName="assignTo" filterBy="nameAr,nameEn"
+                    (onShow)="loadGroups(assignTo.filterValue, true)" (onFilter)="loadGroups($event.filter)"
+                    inputId="assignTo" [filter]="true">
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj }}
+                    </ng-template>
+                  </p-dropdown>
+                  <!-- assignee type = org -->
+                  <p-dropdown *ngSwitchCase="'org'" [options]="orgs$ | async" [autoDisplayFirst]="false"
+                    [showClear]="true" dataKey="id" appendTo="body" formControlName="assignTo" [filter]="true"
+                    filterBy="nameAr,nameEn,code" dataKey="id" [showClear]="true" inputId="assignTo"
+                    (onShow)="loadOrgs(form.get('incidentId').value?.id)">
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj }}
+                    </ng-template>
+                  </p-dropdown>
+                  <p-dropdown *ngSwitchDefault [autoDisplayFirst]="false" [disabled]="true"></p-dropdown>
+                </ng-container>
 
 
-        <div class="p-field p-col-12 p-md-6">
-          <p-toggleButton formControlName="inherited" onLabel="{{ 'SHARED.INHERITED' | translate }}"
-            offLabel="{{ 'SHARED.UNINHERITED' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
-            iconPos="right"></p-toggleButton>
-        </div>
-
-        <div class="p-field p-col-12 p-md-6">
-          <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
-            offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
-            iconPos="right"></p-toggleButton>
-        </div>
-
-
-        <div class="p-field p-col-12 p-md-12">
-          <span class="p-float-label">
-            <p-treeSelect [options]="orgsTree" display="comma" [filter]="true"
-              [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single" formControlName="orgId"
-              appendTo="body">
-              <ng-template let-option pTemplate="value">
-                {{ option | translateObj : 'label' }}
-              </ng-template>
-            </p-treeSelect>
-
-            <label>
-              {{'SHARED.ORG' | translate}}
-              <strong class="required-asterisk"> * </strong>
-            </label>
-          </span>
-          <ng-container
-            *ngIf="form.controls['orgId'].touched && !form.controls['orgId'].valid && form.controls['orgId'].dirty">
-            <p class="p-error mb-0" *ngIf="form.controls['orgId'].hasError('required')">
-              {{ "VALIDATION_MSG.REQUIRED" | translate }}
-            </p>
+                <label>
+                  {{'SHARED.ASSIGNEE' | translate}}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container
+                *ngIf="form.controls['assignTo'].touched && !form.controls['assignTo'].valid && form.controls['assignTo'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['assignTo'].hasError('required')">
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                </p>
+              </ng-container>
+            </div>
           </ng-container>
+
+
+          <div class="p-field p-col-12 p-md-6">
+            <span class="p-float-label">
+              <p-dropdown [options]="types$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+                appendTo="body" formControlName="taskType">
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item | translateObj }}
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  {{ item | translateObj }}
+                </ng-template>
+              </p-dropdown>
+              <label>{{ 'TASK_TYPE' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
+
+            <ng-container
+              *ngIf="form.controls['taskType'].touched && !form.controls['taskType'].valid && form.controls['taskType'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['taskType'].hasError('required')">
+                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+              </p>
+            </ng-container>
+          </div>
+
+
+
+          <div class="p-field p-col-12 p-md-6">
+            <span class="p-float-label">
+              <p-dropdown [options]="priorities$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+                appendTo="body" formControlName="priorityId">
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item | translateObj }}
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  {{ item | translateObj }}
+                </ng-template>
+              </p-dropdown>
+              <label>{{ 'SHARED.PRIORITY' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
+
+            <ng-container
+              *ngIf="form.controls['priorityId'].touched && !form.controls['priorityId'].valid && form.controls['priorityId'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['priorityId'].hasError('required')">
+                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+              </p>
+            </ng-container>
+          </div>
+
+          <!-- assets details  -->
+          <ng-container
+            *ngIf="form.get('category') && (form.get('taskType').value?.nameEn === 'Supplies' || form.get('taskType').value?.type === 'supplies')">
+            <div class="p-col-12">
+              <p-divider align="left">
+                <div class="p-d-inline-flex p-ai-center">
+                  <i class="fa fa-dolly-flatbed p-mx-2"></i>
+                  <b>
+                    {{ "TASK_MANGEMENT.SUPPLIES_DETAILS" | translate }}
+                  </b>
+                </div>
+              </p-divider>
+            </div>
+
+            <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <p-dropdown [options]="assetsCategories$ | async" [autoDisplayFirst]="false" [showClear]="true"
+                  dataKey="id" appendTo="body" [formControl]="form.get('category')">
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{ item | translateObj }}
+                  </ng-template>
+
+                  <ng-template let-item pTemplate="item">
+                    {{ item | translateObj }}
+                  </ng-template>
+                </p-dropdown>
+                <label>{{ 'SHARED.CATEGORY' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['category'].touched && !form.controls['category'].valid && form.controls['category'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['category'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+
+            <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <p-dropdown *ngIf="form.get('category').value" #asset [options]="assets$ | async" inputId="asset"
+                  [formControl]="form.get('asset')" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+                  appendTo="body" filterBy="nameAr,nameEn" (onShow)="loadAssets(asset.filterValue, true)"
+                  (onFilter)="loadAssets($event.filter)" [filter]="true">
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{ item | translateObj }}
+                  </ng-template>
+
+                  <ng-template let-item pTemplate="item">
+                    {{ item | translateObj }}
+                  </ng-template>
+                </p-dropdown>
+
+                <p-dropdown *ngIf="!form.get('category').value" [autoDisplayFirst]="false"
+                  [disabled]="true"></p-dropdown>
+
+                <label>{{ 'SHARED.ASSETS' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['asset'].touched && !form.controls['asset'].valid && form.controls['asset'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['asset'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+            <div class="p-field p-col-12" [ngClass]="{'p-md-6': editMode}">
+              <span class="p-float-label">
+
+                <p-inputNumber [formControl]="form.get('requestQuantity')" mode="decimal" [showButtons]="true" [min]="1"
+                  [max]="this.form.get('asset').value?.quantity">
+                </p-inputNumber>
+                <label>
+                  {{'SHARED.QUANTITY' | translate}}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+              <ng-container
+                *ngIf="form.controls['requestQuantity'].touched && !form.controls['requestQuantity'].valid && form.controls['requestQuantity'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['requestQuantity'].hasError('required')">
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+
+            <div class="p-field p-col-12 p-md-6" *ngIf="editMode">
+              <span class="p-float-label">
+
+                <p-inputNumber [formControl]="form.get('provisionedQuantity')" mode="decimal" [showButtons]="true"
+                  [min]="0">
+                </p-inputNumber>
+                <label>
+                  {{'SHARED.PROVISIONAL_QUANTITY' | translate}}
+                </label>
+              </span>
+              <ng-container
+                *ngIf="form.controls['provisionedQuantity'].touched && !form.controls['provisionedQuantity'].valid && form.controls['provisionedQuantity'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['provisionedQuantity'].hasError('required')">
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+
+            <div class="p-field p-col-12">
+              <span class="p-float-label">
+                <textarea [formControl]="form.get('details')" pInputTextarea
+                  [ngClass]="{'p-filled': form.controls['details'].value}"></textarea>
+                <label>{{ 'TASK_DETAILS' | translate }}
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['details'].touched && !form.controls['details'].valid && form.controls['details'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['details'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+              </ng-container>
+            </div>
+          </ng-container>
+
+        </form>
+
+      </p-tabPanel>
+      <p-tabPanel header="{{'TASK_LOCATION' | translate }}">
+        <ng-template pTemplate="content">
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel header="{{'TASK_ATTACHMENTS' | translate }}">
+        <!-- <ng-template pTemplate="content"> -->
+        <div class="row">
+          <div class="col-12">
+            <!-- <app-files-list style="text-align: -webkit-center" #filesList [files]="(task$ | async)?.attachments"
+                [recordId]="_taskId" [tagId]="UploadTagIdConst.TASKS" [inline]="true">
+              </app-files-list> -->
+
+            <ng-container #attachContainer></ng-container>
+
+          </div>
         </div>
-      </form>
-    </p-blockable-div>
+        <!-- </ng-template> -->
+      </p-tabPanel>
+    </p-tabView>
 
   </div>
 

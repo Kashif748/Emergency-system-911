@@ -1,17 +1,15 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { MessageHelper } from '@core/helpers/message.helper';
-import { TreeHelper } from '@core/helpers/tree.helper';
-import { TreeModel } from '@core/models/tree.model';
-import { IAuthService } from '@core/services/auth.service';
-import { OrgAction, OrgState, TaskAction, TaskState } from '@core/states';
+import { CommonDataState, TaskAction, TaskState } from '@core/states';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent, MenuItem, TreeNode } from 'primeng/api';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
-import { IncidentTaskProjection, OrgStructure } from 'src/app/api/models';
+import { IncidentTaskProjection } from 'src/app/api/models';
 import { BrowseTasksAction } from '../states/browse-tasks.action';
 import {
   BrowseTasksState,
@@ -35,10 +33,10 @@ export class BrowseTasksComponent implements OnInit {
   @Select(BrowseTasksState.hasFilters)
   public hasFilters$: Observable<boolean>;
 
-  @Select(TaskState.priorities)
+  @Select(CommonDataState.priorities)
   public priorities$: Observable<any[]>;
 
-  @Select(TaskState.statuses)
+  @Select(CommonDataState.taskStatuses)
   public statuses$: Observable<any[]>;
 
   private destroy$ = new Subject();
@@ -84,6 +82,7 @@ export class BrowseTasksComponent implements OnInit {
     { name: 'SHARED.CREATED_BY', code: 'createdBy' },
     { name: 'SHARED.ASSIGNEE', code: 'assignee' },
   ];
+  public type$: Observable<string>;
   /**
    *
    */
@@ -92,7 +91,8 @@ export class BrowseTasksComponent implements OnInit {
     private translate: TranslateService,
     private messageHelper: MessageHelper,
     private breakpointObserver: BreakpointObserver,
-    private langFacade: ILangFacade
+    private langFacade: ILangFacade,
+    private route: ActivatedRoute
   ) {}
 
   ngOnDestroy(): void {
@@ -101,10 +101,7 @@ export class BrowseTasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch([
-      new TaskAction.LoadPriorities(),
-      new TaskAction.LoadStatuses(),
-    ]);
+    this.type$ = this.route.queryParams.pipe(map((params) => params['_type']));
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
@@ -206,7 +203,14 @@ export class BrowseTasksComponent implements OnInit {
       }
     }
 
-    this.store.dispatch(new BrowseTasksAction.UpdateFilter(filter));
+    this.store
+      .dispatch(new BrowseTasksAction.UpdateFilter(filter))
+      .toPromise()
+      .then(() => {
+        if (filter.type) {
+          this.search();
+        }
+      });
   }
 
   changeColumns(event) {
