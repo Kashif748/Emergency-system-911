@@ -153,8 +153,8 @@ export class NotificationFormComponent implements OnInit {
     if (!this.form.dirty) {
       return;
     }
-    const template = this.form.get('descriptionEn').value;
     if (this.smsTemplateID) {
+      const template = this.form.get('descriptionEn').value;
       this.notificationService.editSmsNotification(this.smsTemplateID, template).then((res) => {
         if (res) {
           this.alert.openSuccessSnackBarWithMsg(
@@ -217,10 +217,10 @@ export class NotificationFormComponent implements OnInit {
     const dataToSend: WorklongTemplate = new WorklongTemplate(this.form.value);
     dataToSend.id = this.worklogTemplateID ? this.worklogTemplateID : 0;
     dataToSend.config = this.form.get('config').value;
-    dataToSend.nameEn = this.form.get('titleEn').value;
-    dataToSend.nameAr = this.form.get('titleAr').value;
-    dataToSend.descriptionEn = this.form.get('descriptionEn').value;
-    dataToSend.descriptionAr = this.form.get('descriptionAr').value;
+    // dataToSend.nameEn = this.form.get('titleEn').value;
+    // dataToSend.nameAr = this.form.get('titleAr').value;
+    // dataToSend.descriptionEn = this.form.get('descriptionEn').value;
+    // dataToSend.descriptionAr = this.form.get('descriptionAr').value;
     dataToSend.code = this.data['worklog'].code;
     return dataToSend;
   }
