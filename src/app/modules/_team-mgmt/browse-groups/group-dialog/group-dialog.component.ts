@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {TreeNode} from "primeng/api";
-import {OrgStructure, UserAndRoleProjection} from "../../../../api/models";
+import {DistrictNameProjection, IdNameProjection, OrgStructure, UserAndRoleProjection} from "../../../../api/models";
 import {auditTime, catchError, distinctUntilChanged, filter, finalize, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {GroupAction, OrgAction, OrgState, RoleAction, RoleState, UserAction, UserState} from "@core/states";
 import {EMPTY, Observable, Subject} from "rxjs";
@@ -16,6 +16,9 @@ import {BrowseGroupsAction} from "../../states/browse-groups.action";
 import {TranslationService} from "../../../i18n/translation.service";
 import {GroupState} from "@core/states/group/group.state";
 import {userType} from "../../../groups-management/group.model";
+import {CommonService} from "@core/services/common.service";
+import {CenterState} from "@core/states/service-center-area/centers/center.state";
+import {CenterAction} from "@core/states/service-center-area/centers/center.action";
 
 @Component({
   selector: 'app-group-dialog',
@@ -36,7 +39,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   @Select(UserState.groupMapUsers)
   users$: Observable<UserAndRoleProjection[]>;
 
-  // users$: Observable<UserAndRoleProjection[]>;
+  @Select(CenterState.centerList)
+  public centerList$: Observable<IdNameProjection[]>;
+
+  @Select(CenterState.disrictList)
+  public districtList$: Observable<DistrictNameProjection[]>;
 
   @Select(GroupState.blocking)
   blocking$: Observable<boolean>;
@@ -46,11 +53,15 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   @Input()
   orgsTree: TreeNode[];
 
+  public incidentCategories$: any[];
+
   form: FormGroup;
   private defaultFormValue: { [key: string]: any } = {};
 
   userGroupForm: FormGroup;
    private defaultUserFormValue: { [key: string]: any } = {};
+
+  groupZoneIncidentCategory: FormGroup;
 
   destroy$ = new Subject();
   private LoadUsers$ = new Subject<string>();
@@ -100,6 +111,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     private auth: IAuthService,
     private route: ActivatedRoute,
     private translationService: TranslationService,
+    private readonly commonService: CommonService
   ) {
     this.route.queryParams
       .pipe(
@@ -124,6 +136,14 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         }
       })
     );
+/*    this.centerList$.pipe(
+      filter((orgs) => !!orgs),
+      map((orgs) => {
+        return {
+          data: orgs,
+        } as TreeNode;
+      })
+    );*/
   }
 
   ngOnInit(): void {
@@ -133,9 +153,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     );
     this.buildForm();
     this.buildUserForm();
+    this.buildGroupZoneIncidentCategoryForm();
+    this.incidentCategories$ = this.getChildrenCategories();
     this.store.dispatch([
       new OrgAction.LoadOrgs({ orgId: this.auth.getClaim('orgId') }),
-      // new UserAction.LoadUserPage({ name: '', page: 0, size: 10 })
+      new CenterAction.LoadServiceCenterList()
     ]);
     this.LoadUsers$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
@@ -153,6 +175,24 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       filter((r) => !!r),
       take(1)
     );*/
+  }
+
+  loadDistrictList(event) {
+    if (event) {
+      this.store.dispatch([
+        new CenterAction.LoadDistrictList({centerId: event[0].id})
+      ]);
+    }
+  }
+
+  getChildrenCategories() {
+    const categories: any[] =
+      this.commonService.getCommonData().incidentCategories;
+    if (categories.length <= 0) {
+      return [];
+    }
+
+    return categories.filter((item) => item.parent != null);
   }
 
   loadUsers(name?: string, direct = false) {
@@ -173,18 +213,24 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   patchSelectedOrg(user: any) {
     const manager = user.find((item, index) => {
       if (item.type == userType.MANAGER) {
-       /* item.user['lastNameAr'] == null
-          ? (item.user['lastNameAr'] = '')
-          : item.user['lastNameAr'];
-        item.user['lastNameEn'] == null
-          ? (item.user['lastNameEn'] = '')
-          : item.user['lastNameEn'];*/
         return item.user;
+      }
+    });
+    const memberArray: any[] = [];
+    const member = user.find((item, index) => {
+      if (item.type == userType.MEMBER) {
+        memberArray.push(item.user);
+        // return item.user;
       }
     });
     this.form.patchValue({
       userStructure: manager?.user
-    })
+    });
+
+    console.log(memberArray);
+    this.userGroupForm.patchValue({
+      usersIds: memberArray
+    });
     console.log(user);
     this.cdr.detectChanges();
   }
@@ -251,6 +297,15 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     });
   }
 
+  buildGroupZoneIncidentCategoryForm() {
+    this.groupZoneIncidentCategory = this.formBuilder.group({
+      incidentCategory: [null],
+      mapAndList: [null],
+      centerList: [null, []],
+      districtList: [null, []]
+    });
+    }
+
 
   submit() {
     if (!this.form.valid) {
@@ -291,7 +346,9 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         ).subscribe();
       }
 
-    } else if (this.userGroupForm.dirty) {
+    }
+
+    if (this.userGroupForm.dirty) {
       // Validation for user
       if (!this.userGroupForm.valid) {
         this.userGroupForm.markAllAsTouched();
@@ -305,17 +362,38 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       };
       groupUserValue.usersIds = groupUserValue.usersIds?.map((r) => r.id);
       console.log(groupUserValue);
-      groupUserValue.usersIds.forEach((element, index) => {
-        groupUser[index] = {
-          id: 0,
-          type: 2,
-          user: {
-            id: groupUserValue.usersIds[index]
-          }
+      if (groupUserValue.usersIds.length === 1) {
+        groupUser[0].type = 2;
+        groupUser[0].user = {
+          id : groupUserValue.usersIds[0]
         };
-      });
+      } else {
+        groupUserValue.usersIds.forEach((element, index) => {
+          groupUser[index] = {
+            id: 0,
+            type: 2,
+            user: {
+              id: groupUserValue.usersIds[index]
+            }
+          };
+        });
+      }
+
       if (this._userId) {
          this.store.dispatch(new BrowseGroupsAction.CreateUser({groupId: this._userId, user: groupUser}));
+      }
+    }
+
+    if (this.groupZoneIncidentCategory.dirty) {
+      const groupZone = {
+        ...this.groupZoneIncidentCategory.getRawValue(),
+      };
+      if (!this.groupZoneIncidentCategory.valid) {
+        this.groupZoneIncidentCategory.markAllAsTouched();
+        FormUtils.ForEach(this.groupZoneIncidentCategory, (fc) => {
+          fc.markAsDirty();
+        });
+        return;
       }
     }
 

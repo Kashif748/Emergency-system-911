@@ -8,4 +8,24 @@ export namespace CenterAction {
      */
     constructor() {}
   }
+
+  export class LoadServiceCenterList {
+    static readonly type = '[Service] Load Service Center List';
+    /**
+     *
+     */
+    constructor() {}
+  }
+
+  export class LoadDistrictList {
+    static readonly type = '[Service] Load District List';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        centerId?: number;
+      }
+    ) {}
+  }
 }

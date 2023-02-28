@@ -247,7 +247,7 @@ export class GroupState {
     );
     return this.createUserGroupMap
       .createUserGroupMap({
-        groupId: getState().createdGroup.id || payload.groupId,
+        groupId: getState().createdGroup?.id || payload.groupId,
         body: payload.user,
       })
       .pipe(

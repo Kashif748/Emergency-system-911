@@ -1651,7 +1651,8 @@
       "WARNING_NOTE": "Please note that only map or selection would be saved , depends on what's you're opening right now",
       "CATEGORIES_LOCATIONS": "Assigned Categories & Locations",
       "INCIDENT_CATEGORIES": "Assigned Incident Categories",
-      "INCIDENT_LOCATION": "Assigned Incident Locations"
+      "INCIDENT_LOCATION": "Assigned Incident Locations",
+      "GROUP_INFO": "Group Info"
     },
     "DAILY_REPORT": {
       "STATISTICS": {
