@@ -77,21 +77,21 @@ export class KpiControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update29
+   * Path part for operation update30
    */
-  static readonly Update29Path = '/v1/kpis';
+  static readonly Update30Path = '/v1/kpis';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update29()` instead.
+   * To access only the response body, use `update30()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update29$Response(params: {
+  update30$Response(params: {
     body: Kpi
   }): Observable<StrictHttpResponse<RestApiResponseKpi>> {
 
-    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Update29Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Update30Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -109,35 +109,35 @@ export class KpiControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update29$Response()` instead.
+   * To access the full response (for headers, for example), `update30$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update29(params: {
+  update30(params: {
     body: Kpi
   }): Observable<RestApiResponseKpi> {
 
-    return this.update29$Response(params).pipe(
+    return this.update30$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseKpi>) => r.body as RestApiResponseKpi)
     );
   }
 
   /**
-   * Path part for operation create24
+   * Path part for operation create25
    */
-  static readonly Create24Path = '/v1/kpis';
+  static readonly Create25Path = '/v1/kpis';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create24()` instead.
+   * To access only the response body, use `create25()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create24$Response(params: {
+  create25$Response(params: {
     body: Kpi
   }): Observable<StrictHttpResponse<RestApiResponseKpi>> {
 
-    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Create24Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Create25Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -155,15 +155,15 @@ export class KpiControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create24$Response()` instead.
+   * To access the full response (for headers, for example), `create25$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create24(params: {
+  create25(params: {
     body: Kpi
   }): Observable<RestApiResponseKpi> {
 
-    return this.create24$Response(params).pipe(
+    return this.create25$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseKpi>) => r.body as RestApiResponseKpi)
     );
   }
@@ -215,21 +215,21 @@ export class KpiControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete15
+   * Path part for operation delete16
    */
-  static readonly Delete15Path = '/v1/kpis/{id}';
+  static readonly Delete16Path = '/v1/kpis/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete15()` instead.
+   * To access only the response body, use `delete16()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete15$Response(params: {
+  delete16$Response(params: {
     id: Kpi;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Delete15Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Delete16Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -247,15 +247,15 @@ export class KpiControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete15$Response()` instead.
+   * To access the full response (for headers, for example), `delete16$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete15(params: {
+  delete16(params: {
     id: Kpi;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete15$Response(params).pipe(
+    return this.delete16$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

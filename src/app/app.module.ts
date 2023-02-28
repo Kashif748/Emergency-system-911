@@ -63,6 +63,7 @@ import {
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
 import { IncidentState } from '@core/states/incident/incident.state';
+import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -123,6 +124,7 @@ export function getHighlightLanguages() {
         IncidentState,
         CommonDataState,
         AssetState,
+        PhonebookState,
       ],
       {
         developmentMode: !environment.production,

@@ -66,21 +66,21 @@ export class LibraryCategoriesService extends BaseService {
   }
 
   /**
-   * Path part for operation update25
+   * Path part for operation update26
    */
-  static readonly Update25Path = '/v1/library/categories';
+  static readonly Update26Path = '/v1/library/categories';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update25()` instead.
+   * To access only the response body, use `update26()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update25$Response(params: {
+  update26$Response(params: {
     body: LibraryCategory
   }): Observable<StrictHttpResponse<RestApiResponseLibraryCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LibraryCategoriesService.Update25Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, LibraryCategoriesService.Update26Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -98,15 +98,15 @@ export class LibraryCategoriesService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update25$Response()` instead.
+   * To access the full response (for headers, for example), `update26$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update25(params: {
+  update26(params: {
     body: LibraryCategory
   }): Observable<RestApiResponseLibraryCategory> {
 
-    return this.update25$Response(params).pipe(
+    return this.update26$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLibraryCategory>) => r.body as RestApiResponseLibraryCategory)
     );
   }
@@ -158,21 +158,21 @@ export class LibraryCategoriesService extends BaseService {
   }
 
   /**
-   * Path part for operation delete13
+   * Path part for operation delete14
    */
-  static readonly Delete13Path = '/v1/library/categories/{id}';
+  static readonly Delete14Path = '/v1/library/categories/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete13()` instead.
+   * To access only the response body, use `delete14()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13$Response(params: {
+  delete14$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseLibraryCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LibraryCategoriesService.Delete13Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, LibraryCategoriesService.Delete14Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -190,15 +190,15 @@ export class LibraryCategoriesService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete13$Response()` instead.
+   * To access the full response (for headers, for example), `delete14$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13(params: {
+  delete14(params: {
     id: number;
   }): Observable<RestApiResponseLibraryCategory> {
 
-    return this.delete13$Response(params).pipe(
+    return this.delete14$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLibraryCategory>) => r.body as RestApiResponseLibraryCategory)
     );
   }

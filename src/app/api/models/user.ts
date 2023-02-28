@@ -4,6 +4,7 @@ import { OrgStructure } from './org-structure';
 import { Ranks } from './ranks';
 import { UserMobile } from './user-mobile';
 export interface User {
+  avayaUserId?: number;
   email: string;
   emiratesId?: string;
   expireDate?: string;

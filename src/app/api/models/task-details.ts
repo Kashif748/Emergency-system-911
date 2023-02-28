@@ -24,6 +24,7 @@ export interface TaskDetails {
   reportedByEmail?: string;
   reportedByMobile?: string;
   reportedByName?: string;
+  serial?: number;
   statusId?: number;
   taskType?: (InformationType | MissionType | SuppliesType);
   title: string;

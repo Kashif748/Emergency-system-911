@@ -70,21 +70,21 @@ export class DashboardCardControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update63
+   * Path part for operation update65
    */
-  static readonly Update63Path = '/v1/dashboard-cards';
+  static readonly Update65Path = '/v1/dashboard-cards';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update63()` instead.
+   * To access only the response body, use `update65()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update63$Response(params: {
+  update65$Response(params: {
     body: DashboardCard
   }): Observable<StrictHttpResponse<RestApiResponseDashboardCard>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Update63Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Update65Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class DashboardCardControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update63$Response()` instead.
+   * To access the full response (for headers, for example), `update65$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update63(params: {
+  update65(params: {
     body: DashboardCard
   }): Observable<RestApiResponseDashboardCard> {
 
-    return this.update63$Response(params).pipe(
+    return this.update65$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDashboardCard>) => r.body as RestApiResponseDashboardCard)
     );
   }
 
   /**
-   * Path part for operation create58
+   * Path part for operation create59
    */
-  static readonly Create58Path = '/v1/dashboard-cards';
+  static readonly Create59Path = '/v1/dashboard-cards';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create58()` instead.
+   * To access only the response body, use `create59()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create58$Response(params: {
+  create59$Response(params: {
     body: DashboardCard
   }): Observable<StrictHttpResponse<RestApiResponseDashboardCard>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Create58Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Create59Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class DashboardCardControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create58$Response()` instead.
+   * To access the full response (for headers, for example), `create59$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create58(params: {
+  create59(params: {
     body: DashboardCard
   }): Observable<RestApiResponseDashboardCard> {
 
-    return this.create58$Response(params).pipe(
+    return this.create59$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDashboardCard>) => r.body as RestApiResponseDashboardCard)
     );
   }
@@ -208,21 +208,21 @@ export class DashboardCardControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete33
+   * Path part for operation delete34
    */
-  static readonly Delete33Path = '/v1/dashboard-cards/{id}';
+  static readonly Delete34Path = '/v1/dashboard-cards/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete33()` instead.
+   * To access only the response body, use `delete34()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete33$Response(params: {
+  delete34$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseDashboardCard>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Delete33Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Delete34Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -240,15 +240,15 @@ export class DashboardCardControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete33$Response()` instead.
+   * To access the full response (for headers, for example), `delete34$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete33(params: {
+  delete34(params: {
     id: number;
   }): Observable<RestApiResponseDashboardCard> {
 
-    return this.delete33$Response(params).pipe(
+    return this.delete34$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDashboardCard>) => r.body as RestApiResponseDashboardCard)
     );
   }

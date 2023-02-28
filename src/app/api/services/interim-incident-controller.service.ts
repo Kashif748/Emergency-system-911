@@ -121,21 +121,21 @@ export class InterimIncidentControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation create25
+   * Path part for operation create26
    */
-  static readonly Create25Path = '/v1/interim-incidents';
+  static readonly Create26Path = '/v1/interim-incidents';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create25()` instead.
+   * To access only the response body, use `create26()` instead.
    *
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  create25$Response(params?: {
+  create26$Response(params?: {
     body?: { 'details': InterimIncidentDetails, 'doc'?: Blob }
   }): Observable<StrictHttpResponse<RestApiResponseInterimIncident>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.Create25Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.Create26Path, 'post');
     if (params) {
       rb.body(params.body, 'multipart/form-data');
     }
@@ -153,35 +153,35 @@ export class InterimIncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create25$Response()` instead.
+   * To access the full response (for headers, for example), `create26$Response()` instead.
    *
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  create25(params?: {
+  create26(params?: {
     body?: { 'details': InterimIncidentDetails, 'doc'?: Blob }
   }): Observable<RestApiResponseInterimIncident> {
 
-    return this.create25$Response(params).pipe(
+    return this.create26$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseInterimIncident>) => r.body as RestApiResponseInterimIncident)
     );
   }
 
   /**
-   * Path part for operation getById5
+   * Path part for operation getById6
    */
-  static readonly GetById5Path = '/v1/interim-incidents/{id}';
+  static readonly GetById6Path = '/v1/interim-incidents/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById5()` instead.
+   * To access only the response body, use `getById6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById5$Response(params: {
+  getById6$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseGetInterimIncidentProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.GetById5Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.GetById6Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -199,36 +199,36 @@ export class InterimIncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById5$Response()` instead.
+   * To access the full response (for headers, for example), `getById6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById5(params: {
+  getById6(params: {
     id: number;
   }): Observable<RestApiResponseGetInterimIncidentProjection> {
 
-    return this.getById5$Response(params).pipe(
+    return this.getById6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGetInterimIncidentProjection>) => r.body as RestApiResponseGetInterimIncidentProjection)
     );
   }
 
   /**
-   * Path part for operation search1
+   * Path part for operation search2
    */
-  static readonly Search1Path = '/v1/interim-incidents/search';
+  static readonly Search2Path = '/v1/interim-incidents/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search1()` instead.
+   * To access only the response body, use `search2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search1$Response(params: {
+  search2$Response(params: {
     filter: InterimIncidentCriteria;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageGetInterimIncidentProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.Search1Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.Search2Path, 'get');
     if (params) {
       rb.query('filter', params.filter, {});
       rb.query('pageable', params.pageable, {});
@@ -247,16 +247,16 @@ export class InterimIncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search1$Response()` instead.
+   * To access the full response (for headers, for example), `search2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search1(params: {
+  search2(params: {
     filter: InterimIncidentCriteria;
     pageable: Pageable;
   }): Observable<RestApiResponsePageGetInterimIncidentProjection> {
 
-    return this.search1$Response(params).pipe(
+    return this.search2$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageGetInterimIncidentProjection>) => r.body as RestApiResponsePageGetInterimIncidentProjection)
     );
   }

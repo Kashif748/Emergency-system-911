@@ -14,6 +14,7 @@ export interface IncidentExportFilters {
   reporterContact?: string;
   reportingVia?: number;
   responsibleOrg?: number;
+  serial?: number;
   subject?: string;
   toDate?: string;
 }

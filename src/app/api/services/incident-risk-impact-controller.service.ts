@@ -70,21 +70,21 @@ export class IncidentRiskImpactControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update36
+   * Path part for operation update37
    */
-  static readonly Update36Path = '/v1/incident-risk-impact';
+  static readonly Update37Path = '/v1/incident-risk-impact';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update36()` instead.
+   * To access only the response body, use `update37()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update36$Response(params: {
+  update37$Response(params: {
     body: IncidentRiskImpact
   }): Observable<StrictHttpResponse<RestApiResponseIncidentRiskImpact>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Update36Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Update37Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class IncidentRiskImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update36$Response()` instead.
+   * To access the full response (for headers, for example), `update37$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update36(params: {
+  update37(params: {
     body: IncidentRiskImpact
   }): Observable<RestApiResponseIncidentRiskImpact> {
 
-    return this.update36$Response(params).pipe(
+    return this.update37$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentRiskImpact>) => r.body as RestApiResponseIncidentRiskImpact)
     );
   }
 
   /**
-   * Path part for operation create32
+   * Path part for operation create33
    */
-  static readonly Create32Path = '/v1/incident-risk-impact';
+  static readonly Create33Path = '/v1/incident-risk-impact';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create32()` instead.
+   * To access only the response body, use `create33()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create32$Response(params: {
+  create33$Response(params: {
     body: IncidentRiskImpact
   }): Observable<StrictHttpResponse<RestApiResponseIncidentRiskImpact>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Create32Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Create33Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class IncidentRiskImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create32$Response()` instead.
+   * To access the full response (for headers, for example), `create33$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create32(params: {
+  create33(params: {
     body: IncidentRiskImpact
   }): Observable<RestApiResponseIncidentRiskImpact> {
 
-    return this.create32$Response(params).pipe(
+    return this.create33$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentRiskImpact>) => r.body as RestApiResponseIncidentRiskImpact)
     );
   }
@@ -208,21 +208,21 @@ export class IncidentRiskImpactControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete16
+   * Path part for operation delete17
    */
-  static readonly Delete16Path = '/v1/incident-risk-impact/{id}';
+  static readonly Delete17Path = '/v1/incident-risk-impact/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete16()` instead.
+   * To access only the response body, use `delete17()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete16$Response(params: {
+  delete17$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseIncidentRiskImpact>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Delete16Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Delete17Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -240,15 +240,15 @@ export class IncidentRiskImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete16$Response()` instead.
+   * To access the full response (for headers, for example), `delete17$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete16(params: {
+  delete17(params: {
     id: number;
   }): Observable<RestApiResponseIncidentRiskImpact> {
 
-    return this.delete16$Response(params).pipe(
+    return this.delete17$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentRiskImpact>) => r.body as RestApiResponseIncidentRiskImpact)
     );
   }

@@ -1,5 +1,10 @@
 export const COLUMNS = [
   {
+    key: 'serial',
+    nameAr: 'الرقم التسلسلي',
+    nameEn: 'SERIAL NUMBER',
+  },
+  {
     key: 'id',
     nameAr: 'الرقم',
     nameEn: 'ID',

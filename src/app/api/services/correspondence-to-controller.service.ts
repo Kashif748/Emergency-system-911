@@ -74,22 +74,22 @@ export class CorrespondenceToControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update67
+   * Path part for operation update69
    */
-  static readonly Update67Path = '/v1/correspondence/{correspondenceId}/to';
+  static readonly Update69Path = '/v1/correspondence/{correspondenceId}/to';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update67()` instead.
+   * To access only the response body, use `update69()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update67$Response(params: {
+  update69$Response(params: {
     correspondenceId: Correspondence;
     body: CorrespondenceTo
   }): Observable<StrictHttpResponse<RestApiResponseCorrespondenceTo>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CorrespondenceToControllerService.Update67Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, CorrespondenceToControllerService.Update69Path, 'put');
     if (params) {
       rb.path('correspondenceId', params.correspondenceId, {});
       rb.body(params.body, 'application/json');
@@ -108,37 +108,37 @@ export class CorrespondenceToControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update67$Response()` instead.
+   * To access the full response (for headers, for example), `update69$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update67(params: {
+  update69(params: {
     correspondenceId: Correspondence;
     body: CorrespondenceTo
   }): Observable<RestApiResponseCorrespondenceTo> {
 
-    return this.update67$Response(params).pipe(
+    return this.update69$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCorrespondenceTo>) => r.body as RestApiResponseCorrespondenceTo)
     );
   }
 
   /**
-   * Path part for operation create63
+   * Path part for operation create64
    */
-  static readonly Create63Path = '/v1/correspondence/{correspondenceId}/to';
+  static readonly Create64Path = '/v1/correspondence/{correspondenceId}/to';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create63()` instead.
+   * To access only the response body, use `create64()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create63$Response(params: {
+  create64$Response(params: {
     correspondenceId: Correspondence;
     body: CorrespondenceTo
   }): Observable<StrictHttpResponse<RestApiResponseCorrespondenceTo>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CorrespondenceToControllerService.Create63Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, CorrespondenceToControllerService.Create64Path, 'post');
     if (params) {
       rb.path('correspondenceId', params.correspondenceId, {});
       rb.body(params.body, 'application/json');
@@ -157,16 +157,16 @@ export class CorrespondenceToControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create63$Response()` instead.
+   * To access the full response (for headers, for example), `create64$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create63(params: {
+  create64(params: {
     correspondenceId: Correspondence;
     body: CorrespondenceTo
   }): Observable<RestApiResponseCorrespondenceTo> {
 
-    return this.create63$Response(params).pipe(
+    return this.create64$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCorrespondenceTo>) => r.body as RestApiResponseCorrespondenceTo)
     );
   }

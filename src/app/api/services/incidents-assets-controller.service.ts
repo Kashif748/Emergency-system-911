@@ -73,21 +73,21 @@ export class IncidentsAssetsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update44
+   * Path part for operation update45
    */
-  static readonly Update44Path = '/v1/incident-assets';
+  static readonly Update45Path = '/v1/incident-assets';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update44()` instead.
+   * To access only the response body, use `update45()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update44$Response(params: {
+  update45$Response(params: {
     body: IncidentsAssets
   }): Observable<StrictHttpResponse<RestApiResponseIncidentsAssets>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsAssetsControllerService.Update44Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsAssetsControllerService.Update45Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -105,35 +105,35 @@ export class IncidentsAssetsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update44$Response()` instead.
+   * To access the full response (for headers, for example), `update45$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update44(params: {
+  update45(params: {
     body: IncidentsAssets
   }): Observable<RestApiResponseIncidentsAssets> {
 
-    return this.update44$Response(params).pipe(
+    return this.update45$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentsAssets>) => r.body as RestApiResponseIncidentsAssets)
     );
   }
 
   /**
-   * Path part for operation create40
+   * Path part for operation create41
    */
-  static readonly Create40Path = '/v1/incident-assets';
+  static readonly Create41Path = '/v1/incident-assets';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create40()` instead.
+   * To access only the response body, use `create41()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create40$Response(params: {
+  create41$Response(params: {
     body: IncidentsAssets
   }): Observable<StrictHttpResponse<RestApiResponseIncidentsAssets>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsAssetsControllerService.Create40Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsAssetsControllerService.Create41Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -151,15 +151,15 @@ export class IncidentsAssetsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create40$Response()` instead.
+   * To access the full response (for headers, for example), `create41$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create40(params: {
+  create41(params: {
     body: IncidentsAssets
   }): Observable<RestApiResponseIncidentsAssets> {
 
-    return this.create40$Response(params).pipe(
+    return this.create41$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentsAssets>) => r.body as RestApiResponseIncidentsAssets)
     );
   }
@@ -257,22 +257,22 @@ export class IncidentsAssetsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation search4
+   * Path part for operation search5
    */
-  static readonly Search4Path = '/v1/incident-assets/search';
+  static readonly Search5Path = '/v1/incident-assets/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search4()` instead.
+   * To access only the response body, use `search5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search4$Response(params: {
+  search5$Response(params: {
     incidentId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageIncidentAssetsProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsAssetsControllerService.Search4Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsAssetsControllerService.Search5Path, 'get');
     if (params) {
       rb.query('incidentId', params.incidentId, {});
       rb.query('pageable', params.pageable, {});
@@ -291,16 +291,16 @@ export class IncidentsAssetsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search4$Response()` instead.
+   * To access the full response (for headers, for example), `search5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search4(params: {
+  search5(params: {
     incidentId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageIncidentAssetsProjection> {
 
-    return this.search4$Response(params).pipe(
+    return this.search5$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageIncidentAssetsProjection>) => r.body as RestApiResponsePageIncidentAssetsProjection)
     );
   }

@@ -14,6 +14,7 @@ import {
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IncidentFilter } from '@core/api/models/filters.model';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { Store } from '@ngrx/store';
 import { TranslationService } from 'src/app/modules/i18n/translation.service';
 import { UpdateFilter } from 'src/app/modules/incidents/new-incidents-view/store/incidents-dashboard.actions';
@@ -138,7 +139,7 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
     this.advncedFilterForm
       .get(AdvancedSearchFieldsEnum.CREATED_DATE)
       .patchValue(
-        fromDate ? new Date(fromDate).toLocaleDateString('en-CA') : null
+        fromDate ? DateTimeUtil.format(new Date(fromDate), DateTimeUtil.DATE_FORMAT) : null
       );
 
     const toDate = this.advncedFilterForm.get(
@@ -146,7 +147,7 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
     ).value;
     this.advncedFilterForm
       .get(AdvancedSearchFieldsEnum.END_DATE)
-      .patchValue(toDate ? new Date(toDate).toLocaleDateString('en-CA') : null);
+      .patchValue(toDate ? DateTimeUtil.format(new Date(toDate), DateTimeUtil.DATE_FORMAT) : null);
   }
 
   // fillAdvancedSearchFormFieldsData() {
