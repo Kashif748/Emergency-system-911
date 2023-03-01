@@ -58,6 +58,7 @@ export interface Incident {
   reportingVia: ReportingVia;
   responsibleOrg?: OrgStructure;
   sector?: number;
+  serial?: number;
   specialized?: (User | UserInappAuthentication | UserMiddlewareAuth);
   specializedEmail?: string;
   specializedMobile?: string;
@@ -65,6 +66,7 @@ export interface Incident {
   street?: string;
   subject: string;
   uuid?: string;
+  year?: number;
   zone?: number;
 }
 

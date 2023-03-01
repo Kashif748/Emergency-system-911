@@ -70,21 +70,21 @@ export class EnviromentalImpactControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update61
+   * Path part for operation update63
    */
-  static readonly Update61Path = '/v1/enviromental-impacts';
+  static readonly Update63Path = '/v1/enviromental-impacts';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update61()` instead.
+   * To access only the response body, use `update63()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update61$Response(params: {
+  update63$Response(params: {
     body: EnviromentalImpact
   }): Observable<StrictHttpResponse<RestApiResponseEnviromentalImpact>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EnviromentalImpactControllerService.Update61Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, EnviromentalImpactControllerService.Update63Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class EnviromentalImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update61$Response()` instead.
+   * To access the full response (for headers, for example), `update63$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update61(params: {
+  update63(params: {
     body: EnviromentalImpact
   }): Observable<RestApiResponseEnviromentalImpact> {
 
-    return this.update61$Response(params).pipe(
+    return this.update63$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseEnviromentalImpact>) => r.body as RestApiResponseEnviromentalImpact)
     );
   }
 
   /**
-   * Path part for operation create56
+   * Path part for operation create57
    */
-  static readonly Create56Path = '/v1/enviromental-impacts';
+  static readonly Create57Path = '/v1/enviromental-impacts';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create56()` instead.
+   * To access only the response body, use `create57()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create56$Response(params: {
+  create57$Response(params: {
     body: EnviromentalImpact
   }): Observable<StrictHttpResponse<RestApiResponseEnviromentalImpact>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EnviromentalImpactControllerService.Create56Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, EnviromentalImpactControllerService.Create57Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class EnviromentalImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create56$Response()` instead.
+   * To access the full response (for headers, for example), `create57$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create56(params: {
+  create57(params: {
     body: EnviromentalImpact
   }): Observable<RestApiResponseEnviromentalImpact> {
 
-    return this.create56$Response(params).pipe(
+    return this.create57$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseEnviromentalImpact>) => r.body as RestApiResponseEnviromentalImpact)
     );
   }

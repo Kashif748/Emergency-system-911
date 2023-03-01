@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { GroupAssignee } from './group-assignee';
 import { IEntity } from './i-entity';
+import { IncidentSerialProjection } from './incident-serial-projection';
 import { OrgAssignee } from './org-assignee';
 import { UserAssignee } from './user-assignee';
 import { UserDetailsWithOrg } from './user-details-with-org';
@@ -15,7 +16,7 @@ export interface IncidentTaskProjection {
   dueDate?: string;
   featureName?: string;
   id?: number;
-  incident?: IEntity;
+  incident?: IncidentSerialProjection;
   modifiable?: boolean;
   priority?: IEntity;
   status?: IEntity;

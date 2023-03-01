@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-import { IEntity } from './i-entity';
+import { IncidentTaskIdAndTitleProjection } from './incident-task-id-and-title-projection';
 import { UserDetailsWithOrg } from './user-details-with-org';
 export interface TaskWorkLogForDashboardProjection {
   auto?: boolean;
@@ -10,7 +10,7 @@ export interface TaskWorkLogForDashboardProjection {
   isActive?: boolean;
   modifiable?: boolean;
   notes?: string;
-  taskId?: IEntity;
+  taskId?: IncidentTaskIdAndTitleProjection;
   updated?: boolean;
 }
 

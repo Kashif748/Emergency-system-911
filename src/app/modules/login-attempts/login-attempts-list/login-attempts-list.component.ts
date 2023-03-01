@@ -8,6 +8,7 @@ import {Observable, Subject} from "rxjs";
 import {LoginAttemptsService} from "../login-attempts.service";
 import {AdvancedSearchFieldsEnum} from "@shared/components/advanced-search/advancedSearch.model";
 import {MatPaginator} from "@angular/material/paginator";
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-login-attempts-list',
@@ -94,14 +95,14 @@ export class LoginAttemptsListComponent implements OnInit {
       this.searchForm
         .get('fromDate')
         .patchValue(
-          fromDate ? new Date(fromDate).toLocaleDateString('en-CA') : null
+          fromDate ? DateTimeUtil.format(new Date(fromDate), DateTimeUtil.DATE_FORMAT) : null
         );
     }
     if (toDate) {
       this.searchForm
         .get('toDate')
         .patchValue(
-          toDate ? new Date(toDate).toLocaleDateString('en-CA') : null
+          toDate ? DateTimeUtil.format(new Date(toDate), DateTimeUtil.DATE_FORMAT) : null
         );
     }
     const {pageSize, pageIndex} = e;
@@ -134,14 +135,14 @@ export class LoginAttemptsListComponent implements OnInit {
       this.searchForm
         .get('fromDate')
         .patchValue(
-          fromDate ? new Date(fromDate).toLocaleDateString('en-CA') : null
+          fromDate ? DateTimeUtil.format(new Date(fromDate), DateTimeUtil.DATE_FORMAT) : null
         );
     }
     if (toDate) {
       this.searchForm
         .get('toDate')
         .patchValue(
-          toDate ? new Date(toDate).toLocaleDateString('en-CA') : null
+          toDate ? DateTimeUtil.format(new Date(toDate), DateTimeUtil.DATE_FORMAT) : null
         );
     }
     this.getLoginAttemptsList(this.searchForm.get('orgId').value, this.searchForm.get('userName').value,

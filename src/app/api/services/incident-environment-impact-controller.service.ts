@@ -22,21 +22,21 @@ export class IncidentEnvironmentImpactControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update42
+   * Path part for operation update43
    */
-  static readonly Update42Path = '/v1/incident-environment-impacts';
+  static readonly Update43Path = '/v1/incident-environment-impacts';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update42()` instead.
+   * To access only the response body, use `update43()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update42$Response(params: {
+  update43$Response(params: {
     body: IncidentEnvironmentImpact
   }): Observable<StrictHttpResponse<RestApiResponseIncidentEnvironmentImpact>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentEnvironmentImpactControllerService.Update42Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentEnvironmentImpactControllerService.Update43Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -54,35 +54,35 @@ export class IncidentEnvironmentImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update42$Response()` instead.
+   * To access the full response (for headers, for example), `update43$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update42(params: {
+  update43(params: {
     body: IncidentEnvironmentImpact
   }): Observable<RestApiResponseIncidentEnvironmentImpact> {
 
-    return this.update42$Response(params).pipe(
+    return this.update43$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentEnvironmentImpact>) => r.body as RestApiResponseIncidentEnvironmentImpact)
     );
   }
 
   /**
-   * Path part for operation create38
+   * Path part for operation create39
    */
-  static readonly Create38Path = '/v1/incident-environment-impacts';
+  static readonly Create39Path = '/v1/incident-environment-impacts';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create38()` instead.
+   * To access only the response body, use `create39()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create38$Response(params: {
+  create39$Response(params: {
     body: IncidentEnvironmentImpact
   }): Observable<StrictHttpResponse<RestApiResponseIncidentEnvironmentImpact>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentEnvironmentImpactControllerService.Create38Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentEnvironmentImpactControllerService.Create39Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -100,35 +100,35 @@ export class IncidentEnvironmentImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create38$Response()` instead.
+   * To access the full response (for headers, for example), `create39$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create38(params: {
+  create39(params: {
     body: IncidentEnvironmentImpact
   }): Observable<RestApiResponseIncidentEnvironmentImpact> {
 
-    return this.create38$Response(params).pipe(
+    return this.create39$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentEnvironmentImpact>) => r.body as RestApiResponseIncidentEnvironmentImpact)
     );
   }
 
   /**
-   * Path part for operation delete21
+   * Path part for operation delete22
    */
-  static readonly Delete21Path = '/v1/incident-environment-impacts/{id}';
+  static readonly Delete22Path = '/v1/incident-environment-impacts/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete21()` instead.
+   * To access only the response body, use `delete22()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete21$Response(params: {
+  delete22$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentEnvironmentImpactControllerService.Delete21Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, IncidentEnvironmentImpactControllerService.Delete22Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -146,15 +146,15 @@ export class IncidentEnvironmentImpactControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete21$Response()` instead.
+   * To access the full response (for headers, for example), `delete22$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete21(params: {
+  delete22(params: {
     id: number;
   }): Observable<void> {
 
-    return this.delete21$Response(params).pipe(
+    return this.delete22$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

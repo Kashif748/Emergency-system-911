@@ -55,6 +55,7 @@ import { ButtonModule } from 'primeng/button';
 import {GroupState, OrgState, RoleState, TaskState, UserState} from '@core/states';
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
+import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import {CenterState} from "@core/states/service-center-area/centers/center.state";
 import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
