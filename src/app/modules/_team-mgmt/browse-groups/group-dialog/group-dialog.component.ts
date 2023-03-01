@@ -248,6 +248,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       descEn: [null, [Validators.required, GenericValidators.english]],
       descAr: [null, [Validators.required, GenericValidators.arabic]],
+      isActive: [true],
       orgStructure: [{ key: orgId }, [Validators.required]],
       userStructure: [undefined, [Validators.required]],
     });

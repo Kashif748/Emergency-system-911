@@ -154,18 +154,6 @@ export class BrowseGroupsComponent implements OnInit, OnDestroy {
         label: this.translate.instant('ACTIONS.EDIT'),
         icon: 'pi pi-pencil',
       },
-      {
-        label: this.translate.instant('GROUP.groupsMembers'),
-        icon: 'pi pi-users',
-      },
-      {
-        label: this.translate.instant('INCIDENTS.MAIN_CAT'),
-        icon: 'pi pi-sitemap',
-      },
-      {
-        label: this.translate.instant('ACTIONS.DELETE'),
-        icon: 'pi pi-trash',
-      },
     ] as MenuItem[];
 
     this.page$ = this.store.select(GroupState.page).pipe(
@@ -181,27 +169,6 @@ export class BrowseGroupsComponent implements OnInit, OnDestroy {
                   this.openDialog(u.id);
                 },
                 // disabled: !u.isActive,
-              },
-              {
-                ...groupActions[1],
-                command: () => {
-                  this.openDialog(u.id);
-                },
-                // disabled: u.isActive,
-              },
-              {
-                ...groupActions[2],
-                command: () => {
-                  this.openDialog(u.id);
-                },
-                // disabled: u.isActive,
-              },
-              {
-                ...groupActions[3],
-                command: () => {
-                  this.openDialog(u.id);
-                },
-                // disabled: u.isActive,
               },
             ],
           };
