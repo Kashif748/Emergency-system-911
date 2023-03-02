@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -17,7 +18,14 @@ import {
 } from '@angular/material/autocomplete';
 import { DmsService } from '@core/api/services/dms.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { filter, map, startWith, tap } from 'rxjs/operators';
+import {
+  debounceTime,
+  filter,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 import { CommonService } from 'src/app/_metronic/core/services/common.service';
 import { IncidentsService } from 'src/app/_metronic/core/services/incidents.service';
@@ -30,6 +38,9 @@ import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { AttachmentsService } from '../../../_metronic/core/services/attachments.service';
 import { DataOptions } from '@shared/components/advanced-search/advanced-search.component';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { onMessage } from 'firebase/messaging';
+import { NotifService } from '@core/api/services/notif.service';
+import { NotificationsEvents } from '@core/constant/NotificationsEvents';
 
 export interface Log {
   id?: number;
@@ -106,7 +117,8 @@ export class LogComponent implements OnInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     private changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private attachmentsService: AttachmentsService
+    private attachmentsService: AttachmentsService,
+    private notifService: NotifService
   ) {
     this.lang = this.translationService.getSelectedLanguage();
     this.commonData = JSON.parse(localStorage.getItem('commonData'));
@@ -130,6 +142,32 @@ export class LogComponent implements OnInit, OnDestroy {
       map((fruit: any | null) => (fruit ? this._filter(fruit) : this.allOrgs))
     );
     this.getNexLogs();
+    this.notifService.onNewMessage$
+      .pipe(
+        filter((message) => !!message),
+        debounceTime(1000),
+        tap((message) => {
+          const eventType = message.data?.event;
+          const incidentId = message.data?.id;
+          if (
+            (eventType === NotificationsEvents.C_TASK_WL ||
+              eventType === NotificationsEvents.C_INC_WL) &&
+            incidentId === this.id?.toString()
+          ) {
+            this.pageIndex--;
+            this.getNexLogs();
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  visibilityChange($event: Event) {
+    if (document.visibilityState === 'visible') {
+      this.pageIndex--;
+      this.getNexLogs();
+    }
   }
 
   scrollBottom() {
@@ -172,7 +210,7 @@ export class LogComponent implements OnInit, OnDestroy {
             this.gettingNextAllowed = true;
             setTimeout((_) => {
               this.changeDetectorRef.detectChanges();
-              this.scrollBottom()
+              this.scrollBottom();
             }, 400);
           },
           (err) => (this.loading = false)
@@ -197,7 +235,7 @@ export class LogComponent implements OnInit, OnDestroy {
 
             setTimeout((_) => {
               this.changeDetectorRef.detectChanges();
-              this.scrollBottom()
+              this.scrollBottom();
             }, 400);
           },
           (err) => (this.loading = false)
@@ -360,7 +398,7 @@ export class LogComponent implements OnInit, OnDestroy {
       priority: { id: this.priority },
       privateIncidentWorkLogList: this.orgs as any[],
       isActive: true,
-      updated : true
+      updated: true,
     };
 
     if (!this.selectedLog.notes) {
