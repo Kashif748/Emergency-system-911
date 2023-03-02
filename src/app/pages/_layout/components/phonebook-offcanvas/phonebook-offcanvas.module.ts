@@ -21,6 +21,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import {PaginatorModule} from 'primeng/paginator';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '@shared/shared.module';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -45,6 +46,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     PerfectScrollbarModule,
     PaginatorModule,
     RouterModule,
+    SharedModule,
     TranslateModule.forChild({
       extend: true,
       loader: {

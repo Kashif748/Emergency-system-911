@@ -249,11 +249,15 @@
     </div>
 
     <!-- activate status -->
-    <div class="d-flex align-items-center w-25">
-      <span class="mx-4"> {{ "ACTIONS.ACTIVE_STATUS" | translate }}</span>
-      <span class="spacer"></span>
-      <mat-slide-toggle formControlName="isActive" class="m-auto">
-      </mat-slide-toggle>
+    <div class="p-field p-col-12 p-md-4">
+      <p-toggleButton
+        formControlName="isActive"
+        onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+        offLabel="{{ 'ACTIONS.INACTIVE' | translate }}"
+        [onIcon]="'pi pi-check'"
+        offIcon="pi pi-times"
+        iconPos="right"
+      ></p-toggleButton>
     </div>
   </form>
 

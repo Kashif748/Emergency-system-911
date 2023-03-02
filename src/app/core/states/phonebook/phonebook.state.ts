@@ -19,6 +19,9 @@ export interface PhonebookStateModel {
   phonebook: ExternalPhonebook; //User
   loading: boolean;
   blocking: boolean;
+  // sidebar state
+  sidebarPage: PageExternalPhonebook;
+  sidebarLoading: boolean;
 }
 
 const PHONEBOOK_STATE_TOKEN = new StateToken<PhonebookStateModel>('phonebook');
@@ -52,6 +55,20 @@ export class PhonebookState {
   static blocking(state: PhonebookStateModel) {
     return state?.blocking;
   }
+  // sidebar selectors
+  @Selector([PhonebookState])
+  static sidebarPage(state: PhonebookStateModel) {
+    return state?.sidebarPage?.content;
+  }
+  @Selector([PhonebookState])
+  static totalSidebarPageRecords(state: PhonebookStateModel) {
+    return state?.sidebarPage?.totalElements;
+  }
+  @Selector([PhonebookState])
+  static sidebarLoading(state: PhonebookStateModel) {
+    return state?.sidebarLoading;
+  }
+
   /* ********************** ACTIONS ************************* */
   @Action(PhonebookAction.LoadPage, { cancelUncompleted: true })
   loadPage(
@@ -168,6 +185,52 @@ export class PhonebookState {
           setState(
             patch<PhonebookStateModel>({
               blocking: false,
+            })
+          );
+        })
+      );
+  }
+  // sidebar actions
+  @Action(PhonebookAction.LoadSidebarPage, { cancelUncompleted: true })
+  loadSidebarPage(
+    { setState }: StateContext<PhonebookStateModel>,
+    { payload }: PhonebookAction.LoadPage
+  ) {
+    setState(
+      patch<PhonebookStateModel>({
+        sidebarLoading: true,
+      })
+    );
+    return this.phonebookService
+      .search1({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        ...payload.filters,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<PhonebookStateModel>({
+              sidebarPage: res.result,
+              sidebarLoading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<PhonebookStateModel>({
+              sidebarPage: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<PhonebookStateModel>({
+              sidebarLoading: false,
             })
           );
         })
