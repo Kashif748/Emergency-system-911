@@ -410,7 +410,7 @@ export class IncidentComponent implements OnInit, AfterViewInit {
       status: [''],
       subject: [''],
       reporterMobile: [''],
-      rVia: [''],
+      reportingVia: [''],
     });
   }
 
