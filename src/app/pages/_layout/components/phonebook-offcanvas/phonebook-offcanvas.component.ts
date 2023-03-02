@@ -13,6 +13,7 @@ import {
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-phonebook-offcanvas',
@@ -21,9 +22,9 @@ import { PageRequestModel } from '@core/models/page-request.model';
 })
 export class PhonebookOffcanvasComponent implements OnInit {
   display;
-  @Select(PhonebookState.loading)
+  @Select(PhonebookState.sidebarLoading)
   public loading$: Observable<boolean>;
-  @Select(PhonebookState.totalRecords)
+  @Select(PhonebookState.totalSidebarPageRecords)
   public totalRecords$: Observable<number>;
   @Select(OffcanvasPhonebookState.state)
   public state$: Observable<OffcanvasPhonebookStateModel>;
@@ -33,10 +34,11 @@ export class PhonebookOffcanvasComponent implements OnInit {
     private store: Store,
     private clipboard: Clipboard,
     private messageHelper: MessageHelper,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.page$ = this.store.select(PhonebookState.page).pipe(
+    this.page$ = this.store.select(PhonebookState.sidebarPage).pipe(
       filter((p) => !!p),
       map((page) => page?.filter((u) => u.isActive))
     );
@@ -80,6 +82,9 @@ export class PhonebookOffcanvasComponent implements OnInit {
 
   copyToClipboard(phonebook: ExternalPhonebook) {
     this.clipboard.copy(phonebook.mobileNumber);
-    this.messageHelper.success();
+    this.messageHelper.success({
+      summary: this.translate.instant('COMMON.SUCCESSFULLY_COPIED'),
+      detail :''
+    });
   }
 }

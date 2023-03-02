@@ -65,14 +65,12 @@ export class OffcanvasPhonebookState {
     );
     const pageRequest = getState().pageRequest;
     return dispatch(
-      new PhonebookAction.LoadPage({
+      new PhonebookAction.LoadSidebarPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgIds: pageRequest.filters.orgIds?.map((o) => o.key),
-          roleIds: pageRequest.filters.roleIds?.map((r) => r.id),
         },
       })
     );
