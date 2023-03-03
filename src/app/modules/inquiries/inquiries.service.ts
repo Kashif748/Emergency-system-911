@@ -41,8 +41,8 @@ export class InquiriesService {
         toDate: data?.toDate ?? '',
         subject: data?.subject ?? '',
         userId: data?.userId?.id ?? '',
-        pageNumber: pageNumber ?? '0',
-        pageSize : pageSize ?? '10'
+        page: pageNumber ?? '0',
+        size : pageSize ?? '10'
         // sort: `${sort?.active ?? ''},${sort?.direction ?? ''}`,
       },
     });

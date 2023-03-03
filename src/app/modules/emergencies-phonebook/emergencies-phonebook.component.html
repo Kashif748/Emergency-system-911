@@ -27,11 +27,12 @@
           legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
           [collapsed]="true"
         >
-          <form class="p-fluid p-grid">
+          <div class="p-fluid p-grid">
             <div class="p-field p-col-4 p-md-3">
               <input
                 type="text"
                 pInputText
+                [ngModel]="state?.pageRequest?.filters['name']"
                 (keyup)="updateFilter({ name: $event.target.value }, $event)"
                 placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
               />
@@ -40,26 +41,23 @@
               <input
                 type="text"
                 pInputText
+                [ngModel]="state?.pageRequest?.filters['orgName']"
                 (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
                 placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
               />
             </div>
-            <div class="p-field p-col-4 p-md-3">
-              <ngx-intl-tel-input
-                cssClass="p-inputtext p-component p-text-left"
-                [onlyCountries]="['ae']"
-                (keyup)="
-                  updateFilter({ mobileNumber: $event.target.value }, $event)
-                "
-                [enablePlaceholder]="true"
-                [enableAutoCountrySelect]="true"
-                searchCountryPlaceholder="{{
-                  'PHONEBOOK.MOBILE_NUMBER' | translate
-                }}"
-              >
-              </ngx-intl-tel-input>
+            <!-- mobile -phone  -->
+            <div class="p-field p-col-12 p-md-3">
+              <span class="p-float-label">
+                <input
+                  type="text"
+                  placeholder="{{ 'PHONEBOOK.MOBILE_NUMBER' | translate }}"
+                  [ngModel]="state?.pageRequest?.filters['mobileNumber']"
+                  pInputText
+                  (keyup)="updateFilter({ mobileNumber: $event.target.value }, $event)"
+                />
+              </span>
             </div>
-
             <div class="p-col p-d-flex">
               <div class="ml-dir-auto"></div>
               <div class="mx-1">
@@ -83,7 +81,7 @@
                 ></button>
               </div>
             </div>
-          </form>
+          </div>
         </p-fieldset>
       </div>
     </div>

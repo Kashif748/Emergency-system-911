@@ -413,7 +413,7 @@ export class IncidentsService {
 
   searchInterimIncidents(page, search, size = 10, sort?: any) {
     const params = new HttpParams()
-      .append('rVia', search?.rVia ?? '')
+      .append('rVia', search?.reportingVia ?? '')
       .append('id', search?.id ?? '')
       .append('fromDate', search?.fromDate ?? '')
       .append('toDate', search?.toDate ?? '')

@@ -53,9 +53,7 @@ import { BrowseUsersAction } from '../../states/browse-users.action';
 })
 export class UserDialogComponent implements OnInit, OnDestroy {
   public get minDate() {
-    const date = new Date();
-    date.setDate(date.getDate() + 1);
-    return date;
+    return new Date();
   }
   RegxConst = RegxConst;
 
@@ -391,7 +389,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     this.passwordControl = this.formBuilder.control(null, [
       Validators.required,
       Validators.pattern(RegxConst.PASSWORD_REGEX),
-      Validators.maxLength(32)
+      Validators.maxLength(32),
     ]);
     this.form.addControl('password', this.passwordControl);
   }

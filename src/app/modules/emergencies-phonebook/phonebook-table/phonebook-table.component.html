@@ -32,16 +32,14 @@
 
       <th>
         <div class="p-d-flex p-jc-between p-ai-center">
-          {{ "PHONEBOOK.PHONE_NUMBER" | translate }}
-        </div>
-      </th>
-
-      <th>
-        <div class="p-d-flex p-jc-between p-ai-center">
           {{ "PHONEBOOK.MOBILE_NUMBER" | translate }}
         </div>
       </th>
-
+      <th>
+        <div class="p-d-flex p-jc-between p-ai-center">
+          {{ "PHONEBOOK.PHONE_NUMBER" | translate }}
+        </div>
+      </th>
       <th>
         <div class="p-d-flex p-jc-between p-ai-center">
           {{ "PHONEBOOK.ORG_NAME" | translate }}
@@ -78,11 +76,12 @@
       <td>
         {{ item.jobTitle }}
       </td>
-      <td>
-        {{ item.phoneNumber }}
-      </td>
+
       <td>
         {{ item.mobileNumber }}
+      </td>
+      <td>
+        {{ item.phoneNumber }}
       </td>
 
       <td>
@@ -104,6 +103,7 @@
 
       <td>
         <button
+          *appPrivileges="'PRIV_ED_PHONEBOOK_ENTRY'"
           pButton
           pRipple
           type="button"

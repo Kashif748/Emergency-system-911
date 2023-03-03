@@ -52,9 +52,17 @@ registerLocaleData(localeAr);
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
-import { OrgState, RoleState, TaskState, UserState } from '@core/states';
+import {
+  AssetState,
+  CommonDataState,
+  OrgState,
+  RoleState,
+  TaskState,
+  UserState,
+} from '@core/states';
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
+import { IncidentState } from '@core/states/incident/incident.state';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -106,12 +114,29 @@ export function getHighlightLanguages() {
     DropdownListModule,
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     //------------------
-    NgxsModule.forRoot([RootState, UserState, RoleState, OrgState, TaskState ,PhonebookState], {
-      developmentMode: !environment.production,
-    }),
-    NgxsAsyncStoragePluginModule.forRoot(HyperStorageEngine, {
-      key: ['browse_users', 'browse_roles'],
-    }),
+    NgxsModule.forRoot(
+      [
+        RootState,
+        UserState,
+        RoleState,
+        OrgState,
+        TaskState,
+        IncidentState,
+        CommonDataState,
+        AssetState,
+        PhonebookState,
+      ],
+      {
+        developmentMode: !environment.production,
+      }
+    ),
+    NgxsAsyncStoragePluginModule.forRoot(
+      HyperStorageEngine,
+      {
+        key: ['browse_users', 'browse_roles', 'common_data', 'browse_tasks'],
+      },
+      ['common_data']
+    ),
     ToastModule,
     ButtonModule,
   ],
