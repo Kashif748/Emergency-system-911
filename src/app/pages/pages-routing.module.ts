@@ -148,6 +148,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'incidents-management',
+        loadChildren: () =>
+          import('../modules/_incidents-mgmt/incidents-mgmt.module').then(
+            (m) => m.IncidentsMgmtModule
+          ),
+      },
+      {
         path: 'company-profile',
         loadChildren: () =>
           import('../modules/trade-license/trade-license.module').then(

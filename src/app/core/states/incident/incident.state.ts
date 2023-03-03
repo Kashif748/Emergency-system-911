@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import {
   Action,
   Selector,
@@ -8,8 +9,14 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
-import { finalize, tap } from 'rxjs/operators';
-import { IdNameProjection, IncidentProjection } from 'src/app/api/models';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
+import {
+  IdNameProjection,
+  IncidentProjection,
+  Pageable,
+  PageIncidentProjectionMinimum,
+} from 'src/app/api/models';
 import {
   IncidentControllerService,
   IncidentOrgControllerService,
@@ -19,12 +26,14 @@ import { IncidentAction } from './incident.action';
 export interface IncidentStateModel {
   transLoading: boolean;
   incidents: IncidentProjection[];
+  page: PageIncidentProjectionMinimum;
   orgs: IdNameProjection[];
+  loading: boolean;
 }
 
-const TASK_STATE_TOKEN = new StateToken<IncidentStateModel>('incident');
+const INCDINT_STATE_TOKEN = new StateToken<IncidentStateModel>('incident');
 @State<IncidentStateModel>({
-  name: TASK_STATE_TOKEN,
+  name: INCDINT_STATE_TOKEN,
 })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
@@ -43,15 +52,29 @@ export class IncidentState {
   static incidents(state: IncidentStateModel) {
     return state?.incidents;
   }
+  @Selector([IncidentState])
+  static transLoading(state: IncidentStateModel) {
+    return state?.transLoading;
+  }
 
   @Selector([IncidentState])
   static orgs(state: IncidentStateModel) {
     return state?.orgs;
   }
+  //  selectors for closed incidents screen
+  @Selector([IncidentState])
+  static page(state: IncidentStateModel) {
+    return state?.page?.content;
+  }
 
   @Selector([IncidentState])
-  static transLoading(state: IncidentStateModel) {
-    return state?.transLoading;
+  static totalRecords(state: IncidentStateModel) {
+    return state?.page?.totalElements;
+  }
+
+  @Selector([IncidentState])
+  static loading(state: IncidentStateModel) {
+    return state?.loading;
   }
   /* ********************** ACTIONS ************************* */
 
@@ -103,6 +126,49 @@ export class IncidentState {
           setState(
             patch<IncidentStateModel>({
               orgs: list.map((s) => s.orgStructure),
+            })
+          );
+        })
+      );
+  }
+
+  @Action(IncidentAction.LoadPage, { cancelUncompleted: true })
+  loadPage(
+    { setState }: StateContext<IncidentStateModel>,
+    { payload }: IncidentAction.LoadPage
+  ) {
+    setState(
+      patch<IncidentStateModel>({
+        loading: true,
+      })
+    );
+    return this.incidentService
+      .search4({
+        filter: payload.filters,
+        pageable: { page: 0, size: payload.rows },
+        status: [],
+      })
+      .pipe(
+        tap(({ result }) => {
+          setState(
+            patch<IncidentStateModel>({
+              page: result,
+              loading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<IncidentStateModel>({
+              page: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<IncidentStateModel>({
+              loading: false,
             })
           );
         })
