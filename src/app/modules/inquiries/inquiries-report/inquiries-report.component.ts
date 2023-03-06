@@ -130,15 +130,16 @@ export class InquiriesReportComponent implements OnInit {
 
   clearSearch() {
     this.form.reset({
-      fromDate: [''],
-      toDate: [''],
+      fromDate: '',
+      toDate: '',
       subject: [''],
-      userId: [''],
+      userId: null,
     });
     this.paginationConfig.currentPage = 0;
     this.loading = true;
-    this.form.reset();
-    this.ngOnInit();
+
+    this.inquiryServices.getStatistics(this.form.value);
+    this.getInquiriesList(0);
     this.loading = false;
     this.cdr.detectChanges();
   }

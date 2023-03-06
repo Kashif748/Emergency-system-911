@@ -57,7 +57,7 @@ export class InquiriesService {
           fromDate: filterForm?.fromDate ?? '',
           toDate: filterForm?.toDate ?? '',
           orgId: filterForm?.orgId ?? '',
-          userId: filterForm?.userId ?? '',
+          userId: filterForm?.userId?.id ?? '',
           subject: filterForm?.subject ?? '',
         },
 
@@ -85,7 +85,7 @@ export class InquiriesService {
             fromDate: filterForm?.fromDate ?? '',
             toDate: filterForm?.toDate ?? '',
             subject: filterForm?.subject ?? '',
-            userId: filterForm?.userId ?? '',
+            userId: filterForm?.userId?.id ?? '',
             callDurationInMinutes: filterForm?.callDurationInMinutes ?? '',
           },
         })
