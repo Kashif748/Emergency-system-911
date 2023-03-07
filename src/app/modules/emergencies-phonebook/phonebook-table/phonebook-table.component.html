@@ -46,12 +46,6 @@
         </div>
       </th>
 
-      <th>
-        <div class="p-d-flex p-jc-between p-ai-center">
-          {{ "PHONEBOOK.IS_ACTIVE" | translate }}
-        </div>
-      </th>
-
       <th style="width: 92px">
         {{ "ACTIONS.ACTIONS" | translate }}
       </th>
@@ -86,19 +80,6 @@
 
       <td>
         {{ item.orgName }}
-      </td>
-
-      <td>
-        <span
-          *ngIf="item?.isActive"
-          class="label label-rounded label-pill label-inline label-light-success mr-2"
-          >{{ "ACTIONS.ACTIVE" | translate }}</span
-        >
-        <span
-          *ngIf="!item?.isActive"
-          class="label label-rounded label-light-warning label-pill label-inline mr-2"
-          >{{ "ACTIONS.INACTIVE" | translate }}</span
-        >
       </td>
 
       <td>
