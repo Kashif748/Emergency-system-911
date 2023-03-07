@@ -71,8 +71,9 @@ export class NotificationsComponent implements OnInit {
     this.DialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.loading = true;
-        this._service.getNotifications('0', '20').subscribe((response) => {
+        this._service.getNotifications( this.paginator.pageIndex.toString(), '20').subscribe((response) => {
           if (response && response['status']) {
+
             this.data = response['result']?.content;
             this.dataSource.data = this.data;
           }
