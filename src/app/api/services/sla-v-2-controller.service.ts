@@ -166,6 +166,52 @@ export class SlaV2ControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete
+   */
+  static readonly DeletePath = '/v2/sla/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SlaV2ControllerService.DeletePath, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBoolean>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete(params: {
+    id: number;
+  }): Observable<RestApiResponseBoolean> {
+
+    return this.delete$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
+    );
+  }
+
+  /**
    * Path part for operation get
    */
   static readonly GetPath = '/v2/sla/{id}';
@@ -208,52 +254,6 @@ export class SlaV2ControllerService extends BaseService {
 
     return this.get$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseSla>) => r.body as RestApiResponseSla)
-    );
-  }
-
-  /**
-   * Path part for operation delete6
-   */
-  static readonly Delete6Path = '/v2/sla/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete6()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete6$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SlaV2ControllerService.Delete6Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBoolean>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete6$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete6(params: {
-    id: number;
-  }): Observable<RestApiResponseBoolean> {
-
-    return this.delete6$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
 

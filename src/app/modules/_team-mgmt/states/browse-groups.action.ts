@@ -6,6 +6,7 @@ import {
 } from 'src/app/api/models';
 import {Group} from "../../../api/models/group";
 import {GroupUser} from "../../../api/models/group-user";
+import {LocationGeoAndName} from "../../../api/models/location-geo-and-name";
 export namespace BrowseGroupsAction {
   export class LoadGroups {
     static readonly type = '[BrowseGroups] Load Groups';
@@ -72,6 +73,21 @@ export namespace BrowseGroupsAction {
     ) {}
   }
 
+  export class AddGeometryLocation {
+    static readonly type = '[BrowseGroups] Add Geometry Location';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        categoryIds: number[];
+        groupId: number;
+        location?: LocationGeoAndName[];
+      }
+
+    ) {}
+  }
+
   export class DeletedGroup {
     static readonly type = '[BrowseGroups] Delete Group';
     /**
@@ -103,34 +119,31 @@ export namespace BrowseGroupsAction {
     ) {}
   }
 
-/*  export class CreateGroupMapUser {
-    static readonly type = '[BrowseGroups] Create User';
-    /!**
+  export class UpdateUser {
+    static readonly type = '[BrowseGroups] update User';
+    /**
      *
-     *!/
+     */
     constructor(
       public payload: {
         groupId: number,
-        users: GroupUser[]
+        user: GroupUser[]
       }
     ) {}
-  }*/
+  }
 
-/*  export class UploadSignature {
-    static readonly type = '[BrowseUsers] Upload Signature';
-    /!**
+  export class UpdateManager {
+    static readonly type = '[BrowseGroups] update Manager';
+    /**
      *
-     *!/
-    constructor(public payload: { file: File }) {}
-  }*/
-
-/*  export class UploadProfilePhoto {
-    static readonly type = '[BrowseUsers] Upload Profile Photo';
-    /!**
-     *
-     *!/
-    constructor(public payload: { file: File }) {}
-  }*/
+     */
+    constructor(
+      public payload: {
+        groupId: number,
+        user: GroupUser
+      }
+    ) {}
+  }
 
   export class OpenView {
     static readonly type = '[BrowseGroups] Open View';

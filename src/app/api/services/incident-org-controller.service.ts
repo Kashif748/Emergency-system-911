@@ -23,6 +23,52 @@ export class IncidentOrgControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete13
+   */
+  static readonly Delete13Path = '/v1/incident-orgs/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete13()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete13$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentOrgControllerService.Delete13Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete13$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete13(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.delete13$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation update40
    */
   static readonly Update40Path = '/v1/incident-orgs';
@@ -157,52 +203,6 @@ export class IncidentOrgControllerService extends BaseService {
 
     return this.getIncidentOrg$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListIncidentOrgProjection>) => r.body as RestApiResponseListIncidentOrgProjection)
-    );
-  }
-
-  /**
-   * Path part for operation delete20
-   */
-  static readonly Delete20Path = '/v1/incident-orgs/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete20()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete20$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, IncidentOrgControllerService.Delete20Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete20$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete20(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.delete20$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

@@ -138,14 +138,14 @@
               <div class="my-auto">
                 <button pButton type="button"
                         class="p-tag px-2 text-center w-70px py-1 p-button-rounded p-button-sm bg-primary"
-                        [ngClass]="{'active': state.pageRequest.filters['active'] === 1}"
-                        (click)="updateFilter({active: 1}, $event); search();">
+                        [ngClass]="{'active': state.pageRequest.filters['active'] === true}"
+                        (click)="updateFilter({active: true}, $event); search();">
                   <span class="m-auto"> {{ 'ACTIONS.ACTIVE' | translate }} </span>
                 </button>
                 <button pButton type="button"
                         class="p-tag mx-2 px-2 py-1 text-center p-button-rounded w-70px p-button-warning p-button-sm bg-warning border-warning text-white"
-                        [ngClass]="{'active': state.pageRequest.filters['active'] === 0}"
-                        (click)="updateFilter({active: 0}, $event); search();">
+                        [ngClass]="{'active': state.pageRequest.filters['active'] === false}"
+                        (click)="updateFilter({active: false}, $event); search();">
                   <span class="m-auto"> {{ 'ACTIONS.INACTIVE' | translate }} </span>
                 </button>
               </div>

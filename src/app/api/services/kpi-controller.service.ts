@@ -169,6 +169,52 @@ export class KpiControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete7
+   */
+  static readonly Delete7Path = '/v1/kpis/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete7()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete7$Response(params: {
+    id: Kpi;
+  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
+
+    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Delete7Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBoolean>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete7$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete7(params: {
+    id: Kpi;
+  }): Observable<RestApiResponseBoolean> {
+
+    return this.delete7$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
+    );
+  }
+
+  /**
    * Path part for operation get15
    */
   static readonly Get15Path = '/v1/kpis/{id}';
@@ -211,52 +257,6 @@ export class KpiControllerService extends BaseService {
 
     return this.get15$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseKpi>) => r.body as RestApiResponseKpi)
-    );
-  }
-
-  /**
-   * Path part for operation delete16
-   */
-  static readonly Delete16Path = '/v1/kpis/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete16()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete16$Response(params: {
-    id: Kpi;
-  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Delete16Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBoolean>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete16$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete16(params: {
-    id: Kpi;
-  }): Observable<RestApiResponseBoolean> {
-
-    return this.delete16$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
 

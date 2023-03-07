@@ -52,27 +52,6 @@
             <div class="p-field p-col-12 p-md-6">
 
               <span class="p-float-label">
-
-               <!-- <p-treeSelect [options]="users$ | async" display="comma" [filter]="true"
-                              [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single" formControlName="orgStructure"
-                              appendTo="body">
-                  <ng-template let-options pTemplate="selectedItems">
-                    <ng-container *ngFor="let option of options">
-                      <div class="p-multiselect-token">
-                        <span class="p-multiselect-token-label">
-                          {{ option | translateObj : 'name' }}
-                        </span>
-                      </div>
-                    </ng-container>
-                    <ng-container *ngIf="!options || options.length === 0">
-                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
-                    </ng-container>
-                  </ng-template>
-                  &lt;!&ndash;<ng-template let-option pTemplate="value">
-                    {{ option | translateObj : 'name' }}
-                  </ng-template>&ndash;&gt;
-                </p-treeSelect>-->
-
                 <p-dropdown [options]="users$ | async" [filter]="true" filterBy="nameAr,nameEn" #selectedManager
                             [disabled]="viewOnly$ | async" (onShow)="loadUsers(selectedManager.filterValue, true)" [virtualScroll]="true"
                             formControlName="userStructure" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
@@ -190,24 +169,6 @@
               </ng-container>
             </div>
 
-
-
-            <!--<div class="p-field p-col-12 p-md-4">
-              <span class="p-float-label">
-                <input type="text" formControlName="middleNameAr" pInputText>
-                <label>{{ 'SHARED.MN_AR' | translate }}</label>
-              </span>
-
-              <ng-container
-                *ngIf="form.controls['middleNameAr'].touched && !form.controls['middleNameAr'].valid && form.controls['middleNameAr'].dirty">
-
-                <p class="p-error mb-0" *ngIf="form.controls['middleNameAr'].hasError('arabic')">
-                  {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
-                </p>
-              </ng-container>
-            </div>-->
-
-
             <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
                 <textarea
@@ -260,61 +221,56 @@
               </ng-container>
             </div>
 
-            <div class="p-col-12">
-
-              <p-divider align="left">
-               <!-- <div class="p-d-inline-flex p-ai-center">
-                  &lt;!&ndash;<i class="pi pi-sliders-v p-mx-2"></i>&ndash;&gt;
-                  &lt;!&ndash;<b>
-                    {{ "USER_MANAGEMENT.USERS.CONTROL_INFO" | translate }}
-                  </b>&ndash;&gt;
-                </div>-->
-              </p-divider>
-            </div>
-
-
-            <!--<div class="p-field p-col-12 p-md-9">
+            <div class="p-field p-md-offset-p -col-12 p-md-6">
               <span class="p-float-label">
-                <p-multiSelect [options]="roles$ | async" [filter]="true" filterBy="nameAr,nameEn"
-                               formControlName="roleIds" dataKey="id" display="chip" appendTo="body">
-                  <ng-template let-options pTemplate="selectedItems">
-                    <ng-container *ngFor="let option of options">
-                      <div class="p-multiselect-token">
-                        <span class="p-multiselect-token-label">
-                          {{ option | translateObj : 'name' }}
-                        </span>
-                      </div>
-                    </ng-container>
-                    <ng-container *ngIf="!options || options.length === 0">
-                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
-                    </ng-container>
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option | translateObj : 'name' }}
-                  </ng-template>
-                </p-multiSelect>
-                <label>
-                  {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
+                <textarea
+                  pInputText
+                  type="text"
+                  formControlName="shiftSchedule"
+                  rows="5"
+                ></textarea>
+                <!--                <input type="text" formControlName="descEn" pInputText>-->
+                <label>{{ 'GROUP.SHIFT_SCHEDULE' | translate }}
+                  <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
 
-            </div>-->
+              <ng-container
+                *ngIf="form.controls['shiftSchedule'].touched && !form.controls['shiftSchedule'].valid && form.controls['shiftSchedule'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['shiftSchedule'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
 
-            <!--<div class="p-field p-col-12 p-md-3">
-              <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
-                              offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
-                              iconPos="right"></p-toggleButton>
-            </div>-->
+                <p class="p-error mb-0" *ngIf="form.controls['descEn'].hasError('english')">
+                  {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+            <div class="p-col-12">
+
+              <p-divider align="center">
+                <div class="p-d-inline-flex p-ai-center">
+                  <div class="p-field p-col-12 p-md-12">
+                    <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                                    offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                    iconPos="right"></p-toggleButton>
+                  </div>
+                </div>
+              </p-divider>
+            </div>
+
           </form>
         </ng-template>
       </p-tabPanel>
       <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode">
         <ng-template pTemplate="content">
           <form [formGroup]="userGroupForm" class="p-fluid p-grid mt-4" autocomplete="off">
-            <div class="p-field p-col-12 p-md-9">
+            <div class="p-field p-col-12 p-md-9" *ngIf="!(viewOnly$ | async)">
               <span class="p-float-label">
                 <p-multiSelect [options]="users$ | async" [filter]="true" filterBy="name,roleName"
-                               formControlName="usersIds" dataKey="id" display="chip" appendTo="body">
+                               formControlName="usersIds" dataKey="id" display="chip" appendTo="body"
+                               optionDisabled="disabled">
                   <ng-template let-options pTemplate="selectedItems">
                     <ng-container *ngFor="let option of options">
                       <div class="p-multiselect-token">
@@ -384,6 +340,55 @@
               </ng-container>
 
             </div>
+            <div *ngIf="viewOnly$ | async">
+              <div class="col-md-12">
+                <h3>{{ "GROUP.MEMBERS" | translate }}</h3>
+                  <div class="row">
+                    <div class="p-md-6 p-sm-6 info-item p-1" *ngFor="let userObj of users">
+                      <!--begin::Item-->
+                      <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                                  <span class="">
+                                    <span
+                                      [inlineSVG]="'./assets/media/svg/icons/General/User.svg'"
+                                      class="svg-icon svg-icon-lg svg-icon-primary"
+                                    ></span>
+                                  </span></div>
+                        <!--end::Symbol-->
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                                  <span class="text-muted">
+                                    <p
+                                      class="text-dark-75 font-weight-bolder mb-1 font-size-lg">
+                                      {{ userObj?.user | translateObj: "firstName" }}
+                                      {{ "" }}
+                                      {{ userObj?.user | translateObj: "lastName" }}
+                                    </p>
+                                  </span>
+                          <a class="mb-1 user-phone text-size-sm">
+                            {{ userObj?.user?.mobile }}
+                          </a>
+                          <a class="text-dark mb-1 text-size-sm">
+                            {{ userObj?.user?.email }}
+                          </a>
+                          <span
+                            class="text-dark mb-1 text-size-md font-weight-500 label label-rounded label-inline"
+                            [ngClass]="{'label-success': userObj.type == userTypes.MANAGER,
+                                    'label-light-primary': userObj.type.MEMBER}">
+                                      {{
+                                        userObj.type == userTypes.MANAGER
+                                          ? ("SHARED.MANAGER" | translate)
+                                          : ("SHARED.MEMBER" | translate)
+                                      }}
+                                  </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
           </form>
         </ng-template>
       </p-tabPanel>
@@ -391,32 +396,12 @@
 
       <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode">
         <ng-template pTemplate="content">
-         <!-- <div class="d-flex align-items-center mb-9 bg-light-primary rounded p-2">
-            &lt;!&ndash;begin::Title&ndash;&gt;
-            <div class="d-flex flex-column flex-grow-1 mr-2">
-              <p class="font-weight-bold text-dark-75 font-size-lg mb-1">
-
-              </p>
-              <span class="text-muted font-weight-bold">
-              </span>
-            </div>
-            &lt;!&ndash;end::Title&ndash;&gt;
-            &lt;!&ndash;begin::Lable&ndash;&gt;
-            <span class="font-weight-bolder text-primary py-1 font-size-lg">
-                  <span [inlineSVG]="'/assets/media/svg/icons/Communication/Group.svg'"
-                        cacheSVG="true"
-                        class="svg-icon svg-icon-md svg-icon-primary"></span>
-            </span>
-            &lt;!&ndash;end::Lable&ndash;&gt;
-          </div>-->
-
           <div class="d-flex flex-column flex-grow-1 my-1">
             <p class="text-warning  font-size-lg mb-1">
               {{ 'GROUP.WARNING_NOTE' | translate }}
             </p>
           </div>
-
-          <form [formGroup]="groupZoneIncidentCategory" class="p-fluid p-grid mt-4" autocomplete="off">
+          <form [formGroup]="incidentCategory" class="p-fluid p-grid mt-4" autocomplete="off">
             <div class="p-field p-col-12 p-md-12">
               <span class="p-float-label">
                 <p-multiSelect [options]="incidentCategories$" [filter]="true" filterBy="name,roleName"
@@ -443,32 +428,37 @@
                 </label>
 
                  <ng-container
-                   *ngIf="groupZoneIncidentCategory.controls['incidentCategory'].touched && !groupZoneIncidentCategory.controls['incidentCategory'].valid && groupZoneIncidentCategory.controls['incidentCategory'].dirty">
-                    <p class="p-error mb-0" *ngIf="groupZoneIncidentCategory.controls['incidentCategory'].hasError('required')">
+                   *ngIf="incidentCategory.controls['incidentCategory'].touched && !incidentCategory.controls['incidentCategory'].valid && incidentCategory.controls['incidentCategory'].dirty">
+                    <p class="p-error mb-0" *ngIf="incidentCategory.controls['incidentCategory'].hasError('required')">
                       {{ "VALIDATION_MSG.REQUIRED" | translate }}
                     </p>
                   </ng-container>
               </span>
             </div>
+          </form>
+          <form [formGroup]="groupZoneIncidentCategory" class="p-fluid p-grid mt-4" autocomplete="off">
             <div class="p-field p-col-12 p-md-6">
               <label class="mt-3" id="example-radio-group-label">{{'GROUP.CHOOSE_APPROACH' | translate }}</label>
             </div>
             <div class="p-field p-col-12 p-md-3">
               <p-toggleButton formControlName="mapAndList" onLabel="{{ 'GROUP.MAP' | translate }}"
-                              offLabel="{{ 'GROUP.SELECT' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                              offLabel="{{ 'GROUP.SELECT' | translate }}" [onIcon]="'pi pi-map-marker'"
+                              offIcon="pi pi-list"
                               iconPos="right"></p-toggleButton>
             </div>
 
-            <div class="p-field p-col-12 p-md-6">
+            <p-divider align="center" class="p-md-12 p-col-12"></p-divider>
+
+            <div class="p-field p-col-12 p-md-6" *ngIf="this.groupZoneIncidentCategory.get('mapAndList').value === false || !checkMap">
               <span class="p-float-label">
-                <p-multiSelect [options]="centerList$ | async" [filter]="true" filterBy="name,roleName"
-                               formControlName="centerList" dataKey="id" display="chip" tabindex="0" appendTo="body"
-                                (onChange)="loadDistrictList($event.value)">
+                <p-multiSelect [options]="areaItems" [filter]="true" filterBy="nameEn,nameAr"
+                               formControlName="centerList" dataKey="center.id" display="chip" tabindex="0" appendTo="body"
+                                (onChange)="loadDistrictList($event)">
                   <ng-template let-options pTemplate="selectedItems">
                     <ng-container *ngFor="let option of options">
                       <div class="p-multiselect-token">
                         <span class="p-multiselect-token-label">
-                          {{ option | translateObj : 'name'}}
+                          {{ option.center | translateObj : 'name'}}
                         </span>
                       </div>
                     </ng-container>
@@ -477,11 +467,11 @@
                     </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
-                    {{ option | translateObj : 'name' }}
+                    {{ option.center | translateObj : 'name' }}
                   </ng-template>
                 </p-multiSelect>
                 <label>
-                  {{'INCIDENTS.MAIN_CAT' | translate}}
+                  {{'INCIDENTS.CENTER' | translate}}
                   <strong class="required-asterisk"> * </strong>
                 </label>
 
@@ -494,69 +484,75 @@
               </span>
             </div>
 
-            <div class="p-field p-col-12 p-md-6">
+            <div class="p-field p-col-12 p-md-6" *ngIf="this.groupZoneIncidentCategory.get('mapAndList').value === false">
               <span class="p-float-label">
-                <p-multiSelect [options]="districtList$ | async" [filter]="true" filterBy="name,roleName"
-                               formControlName="districtList" dataKey="id" display="chip" appendTo="body">
-                  <ng-template let-options pTemplate="selectedItems">
-                    <ng-container *ngFor="let option of options">
+                <p-multiSelect [options]="district" [filter]="true" filterBy="nameEn,nameAr"
+                               formControlName="zoneId"  display="chip" appendTo="body"
+                               [group]="true" defaultLabel="" scrollHeight="250px" display="chip"
+                               (onChange)="onDistrictSelect($event)">
+
+                  <ng-template let-group pTemplate="group">
+                    <div class="flex align-items-center">
+                      <span>{{group | translateObj : 'name'}}</span>
+                    </div>
+                  </ng-template>
+
+                <ng-template let-selected pTemplate="selectedItems">
+                  <ng-container *ngFor="let option of selected">
                       <div class="p-multiselect-token">
                         <span class="p-multiselect-token-label">
-                          {{ option | translateObj: 'name' }}
+                          {{option | translateObj : 'name'}}
                         </span>
                       </div>
                     </ng-container>
-                    <ng-container *ngIf="!options || options.length === 0">
+                  <ng-container *ngIf="!selected || selected.length === 0">
                       {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
                     </ng-container>
                   </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option | translateObj : 'name'}}
+
+
+                 <ng-template let-item pTemplate="items">
+                     {{item | translateObj : 'name'}}
                   </ng-template>
+
                 </p-multiSelect>
                 <label>
-                  {{'INCIDENTS.MAIN_CAT' | translate}}
+                  {{'INCIDENTS.CENTER' | translate}}
                   <strong class="required-asterisk"> * </strong>
                 </label>
 
                  <ng-container
-                   *ngIf="groupZoneIncidentCategory.controls['districtList'].touched && !groupZoneIncidentCategory.controls['districtList'].valid && groupZoneIncidentCategory.controls['districtList'].dirty">
-                    <p class="p-error mb-0" *ngIf="groupZoneIncidentCategory.controls['districtList'].hasError('required')">
+                   *ngIf="groupZoneIncidentCategory.controls['zoneId'].touched && !groupZoneIncidentCategory.controls['zoneId'].valid && groupZoneIncidentCategory.controls['zoneId'].dirty">
+                    <p class="p-error mb-0" *ngIf="groupZoneIncidentCategory.controls['zoneId'].hasError('required')">
                       {{ "VALIDATION_MSG.REQUIRED" | translate }}
                     </p>
                   </ng-container>
               </span>
             </div>
+
+            <div class="p-field p-col-12 p-md-12"  *ngIf="this.groupZoneIncidentCategory.get('mapAndList').value === true || checkMap">
+              <form #locationForm="ngForm" class="form-group">
+                <div class="m-4 d-flex  align-items-center justify-content-between" *ngFor="let location of namedLocations; let i = index">
+                  <input *ngIf="location.isEditing" ngModel type="text" #name="ngModel" name="name" class="form-control" [(ngModel)]="location.name" />
+                  <span *ngIf="!location.isEditing">{{ location.name }}</span>
+                  <div class="d-flex">
+                    <button *ngIf="location.geometry == null" (click)="openLocationDialoug(i, null)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-map-marker p-mx-2"></i></button>
+                    <button *ngIf="location.geometry !== null" (click)="viewLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-eye p-mx-2"></i></button>
+                    <button *ngIf="location.isEditing" (click)="save(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-save p-mx-2"></i></button>
+                    <button *ngIf="location.geometry !== null" (click)="updateLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-warning btn btn-sm" ><i class="pi pi-pencil p-mx-2"></i></button>
+                    <button [disabled]="namedLocations.length == 1" [ngClass]="{'disabled':namedLocations.length == 1}" (click)="removeLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-danger btn btn-sm" ><i class="pi pi-trash p-mx-2"></i></button>
+                  </div>
+
+                </div>
+              </form>
+              <div class="ml-dir-auto d-flex p-md-offset-9 p-md-2">
+                <button pButton type="button" label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus"
+                       [loading]="blocking$ | async" (click)="addNewLocation()"></button>
+              </div>
+            </div>
           </form>
         </ng-template>
       </p-tabPanel>
-
-
-      <!--<p-tabPanel header="{{'USER_MANAGEMENT.PROFILE_PHOTO' | translate }}" [disabled]="!editMode">
-        <ng-template pTemplate="content">
-          <div class="container mx-auto p-4" style="background-color: var(&#45;&#45;background-secondary-color);">
-            <div>
-              <div class="d-flex justify-content-center align-items-center p-10 min-h-350px text-center">
-                <div class="text-center">
-                  <ng-container *ngIf="!profileImg && _userId === loggedinUserId">
-                    <p-fileUpload #pimg mode="basic" accept="image/*" [maxFileSize]="1024 * 1024"
-                                  (onSelect)="profileImgChange($event);pimg.clear();" [auto]="false"
-                                  chooseLabel="{{ 'ACTIONS.BROWSE' | translate }}" chooseIcon="pi pi-image"
-                                  invalidFileSizeMessageSummary="{{ 'VALIDATION_MSG.INVALID_FILE_SIZE' | translate }}"
-                                  invalidFileSizeMessageDetail="{{ 'VALIDATION_MSG.MAX_UPLOAD_SIZE' | translate }}"></p-fileUpload>
-                  </ng-container>
-
-                  <h2 *ngIf="!profileImg && _userId !== loggedinUserId">
-                    {{ 'SHARED.NO_IMAGE' | translate }}
-                  </h2>
-                </div>
-                <img *ngIf="profileImg" class="max-h-300px max-w-100" [src]="profileImg?.base64 | url" alt="">
-              </div>
-
-            </div>
-          </div>
-        </ng-template>
-      </p-tabPanel>-->
     </p-tabView>
   </div>
 
@@ -564,7 +560,7 @@
     <div class="p-col p-d-flex">
       <button pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
       <div class="ml-dir-auto"></div>
-      <ng-container *ngIf="!(viewOnly$ | async) || activeTab !== 0">
+      <ng-container *ngIf="!(viewOnly$ | async)">
         <div class="mx-1" *ngIf="loggedinUserId == _userId">
           <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
                   class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
@@ -572,12 +568,6 @@
         <div class="mx-1">
           <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
                   (click)="submit()"></button>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="viewOnly$ | async">
-        <div class="mx-1" *ngIf="activeTab !== 2 || loggedinUserId == _userId">
-          <button pButton label="{{ 'ACTIONS.DELETE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-                  (click)="delete()"></button>
         </div>
       </ng-container>
     </div>

@@ -177,34 +177,13 @@ export class UserState {
         tap( ({result: {content: list}}) => {
           setState(
             patch<UserStateModel>({
-              groupMapUser: list,
+              groupMapUser: list.map((v) => {
+                return {...v , inactive: true};
+              }),
             })
           );
 
         }),
-        /*tap((res) => {
-          setState(
-            patch<UserStateModel>({
-              page: res.result,
-              loading: false,
-            })
-          );
-        }),*/
-     /*   catchError(() => {
-          setState(
-            patch<UserStateModel>({
-              page: { content: [], totalElements: 0 },
-            })
-          );
-          return EMPTY;
-        }),*/
-       /* finalize(() => {
-          setState(
-            patch<UserStateModel>({
-              loading: false,
-            })
-          );
-        })*/
       );
   }
 

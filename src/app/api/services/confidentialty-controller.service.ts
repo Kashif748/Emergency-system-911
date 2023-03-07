@@ -70,21 +70,21 @@ export class ConfidentialtyControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update76
+   * Path part for operation update77
    */
-  static readonly Update76Path = '/v1/circular-confidentialties';
+  static readonly Update77Path = '/v1/circular-confidentialties';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update76()` instead.
+   * To access only the response body, use `update77()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update76$Response(params: {
+  update77$Response(params: {
     body: Confidentialty
   }): Observable<StrictHttpResponse<RestApiResponseConfidentialty>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Update76Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Update77Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class ConfidentialtyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update76$Response()` instead.
+   * To access the full response (for headers, for example), `update77$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update76(params: {
+  update77(params: {
     body: Confidentialty
   }): Observable<RestApiResponseConfidentialty> {
 
-    return this.update76$Response(params).pipe(
+    return this.update77$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseConfidentialty>) => r.body as RestApiResponseConfidentialty)
     );
   }
 
   /**
-   * Path part for operation create71
+   * Path part for operation create72
    */
-  static readonly Create71Path = '/v1/circular-confidentialties';
+  static readonly Create72Path = '/v1/circular-confidentialties';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create71()` instead.
+   * To access only the response body, use `create72()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create71$Response(params: {
+  create72$Response(params: {
     body: Confidentialty
   }): Observable<StrictHttpResponse<RestApiResponseConfidentialty>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Create71Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Create72Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,35 +148,35 @@ export class ConfidentialtyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create71$Response()` instead.
+   * To access the full response (for headers, for example), `create72$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create71(params: {
+  create72(params: {
     body: Confidentialty
   }): Observable<RestApiResponseConfidentialty> {
 
-    return this.create71$Response(params).pipe(
+    return this.create72$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseConfidentialty>) => r.body as RestApiResponseConfidentialty)
     );
   }
 
   /**
-   * Path part for operation get27
+   * Path part for operation get28
    */
-  static readonly Get27Path = '/v1/circular-confidentialties/{id}';
+  static readonly Get28Path = '/v1/circular-confidentialties/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `get27()` instead.
+   * To access only the response body, use `get28()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get27$Response(params: {
+  get28$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseConfidentialty>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Get27Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Get28Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -194,15 +194,15 @@ export class ConfidentialtyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `get27$Response()` instead.
+   * To access the full response (for headers, for example), `get28$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get27(params: {
+  get28(params: {
     id: number;
   }): Observable<RestApiResponseConfidentialty> {
 
-    return this.get27$Response(params).pipe(
+    return this.get28$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseConfidentialty>) => r.body as RestApiResponseConfidentialty)
     );
   }

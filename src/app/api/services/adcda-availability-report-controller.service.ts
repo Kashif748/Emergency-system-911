@@ -27,21 +27,21 @@ export class AdcdaAvailabilityReportControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete5
+   * Path part for operation delete34
    */
-  static readonly Delete5Path = '/v1/adcda/availability-report/{id}/inactive';
+  static readonly Delete34Path = '/v1/adcda/availability-report/{id}/inactive';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete5()` instead.
+   * To access only the response body, use `delete34()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete5$Response(params: {
+  delete34$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaAvailabilityReportControllerService.Delete5Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaAvailabilityReportControllerService.Delete34Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -59,15 +59,15 @@ export class AdcdaAvailabilityReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete5$Response()` instead.
+   * To access the full response (for headers, for example), `delete34$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete5(params: {
+  delete34(params: {
     id: number;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete5$Response(params).pipe(
+    return this.delete34$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

@@ -22,6 +22,52 @@ export class IncidentReasonControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete12
+   */
+  static readonly Delete12Path = '/v1/incident-reasons/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete12()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete12$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentReasonControllerService.Delete12Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete12$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete12(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.delete12$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation update39
    */
   static readonly Update39Path = '/v1/incident-reasons';
@@ -110,52 +156,6 @@ export class IncidentReasonControllerService extends BaseService {
 
     return this.create36$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentReason>) => r.body as RestApiResponseIncidentReason)
-    );
-  }
-
-  /**
-   * Path part for operation delete19
-   */
-  static readonly Delete19Path = '/v1/incident-reasons/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete19()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete19$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, IncidentReasonControllerService.Delete19Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete19$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete19(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.delete19$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

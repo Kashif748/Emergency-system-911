@@ -10,9 +10,11 @@ import {
 import { patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { ExternalPhonebook, PageExternalPhonebook } from 'src/app/api/models';
-import { ExternalPhonebookControllerService } from 'src/app/api/services';
 import { PhonebookAction } from './phonebook.action';
+import {ExternalPhonebookControllerService} from "../../../api/services/external-phonebook-controller.service";
+import {PageExternalPhonebook} from "../../../api/models/page-external-phonebook";
+import {ExternalPhonebook} from "../../../api/models/external-phonebook";
+
 
 export interface PhonebookStateModel {
   page: PageExternalPhonebook;

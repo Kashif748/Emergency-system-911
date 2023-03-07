@@ -1,5 +1,3 @@
-import {ServiceCenterModel} from "@core/states/service-center-area/centers/center.state";
-import {IncidentLocationInfo} from "../../../api/models";
 import {CenterRequest} from "../../../api/models/center-request";
 
 export namespace IncicentLocationInfoAction {
@@ -13,6 +11,31 @@ export namespace IncicentLocationInfoAction {
       centers: Array<CenterRequest>;
       groupId: number;
     }
+    ) {}
+  }
+
+  export class UpdateIncidentLocationInfo {
+    static readonly type = '[Location] Update incident Location';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        centers: Array<CenterRequest>;
+        groupId: number;
+      }
+    ) {}
+  }
+
+  export class GetIncidentLocationInfo {
+    static readonly type = '[Location] Get incident Location';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id: number;
+      }
     ) {}
   }
 }

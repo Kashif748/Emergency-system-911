@@ -12,8 +12,8 @@ import { finalize, tap } from 'rxjs/operators';
 import {IncidentLocationInfo} from "../../../api/models";
 import {GroupCategoryCenterControllerService} from "../../../api/services/group-category-center-controller.service";
 import {IncicentLocationInfoAction} from "@core/states/incident-location-info/incidentLocInfo.action";
-import {GroupAction} from "@core/states/group/group.action";
-import {UserState, UserStateModel} from "@core/states/user/user.state";
+import {IncidentLocationInfoResponse} from "../../../api/models/incident-location-info-response";
+import {GroupStateModel} from "@core/states/group/group.state";
 
 
 export interface ServiceCenterModel {
@@ -21,6 +21,7 @@ export interface ServiceCenterModel {
    * temporary state to store entities and select them once
    */
   incidentLocationInfo: IncidentLocationInfo;
+  getincidentLocationInfo: IncidentLocationInfoResponse;
   blocking: boolean;
 
   /**
@@ -46,6 +47,11 @@ export class IncidentLocInfoState {
   }
 
   @Selector([IncidentLocInfoState])
+  static getIncidentLocInfo(state: ServiceCenterModel) {
+    return state?.getincidentLocationInfo;
+  }
+
+  @Selector([IncidentLocInfoState])
   static blocking(state: ServiceCenterModel) {
     return state?.blocking;
   }
@@ -57,7 +63,7 @@ export class IncidentLocInfoState {
     { payload }: IncicentLocationInfoAction.IncidentLocationInfo
   ) {
       return this.incidentLocInfo
-        .update40({
+        .addInfo({
           body: payload
         })
         .pipe(
@@ -69,6 +75,53 @@ export class IncidentLocInfoState {
             );
           })
         );
+  }
+
+  @Action(IncicentLocationInfoAction.UpdateIncidentLocationInfo)
+  updateIncidentLocationInfo(
+    { setState }: StateContext<ServiceCenterModel>,
+    { payload }: IncicentLocationInfoAction.UpdateIncidentLocationInfo
+  ) {
+    return this.incidentLocInfo
+      .update41({
+        body: payload
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<ServiceCenterModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(IncicentLocationInfoAction.GetIncidentLocationInfo)
+  GetIncidentLocationInfo(
+    { setState }: StateContext<ServiceCenterModel>,
+    { payload }: IncicentLocationInfoAction.GetIncidentLocationInfo
+  ) {
+    return this.incidentLocInfo
+      .getByGroupCenter({
+        groupId: payload.id
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<ServiceCenterModel> ( {
+              getincidentLocationInfo: res.result
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ServiceCenterModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
   }
 
 }

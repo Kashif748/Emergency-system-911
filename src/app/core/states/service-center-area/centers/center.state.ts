@@ -7,7 +7,7 @@ import {
   StateContext,
   StateToken,
 } from '@ngxs/store';
-import { patch } from '@ngxs/store/operators';
+import {append, patch} from '@ngxs/store/operators';
 import { finalize, tap } from 'rxjs/operators';
 import {CenterAction} from '../centers/center.action';
 import {ServiceCenterAreaServiceControllerService} from "../../../../api/services/service-center-area-service-controller.service";
@@ -46,12 +46,16 @@ export class CenterState {
 
   @Selector([CenterState])
   static centerList(state: ServiceCenterModel) {
-    return state?.center_list;
+    return state?.center_list.map((v, index) => {
+      return {...v, index};
+    });
   }
 
   @Selector([CenterState])
   static disrictList(state: ServiceCenterModel) {
-    return state?.districtList;
+    return state?.districtList.map((v, index) => {
+      return {...v, index};
+    });
   }
 
   /* ********************** ACTIONS ************************* */
@@ -103,7 +107,9 @@ export class CenterState {
         tap((r) => {
           setState(
             patch<ServiceCenterModel>({
-              districtList: r.result,
+              districtList: r.result.map((v) => {
+                return {...v, center: payload.centerId} as DistrictNameProjection;
+              }),
             })
           );
         })

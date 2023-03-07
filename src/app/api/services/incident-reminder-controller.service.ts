@@ -26,6 +26,52 @@ export class IncidentReminderControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete11
+   */
+  static readonly Delete11Path = '/v1/incident-reminder/delete/{reminderId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete11()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete11$Response(params: {
+    reminderId: number;
+  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentReminderControllerService.Delete11Path, 'put');
+    if (params) {
+      rb.path('reminderId', params.reminderId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBoolean>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete11$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete11(params: {
+    reminderId: number;
+  }): Observable<RestApiResponseBoolean> {
+
+    return this.delete11$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
+    );
+  }
+
+  /**
    * Path part for operation getReminders
    */
   static readonly GetRemindersPath = '/v1/incident-reminder';
@@ -209,52 +255,6 @@ export class IncidentReminderControllerService extends BaseService {
 
     return this.getByReminderId$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentReminder>) => r.body as RestApiResponseIncidentReminder)
-    );
-  }
-
-  /**
-   * Path part for operation delete18
-   */
-  static readonly Delete18Path = '/v1/incident-reminder/{reminderId}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete18()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete18$Response(params: {
-    reminderId: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, IncidentReminderControllerService.Delete18Path, 'delete');
-    if (params) {
-      rb.path('reminderId', params.reminderId, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBoolean>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete18$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete18(params: {
-    reminderId: number;
-  }): Observable<RestApiResponseBoolean> {
-
-    return this.delete18$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
 

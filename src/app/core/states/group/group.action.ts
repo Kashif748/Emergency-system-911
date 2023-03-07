@@ -1,5 +1,6 @@
 import {Group} from "../../../api/models/group";
 import {GroupUser} from "../../../api/models/group-user";
+import {LocationGeoAndName} from "../../../api/models/location-geo-and-name";
 
 export namespace GroupAction {
   export class LoadPage {
@@ -84,19 +85,20 @@ export namespace GroupAction {
     ) {}
   }
 
- /* export class CreateGroupMapUser {
-    static readonly type = '[Group] Create Group Map User';
-    /!**
+  export class GroupGeometryLocation {
+    static readonly type = '[Group] Group Geometry Location';
+    /**
      *
-     *!/
+     */
     constructor(
       public payload: {
-        groupId: number,
-        user: GroupUser[]
+        categoryIds: number[];
+        groupId: number;
+        location?: LocationGeoAndName[];
       }
 
     ) {}
-  }*/
+  }
 
   export class Update {
     static readonly type = '[Group] Update';
@@ -105,6 +107,44 @@ export namespace GroupAction {
      */
     constructor(
       public payload: Group
+    ) {}
+  }
+
+  export class UpdateUser {
+    static readonly type = '[Group] Update user';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        groupId: number,
+        user: GroupUser[]
+      }
+    ) {}
+  }
+
+  export class UpdateManager {
+    static readonly type = '[Group] Update Manager';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        groupId: number,
+        user: GroupUser
+      }
+    ) {}
+  }
+
+  export class GetGeometryLocation {
+    static readonly type = '[Group] Geometry Location';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id: number;
+      }
     ) {}
   }
 }

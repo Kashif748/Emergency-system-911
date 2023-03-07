@@ -14,8 +14,8 @@ import {
 import { iif, patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import {BrowseGroupsAction} from "./browse-groups.action";
 import {GroupAction} from "@core/states";
+import {BrowseGroupsAction} from "./browse-groups.action";
 
 export interface BrowseGroupsStateModel {
   pageRequest: PageRequestModel;
@@ -39,6 +39,7 @@ export const BROWSE_GROUPS_UI_STATE_TOKEN =
       'nameEn',
       'org',
       'leader',
+      'shift_schedule',
       'usersnumber'
     ],
      view: 'TABLE',
@@ -210,30 +211,6 @@ export class BrowseGroupsState {
     );
   }
 
- /* @Action(BrowseGroupsAction.CreateGroupMapUser)
-  createGroupMapUser(
-    { dispatch }: StateContext<BrowseGroupsStateModel>,
-    { payload }: BrowseGroupsAction.CreateGroupMapUser
-  ) {
-    return dispatch(new GroupAction.CreateGroupMapUser({
-      groupId: payload.groupId,
-      user: payload.users
-    })).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch(new BrowseGroupsAction.LoadGroups());
-      }),
-      catchError((err) => {
-        this.messageHelper.error({ error: err });
-        return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseGroupsAction.ToggleDialog({}));
-      })
-    );
-  }*/
-
-
   @Action(BrowseGroupsAction.CreateGroup)
   createGroup(
     { dispatch }: StateContext<BrowseGroupsStateModel>,
@@ -251,6 +228,26 @@ export class BrowseGroupsState {
      /* finalize(() => {
          dispatch(new BrowseGroupsAction.ToggleDialog({}));
       })*/
+    );
+  }
+
+  @Action(BrowseGroupsAction.UpdateGroup)
+  updateGroup(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.UpdateGroup
+  ) {
+    return dispatch(new GroupAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        // dispatch(new BrowseGroupsAction.LoadGroups());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+       finalize(() => {
+          // dispatch(new BrowseGroupsAction.ToggleDialog({}));
+       })
     );
   }
 
@@ -274,12 +271,12 @@ export class BrowseGroupsState {
     );
   }
 
-  @Action(BrowseGroupsAction.UpdateGroup)
-  updateUser(
+  @Action(BrowseGroupsAction.UpdateUser)
+  UpdateUser(
     { dispatch }: StateContext<BrowseGroupsStateModel>,
-    { payload }: BrowseGroupsAction.UpdateGroup
+    { payload }: BrowseGroupsAction.UpdateUser
   ) {
-    return dispatch(new GroupAction.Update(payload)).pipe(
+    return dispatch(new GroupAction.UpdateUser(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseGroupsAction.LoadGroups());
@@ -290,6 +287,46 @@ export class BrowseGroupsState {
       }),
       finalize(() => {
          dispatch(new BrowseGroupsAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowseGroupsAction.UpdateManager)
+  UpdateManager(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.UpdateManager
+  ) {
+    return dispatch(new GroupAction.UpdateManager(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseGroupsAction.LoadGroups());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseGroupsAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowseGroupsAction.AddGeometryLocation)
+  addGeometryLocation(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.AddGeometryLocation
+  ) {
+    return dispatch(new GroupAction.GroupGeometryLocation(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseGroupsAction.LoadGroups());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseGroupsAction.ToggleDialog({}));
       })
     );
   }

@@ -158,6 +158,12 @@
                 </div>
               </th>
 
+              <th *ngIf="columns?.includes('shift_schedule')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "GROUP.SHIFT_SCHEDULE" | translate }}
+                </div>
+              </th>
+
               <th *ngIf="columns?.includes('usersnumber')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "SHARED.JOB_TITLE" | translate }}
@@ -194,6 +200,10 @@
                 <p-skeleton></p-skeleton>
               </td>
               <td *ngIf="columns?.includes('leader')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td *ngIf="columns?.includes('shift_schedule')">
                 <p-skeleton></p-skeleton>
               </td>
 
@@ -256,6 +266,12 @@
                 </div>
               </th>
 
+              <th *ngIf="columns?.includes('shift_schedule')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "GROUP.SHIFT_SCHEDULE" | translate }}
+                </div>
+              </th>
+
               <th *ngIf="columns?.includes('usersnumber')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "GROUP.USERS_NO" | translate }}
@@ -295,6 +311,10 @@
                 <ng-container *ngFor="let user of item.users; let i = index">
                   {{user?.type === 1 && lang === 'en' ? user.user.firstNameEn : user?.type === 1 && lang === 'ar' ? user.user.firstNameAr : ''}}
                 </ng-container>
+              </td>
+
+              <td *ngIf="columns?.includes('shift_schedule')" (click)="item.isActive && openView(item.id)">
+                {{item.shiftSchedule}}
               </td>
 
               <td *ngIf="columns?.includes('usersnumber')" (click)="item.isActive && openView(item.id)">

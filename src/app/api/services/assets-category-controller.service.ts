@@ -24,6 +24,52 @@ export class AssetsCategoryControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete33
+   */
+  static readonly Delete33Path = '/v1/assets-category/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete33()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete33$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseAssetsCategory>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Delete33Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseAssetsCategory>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete33$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete33(params: {
+    id: number;
+  }): Observable<RestApiResponseAssetsCategory> {
+
+    return this.delete33$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseAssetsCategory>) => r.body as RestApiResponseAssetsCategory)
+    );
+  }
+
+  /**
    * Path part for operation getPage
    */
   static readonly GetPagePath = '/v1/assets-category';
@@ -162,21 +208,21 @@ export class AssetsCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation get29
+   * Path part for operation get30
    */
-  static readonly Get29Path = '/v1/assets-category/{id}';
+  static readonly Get30Path = '/v1/assets-category/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `get29()` instead.
+   * To access only the response body, use `get30()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get29$Response(params: {
+  get30$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseAssetsCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Get29Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Get30Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -194,61 +240,15 @@ export class AssetsCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `get29$Response()` instead.
+   * To access the full response (for headers, for example), `get30$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get29(params: {
+  get30(params: {
     id: number;
   }): Observable<RestApiResponseAssetsCategory> {
 
-    return this.get29$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseAssetsCategory>) => r.body as RestApiResponseAssetsCategory)
-    );
-  }
-
-  /**
-   * Path part for operation delete39
-   */
-  static readonly Delete39Path = '/v1/assets-category/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete39()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete39$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseAssetsCategory>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AssetsCategoryControllerService.Delete39Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseAssetsCategory>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete39$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete39(params: {
-    id: number;
-  }): Observable<RestApiResponseAssetsCategory> {
-
-    return this.delete39$Response(params).pipe(
+    return this.get30$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAssetsCategory>) => r.body as RestApiResponseAssetsCategory)
     );
   }

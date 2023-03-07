@@ -381,6 +381,58 @@ export class IncidentControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation changeIncident1
+   */
+  static readonly ChangeIncident1Path = '/v1/incidents/changeIncidentStatus/{incId}/{statusId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeIncident1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeIncident1$Response(params: {
+    incId: number;
+    statusId: number;
+    language: boolean;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.ChangeIncident1Path, 'put');
+    if (params) {
+      rb.path('incId', params.incId, {});
+      rb.path('statusId', params.statusId, {});
+      rb.query('language', params.language, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `changeIncident1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeIncident1(params: {
+    incId: number;
+    statusId: number;
+    language: boolean;
+  }): Observable<void> {
+
+    return this.changeIncident1$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation action
    */
   static readonly ActionPath = '/v1/incidents/action/{id}';

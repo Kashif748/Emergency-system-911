@@ -1,4 +1,5 @@
-.test {
-  overflow-y: scroll;
-  height: 240px;
+.disabled-For-Manager {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
