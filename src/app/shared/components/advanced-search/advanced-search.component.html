@@ -349,6 +349,35 @@
         [childrenOfCurrentOrg]="true"
       ></app-pick-org>
     </div>
+
+    <!-- groups-->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl : advancedSearchFields.GROUP"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.UNITS" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'INCIDENTS.UNITS' | translate }}"
+          [id]="advancedSearchFields.GROUP"
+          [formControlName]="advancedSearchFields.GROUP"
+        >
+          <mat-option
+            *ngFor="
+              let rv of dataLists
+                | extractDataList : advancedSearchFields.GROUP
+            "
+            [value]="rv.id"
+          >
+            {{ rv | propTranslator : "name" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row mt-3">

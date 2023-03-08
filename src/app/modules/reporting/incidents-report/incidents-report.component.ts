@@ -20,6 +20,7 @@ import { CommonService } from '@core/services/common.service';
 import { Router } from '@angular/router';
 import { INTERIM_STATUS } from '../../incidents/new-incidents-view/const';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import {GroupService} from "@core/api/services/group.service";
 
 @Component({
   selector: 'app-incidents-report',
@@ -36,7 +37,8 @@ export class IncidentsReportComponent implements OnInit {
     private storageService: IStorageService,
     private alertService: AlertsService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    protected groupService: GroupService,
   ) {
     this.commonData = this.commonService.getCommonData();
     this.paginationConfig = {
@@ -62,6 +64,7 @@ export class IncidentsReportComponent implements OnInit {
   public categories = {};
   public mainCategories: ICategory[] = [];
   public reportingVias = {};
+  public groups: any[] = [];
   public riskImpacts = {};
   ProBackstyle: any;
   public form: FormGroup;
@@ -81,6 +84,7 @@ export class IncidentsReportComponent implements OnInit {
     { formControlName: AdvancedSearchFieldsEnum.CREATED_BY },
     { formControlName: AdvancedSearchFieldsEnum.RESPONSIBLE_ORG },
     { formControlName: AdvancedSearchFieldsEnum.STATUS },
+    { formControlName: AdvancedSearchFieldsEnum.GROUP },
   ];
   public loading = true;
   public resetForm = new FormControl(false);
@@ -502,15 +506,24 @@ export class IncidentsReportComponent implements OnInit {
       formControlName: AdvancedSearchFieldsEnum.REPORTING_VIA,
       children: this.commonData?.reportingVias,
     };
+    const group: DataOptions = {
+      formControlName: AdvancedSearchFieldsEnum.GROUP,
+      children: this.groups,
+    };
     this.advancedSearchDataList = [
       priorities,
       cities,
       mainCategories,
       reportingVias,
       statuses,
+      group
     ];
+    console.log(statuses)
+    console.log(group)
     this.filter = {};
     this.getIncidents(this.paginationConfig.currentPage);
+    const org = this.commonData.currentOrgDetails;
+    this.loadNonGlobalGroups(org.id, 0, 10);
     await this.initCharts();
   }
 
@@ -795,5 +808,19 @@ export class IncidentsReportComponent implements OnInit {
 
   async openIncident(incident: any) {
     await this.router.navigate(['/incidents/view', incident.id]);
+  }
+  loadNonGlobalGroups(id, page, size) {
+    this.groupService.getNonGlobalGroupsByOrgId(id, '', page, size).subscribe(
+      (data) => {
+        if (data) {
+          this.groups.push(...data.result?.content);
+        }
+        if (data.result?.totalPages > page) {
+          this.loadNonGlobalGroups(id, page + 1, size);
+        }
+        this.cdr.detectChanges();
+      },
+      (error) => {}
+    );
   }
 }
