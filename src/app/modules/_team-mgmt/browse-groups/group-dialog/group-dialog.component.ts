@@ -24,6 +24,7 @@ import {IncicentLocationInfoAction} from "@core/states/incident-location-info/in
 import {AreaItem, GeometryType, GroupGeometryLocation} from "../../../groups-management/group-incidents-categroies/center.model";
 import {MapViewType} from "@shared/components/map/utils/MapViewType";
 import {MapService} from "@shared/components/map/services/map.service";
+import {__await} from "tslib";
 
 @Component({
   selector: 'app-group-dialog',
@@ -66,6 +67,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   public previous = 0;
   public previousDistrict = 0;
   public selectedCenterDistricsList: any[] = [];
+  public selectedZonesEdit = [];
 
   form: FormGroup;
   private defaultFormValue: { [key: string]: any } = {};
@@ -149,8 +151,21 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         switchMap(() => this.store.select(IncidentLocInfoState.getIncidentLocInfo)),
         takeUntil(this.destroy$),
         take(1),
+        switchMap((incidentLocInfo) => {
+          return  this.centerList$.pipe(filter((value) => !!value),
+          tap((data) => {
+            if (data) {
+              data.forEach((element) => {
+                this.areaItems.push(new AreaItem(element));
+              });
+            }
+          }),
+          map(() => incidentLocInfo));
+        }),
+        takeUntil(this.destroy$),
+        take(1),
         tap((incidentLocInfo) => {
-          this.responseFromIncidentLoc = incidentLocInfo;
+          this.patchIndentLocInfo(incidentLocInfo);
         }),
       ).subscribe();
   }
@@ -226,14 +241,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           })
         );
       });
-    this.centerList$.pipe(takeUntil(this.destroy$), auditTime(1000), take(2)).subscribe((data) => {
-      if (data) {
-        data.forEach((element) => {
-          this.areaItems.push(new AreaItem(element));
-        });
-      }
-      this.patchIndentLocInfo(this.responseFromIncidentLoc);
-    });
   }
 
   isDisabled(id) {
@@ -363,23 +370,16 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     this.namedLocations[i].isEditing = false;
   }
 
-  loadDistrictList(event) {
-    let id;
-    let index;
-    event.value.forEach(v => {
-      if (v.center.index === event.itemValue.center.index) {
-        id = v.center.id;
-        index = v.center.index;
-      }
-    });
-    if (event.value.length > this.previous) {
-      this.previous = event.value.length;
+  loadDistrictList(event?, editModeId?, zone?) {
+    if (editModeId) {
+      const index = editModeId.index;
+      const id = editModeId.id;
       this.store.dispatch([
         new CenterAction.LoadDistrictList({centerId: id})
       ]).pipe(
         map((res) => {
           this.areaItems.forEach((v, index) => {
-            if (v.center.id === event.itemValue.center.id) {
+            if (v.center.id === id) {
               this.areaItems[index].zones = res[0].serviceCenterArea.districtList;
             }
           });
@@ -389,7 +389,16 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
             nameEn: this.areaItems[index].center.nameEn,
             items: this.areaItems[index].zones
           };
+          tempZone.items.forEach((item) => {
+            if (zone.includes(Number(item.zoneId))) {
+              this.selectedZonesEdit.push(item);
+            }
+          });
           this.district.push(tempZone);
+          console.log('zone', this.selectedZonesEdit);
+          this.groupZoneIncidentCategory.get('zoneId').setValue(this.selectedZonesEdit);
+          this.onDistrictSelect('', this.selectedZonesEdit)
+
           this.cdr.detectChanges();
           this.groupZoneIncidentCategory.get('zoneId').updateValueAndValidity();
 
@@ -397,32 +406,64 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$), auditTime(1000), take(1)).subscribe((res) => {
       });
     } else {
-      const removeIndex = event.itemValue.center.index;
-      this.previous = event.value.length;
-      this.areaItems[removeIndex].zones = [];
-      const selectdZones = this.groupZoneIncidentCategory.get('zoneId').value as any[];
-      if (selectdZones) {
-        selectdZones.forEach((item, index) => {
-          if (item.center === event.itemValue.center.id) {
-            selectdZones.splice(index, 1);
-          }
-        });
-      }
-      this.groupZoneIncidentCategory.get('zoneId').patchValue(selectdZones);
-      this.district.forEach((item, index) => {
-        if (event.itemValue.center.id === item.id) {
-          this.district.splice(index, 1);
+      let id;
+      let index;
+      event.value.forEach(v => {
+        if (v.center.index === event.itemValue.center.index) {
+          id = v.center.id;
+          index = v.center.index;
         }
       });
-      console.log('after remove distric', this.district);
+      if (event.value.length > this.previous) {
+        this.previous = event.value.length;
+        this.store.dispatch([
+          new CenterAction.LoadDistrictList({centerId: id})
+        ]).pipe(
+          map((res) => {
+            this.areaItems.forEach((v, index) => {
+              if (v.center.id === event.itemValue.center.id) {
+                this.areaItems[index].zones = res[0].serviceCenterArea.districtList;
+              }
+            });
+            const tempZone = {
+              id : this.areaItems[index].center.id,
+              nameAr: this.areaItems[index].center.nameAr,
+              nameEn: this.areaItems[index].center.nameEn,
+              items: this.areaItems[index].zones
+            };
+            this.district.push(tempZone);
+            this.cdr.detectChanges();
+            this.groupZoneIncidentCategory.get('zoneId').updateValueAndValidity();
+
+          }),
+          takeUntil(this.destroy$), auditTime(1000), take(1)).subscribe((res) => {
+        });
+      } else {
+        const removeIndex = event.itemValue.center.index;
+        this.previous = event.value.length;
+        this.areaItems[removeIndex].zones = [];
+        const selectdZones = this.groupZoneIncidentCategory.get('zoneId').value as any[];
+        if (selectdZones) {
+          selectdZones.forEach((item, index) => {
+            if (item.center === event.itemValue.center.id) {
+              selectdZones.splice(index, 1);
+            }
+          });
+        }
+        this.groupZoneIncidentCategory.get('zoneId').patchValue(selectdZones);
+        this.district.forEach((item, index) => {
+          if (event.itemValue.center.id === item.id) {
+            this.district.splice(index, 1);
+          }
+        });
+        console.log('after remove distric', this.district);
+      }
     }
   }
 
-  onDistrictSelect(event) {
-    // const incidentCategories = this.groupZoneIncidentCategory.get('incidentCategory').value;
-    const selectdZones = this.groupZoneIncidentCategory.get('zoneId').value as any[];
-    const centers = [];
-    if (event.value.length > this.previousDistrict) {
+  onDistrictSelect(event?, selectedZones?) {
+    if (selectedZones) {
+      const centers = [];
       this.district.forEach((v, index) => {
         centers.push({
           incidentCategoryId : null,
@@ -430,52 +471,58 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           centerId: v.id,
           allZones: false
         });
-        if (selectdZones) {
-          selectdZones.forEach((item) => {
+        if (selectedZones) {
+          selectedZones.forEach((item) => {
             if (item.center === v.id) {
               centers[index].zones.push(item.zoneId);
             }
           });
         }
       });
-      console.log(centers);
       this.selectedCenterDistricsList = centers;
     } else {
-      this.selectedCenterDistricsList.forEach((v) => {
-        v.zones.forEach((item, index) => {
-          if (item === event.itemValue.zoneId) {
-            v.zones.splice(index, 1);
+      const selectdZones = this.groupZoneIncidentCategory.get('zoneId').value as any[];
+      const centers = [];
+      if (event.value.length > this.previousDistrict) {
+        this.district.forEach((v, index) => {
+          centers.push({
+            incidentCategoryId : null,
+            zones: [],
+            centerId: v.id,
+            allZones: false
+          });
+          if (selectdZones) {
+            selectdZones.forEach((item) => {
+              if (item.center === v.id) {
+                centers[index].zones.push(item.zoneId);
+              }
+            });
           }
-        })
-      });
+        });
+        this.selectedCenterDistricsList = centers;
+      } else {
+        this.selectedCenterDistricsList.forEach((v) => {
+          v.zones.forEach((item, index) => {
+            if (item === event.itemValue.zoneId) {
+              v.zones.splice(index, 1);
+            }
+          });
+        });
+      }
     }
     console.log('alter rem0ve dis', this.selectedCenterDistricsList)
 
   }
 
-  /*selectedDistrict(event) {
-    const centerList = this.groupZoneIncidentCategory.get('centerList').value;
-    const incidentCategories = this.groupZoneIncidentCategory.get('incidentCategory').value;
-    const centers = [];
-    if (event.value.length > this.previousDistrict) {
-      this.previousDistrict = event.value.length;
-      centerList.forEach((v, index) => {
-        centers.push({
-          incidentCategoryId : incidentCategories,
-          zones: [],
-          centerId: v.id,
-          allZones: false
-        });
-        event.value.forEach((i) => {
-          if (v.id === event.itemValue.center) {
-            centers[index].zones.push(i.zoneId);
-          }
-        });
-      });
-      console.log(centers);
+  clearCenterDistrict() {
+    const value = this.groupZoneIncidentCategory.get('mapAndList').value;
+    if (value) {
+      this.checkMap = true;
+    } else {
+      this.checkMap = false;
     }
-
-  }*/
+    console.log(value);
+  }
 
   getChildrenCategories() {
     const categories: any[] =
@@ -528,65 +575,79 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   }
 
   patchGeometryLocation(locations) {
-    if (locations.length > 0) {
-      const categories = [];
-      this.namedLocations = [];
-      this.groupZoneIncidentCategory.get('mapAndList').setValue('true');
-      this.checkMap = true;
-      this.incidentCategories$.map((v) => {
-        locations[0].categoryIds.forEach((item) => {
-          if (item === v.id) {
-            categories.push(v);
-          }
+    if (locations) {
+      if (locations.length > 0) {
+        const categories = [];
+        this.namedLocations = [];
+        this.groupZoneIncidentCategory.get('mapAndList').setValue('true');
+        this.checkMap = true;
+        this.incidentCategories$.map((v) => {
+          locations[0].categoryIds.forEach((item) => {
+            if (item === v.id) {
+              categories.push(v);
+            }
+          });
         });
-      });
-      this.incidentCategory.get('incidentCategory').setValue(categories);
-      if (locations[0].location.length) {
-        this.loadGroupGeometryInfo(locations);
+        this.incidentCategory.get('incidentCategory').setValue(categories);
+        if (locations[0].location.length) {
+          this.loadGroupGeometryInfo(locations);
+        }
+        this.cdr.detectChanges();
       }
-      this.cdr.detectChanges();
     }
   }
 
   patchIndentLocInfo(incidentLoc) {
-    console.log('incident', incidentLoc);
-    let centers = [];
-    let incidentsCat = [];
-    let zones = [];
-    if (incidentLoc.centers.length > 0) {
-      this.checkMap = false;
-      incidentLoc.centers.forEach((element) => {
-        centers.push(element.centerId);
-        incidentsCat.push(element.category.flatMap((v) => v.categoryId));
-        zones.push(
-          ...new Set(
-            element.category?.flatMap((v) =>
-              v.zones?.filter((v) => v > 0).flatMap((v) => v)
+    if (incidentLoc) {
+      let centers = [];
+      let incidentsCat = [];
+      let zones = [];
+      if (incidentLoc?.centers?.length > 0) {
+        this.checkMap = false;
+        incidentLoc.centers.forEach((element) => {
+          centers.push(element.centerId);
+          incidentsCat.push(element.category.flatMap((v) => v.categoryId));
+          zones.push(
+            ...new Set(
+              element.category?.flatMap((v) =>
+                v.zones?.filter((v) => v > 0).flatMap((v) => v)
+              )
             )
-          )
-        );
+          );
+        });
+      }
+      let categories = [];
+      categories = this.getChildrenCategories();
+      let selectedCat = [];
+      incidentsCat = [...new Set(...incidentsCat)];
+      selectedCat = categories.filter((item) =>
+        incidentsCat.includes(item.id)
+      );
+      console.log(selectedCat);
+      this.incidentCategory.get('incidentCategory').setValue(selectedCat);
+
+
+      const selectedCenter = [];
+      let selectedZones = [];
+      centers = [...new Set(centers)];
+      console.log(centers);
+      console.log(this.areaItems);
+      centers.filter((item) => this.areaItems.forEach((itemArea) => {
+        if (itemArea.center.id === item) {
+          selectedCenter.push(itemArea);
+        }
+      }));
+      console.log(selectedCenter);
+      zones = [...new Set(zones)];
+      console.log(zones);
+      this.selectedZonesEdit = [];
+      selectedCenter.forEach((item) => {
+        this.loadDistrictList('', item.center, zones);
       });
-    }
-    let categories = [];
-    categories = this.getChildrenCategories();
-    let selectedCat = [];
-    incidentsCat = [...new Set(...incidentsCat)];
-    selectedCat = categories.filter((item) =>
-      incidentsCat.includes(item.id)
-    );
-    console.log(selectedCat);
-    this.incidentCategory.get('incidentCategory').setValue(selectedCat);
-    console.log(centers);
-    console.log(zones);
-    let selectedCenter = [];
-    centers = [...new Set(centers)];
-    console.log(this.areaItems);
-    // selectedCenter = this.areaItems.filter((item) => item.center.filter((center) => centers.includes(center.id)))
-    this.groupZoneIncidentCategory.get('centerList').setValue([...new Set(centers)]);
-    zones = zones?.filter((v) => v).map((item) => item?.toString());
-    this.groupZoneIncidentCategory.get('zoneId').setValue([...new Set(zones)]);
-    this.cdr.detectChanges();
-  }
+      this.groupZoneIncidentCategory.get('centerList').setValue(selectedCenter);
+      // zones = zones?.filter((v) => v).map((item) => item?.toString());
+      console.log(this.district);
+    }}
 
   loadGroupGeometryInfo(data: Array<GroupGeometryLocation>) {
     data
@@ -798,7 +859,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       const geometryLocation = {
         ...this.groupZoneIncidentCategory.getRawValue(),
       };
-      if (this.groupGeometry.location.length > 0) {
+      if (this.groupGeometry.location) {
         this.submitGeometryLocations(geometryLocation);
       }
     } else {

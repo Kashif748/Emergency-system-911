@@ -21,7 +21,7 @@
     </p-blockUI>
     <p-tabView #tabv [(activeIndex)]="activeTab">
 
-      <p-tabPanel header="{{'GROUP.GROUP_INFO' | translate }}">
+      <p-tabPanel header="{{'GROUP.GROUP_INFO' | translate }}" *checkPrivileges="'PRIV_UP_GRP'">
         <ng-template pTemplate="content">
           <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
 
@@ -251,7 +251,7 @@
 
               <p-divider align="center">
                 <div class="p-d-inline-flex p-ai-center">
-                  <div class="p-field p-col-12 p-md-12">
+                  <div class="p-field p-col-12 p-md-12" *checkPrivileges="'PRIV_UP_GRP'">
                     <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
                                     offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
                                     iconPos="right"></p-toggleButton>
@@ -263,7 +263,7 @@
           </form>
         </ng-template>
       </p-tabPanel>
-      <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode">
+      <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode" *checkPrivileges="'PRIV_ED_USR_GRP'">
         <ng-template pTemplate="content">
           <form [formGroup]="userGroupForm" class="p-fluid p-grid mt-4" autocomplete="off">
             <div class="p-field p-col-12 p-md-9" *ngIf="!(viewOnly$ | async)">
@@ -394,7 +394,7 @@
       </p-tabPanel>
 
 
-      <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode">
+      <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode" *checkPrivileges="'PRIV_ED_LOC_INC_GRP'">
         <ng-template pTemplate="content">
           <div class="d-flex flex-column flex-grow-1 my-1">
             <p class="text-warning  font-size-lg mb-1">
@@ -444,12 +444,13 @@
               <p-toggleButton formControlName="mapAndList" onLabel="{{ 'GROUP.MAP' | translate }}"
                               offLabel="{{ 'GROUP.SELECT' | translate }}" [onIcon]="'pi pi-map-marker'"
                               offIcon="pi pi-list"
+                              (onChange)="clearCenterDistrict()"
                               iconPos="right"></p-toggleButton>
             </div>
 
             <p-divider align="center" class="p-md-12 p-col-12"></p-divider>
 
-            <div class="p-field p-col-12 p-md-6" *ngIf="this.groupZoneIncidentCategory.get('mapAndList').value === false || !checkMap">
+            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap">
               <span class="p-float-label">
                 <p-multiSelect [options]="areaItems" [filter]="true" filterBy="nameEn,nameAr"
                                formControlName="centerList" dataKey="center.id" display="chip" tabindex="0" appendTo="body"
@@ -484,7 +485,7 @@
               </span>
             </div>
 
-            <div class="p-field p-col-12 p-md-6" *ngIf="this.groupZoneIncidentCategory.get('mapAndList').value === false">
+            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap">
               <span class="p-float-label">
                 <p-multiSelect [options]="district" [filter]="true" filterBy="nameEn,nameAr"
                                formControlName="zoneId"  display="chip" appendTo="body"
@@ -517,7 +518,7 @@
 
                 </p-multiSelect>
                 <label>
-                  {{'INCIDENTS.CENTER' | translate}}
+                  {{'INCIDENTS.DISTRICT' | translate}}
                   <strong class="required-asterisk"> * </strong>
                 </label>
 
@@ -530,7 +531,7 @@
               </span>
             </div>
 
-            <div class="p-field p-col-12 p-md-12"  *ngIf="this.groupZoneIncidentCategory.get('mapAndList').value === true || checkMap">
+            <div class="p-field p-col-12 p-md-12"  *ngIf="checkMap">
               <form #locationForm="ngForm" class="form-group">
                 <div class="m-4 d-flex  align-items-center justify-content-between" *ngFor="let location of namedLocations; let i = index">
                   <input *ngIf="location.isEditing" ngModel type="text" #name="ngModel" name="name" class="form-control" [(ngModel)]="location.name" />
