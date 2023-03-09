@@ -435,7 +435,7 @@
                 <button
                   mat-menu-item
                   *ngIf="
-                    canUserUpdate(row?.primaryOrgId, row?.responsibleOrg?.id)
+                    canUserUpdate(row?.primaryOrgId, row?.responsibleOrg?.id, row)
                   "
                   (click)="updateIncident(row.id)"
                 >

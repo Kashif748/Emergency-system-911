@@ -972,11 +972,15 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     });
   }
 
-  canUserUpdate(Porg, respID) {
-    if (this.commonData.currentOrgDetails.id == Porg) {
-      return true;
+  canUserUpdate(Porg, respID , incident: any) {
+    if (incident.status.id !== 2 && incident.status.id !== 3) {
+      if (this.commonData.currentOrgDetails.id == Porg) {
+        return true;
+      } else {
+        return this.commonData.currentOrgDetails.id == respID;
+      }
     } else {
-      return this.commonData.currentOrgDetails.id == respID;
+      return false;
     }
   }
 
