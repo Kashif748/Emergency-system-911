@@ -43,7 +43,7 @@
             <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
               [ngClass]="{'p-border-help': !type || type === 'TO_MY_ORG', 'p-border-secondary': type === 'BY_MY_ORG' }">
 
-              <div class="flex-grow-1 p-grid p-fluid" (click)="item.isActive && openView(item.id)">
+              <div class="flex-grow-1 p-grid p-fluid" (click)="openView(item.id)">
                 <div class="p-col-12">
 
                   <div class="mt-1 mx-2 p-grid p-fluid">
@@ -278,43 +278,43 @@
                 <div [ngClass]="{'p-bg-help': !type || type === 'TO_MY_ORG', 'p-bg-secondary': type === 'BY_MY_ORG' }">
                 </div>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('title')" (click)="item.isActive && openView(item.id)">
+              <td class="max-w-250px" *ngIf="columns?.includes('title')" (click)="openView(item.id)">
                 {{item.title}}
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('desc')" (click)="item.isActive && openView(item.id)">
+              <td class="max-w-250px" *ngIf="columns?.includes('desc')" (click)="openView(item.id)">
                 {{item.body}}
               </td>
               <td class="max-w-250px" *ngIf="columns?.includes('incidentId')"
-                (click)="item.isActive && openView(item.id)">
+                (click)="openView(item.id)">
                 {{item.incident?.id}}
               </td>
 
               <td class="max-w-250px" *ngIf="columns?.includes('priority')"
-                (click)="item.isActive && openView(item.id)">
+                (click)="openView(item.id)">
 
                 <p-tag styleClass="m-1 bg-{{item?.priority?.color}}">
                   {{ item.priority | translateObj }}
                 </p-tag>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('dueDate')" (click)="item.isActive && openView(item.id)">
+              <td class="max-w-250px" *ngIf="columns?.includes('dueDate')" (click)="openView(item.id)">
                 <p-tag styleClass="m-1" checkDueDate [closedDate]="item.closedDate" [dueDate]="item.dueDate">
                   {{ item.dueDate | cdate }}
                 </p-tag>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('status')" (click)="item.isActive && openView(item.id)">
+              <td class="max-w-250px" *ngIf="columns?.includes('status')" (click)="openView(item.id)">
                 <p-tag styleClass="m-1">
                   {{item.status | translateObj }}
                 </p-tag>
               </td>
 
               <td class="max-w-250px" *ngIf="columns?.includes('createdBy')"
-                (click)="item.isActive && openView(item.id)">
+                (click)="openView(item.id)">
                 {{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} /
                 {{item.createdBy?.orgStructure | translateObj }}
               </td>
               <td class="max-w-250px" *ngIf="columns?.includes('assignee')"
-                (click)="item.isActive && openView(item.id)">
+                (click)="openView(item.id)">
                 {{item.assignTo | translateObj }}
 
                 <p-tag styleClass="m-1 bg-{{ assigneeMap[item.assignTo?.type]?.bg }}">

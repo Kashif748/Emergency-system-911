@@ -8,7 +8,7 @@ import { ILangFacade } from '@core/facades/lang.facade';
 export class TranslateObjPipe implements PipeTransform {
   constructor(private langFacade: ILangFacade) {}
 
-  transform(value: unknown, ...args: unknown[]): unknown {
+  transform(value: unknown, ...args: unknown[]): string {
     if (!value || typeof value !== 'object') {
       return '';
     }
@@ -37,5 +37,6 @@ export class TranslateObjPipe implements PipeTransform {
   imports: [CommonModule],
   declarations: [TranslateObjPipe],
   exports: [TranslateObjPipe],
+  providers: [TranslateObjPipe],
 })
 export class TranslateObjModule {}
