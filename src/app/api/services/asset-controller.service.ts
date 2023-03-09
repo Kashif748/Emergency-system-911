@@ -28,21 +28,21 @@ export class AssetControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete4
+   * Path part for operation delete32
    */
-  static readonly Delete4Path = '/v1/assets/delete/{id}';
+  static readonly Delete32Path = '/v1/assets/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete4()` instead.
+   * To access only the response body, use `delete32()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete4$Response(params: {
+  delete32$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Delete4Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Delete32Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -60,15 +60,15 @@ export class AssetControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete4$Response()` instead.
+   * To access the full response (for headers, for example), `delete32$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete4(params: {
+  delete32(params: {
     id: number;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete4$Response(params).pipe(
+    return this.delete32$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

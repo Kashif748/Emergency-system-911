@@ -24,6 +24,52 @@ export class NewsTypeControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete5
+   */
+  static readonly Delete5Path = '/v1/news-type/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete5()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete5$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
+
+    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Delete5Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseNewsType>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete5$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete5(params: {
+    id: number;
+  }): Observable<RestApiResponseNewsType> {
+
+    return this.delete5$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
+    );
+  }
+
+  /**
    * Path part for operation findActivePage5
    */
   static readonly FindActivePage5Path = '/v1/news-type';
@@ -203,52 +249,6 @@ export class NewsTypeControllerService extends BaseService {
   }): Observable<RestApiResponseNewsType> {
 
     return this.getActiveNewsType$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
-    );
-  }
-
-  /**
-   * Path part for operation delete11
-   */
-  static readonly Delete11Path = '/v1/news-type/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete11()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete11$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
-
-    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Delete11Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseNewsType>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete11$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete11(params: {
-    id: number;
-  }): Observable<RestApiResponseNewsType> {
-
-    return this.delete11$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
     );
   }

@@ -162,21 +162,21 @@ export class AssetsGroupControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation get28
+   * Path part for operation get29
    */
-  static readonly Get28Path = '/v1/assets-group/{id}';
+  static readonly Get29Path = '/v1/assets-group/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `get28()` instead.
+   * To access only the response body, use `get29()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get28$Response(params: {
+  get29$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseAssetsGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetsGroupControllerService.Get28Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AssetsGroupControllerService.Get29Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -194,15 +194,15 @@ export class AssetsGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `get28$Response()` instead.
+   * To access the full response (for headers, for example), `get29$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get28(params: {
+  get29(params: {
     id: number;
   }): Observable<RestApiResponseAssetsGroup> {
 
-    return this.get28$Response(params).pipe(
+    return this.get29$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAssetsGroup>) => r.body as RestApiResponseAssetsGroup)
     );
   }

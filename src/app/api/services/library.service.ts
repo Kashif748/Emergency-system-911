@@ -264,21 +264,21 @@ export class LibraryService extends BaseService {
   }
 
   /**
-   * Path part for operation delete13
+   * Path part for operation delete35
    */
-  static readonly Delete13Path = '/v1/library/{id}';
+  static readonly Delete35Path = '/v1/library/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete13()` instead.
+   * To access only the response body, use `delete35()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13$Response(params: {
+  delete35$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseObject>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LibraryService.Delete13Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, LibraryService.Delete35Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -296,15 +296,15 @@ export class LibraryService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete13$Response()` instead.
+   * To access the full response (for headers, for example), `delete35$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13(params: {
+  delete35(params: {
     id: number;
   }): Observable<RestApiResponseObject> {
 
-    return this.delete13$Response(params).pipe(
+    return this.delete35$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseObject>) => r.body as RestApiResponseObject)
     );
   }

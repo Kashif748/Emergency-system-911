@@ -26,8 +26,8 @@ export { OrgQuickLinkControllerService } from './services/org-quick-link-control
 export { OperationalReportControllerService } from './services/operational-report-controller.service';
 export { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
 export { NotificationControllerService } from './services/notification-controller.service';
-export { NewsTypeControllerService } from './services/news-type-controller.service';
 export { NewsControllerService } from './services/news-controller.service';
+export { NewsTypeControllerService } from './services/news-type-controller.service';
 export { MsExchangeOrgConfigControllerService } from './services/ms-exchange-org-config-controller.service';
 export { ModuleControllerService } from './services/module-controller.service';
 export { ModuleOrgControllerService } from './services/module-org-controller.service';
@@ -62,6 +62,7 @@ export { GroupCentersControllerService } from './services/group-centers-controll
 export { ManageGroupsService } from './services/manage-groups.service';
 export { GroupLocationGeometryControllerService } from './services/group-location-geometry-controller.service';
 export { SchedulerControllerService } from './services/scheduler-controller.service';
+export { AvayaControllerService } from './services/avaya-controller.service';
 export { ExerciseControllerService } from './services/exercise-controller.service';
 export { ExerciseTypeControllerService } from './services/exercise-type-controller.service';
 export { ExerciseStatusControllerService } from './services/exercise-status-controller.service';
@@ -69,8 +70,8 @@ export { ExerciseMemberRoleControllerService } from './services/exercise-member-
 export { ExerciseLessonControllerService } from './services/exercise-lesson-controller.service';
 export { ExerciseGoalControllerService } from './services/exercise-goal-controller.service';
 export { ExerciseGoalLessonControllerService } from './services/exercise-goal-lesson-controller.service';
-export { ExerciseCommitteeRoleControllerService } from './services/exercise-committee-role-controller.service';
 export { ExerciseCommitteeControllerService } from './services/exercise-committee-controller.service';
+export { ExerciseCommitteeRoleControllerService } from './services/exercise-committee-role-controller.service';
 export { EventsConfigControllerService } from './services/events-config-controller.service';
 export { EventsConfigSmsControllerService } from './services/events-config-sms-controller.service';
 export { EnviromentalImpactControllerService } from './services/enviromental-impact-controller.service';
@@ -89,7 +90,6 @@ export { CircularCcControllerService } from './services/circular-cc-controller.s
 export { CircularControllerService } from './services/circular-controller.service';
 export { CircularStatusControllerService } from './services/circular-status-controller.service';
 export { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
-export { AvayaControllerService } from './services/avaya-controller.service';
 export { AssetControllerService } from './services/asset-controller.service';
 export { AssetsGroupControllerService } from './services/assets-group-controller.service';
 export { AssetsCategoryControllerService } from './services/assets-category-controller.service';

@@ -163,6 +163,52 @@ export class MsExchangeOrgConfigControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete6
+   */
+  static readonly Delete6Path = '/v1/ms-exchange-orgs/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete6()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete6$Response(params: {
+    id: MsExchangeOrgConfig;
+  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
+
+    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Delete6Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBoolean>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete6$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete6(params: {
+    id: MsExchangeOrgConfig;
+  }): Observable<RestApiResponseBoolean> {
+
+    return this.delete6$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
+    );
+  }
+
+  /**
    * Path part for operation get12
    */
   static readonly Get12Path = '/v1/ms-exchange-orgs/{id}';
@@ -205,52 +251,6 @@ export class MsExchangeOrgConfigControllerService extends BaseService {
 
     return this.get12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseMsExchangeOrgConfig>) => r.body as RestApiResponseMsExchangeOrgConfig)
-    );
-  }
-
-  /**
-   * Path part for operation delete12
-   */
-  static readonly Delete12Path = '/v1/ms-exchange-orgs/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete12()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete12$Response(params: {
-    id: MsExchangeOrgConfig;
-  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, MsExchangeOrgConfigControllerService.Delete12Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBoolean>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete12$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete12(params: {
-    id: MsExchangeOrgConfig;
-  }): Observable<RestApiResponseBoolean> {
-
-    return this.delete12$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
 
