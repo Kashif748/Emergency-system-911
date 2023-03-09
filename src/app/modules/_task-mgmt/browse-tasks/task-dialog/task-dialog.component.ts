@@ -12,7 +12,6 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
-import { MessageHelper } from '@core/helpers/message.helper';
 import { IAuthService } from '@core/services/auth.service';
 import {
   AssetAction,
@@ -25,10 +24,12 @@ import {
 } from '@core/states';
 import { IncidentAction } from '@core/states/incident/incident.action';
 import { IncidentState } from '@core/states/incident/incident.state';
-import { TaskModel } from '@core/states/task/task.state';
 import { FormUtils } from '@core/utils/form.utils';
 import { Select, Store } from '@ngxs/store';
 import { FilesListComponent } from '@shared/attachments-list/files-list/files-list.component';
+import { MapViewType } from '@shared/components/map/utils/MapViewType';
+import { MapComponent } from '@shared/sh-components/map/map.component';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { TreeNode } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
 import { Observable, Subject } from 'rxjs';
@@ -82,6 +83,8 @@ export class TaskDialogComponent implements OnInit {
 
   @Select(CommonDataState.taskTypes)
   public types$: Observable<TaskType[]>;
+  public nonOrgTypes$: Observable<TaskType[]>;
+  public disabledTypes$: Observable<TaskType[]>;
 
   @Select(CommonDataState.taskStatuses)
   public statuses$: Observable<TaskStatus[]>;
@@ -92,9 +95,6 @@ export class TaskDialogComponent implements OnInit {
   @Select(AssetState.assets)
   public assets$: Observable<OrgAssetsProjection[]>;
 
-  @Select(TaskState.task)
-  public task$: Observable<TaskModel>;
-
   @Select(IncidentState.transLoading)
   incidentLoading$: Observable<boolean>;
 
@@ -103,10 +103,19 @@ export class TaskDialogComponent implements OnInit {
 
   @ViewChildren(Dropdown) dropdowns: QueryList<Dropdown>;
 
-  @ViewChild('filesList') attachComponent: FilesListComponent;
-
   @ViewChild('attachContainer', { read: ViewContainerRef })
   attachContainer: ViewContainerRef;
+  attachComponent: FilesListComponent;
+
+  @ViewChild('mapContainer', { read: ViewContainerRef })
+  mapContainer: ViewContainerRef;
+  mapComponent: MapComponent;
+
+  @ViewChild('workLogContainer', { read: ViewContainerRef })
+  workLogContainer: ViewContainerRef;
+
+  @ViewChild('notificationsContainer', { read: ViewContainerRef })
+  notificationsContainer: ViewContainerRef;
 
   public get minDate() {
     return new Date();
@@ -146,6 +155,12 @@ export class TaskDialogComponent implements OnInit {
   set taskId(v: number) {
     this._taskId = v;
     this.buildForm();
+    this.mapContainer?.clear();
+    this.mapComponent = undefined;
+    this.attachContainer?.clear();
+    this.attachComponent = undefined;
+    this.notificationsContainer?.clear();
+
     if (v === undefined || v === null) {
       return;
     }
@@ -183,15 +198,15 @@ export class TaskDialogComponent implements OnInit {
               dropdowns
                 .filter((d) => d.inputId === 'assignTo')
                 .forEach((d) => {
-                  d.filterValue = task.assignTo?.nameEn;
+                  d.filterValue = this.translateObj.transform(task.assignTo);
                 });
             });
           switch (task.assignTo?.type) {
             case 'user':
-              this.loadUsers(task.assignTo?.nameEn, true);
+              this.loadUsers(this.translateObj.transform(task.assignTo), true);
               break;
             case 'group':
-              this.loadGroups(task.assignTo?.nameEn, true);
+              this.loadGroups(this.translateObj.transform(task.assignTo), true);
               break;
             case 'org':
               this.loadOrgs((task.incidentId as any)?.id);
@@ -219,9 +234,9 @@ export class TaskDialogComponent implements OnInit {
     private store: Store,
     private auth: IAuthService,
     private route: ActivatedRoute,
-    private messageHelper: MessageHelper,
     private injector: Injector,
-    private cfr: ComponentFactoryResolver
+    private cfr: ComponentFactoryResolver,
+    private translateObj: TranslateObjPipe
   ) {
     this.route.queryParams
       .pipe(
@@ -232,6 +247,20 @@ export class TaskDialogComponent implements OnInit {
         this.taskId = id;
       });
 
+    this.nonOrgTypes$ = this.types$.pipe(
+      map((ts) =>
+        ts.map((t) => {
+          return { ...t, disabled: t.nameEn?.toLowerCase() === 'supplies' };
+        })
+      )
+    );
+    this.disabledTypes$ = this.types$.pipe(
+      map((ts) =>
+        ts.map((t) => {
+          return { ...t, disabled: true };
+        })
+      )
+    );
     this.viewOnly$ = this.route.queryParams.pipe(
       map((params) => params['_mode'] === 'viewonly'),
       tap((v) => {
@@ -399,10 +428,10 @@ export class TaskDialogComponent implements OnInit {
           dropdowns
             .filter((d) => d.inputId === 'asset')
             .forEach((d) => {
-              d.filterValue = value.asset?.nameEn;
+              d.filterValue = this.translateObj.transform(value.asset);
             });
         });
-      this.loadAssets(value.asset?.nameEn, true);
+      this.loadAssets(this.translateObj.transform(value.asset), true);
     }
 
     !this.form.contains('requestQuantity') &&
@@ -494,6 +523,7 @@ export class TaskDialogComponent implements OnInit {
 
     let task = {
       ...this.form.getRawValue(),
+      id: this._taskId,
     };
 
     task = {
@@ -520,10 +550,14 @@ export class TaskDialogComponent implements OnInit {
       category: undefined,
     };
 
-    task.id = this._taskId;
+    if (this.mapComponent?.gType) {
+      task.featureName = this.mapComponent?.gType;
+    }
+
     if (this.editMode) {
       this.store.dispatch(new BrowseTasksAction.UpdateTask(task));
       await this.attachComponent?.upload(this._taskId, false);
+      this.saveMap(task);
       setTimeout(() => {
         this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
       }, 1200);
@@ -538,10 +572,37 @@ export class TaskDialogComponent implements OnInit {
         )
         .subscribe(async (t) => {
           await this.attachComponent?.upload(t.id, false);
+          task.id = t.id;
+          this.saveMap(task);
           setTimeout(() => {
             this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
           }, 1200);
         });
+    }
+  }
+
+  async saveMap(task) {
+    if (this.mapComponent && this.mapComponent?.gType) {
+      const org = this.store.selectSnapshot(CommonDataState.currentOrg);
+      const priority = this.store
+        .selectSnapshot(CommonDataState.priorities)
+        .find((p) => p.id === task.priorityId);
+
+      const type = this.store
+        .selectSnapshot(CommonDataState.taskTypes)
+        .find((t) => t.id === task.taskType?.typeId);
+
+      const result = await this.mapComponent.save({
+        refId: Number.parseInt(task.id),
+        title: task.title,
+        orgName: org.code,
+        levelId: 1,
+        priorityId: `${priority?.nameAr ?? ''} / ${priority?.nameEn ?? ''}`,
+        dueDate: task.dueDate,
+        type: `${type?.nameAr ?? ''} / ${type?.nameEn ?? ''}`,
+        inc_ref_id: task.incidentId,
+      });
+      task.featureName = result.gType;
     }
   }
 
@@ -556,6 +617,8 @@ export class TaskDialogComponent implements OnInit {
   }
 
   async loadAttachComponent() {
+    if (this.attachComponent) return;
+
     this.attachContainer?.clear();
     const { FilesListComponent } = await import(
       '@shared/attachments-list/files-list/files-list.component'
@@ -572,12 +635,96 @@ export class TaskDialogComponent implements OnInit {
     cdr.detectChanges();
   }
 
+  async loadMapComponent() {
+    if (this.mapComponent) return;
+
+    this.mapContainer?.clear();
+    const { MapComponent } = await import(
+      '@shared/sh-components/map/map.component'
+    );
+    const factory = this.cfr.resolveComponentFactory(MapComponent);
+
+    const { instance, changeDetectorRef: cdr } =
+      this.mapContainer.createComponent(factory, null, this.injector);
+
+    const task = this.store.selectSnapshot(TaskState.task);
+
+    instance.config = {
+      mapType: MapViewType.TASK,
+      showSaveButton: false,
+      zoomModel: {
+        referenceId: task?.id,
+        featureName: task?.featureName as any,
+      },
+      showLayers: false,
+    };
+
+    instance.OnSaveMap.subscribe((response) => {
+      // this.addLocationToMapFunc = response?.ff;
+      this.form.get('featureName').patchValue(response?.gType);
+      if (response) {
+        this.form.get('newLocation').patchValue(true);
+      }
+      cdr.detectChanges();
+    });
+
+    this.mapComponent = instance;
+    cdr.detectChanges();
+  }
+
+  async loadTaskWorkLog() {
+    this.workLogContainer.clear();
+    const { LogComponent } = await import(
+      'src/app/modules/incidents/log/log.component'
+    );
+    const workLogFactory = this.cfr.resolveComponentFactory(LogComponent);
+    const { instance, changeDetectorRef } =
+      this.workLogContainer.createComponent(
+        workLogFactory,
+        null,
+        this.injector
+      );
+    instance.id = this._taskId;
+    instance.type = 'task';
+    instance.height = '100%';
+    changeDetectorRef.detectChanges();
+  }
+
+  async loadNotifications() {
+    if (this.notificationsContainer?.length) return;
+
+    this.notificationsContainer?.clear();
+    const { NotificationsTableComponent } = await import(
+      'src/app/shared/components/notifications-table/notifications-table.component'
+    );
+    const notificationsFactory = this.cfr.resolveComponentFactory(
+      NotificationsTableComponent
+    );
+    const { instance, changeDetectorRef } =
+      this.notificationsContainer.createComponent(
+        notificationsFactory,
+        null,
+        this.injector
+      );
+    instance.recordId = this._taskId;
+    instance.moduleId = 3;
+    changeDetectorRef.detectChanges();
+  }
+
   tab(index: number) {
     switch (index) {
+      case 1:
+        this.loadMapComponent();
+        break;
       case 2:
         this.loadAttachComponent();
         break;
-
+      case 3:
+        this.loadTaskWorkLog();
+        break;
+      case 4:
+        this.loadNotifications();
+        break;
       default:
         break;
     }

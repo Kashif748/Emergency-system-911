@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Observable } from 'rxjs';
 import { loadModules } from 'esri-loader';
-import { MapComponent, MapModule } from '../map.component';
+import { MapComponent } from '../map.component';
 import { environment } from 'src/environments/environment';
 import esri = __esri;
 import { MapViewType } from '@shared/components/map/utils/MapViewType';
@@ -14,6 +14,7 @@ import { map } from 'rxjs/operators';
 import { AddressSearchResultModel } from '../utils/map.models';
 
 export interface MapConfig {
+  showSaveButton: boolean;
   mapType: MapViewType;
   zoomModel?: {
     referenceId: any;
@@ -28,7 +29,9 @@ export interface MapConfig {
   polylineLocation?: AddressSearchResultModel;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MapService {
   constructor(
     private dialog: MatDialog,
