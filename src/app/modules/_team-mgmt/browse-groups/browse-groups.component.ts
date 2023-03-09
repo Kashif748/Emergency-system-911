@@ -82,6 +82,7 @@ export class BrowseGroupsComponent implements OnInit, OnDestroy {
     { name: 'SHARED.ORG', code: 'org'},
     { name: 'GROUP.LEADER', code: 'leader' },
     { name: 'GROUP.USERS_NO', code: 'usersnumber' },
+    { name: 'GROUP.SHIFT_SCHEDULE', code: 'shift_schedule' },
   ];
 
   public groupMembers$ = [
