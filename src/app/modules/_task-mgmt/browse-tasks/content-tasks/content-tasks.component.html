@@ -40,7 +40,8 @@
       <ng-template #cardsTemplate>
         <ng-container *ngFor="let item of page">
           <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border">
-            <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px">
+            <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
+              [ngClass]="{'p-border-help': !type || type === 'TO_MY_ORG', 'p-border-secondary': type === 'BY_MY_ORG' }">
 
               <div class="flex-grow-1 p-grid p-fluid" (click)="item.isActive && openView(item.id)">
                 <div class="p-col-12">
@@ -76,7 +77,8 @@
                         label="{{item.status | translateObj }}" icon="pi pi-question-circle" styleClass="m-1"></p-chip>
 
                       <p-chip pTooltip="{{ 'SHARED.ASSIGNEE' | translate }}" appendTo="body" tooltipPosition="top"
-                        label="{{item.assignTo | translateObj }} ({{ 'SHARED.' + assigneeMap[item.assignTo?.type]?.text | translate }})" icon="pi pi-angle-double-up">
+                        label="{{item.assignTo | translateObj }} ({{ 'SHARED.' + assigneeMap[item.assignTo?.type]?.text | translate }})"
+                        icon="pi pi-angle-double-up">
                       </p-chip>
 
                     </div>
@@ -273,7 +275,7 @@
             <tr class="cursor-pointer hoverable" checkDueDate [closedDate]="item.closedDate" [dueDate]="item.dueDate"
               [dueClass]="'highlight'">
               <td class="flag-td">
-                <div class="bg-secondary">
+                <div [ngClass]="{'p-bg-help': !type || type === 'TO_MY_ORG', 'p-bg-secondary': type === 'BY_MY_ORG' }">
                 </div>
               </td>
               <td class="max-w-250px" *ngIf="columns?.includes('title')" (click)="item.isActive && openView(item.id)">

@@ -56,27 +56,8 @@
     <div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
         <input type="text" formControlName="middleName" pInputText />
-        <label
-          >{{ "PHONEBOOK.MIDDLE_NAME" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
+        <label>{{ "PHONEBOOK.MIDDLE_NAME" | translate }} </label>
       </span>
-
-      <ng-container
-        *ngIf="
-          form.controls['middleName'].touched &&
-          !form.controls['middleName'].valid &&
-          form.controls['middleName'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['firstName'].hasError('required')"
-        >
-          z
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
     </div>
 
     <!-- last name -->
@@ -111,50 +92,16 @@
         <input type="text" formControlName="title" pInputText />
         <label>
           {{ "PHONEBOOK.TITLE" | translate }}
-          <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-
-      <ng-container
-        *ngIf="
-          form.controls['title'].touched &&
-          !form.controls['title'].valid &&
-          form.controls['title'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['title'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
     </div>
 
     <!-- job title -->
     <div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
         <input type="text" formControlName="jobTitle" pInputText />
-        <label
-          >{{ "SHARED.JOB_TITLE" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
+        <label>{{ "SHARED.JOB_TITLE" | translate }} </label>
       </span>
-
-      <ng-container
-        *ngIf="
-          form.controls['jobTitle'].touched &&
-          !form.controls['jobTitle'].valid &&
-          form.controls['jobTitle'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['jobTitle'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
     </div>
 
     <!-- org name -->
@@ -189,24 +136,8 @@
         <input type="text" formControlName="phoneNumber" pInputText />
         <label>
           {{ "PHONEBOOK.PHONE_NUMBER" | translate }}
-          <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-
-      <ng-container
-        *ngIf="
-          form.controls['phoneNumber'].touched &&
-          !form.controls['phoneNumber'].valid &&
-          form.controls['phoneNumber'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['phoneNumber'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
     </div>
     <!-- mobile -->
     <div class="p-field p-col-12 p-md-4" dir="ltr">
@@ -214,7 +145,7 @@
         <ngx-intl-tel-input
           cssClass="p-inputtext p-component p-text-left"
           [onlyCountries]="['ae']"
-          formControlName="mobileNumber"
+          [formControl]="form.get('mobileNumber')"
           [enablePlaceholder]="false"
           [enableAutoCountrySelect]="true"
         >
@@ -249,11 +180,15 @@
     </div>
 
     <!-- activate status -->
-    <div class="d-flex align-items-center w-25">
-      <span class="mx-4"> {{ "ACTIONS.ACTIVE_STATUS" | translate }}</span>
-      <span class="spacer"></span>
-      <mat-slide-toggle formControlName="isActive" class="m-auto">
-      </mat-slide-toggle>
+    <div class="p-field p-col-12 p-md-4">
+      <p-toggleButton
+        formControlName="isActive"
+        onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+        offLabel="{{ 'ACTIONS.INACTIVE' | translate }}"
+        [onIcon]="'pi pi-check'"
+        offIcon="pi pi-times"
+        iconPos="right"
+      ></p-toggleButton>
     </div>
   </form>
 

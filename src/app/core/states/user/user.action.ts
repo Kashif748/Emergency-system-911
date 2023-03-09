@@ -35,6 +35,21 @@ export namespace UserAction {
     ) {}
   }
 
+   export class LoadUsers {
+    static readonly type = '[User] Load Users';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        search?: string;
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+
   export class GetUser {
     static readonly type = '[User] Get User';
     /**

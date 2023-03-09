@@ -17,6 +17,7 @@ export enum AdvancedSearchFieldsEnum {
   INQUIRY = 'subject',
   REPORTING_CONTACT = 'reporterContact',
   LEADING_ORG = 'organization',
+  GROUP = 'groupId',
 }
 
 export interface IsExpiredOption {

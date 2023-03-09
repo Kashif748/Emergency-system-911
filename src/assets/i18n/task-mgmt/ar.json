@@ -1,1 +1,24 @@
-{}
+{
+  "BY_MY_ORG": "بواسطة جهتي",
+  "TO_MY_ORG": "إلى جهتي",
+  "TASK_MANGEMENT": {
+    "CREATE": {
+      "TITLE": "إضافة مهمة"
+    },
+    "EDIT": {
+      "TITLE": "تعديل مهمة"
+    },
+    "VIEW": {
+      "TITLE": "عرض مهمة"
+    },
+    "SUPPLIES_DETAILS": "تفاصيل الموارد"
+  },
+  "TASK_TITLE": "عنوان المهمة",
+  "TASK_DESCRIPTION": "وصف المهمة",
+  "TASK_DETAILS": "تفاصيل المهمة",
+  "ASSIGNEE_TYPE": "صفة المحال إليه",
+  "TASK_TYPE": "نوع المهمة",
+  "TASK_INFO": "معلومات المهمة",
+  "TASK_LOCATION": "موقع المهمة",
+  "TASK_ATTACHMENTS": "مرفقات المهمة"
+}

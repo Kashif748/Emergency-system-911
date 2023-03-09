@@ -1,0 +1,286 @@
+<div class="container-fluid p-0 table-container h-100" id="map-container">
+  <div [hidden]="!showButton" #info class="no-gutters h-100">
+    <!-- incident buttons -->
+    <div class="d-flex w-100 my-4" *ngIf="mapType == 'incident'">
+      <!-- add incident point -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Inc_point" (click)="addIncidentPoint()">
+        {{ "INCIDENTS.SET_INCIDENT_POINT" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+
+      <!-- add incident polyline -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Inc_Polyline" (click)="addIncidentPolyline()">
+        {{ "INCIDENTS.CREATE_INCIDENT_POLYLINE" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Design/Line.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+
+      <!-- add incident polygon -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Inc_Polygon" (click)="addIncidentPolygon()">
+        {{ "INCIDENTS.CREATE_INCIDENT_POLYGON" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+    </div>
+
+    <div class="d-flex w-100 my-4" *ngIf="mapType == 'task'">
+      <!-- add task point -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Tsk_point" (click)="addTaskPoint()">
+        {{ "TASK.CREATE_TASK_POINT" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+
+      <!-- add task polyline -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Tsk_Polyline" (click)="addTaskPolyline()">
+        {{ "TASK.CREATE_TASK_POLYLINE" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Design/Line.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+
+      <!-- add task polygon -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Tsk_Polygon" (click)="addTaskPolygon()">
+        {{ "TASK.CREATE_TASK_POLYGON" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+    </div>
+    <div class="d-flex w-100 my-4" *ngIf="mapType == 'organization'">
+      <!-- add task point -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Org_point" (click)="addOrgPoint()">
+
+        {{ "ORGANIZATIONS.CREATE_ORG_POINT" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+
+
+    </div>
+    <div class="d-flex w-100 my-4" *ngIf="mapType == 'asset'">
+      <!-- add task point -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Asset_point" (click)="addAssetPoint()">
+
+        {{ "RESOURCE.CREATE_ASSET_POINT" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+    </div>
+    <div class="d-flex w-100 my-4" *ngIf="mapType == 'team'">
+
+
+      <!-- add team polyline -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Inc_Polyline" (click)="addTeamPolyline()">
+        {{ "INCIDENTS.CREATE_TEAM_POLYLINE" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Design/Line.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+
+      <!-- add team polygon -->
+      <button class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Inc_Polygon" (click)="addTeamPolygon()">
+        {{ "INCIDENTS.CREATE_TEAM_POLYGON" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+    </div>
+    <div class="d-flex w-100 my-4" *ngIf="mapType == 'reporter'">
+      <!-- add task point -->
+      <button [hidden]="showButton" class="
+          btn btn-md btn-light-primary
+          font-weight-bolder
+          cursor-pointer
+          mx-auto
+        " id="Reporter_Point" (click)="addReporterPoint()">
+
+        {{ "INCIDENTS.CREATE_REPORTER_POINT" | translate }}
+        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-md"></span>
+      </button>
+
+
+    </div>
+  </div>
+
+  <div class="no-gutters h-100">
+    <div #mapView id="map" [ngClass]="{
+        'min-h-450px':
+          (data?.viewOnly && !data?.zoomModel?.referenceId) || smallSize,
+        'rounded-lg': mapType == 'incident'
+      }" class="w-100 border m-0 p-0" [attr.style]="
+        !((data?.viewOnly && !data?.zoomModel?.referenceId) || smallSize)
+          ? 'height: ' + (window.innerHeight - 200) + 'px !important'
+          : ''
+      "></div>
+    <div class="container p-0" dir="{{ lang == 'en' ? 'ltr' : 'rtl' }}"
+      *ngIf="data?.viewOnly && !!data?.zoomModel?.referenceId && showLocInfo">
+      <div class="row">
+        <!--begin::Item-->
+        <div class="col-md-4 p-3">
+          <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+            <!--begin::Symbol-->
+            <div class="symbol symbol-40 mx-5">
+              <span class="">
+                <span [inlineSVG]="'./assets/media/svg/icons/Design/Position.svg'"
+                  class="svg-icon svg-icon-lg svg-icon-primary"></span>
+              </span>
+            </div>
+            <!--end::Symbol-->
+            <!--begin::Text-->
+            <div class="d-flex flex-column font-weight-bold">
+              <a class="
+                  text-dark text-hover-primary
+                  mb-1
+                  font-size-lg
+                  cursor-pointer
+                ">
+                {{ "INCIDENTS.ZONE" | translate }}
+              </a>
+              <span class="label label-lg label-light-primary label-inline">{{
+                this.lang == "ar"
+                ? zoomedLocationInfo.zoneAr
+                : zoomedLocationInfo.zoneEn
+                }}</span>
+            </div>
+            <!--end::Text-->
+          </div>
+        </div>
+
+        <!--begin::Item-->
+        <div class="col-md-4 p-3">
+          <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+            <!--begin::Symbol-->
+            <div class="symbol symbol-40 mx-5">
+              <span class="">
+                <span [inlineSVG]="'./assets/media/svg/icons/Design/Difference.svg'"
+                  class="svg-icon svg-icon-lg svg-icon-primary"></span>
+              </span>
+            </div>
+            <!--end::Symbol-->
+            <!--begin::Text-->
+            <div class="d-flex flex-column font-weight-bold">
+              <a class="
+                  text-dark text-hover-primary
+                  mb-1
+                  font-size-lg
+                  cursor-pointer
+                ">
+                {{ "INCIDENTS.SECTOR" | translate }}
+              </a>
+              <span class="label label-lg label-light-primary label-inline">{{
+                this.lang == "ar"
+                ? zoomedLocationInfo.sectorAr
+                : zoomedLocationInfo.sectorEn
+                }}</span>
+            </div>
+            <!--end::Text-->
+          </div>
+        </div>
+
+        <!--begin::Item-->
+        <div class="col-md-4 p-3">
+          <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+            <!--begin::Symbol-->
+            <div class="symbol symbol-40 mx-5">
+              <span class="">
+                <span [inlineSVG]="'./assets/media/svg/icons/Map/Position.svg'"
+                  class="svg-icon svg-icon-lg svg-icon-primary"></span>
+              </span>
+            </div>
+            <!--end::Symbol-->
+            <!--begin::Text-->
+            <div class="d-flex flex-column font-weight-bold">
+              <a class="
+                  text-dark text-hover-primary
+                  mb-1
+                  font-size-lg
+                  cursor-pointer
+                ">
+                {{ "INCIDENTS.PLOT" | translate }}
+              </a>
+              <span class="label label-lg label-light-primary label-inline">{{
+                lang == "en"
+                ? zoomedLocationInfo.plotEn
+                : zoomedLocationInfo.plotAr
+                }}</span>
+            </div>
+            <!--end::Text-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 text-center my-4" [hidden]="!showButton">
+    <button class="
+      save-map
+        btn
+        w-md-50
+        btn-lg btn-light-primary
+        font-weight-bolder
+        py-2
+        px-5
+        cursor-pointer
+      " (click)="saveMap()" [disabled]="loading">
+      {{ "SHARED.SAVE" | translate }}
+    </button>
+  </div>
+
+  <div class="spinner-container m-auto p-10" *ngIf="loading">
+    <!-- <mat-spinner class="m-auto" diameter="50"></mat-spinner> -->
+    <p-progressSpinner class="m-auto"></p-progressSpinner>
+  </div>
+</div>
+
+<!-- map top-bar -->
+<div id="map-topbar" *ngIf="!smallSize" #topbar class="w-100">
+  <app-top-bar></app-top-bar>
+</div>

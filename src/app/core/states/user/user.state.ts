@@ -40,6 +40,7 @@ export interface UserStateModel {
   groupMapUser: UserAndRoleProjection[];
   loading: boolean;
   blocking: boolean;
+  users: UserAndRoleProjection[];
 }
 
 const USER_STATE_TOKEN = new StateToken<UserStateModel>('user');
@@ -66,6 +67,12 @@ export class UserState {
   static page(state: UserStateModel) {
     return state?.page?.content;
   }
+
+  @Selector([UserState])
+  static users(state: UserStateModel) {
+    return state?.users;
+  }
+
   @Selector([UserState])
   static totalRecords(state: UserStateModel) {
     return state?.page?.totalElements;
@@ -153,7 +160,7 @@ export class UserState {
       );
   }
 
-  @Action(UserAction.LoadGroupMapUserPage, { cancelUncompleted: true })
+@Action(UserAction.LoadGroupMapUserPage, { cancelUncompleted: true })
   LoadGroupMapUserPage(
     { setState }: StateContext<UserStateModel>,
     { payload }: UserAction.LoadGroupMapUserPage
@@ -184,6 +191,31 @@ export class UserState {
           );
 
         }),
+      );
+  }
+
+@Action(UserAction.LoadUsers, { cancelUncompleted: true })
+  loadUsers(
+    { setState }: StateContext<UserStateModel>,
+    { payload }: UserAction.LoadUsers
+  ) {
+    return this.userService
+      .getAllForOrg({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload.search,
+      })
+      .pipe(
+        tap(({ result: { content: list } }) => {
+          setState(
+            patch<UserStateModel>({
+              users: list,
+            })
+          );
+        })
       );
   }
 

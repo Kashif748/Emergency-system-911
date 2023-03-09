@@ -16,6 +16,20 @@ export namespace PhonebookAction {
     ) {}
   }
 
+  export class LoadSidebarPage {
+    static readonly type = '[Phonebook] Load Sidebar Page';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        filters?: { [key: string]: any };
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
   export class GetPhonebook {
     static readonly type = '[Phonebook] Get Phonebook';
     /**

@@ -65,8 +65,8 @@
                 <div class="p-field p-col-6 p-md-3">
                   <p-calendar placeholder="{{ 'SHARED.DUE_DATE' | translate }}"
                     [ngModel]="state.pageRequest.filters['dueDate']"
-                    (ngModelChange)="updateFilter({dueDate: $event}, $event)" [showIcon]="true" showButtonBar="true"
-                    ></p-calendar>
+                    (ngModelChange)="updateFilter({dueDate: $event}, $event)" [showIcon]="true"
+                    showButtonBar="true"></p-calendar>
 
                 </div>
 
@@ -134,16 +134,16 @@
             <div class="w-100 d-flex flex-wrap mx-1 px-6">
               <div class="my-auto">
                 <button pButton type="button"
-                  class="p-tag px-2 text-center w-70px py-1 p-button-rounded p-button-sm bg-primary"
-                  [ngClass]="{'active': state.pageRequest.filters['status'] === 1}"
-                  (click)="updateFilter({status: 1}, $event); search();">
-                  <span class="m-auto"> {{ 'ACTIONS.ACTIVE' | translate }} </span>
+                  class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
+                  [ngClass]="{'active':   !(type$ | async) || (type$ | async) === 'TO_MY_ORG'}"
+                  (click)="updateFilter({type: 'TO_MY_ORG'}, $event);">
+                  <span class="m-auto"> {{ 'TO_MY_ORG' | translate }} </span>
                 </button>
                 <button pButton type="button"
-                  class="p-tag mx-2 px-2 py-1 text-center p-button-rounded w-70px p-button-warning p-button-sm bg-warning border-warning text-white"
-                  [ngClass]="{'active': state.pageRequest.filters['status'] === 0}"
-                  (click)="updateFilter({status: 0}, $event); search();">
-                  <span class="m-auto"> {{ 'ACTIONS.INACTIVE' | translate }} </span>
+                  class="p-tag w-95px mx-2 px-2 py-1 text-center p-button-rounded p-button-secondary p-button-sm text-white"
+                  [ngClass]="{'active': (type$ | async) === 'BY_MY_ORG'}"
+                  (click)="updateFilter({type: 'BY_MY_ORG'}, $event);">
+                  <span class="m-auto"> {{ 'BY_MY_ORG' | translate }} </span>
                 </button>
               </div>
 
@@ -164,9 +164,9 @@
             </p-divider>
           </div>
         </div>
-        <app-content-tasks [view]="state.view" [loading]="loading$ | async" [page]="page$ | async"
-          [columns]="state.columns" [totalRecords]="totalRecords$ | async" [pageRequest]="state.pageRequest"
-          (onPageChange)="loadPage($event)"></app-content-tasks>
+        <app-content-tasks [view]="state.view" [type]="type$ | async" [loading]="loading$ | async"
+          [page]="page$ | async" [columns]="state.columns" [totalRecords]="totalRecords$ | async"
+          [pageRequest]="state.pageRequest" (onPageChange)="loadPage($event)"></app-content-tasks>
 
       </div>
     </div>

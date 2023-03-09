@@ -70,15 +70,12 @@ export class PhonebookDialogComponent implements OnInit {
     this.form = this.formBuilder.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      middleName: [null, [Validators.required]],
+      middleName: [null],
       orgName: [null, [Validators.required]],
-      jobTitle: [null, [Validators.required]],
-      phoneNumber: [
-        null,
-        [Validators.required, Validators.pattern(/^-?([0-9]\d*)?$/)],
-      ],
+      jobTitle: [null],
+      phoneNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
-      title: [null, [Validators.required]],
+      title: [null],
       isActive: [true, [Validators.required]],
       id: 0,
     });
