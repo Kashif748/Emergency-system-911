@@ -124,8 +124,8 @@ export function getHighlightLanguages() {
         RoleState,
         OrgState,
         TaskState,
-        GroupState, 
-        CenterState, 
+        GroupState,
+        CenterState,
         IncidentLocInfoState,
         IncidentState,
         CommonDataState,
@@ -139,7 +139,7 @@ export function getHighlightLanguages() {
     NgxsAsyncStoragePluginModule.forRoot(
       HyperStorageEngine,
       {
-        key: ['browse_users', 'browse_roles', 'common_data', 'browse_tasks'],
+        key: ['browse_users', 'browse_roles', 'common_data', 'browse_tasks', 'browse_groups'],
       },
       ['common_data']
     ),
