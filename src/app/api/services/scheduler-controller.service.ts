@@ -162,21 +162,21 @@ export class SchedulerControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation get20
+   * Path part for operation get21
    */
-  static readonly Get20Path = '/v1/ext/schedulers/{id}';
+  static readonly Get21Path = '/v1/ext/schedulers/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `get20()` instead.
+   * To access only the response body, use `get21()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get20$Response(params: {
+  get21$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseScheduler>> {
 
-    const rb = new RequestBuilder(this.rootUrl, SchedulerControllerService.Get20Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, SchedulerControllerService.Get21Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -194,15 +194,15 @@ export class SchedulerControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `get20$Response()` instead.
+   * To access the full response (for headers, for example), `get21$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  get20(params: {
+  get21(params: {
     id: number;
   }): Observable<RestApiResponseScheduler> {
 
-    return this.get20$Response(params).pipe(
+    return this.get21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseScheduler>) => r.body as RestApiResponseScheduler)
     );
   }

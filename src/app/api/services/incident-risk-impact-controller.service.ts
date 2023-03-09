@@ -24,6 +24,52 @@ export class IncidentRiskImpactControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete10
+   */
+  static readonly Delete10Path = '/v1/incident-risk-impact/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete10()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete10$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseIncidentRiskImpact>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Delete10Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseIncidentRiskImpact>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete10$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete10(params: {
+    id: number;
+  }): Observable<RestApiResponseIncidentRiskImpact> {
+
+    return this.delete10$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseIncidentRiskImpact>) => r.body as RestApiResponseIncidentRiskImpact)
+    );
+  }
+
+  /**
    * Path part for operation findActivePage10
    */
   static readonly FindActivePage10Path = '/v1/incident-risk-impact';
@@ -203,52 +249,6 @@ export class IncidentRiskImpactControllerService extends BaseService {
   }): Observable<RestApiResponseIncidentRiskImpact> {
 
     return this.getActiveIncidentRiskImpact$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseIncidentRiskImpact>) => r.body as RestApiResponseIncidentRiskImpact)
-    );
-  }
-
-  /**
-   * Path part for operation delete17
-   */
-  static readonly Delete17Path = '/v1/incident-risk-impact/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete17()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete17$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseIncidentRiskImpact>> {
-
-    const rb = new RequestBuilder(this.rootUrl, IncidentRiskImpactControllerService.Delete17Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseIncidentRiskImpact>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete17$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete17(params: {
-    id: number;
-  }): Observable<RestApiResponseIncidentRiskImpact> {
-
-    return this.delete17$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentRiskImpact>) => r.body as RestApiResponseIncidentRiskImpact)
     );
   }

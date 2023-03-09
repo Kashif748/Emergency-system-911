@@ -25,6 +25,52 @@ export class ExternalPhonebookControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation softDelete
+   */
+  static readonly SoftDeletePath = '/v1/phonebook/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `softDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  softDelete$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.SoftDeletePath, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBoolean>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `softDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  softDelete(params: {
+    id: number;
+  }): Observable<RestApiResponseBoolean> {
+
+    return this.softDelete$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
+    );
+  }
+
+  /**
    * Path part for operation search1
    */
   static readonly Search1Path = '/v1/phonebook';
@@ -214,52 +260,6 @@ export class ExternalPhonebookControllerService extends BaseService {
 
     return this.getById3$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExternalPhonebook>) => r.body as RestApiResponseExternalPhonebook)
-    );
-  }
-
-  /**
-   * Path part for operation delete8
-   */
-  static readonly Delete8Path = '/v1/phonebook/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete8()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete8$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Delete8Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBoolean>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete8$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete8(params: {
-    id: number;
-  }): Observable<RestApiResponseBoolean> {
-
-    return this.delete8$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
 

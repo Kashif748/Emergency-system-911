@@ -1,8 +1,7 @@
-<p-dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
+<p-dialog #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
   [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
   [resizable]="false">
   <ng-template pTemplate="header">
-
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
         {{'TASK_MANGEMENT.EDIT.TITLE' | translate}}
@@ -15,12 +14,12 @@
       </ng-container>
     </h3>
   </ng-template>
-  <div class="w-100 pt-2" style="height: 65vh;">
+  <div class="w-100 pt-2" [ngStyle]="{'height': dialog.maximized ? '100%' : '65vh'}">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
 
-    <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)">
+    <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)" styleClass="h-100">
       <p-tabPanel header="{{'TASK_INFO' | translate }}">
 
         <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
@@ -128,21 +127,21 @@
             </ng-container>
           </div>
 
-
-          <div class="p-col-12">
-
-            <p-divider align="left">
-              <div class="p-d-inline-flex p-ai-center">
-                <i class="pi pi-sliders-v p-mx-2"></i>
-                <b>
-                  {{ "TASK.TASK_DETAILS" | translate }}
-                </b>
-              </div>
-            </p-divider>
-          </div>
-
-
           <ng-container *ngIf="![null, undefined].includes(form.get('incidentId').value)">
+
+            <div class="p-col-12">
+
+              <p-divider align="left">
+                <div class="p-d-inline-flex p-ai-center">
+                  <i class="pi pi-sliders-v p-mx-2"></i>
+                  <b>
+                    {{ "TASK.TASK_DETAILS" | translate }}
+                  </b>
+                </div>
+              </p-divider>
+            </div>
+
+
             <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
                 <p-dropdown
@@ -220,61 +219,62 @@
                 </p>
               </ng-container>
             </div>
+
+
+            <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="((form.controls['assigneeType']?.value === 'org' ? types$ : nonOrgTypes$)| async)"
+                  [autoDisplayFirst]="false" [showClear]="true" dataKey="id" appendTo="body" formControlName="taskType">
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{ item | translateObj }}
+                  </ng-template>
+
+                  <ng-template let-item pTemplate="item">
+                    {{ item | translateObj }}
+                  </ng-template>
+                </p-dropdown>
+                <label>{{ 'TASK_TYPE' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['taskType'].touched && !form.controls['taskType'].valid && form.controls['taskType'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['taskType'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
+
+
+            <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <p-dropdown [options]="priorities$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+                  appendTo="body" formControlName="priorityId">
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{ item | translateObj }}
+                  </ng-template>
+
+                  <ng-template let-item pTemplate="item">
+                    {{ item | translateObj }}
+                  </ng-template>
+                </p-dropdown>
+                <label>{{ 'SHARED.PRIORITY' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <ng-container
+                *ngIf="form.controls['priorityId'].touched && !form.controls['priorityId'].valid && form.controls['priorityId'].dirty">
+                <p class="p-error mb-0" *ngIf="form.controls['priorityId'].hasError('required')">
+                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                </p>
+              </ng-container>
+            </div>
+
           </ng-container>
-
-
-          <div class="p-field p-col-12 p-md-6">
-            <span class="p-float-label">
-              <p-dropdown [options]="types$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
-                appendTo="body" formControlName="taskType">
-                <ng-template let-item pTemplate="selectedItem">
-                  {{ item | translateObj }}
-                </ng-template>
-
-                <ng-template let-item pTemplate="item">
-                  {{ item | translateObj }}
-                </ng-template>
-              </p-dropdown>
-              <label>{{ 'TASK_TYPE' | translate }}
-                <strong class="required-asterisk"> * </strong>
-              </label>
-            </span>
-
-            <ng-container
-              *ngIf="form.controls['taskType'].touched && !form.controls['taskType'].valid && form.controls['taskType'].dirty">
-              <p class="p-error mb-0" *ngIf="form.controls['taskType'].hasError('required')">
-                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-              </p>
-            </ng-container>
-          </div>
-
-
-
-          <div class="p-field p-col-12 p-md-6">
-            <span class="p-float-label">
-              <p-dropdown [options]="priorities$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
-                appendTo="body" formControlName="priorityId">
-                <ng-template let-item pTemplate="selectedItem">
-                  {{ item | translateObj }}
-                </ng-template>
-
-                <ng-template let-item pTemplate="item">
-                  {{ item | translateObj }}
-                </ng-template>
-              </p-dropdown>
-              <label>{{ 'SHARED.PRIORITY' | translate }}
-                <strong class="required-asterisk"> * </strong>
-              </label>
-            </span>
-
-            <ng-container
-              *ngIf="form.controls['priorityId'].touched && !form.controls['priorityId'].valid && form.controls['priorityId'].dirty">
-              <p class="p-error mb-0" *ngIf="form.controls['priorityId'].hasError('required')">
-                {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-              </p>
-            </ng-container>
-          </div>
-
           <!-- assets details  -->
           <ng-container
             *ngIf="form.get('category') && (form.get('taskType').value?.nameEn === 'Supplies' || form.get('taskType').value?.type === 'supplies')">
@@ -410,23 +410,35 @@
 
       </p-tabPanel>
       <p-tabPanel header="{{'TASK_LOCATION' | translate }}">
-        <ng-template pTemplate="content">
-        </ng-template>
-      </p-tabPanel>
-      <p-tabPanel header="{{'TASK_ATTACHMENTS' | translate }}">
-        <!-- <ng-template pTemplate="content"> -->
-        <div class="row">
+        <div class="row h-100">
           <div class="col-12">
-            <!-- <app-files-list style="text-align: -webkit-center" #filesList [files]="(task$ | async)?.attachments"
-                [recordId]="_taskId" [tagId]="UploadTagIdConst.TASKS" [inline]="true">
-              </app-files-list> -->
-
-            <ng-container #attachContainer></ng-container>
-
+            <ng-container #mapContainer></ng-container>
           </div>
         </div>
-        <!-- </ng-template> -->
       </p-tabPanel>
+      <p-tabPanel header="{{'TASK_ATTACHMENTS' | translate }}">
+        <div class="row">
+          <div class="col-12">
+            <ng-container #attachContainer></ng-container>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <p-tabPanel *ngIf="editMode" header="{{'TASK_WORKLOG' | translate }}">
+        <div class="row h-100">
+          <div class="col-12 h-100">
+            <ng-container #workLogContainer></ng-container>
+          </div>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel *ngIf="editMode" header="{{'TASK_NOTIFICATIONS' | translate }}">
+        <div class="row h-100">
+          <div class="col-12 h-100">
+            <ng-container #notificationsContainer></ng-container>
+          </div>
+        </div>
+      </p-tabPanel>
+
     </p-tabView>
 
   </div>
@@ -435,7 +447,7 @@
     <div class="p-col p-d-flex">
       <button pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
       <div class="ml-dir-auto"></div>
-      <ng-container *ngIf="!(viewOnly$ | async)">
+      <ng-container *ngIf="!(viewOnly$ | async) && ![3,4].includes(tabv.activeIndex)">
         <div class="mx-1">
           <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
             class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>

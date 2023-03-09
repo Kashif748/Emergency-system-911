@@ -1644,6 +1644,7 @@
       "NAME_AR": "الاسم(عربي)",
       "NAME_EN": "الاسم(انكليزي)",
       "GROUP_NAME": "الاسم",
+      "SHIFT_SCHEDULE": "جدول المناوبة",
       "ORGANIZATION": "الجهة",
       "DESCRIPTION_AR": "الوصف(عربي)",
       "DESCRIPTION_EN": "الوصف (انكليزي)",
@@ -1685,7 +1686,8 @@
       "WARNING_NOTE": "من فضلك اعلم ان احد الاختيارات سيتم حفظها  طبقا لما  هو نشط عند الحفظ",
       "CATEGORIES_LOCATIONS": "التصنيفات والنطاقات المسندة",
       "INCIDENT_CATEGORIES": "تصنيفات البلاغات المسندة",
-      "INCIDENT_LOCATION": "نطاقات البلاغت المسندة"
+      "INCIDENT_LOCATION": "نطاقات البلاغت المسندة",
+      "GROUP_BREAD": "فرق و مجموعات"
     },
     "Survey": {
       "Satisfaction": "ما  مدى  رضاكم  عن  خدمات  الطوارئ؟",

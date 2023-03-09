@@ -28,22 +28,22 @@ export class IncidentsWorkLogControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete1
+   * Path part for operation delete8
    */
-  static readonly Delete1Path = '/v1/incidents/{incidentId}/logs/inactive/{id}';
+  static readonly Delete8Path = '/v1/incidents/{incidentId}/logs/inactive/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete1()` instead.
+   * To access only the response body, use `delete8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete1$Response(params: {
+  delete8$Response(params: {
     incidentId: number;
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Delete1Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Delete8Path, 'put');
     if (params) {
       rb.path('incidentId', params.incidentId, {});
       rb.path('id', params.id, {});
@@ -62,16 +62,16 @@ export class IncidentsWorkLogControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete1$Response()` instead.
+   * To access the full response (for headers, for example), `delete8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete1(params: {
+  delete8(params: {
     incidentId: number;
     id: number;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete1$Response(params).pipe(
+    return this.delete8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

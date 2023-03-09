@@ -20,5 +20,7 @@
   "TASK_TYPE": "نوع المهمة",
   "TASK_INFO": "معلومات المهمة",
   "TASK_LOCATION": "موقع المهمة",
-  "TASK_ATTACHMENTS": "مرفقات المهمة"
+  "TASK_ATTACHMENTS": "مرفقات المهمة",
+  "TASK_WORKLOG": "سجل المهمة",
+  "TASK_NOTIFICATIONS": "تنبيهات المهمة"
 }

@@ -24,6 +24,52 @@ export class OrgQuickLinkControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete3
+   */
+  static readonly Delete3Path = '/v1/org-quick-link/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete3()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete3$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseOrgQuickLink>> {
+
+    const rb = new RequestBuilder(this.rootUrl, OrgQuickLinkControllerService.Delete3Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseOrgQuickLink>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete3$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete3(params: {
+    id: number;
+  }): Observable<RestApiResponseOrgQuickLink> {
+
+    return this.delete3$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseOrgQuickLink>) => r.body as RestApiResponseOrgQuickLink)
+    );
+  }
+
+  /**
    * Path part for operation findActivePage3
    */
   static readonly FindActivePage3Path = '/v1/org-quick-link';
@@ -203,52 +249,6 @@ export class OrgQuickLinkControllerService extends BaseService {
   }): Observable<RestApiResponseOrgQuickLink> {
 
     return this.getActiveOrgQuickLink$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseOrgQuickLink>) => r.body as RestApiResponseOrgQuickLink)
-    );
-  }
-
-  /**
-   * Path part for operation delete9
-   */
-  static readonly Delete9Path = '/v1/org-quick-link/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete9()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete9$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseOrgQuickLink>> {
-
-    const rb = new RequestBuilder(this.rootUrl, OrgQuickLinkControllerService.Delete9Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseOrgQuickLink>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete9$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete9(params: {
-    id: number;
-  }): Observable<RestApiResponseOrgQuickLink> {
-
-    return this.delete9$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgQuickLink>) => r.body as RestApiResponseOrgQuickLink)
     );
   }

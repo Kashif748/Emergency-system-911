@@ -37,6 +37,7 @@ export interface UserStateModel {
   page: PageUserAndRoleProjection;
   user: User & UserInappAuthentication & UserMiddlewareAuth;
   ranks: Ranks[];
+  groupMapUser: UserAndRoleProjection[];
   loading: boolean;
   blocking: boolean;
   users: UserAndRoleProjection[];
@@ -81,6 +82,12 @@ export class UserState {
   static user(state: UserStateModel) {
     return state?.user;
   }
+
+  @Selector([UserState])
+  static groupMapUsers(state: UserStateModel) {
+    return state?.groupMapUser;
+  }
+
 
   @Selector([UserState])
   static ranks(state: UserStateModel) {
@@ -153,7 +160,41 @@ export class UserState {
       );
   }
 
-  @Action(UserAction.LoadUsers, { cancelUncompleted: true })
+@Action(UserAction.LoadGroupMapUserPage, { cancelUncompleted: true })
+  LoadGroupMapUserPage(
+    { setState }: StateContext<UserStateModel>,
+    { payload }: UserAction.LoadGroupMapUserPage
+  ) {
+    setState(
+      patch<UserStateModel>({
+        loading: true,
+      })
+    );
+    return this.userService
+      .getAllForOrg({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload.name,
+
+      })
+      .pipe(
+        tap( ({result: {content: list}}) => {
+          setState(
+            patch<UserStateModel>({
+              groupMapUser: list.map((v) => {
+                return {...v , inactive: true};
+              }),
+            })
+          );
+
+        }),
+      );
+  }
+
+@Action(UserAction.LoadUsers, { cancelUncompleted: true })
   loadUsers(
     { setState }: StateContext<UserStateModel>,
     { payload }: UserAction.LoadUsers

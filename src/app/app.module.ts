@@ -53,6 +53,7 @@ import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import {
+  GroupState,
   AssetState,
   CommonDataState,
   OrgState,
@@ -64,6 +65,8 @@ import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
 import { IncidentState } from '@core/states/incident/incident.state';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
+import {CenterState} from "@core/states/service-center-area/centers/center.state";
+import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -121,6 +124,9 @@ export function getHighlightLanguages() {
         RoleState,
         OrgState,
         TaskState,
+        GroupState, 
+        CenterState, 
+        IncidentLocInfoState,
         IncidentState,
         CommonDataState,
         AssetState,

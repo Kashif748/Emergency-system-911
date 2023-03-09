@@ -178,6 +178,58 @@ export class TaskControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation changeIncident
+   */
+  static readonly ChangeIncidentPath = '/v1/tasks/changeTaskStatus/{taskId}/{statusId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeIncident()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeIncident$Response(params: {
+    taskId: number;
+    statusId: number;
+    language: boolean;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskControllerService.ChangeIncidentPath, 'put');
+    if (params) {
+      rb.path('taskId', params.taskId, {});
+      rb.path('statusId', params.statusId, {});
+      rb.query('language', params.language, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `changeIncident$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeIncident(params: {
+    taskId: number;
+    statusId: number;
+    language: boolean;
+  }): Observable<void> {
+
+    return this.changeIncident$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getAllForOrg1
    */
   static readonly GetAllForOrg1Path = '/v1/tasks';

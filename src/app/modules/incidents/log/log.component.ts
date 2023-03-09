@@ -63,6 +63,7 @@ export class LogComponent implements OnInit, OnDestroy {
   // UI
   @Input() type: 'task' | 'incident';
   @Input() id: number;
+  @Input() height = '450px';
   @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild('orgInput') orgInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;

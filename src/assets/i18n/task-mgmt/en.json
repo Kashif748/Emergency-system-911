@@ -20,5 +20,7 @@
   "TASK_TYPE": "Task Type",
   "TASK_INFO": "Task Info",
   "TASK_LOCATION": "Task Location",
-  "TASK_ATTACHMENTS": "Task Attachments"
+  "TASK_ATTACHMENTS": "Task Attachments",
+  "TASK_WORKLOG": "Task Log",
+  "TASK_NOTIFICATIONS": "Task Notifications"
 }

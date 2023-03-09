@@ -11,6 +11,7 @@ export interface Group {
   nameAr: string;
   nameEn: string;
   orgStructure: OrgStructure;
+  shiftSchedule?: string;
   users?: Array<GroupUser>;
 }
 

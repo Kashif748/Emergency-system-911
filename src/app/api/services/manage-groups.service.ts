@@ -32,6 +32,52 @@ export class ManageGroupsService extends BaseService {
   }
 
   /**
+   * Path part for operation delete17
+   */
+  static readonly Delete17Path = '/v1/groups/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete17()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete17$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Delete17Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseGroup>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete17$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete17(params: {
+    id: number;
+  }): Observable<RestApiResponseGroup> {
+
+    return this.delete17$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
+    );
+  }
+
+  /**
    * Path part for operation findByPage2
    */
   static readonly FindByPage2Path = '/v1/groups';
@@ -225,21 +271,21 @@ export class ManageGroupsService extends BaseService {
   }
 
   /**
-   * Path part for operation getActiveGroup
+   * Path part for operation get20
    */
-  static readonly GetActiveGroupPath = '/v1/groups/{id}';
+  static readonly Get20Path = '/v1/groups/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getActiveGroup()` instead.
+   * To access only the response body, use `get20()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getActiveGroup$Response(params: {
+  get20$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseGroupProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.GetActiveGroupPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Get20Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -257,66 +303,16 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getActiveGroup$Response()` instead.
+   * To access the full response (for headers, for example), `get20$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getActiveGroup(params: {
+  get20(params: {
     id: number;
   }): Observable<RestApiResponseGroupProjection> {
 
-    return this.getActiveGroup$Response(params).pipe(
+    return this.get20$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroupProjection>) => r.body as RestApiResponseGroupProjection)
-    );
-  }
-
-  /**
-   * Path part for operation delete24
-   */
-  static readonly Delete24Path = '/v1/groups/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete24()` instead.
-   *
-   * This method doesn't expect any request body.
-   *
-   * @deprecated
-   */
-  delete24$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Delete24Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseGroup>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete24$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   *
-   * @deprecated
-   */
-  delete24(params: {
-    id: number;
-  }): Observable<RestApiResponseGroup> {
-
-    return this.delete24$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }
 

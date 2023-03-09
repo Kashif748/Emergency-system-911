@@ -11,6 +11,7 @@ export interface GroupProjection {
   nameAr?: string;
   nameEn?: string;
   orgStructure?: GroupOrganizationProjection;
+  shiftSchedule?: string;
   users?: Array<GroupUserAndRolesProjection>;
 }
 

@@ -122,6 +122,52 @@ export class OrgStructureControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteOrgStructure
+   */
+  static readonly DeleteOrgStructurePath = '/v1/organizations/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteOrgStructure()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteOrgStructure$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseObject>> {
+
+    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.DeleteOrgStructurePath, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseObject>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteOrgStructure$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteOrgStructure(params: {
+    id: number;
+  }): Observable<RestApiResponseObject> {
+
+    return this.deleteOrgStructure$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseObject>) => r.body as RestApiResponseObject)
+    );
+  }
+
+  /**
    * Path part for operation active1
    */
   static readonly Active1Path = '/v1/organizations/active/{id}';
@@ -345,52 +391,6 @@ export class OrgStructureControllerService extends BaseService {
 
     return this.getById4$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
-    );
-  }
-
-  /**
-   * Path part for operation deleteOrgStructure
-   */
-  static readonly DeleteOrgStructurePath = '/v1/organizations/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteOrgStructure()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteOrgStructure$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.DeleteOrgStructurePath, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseObject>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteOrgStructure$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteOrgStructure(params: {
-    id: number;
-  }): Observable<RestApiResponseObject> {
-
-    return this.deleteOrgStructure$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseObject>) => r.body as RestApiResponseObject)
     );
   }
 

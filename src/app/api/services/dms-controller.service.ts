@@ -74,21 +74,21 @@ export class DmsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete3
+   * Path part for operation delete27
    */
-  static readonly Delete3Path = '/v1/dms';
+  static readonly Delete27Path = '/v1/dms';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete3()` instead.
+   * To access only the response body, use `delete27()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3$Response(params: {
+  delete27$Response(params: {
     id: string;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DmsControllerService.Delete3Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, DmsControllerService.Delete27Path, 'put');
     if (params) {
       rb.query('id', params.id, {});
     }
@@ -106,15 +106,15 @@ export class DmsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete3$Response()` instead.
+   * To access the full response (for headers, for example), `delete27$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3(params: {
+  delete27(params: {
     id: string;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete3$Response(params).pipe(
+    return this.delete27$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
