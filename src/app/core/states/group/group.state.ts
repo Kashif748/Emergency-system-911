@@ -211,7 +211,7 @@ export class GroupState {
           });
           this.urlHelper.downloadBlob(
             newBlob,
-            `TEAMS & GROUPS - ${new Date().toISOString().split('.')[0]}`
+            `TEAMS&GROUPS - ${new Date().toISOString().split('.')[0]}`
           );
         })
       );

@@ -19,7 +19,7 @@
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <p-tabView #tabv [(activeIndex)]="activeTab">
+    <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)">
 
       <p-tabPanel header="{{'GROUP.GROUP_INFO' | translate }}" *checkPrivileges="'PRIV_UP_GRP'">
         <ng-template pTemplate="content">
@@ -263,9 +263,9 @@
           </form>
         </ng-template>
       </p-tabPanel>
-      <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode" *checkPrivileges="'PRIV_ED_USR_GRP'">
+      <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="'PRIV_ED_USR_GRP'">
         <ng-template pTemplate="content">
-          <form [formGroup]="userGroupForm" class="p-fluid p-grid mt-4" autocomplete="off">
+          <form [formGroup]="userGroupForm" class="p-fluid mt-4" autocomplete="off">
             <div class="p-field p-col-12 p-md-9" *ngIf="!(viewOnly$ | async)">
               <span class="p-float-label">
                 <p-multiSelect [options]="users$ | async" [filter]="true" filterBy="name,roleName"
@@ -394,7 +394,7 @@
       </p-tabPanel>
 
 
-      <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode" *checkPrivileges="'PRIV_ED_LOC_INC_GRP'">
+      <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="'PRIV_ED_LOC_INC_GRP'">
         <ng-template pTemplate="content">
           <div class="d-flex flex-column flex-grow-1 my-1">
             <p class="text-warning  font-size-lg mb-1">
@@ -402,7 +402,7 @@
             </p>
           </div>
           <form [formGroup]="incidentCategory" class="p-fluid p-grid mt-4" autocomplete="off">
-            <div class="p-field p-col-12 p-md-12">
+            <div class="p-field p-col-12 p-md-12" *ngIf="!(viewOnly$ | async)">
               <span class="p-float-label">
                 <p-multiSelect [options]="incidentCategories$" [filter]="true" filterBy="name,roleName"
                                formControlName="incidentCategory" dataKey="id" display="chip" appendTo="body">
@@ -435,22 +435,97 @@
                   </ng-container>
               </span>
             </div>
+
+            <div class="p-field p-col-12 p-md-12" *ngIf="viewOnly$ | async">
+              <div class="col-md-12 col-sm-12 info-item p-3">
+                <!--begin::Item-->
+                <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                    <!--begin::Symbol-->
+                    <div class="symbol symbol-40 mx-5">
+                      <span class="">
+                        <span [inlineSVG]="'./assets/media/svg/icons/Layout/Layout-grid.svg'"
+                              class="svg-icon svg-icon-lg svg-icon-primary">
+                        </span>
+                      </span>
+                    </div>
+                    <!--end::Symbol-->
+
+                    <!--begin::Text-->
+                    <div class="d-flex flex-column font-weight-bold">
+                      <a class="text-dark mb-1 text-size-sm">
+                        {{ "GROUP.INCIDENT_CATEGORIES" | translate }}
+                      </a>
+                      <span *ngIf="selectedCat" class="text-muted">
+                        <div class="mr-4 alert alert-danger" style="display: inline-block"
+                             *ngFor="let categ of selectedCat">
+                          {{ categ | translateObj: "name"}}
+                        </div>
+                      </span>
+                      <span *ngIf="categories" class="text-muted">
+                        <div class="mr-4 alert alert-danger" style="display: inline-block"
+                             *ngFor="let categ of categories">
+                          {{ categ | translateObj: "name"}}
+                        </div>
+                      </span>
+                    </div>
+                    <!--end::Text-->
+                </div>
+              </div>
+            </div>
           </form>
           <form [formGroup]="groupZoneIncidentCategory" class="p-fluid p-grid mt-4" autocomplete="off">
-            <div class="p-field p-col-12 p-md-6">
-              <label class="mt-3" id="example-radio-group-label">{{'GROUP.CHOOSE_APPROACH' | translate }}</label>
-            </div>
-            <div class="p-field p-col-12 p-md-3">
-              <p-toggleButton formControlName="mapAndList" onLabel="{{ 'GROUP.MAP' | translate }}"
-                              offLabel="{{ 'GROUP.SELECT' | translate }}" [onIcon]="'pi pi-map-marker'"
-                              offIcon="pi pi-list"
-                              (onChange)="clearCenterDistrict()"
-                              iconPos="right"></p-toggleButton>
+            <div *ngIf="!(viewOnly$ | async)" class="p-md-8 p-fluid p-grid row">
+              <div class="p-col-12 p-md-7">
+                <label class="p-inputlabel mt-3">{{'GROUP.CHOOSE_APPROACH' | translate }}</label>
+              </div>
+              <div class="p-col-12 p-md-5">
+                <p-toggleButton formControlName="mapAndList" onLabel="{{ 'GROUP.MAP' | translate }}" offLabel="{{ 'GROUP.SELECT' | translate }}" [onIcon]="'pi pi-map-marker'"
+                                offIcon="pi pi-list"
+                                (onChange)="clearCenterDistrict()"
+                                iconPos="right"></p-toggleButton>
+              </div>
             </div>
 
             <p-divider align="center" class="p-md-12 p-col-12"></p-divider>
 
-            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap">
+            <div class="p-field p-col-12 p-md-12" *ngIf="!checkMap && viewOnly$ | async">
+              <div class="col-md-12 col-sm-12 info-item p-3">
+                <!--begin::Item-->
+                <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                  <!--begin::Symbol-->
+                  <div class="symbol symbol-40 mx-5">
+                      <span class="">
+                        <span [inlineSVG]="'./assets/media/svg/icons/Map/Marker1.svg'"
+                              class="svg-icon svg-icon-lg svg-icon-primary">
+                        </span>
+                      </span>
+                  </div>
+                  <!--end::Symbol-->
+
+                  <!--begin::Text-->
+                  <div class="d-flex flex-column font-weight-bold">
+                    <a class="text-dark mb-1 text-size-sm">
+                      {{ "GROUP.INCIDENT_LOCATION" | translate }}
+                    </a>
+                    <span *ngIf="selectedCenter" class="text-muted">
+                          <span *ngFor="let center of selectedCenter">
+                            <div class="mr-4 alert alert-primary" style="display: inline-block">
+                                {{ center.center | translateObj: "name" }}
+                            </div>
+                            <div *ngFor="let zone of selectedZonesEdit" [ngClass]="zone.center === center.center.id ? 'mr-4 alert alert-primary': ''" style="display: inline-block; color: #3699ff !important; background-color: #d7ebff !important; border: none">
+                              <div *ngIf= "zone.center === center.center.id" >
+                                {{ zone | translateObj: "name" }}
+                              </div>
+                            </div><br/>
+                          </span>
+                        </span>
+                  </div>
+                  <!--end::Text-->
+                </div>
+              </div>
+            </div>
+
+            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap && !(viewOnly$ | async)">
               <span class="p-float-label">
                 <p-multiSelect [options]="areaItems" [filter]="true" filterBy="nameEn,nameAr"
                                formControlName="centerList" dataKey="center.id" display="chip" tabindex="0" appendTo="body"
@@ -485,7 +560,7 @@
               </span>
             </div>
 
-            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap">
+            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap && !(viewOnly$ | async)">
               <span class="p-float-label">
                 <p-multiSelect [options]="district" [filter]="true" filterBy="nameEn,nameAr"
                                formControlName="zoneId"  display="chip" appendTo="body"
@@ -531,7 +606,7 @@
               </span>
             </div>
 
-            <div class="p-field p-col-12 p-md-12"  *ngIf="checkMap">
+            <div class="p-field p-col-12 p-md-12"  *ngIf="checkMap && !(viewOnly$ | async)">
               <form #locationForm="ngForm" class="form-group">
                 <div class="m-4 d-flex  align-items-center justify-content-between" *ngFor="let location of namedLocations; let i = index">
                   <input *ngIf="location.isEditing" ngModel type="text" #name="ngModel" name="name" class="form-control" [(ngModel)]="location.name" />
@@ -552,6 +627,19 @@
               </div>
             </div>
           </form>
+
+          <!-- map-->
+          <div *ngIf="checkMap && (viewOnly$ | async)">
+            <a class="text-dark mb-1 text-size-sm">
+              {{ "GROUP.INCIDENT_LOCATION" | translate }}
+            </a>
+          </div>
+          <div class="row" style="height: 40rem" *ngIf="checkMap && (viewOnly$ | async)">
+            <div class="col-12">
+              <ng-container #mapContainer></ng-container>
+            </div>
+          </div>
+
         </ng-template>
       </p-tabPanel>
     </p-tabView>

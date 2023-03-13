@@ -1,8 +1,18 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {TreeNode} from "primeng/api";
 import {DistrictNameProjection, IdNameProjection, OrgStructure, UserAndRoleProjection} from "../../../../api/models";
-import {auditTime, catchError, distinctUntilChanged, filter, finalize, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {GroupAction, OrgAction, OrgState, RoleAction, RoleState, UserAction, UserState} from "@core/states";
+import {auditTime, catchError, distinctUntilChanged, filter, finalize, map, pluck, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {GroupAction, OrgAction, OrgState, RoleAction, RoleState, TaskState, UserAction, UserState} from "@core/states";
 import {EMPTY, Observable, Subject} from "rxjs";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {RegxConst} from "@core/constant/RegxConst";
@@ -21,10 +31,18 @@ import {CenterState} from "@core/states/service-center-area/centers/center.state
 import {CenterAction} from "@core/states/service-center-area/centers/center.action";
 import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
 import {IncicentLocationInfoAction} from "@core/states/incident-location-info/incidentLocInfo.action";
-import {AreaItem, GeometryType, GroupGeometryLocation} from "../../../groups-management/group-incidents-categroies/center.model";
+import {
+  AreaItem,
+  Center,
+  GeometryType,
+  GroupGeometryLocation,
+  Zone
+} from "../../../groups-management/group-incidents-categroies/center.model";
 import {MapViewType} from "@shared/components/map/utils/MapViewType";
-import {MapService} from "@shared/components/map/services/map.service";
+import {MapConfig, MapService} from "@shared/components/map/services/map.service";
 import {__await} from "tslib";
+import {AppCommonData, IncidentCategory2} from "@core/entities/AppCommonData";
+import {MapComponent} from "@shared/sh-components/map/map.component";
 
 @Component({
   selector: 'app-group-dialog',
@@ -32,7 +50,7 @@ import {__await} from "tslib";
   styleUrls: ['./group-dialog.component.scss']
 })
 export class GroupDialogComponent implements OnInit, OnDestroy {
-
+  commonData: AppCommonData;
   RegxConst = RegxConst;
 
   opened$: Observable<boolean>;
@@ -59,6 +77,10 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   @Input()
   orgsTree: TreeNode[];
 
+  @ViewChild('mapContainer', { read: ViewContainerRef })
+  mapContainer: ViewContainerRef;
+  mapComponent: MapComponent;
+
   public incidentCategories$: any[];
 
   public district: any[] = [];
@@ -68,6 +90,13 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   public previousDistrict = 0;
   public selectedCenterDistricsList: any[] = [];
   public selectedZonesEdit = [];
+  public selectedCenter = []
+  public categoryName: string[];
+  public displayCenters: Center[] = [];
+  public selectedCat = [];
+  public categories = [];
+  public groupConfig: MapConfig[];
+  public isUserActive;
 
   form: FormGroup;
   private defaultFormValue: { [key: string]: any } = {};
@@ -88,6 +117,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   responseFromIncidentLoc: any = [];
 
   _userId: number;
+  _mode: string;
   get loggedinUserId() {
     return this.auth.getClaim('sub');
   }
@@ -111,6 +141,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   set userId(v: number) {
     this._userId = v;
     this.buildForm();
+    this.mapContainer?.clear();
+    this.mapComponent = undefined;
     if (v === undefined || v === null) {
       return;
     }
@@ -131,43 +163,15 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
               data: user.orgStructure,
             },
           });
+          this.isUserActive = user.isActive;
           this.users = user.users;
           this.disabledUsers = user.users;
           this.patchSelectedOrg(user.users);
         }),
       )
       .subscribe();
-    this.store.dispatch(new GroupAction.GetGeometryLocation({id: v}))
-      .pipe(
-        switchMap(() => this.store.select(GroupState.geometryResponse)),
-        takeUntil(this.destroy$),
-        take(1),
-        tap((geometryLocation) => {
-          this.patchGeometryLocation(geometryLocation);
-        }),
-      ).subscribe();
-    this.store.dispatch(new IncicentLocationInfoAction.GetIncidentLocationInfo({id: v}))
-      .pipe(
-        switchMap(() => this.store.select(IncidentLocInfoState.getIncidentLocInfo)),
-        takeUntil(this.destroy$),
-        take(1),
-        switchMap((incidentLocInfo) => {
-          return  this.centerList$.pipe(filter((value) => !!value),
-          tap((data) => {
-            if (data) {
-              data.forEach((element) => {
-                this.areaItems.push(new AreaItem(element));
-              });
-            }
-          }),
-          map(() => incidentLocInfo));
-        }),
-        takeUntil(this.destroy$),
-        take(1),
-        tap((incidentLocInfo) => {
-          this.patchIndentLocInfo(incidentLocInfo);
-        }),
-      ).subscribe();
+
+
   }
   constructor(
     private cdr: ChangeDetectorRef,
@@ -178,6 +182,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     private translationService: TranslationService,
     private readonly commonService: CommonService,
     protected mapService: MapService,
+    private cfr: ComponentFactoryResolver,
+    private injector: Injector,
   ) {
     this.route.queryParams
       .pipe(
@@ -186,6 +192,13 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       )
       .subscribe((id) => {
         this.userId = id;
+      });
+    this.route.queryParams.pipe(
+      map((params) => params['_mode']),
+      takeUntil(this.destroy$)
+    )
+      .subscribe((mode) => {
+        this._mode = mode;
       });
 
     this.viewOnly$ = this.route.queryParams.pipe(
@@ -226,10 +239,9 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     this.buildIncidentCategoryForm();
     this.buildGroupZoneIncidentCategoryForm();
     this.incidentCategories$ = this.getChildrenCategories();
-    this.store.dispatch([
+    this.store.dispatch(
       new OrgAction.LoadOrgs({ orgId: this.auth.getClaim('orgId') }),
-      new CenterAction.LoadServiceCenterList()
-    ]);
+    );
     this.LoadUsers$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
       .subscribe((name) => {
@@ -577,20 +589,20 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   patchGeometryLocation(locations) {
     if (locations) {
       if (locations.length > 0) {
-        const categories = [];
+        this.categories = [];
         this.namedLocations = [];
         this.groupZoneIncidentCategory.get('mapAndList').setValue('true');
-        this.checkMap = true;
         this.incidentCategories$.map((v) => {
           locations[0].categoryIds.forEach((item) => {
             if (item === v.id) {
-              categories.push(v);
+              this.categories.push(v);
             }
           });
         });
-        this.incidentCategory.get('incidentCategory').setValue(categories);
+        this.incidentCategory.get('incidentCategory').setValue(this.categories);
         if (locations[0].location.length) {
           this.loadGroupGeometryInfo(locations);
+          // this.viewLocationOnly();
         }
         this.cdr.detectChanges();
       }
@@ -604,6 +616,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       let zones = [];
       if (incidentLoc?.centers?.length > 0) {
         this.checkMap = false;
+        this.groupZoneIncidentCategory.get('mapAndList').setValue(false);
         incidentLoc.centers.forEach((element) => {
           centers.push(element.centerId);
           incidentsCat.push(element.category.flatMap((v) => v.categoryId));
@@ -618,33 +631,33 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       }
       let categories = [];
       categories = this.getChildrenCategories();
-      let selectedCat = [];
+      this.selectedCat = [];
       incidentsCat = [...new Set(...incidentsCat)];
-      selectedCat = categories.filter((item) =>
+      this.selectedCat = categories.filter((item) =>
         incidentsCat.includes(item.id)
       );
-      console.log(selectedCat);
-      this.incidentCategory.get('incidentCategory').setValue(selectedCat);
+      console.log(this.selectedCat);
+      this.incidentCategory.get('incidentCategory').setValue(this.selectedCat);
 
 
-      const selectedCenter = [];
+      this.selectedCenter = [];
       let selectedZones = [];
       centers = [...new Set(centers)];
       console.log(centers);
       console.log(this.areaItems);
       centers.filter((item) => this.areaItems.forEach((itemArea) => {
         if (itemArea.center.id === item) {
-          selectedCenter.push(itemArea);
+          this.selectedCenter.push(itemArea);
         }
       }));
-      console.log(selectedCenter);
+      console.log(this.selectedCenter);
       zones = [...new Set(zones)];
       console.log(zones);
       this.selectedZonesEdit = [];
-      selectedCenter.forEach((item) => {
+      this.selectedCenter.forEach((item) => {
         this.loadDistrictList('', item.center, zones);
       });
-      this.groupZoneIncidentCategory.get('centerList').setValue(selectedCenter);
+      this.groupZoneIncidentCategory.get('centerList').setValue(this.selectedCenter);
       // zones = zones?.filter((v) => v).map((item) => item?.toString());
       console.log(this.district);
     }}
@@ -1007,8 +1020,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       // this.profileImg = undefined;
       return;
     }
-    // this.store.dispatch(new UserAction.GetUser({}));
-    // this.patchMobile([]);
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();
@@ -1018,4 +1029,128 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseGroupsAction.ToggleDialog({}));
   }
 
+  loadCenterListCall() {
+    this.store.dispatch(
+      new CenterAction.LoadServiceCenterList());
+  }
+
+  async tab(index: number) {
+    const mode = '' //this.route.queryParams._value._mode
+    switch (index) {
+      case 2:
+         this.loadCenterListCall();
+         this.loadGeometry();
+         this.loadIncidentLocation();
+         setTimeout(() => {
+          if (this._mode && this.checkMap) {
+            this.loadMapComponent();
+          }
+        }, 1200);
+         break;
+      default:
+        break;
+    }
+  }
+
+  getCategoryName(id: number[]) {
+    this.categoryName = [];
+    let categories: any[] = this.commonData['incidentCategories'];
+    for (let i = 0 ; i < id.length; i++) {
+      for (let j = 0; j < categories.length; j++){
+        if (categories[j].id === id[i]) {
+          this.categoryName.push(this.lang == 'en' ? categories[j].nameEn : categories[j].nameAr);
+          break;
+        }
+      }
+    }
+  }
+  async loadGeometry() {
+    this.store.dispatch(new GroupAction.GetGeometryLocation({id: this._userId}))
+      .pipe(
+        switchMap(() => this.store.select(GroupState.geometryResponse)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((geometryLocation) => {
+          // console.log('geo good ', geometryLocation);
+          if (geometryLocation) {
+            this.checkMap = true;
+            this.patchGeometryLocation(geometryLocation);
+          }
+        }),
+      ).subscribe();
+  }
+
+  async loadIncidentLocation() {
+    this.store.dispatch(new IncicentLocationInfoAction.GetIncidentLocationInfo({id: this._userId}))
+      .pipe(
+        switchMap(() => this.store.select(IncidentLocInfoState.getIncidentLocInfo)),
+        takeUntil(this.destroy$),
+        take(1),
+        switchMap((incidentLocInfo) => {
+          return  this.centerList$.pipe(filter((value) => !!value),
+            tap((data) => {
+              this.areaItems = [];
+              this.district = [];
+              if (data) {
+                data.forEach((element) => {
+                  this.areaItems.push(new AreaItem(element));
+                });
+              }
+            }),
+            map(() => incidentLocInfo));
+        }),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((incidentLocInfo) => {
+          // console.log('inci location good ', incidentLocInfo);
+          if (incidentLocInfo) {
+            this.patchIndentLocInfo(incidentLocInfo);
+          }
+        }),
+      ).subscribe();
+  }
+  async loadMapComponent() {
+    if (this.mapComponent) return;
+
+    this.mapContainer?.clear();
+    const { MapComponent } = await import(
+      '@shared/sh-components/map/map.component'
+      );
+    const factory = this.cfr.resolveComponentFactory(MapComponent);
+
+    const { instance, changeDetectorRef: cdr } =
+      this.mapContainer.createComponent(factory, null, this.injector);
+
+    const task = this.store.selectSnapshot(TaskState.task);
+
+    for (let i = 0; i < this.namedLocations.length; i++) {
+      const loc = this.namedLocations[i];
+      const geometry = this.mapStringToCoordinates(loc.geometry);
+      instance.config = {
+        mapType: MapViewType.TEAM,
+        showLayers: false,
+        showSaveButton: false,
+        viewOnly: true,
+        polygonLocation:
+          geometry?.type == 'polygon'
+            ? {
+              type: geometry.type,
+              polygonRings: geometry.points,
+              Address: this.namedLocations[i].name,
+            }
+            : null,
+        polylineLocation:
+          geometry?.type == 'polyline'
+            ? {
+              type: geometry.type,
+              polylinePaths: geometry.points,
+              Address: this.namedLocations[i].name,
+            }
+            : null,
+      };
+      // instance.push(config);
+      this.mapComponent = instance;
+    }
+    cdr.detectChanges();
+  }
 }
