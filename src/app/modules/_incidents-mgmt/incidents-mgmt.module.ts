@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowseIncidentsComponent } from './browse-incidents/browse-incidents.component';
 import { BrowseIncidentsState } from './states/browse-incidents.state';
@@ -35,6 +35,9 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ContentIncidentsComponent } from './browse-incidents/content-incidents/content-incidents.component';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
+import { TabViewModule } from 'primeng/tabview';
+import { CustomDatePipe } from '@shared/pipes/custom-date.pipe';
+import { SharedModule } from '@shared/shared.module';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/incident-mgmt/', '.json');
@@ -87,8 +90,12 @@ const routes: Routes = [
     InputTextareaModule,
     TagModule,
     CalendarModule,
+    TabViewModule,
     InputNumberModule,
+    SharedModule,
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  providers: [{ provide: ILangFacade, useClass: LangFacade },
+    DatePipe,
+    CustomDatePipe],
 })
 export class IncidentsMgmtModule {}

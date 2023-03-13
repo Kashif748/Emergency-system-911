@@ -231,9 +231,10 @@
                 *ngIf="columns?.includes('incidentDate')"
                 (click)="item.isActive && openView(item.id)"
               >
-                <p-tag styleClass="m-1 bg-{{ item?.incidentDate?.color }}">
-                  {{ item.incidentDate | translateObj }}
-                </p-tag>
+
+
+              {{ item.incidentDate   | customDate
+                    | date: "yyyy-MM-dd h:mm:ss" }}
               </td>
               <!-- status -->
               <td
