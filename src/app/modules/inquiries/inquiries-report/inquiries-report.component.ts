@@ -62,7 +62,7 @@ export class InquiriesReportComponent implements OnInit {
     this.inquiryServices
       .getInquiries(
         this.form.value,
-        this.paginationConfig.currentPage,
+        page,
         this.paginationConfig.itemsPerPage
       )
       .subscribe((data) => {

@@ -1,4 +1,8 @@
 :host ::ng-deep {
+  .attach-uppload-header,
+  .attach-header {
+    display: none !important;
+  }
   #logs {
     height: 100%;
   }

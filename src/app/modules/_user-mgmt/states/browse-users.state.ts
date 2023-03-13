@@ -91,11 +91,7 @@ export class BrowseUsersState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        filters: {
-          ...pageRequest.filters,
-          orgIds: pageRequest.filters.orgIds?.map((o) => o.key),
-          roleIds: pageRequest.filters.roleIds?.map((r) => r.id),
-        },
+        filters: this.filters(pageRequest),
       })
     );
   }
@@ -120,11 +116,7 @@ export class BrowseUsersState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        filters: {
-          ...pageRequest.filters,
-          orgIds: pageRequest.filters.orgIds?.map((o) => o.key),
-          roleIds: pageRequest.filters.roleIds?.map((r) => r.id),
-        },
+        filters: this.filters(pageRequest),
       })
     );
   }
@@ -183,7 +175,7 @@ export class BrowseUsersState {
     return dispatch(
       new UserAction.Export({
         type: payload.type,
-        filters: pageRequest.filters,
+        filters: this.filters(pageRequest),
       })
     );
   }
@@ -302,5 +294,16 @@ export class BrowseUsersState {
         dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
+  }
+
+  /* ********************** UTILS ************************* */
+  private filters(pageRequest: PageRequestModel) {
+    const orgIds = pageRequest.filters.orgIds?.map((o) => o.key);
+    const roleIds = pageRequest.filters.roleIds?.map((r) => r.id);
+    return {
+      ...pageRequest.filters,
+      orgIds: orgIds?.length > 0 ? orgIds : undefined,
+      roleIds: roleIds?.length > 0 ? roleIds : undefined,
+    };
   }
 }
