@@ -874,58 +874,78 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     // For map
 
     if (this.groupZoneIncidentCategory.get('mapAndList').value) {
-      const geometryLocation = {
-        ...this.groupZoneIncidentCategory.getRawValue(),
-      };
-      if (this.groupGeometry.location) {
-        this.submitGeometryLocations(geometryLocation);
+      const incidentIds = this.incidentCategory.get('incidentCategory');
+
+      if (this.activeTab === 2) {
+        if (!incidentIds.valid) {
+          incidentIds.markAsTouched();
+          incidentIds.markAsDirty();
+          return;
+        }
+
+        const geometryLocation = {
+          ...this.groupZoneIncidentCategory.getRawValue(),
+        };
+
+        if (this.groupGeometry.location) {
+          this.submitGeometryLocations(geometryLocation);
+        }
       }
     } else {
       const centerList = this.groupZoneIncidentCategory.get('centerList');
       const zoneId = this.groupZoneIncidentCategory.get('zoneId');
       const incidentIds = this.incidentCategory.get('incidentCategory');
-      if (!centerList.valid) {
-        centerList.markAsTouched();
-        centerList.markAsDirty();
-        return;
-      }
-      if (!zoneId.valid) {
-        zoneId.markAsTouched();
-        zoneId.markAsDirty();
-        return;
-      }
-      if (!incidentIds.valid) {
-        incidentIds.markAsTouched();
-        incidentIds.markAsDirty();
-        return;
-      }
-      const selectedIncidentCategories = this.incidentCategory.get('incidentCategory').value;
-      const center = []
-      selectedIncidentCategories.forEach((element) => {
-        this.selectedCenterDistricsList.forEach((v, index) => {
-          const item = {
-            incidentCategoryId: element.id,
-            centerId: v.centerId,
-            zones: v.zones,
-            allZones: false,
-          };
-          center.push(item);
+      let center;
+      if (this.activeTab === 2) {
+        if (!centerList.valid) {
+          centerList.markAsTouched();
+          centerList.markAsDirty();
+          return;
+        }
+
+        if (!zoneId.valid) {
+          zoneId.markAsTouched();
+          zoneId.markAsDirty();
+          return;
+        }
+
+        if (!incidentIds.valid) {
+          incidentIds.markAsTouched();
+          incidentIds.markAsDirty();
+          return;
+        }
+
+        const selectedIncidentCategories = this.incidentCategory.get('incidentCategory').value;
+        center = [];
+        selectedIncidentCategories.forEach((element) => {
+          this.selectedCenterDistricsList.forEach((v, index) => {
+            const item = {
+              incidentCategoryId: element.id,
+              centerId: v.centerId,
+              zones: v.zones,
+              allZones: false,
+            };
+            center.push(item);
+          });
         });
-      });
-      console.log('centers', center);
-      if (this._userId) {
+      }
+
+
+      // console.log('centers', center);
+      if (this._userId && this.activeTab === 2) {
         if (this.editMode) {
-          this.store.dispatch(new IncicentLocationInfoAction.UpdateIncidentLocationInfo({
+          this.store.dispatch(new BrowseGroupsAction.UpdateIncidentLocInfo({
             groupId: this._userId, centers: center
           }));
         } else {
-          this.store.dispatch(new IncicentLocationInfoAction.IncidentLocationInfo({
+          this.store.dispatch(new BrowseGroupsAction.AddIncidentLocInfo({
             groupId: this._userId, centers: center
           }));
         }
       }
     }
-    if (this.groupZoneIncidentCategory.dirty) {
+
+    if (this.groupZoneIncidentCategory.dirty && this.activeTab === 2) {
       if (!this.incidentCategory.valid) {
         this.incidentCategory.markAllAsTouched();
         FormUtils.ForEach(this.incidentCategory, (fc) => {
@@ -1042,6 +1062,9 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           if ((geometryLocation as any).length > 0) {
             this.checkMap = true;
             this.patchGeometryLocation(geometryLocation);
+          } else {
+            this.incidentCategory.get('incidentCategory').setValue('');
+            this.namedLocations = [];
           }
         }),
       ).subscribe();
@@ -1072,6 +1095,9 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           // console.log('inci location good ', incidentLocInfo);
           if (incidentLocInfo) {
             this.patchIndentLocInfo(incidentLocInfo);
+          } else {
+            this.incidentCategory.reset();
+            this.groupZoneIncidentCategory.reset();
           }
         }),
       ).subscribe();
