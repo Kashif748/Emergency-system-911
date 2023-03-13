@@ -116,7 +116,7 @@ export function getHighlightLanguages() {
     StoreModule.forRoot({ incidentDashboard: reducer }, {}),
     DropdownListModule,
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
-    //------------------
+     // ------------------
     NgxsModule.forRoot(
       [
         RootState,

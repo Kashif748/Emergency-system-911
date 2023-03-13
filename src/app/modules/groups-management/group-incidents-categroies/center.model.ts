@@ -2,7 +2,8 @@ export class Center {
   id: number;
   nameAr: string;
   nameEn: string;
-  selected: boolean;
+  index: number;
+  selected?: boolean;
 
   constructor(center) {
     this.id = center.id;

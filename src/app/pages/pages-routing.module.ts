@@ -155,11 +155,20 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'groups-management',
+        path: 'groups-managements',
         canLoad: [PrivilegeGuard],
         data: { permission: ['PRIV_VW_GRP', 'PRIV_VW_MNG_GRP'], type: 'or' },
         loadChildren: () =>
           import('../modules/_team-mgmt/team-mgmt.module').then(
+            (m) => m.GroupsManagementModule
+          ),
+      },
+      {
+        path: 'groups-management',
+        canLoad: [PrivilegeGuard],
+        data: { permission: ['PRIV_VW_GRP', 'PRIV_VW_MNG_GRP'], type: 'or' },
+        loadChildren: () =>
+          import('../modules/groups-management/groups-management.module').then(
             (m) => m.GroupsManagementModule
           ),
       },
