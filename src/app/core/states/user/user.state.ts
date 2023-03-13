@@ -121,17 +121,7 @@ export class UserState {
           size: payload.size,
           sort: payload.sort,
         },
-        request: {
-          ...payload.filters,
-          roleIds:
-            payload.filters?.roleIds?.length > 0
-              ? payload.filters?.roleIds
-              : undefined,
-          orgIds:
-            payload.filters?.orgIds?.length > 0
-              ? payload.filters?.orgIds
-              : undefined,
-        },
+        request: payload.filters,
       })
       .pipe(
         tap((res) => {
