@@ -122,8 +122,9 @@ export class BrowseGroupsState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgId: pageRequest.filters.orgIds?.map((o) => o.key),
-          // roleIds: pageRequest.filters.roleIds?.map((r) => r.id),
+          orgId: pageRequest.filters.orgId?.map((o) => o.key),
+          incidentLocation: pageRequest.filters.incidentLocation?.id,
+          incidentCategoryId: pageRequest.filters.incidentCategoryId?.id,
         },
       })
     );
@@ -183,7 +184,12 @@ export class BrowseGroupsState {
     return dispatch(
       new GroupAction.Export({
         type: payload.type,
-        filters: pageRequest.filters,
+        filters: {
+          ...pageRequest.filters,
+          orgId: pageRequest.filters.orgId?.map((o) => o.key),
+          incidentLocation: pageRequest.filters.incidentLocation?.id,
+          incidentCategoryId: pageRequest.filters.incidentCategoryId?.id,
+        },
       })
     );
   }

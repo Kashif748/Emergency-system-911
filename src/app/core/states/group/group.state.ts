@@ -198,7 +198,8 @@ export class GroupState {
       .export6({
         as: payload.type,
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
-        filter: payload.filters,
+        filter: {...payload.filters},
+
       })
       .pipe(
         tap((res: any) => {

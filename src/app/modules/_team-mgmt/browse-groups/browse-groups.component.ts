@@ -72,8 +72,7 @@ export class BrowseGroupsComponent implements OnInit, OnDestroy {
       name: 'USER_MANAGEMENT.USERS.NAME_EN',
       code: 'nameEn',
     },
-    { name: 'SHARED.ORG', code: 'orgStructure.nameEn,orgStructure.nameAr' },
-    { name: 'GROUP.LEADER', code: 'manager' },
+    { name: 'SHARED.ORG', code: 'orgStructure.nameEn,orgStructure.nameAr' }
   ];
 
   public columns = [
