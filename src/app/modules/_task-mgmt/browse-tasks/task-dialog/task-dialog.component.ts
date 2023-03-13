@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   Injector,
@@ -60,7 +61,7 @@ import { BrowseTasksAction } from '../../states/browse-tasks.action';
   templateUrl: './task-dialog.component.html',
   styleUrls: ['./task-dialog.component.scss'],
 })
-export class TaskDialogComponent implements OnInit {
+export class TaskDialogComponent implements OnInit, AfterViewInit {
   UploadTagIdConst = UploadTagIdConst;
   opened$: Observable<boolean>;
   @Input()
@@ -151,6 +152,9 @@ export class TaskDialogComponent implements OnInit {
     return this._taskId !== undefined && this._taskId !== null;
   }
 
+  get viewOnly() {
+    return this.route.snapshot.queryParams['_mode'] === 'viewonly';
+  }
   @Input()
   set taskId(v: number) {
     this._taskId = v;
@@ -161,15 +165,13 @@ export class TaskDialogComponent implements OnInit {
     this.attachComponent = undefined;
     this.notificationsContainer?.clear();
 
-    if (v === undefined || v === null) {
-      return;
-    }
     this.store
       .dispatch(new TaskAction.GetTask({ id: v }))
       .pipe(
         switchMap(() => this.store.select(TaskState.task)),
         takeUntil(this.destroy$),
         take(1),
+        filter((t) => !!t),
         tap((task: TaskDetails) => {
           this.defaultFormValue = {
             ...this.defaultFormValue,
@@ -275,6 +277,14 @@ export class TaskDialogComponent implements OnInit {
         }
       })
     );
+  }
+  ngAfterViewInit(): void {
+    if (this.editMode) {
+      this.form.get('incidentId').disable();
+      this.form.get('assigneeType').disable();
+      this.form.get('assignTo').disable();
+      this.form.get('taskType').disable();
+    }
   }
 
   ngOnInit() {
@@ -571,7 +581,7 @@ export class TaskDialogComponent implements OnInit {
           take(1)
         )
         .subscribe(async (t) => {
-          await this.attachComponent?.upload(t.id, false);
+          await this.attachComponent?.upload(t.id, true);
           task.id = t.id;
           this.saveMap(task);
           setTimeout(() => {
@@ -627,10 +637,11 @@ export class TaskDialogComponent implements OnInit {
 
     const { instance, changeDetectorRef: cdr } =
       this.attachContainer.createComponent(factory, null, this.injector);
+    const task = this.store.selectSnapshot(TaskState.task);
 
     instance.recordId = this._taskId;
     instance.tagId = UploadTagIdConst.TASKS;
-    instance.inline = true;
+    instance.inline = !this.viewOnly;
     this.attachComponent = instance;
     cdr.detectChanges();
   }
