@@ -16,7 +16,7 @@ export class CommonInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     return next.handle(
-      request.body instanceof FormData
+      request.body instanceof FormData || request.headers.get('Content-Type') === 'application/pdf'
         ? request
         : request.clone({
             headers: request.headers.set('Content-type', 'application/json'),
