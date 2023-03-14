@@ -1,4 +1,5 @@
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   ComponentFactoryResolver,
@@ -37,6 +38,7 @@ import { Observable, Subject } from 'rxjs';
 import {
   auditTime,
   distinctUntilChanged,
+  distinctUntilKeyChanged,
   filter,
   map,
   switchMap,
@@ -61,7 +63,7 @@ import { BrowseTasksAction } from '../../states/browse-tasks.action';
   templateUrl: './task-dialog.component.html',
   styleUrls: ['./task-dialog.component.scss'],
 })
-export class TaskDialogComponent implements OnInit, AfterViewInit {
+export class TaskDialogComponent implements OnInit, AfterViewChecked {
   UploadTagIdConst = UploadTagIdConst;
   opened$: Observable<boolean>;
   @Input()
@@ -278,7 +280,7 @@ export class TaskDialogComponent implements OnInit, AfterViewInit {
       })
     );
   }
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     if (this.editMode) {
       this.form.get('incidentId').disable();
       this.form.get('assigneeType').disable();
@@ -668,6 +670,7 @@ export class TaskDialogComponent implements OnInit, AfterViewInit {
         featureName: task?.featureName as any,
       },
       showLayers: false,
+      viewOnly: this.viewOnly,
     };
 
     instance.OnSaveMap.subscribe((response) => {
