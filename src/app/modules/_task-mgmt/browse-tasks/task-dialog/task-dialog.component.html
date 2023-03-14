@@ -424,14 +424,14 @@
         </div>
       </p-tabPanel>
 
-      <p-tabPanel *ngIf="editMode" header="{{'TASK_WORKLOG' | translate }}">
+      <p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_WORKLOG' | translate }}">
         <div class="row h-100">
           <div class="col-12 h-100">
             <ng-container #workLogContainer></ng-container>
           </div>
         </div>
       </p-tabPanel>
-      <p-tabPanel *ngIf="editMode" header="{{'TASK_NOTIFICATIONS' | translate }}">
+      <p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_NOTIFICATIONS' | translate }}">
         <div class="row h-100">
           <div class="col-12 h-100">
             <ng-container #notificationsContainer></ng-container>
