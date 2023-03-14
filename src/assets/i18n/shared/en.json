@@ -991,14 +991,14 @@
     },
     "CIRCULARS": {
       "HEADER": "Create Circular",
-      "CONFIDENTIALITY": "The degree of confidentiality",
-      "PRIORITY": "The degree of priority",
+      "CONFIDENTIALITY": "Confidentiality Degree",
+      "PRIORITY": "Priority Level",
       "Date": "Date",
       "SUBJECT": "Subject",
       "NUMBER": "Number",
       "ORG": "Organization",
       "ORG_TO": "Organization To",
-      "CC": "Copied To",
+      "CC": "Copy To (CC) Sent to Users",
       "MEASURES": "Procedures",
       "POSISSION": "The Position",
       "COORDINATE": "Coordinate",
@@ -1016,7 +1016,13 @@
       "REJECT": "Reject Circular",
       "SEND": "Send for approval",
       "MANAGER": "Approval By",
-      "PUBLISH": "Publish Circular"
+      "PUBLISH": "Publish Circular",
+      "SENT_TO": "Send To",
+      "TEXT": "Circular Text",
+      "COORDINATE_DATA": "Coordination Details",
+      "FOR_APPROVAL": "Approvals",
+      "TO_EXTERNAL_ORGANIZATION":"To External Organization",
+      "TO_INTERNAL_ORGANIZATION":"To Internal Organization"
     },
     "DAILY_BREVITY": {
       "HEADER": "Daily brevity",
