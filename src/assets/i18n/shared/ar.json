@@ -1037,8 +1037,8 @@
       "POSISSION": "الموقف",
       "COORDINATE": "التنسيق",
       "EMAIL": "البريد الالكتروني",
-      "Phone": "الرقم المتحرك",
-      "MOBILE": "الهاتف",
+      "Phone": "الهاتف",
+      "MOBILE": "الرقم المتحرك",
       "NO_VALUE": "غير محدد",
       "STATUS": "الحالة",
       "RECEIVERS": "المستلمين",
@@ -1056,8 +1056,8 @@
       "TEXT":"نص التعميم",
       "COORDINATE_DATA": "بيانات التنسيق",
       "FOR_APPROVAL": "الاعتمادات",
-      "EXTERNAL_ORGANIZATION":"الجهات الخارجية المستقبلة",
-      "INTERNAL_ORGANIZATION":"الجهات الداخلية المستقبلة"
+      "TO_EXTERNAL_ORGANIZATION":"الجهات الخارجية المستقبلة",
+      "TO_INTERNAL_ORGANIZATION":"الجهات الداخلية المستقبلة"
     },
     "DAILY_BREVITY": {
       "HEADER": "الإيجاز اليومي",
