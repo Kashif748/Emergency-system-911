@@ -22,7 +22,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
-import { map, pluck, startWith, throttleTime } from 'rxjs/operators';
+import { filter, map, pluck, startWith, throttleTime } from 'rxjs/operators';
 
 import { TranslationService } from 'src/app/modules/i18n/translation.service';
 
@@ -98,6 +98,7 @@ export class ToUsersComponent
             element['user']['firstNameEn'] +
             ' ' +
             element['user']['lastNameEn'],
+            ...element['user']
         };
       });
       console.log('after : ', this.selectedUsers);
@@ -123,8 +124,8 @@ export class ToUsersComponent
       (!changes?.selectAll?.currentValue &&
         !changes?.selectAll?.isFirstChange())
     ) {
-      this.users$.subscribe((users) => {
-        this.selectedUsers = changes?.selectAll?.currentValue ? users : [];
+      this.users$.pipe(filter((l) => l?.length > 0)).subscribe((users) => {
+        this.selectedUsers = changes?.selectAll?.currentValue ? users : this.selectedUsers;
         this.onChange(this.selectedUsers);
       });
     }
