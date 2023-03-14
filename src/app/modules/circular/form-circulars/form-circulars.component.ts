@@ -83,7 +83,7 @@ export class FormCircularsComponent implements OnInit {
       this.storage = commonData['currentOrgDetails'];
     }
 
-    this.cirService.getNextNumber().subscribe((data) => {
+    this.cirService.getCircularNumber().subscribe((data) => {
       if (data && data['status']) {
         this.formId = data['result']['ar'];
         this.form.get('number').setValue(this.formId);

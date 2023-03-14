@@ -253,8 +253,8 @@ export class CircularsService implements Resolve<any> {
     );
   }
 
-  getNextNumber() {
-    return this.http.get<any>(environment.apiUrl + '/circulars/nextNumber', {
+  getCircularNumber() {
+    return this.http.get<any>(environment.apiUrl + '/circulars/number', {
       headers: this.result,
     });
   }
