@@ -128,7 +128,7 @@ export class CircularsService implements Resolve<any> {
 
   getManagers() {
     return this.http
-      .get<any>(environment.apiUrl + '/users/managers/15', {
+      .get<any>(environment.apiUrl + '/users/circular-managers', {
         headers: this.result,
       })
       .subscribe((res) => {

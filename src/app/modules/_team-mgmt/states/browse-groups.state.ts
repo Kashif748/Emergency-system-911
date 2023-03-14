@@ -16,6 +16,7 @@ import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import {GroupAction} from "@core/states";
 import {BrowseGroupsAction} from "./browse-groups.action";
+import {IncicentLocationInfoAction} from "@core/states/incident-location-info/incidentLocInfo.action";
 
 export interface BrowseGroupsStateModel {
   pageRequest: PageRequestModel;
@@ -372,4 +373,45 @@ export class BrowseGroupsState {
       queryParamsHandling: 'merge',
     });
   }
+
+  @Action(BrowseGroupsAction.AddIncidentLocInfo)
+  addIncidentLocation(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.AddIncidentLocInfo
+  ) {
+    return dispatch(new IncicentLocationInfoAction.IncidentLocationInfo(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseGroupsAction.LoadGroups());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseGroupsAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowseGroupsAction.UpdateIncidentLocInfo)
+  updateIncidentLocation(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.UpdateIncidentLocInfo
+  ) {
+    return dispatch(new IncicentLocationInfoAction.UpdateIncidentLocationInfo(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseGroupsAction.LoadGroups());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseGroupsAction.ToggleDialog({}));
+      })
+    );
+  }
+
 }

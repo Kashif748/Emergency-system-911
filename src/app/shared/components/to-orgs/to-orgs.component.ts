@@ -130,7 +130,7 @@ export class ToOrgsComponent implements OnInit, OnChanges {
       (!changes?.selectAll?.currentValue &&
         !changes?.selectAll?.isFirstChange())
     ) {
-      this.filteredOrgs.subscribe((orgs) => {
+      this.filteredOrgs?.subscribe((orgs) => {
         this.orgs = changes?.selectAll?.currentValue ? orgs : this.orgs;
         this.onChange(this.orgs);
         //this.cdr.detectChanges();
@@ -180,14 +180,14 @@ export class ToOrgsComponent implements OnInit, OnChanges {
   }
 
   private _filter(value: any): any[] {
-    const remainingOrgs = this.allOrgs.filter(
+    const remainingOrgs = this.allOrgs?.filter(
       (org) => !this.orgs.includes(org)
     );
-    const filteredOrg = remainingOrgs.filter((org) => {
+    const filteredOrg = remainingOrgs?.filter((org) => {
       return org?.id !== value?.id;
     });
     var remainingFilteredOrg =[];
-    for (let index = 0; index < this.allOrgs.length; index++) {
+    for (let index = 0; index < this.allOrgs?.length; index++) {
       if((this.allOrgs[index].code.includes(value) == true) || (this.allOrgs[index].nameEn === value)){
         remainingFilteredOrg.push(this.allOrgs[index]);
       }

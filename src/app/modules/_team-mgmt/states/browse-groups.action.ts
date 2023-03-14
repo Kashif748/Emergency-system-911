@@ -7,6 +7,7 @@ import {
 import {Group} from "../../../api/models/group";
 import {GroupUser} from "../../../api/models/group-user";
 import {LocationGeoAndName} from "../../../api/models/location-geo-and-name";
+import {CenterRequest} from "../../../api/models/center-request";
 export namespace BrowseGroupsAction {
   export class LoadGroups {
     static readonly type = '[BrowseGroups] Load Groups';
@@ -151,5 +152,31 @@ export namespace BrowseGroupsAction {
      *
      */
     constructor(public payload: { id: number }) {}
+  }
+
+  export class AddIncidentLocInfo {
+    static readonly type = '[BrowseGroups] Incident Loc Info';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        centers: Array<CenterRequest>;
+        groupId: number;
+      }
+    ) {}
+  }
+
+  export class UpdateIncidentLocInfo {
+    static readonly type = '[BrowseGroups] update Incident Loc Info';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        centers: Array<CenterRequest>;
+        groupId: number;
+      }
+    ) {}
   }
 }

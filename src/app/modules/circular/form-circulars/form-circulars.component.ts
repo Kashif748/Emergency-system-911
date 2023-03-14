@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '@core/api/services/user.service';
 import {UrlHelperService} from '@core/services/url-helper.service';
-import {Observable} from 'rxjs';
+import {combineLatest, merge, Observable} from 'rxjs';
 import {CircularsService} from 'src/app/_metronic/core/services/circulars.service';
 import {OrgsService} from 'src/app/_metronic/core/services/orgs.service';
 import {AlertsService} from 'src/app/_metronic/core/services/alerts.service';
@@ -15,6 +15,7 @@ import {LayoutDataService} from 'src/app/pages/layout.service';
 import {MenuItem} from 'src/app/pages/_layout/components/header/header-menu/menu-item.model';
 import {TranslationService} from '../../i18n/translation.service';
 import {CommonService} from '@core/services/common.service';
+import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-form-circulars',
@@ -47,6 +48,7 @@ export class FormCircularsComponent implements OnInit {
     .pipe(map((r) => r.result.content));
   currentCir: any;
   currentMenu: MenuItem;
+  toInternalOrgsList: any[];
 
   constructor(
     private translationService: TranslationService,
@@ -100,7 +102,7 @@ export class FormCircularsComponent implements OnInit {
       this.filterManagersList = this.managersList;
     });
     this.id = this.route.snapshot.params.id;
-
+    
     if (this.id) {
       this.cirService.getById(this.id).subscribe((cir) => {
         this.currentCir = cir;
@@ -111,7 +113,7 @@ export class FormCircularsComponent implements OnInit {
           createdOrg: cir.createdOrg,
           createdBy: cir.createdBy,
           number: cir.number,
-          posission: cir.posission,
+          //posission: cir.posission,
           subject: cir.subject || null,
           procedure: cir.procedure,
           date: cir.date,
@@ -124,8 +126,15 @@ export class FormCircularsComponent implements OnInit {
           cc: cir.cc,
           incidentId: cir?.incident?.id || null,
           orgs: cir.orgs.map((item) => {
-            return item['orgStructure'];
-          }),
+            if (item.internal == false) {
+              return item['orgStructure'];
+            }
+          }).filter(i => !!i),
+          internalOrgs: cir.orgs.map((item) => {
+            if (item.internal == true) {
+             return item['orgStructure'];
+            }
+          }).filter(i => !!i),
         };
 
         this.form.setValue(obj);
@@ -141,7 +150,24 @@ export class FormCircularsComponent implements OnInit {
       }
       orgs.forEach((org) => {
         this.toOrgsList.push({
-          id: 1,
+          id: 0,
+          internal: false,
+          orgStructure: {
+            id: org.id,
+          },
+        });
+      });
+    });
+
+    this.form.get('internalOrgs').valueChanges.subscribe((orgs) => {
+      this.toInternalOrgsList = [];
+      if (!orgs.length) {
+        return;
+      }
+      orgs.forEach((org) => {
+        this.toInternalOrgsList.push({
+          id: 0,
+          internal: true,
           orgStructure: {
             id: org.id,
           },
@@ -155,7 +181,7 @@ export class FormCircularsComponent implements OnInit {
         return;
       }
       users.forEach((user) => {
-        this.toCCUsersList.push({id: 1, user: {id: user.id}});
+        this.toCCUsersList.push({id: 0, user: {id: user.id}});
       });
     });
     this.form.get('manager').valueChanges.subscribe((data) => {
@@ -166,9 +192,10 @@ export class FormCircularsComponent implements OnInit {
   createForm() {
     const currentDate = new Date().toISOString().substring(0, 30);
     this.form = this.fb.group({
+      internalOrgs:[[], [Validators.required]],
       // number: ['',[ Validators.required,Validators.pattern(reg)]],
       number: ['', [Validators.required]],
-      posission: ['', Validators.required],
+      //posission: ['', Validators.required],
       subject: ['', Validators.required],
       procedure: ['', Validators.required],
       date: [new Date(), Validators.required],
@@ -223,8 +250,9 @@ export class FormCircularsComponent implements OnInit {
     delete this.form.value.cc;
     delete this.form.value.orgs;
     delete this.form.value.confidentialtyID;
+    delete this.form.value.internalOrgs;
     val['cc'] = this.toCCUsersList;
-    val['orgs'] = this.toOrgsList;
+    val['orgs'] = this.toOrgsList.concat(this.toInternalOrgsList);
     val['manager'] = {
       id: val['manager']['id'],
     };
@@ -306,7 +334,7 @@ export class FormCircularsComponent implements OnInit {
         this.currentCir = data['result'];
         this.cirService.publish(this.id).then((data) => {
           this.currentCir = data['result'];
-          this.cirService.getCirculars(0, 10, 'asc');
+          this.cirService.getCirculars(0, 10, 'desc');
           this.cdr.detectChanges();
           this.backClicked();
         });
