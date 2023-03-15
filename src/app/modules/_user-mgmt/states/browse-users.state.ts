@@ -208,14 +208,14 @@ export class BrowseUsersState {
     return dispatch(new UserAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
+        dispatch([
+          new BrowseUsersAction.LoadUsers(),
+          new BrowseUsersAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
   }
@@ -262,16 +262,9 @@ export class BrowseUsersState {
     { payload }: BrowseUsersAction.UploadSignature
   ) {
     return dispatch(new UserAction.UploadSignature(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
-      }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
   }
@@ -282,16 +275,9 @@ export class BrowseUsersState {
     { payload }: BrowseUsersAction.UploadSignature
   ) {
     return dispatch(new UserAction.UploadProfilePhoto(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
-      }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
   }

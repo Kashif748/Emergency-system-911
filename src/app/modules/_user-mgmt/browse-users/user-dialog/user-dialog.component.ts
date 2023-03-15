@@ -269,6 +269,8 @@ export class UserDialogComponent implements OnInit, OnDestroy {
         if (org?.data?.ldapOrgId || this._userId) {
           this.removePassword();
         }
+
+        this.form.get('roleIds').reset();
       });
   }
 
@@ -302,13 +304,6 @@ export class UserDialogComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    if (this.activeTab === 1) {
-      this.signatureImgUpload();
-      return;
-    } else if (this.activeTab === 2) {
-      this.profileImgUpload();
-      return;
-    }
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -345,6 +340,10 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     user.orgStructure = { id: user.orgStructure?.key };
 
     user.id = this._userId;
+
+    this.signatureImgUpload();
+    this.profileImgUpload();
+    
     if (this.editMode) {
       this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
     } else {
@@ -455,6 +454,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
   }
 
   profileImgUpload() {
+    if (!this.profileImg?.file) return;
     this.store.dispatch(
       new BrowseUsersAction.UploadProfilePhoto({ file: this.profileImg.file })
     );
@@ -472,6 +472,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
   }
 
   signatureImgUpload() {
+    if (!this.signatureImg?.file) return;
     this.store.dispatch(
       new BrowseUsersAction.UploadSignature({ file: this.signatureImg.file })
     );
