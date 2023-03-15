@@ -235,7 +235,17 @@ export class BrowseGroupsComponent implements OnInit, OnDestroy {
     if (keys.length > 0) {
       switch (keys[0]) {
         case 'orgId':
-          filter['orgId'] = filter['orgId']
+          filter['orgId'] = {
+            key: filter['orgId']?.key,
+            labelEn: filter['orgId'].labelEn,
+            labelAr: filter['orgId'].labelAr,
+          };
+            /*[{
+            key: filter['orgId']?.key,
+            labelEn: filter['orgId'].labelEn,
+            labelAr: filter['orgId'].labelAr,
+          }];*/
+          /*filter['orgId']
             .map((o) => {
               return {
                 key: o?.key,
@@ -243,7 +253,7 @@ export class BrowseGroupsComponent implements OnInit, OnDestroy {
                 labelAr: o.labelAr,
               };
             })
-            .filter((id) => ![undefined, null].includes(id));
+            .filter((id) => ![undefined, null].includes(id));*/
           break;
         default:
           break;

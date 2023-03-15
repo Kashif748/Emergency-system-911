@@ -1025,10 +1025,10 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     switch (index) {
       case 2:
         this.loadCenterListCall();
-        this.loadGeometry();
-        this.loadIncidentLocation();
+        await this.loadGeometry();
+        await this.loadIncidentLocation();
         setTimeout(() => {
-          if (this._mode && this.checkMap && this.groupConfig.length > 0) {
+          if (this._mode && this.checkMap && this.namedLocations.length > 0) {
             this.loadMapComponent();
           }
         }, 2000);
@@ -1061,6 +1061,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           // console.log('geo good ', geometryLocation);
           if ((geometryLocation as any).length > 0) {
             this.checkMap = true;
+            this.groupZoneIncidentCategory.get('mapAndList').setValue(true);
+            this.cdr.detectChanges();
             this.patchGeometryLocation(geometryLocation);
           } else {
             this.incidentCategory.get('incidentCategory').setValue('');

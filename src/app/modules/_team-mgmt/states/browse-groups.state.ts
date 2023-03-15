@@ -93,7 +93,7 @@ export class BrowseGroupsState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgId: pageRequest.filters.orgId?.map((o) => o.key),
+          orgId: pageRequest.filters.orgId?.key,
           incidentLocation: pageRequest.filters.incidentLocation?.id,
           incidentCategoryId: pageRequest.filters.incidentCategoryId?.id,
         },
@@ -187,7 +187,7 @@ export class BrowseGroupsState {
         type: payload.type,
         filters: {
           ...pageRequest.filters,
-          orgId: pageRequest.filters.orgId?.map((o) => o.key),
+          orgId: pageRequest.filters.orgId?.key,
           incidentLocation: pageRequest.filters.incidentLocation?.id,
           incidentCategoryId: pageRequest.filters.incidentCategoryId?.id,
         },

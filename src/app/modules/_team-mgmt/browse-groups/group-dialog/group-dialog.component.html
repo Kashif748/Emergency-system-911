@@ -281,9 +281,9 @@
                         </span>
                       </div>
                     </ng-container>
-                    <!--<ng-container *ngIf="!options || options.length === 0">
+                    <ng-container *ngIf="!options || options.length === 0">
                       {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
-                    </ng-container>-->
+                    </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
                     <div *ngIf="lang == 'ar'" class="d-flex flex-column flex-grow-1 w-100"
@@ -417,9 +417,9 @@
                         </span>
                       </div>
                     </ng-container>
-                    <!--<ng-container *ngIf="!options || options.length === 0">
+                    <ng-container *ngIf="!options || options.length === 0">
                       {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
-                    </ng-container>-->
+                    </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
                     {{ option | translateObj }}
@@ -541,9 +541,9 @@
                         </span>
                       </div>
                     </ng-container>
-                    <!--<ng-container *ngIf="!options || options.length === 0">
+                    <ng-container *ngIf="!options || options.length === 0">
                       {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
-                    </ng-container>-->
+                    </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
                     {{ option.center | translateObj : 'name' }}
@@ -637,7 +637,7 @@
               {{ "GROUP.INCIDENT_LOCATION" | translate }}
             </a>
           </div>
-          <div class="row" style="height: 40rem" *ngIf="checkMap && (viewOnly$ | async) && groupConfig.length > 0">
+          <div class="row" style="height: 40rem" *ngIf="checkMap && (viewOnly$ | async) && namedLocations.length > 0">
             <div class="col-12">
               <ng-container #mapContainer></ng-container>
             </div>
