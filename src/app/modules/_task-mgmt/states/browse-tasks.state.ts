@@ -13,8 +13,8 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { patch, iif } from '@ngxs/store/operators';
-import { EMPTY } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { BrowseTasksAction } from './browse-tasks.action';
 
 export interface BrowseTasksStateModel {
@@ -204,11 +204,8 @@ export class BrowseTasksState {
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
-        return EMPTY;
+        return throwError(err);
       })
-      // finalize(() => {
-      //   dispatch(new BrowseTasksAction.ToggleDialog({}));
-      // })
     );
   }
 
@@ -224,11 +221,8 @@ export class BrowseTasksState {
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
-        return EMPTY;
+        return throwError(err);
       })
-      // finalize(() => {
-      //   dispatch(new BrowseTasksAction.ToggleDialog({}));
-      // })
     );
   }
 
