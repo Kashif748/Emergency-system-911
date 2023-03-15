@@ -1,6 +1,5 @@
 import {
   AfterViewChecked,
-  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   Injector,
@@ -34,11 +33,11 @@ import { MapComponent } from '@shared/sh-components/map/map.component';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { TreeNode } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
-import { Observable, Subject } from 'rxjs';
+import { EMPTY, Observable, Subject } from 'rxjs';
 import {
   auditTime,
+  catchError,
   distinctUntilChanged,
-  distinctUntilKeyChanged,
   filter,
   map,
   switchMap,
@@ -284,7 +283,6 @@ export class TaskDialogComponent implements OnInit, AfterViewChecked {
     if (this.editMode) {
       this.form.get('incidentId').disable();
       this.form.get('assigneeType').disable();
-      this.form.get('assignTo').disable();
       this.form.get('taskType').disable();
     }
   }
@@ -567,12 +565,23 @@ export class TaskDialogComponent implements OnInit, AfterViewChecked {
     }
 
     if (this.editMode) {
-      this.store.dispatch(new BrowseTasksAction.UpdateTask(task));
-      await this.attachComponent?.upload(this._taskId, false);
-      this.saveMap(task);
-      setTimeout(() => {
-        this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
-      }, 1200);
+      this.store
+        .dispatch(new BrowseTasksAction.UpdateTask(task))
+        .pipe(
+          tap(async () => {
+            await this.attachComponent?.upload(this._taskId, false);
+            this.saveMap(task);
+            setTimeout(() => {
+              this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+            }, 1200);
+          }),
+          catchError(() => {
+            return EMPTY;
+          }),
+          takeUntil(this.destroy$),
+          take(1)
+        )
+        .subscribe();
     } else {
       this.store
         .dispatch(new BrowseTasksAction.CreateTask(task))
