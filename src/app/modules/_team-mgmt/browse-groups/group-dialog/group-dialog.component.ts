@@ -1075,7 +1075,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           } else {
             this.checkMap = false;
             this.groupZoneIncidentCategory.get('mapAndList').setValue(false);
-            this.incidentCategory.get('incidentCategory').setValue('');
+            this.incidentCategory.reset();
             this.namedLocations = [];
             this.categories = [];
           }
