@@ -181,12 +181,6 @@
             <mat-error *ngIf="handleError('coordinatorPhone', 'required')">
               {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
-            <mat-error *ngIf="handleError('coordinatorPhone', 'minlength')">
-              {{ "CIRCULARS.MIN_LENGTH_FIELD" | translate }}
-            </mat-error>
-            <mat-error *ngIf="handleError('coordinatorPhone', 'maxlength')">
-              {{ "CIRCULARS.MAX_LENGTH_FIELD" | translate }}
-            </mat-error>
           </mat-form-field>
         </div>
         
@@ -201,11 +195,8 @@
             <mat-error *ngIf="handleError('coordinatorMobil', 'required')">
               {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
-            <mat-error *ngIf="handleError('coordinatorMobil', 'minlength')">
-              {{ "CIRCULARS.MIN_LENGTH_FIELD" | translate }}
-            </mat-error>
-            <mat-error *ngIf="handleError('coordinatorMobil', 'maxlength')">
-              {{ "CIRCULARS.MAX_LENGTH_FIELD" | translate }}
+            <mat-error *ngIf="handleError('coordinatorMobil', 'pattern')">
+              {{ "CIRCULARS.MOBILE_ERR_MSG" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
