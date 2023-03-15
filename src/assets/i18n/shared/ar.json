@@ -1061,7 +1061,8 @@
       "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب",
       "MIN_LENGTH_FIELD": "اقل حجم للخانة:",
       "MAX_LENGTH_FIELD": "اكبر حجم للخانة :",
-      "EMAIL_ERR_MSG": "الرجاء إدخال بريد  صالح "
+      "EMAIL_ERR_MSG": "الرجاء إدخال بريد  صالح ",
+      "MOBILE_ERR_MSG": "الرجاء ادخال رقم  صالح الموبايل"
     },
     "DAILY_BREVITY": {
       "HEADER": "الإيجاز اليومي",

@@ -214,8 +214,8 @@ export class FormCircularsComponent implements OnInit {
           Validators.maxLength(320),
         ]),
       ],
-      coordinatorMobil: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]],
-      coordinatorPhone: ['', [Validators.required, Validators.maxLength(9), Validators.minLength(9)]],
+      coordinatorMobil: ['', [Validators.required, Validators.pattern(/((971|0){1}(50|51|52|54|55|56|58){1}([0-9]{7}))/)]],
+      coordinatorPhone: ['', [Validators.required, Validators.pattern(/^-?([0-9]\d*)?$/)]],
       manager: ['', Validators.required],
       createdBy: {
         id: this.user$['id'],

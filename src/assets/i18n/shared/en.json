@@ -1026,7 +1026,8 @@
       "THIS_FIELD_IS_REQUIRED": "This field is required",
       "MIN_LENGTH_FIELD": "Minimum field length:",
       "MAX_LENGTH_FIELD": "Maximum field length:",
-      "EMAIL_ERR_MSG": "Please enter  valid email"
+      "EMAIL_ERR_MSG": "Please enter  valid email",
+      "MOBILE_ERR_MSG": "Invalid Mobile Number"
     },
     "DAILY_BREVITY": {
       "HEADER": "Daily brevity",
