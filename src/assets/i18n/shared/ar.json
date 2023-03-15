@@ -1058,7 +1058,11 @@
       "COORDINATE_DATA": "بيانات التنسيق",
       "FOR_APPROVAL": "الاعتمادات",
       "TO_EXTERNAL_ORGANIZATION":"الجهات الخارجية المستقبلة",
-      "TO_INTERNAL_ORGANIZATION":"الجهات الداخلية المستقبلة"
+      "TO_INTERNAL_ORGANIZATION":"الجهات الداخلية المستقبلة",
+      "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب",
+      "MIN_LENGTH_FIELD": "اقل حجم للخانة:",
+      "MAX_LENGTH_FIELD": "اكبر حجم للخانة :",
+      "EMAIL_ERR_MSG": "الرجاء إدخال بريد  صالح "
     },
     "DAILY_BREVITY": {
       "HEADER": "الإيجاز اليومي",

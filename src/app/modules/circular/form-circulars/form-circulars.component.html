@@ -28,7 +28,7 @@
 
             <input matInput formControlName="number" />
             <mat-error *ngIf="handleError('number', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
             <!-- <mat-error *ngIf="handleError('number', 'pattern')">
                            not match
@@ -86,7 +86,7 @@
             </mat-select>
 
             <mat-error *ngIf="handleError('priority', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -108,7 +108,7 @@
             </mat-select>
 
             <mat-error *ngIf="handleError('confidentialtyID', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -147,7 +147,7 @@
 
             <input matInput formControlName="subject" />
             <mat-error>
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -160,7 +160,7 @@
             <textarea rows="5" formControlName="procedure" matInput></textarea>
 
             <mat-error *ngIf="handleError('procedure', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -179,34 +179,33 @@
             <input placeholder="02 345 6577" (keypress)="numberOnly($event)" type="text" matInput
               formControlName="coordinatorPhone" />
             <mat-error *ngIf="handleError('coordinatorPhone', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
             <mat-error *ngIf="handleError('coordinatorPhone', 'minlength')">
-              {{ "VALIDATION.MIN_LENGTH_FIELD" | translate }}
+              {{ "CIRCULARS.MIN_LENGTH_FIELD" | translate }}
             </mat-error>
             <mat-error *ngIf="handleError('coordinatorPhone', 'maxlength')">
-              {{ "VALIDATION.MAX_LENGTH_FIELD" | translate }}
+              {{ "CIRCULARS.MAX_LENGTH_FIELD" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
-
+        
         <div class="col-md-3">
           <mat-form-field [dir]="lang === 'en' ? 'ltr' : 'rtl'" appearance="fill">
-            <mat-label>
-              {{ "CIRCULARS.MOBILE" | translate }}
+            <mat-label>{{ "CIRCULARS.MOBILE" | translate }}
               <span class="required-asterisk">*</span>
             </mat-label>
 
-            <input placeholder="056 9999887" matInput (keypress)="numberOnly($event)" type="text"
+            <input placeholder="056 9999887"  (keypress)="numberOnly($event)" type="text"  matInput
               formControlName="coordinatorMobil" />
             <mat-error *ngIf="handleError('coordinatorMobil', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
-              <mat-error *ngIf="handleError('coordinatorMobil', 'minlength')">
-                {{ "VALIDATION.MIN_LENGTH_FIELD" | translate }}
-              </mat-error>
-              <mat-error *ngIf="handleError('coordinatorMobil', 'maxlength')">
-                {{ "VALIDATION.MAX_LENGTH_FIELD" | translate }}
-              </mat-error>
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
+            </mat-error>
+            <mat-error *ngIf="handleError('coordinatorMobil', 'minlength')">
+              {{ "CIRCULARS.MIN_LENGTH_FIELD" | translate }}
+            </mat-error>
+            <mat-error *ngIf="handleError('coordinatorMobil', 'maxlength')">
+              {{ "CIRCULARS.MAX_LENGTH_FIELD" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -237,6 +236,9 @@
               <span class="required-asterisk">*</span>
             </mat-label>
             <input matInput [matAutocomplete]="auto" formControlName="manager" />
+            <mat-error *ngIf="handleError('manager', 'required')">
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
+            </mat-error>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let manager of filterManagersList" [value]="manager">
                 <span class="
