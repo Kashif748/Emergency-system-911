@@ -240,20 +240,6 @@ export class BrowseGroupsComponent implements OnInit, OnDestroy {
             labelEn: filter['orgId'].labelEn,
             labelAr: filter['orgId'].labelAr,
           };
-            /*[{
-            key: filter['orgId']?.key,
-            labelEn: filter['orgId'].labelEn,
-            labelAr: filter['orgId'].labelAr,
-          }];*/
-          /*filter['orgId']
-            .map((o) => {
-              return {
-                key: o?.key,
-                labelEn: o.labelEn,
-                labelAr: o.labelAr,
-              };
-            })
-            .filter((id) => ![undefined, null].includes(id));*/
           break;
         default:
           break;
