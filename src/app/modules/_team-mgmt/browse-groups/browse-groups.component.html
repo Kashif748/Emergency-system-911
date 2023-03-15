@@ -18,29 +18,17 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <span class="p-float-label">
-                 <!-- <p-treeSelect [options]="orgsTree$ | async" display="chip" [metaKeySelection]="true" [filter]="true"
-                                [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="checkbox"
-                                [ngModel]="state?.pageRequest?.filters['orgId']" placeholder="{{ 'SHARED.ORG' | translate }}"
-                                (ngModelChange)="updateFilter({orgId: $event}, $event)" [propagateSelectionDown]="false"
-                                [propagateSelectionUp]="false">
-                  </p-treeSelect>-->
                     <p-treeSelect [options]="orgsTree$ | async"  [filter]="true"
                                   [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single"
                                   [ngModel]="state?.pageRequest?.filters['orgId']"
+                                  placeholder="{{'INCIDENTS.CENTER' | translate}}"
                                   (ngModelChange)="updateFilter({orgId: $event}, $event)"
                                   appendTo="body">
-                                 <ng-template let-option pTemplate="value">
-                                      {{ option | translateObj : 'label' }}
+                                 <ng-template let-option let-placeholder pTemplate="value">
+                                      {{ option ? (option | translateObj : 'label') : ('SHARED.ORG' | translate)}}
                                   </ng-template>
-
-                                  <!--<ng-template pTemplate="placeholder">
-                                      <div *ngIf="state?.pageRequest?.filters === {}">
-                                          <span >Select a Node</span>
-                                      </div>
-                                  </ng-template>-->
                     </p-treeSelect>
-                  </span>
+
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
