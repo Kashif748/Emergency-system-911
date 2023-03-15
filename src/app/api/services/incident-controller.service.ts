@@ -99,21 +99,68 @@ export class IncidentControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update32
+   * Path part for operation get16
    */
-  static readonly Update32Path = '/v1/incidents';
+  static readonly Get16Path = '/v1/incidents/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update32()` instead.
+   * To access only the response body, use `get16()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  get16$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseIncidentProjection>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Get16Path, 'get');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseIncidentProjection>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `get16$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  get16(params: {
+    id: number;
+  }): Observable<RestApiResponseIncidentProjection> {
+
+    return this.get16$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseIncidentProjection>) => r.body as RestApiResponseIncidentProjection)
+    );
+  }
+
+  /**
+   * Path part for operation update34
+   */
+  static readonly Update34Path = '/v1/incidents/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `update34()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update32$Response(params: {
-    body: Incident
-  }): Observable<StrictHttpResponse<RestApiResponseIncidentProjectionMinimum>> {
+  update34$Response(params: {
+    id: number;
+    body: IncidentLocation
+  }): Observable<StrictHttpResponse<RestApiResponseIncidentLocationProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Update32Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Update34Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
       rb.body(params.body, 'application/json');
@@ -132,35 +179,36 @@ export class IncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update32$Response()` instead.
+   * To access the full response (for headers, for example), `update34$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update32(params: {
-    body: Incident
-  }): Observable<RestApiResponseIncidentProjectionMinimum> {
+  update34(params: {
+    id: number;
+    body: IncidentLocation
+  }): Observable<RestApiResponseIncidentLocationProjection> {
 
-    return this.update32$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseIncidentProjectionMinimum>) => r.body as RestApiResponseIncidentProjectionMinimum)
+    return this.update34$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseIncidentLocationProjection>) => r.body as RestApiResponseIncidentLocationProjection)
     );
   }
 
   /**
-   * Path part for operation create28
+   * Path part for operation closeIncident
    */
-  static readonly Create28Path = '/v1/incidents';
+  static readonly CloseIncidentPath = '/v1/incidents/closeIncident';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create28()` instead.
+   * To access only the response body, use `closeIncident()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create28$Response(params: {
-    body: Incident
-  }): Observable<StrictHttpResponse<RestApiResponseIncidentProjectionMinimum>> {
+  closeIncident$Response(params: {
+    body: IncidentCloseObject
+  }): Observable<StrictHttpResponse<RestApiResponseClosedIncidentResponse>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Create28Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.CloseIncidentPath, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -178,16 +226,16 @@ export class IncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create28$Response()` instead.
+   * To access the full response (for headers, for example), `closeIncident$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create28(params: {
-    body: Incident
-  }): Observable<RestApiResponseIncidentProjectionMinimum> {
+  closeIncident(params: {
+    body: IncidentCloseObject
+  }): Observable<RestApiResponseClosedIncidentResponse> {
 
-    return this.create28$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseIncidentProjectionMinimum>) => r.body as RestApiResponseIncidentProjectionMinimum)
+    return this.closeIncident$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseClosedIncidentResponse>) => r.body as RestApiResponseClosedIncidentResponse)
     );
   }
 
@@ -263,8 +311,8 @@ export class IncidentControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -290,22 +338,22 @@ export class IncidentControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update35
+   * Path part for operation page8
    */
-  static readonly Update35Path = '/v1/incidents/{id}';
+  static readonly Page8Path = '/v1/incidents';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update35()` instead.
+   * To access only the response body, use `page8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  update35$Response(params: {
-    id: number;
-    body: IncidentLocation
-  }): Observable<StrictHttpResponse<RestApiResponseIncidentLocationProjection>> {
+  page8$Response(params: {
+    filter: IncidentFilter;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageIncidentProjectionMinimum>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Update35Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Page8Path, 'get');
     if (params) {
       rb.query('filter', params.filter, {});
       rb.query('pageable', params.pageable, {});
@@ -324,17 +372,17 @@ export class IncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update35$Response()` instead.
+   * To access the full response (for headers, for example), `page8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  update35(params: {
-    id: number;
-    body: IncidentLocation
-  }): Observable<RestApiResponseIncidentLocationProjection> {
+  page8(params: {
+    filter: IncidentFilter;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageIncidentProjectionMinimum> {
 
-    return this.update35$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseIncidentLocationProjection>) => r.body as RestApiResponseIncidentLocationProjection)
+    return this.page8$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageIncidentProjectionMinimum>) => r.body as RestApiResponsePageIncidentProjectionMinimum)
     );
   }
 
@@ -385,100 +433,48 @@ export class IncidentControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation changeIncident1
+   * Path part for operation create30
    */
-  static readonly ChangeIncident1Path = '/v1/incidents/changeIncidentStatus/{incId}';
+  static readonly Create30Path = '/v1/incidents';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `changeIncident1()` instead.
+   * To access only the response body, use `create30()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  changeIncident1$Response(params: {
-    incId: number;
-    language: boolean;
-  }): Observable<StrictHttpResponse<RestApiResponseString>> {
+  create30$Response(params: {
+    body: Incident
+  }): Observable<StrictHttpResponse<RestApiResponseIncidentProjectionMinimum>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.ChangeIncident1Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Create30Path, 'post');
     if (params) {
-      rb.path('incId', params.incId, {});
-      rb.query('language', params.language, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseString>;
+        return r as StrictHttpResponse<RestApiResponseIncidentProjectionMinimum>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `changeIncident1$Response()` instead.
+   * To access the full response (for headers, for example), `create30$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  changeIncident1(params: {
-    incId: number;
-    language: boolean;
-  }): Observable<RestApiResponseString> {
+  create30(params: {
+    body: Incident
+  }): Observable<RestApiResponseIncidentProjectionMinimum> {
 
-    return this.changeIncident1$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseString>) => r.body as RestApiResponseString)
-    );
-  }
-
-  /**
-   * Path part for operation action
-   */
-  static readonly ActionPath = '/v1/incidents/action/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `action()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  action$Response(params: {
-    id: number;
-    action: 'REACHED' | 'CONTAINED';
-  }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.ActionPath, 'put');
-    if (params) {
-      rb.path('id', params.id, {});
-      rb.query('action', params.action, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBoolean>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `action$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  action(params: {
-    id: number;
-    action: 'REACHED' | 'CONTAINED';
-  }): Observable<RestApiResponseBoolean> {
-
-    return this.action$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
+    return this.create30$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseIncidentProjectionMinimum>) => r.body as RestApiResponseIncidentProjectionMinimum)
     );
   }
 
@@ -693,8 +689,8 @@ export class IncidentControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -780,26 +776,23 @@ export class IncidentControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation search4
+   * Path part for operation centerStatistics
    */
-  static readonly Search4Path = '/v1/incidents/search';
+  static readonly CenterStatisticsPath = '/v1/incidents/statistics';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search4()` instead.
+   * To access only the response body, use `centerStatistics()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search4$Response(params: {
-    priority?: Array<Priority>;
-    emergencylevel?: Array<EmergencyLevel>;
-    status?: Array<IncidentStatus>;
-    isKpiExpired?: boolean;
-    filter: IncidentSearchFilters;
-    pageable: Pageable;
-  }): Observable<StrictHttpResponse<RestApiResponsePageIncidentInfoWithOrgsProjection>> {
+  centerStatistics$Response(params?: {
+    fromDate?: string;
+    toDate?: string;
+    centerId?: number;
+  }): Observable<StrictHttpResponse<RestApiResponseListIncidentStatistics>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.Search4Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.CenterStatisticsPath, 'get');
     if (params) {
       rb.query('fromDate', params.fromDate, {});
       rb.query('toDate', params.toDate, {});
@@ -819,21 +812,18 @@ export class IncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search4$Response()` instead.
+   * To access the full response (for headers, for example), `centerStatistics$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search4(params: {
-    priority?: Array<Priority>;
-    emergencylevel?: Array<EmergencyLevel>;
-    status?: Array<IncidentStatus>;
-    isKpiExpired?: boolean;
-    filter: IncidentSearchFilters;
-    pageable: Pageable;
-  }): Observable<RestApiResponsePageIncidentInfoWithOrgsProjection> {
+  centerStatistics(params?: {
+    fromDate?: string;
+    toDate?: string;
+    centerId?: number;
+  }): Observable<RestApiResponseListIncidentStatistics> {
 
-    return this.search4$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponsePageIncidentInfoWithOrgsProjection>) => r.body as RestApiResponsePageIncidentInfoWithOrgsProjection)
+    return this.centerStatistics$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListIncidentStatistics>) => r.body as RestApiResponseListIncidentStatistics)
     );
   }
 
@@ -1127,8 +1117,8 @@ export class IncidentControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
