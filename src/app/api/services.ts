@@ -39,9 +39,9 @@ export { LeaveCalendarControllerService } from './services/leave-calendar-contro
 export { KpiControllerService } from './services/kpi-controller.service';
 export { InterimIncidentControllerService } from './services/interim-incident-controller.service';
 export { InquiryControllerService } from './services/inquiry-controller.service';
-export { IncidentControllerService } from './services/incident-controller.service';
 export { IncidentsWorkLogControllerService } from './services/incidents-work-log-controller.service';
 export { IncidentsChallengesReqControllerService } from './services/incidents-challenges-req-controller.service';
+export { IncidentControllerService } from './services/incident-controller.service';
 export { IncidentStatusControllerService } from './services/incident-status-controller.service';
 export { IncidentRiskImpactControllerService } from './services/incident-risk-impact-controller.service';
 export { IncidentReminderControllerService } from './services/incident-reminder-controller.service';

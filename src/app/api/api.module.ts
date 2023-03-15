@@ -45,9 +45,9 @@ import { LeaveCalendarControllerService } from './services/leave-calendar-contro
 import { KpiControllerService } from './services/kpi-controller.service';
 import { InterimIncidentControllerService } from './services/interim-incident-controller.service';
 import { InquiryControllerService } from './services/inquiry-controller.service';
-import { IncidentControllerService } from './services/incident-controller.service';
 import { IncidentsWorkLogControllerService } from './services/incidents-work-log-controller.service';
 import { IncidentsChallengesReqControllerService } from './services/incidents-challenges-req-controller.service';
+import { IncidentControllerService } from './services/incident-controller.service';
 import { IncidentStatusControllerService } from './services/incident-status-controller.service';
 import { IncidentRiskImpactControllerService } from './services/incident-risk-impact-controller.service';
 import { IncidentReminderControllerService } from './services/incident-reminder-controller.service';
@@ -183,9 +183,9 @@ import { MigrationControllerService } from './services/migration-controller.serv
     KpiControllerService,
     InterimIncidentControllerService,
     InquiryControllerService,
-    IncidentControllerService,
     IncidentsWorkLogControllerService,
     IncidentsChallengesReqControllerService,
+    IncidentControllerService,
     IncidentStatusControllerService,
     IncidentRiskImpactControllerService,
     IncidentReminderControllerService,

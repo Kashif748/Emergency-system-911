@@ -28,7 +28,7 @@ export interface Circular {
   number: string;
   orgs?: Array<CircularOrg>;
   posission?: string;
-  priority: Priority;
+  priority?: Priority;
   procedure: string;
   sentDate: string;
   status?: CircularStatus;

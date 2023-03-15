@@ -17,6 +17,7 @@ import { RestApiResponseListTaskType } from '../models/rest-api-response-list-ta
 import { RestApiResponseLong } from '../models/rest-api-response-long';
 import { RestApiResponsePageIncidentTask } from '../models/rest-api-response-page-incident-task';
 import { RestApiResponsePageIncidentTaskProjection } from '../models/rest-api-response-page-incident-task-projection';
+import { RestApiResponseString } from '../models/rest-api-response-string';
 import { RestApiResponseTaskDetails } from '../models/rest-api-response-task-details';
 import { RestApiResponseTaskMetricsDetails } from '../models/rest-api-response-task-metrics-details';
 import { TaskCriteria } from '../models/task-criteria';
@@ -180,7 +181,7 @@ export class TaskControllerService extends BaseService {
   /**
    * Path part for operation changeIncident
    */
-  static readonly ChangeIncidentPath = '/v1/tasks/changeTaskStatus/{taskId}/{statusId}';
+  static readonly ChangeIncidentPath = '/v1/tasks/changeTaskStatus/{taskId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -190,24 +191,22 @@ export class TaskControllerService extends BaseService {
    */
   changeIncident$Response(params: {
     taskId: number;
-    statusId: number;
     language: boolean;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<RestApiResponseString>> {
 
     const rb = new RequestBuilder(this.rootUrl, TaskControllerService.ChangeIncidentPath, 'put');
     if (params) {
       rb.path('taskId', params.taskId, {});
-      rb.path('statusId', params.statusId, {});
       rb.query('language', params.language, {});
     }
 
     return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<RestApiResponseString>;
       })
     );
   }
@@ -220,12 +219,11 @@ export class TaskControllerService extends BaseService {
    */
   changeIncident(params: {
     taskId: number;
-    statusId: number;
     language: boolean;
-  }): Observable<void> {
+  }): Observable<RestApiResponseString> {
 
     return this.changeIncident$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<RestApiResponseString>) => r.body as RestApiResponseString)
     );
   }
 
