@@ -644,6 +644,49 @@ export class UserProfileControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation getCircularManagers
+   */
+  static readonly GetCircularManagersPath = '/v1/users/circular-managers';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCircularManagers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCircularManagers$Response(params?: {
+  }): Observable<StrictHttpResponse<RestApiResponseListUserMinimunProjection>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UserProfileControllerService.GetCircularManagersPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListUserMinimunProjection>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getCircularManagers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCircularManagers(params?: {
+  }): Observable<RestApiResponseListUserMinimunProjection> {
+
+    return this.getCircularManagers$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListUserMinimunProjection>) => r.body as RestApiResponseListUserMinimunProjection)
+    );
+  }
+
+  /**
    * Path part for operation getAllUsers
    */
   static readonly GetAllUsersPath = '/v1/users/all-users';

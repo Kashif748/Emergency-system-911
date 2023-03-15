@@ -197,7 +197,7 @@ export class CircularsService implements Resolve<any> {
   publish(id) {
     return new Promise((resolve, reject) => {
       let httpParams = new HttpParams()
-        .append('id', id)
+        //.append('id', id)
         .append('withArch', 'true');
 
       this.http

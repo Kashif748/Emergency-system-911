@@ -858,6 +858,7 @@
       "UPDATE_STATUS": "Update Task Status",
       "TASK_TITLE": "Title",
       "TASK_TYPE": "Task Type",
+      "TASK_ID": "Task Id",
       "ASSIGNED_TO": "Assigned To",
       "DETAILS": "Task Details",
       "ASSETS": "Assests",
@@ -1022,7 +1023,11 @@
       "COORDINATE_DATA": "Coordination Details",
       "FOR_APPROVAL": "Approvals",
       "TO_EXTERNAL_ORGANIZATION":"To External Organization",
-      "TO_INTERNAL_ORGANIZATION":"To Internal Organization"
+      "TO_INTERNAL_ORGANIZATION":"To Internal Organization",
+      "THIS_FIELD_IS_REQUIRED": "This field is required",
+      "MIN_LENGTH_FIELD": "Minimum field length:",
+      "MAX_LENGTH_FIELD": "Maximum field length:",
+      "EMAIL_ERR_MSG": "Please enter  valid email"
     },
     "DAILY_BREVITY": {
       "HEADER": "Daily brevity",

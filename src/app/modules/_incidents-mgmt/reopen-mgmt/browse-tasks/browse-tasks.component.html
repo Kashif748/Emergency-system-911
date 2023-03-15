@@ -1,0 +1,44 @@
+<ng-container *ngIf="state$ | async as state">
+  <div class="row">
+    <div class="col-12 my-3">
+      <div class="w-100 d-flex flex-wrap mx-1 px-6">
+        <div class="my-auto">
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
+            [ngClass]="{
+              active: !(type$ | async) || (type$ | async) === 'TO_MY_ORG'
+            }"
+            (click)="updateFilter({ type: 'TO_MY_ORG' }, $event)"
+          >
+            <span class="m-auto"> {{ "TO_MY_ORG" | translate }} </span>
+          </button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px mx-2 px-2 py-1 text-center p-button-rounded p-button-secondary p-button-sm text-white"
+            [ngClass]="{ active: (type$ | async) === 'BY_MY_ORG' }"
+            (click)="updateFilter({ type: 'BY_MY_ORG' }, $event)"
+          >
+            <span class="m-auto"> {{ "BY_MY_ORG" | translate }} </span>
+          </button>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <app-content-tasks
+    [view]="state.view"
+    [type]="type$ | async"
+    [loading]="loading$ | async"
+    [page]="page$ | async"
+    [columns]="state.columns"
+    [totalRecords]="totalRecords$ | async"
+    [pageRequest]="state.TasksPageRequest"
+    (onPageChange)="loadPage($event)"
+    (reOpenTask)="reOpenTask($event)"
+  ></app-content-tasks>
+</ng-container>

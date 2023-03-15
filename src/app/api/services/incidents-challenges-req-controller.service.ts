@@ -122,22 +122,22 @@ export class IncidentsChallengesReqControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update34
+   * Path part for operation update33
    */
-  static readonly Update34Path = '/v1/incidents/{incidentId}/challenge-requests';
+  static readonly Update33Path = '/v1/incidents/{incidentId}/challenge-requests';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update34()` instead.
+   * To access only the response body, use `update33()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update34$Response(params: {
+  update33$Response(params: {
     incidentId: number;
     body: IncidentsChallengesReq
   }): Observable<StrictHttpResponse<RestApiResponseIncidentsChallengesReq>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsChallengesReqControllerService.Update34Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsChallengesReqControllerService.Update33Path, 'put');
     if (params) {
       rb.path('incidentId', params.incidentId, {});
       rb.body(params.body, 'application/json');
@@ -156,37 +156,37 @@ export class IncidentsChallengesReqControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update34$Response()` instead.
+   * To access the full response (for headers, for example), `update33$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update34(params: {
+  update33(params: {
     incidentId: number;
     body: IncidentsChallengesReq
   }): Observable<RestApiResponseIncidentsChallengesReq> {
 
-    return this.update34$Response(params).pipe(
+    return this.update33$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentsChallengesReq>) => r.body as RestApiResponseIncidentsChallengesReq)
     );
   }
 
   /**
-   * Path part for operation create30
+   * Path part for operation create29
    */
-  static readonly Create30Path = '/v1/incidents/{incidentId}/challenge-requests';
+  static readonly Create29Path = '/v1/incidents/{incidentId}/challenge-requests';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create30()` instead.
+   * To access only the response body, use `create29()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create30$Response(params: {
+  create29$Response(params: {
     incidentId: number;
     body: IncidentsChallengesReq
   }): Observable<StrictHttpResponse<RestApiResponseIncidentsChallengesReq>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsChallengesReqControllerService.Create30Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsChallengesReqControllerService.Create29Path, 'post');
     if (params) {
       rb.path('incidentId', params.incidentId, {});
       rb.body(params.body, 'application/json');
@@ -205,16 +205,16 @@ export class IncidentsChallengesReqControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create30$Response()` instead.
+   * To access the full response (for headers, for example), `create29$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create30(params: {
+  create29(params: {
     incidentId: number;
     body: IncidentsChallengesReq
   }): Observable<RestApiResponseIncidentsChallengesReq> {
 
-    return this.create30$Response(params).pipe(
+    return this.create29$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentsChallengesReq>) => r.body as RestApiResponseIncidentsChallengesReq)
     );
   }

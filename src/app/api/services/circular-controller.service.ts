@@ -418,7 +418,7 @@ export class CircularControllerService extends BaseService {
   /**
    * Path part for operation getNextNumber
    */
-  static readonly GetNextNumberPath = '/v1/circulars/nextNumber';
+  static readonly GetNextNumberPath = '/v1/circulars/number';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
