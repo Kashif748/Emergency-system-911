@@ -399,7 +399,7 @@
 
       <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="'PRIV_ED_LOC_INC_GRP'">
         <ng-template pTemplate="content">
-          <div class="d-flex flex-column flex-grow-1 my-1">
+          <div class="d-flex flex-column flex-grow-1 my-1" *ngIf="!(viewOnly$ | async)">
             <p class="text-warning  font-size-lg mb-1">
               {{ 'GROUP.WARNING_NOTE' | translate }}
             </p>
@@ -438,40 +438,6 @@
                   </ng-container>
               </span>
             </div>
-
-           <!-- <div class="p-field p-col-12 p-md-12" *ngIf="!(viewOnly$ | async) && checkMap">
-              <span class="p-float-label">
-                <p-multiSelect [options]="incidentCategories$" [filter]="true" filterBy="name,roleName"
-                               formControlName="geometryCategory" dataKey="id" display="chip" appendTo="body">
-                  <ng-template let-options pTemplate="selectedItems">
-                    <ng-container *ngFor="let option of options">
-                      <div class="p-multiselect-token">
-                        <span class="p-multiselect-token-label">
-                          {{ option | translateObj }}
-                        </span>
-                      </div>
-                    </ng-container>
-                    <ng-container *ngIf="!options || options.length === 0">
-                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
-                    </ng-container>
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option | translateObj }}
-                  </ng-template>
-                </p-multiSelect>
-                <label>
-                  {{'INCIDENTS.MAIN_CAT' | translate}}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-
-                 <ng-container
-                   *ngIf="incidentCategory.controls['geometryCategory'].touched && !incidentCategory.controls['geometryCategory'].valid && incidentCategory.controls['geometryCategory'].dirty">
-                    <p class="p-error mb-0" *ngIf="incidentCategory.controls['geometryCategory'].hasError('required')">
-                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
-                    </p>
-                  </ng-container>
-              </span>
-            </div>-->
 
             <div class="p-field p-col-12 p-md-12" *ngIf="viewOnly$ | async">
               <div class="col-md-12 col-sm-12 info-item p-3">
