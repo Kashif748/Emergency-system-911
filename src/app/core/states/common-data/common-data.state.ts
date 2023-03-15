@@ -74,10 +74,14 @@ export class CommonDataState {
   static entityTags(state: CommonDataStateModel) {
     return state?.data?.entityTags;
   }
-  
+
   @Selector([CommonDataState])
   static currentGroup(state: CommonDataStateModel) {
     return state?.data?.currentGroupDetails;
+  }
+  @Selector([CommonDataState])
+  static incidentStatus(state: CommonDataStateModel) {
+    return state?.data?.incidentStatus;
   }
 
   /* ********************** ACTIONS ************************* */

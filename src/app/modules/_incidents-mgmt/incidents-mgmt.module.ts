@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { BrowseIncidentsComponent } from './browse-incidents/browse-incidents.component';
-import { BrowseIncidentsState } from './states/browse-incidents.state';
+import { BrowseIncidentsComponent } from './reopen-mgmt/browse-incidents/browse-incidents.component';
+import { ReopenState } from './states/reopen.state';
 import { NgxsModule } from '@ngxs/store';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -33,11 +33,16 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { ContentIncidentsComponent } from './browse-incidents/content-incidents/content-incidents.component';
+import { ContentIncidentsComponent } from './reopen-mgmt/browse-incidents/content-incidents/content-incidents.component';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
 import { TabViewModule } from 'primeng/tabview';
 import { CustomDatePipe } from '@shared/pipes/custom-date.pipe';
 import { SharedModule } from '@shared/shared.module';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
+import { ReopenMgmtComponent } from './reopen-mgmt/reopen-mgmt.component';
+import { BrowseTasksComponent } from './reopen-mgmt/browse-tasks/browse-tasks.component';
+import { ContentTasksComponent } from './reopen-mgmt/browse-tasks/content-tasks/content-tasks.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/incident-mgmt/', '.json');
@@ -45,16 +50,22 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 const routes: Routes = [
   {
     path: '',
-    component: BrowseIncidentsComponent,
+    component: ReopenMgmtComponent,
   },
 ];
 
 @NgModule({
-  declarations: [BrowseIncidentsComponent, ContentIncidentsComponent],
+  declarations: [
+    BrowseIncidentsComponent,
+    ContentIncidentsComponent,
+    ReopenMgmtComponent,
+    BrowseTasksComponent,
+    ContentTasksComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    NgxsModule.forFeature([BrowseIncidentsState]),
+    NgxsModule.forFeature([ReopenState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
@@ -93,9 +104,13 @@ const routes: Routes = [
     TabViewModule,
     InputNumberModule,
     SharedModule,
+    ConfirmPopupModule,
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade },
+  providers: [
+    { provide: ILangFacade, useClass: LangFacade },
     DatePipe,
-    CustomDatePipe],
+    CustomDatePipe,
+    ConfirmationService,
+  ],
 })
 export class IncidentsMgmtModule {}

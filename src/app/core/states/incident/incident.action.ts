@@ -15,7 +15,7 @@ export namespace IncidentAction {
   }
 
   export class LoadPage {
-    static readonly type = '[Incident] Load Incidents';
+    static readonly type = '[Incident] Load Page';
     /**
      *
      */
@@ -24,6 +24,14 @@ export namespace IncidentAction {
 
   export class LoadOrgs {
     static readonly type = '[Incident] Load Orgs';
+    /**
+     *
+     */
+    constructor(public payload: { incidentId: number }) {}
+  }
+
+  export class reOpenIncident {
+    static readonly type = '[Incident] Open Incidint';
     /**
      *
      */

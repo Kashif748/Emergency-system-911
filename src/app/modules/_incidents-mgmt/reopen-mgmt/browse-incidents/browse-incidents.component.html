@@ -1,0 +1,12 @@
+<ng-container *ngIf="state$ | async as state">
+  <app-content-incidents
+    [view]="state.view"
+    [loading]="loading$ | async"
+    [page]="page$ | async"
+    [columns]="state.columns"
+    [totalRecords]="totalRecords$ | async"
+    [pageRequest]="state.IncidentsPageRequest"
+    (onPageChange)="loadPage($event)"
+    (reOpenIncidint)="reOpenIncidint($event)"
+  ></app-content-incidents>
+</ng-container>

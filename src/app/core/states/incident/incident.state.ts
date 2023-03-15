@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import {
   Action,
+  Select,
   Selector,
   SelectorOptions,
   State,
@@ -9,7 +10,7 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
-import { EMPTY } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import {
   IdNameProjection,
@@ -21,6 +22,7 @@ import {
   IncidentControllerService,
   IncidentOrgControllerService,
 } from 'src/app/api/services';
+import { CommonDataState } from '../common-data/common-data.state';
 import { IncidentAction } from './incident.action';
 
 export interface IncidentStateModel {
@@ -76,6 +78,9 @@ export class IncidentState {
   static loading(state: IncidentStateModel) {
     return state?.loading;
   }
+
+  @Select(CommonDataState.incidentStatus)
+  public statuses$: Observable<any[]>;
   /* ********************** ACTIONS ************************* */
 
   @Action(IncidentAction.LoadIncidents, { cancelUncompleted: true })
@@ -149,10 +154,68 @@ export class IncidentState {
         status: [],
       })
       .pipe(
+        switchMap((res) =>
+          this.statuses$.pipe(
+            map(
+              (statuses) => {
+                const mp = statuses.reduce((pv, cv) => {
+                  pv[`${cv.id}`] = cv;
+                  return pv;
+                }, {});
+                res.result.content.forEach((t) => {
+                  t.status = mp[t.status?.id] ?? t.status;
+                });
+                return res;
+              },
+              catchError(() => of(res))
+            )
+          )
+        ),
         tap(({ result }) => {
           setState(
             patch<IncidentStateModel>({
               page: result,
+              loading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<IncidentStateModel>({
+              page: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<IncidentStateModel>({
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(IncidentAction.reOpenIncident, { cancelUncompleted: true })
+  reOpenIncident(
+    { setState }: StateContext<IncidentStateModel>,
+    { payload }: IncidentAction.reOpenIncident
+  ) {
+    setState(
+      patch<IncidentStateModel>({
+        loading: true,
+      })
+    );
+    return this.incidentService
+      .changeIncident1({
+        incId: payload.incidentId,
+        language: true,
+      })
+      .pipe(
+        tap(({ result }) => {
+          setState(
+            patch<IncidentStateModel>({
               loading: false,
             })
           );

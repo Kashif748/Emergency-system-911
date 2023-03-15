@@ -858,6 +858,7 @@
       "UPDATE_STATUS": "Update Task Status",
       "TASK_TITLE": "Title",
       "TASK_TYPE": "Task Type",
+      "TASK_ID": "Task Id",
       "ASSIGNED_TO": "Assigned To",
       "DETAILS": "Task Details",
       "ASSETS": "Assests",

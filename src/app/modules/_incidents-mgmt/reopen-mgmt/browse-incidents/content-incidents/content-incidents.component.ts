@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageRequestModel } from '@core/models/page-request.model';
+import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { IncidentProjection } from 'src/app/api/models';
-import { BrowseIncidentsAction } from '../../states/browse-incidents.action';
 
 @Component({
   selector: 'app-content-incidents',
@@ -26,7 +26,15 @@ export class ContentIncidentsComponent implements OnInit {
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
-  constructor(private store: Store) {}
+
+  @Output()
+  reOpenIncidint = new EventEmitter<number>();
+
+  constructor(
+    private store: Store,
+    private confirmationService: ConfirmationService,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
     this.onPageChange.emit({
@@ -37,5 +45,17 @@ export class ContentIncidentsComponent implements OnInit {
 
   openView(id?: number) {
     // this.store.dispatch(new BrowseIncidentsAction.OpenView({ taskId: id }));
+  }
+
+  reOpen(event: Event, id) {
+    console.log(event);
+
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translate.instant('REOPEN_INC_CONFIREM'),
+      icon: 'pi pi-question-circle',
+      accept: () => this.reOpenIncidint.emit(id),
+      reject: () => {},
+    });
   }
 }

@@ -39,7 +39,7 @@
                 pButton
                 pRipple
                 type="button"
-                icon="pi pi-ellipsis-v"
+                icon="pi pi-replay"
                 class="p-button-rounded p-button-text mt-0 p-button-plain"
               ></button>
             </div>
@@ -54,79 +54,82 @@
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 0"></th>
-              <th *ngIf="columns?.includes('serial')">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.SERIAL" | translate }}
-                </div>
-              </th>
-              <th *ngIf="columns?.includes('id')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.ID" | translate }}
                 </div>
               </th>
-              <th *ngIf="columns?.includes('description')">
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "INCIDENTS.SERIAL" | translate }}
+                </div>
+              </th>
+
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.DESCRIPTION" | translate }}
                 </div>
               </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "INCIDENTS.DATE" | translate }}
+                </div>
+              </th>
 
-              <th *ngIf="columns?.includes('responsibleOrg')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.RESPONSIBLE_ORG" | translate }}
                 </div>
               </th>
-              <th *ngIf="columns?.includes('center')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.SPECIALIZED_CENTER" | translate }}
                 </div>
               </th>
-              <th *ngIf="columns?.includes('status')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.STATUS" | translate }}
                 </div>
               </th>
-              <th *checkPrivileges="'PRIV_UP_TASK'" style="width: 92px">
+              <th style="width: 92px">
                 {{ "ACTIONS.ACTIONS" | translate }}
               </th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
-              <td class="max-w-250px" *ngIf="columns?.includes('serial')">
+              <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('id')">
+              <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('description')">
-                <p-skeleton></p-skeleton>
-              </td>
-
-              <td class="max-w-250px" *ngIf="columns?.includes('incidentDate')">
+              <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('status')">
+              <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('status')">
+              <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('responsibleOrg')"
-              >
+              <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('center')">
+              <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td *checkPrivileges="'PRIV_UP_TASK'" class="max-w-250px">
+              <td class="max-w-250px">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px">
                 <button
                   pButton
                   pRipple
@@ -154,42 +157,44 @@
           </ng-template>
           <ng-template pTemplate="header">
             <tr>
-              <th *ngIf="columns?.includes('serial')">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.SERIAL" | translate }}
-                </div>
-              </th>
-              <th *ngIf="columns?.includes('id')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.ID" | translate }}
                 </div>
               </th>
-              <th *ngIf="columns?.includes('description')">
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "INCIDENTS.SERIAL" | translate }}
+                </div>
+              </th>
+
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.DESCRIPTION" | translate }}
                 </div>
               </th>
-              <th *ngIf="columns?.includes('incidentDate')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.DATE" | translate }}
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('status')">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.STATUS" | translate }}
-                </div>
-              </th>
 
-              <th *ngIf="columns?.includes('responsibleOrg')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.RESPONSIBLE_ORG" | translate }}
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('center')">
+              <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.SPECIALIZED_CENTER" | translate }}
+                </div>
+              </th>
+
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "INCIDENTS.STATUS" | translate }}
                 </div>
               </th>
 
@@ -200,85 +205,50 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
+                <!-- id -->
+                <td class="max-w-250px">
+                  {{ item?.id }}
+                </td>
               <!-- serial -->
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('serial')"
-                (click)="item.isActive && openView(item.id)"
-              >
+              <td class="max-w-250px">
                 {{ item.serial }}
               </td>
-              <!-- id -->
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('id')"
-                (click)="item.isActive && openView(item.id)"
-              >
-                {{ item?.id }}
-              </td>
+
               <!-- description -->
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('description')"
-                (click)="item.isActive && openView(item.id)"
-              >
+              <td class="max-w-250px">
                 {{ item.description }}
               </td>
 
               <!-- incidentDate -->
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('incidentDate')"
-                (click)="item.isActive && openView(item.id)"
-              >
-
-
-              {{ item.incidentDate   | customDate
-                    | date: "yyyy-MM-dd h:mm:ss" }}
+              <td class="max-w-250px">
+                {{ item.incidentDate | customDate | date : "yyyy-MM-dd h:mm" }}
               </td>
-              <!-- status -->
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('status')"
-                (click)="item.isActive && openView(item.id)"
-              >
-                <p-tag styleClass="m-1">
-                  {{ item.status | translateObj }}
-                </p-tag>
-              </td>
+
               <!-- responsibleOrg -->
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('responsibleOrg')"
-                (click)="item.isActive && openView(item.id)"
-              >
+              <td class="max-w-250px">
                 {{ item.responsibleOrg | translateObj : "name" }}
               </td>
               <!-- center -->
-              <td
-                class="max-w-250px"
-                *ngIf="columns?.includes('center')"
-                (click)="item.isActive && openView(item.id)"
-              >
+              <td class="max-w-250px">
                 {{ item.center | translateObj }}
               </td>
 
+                <!-- status -->
+                <td class="max-w-250px">
+                  <p-tag styleClass="m-1">
+                    {{ item.status | translateObj }}
+                  </p-tag>
+                </td>
               <!-- actions -->
               <td class="max-w-250px">
                 <button
                   pButton
                   pRipple
                   type="button"
-                  icon="pi pi-ellipsis-v"
+                  icon="pi pi-replay"
                   class="p-button-rounded p-button-text my-auto p-button-plain"
-                  (click)="menu.toggle($event)"
+                  (click)="reOpen($event, item.id)"
                 ></button>
-                <p-menu
-                  #menu
-                  appendTo="body"
-                  [popup]="true"
-                  [model]="item.actions"
-                ></p-menu>
               </td>
             </tr>
           </ng-template>
@@ -308,3 +278,5 @@
     </p-paginator>
   </div>
 </div>
+
+<p-confirmPopup></p-confirmPopup>

@@ -408,4 +408,45 @@ export class TaskState {
         })
       );
   }
+
+  @Action(TaskAction.reOpenTask, { cancelUncompleted: true })
+  reOpenTask(
+    { setState }: StateContext<TaskStateModel>,
+    { payload }: TaskAction.reOpenTask
+  ) {
+    setState(
+      patch<TaskStateModel>({
+        loading: true,
+      })
+    );
+    return this.taskService
+      .changeIncident({
+        taskId: payload.taskId,
+        language: true,
+      })
+      .pipe(
+        tap(({ result }) => {
+          setState(
+            patch<TaskStateModel>({
+              loading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<TaskStateModel>({
+              page: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<TaskStateModel>({
+              loading: false,
+            })
+          );
+        })
+      );
+  }
 }
