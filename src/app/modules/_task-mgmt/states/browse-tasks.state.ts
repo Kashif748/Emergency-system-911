@@ -184,12 +184,14 @@ export class BrowseTasksState {
       })
     );
 
-    return this.router.navigate([], {
-      queryParams: {
-        _type: payload?.type,
-      },
-      queryParamsHandling: 'merge',
-    });
+    if (payload?.type) {
+      return this.router.navigate([], {
+        queryParams: {
+          _type: payload?.type,
+        },
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 
   @Action(BrowseTasksAction.CreateTask)
