@@ -5,7 +5,7 @@ import {
   getValue,
   InitState,
   UpdateState,
-  actionMatcher
+  actionMatcher,
 } from '@ngxs/store';
 
 import {
@@ -14,7 +14,7 @@ import {
   STORAGE_ENGINE,
   StorageEngine,
   AsyncStorageEngine,
-  AsyncStorageEngineProxy
+  AsyncStorageEngineProxy,
 } from './symbols';
 import { tap, concatMap, map, reduce } from 'rxjs/operators';
 import { NgxsNextPluginFn } from '@ngxs/store/src/symbols';
@@ -50,8 +50,8 @@ export class NgxsAsyncStoragePlugin implements NgxsPlugin {
 
     if (isInitAction) {
       initAction = from(keys).pipe(
-        concatMap(key =>
-          this._asyncEngine.getItem(key).pipe(map(val => [key, val]))
+        concatMap((key) =>
+          this._asyncEngine.getItem(key).pipe(map((val) => [key, val]))
         ),
         reduce((previousState, [key, val]) => {
           const isMaster = key === '@@STATE';
@@ -71,7 +71,7 @@ export class NgxsAsyncStoragePlugin implements NgxsPlugin {
             }
 
             if (options.migrations) {
-              options.migrations.forEach(strategy => {
+              options.migrations.forEach((strategy) => {
                 const versionMatch =
                   strategy.version ===
                   getValue(val, strategy.versionKey || 'version');
@@ -95,7 +95,7 @@ export class NgxsAsyncStoragePlugin implements NgxsPlugin {
               } else {
                 val = getValue(state, key);
               }
-              options.migrations.forEach(strategy => {
+              options.migrations.forEach((strategy) => {
                 const versionMatch =
                   strategy.version ===
                   getValue(val, strategy.versionKey || 'version');
@@ -119,8 +119,8 @@ export class NgxsAsyncStoragePlugin implements NgxsPlugin {
     }
 
     return initAction.pipe(
-      concatMap(stateAfterInit => next(stateAfterInit, event)),
-      tap(nextState => {
+      concatMap((stateAfterInit) => next(stateAfterInit, event)),
+      tap((nextState) => {
         if (!isInitAction || (isInitAction && hasMigration)) {
           for (const key of keys) {
             let val = nextState;
@@ -130,7 +130,8 @@ export class NgxsAsyncStoragePlugin implements NgxsPlugin {
             }
 
             try {
-              this._asyncEngine.setItem(key, options.serialize(val));
+              ![undefined, null].includes(val) &&
+                this._asyncEngine.setItem(key, options.serialize(val));
             } catch (e) {
               console.error(
                 'Error ocurred while serializing the store value, value not updated.'
