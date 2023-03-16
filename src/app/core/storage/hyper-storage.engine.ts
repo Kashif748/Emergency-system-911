@@ -1,7 +1,7 @@
 import { Inject } from '@angular/core';
 import { IAuthService } from '@core/services/auth.service';
 import { EMPTY, Observable, of, Subject } from 'rxjs';
-import { auditTime, catchError, map, take } from 'rxjs/operators';
+import { auditTime, catchError, map, take, tap } from 'rxjs/operators';
 import { UserPreferencesControllerService } from 'src/app/api/services';
 import {
   AsyncStorageEngine,
@@ -35,6 +35,9 @@ export class HyperStorageEngine implements AsyncStorageEngine {
     }
     return this.preferences.getByStateKey({ stateKey: key }).pipe(
       map((r) => r.result.stateVal),
+      tap((val) => {
+        localStorage.setItem(key, val);
+      }),
       catchError(() => of(undefined))
     );
   }
@@ -44,7 +47,7 @@ export class HyperStorageEngine implements AsyncStorageEngine {
       return;
     }
     localStorage.setItem(key, val);
-    if (this.ignoreSyncStates.includes(key)) {
+    if (this.ignoreSyncStates?.includes(key)) {
       return;
     }
     if (!this.auth.isAuthorized()) {
