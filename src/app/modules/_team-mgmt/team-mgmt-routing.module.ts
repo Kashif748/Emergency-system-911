@@ -15,24 +15,6 @@ const routes: Routes = [
         canLoad: [PrivilegeGuard],
         data: {permission: 'PRIV_VW_GRP'},
       },
-     /* {
-        path: 'groups/add',
-        component: NewGroupComponent,
-        canLoad: [PrivilegeGuard],
-        data: {permission: 'PRIV_CR_GRP'},
-      },*/
-     /* {
-        path: 'groups/edit/:id',
-        component: NewGroupComponent,
-        canLoad: [PrivilegeGuard],
-        data: {permission: 'PRIV_UP_GRP'},
-      },*/
-      /*{
-        path: 'groups/view/:id',
-        component: ViewGroupComponent,
-        canLoad: [PrivilegeGuard],
-        data: {permission: 'PRIV_VW_GRP'},
-      },*/
     ],
   },
 ];

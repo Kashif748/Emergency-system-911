@@ -494,6 +494,7 @@
       },
       "INCIDENTS": "Incidents",
       "REPORTER": "Location Shared By Reporter",
+      "TEAM_LOCATION":"Team Location",
       "OPEN_TASKS": "Open Tasks",
       "CLOSED_TASKS": "Closed Tasks",
       "DELAYED_TASKS": "Delayed Tasks",
