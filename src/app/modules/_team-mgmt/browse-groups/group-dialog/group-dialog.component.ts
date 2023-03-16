@@ -362,7 +362,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
             : polylineCoordinates) as string[][][],
           type
         );
-        // this.groupGeometry.locations.push(locationAsString);
         this.namedLocations[i].geometry = locationAsString;
         this.namedLocations[i].type = type;
       });
@@ -534,15 +533,12 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   clearCenterDistrict() {
     const value = this.groupZoneIncidentCategory.get('mapAndList').value;
     const centerControl = this.groupZoneIncidentCategory.get('centerList');
-    //const incidentCategoryControl = this.groupZoneIncidentCategory.get('incidentCategory');
-   // const geometryCategoryControl = this.groupZoneIncidentCategory.get('incidentCategory');
     const zoneControl = this.groupZoneIncidentCategory.get('zoneId');
     if (value) {
       this.checkMap = true;
       this.groupZoneIncidentCategory.get('centerList').setValue('');
       this.groupZoneIncidentCategory.get('incidentCategory').setValue('');
       this.groupZoneIncidentCategory.get('zoneId').setValue('');
-      //incidentCategoryControl.clearValidators();
       centerControl.clearValidators();
       zoneControl.clearValidators();
     } else {
@@ -550,9 +546,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       this.namedLocations = [];
       centerControl.setValidators(Validators.required);
       zoneControl.setValidators(Validators.required);
-      //incidentCategoryControl.setValidators(Validators.required);
-      ////geometryCategoryControl.clearValidators();
-      //this.groupZoneIncidentCategory.get('geometryCategory').setValue('');
     }
     console.log(value);
   }
@@ -1105,7 +1098,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         take(1),
         tap((incidentLocInfo) => {
-          // console.log('inci location good ', incidentLocInfo);
           if (incidentLocInfo) {
             this.checkMap = false;
             this.groupZoneIncidentCategory.get('mapAndList').setValue(false);
@@ -1113,7 +1105,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
             this.patchIndentLocInfo(incidentLocInfo);
           }
           else {
-             // this.groupZoneIncidentCategory.get('incidentCategory').reset();
              this.selectedCat = [];
           }
         }),
