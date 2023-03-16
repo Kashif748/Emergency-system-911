@@ -1,8 +1,7 @@
 <p-sidebar
   [(visible)]="display"
-  [baseZIndex]="9999"
   [modal]="false"
-  [position]="'right'"
+  [position]="position$ | async"
   [style]="{ width: '30em' }"
   [showCloseIcon]="false"
 >
@@ -23,7 +22,7 @@
     <p-panel
       header="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
       [toggleable]="true"
-      [collapsed]="true"
+      [collapsed]="!(hasFilters$ | async)"
     >
       <div class="p-fluid p-grid">
         <div class="p-field p-col-12">
@@ -82,39 +81,54 @@
         </div>
       </div>
     </p-panel>
-    <perfect-scrollbar class="overflow-scroll">
+    <perfect-scrollbar class="overflow-scroll h-auto">
       <ng-container *ngIf="!(loading$ | async); else loadingSkelton">
         <ul class="navi navi-hover navi-active mt-4">
           <li *ngFor="let item of page$ | async" class="navi-item">
-            <div class="navi-link rounded-lg">
-              <div class="navi-text d-flex flex-column">
-                <span class="d-block font-weight-bold">
-                  {{ item.firstName }} {{ item.middleName }} {{ item.lastName }}
+            <div class=" rounded-lg">
+              <div class="navi-text d-flex flex-column justify-content-between">
+                <span class="d-flex">
+                  <span class="font-weight-bold">
+                    {{ item.title }} {{ item.firstName }}
+                    {{ item.lastName }}
+                  </span>
+                  <div class="spacer"></div>
+                  <span class="label label-light-primary label-inline mr-2">
+                    {{ item.orgName }}
+                  </span>
+                </span>
+                <span class="d-flex text-muted mb-2">
+                  {{ item.jobTitle }}
                 </span>
                 <div class="d-flex text-muted">
-                  <span class="">
+                  <span
+                    pTooltip="{{ 'PHONEBOOK.COPY_TOOLTIP' | translate }}  "
+                    (click)="copyToClipboard(item)"
+                    class="cursor-pointer"
+                  >
                     <i class="pi pi-mobile"></i>
 
                     {{ item.mobileNumber }}
                   </span>
                   <span class="px-3">|</span>
-                  <span class="">
+                  <span *ngIf="item?.phoneNumber">
                     <i class="pi pi-phone"></i>
 
                     {{ item.phoneNumber }}
                   </span>
                 </div>
               </div>
-              <button
+              <!-- <button
                 pButton
                 pRipple
                 type="button"
                 icon="pi pi-copy"
-                pTooltip="Copy Mobile Number"
+                pTooltip="{{ 'PHONEBOOK.COPY_TOOLTIP' | translate }}  "
                 (click)="copyToClipboard(item)"
                 class="p-button-rounded p-button-secondary p-button-text copy-btn"
-              ></button>
+              ></button> -->
             </div>
+            <hr>
           </li>
         </ul>
       </ng-container>
@@ -131,25 +145,24 @@
 </p-sidebar>
 
 <!-- float button -->
-<div  *appPrivileges="'PRIV_VW_PHONEBOOK_ENTRY'" class="float-phonebook d-flex flex-column shadow">
-  <button
-    type="button"
-    class="btn btn-icon btn-light mb-2"
-    [routerLink]="['/emergencies-phonebook']"
-  >
+<div
+  *appPrivileges="'PRIV_VW_PHONEBOOK_ENTRY'"
+  class="float-phonebook d-flex flex-column shadow"
+>
+  <button type="button" class="btn btn-icon btn-light" (click)="openSideBar()">
     <span
       inlineSVG="/assets/media/svg/icons/Communication/Call.svg"
       cacheSVG="true"
       class="svg-icon svg-icon-success"
     ></span>
   </button>
-  <button  type="button" class="btn btn-icon btn-light" (click)="display = true">
+  <!-- <button  type="button" class="btn btn-icon btn-light" >
     <span
       inlineSVG="/assets/media/svg/icons/Text/Bullet-list.svg"
       cacheSVG="true"
       class="svg-icon svg-icon-primary"
     ></span>
-  </button>
+  </button> -->
 </div>
 
 <ng-template #loadingSkelton>

@@ -85,8 +85,6 @@ export class BrowsePhonebookState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgIds: pageRequest.filters.orgIds?.map((o) => o.key),
-          roleIds: pageRequest.filters.roleIds?.map((r) => r.id),
         },
       })
     );
@@ -169,5 +167,4 @@ export class BrowsePhonebookState {
       })
     );
   }
-
 }

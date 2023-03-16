@@ -4,7 +4,7 @@
     "NEW_ITEM": "New Item",
     "TITLE": "Title",
     "ID": "ID",
-    "FULL_NAME" : "Full Name",
+    "FULL_NAME": "Full Name",
     "FIRST_NAME": "First Name",
     "MIDDLE_NAME": "Middle Name",
     "LAST_NAME": "Last Name",
@@ -12,6 +12,8 @@
     "MOBILE_NUMBER": "Mobile",
     "PHONE_NUMBER": "Phone",
     "IS_ACTIVE": "active",
-    "JOB_TITLE": "Job Title"
+    "JOB_TITLE": "Job Title",
+    "COPY_TOOLTIP": "Copy mobile number",
+    "ALL": "All"
   }
 }
