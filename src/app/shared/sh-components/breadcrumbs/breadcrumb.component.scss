@@ -1,0 +1,10 @@
+:host {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+h3,
+span {
+  color: var(--text-primary-color) !important;
+}

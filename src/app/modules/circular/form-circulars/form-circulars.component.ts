@@ -190,7 +190,7 @@ export class FormCircularsComponent implements OnInit {
   }
 
   createForm() {
-    const currentDate = new Date().toISOString().substring(0, 30);
+    const currentDate = new Date();
     this.form = this.fb.group({
       internalOrgs:[[], [Validators.required]],
       // number: ['',[ Validators.required,Validators.pattern(reg)]],
@@ -205,14 +205,14 @@ export class FormCircularsComponent implements OnInit {
       orgs: ['', Validators.required],
       cc: [''],
       confidentialtyID: ['', Validators.required],
-      coordinatorMail: [
-        'ops@adloc.gov.ae',
-        Validators.compose([
-          Validators.required,
-          Validators.email,
-          Validators.minLength(3),
-          Validators.maxLength(320),
-        ]),
+      coordinatorMail: ['', Validators.required
+        // 'ops@adloc.gov.ae',
+        // Validators.compose([
+        //   Validators.required,
+        //   Validators.email,
+        //   Validators.minLength(3),
+        //   Validators.maxLength(320),
+        // ]),
       ],
       coordinatorMobil: ['', [Validators.required, Validators.pattern(/((971|0){1}(50|51|52|54|55|56|58){1}([0-9]{7}))/)]],
       coordinatorPhone: ['', [Validators.required, Validators.pattern(/^-?([0-9]\d*)?$/)]],

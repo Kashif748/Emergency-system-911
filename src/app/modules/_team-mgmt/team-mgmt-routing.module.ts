@@ -10,7 +10,7 @@ const routes: Routes = [
     component: TeamMgmtComponent,
     children: [
       {
-        path: 'groups',
+        path: 'teams',
         component: BrowseGroupsComponent,
         canLoad: [PrivilegeGuard],
         data: {permission: 'PRIV_VW_GRP'},
