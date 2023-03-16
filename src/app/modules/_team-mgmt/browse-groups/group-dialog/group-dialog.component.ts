@@ -773,67 +773,68 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   }
 
 
+
+
   submit() {
     const groupUser = [{
       id: 0,
       type: 1,
       user: null
     }];
-    if (this.activeTab === 0) {
-      if (!this.form.valid) {
-        this.form.markAllAsTouched();
-        FormUtils.ForEach(this.form, (fc) => {
-          fc.markAsDirty();
-        });
-        return;
-      }
 
-      if (this.form.dirty) {
-        const group = {
-          ...this.form.getRawValue(),
-        };
-        group.orgStructure = {id: group.orgStructure?.key};
-        const groupUserValue = this.form.get('userStructure').value;
-        groupUser[0].user = {
-          id: groupUserValue.id
-        };
-        if (this.editMode) {
-          const manager = {
-            id: 0,
-            type: 1,
-            user: groupUserValue.id
-          }
-          group.id = this._userId;
-          this.store.dispatch(new BrowseGroupsAction.UpdateGroup(group)).pipe(
-            tap(() => {
-              this.store.dispatch(new BrowseGroupsAction.UpdateManager({
-                groupId: this._userId,
-                user: manager
-              }));
-              takeUntil(this.destroy$);
-              take(1);
-            }),
-          ).subscribe();
-        } else {
-          this.store.dispatch(new BrowseGroupsAction.CreateGroup(group)).pipe(
-            tap(() => {
-              this.store.dispatch(new BrowseGroupsAction.CreateUser({
-                user: groupUser
-              }));
-              this.groupZoneIncidentCategory.reset();
-              this.incidentCategory.reset();
-              this.userGroupForm.reset();
-              console.log('clear bug');
-              takeUntil(this.destroy$);
-              take(1);
-            }),
-          ).subscribe();
-        }
-
-      }
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      FormUtils.ForEach(this.form, (fc) => {
+        fc.markAsDirty();
+      });
+      return;
     }
 
-    if (this.userGroupForm.dirty && this.activeTab === 1) {
+    if (this.form.dirty) {
+      const group = {
+        ...this.form.getRawValue(),
+      };
+      group.orgStructure = {id: group.orgStructure?.key};
+      const groupUserValue = this.form.get('userStructure').value;
+      groupUser[0].user = {
+        id: groupUserValue.id
+      };
+      if (this.editMode) {
+        const manager = {
+          id: 0,
+          type: 1,
+          user: groupUserValue.id
+        }
+        group.id = this._userId;
+        this.store.dispatch(new BrowseGroupsAction.UpdateGroup(group)).pipe(
+          tap(() => {
+            this.store.dispatch(new BrowseGroupsAction.UpdateManager({
+              groupId: this._userId,
+              user: manager
+            }));
+            takeUntil(this.destroy$);
+            take(1);
+          }),
+        ).subscribe();
+      } else {
+        this.store.dispatch(new BrowseGroupsAction.CreateGroup(group)).pipe(
+          tap(() => {
+            this.store.dispatch(new BrowseGroupsAction.CreateUser({
+              user: groupUser
+            }));
+            this.groupZoneIncidentCategory.reset();
+            this.incidentCategory.reset();
+            this.userGroupForm.reset();
+            console.log('clear bug');
+            takeUntil(this.destroy$);
+            take(1);
+          }),
+        ).subscribe();
+      }
+
+    }
+
+    if (this.userGroupForm.dirty) {
       if (!this.userGroupForm.valid) {
         this.userGroupForm.markAllAsTouched();
         FormUtils.ForEach(this.userGroupForm, (fc) => {
@@ -877,63 +878,60 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     if (this.groupZoneIncidentCategory.get('mapAndList').value) {
       const incidentIds = this.incidentCategory.get('incidentCategory');
 
-      if (this.activeTab === 2) {
-        if (!incidentIds.valid) {
-          incidentIds.markAsTouched();
-          incidentIds.markAsDirty();
-          return;
-        }
-
-        const geometryLocation = {
-          ...this.groupZoneIncidentCategory.getRawValue(),
-        };
-
-        if (this.groupGeometry.location) {
-          this.submitGeometryLocations(geometryLocation);
-        }
+      if (!incidentIds.valid) {
+        incidentIds.markAsTouched();
+        incidentIds.markAsDirty();
+        return;
       }
+
+      const geometryLocation = {
+        ...this.groupZoneIncidentCategory.getRawValue(),
+      };
+
+      if (this.groupGeometry.location) {
+        this.submitGeometryLocations(geometryLocation);
+      }
+
     } else {
       const centerList = this.groupZoneIncidentCategory.get('centerList');
       const zoneId = this.groupZoneIncidentCategory.get('zoneId');
       const incidentIds = this.incidentCategory.get('incidentCategory');
       let center;
-      if (this.activeTab === 2) {
-        if (!centerList.valid) {
-          centerList.markAsTouched();
-          centerList.markAsDirty();
-          return;
-        }
-
-        if (!zoneId.valid) {
-          zoneId.markAsTouched();
-          zoneId.markAsDirty();
-          return;
-        }
-
-        if (!incidentIds.valid) {
-          incidentIds.markAsTouched();
-          incidentIds.markAsDirty();
-          return;
-        }
-
-        const selectedIncidentCategories = this.incidentCategory.get('incidentCategory').value;
-        center = [];
-        selectedIncidentCategories.forEach((element) => {
-          this.selectedCenterDistricsList.forEach((v, index) => {
-            const item = {
-              incidentCategoryId: element.id,
-              centerId: v.centerId,
-              zones: v.zones,
-              allZones: false,
-            };
-            center.push(item);
-          });
-        });
+      if (!centerList.valid) {
+        centerList.markAsTouched();
+        centerList.markAsDirty();
+        return;
       }
+
+      if (!zoneId.valid) {
+        zoneId.markAsTouched();
+        zoneId.markAsDirty();
+        return;
+      }
+
+      if (!incidentIds.valid) {
+        incidentIds.markAsTouched();
+        incidentIds.markAsDirty();
+        return;
+      }
+
+      const selectedIncidentCategories = this.incidentCategory.get('incidentCategory').value;
+      center = [];
+      selectedIncidentCategories.forEach((element) => {
+        this.selectedCenterDistricsList.forEach((v, index) => {
+          const item = {
+            incidentCategoryId: element.id,
+            centerId: v.centerId,
+            zones: v.zones,
+            allZones: false,
+          };
+          center.push(item);
+        });
+      });
 
 
       // console.log('centers', center);
-      if (this._userId && this.activeTab === 2) {
+      if (this._userId) {
         if (this.editMode) {
           this.store.dispatch(new BrowseGroupsAction.UpdateIncidentLocInfo({
             groupId: this._userId, centers: center
@@ -946,7 +944,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.groupZoneIncidentCategory.dirty && this.activeTab === 2) {
+    if (this.groupZoneIncidentCategory.dirty) {
       if (!this.incidentCategory.valid) {
         this.incidentCategory.markAllAsTouched();
         FormUtils.ForEach(this.incidentCategory, (fc) => {
@@ -954,13 +952,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         });
         return;
       }
-    }
-
-    if (this.activeTab === 0) {
-      return;
-    } else if (this.activeTab === 2) {
-      // this.profileImg = undefined;
-      return;
     }
   }
 

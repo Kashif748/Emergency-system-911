@@ -162,7 +162,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'groups-managements',
+        path: 'teams-management',
         canLoad: [PrivilegeGuard],
         data: { permission: ['PRIV_VW_GRP', 'PRIV_VW_MNG_GRP'], type: 'or' },
         loadChildren: () =>
