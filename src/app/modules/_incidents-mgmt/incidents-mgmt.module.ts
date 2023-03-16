@@ -43,6 +43,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ReopenMgmtComponent } from './reopen-mgmt/reopen-mgmt.component';
 import { BrowseTasksComponent } from './reopen-mgmt/browse-tasks/browse-tasks.component';
 import { ContentTasksComponent } from './reopen-mgmt/browse-tasks/content-tasks/content-tasks.component';
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/incident-mgmt/', '.json');
@@ -105,6 +106,7 @@ const routes: Routes = [
     InputNumberModule,
     SharedModule,
     ConfirmPopupModule,
+    SharedBreadcrumbModule
   ],
   providers: [
     { provide: ILangFacade, useClass: LangFacade },

@@ -1,6 +1,7 @@
 {
+  "REOPEN_HEADER" : "Manage Incidents & Tasks Status ",
   "REOPEN_INC_CONFIREM" : "Incident status will reset to : In Progress",
-  "REOPEN_TSK_CONFIREM" : "Task status will reset to : In Progress",
+  "REOPEN_TSK_CONFIREM" : "Task status will reset to : Viewd",
   "BY_MY_ORG": "By My Org",
   "TO_MY_ORG": "To My Org"
 }
