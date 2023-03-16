@@ -1,0 +1,11 @@
+<h3 *ngIf="currentMenu" class="card-title align-items-start flex-column m-0">
+  <span *ngIf="lang == 'ar'" class="card-label font-weight-bolder">{{
+    currentMenu.module.nameAr
+    }}</span>
+  <span *ngIf="lang == 'en'" class="card-label font-weight-bolder">{{
+    currentMenu.module.nameEn
+    }}</span>
+</h3>
+<h3 *ngIf="title" class="card-title align-items-start flex-column m-0">
+  <span class="card-label font-weight-bolder">{{title}}</span>
+</h3>

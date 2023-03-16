@@ -59,7 +59,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { NgxIntlTelInputModule } from '@shared/sh-components/ngx-intl-tel-input/ngx-intl-tel-input.module';
-
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/user-mgmt/', '.json');
 }
@@ -125,6 +126,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     InputTextareaModule,
     ProgressBarModule,
     FileUploadModule,
+    SharedBreadcrumbModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
