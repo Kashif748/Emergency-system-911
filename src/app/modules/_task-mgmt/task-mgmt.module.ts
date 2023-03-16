@@ -43,6 +43,7 @@ import { DueDateDirectiveModule } from '@shared/sh-directives/due-date.directive
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TabViewModule } from 'primeng/tabview';
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/task-mgmt/', '.json');
@@ -100,6 +101,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     CdateModule,
     DueDateDirectiveModule,
     TabViewModule,
+    SharedBreadcrumbModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
