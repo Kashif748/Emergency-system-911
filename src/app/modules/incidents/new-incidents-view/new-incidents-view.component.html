@@ -214,13 +214,26 @@
         }}</span>
       </ng-container>
     </div>
-    <div class="tab-title text-medium-slate-blue">{{ tableTitle }}
-      <div class="text-center mt-4" style="color:#000;" *ngIf="currentView !== incidentViews.INTERIM_INCIDENTS &&
-                                                                currentView !== incidentViews.INQUIRIES">
-        <mat-slide-toggle #toggleElement class="example-margin" [checked]="false" (change)="viewChange($event)">
+    <div class="tab-title text-medium-slate-blue">
+      {{ tableTitle }}
+      <div
+        class="text-center mt-4"
+        style="color: #000"
+        *ngIf="
+          currentView !== incidentViews.INTERIM_INCIDENTS &&
+          currentView !== incidentViews.INQUIRIES
+        "
+      >
+        <mat-slide-toggle
+          #toggleElement
+          class="example-margin"
+          [checked]="false"
+          (change)="viewChange($event)"
+        >
           {{ "INCIDENTS.MAPVIEW" | translate }}
         </mat-slide-toggle>
-      </div></div>
+      </div>
+    </div>
 
     <div class="column-selector">
       <ngx-select-dropdown
@@ -231,16 +244,30 @@
         [config]="{ displayKey: 'name' }"
       ></ngx-select-dropdown>
     </div>
-
   </div>
-  <div class="table-responsive container-fluid my-2 px-1 mapView"
-       *ngIf="mapView && currentView !== incidentViews.INTERIM_INCIDENTS
-       && currentView !== incidentViews.INQUIRIES" id="mapView">
-    <app-map #mapContainer id="mapContainer" [config]="{ viewOnly: true, showLayers: false }" [dashboardMode]="false"
-             [showLayers]="false">
+  <div
+    class="table-responsive container-fluid my-2 px-1 mapView"
+    *ngIf="
+      mapView &&
+      currentView !== incidentViews.INTERIM_INCIDENTS &&
+      currentView !== incidentViews.INQUIRIES
+    "
+    id="mapView"
+  >
+    <app-map
+      #mapContainer
+      id="mapContainer"
+      [config]="{ viewOnly: true, showLayers: false }"
+      [dashboardMode]="false"
+      [showLayers]="false"
+    >
     </app-map>
-</div>
-  <div class="table-responsive container-fluid my-2 px-1"  id="tableView" *ngIf="!mapView">
+  </div>
+  <div
+    class="table-responsive container-fluid my-2 px-1"
+    id="tableView"
+    *ngIf="!mapView"
+  >
     <table class="table w-100">
       <thead>
         <tr>
@@ -255,7 +282,7 @@
           ></th>
           <th
             scope="col"
-            *ngFor="let col of selectedDisplayedCols | orderBy: 'order'"
+            *ngFor="let col of selectedDisplayedCols | orderBy : 'order'"
           >
             {{ col.name }}
           </th>
@@ -272,7 +299,7 @@
         "
       >
         <tr
-          *ngFor="let row of data | paginate: paginationConfig"
+          *ngFor="let row of data | paginate : paginationConfig"
           (click)="navigateTo(navigationViews.VIEW_INCIDENT, row['id'])"
         >
           <td
@@ -285,11 +312,14 @@
               <mat-icon *ngIf="row?.status?.id === 1">update</mat-icon>
             </span>
 
-            <span dir="ltr">{{ row[columnValues.YEAR] }} / {{ row[columnValues.SERIAL] }}</span>
+            <span dir="ltr"
+              >{{ row[columnValues.YEAR] }} /
+              {{ row[columnValues.SERIAL] }}</span
+            >
           </td>
           <td *ngIf="showRow(columnValues.SUBJECT)" class="subject">
             <span>
-              {{ row[columnValues.SUBJECT] | slice: 0:50 }}
+              {{ row[columnValues.SUBJECT] | slice : 0 : 50 }}
               <mat-icon *ngIf="row[columnValues.SUBJECT]?.length > 50"
                 >more_horiz</mat-icon
               ></span
@@ -309,12 +339,12 @@
           </td>
           <td *ngIf="showRow(columnValues.MAIN_CATEGORY)" class="main-category">
             <span>{{
-              row[columnValues.MAIN_CATEGORY] | propTranslator: "name"
+              row[columnValues.MAIN_CATEGORY] | propTranslator : "name"
             }}</span>
           </td>
           <td *ngIf="showRow(columnValues.CENTER)" class="region">
             <span>{{
-              getCity(row[columnValues.CENTER]) | propTranslator: "name"
+              getCity(row[columnValues.CENTER]) | propTranslator : "name"
             }}</span>
           </td>
           <td *ngIf="showRow(columnValues.GROUPS)" class="teams">
@@ -342,7 +372,7 @@
                   <span
                     class="text-dark-75 font-weight-bolder label label-lg label-light-primary label-inline"
                   >
-                    {{ item?.group | propTranslator: "name" }} </span
+                    {{ item?.group | propTranslator : "name" }} </span
                   ><br />
                 </span>
               </div>
@@ -352,12 +382,12 @@
             *ngIf="showRow(columnValues.RESPONSIBLE_ORG)"
             class="responsibleOrg"
           >
-            {{ row[columnValues.RESPONSIBLE_ORG] | propTranslator: "name" }}
+            {{ row[columnValues.RESPONSIBLE_ORG] | propTranslator : "name" }}
           </td>
           <td *ngIf="showRow(columnValues.PARENT_ORG)" class="primaryOrg">
             {{
               getParentOrg(row[columnValues.PARENT_ORG])
-                | propTranslator: "name"
+                | propTranslator : "name"
             }}
           </td>
           <td *ngIf="showRow(columnValues.TASKS)">
@@ -435,7 +465,11 @@
                 <button
                   mat-menu-item
                   *ngIf="
-                    canUserUpdate(row?.primaryOrgId, row?.responsibleOrg?.id, row)
+                    canUserUpdate(
+                      row?.primaryOrgId,
+                      row?.responsibleOrg?.id,
+                      row
+                    )
                   "
                   (click)="updateIncident(row.id)"
                 >
@@ -451,12 +485,11 @@
         *ngIf="currentView === incidentViews.INQUIRIES && !(isLoading$ | async)"
       >
         <tr
-          *ngFor="let row of data | paginate: paginationConfig"
+          *ngFor="let row of data | paginate : paginationConfig"
           (click)="navigateTo(navigationViews.VIEW_INQURY, row['id'])"
         >
-          <td *ngIf="showRow(columnValues.SERIAL)" class="id">
-
-            <span dir="ltr">{{ row[columnValues.YEAR] }} / {{ row[columnValues.SERIAL] }}</span>
+          <td *ngIf="showRow(columnValues.SR_NO)" class="id">
+            <span dir="ltr">{{ row[columnValues.SR_NO] }} </span>
           </td>
           <td *ngIf="showRow(columnValues.SUBJECT)" class="subject">
             <span>{{ row[columnValues.SUBJECT] }}</span>
@@ -468,7 +501,7 @@
             {{
               row[columnValues.CREATED_DATE]
                 | customDate
-                | date: "yyyy-MM-dd h:mm:ss"
+                | date : "yyyy-MM-dd h:mm:ss"
             }}
           </td>
           <td *ngIf="showRow(columnValues.REPORTING_CONTACT)" class="">
@@ -501,13 +534,16 @@
         "
       >
         <tr
-          *ngFor="let row of data | paginate: paginationConfig"
+          *ngFor="let row of data | paginate : paginationConfig"
           (click)="
             navigateTo(this.navigationViews.VIEW_INTERIM_INCIDENT, row['id'])
           "
         >
           <td *ngIf="showRow(columnValues.SERIAL)" class="sr_no">
-            <span dir="ltr">{{ row[columnValues.YEAR] }} / {{ row[columnValues.SERIAL] }}</span>
+            <span dir="ltr"
+              >{{ row[columnValues.YEAR] }} /
+              {{ row[columnValues.SERIAL] }}</span
+            >
           </td>
           <td *ngIf="showRow(columnValues.DESCRIPTION)" class="subject">
             <span>{{ row[columnValues.DESCRIPTION] }}</span>
@@ -527,7 +563,7 @@
           <td *ngIf="showRow(columnValues.REPORTING_VIA)" class="channelType">
             <span>{{
               getReportingVia(row[columnValues.REPORTING_VIA])
-                | propTranslator: "name"
+                | propTranslator : "name"
             }}</span>
           </td>
           <td *ngIf="showRow(columnValues.STATUS)" class="status">
@@ -539,7 +575,7 @@
                 'text-warning': row?.status?.statusEn === 'Transferred'
               }"
               >{{
-                getStatusVia(row[columnValues.STATUS]) | propTranslator: "name"
+                getStatusVia(row[columnValues.STATUS]) | propTranslator : "name"
               }}</span
             >
           </td>

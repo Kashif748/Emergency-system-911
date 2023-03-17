@@ -85,6 +85,7 @@ export class ExternalPhonebookControllerService extends BaseService {
     name?: string;
     mobileNumber?: string;
     orgName?: string;
+    active?: boolean;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageExternalPhonebook>> {
 
@@ -93,6 +94,7 @@ export class ExternalPhonebookControllerService extends BaseService {
       rb.query('name', params.name, {});
       rb.query('mobileNumber', params.mobileNumber, {});
       rb.query('orgName', params.orgName, {});
+      rb.query('active', params.active, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -117,6 +119,7 @@ export class ExternalPhonebookControllerService extends BaseService {
     name?: string;
     mobileNumber?: string;
     orgName?: string;
+    active?: boolean;
     pageable: Pageable;
   }): Observable<RestApiResponsePageExternalPhonebook> {
 

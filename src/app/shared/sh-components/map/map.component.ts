@@ -845,7 +845,8 @@ export class MapComponent
               ? polylineSymbol
               : pointSymbol,
           popupTemplate: {
-            title: this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
+             title: address?.type == 'polygon' ? this.translationService.translateAWord('INCIDENTS.TEAM_LOCATION') :
+               this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
             content: (feature: __esri.Feature) => {
               return `${address.Address}`;
             },

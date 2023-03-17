@@ -2,7 +2,7 @@
   "PHONEBOOK": {
     "HEADER": "دليل هاتف الطوارئ",
     "NEW_ITEM": "عنصر جديد",
-    "TITLE": "العنوان",
+    "TITLE": "اللقب",
     "ID": "ID",
     "FULL_NAME" : "الاسم",
     "FIRST_NAME": "الاسم",
@@ -12,6 +12,8 @@
     "MOBILE_NUMBER": "الجوال",
     "PHONE_NUMBER": "الهاتف الثابت",
     "IS_ACTIVE": "حالةالنشاط",
-    "JOB_TITLE": "المسمى الوظيفي"
+    "JOB_TITLE": "المسمى الوظيفي",
+    "COPY_TOOLTIP" : "نسخ رقم الجوال",
+    "ALL" :"الكل"
   }
 }

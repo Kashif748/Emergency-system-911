@@ -25,7 +25,9 @@ export const OFFCANVAS_PHONEBOOK_UI_STATE_TOKEN =
   name: OFFCANVAS_PHONEBOOK_UI_STATE_TOKEN,
   defaults: {
     pageRequest: {
-      filters: {},
+      filters: {
+        active: true,
+      },
       first: 0,
       rows: 20,
     },
@@ -44,6 +46,13 @@ export class OffcanvasPhonebookState {
     state: OffcanvasPhonebookStateModel
   ): OffcanvasPhonebookStateModel {
     return state;
+  }
+  @Selector([OffcanvasPhonebookState])
+  static hasFilters(state: OffcanvasPhonebookStateModel): boolean {
+    return (
+      Object.keys(state.pageRequest.filters).filter((k) => k !== 'active')
+        .length > 0
+    );
   }
   /* ********************** ACTIONS ************************* */
   @Action(OffcanvasPhonebookAction.LoadPhonebook)

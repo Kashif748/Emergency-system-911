@@ -24,8 +24,11 @@ export class BreadcrumbComponent implements OnInit {
     this.lang = this.translationService.getSelectedLanguage();
     if (!this.title) {
       this.layoutDataService.currentMenuItem.subscribe((data) => {
+        console.log(data);
+
         if (data) {
           this.currentMenu = data;
+
         }
       });
     }

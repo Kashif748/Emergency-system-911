@@ -41,7 +41,16 @@ export class BrowseIncidentsComponent implements OnInit {
   ngOnInit(): void {
     this.page$ = this.store.select(IncidentState.page).pipe(
       filter((p) => !!p),
-      tap(console.log)
+      map((page) =>
+        page?.map((u) => {
+          return {
+            ...u,
+            Porg: u['incidentOrgs']?.find(
+              (element) => element.isMain && element.isMain == true
+            ),
+          };
+        })
+      )
     );
   }
 

@@ -486,6 +486,10 @@ export class LogComponent implements OnInit, OnDestroy {
 
   async keydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
+      if (this.mode === 'edit') {
+        this.updateWorkLog();
+        return;
+      }
       if (this.type === 'task') {
         this.addTaskWorkLog();
       }
