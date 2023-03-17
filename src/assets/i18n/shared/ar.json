@@ -528,6 +528,7 @@
       "LATE": "متأخر",
       "INCIDENTS": "البلاغات",
       "REPORTER": "الموقع المرسل من قبل المبلغ",
+      "TEAM_LOCATION":"موقع الفريق",
       "OPEN_TASKS": "مهام مفتوحة",
       "CLOSED_TASKS": "مهام مغلقة",
       "DELAYED_TASKS": "مهام متأخرة",
