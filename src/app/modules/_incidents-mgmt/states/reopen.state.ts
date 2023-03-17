@@ -33,7 +33,7 @@ export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
   defaults: {
     IncidentsPageRequest: {
       filters: {
-        status: [{ id: 3 }, { id: 4 }],
+        status: [{ id: 2 },{ id: 3 }, { id: 4 }],
       },
       first: 0,
       rows: 10,
@@ -43,7 +43,7 @@ export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
 
     TasksPageRequest: {
       filters: {
-        status: [{ id: 4 }, { id: 5 }, { id: 7 }],
+        status: [{ id: 4 },  { id: 7 }],
       },
       first: 0,
       rows: 10,

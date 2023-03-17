@@ -48,8 +48,6 @@ export class ContentIncidentsComponent implements OnInit {
   }
 
   reOpen(event: Event, id) {
-    console.log(event);
-
     this.confirmationService.confirm({
       target: event.target,
       message: this.translate.instant('REOPEN_INC_CONFIREM'),
