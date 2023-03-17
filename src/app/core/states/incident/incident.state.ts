@@ -150,7 +150,7 @@ export class IncidentState {
     return this.incidentService
       .search4({
         filter: payload.filters,
-        pageable: { page: 0, size: payload.rows },
+        pageable: { page: payload.page, size: payload.size },
         status: [],
       })
       .pipe(

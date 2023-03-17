@@ -52,6 +52,8 @@ export class ContentIncidentsComponent implements OnInit {
       target: event.target,
       message: this.translate.instant('REOPEN_INC_CONFIREM'),
       icon: 'pi pi-question-circle',
+      acceptLabel: this.translate.instant('SHARED.DIALOG.YES'),
+      rejectLabel: this.translate.instant('SHARED.DIALOG.NO'),
       accept: () => this.reOpenIncidint.emit(id),
       reject: () => {},
     });

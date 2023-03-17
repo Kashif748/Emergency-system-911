@@ -93,8 +93,9 @@ export class ReopenState {
     const pageRequest = getState().IncidentsPageRequest;
     return dispatch(
       new IncidentAction.LoadPage({
-        first: this.apiHelper.page(pageRequest),
-        rows: pageRequest.rows,
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
           status: pageRequest.filters.status?.map((o) => o.id),
