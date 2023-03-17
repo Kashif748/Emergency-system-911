@@ -89,6 +89,14 @@ export class EmergenciesPhonebookComponent implements OnInit {
 
     this.store.dispatch(new BrowsePhonebookAction.UpdateFilter(filter));
   }
+  loadByStatus(filter: { [key: string]: any }) {
+    this.store
+      .dispatch(new BrowsePhonebookAction.UpdateFilter(filter))
+      .toPromise()
+      .then(() => {
+        this.search();
+      });
+  }
 
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(

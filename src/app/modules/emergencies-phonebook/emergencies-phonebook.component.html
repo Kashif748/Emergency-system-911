@@ -5,18 +5,6 @@
     <h2>{{ "PHONEBOOK.HEADER" | translate }}</h2>
 
     <div class="spacer"></div>
-    <button
-      *appPrivileges="'PRIV_ADD_PHONEBOOK_ENTRY'"
-      class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
-      (click)="openDialog(null)"
-    >
-      {{ "PHONEBOOK.NEW_ITEM" | translate }}
-      <span
-        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
-        cacheSVG="true"
-        class="svg-icon svg-icon-md"
-      ></span>
-    </button>
   </mat-toolbar>
   <div class="mx-4 my-10" *ngIf="state$ | async as state">
     <div class="row mb-4">
@@ -54,7 +42,9 @@
                   placeholder="{{ 'PHONEBOOK.MOBILE_NUMBER' | translate }}"
                   [ngModel]="state?.pageRequest?.filters['mobileNumber']"
                   pInputText
-                  (keyup)="updateFilter({ mobileNumber: $event.target.value }, $event)"
+                  (keyup)="
+                    updateFilter({ mobileNumber: $event.target.value }, $event)
+                  "
                 />
               </span>
             </div>
@@ -83,6 +73,53 @@
             </div>
           </div>
         </p-fieldset>
+      </div>
+      <div class="w-100 d-flex flex-wrap mx-1 my-2 px-6">
+        <div class="my-auto">
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
+            (click)="loadByStatus({ active: null })"
+            [ngClass]="{
+              active: state?.pageRequest?.filters['active'] == null
+            }"
+          >
+            <span class="m-auto"> {{ "PHONEBOOK.ALL" | translate }}</span>
+          </button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px mx-2 px-2 text-center py-1 p-button-rounded p-button-sm p-button-warning"
+            (click)="loadByStatus({ active: false })"
+            [ngClass]="{
+              active: !state?.pageRequest?.filters['active']
+            }"
+          >
+            <span class="m-auto"> {{ "ACTIONS.INACTIVE" | translate }}</span>
+          </button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 py-1 text-center p-button-rounded p-button-primary p-button-sm text-white"
+            (click)="loadByStatus({ active: true })"
+            [ngClass]="{
+              active: state?.pageRequest?.filters['active']
+            }"
+          >
+            <span class="m-auto"> {{ "ACTIONS.ACTIVE" | translate }} </span>
+          </button>
+        </div>
+
+        <div class="ml-dir-auto d-flex">
+          <button
+            pButton
+            label="{{ 'ACTIONS.ADD' | translate }}"
+            icon="pi pi-plus"
+            (click)="openDialog()"
+            *appPrivileges="'PRIV_ADD_PHONEBOOK_ENTRY'"
+          ></button>
+        </div>
       </div>
     </div>
 

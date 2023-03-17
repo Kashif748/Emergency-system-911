@@ -14,6 +14,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { TranslateService } from '@ngx-translate/core';
+import { ILangFacade } from '@core/facades/lang.facade';
 
 @Component({
   selector: 'app-phonebook-offcanvas',
@@ -29,12 +30,20 @@ export class PhonebookOffcanvasComponent implements OnInit {
   @Select(OffcanvasPhonebookState.state)
   public state$: Observable<OffcanvasPhonebookStateModel>;
 
+  @Select(OffcanvasPhonebookState.hasFilters)
+  public hasFilters$: Observable<boolean>;
+
+
+  public position$ = this.langFacade.vm$.pipe(
+    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
+  );
   public page$: Observable<ExternalPhonebook[]>;
   constructor(
     private store: Store,
     private clipboard: Clipboard,
     private messageHelper: MessageHelper,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private langFacade: ILangFacade
   ) {}
 
   ngOnInit(): void {
@@ -42,10 +51,15 @@ export class PhonebookOffcanvasComponent implements OnInit {
       filter((p) => !!p),
       map((page) => page?.filter((u) => u.isActive))
     );
-    this.loadPage({
-      first: 0,
-      rows: 20,
-    });
+  }
+  openSideBar() {
+    this.display = !this.display;
+    if (this.display) {
+      this.loadPage({
+        first: 0,
+        rows: 20,
+      });
+    }
   }
 
   openDialog(id?: number) {
@@ -53,6 +67,7 @@ export class PhonebookOffcanvasComponent implements OnInit {
   }
   search() {
     this.store.dispatch(new OffcanvasPhonebookAction.LoadPhonebook());
+
   }
 
   clear() {
@@ -60,6 +75,7 @@ export class PhonebookOffcanvasComponent implements OnInit {
       new OffcanvasPhonebookAction.UpdateFilter({ clear: true }),
       new OffcanvasPhonebookAction.LoadPhonebook(),
     ]);
+
   }
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
     if (event?.key === 'Enter') {
@@ -84,7 +100,7 @@ export class PhonebookOffcanvasComponent implements OnInit {
     this.clipboard.copy(phonebook.mobileNumber);
     this.messageHelper.success({
       summary: this.translate.instant('COMMON.SUCCESSFULLY_COPIED'),
-      detail :''
+      detail: '',
     });
   }
 }
