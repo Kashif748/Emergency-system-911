@@ -437,8 +437,20 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
           //     title: 'Municipality',
           //   },
           // ],
-          // url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
-          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+          url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
+          id: 'MunicipalityImage',
+          title: 'Municipality',
+          opacity: 0.5,
+          sublayers: [
+            {
+              id: 20,
+              visible: true,
+              title: 'Municipality Areas',
+            },
+          ],
+
+          // new layers start
+          /*url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
           id: 'MunicipalityImage',
           title: 'Municipality',
           opacity: 0.5,
@@ -449,10 +461,13 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               // title: 'Municipality Areas',
               title: 'Municipality Areas',
             },
-          ],
+          ],*/
+          // new layers End
+
         } as __esri.MapImageLayerProperties);
 
-/*      const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
+
+      const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
           id: 'TAWAJUDI_FACILITIES_IMAGE_LAYER',
@@ -465,9 +480,11 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               title: 'Tawajudi Facilities',
             },
           ],
-        } as __esri.MapImageLayerProperties);*/
+        } as __esri.MapImageLayerProperties);
 
-      const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
+// new layer start
+
+      /*const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
               new MapImageLayer({
         url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
         id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
@@ -480,11 +497,14 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
             visible: true,
           },
         ],
-      } as __esri.MapImageLayerProperties);
-/*        new MapImageLayer({
+      } as __esri.MapImageLayerProperties);*/
+
+      // new layer end
+      const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
           url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
             this.lang == 'ar' ? '_Ara' : '_Eng'
-          }/MapServer`,
+            }/MapServer`,
           id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
           tilte: 'Districts',
           transparent: true,
@@ -495,9 +515,11 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               visible: true,
             },
           ],
-        } as __esri.MapImageLayerProperties);*/
+        } as __esri.MapImageLayerProperties);
 
-      const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
+        // new layer start here
+
+     /* const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
           id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
@@ -511,8 +533,11 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               // tilte: 'Plots',
             },
           ],
-        } as __esri.MapImageLayerProperties);
-/*        new MapImageLayer({
+        } as __esri.MapImageLayerProperties);*/
+
+      // new layer end here
+      const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
           url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
           id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
           tilte: 'Plots',
@@ -525,7 +550,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               // tilte: 'Plots',
             },
           ],
-        } as __esri.MapImageLayerProperties);*/
+        } as __esri.MapImageLayerProperties);
 
       this.ONWANI_SEARCH_DZSP_IMAGE_LAYER = new MapImageLayer({
         // url: '/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer',
