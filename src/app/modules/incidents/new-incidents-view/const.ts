@@ -63,7 +63,7 @@ export const COLUMNS = {
   ],
   Inquiries: [
     // { value: 'id', name: 'INCIDENTS.INQUIRIES.ID', order: 1 },
-    { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
+    { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
     { value: 'subject', name: 'INCIDENTS.INQUIRIES.SUBJECT', order: 2 },
     {
       value: 'createdDate',
