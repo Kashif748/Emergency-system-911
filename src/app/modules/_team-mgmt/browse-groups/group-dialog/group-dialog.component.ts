@@ -61,7 +61,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   @Select(OrgState.orgs)
   orgs$: Observable<OrgStructure[]>;
 
-  @Select(UserState.groupMapUsers)
+  @Select(GroupState.groupMapUsers)
   users$: Observable<UserAndRoleProjection[]>;
 
   @Select(CenterState.centerList)
@@ -150,7 +150,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     if (v === undefined || v === null) {
       return;
     }
-    this.loadUsers('', true);
+    // this.loadUsers('', true);
     this.store
       .dispatch(new GroupAction.GetGroup({id: v}))
       .pipe(
@@ -158,6 +158,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         take(1),
         tap((user) => {
+
           this.form.patchValue({
             ...user,
             orgStructure: {
@@ -252,7 +253,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$), auditTime(1000))
       .subscribe((name) => {
         this.store.dispatch(
-          new UserAction.LoadGroupMapUserPage({
+          new GroupAction.LoadGroupMapUserPage({
             name,
             page: 0,
             size: 15,
@@ -564,7 +565,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   loadUsers(name?: string, direct = false) {
     if (direct) {
       this.store.dispatch(
-        new UserAction.LoadGroupMapUserPage({
+        new GroupAction.LoadGroupMapUserPage({
           name,
           page: 0,
           size: 15,
@@ -1021,6 +1022,9 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       index = index + 1;
     }
     switch (index) {
+      case 1:
+        this.loadUsers('', true);
+        break;
       case 2:
         this.loadCenterListCall();
         await this.loadGeometry();

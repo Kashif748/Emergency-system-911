@@ -147,4 +147,19 @@ export namespace GroupAction {
       }
     ) {}
   }
+
+  export class LoadGroupMapUserPage {
+    static readonly type = '[Group] Load Page';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        name: string;
+        page: number;
+        size: number;
+        sort?: string[];
+      }
+    ) {}
+  }
 }

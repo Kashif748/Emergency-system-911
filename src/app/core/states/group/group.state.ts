@@ -25,13 +25,17 @@ import { EMPTY } from 'rxjs';
 import {ManageGroupsService} from "../../../api/services/manage-groups.service";
 import {Group} from "../../../api/models/group";
 import {PageGroupProjection} from "../../../api/models/page-group-projection";
-import {Pageable, User, UserInappAuthentication, UserMiddlewareAuth} from "../../../api/models";
+import {Pageable, User, UserAndRoleProjection, UserInappAuthentication, UserMiddlewareAuth} from "../../../api/models";
 import {GroupProjection} from "../../../api/models/group-projection";
 import {UserGroupMapControllerService} from "../../../api/services/user-group-map-controller.service";
 import {GroupUser} from "../../../api/models/group-user";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {GroupLocationGeoInfo} from "../../../api/models/group-location-geo-info";
 import {GroupLocationGeometryControllerService} from "../../../api/services/group-location-geometry-controller.service";
+import {UserState, UserStateModel} from "@core/states/user/user.state";
+import {UserAction} from "@core/states/user/user.action";
+import {UserProfileControllerService} from "../../../api/services";
+import {userType} from "../../../modules/groups-management/group.model";
 
 export interface GroupStateModel {
   page: PageGroupProjection;
@@ -40,6 +44,8 @@ export interface GroupStateModel {
   groupUser: GroupUser;
   createdGroup: Group;
   groupLocGeometry: GroupLocationGeoInfo | GroupLocationGeoResponse[];
+  groupMapUser: UserAndRoleProjection[];
+  usersAssignToGroup: UserAndRoleProjection[];
   loading: boolean;
   blocking: boolean;
 }
@@ -61,7 +67,8 @@ export class GroupState {
     private store: Store,
     private messageHelper: MessageHelper,
     private createUserGroupMap: UserGroupMapControllerService,
-    private groupLocationGeometry: GroupLocationGeometryControllerService
+    private groupLocationGeometry: GroupLocationGeometryControllerService,
+    private userService: UserProfileControllerService,
   ) {}
   /* ************************ SELECTORS ******************** */
   @Selector([GroupState])
@@ -92,6 +99,17 @@ export class GroupState {
   static blocking(state: GroupStateModel) {
     return state?.blocking;
   }
+
+  @Selector([GroupState])
+  static groupMapUsers(state: GroupStateModel) {
+    return state?.groupMapUser;
+  }
+
+  @Selector([GroupState])
+  static usersAssignToGroup(state: GroupStateModel) {
+    return state?.usersAssignToGroup;
+  }
+
   /* ********************** ACTIONS ************************* */
   @Action(GroupAction.LoadPage, { cancelUncompleted: true })
   loadPage(
@@ -179,6 +197,7 @@ export class GroupState {
         setState(
           patch<GroupStateModel>({
             group: res.result,
+            usersAssignToGroup: res.result.users,
           })
         );
       }),
@@ -475,6 +494,58 @@ export class GroupState {
             })
           );
         })
+      );
+  }
+
+  @Action(GroupAction.LoadGroupMapUserPage, { cancelUncompleted: true })
+  LoadGroupMapUserPage(
+    { setState, getState }: StateContext<GroupStateModel>,
+    { payload }: GroupAction.LoadGroupMapUserPage
+  ) {
+    const users = getState().usersAssignToGroup
+    let manager;
+    if (users) {
+      manager = users.find((item, index) => {
+        if (item['type'] == userType.MANAGER) {
+          return item;
+        }
+      });
+    }
+    console.log(manager);
+    setState(
+      patch<UserStateModel>({
+        loading: true,
+      })
+    );
+    return this.userService
+      .getAllForOrg({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload.name,
+
+      })
+      .pipe(
+        tap( ({result: {content: list}}) => {
+          setState(
+            patch<GroupStateModel>({
+              groupMapUser: list.map((v) => {
+                if (manager) {
+                  if (v.id === manager['user'].id) {
+                    return {...v , disabled: true};
+                  } else {
+                    return {...v , disabled: false};
+                  }
+                } else {
+                  return {...v , disabled: false};
+                }
+              }),
+            })
+          );
+
+        }),
       );
   }
 }
