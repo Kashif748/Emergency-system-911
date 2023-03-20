@@ -43,6 +43,7 @@ import {MapConfig, MapService} from "@shared/components/map/services/map.service
 import {AppCommonData, IncidentCategory2} from "@core/entities/AppCommonData";
 import {MapComponent} from "@shared/sh-components/map/map.component";
 import {__await} from "tslib";
+import {TabPanel} from "primeng/tabview";
 
 @Component({
   selector: 'app-group-dialog',
@@ -96,7 +97,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   public selectedCat = [];
   public categories = [];
   public groupConfig: MapConfig[] = [];
-  public isUserActive;
+  public isUserActive = true;
 
   form: FormGroup;
   private defaultFormValue: { [key: string]: any } = {};
@@ -113,7 +114,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   checkMap = false;
 
   areaItems: AreaItem[] = [];
-  disabledUsers = [];
+  public disabledUsers = [];
   responseFromIncidentLoc: any = [];
 
   _userId: number;
@@ -781,8 +782,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       type: 1,
       user: null
     }];
-
-    if (!this.form.valid) {
+    const viewGroup = document.getElementById('viewGroup');
+    if (!this.form.valid && viewGroup !== null) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
         fc.markAsDirty();
@@ -1014,6 +1015,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
 
   async tab(index: number) {
     const mode = ''
+    const viewGroup = document.getElementById('viewGroup');
+    if (viewGroup !== null) {
+      } else {
+      index = index + 1;
+    }
     switch (index) {
       case 2:
         this.loadCenterListCall();
