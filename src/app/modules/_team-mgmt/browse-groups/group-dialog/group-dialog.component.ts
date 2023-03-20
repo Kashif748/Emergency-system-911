@@ -1097,6 +1097,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           }
           else {
              this.selectedCat = [];
+             this.selectedCenter = [];
           }
         }),
       ).subscribe();
