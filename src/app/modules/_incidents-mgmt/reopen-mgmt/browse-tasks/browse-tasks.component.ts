@@ -40,47 +40,6 @@ export class BrowseTasksComponent implements OnInit {
 
   private destroy$ = new Subject();
 
-  public sortableColumns$ = this.langFacade.vm$.pipe(
-    map(({ ActiveLang: { key } }) => {
-      return [
-        {
-          name: 'SHARED.TITLE',
-          code: 'title',
-        },
-        { name: 'SHARED.INCIDENT_ID', code: 'incident.id' },
-        { name: 'SHARED.PRIORITY', code: 'priority' },
-        { name: 'SHARED.DUE_DATE', code: 'dueDate' },
-        { name: 'SHARED.STATUS', code: 'status.id' },
-        {
-          name: 'SHARED.CREATED_BY',
-          code: `createdBy.firstName${key[0].toUpperCase()}${
-            key[1]
-          },createdBy.middleName${key[0].toUpperCase()}${
-            key[1]
-          },createdBy.lastName${key[0].toUpperCase()}${key[1]}`,
-        },
-      ];
-    })
-  );
-
-  public columns = [
-    {
-      name: 'SHARED.TITLE',
-      code: 'title',
-      disabled: true,
-    },
-    {
-      name: 'SHARED.DESC',
-      code: 'desc',
-      disabled: true,
-    },
-    { name: 'SHARED.INCIDENT_ID', code: 'incidentId' },
-    { name: 'SHARED.PRIORITY', code: 'priority' },
-    { name: 'SHARED.DUE_DATE', code: 'dueDate' },
-    { name: 'SHARED.STATUS', code: 'status' },
-    { name: 'SHARED.CREATED_BY', code: 'createdBy' },
-    { name: 'SHARED.ASSIGNEE', code: 'assignee' },
-  ];
   public type$: Observable<string>;
   /**
    *
@@ -103,38 +62,10 @@ export class BrowseTasksComponent implements OnInit {
     this.type$ = this.route.queryParams.pipe(
       map((params) => params['task_type'])
     );
-    this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((c) => c.matches)
-      )
-      .subscribe(() => {
-        // this.changeView('CARDS');
-      });
-    this.page$ = this.store.select(TaskState.page).pipe(
-      filter((p) => !!p),
-      tap(console.log)
-    );
+
+    this.page$ = this.store.select(TaskState.page).pipe(filter((p) => !!p));
   }
 
-  activate(id: number) {
-    this.messageHelper.confirm({
-      summary: 'SHARED.DIALOG.ARE_YOU_SURE',
-      detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE',
-      yesCommand: () => {
-        this.store.dispatch(new TaskAction.Activate({ id }));
-        this.messageHelper.closeConfirm();
-      },
-      noCommand: () => {
-        this.messageHelper.closeConfirm();
-      },
-    });
-  }
-
-  // changeView(view: 'TABLE' | 'CARDS') {
-  //   this.store.dispatch(new BrowseTasksAction.ChangeView({ view }));
-  // }
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
     if (event?.key === 'Enter') {
       return this.search();
