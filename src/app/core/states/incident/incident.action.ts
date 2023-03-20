@@ -19,7 +19,12 @@ export namespace IncidentAction {
     /**
      *
      */
-    constructor(public payload: PageRequestModel) {}
+    constructor(public payload:  {
+      filters?: { [key: string]: any };
+      sort?: string[];
+      page: number;
+      size: number;
+    }) {}
   }
 
   export class LoadOrgs {
