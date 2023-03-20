@@ -77,8 +77,8 @@ export const COLUMNS = {
     },
   ],
   InterimIncidents: [
-    { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
-    // { name: 'INCIDENTS.SR_NO', value: 'serial', order: 1 },
+    // { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
+    { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
     {
       name: 'INCIDENTS.INCIDENT_SUBJECT',
       value: 'description',

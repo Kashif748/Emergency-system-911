@@ -539,11 +539,8 @@
             navigateTo(this.navigationViews.VIEW_INTERIM_INCIDENT, row['id'])
           "
         >
-          <td *ngIf="showRow(columnValues.SERIAL)" class="sr_no">
-            <span dir="ltr"
-              >{{ row[columnValues.YEAR] }} /
-              {{ row[columnValues.SERIAL] }}</span
-            >
+          <td *ngIf="showRow(columnValues.SR_NO)" class="id">
+            <span dir="ltr">{{ row[columnValues.SR_NO] }} </span>
           </td>
           <td *ngIf="showRow(columnValues.DESCRIPTION)" class="subject">
             <span>{{ row[columnValues.DESCRIPTION] }}</span>
