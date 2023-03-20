@@ -32,33 +32,30 @@
     </h2>
     <div class="spacer"></div>
 
-    <ng-container
-      *ngIf="incidentDetails?.status?.id == 1"
-    >
+    <ng-container *ngIf="incidentDetails?.status?.id == 1">
       <button
-        *appPrivileges="['PRIV_CR_INC','PRIV_AR_INT_INC']"
+        *appPrivileges="['PRIV_CR_INC', 'PRIV_AR_INT_INC']"
         class="btn btn-md btn-square btn-primary font-weight-bold cursor-pointer py-2"
         [routerLink]="['/incidents/report-interim', incidentDetails?.id]"
       >
         {{ "INCIDENTS.ACCEPT_INCIDENT" | translate }}
       </button>
       <button
-      *appPrivileges="'PRIV_AR_INT_INC'"
+        *appPrivileges="'PRIV_AR_INT_INC'"
         class="btn btn-md btn-square btn-danger font-weight-bold cursor-pointer py-2 mx-2 px-6"
         (click)="changeStatus($event, incidentDetails.id)"
       >
         {{ "INCIDENTS.DECLINE_INCIDENT" | translate }}
       </button>
     </ng-container>
-    <ng-container
-      *ngIf="incidentDetails?.status?.id == 2"
-    >
-
+    <ng-container *ngIf="incidentDetails?.status?.id == 2">
       <a
         class="btn btn-md btn-square btn-primary font-weight-bold cursor-pointer py-2 mx-2 px-6"
-        routerLink="../../view/{{incidentDetails.incidentId}}"
+        routerLink="../../view/{{ incidentDetails.incidentId }}"
       >
-       {{'INCIDENTS.ID' | translate}}  {{incidentDetails.incidentId}}/{{incidentDetails?.createdOn | customDate | date: "yyyy"}}
+        {{ "INCIDENTS.ID" | translate }} {{ incidentDetails.incidentId }}/{{
+          incidentDetails?.createdOn | customDate | date : "yyyy"
+        }}
       </a>
     </ng-container>
   </div>
@@ -204,15 +201,13 @@
                         <!--begin::Text-->
                         <div class="d-flex flex-column font-weight-bold">
                           <a class="text-dark mb-1">
-                            {{ "INCIDENTS.SERIAL" | translate }}
+                            {{ "INCIDENTS.SR_NO" | translate }}
                           </a>
                           <span class="text-muted">
                             <p
                               class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
                             >
-                            {{ incidentDetails?.year }}/{{
-                              incidentDetails?.serial
-                            }}
+                              {{ incidentDetails?.id }}
                             </p>
                           </span>
                         </div>
@@ -249,7 +244,7 @@
                               class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
                             >
                               <!-- {{incidentDetails?.city}} -->
-                              {{ mainCategory | propTranslator:'name' }}
+                              {{ mainCategory | propTranslator : "name" }}
                             </p>
                           </span>
                         </div>
@@ -286,7 +281,7 @@
                               class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
                             >
                               <!-- {{incidentDetails?.city}} -->
-                              {{ category | propTranslator:'name' }}
+                              {{ category | propTranslator : "name" }}
                             </p>
                           </span>
                         </div>
@@ -325,7 +320,7 @@
                               {{
                                 incidentDetails?.createdOn
                                   | customDate
-                                  | date: "medium"
+                                  | date : "medium"
                               }}
                             </p>
                           </span>
@@ -361,9 +356,7 @@
                             <p
                               class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
                             >
-                              {{
-                                getStatusVia(incidentDetails?.status?.id)
-                              }}
+                              {{ getStatusVia(incidentDetails?.status?.id) }}
                               <!-- {{ getStatusId(incidentDetails?.status?.id) }} -->
                             </p>
 
@@ -407,7 +400,9 @@
                           <a class="text-dark mb-1">
                             {{ "INCIDENTS.CITY" | translate }}
                           </a>
-                          <div class=" text-dark-75 font-weight-bolder mb-1 font-size-lg">
+                          <div
+                            class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                          >
                             {{ getcityId(incidentDetails?.city?.id) }}
                           </div>
                         </div>
@@ -417,8 +412,10 @@
                     </div>
 
                     <!--Incident Action Time and Date-->
-                    <div class="col-md-4 col-sm-6 info-item p-3"
-                    *ngIf="incidentDetails?.lastActionDate">
+                    <div
+                      class="col-md-4 col-sm-6 info-item p-3"
+                      *ngIf="incidentDetails?.lastActionDate"
+                    >
                       <!--begin::Item-->
                       <div
                         class="d-flex w-100 h-100 align-items-center border rounded mb-10"
@@ -448,7 +445,7 @@
                               {{
                                 incidentDetails?.lastActionDate
                                   | customDate
-                                  | date: "medium"
+                                  | date : "medium"
                               }}
                             </p>
                           </span>
@@ -458,8 +455,10 @@
                     </div>
 
                     <!--Incident Action done By-->
-                    <div class="col-md-4 col-sm-6 info-item p-3"
-                    *ngIf="incidentDetails?.lastActionBy">
+                    <div
+                      class="col-md-4 col-sm-6 info-item p-3"
+                      *ngIf="incidentDetails?.lastActionBy"
+                    >
                       <!--begin::Item-->
                       <div
                         class="d-flex w-100 h-100 align-items-center border rounded mb-10"
@@ -480,7 +479,7 @@
                         <!--begin::Text-->
                         <div class="d-flex flex-column font-weight-bold">
                           <a class="text-dark mb-1">
-                            {{ 'INCIDENTS.ACTION_TAKEN_BY' | translate}}
+                            {{ "INCIDENTS.ACTION_TAKEN_BY" | translate }}
                           </a>
                           <span class="text-muted">
                             <p
@@ -498,8 +497,10 @@
                       </div>
                     </div>
                     <!--Incident Rejection Reason-->
-                    <div class="col-md-4 col-sm-6 info-item p-3"
-                      *ngIf="incidentDetails?.reason">
+                    <div
+                      class="col-md-4 col-sm-6 info-item p-3"
+                      *ngIf="incidentDetails?.reason"
+                    >
                       <!--begin::Item-->
                       <div
                         class="d-flex w-100 h-100 align-items-center border rounded mb-10"
@@ -520,15 +521,13 @@
                         <!--begin::Text-->
                         <div class="d-flex flex-column font-weight-bold">
                           <a class="text-dark mb-1">
-                            {{ 'INCIDENTS.REJECTION_REASON' | translate}}
+                            {{ "INCIDENTS.REJECTION_REASON" | translate }}
                           </a>
                           <span class="text-muted">
                             <p
                               class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
                             >
-                              {{
-                                incidentDetails?.reason
-                              }}
+                              {{ incidentDetails?.reason }}
                             </p>
                           </span>
                         </div>
@@ -536,11 +535,8 @@
                       </div>
                     </div>
 
-
                     <!-- Incidents Location Url -->
-                    <div
-                      class="col-12 mt-5 info-item"
-                    >
+                    <div class="col-12 mt-5 info-item">
                       <!--begin::Item-->
                       <div
                         class="d-flex w-100 h-100 align-items-center mb-10 border py-4 rounded"
@@ -567,7 +563,11 @@
                             class="text-dark font-size-h5"
                             style="line-break: anywhere"
                           >
-                            <a [href]="incidentDetails?.location" target="_blank">{{incidentDetails?.location}}</a>
+                            <a
+                              [href]="incidentDetails?.location"
+                              target="_blank"
+                              >{{ incidentDetails?.location }}</a
+                            >
                           </div>
                         </div>
                         <!--end::Text-->
@@ -576,9 +576,7 @@
                     </div>
 
                     <!-- Incidents Desc -->
-                    <div
-                      class="col-12 mt-5 info-item"
-                    >
+                    <div class="col-12 mt-5 info-item">
                       <!--begin::Item-->
                       <div
                         class="d-flex w-100 h-100 align-items-center mb-10 border py-4 rounded"

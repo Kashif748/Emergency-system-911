@@ -1,30 +1,50 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
-import {Location} from '@angular/common';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {UserService} from '@core/api/services/user.service';
-import {UrlHelperService} from '@core/services/url-helper.service';
-import {combineLatest, merge, Observable} from 'rxjs';
-import {CircularsService} from 'src/app/_metronic/core/services/circulars.service';
-import {OrgsService} from 'src/app/_metronic/core/services/orgs.service';
-import {AlertsService} from 'src/app/_metronic/core/services/alerts.service';
-import {IncidentsService} from 'src/app/_metronic/core/services/incidents.service';
-import {map} from 'rxjs/operators';
-import {IStorageService} from 'src/app/core/services/storage.service';
-import {LayoutDataService} from 'src/app/pages/layout.service';
-import {MenuItem} from 'src/app/pages/_layout/components/header/header-menu/menu-item.model';
-import {TranslationService} from '../../i18n/translation.service';
-import {CommonService} from '@core/services/common.service';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Location } from '@angular/common';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { UserService } from '@core/api/services/user.service';
+import { UrlHelperService } from '@core/services/url-helper.service';
+import { combineLatest, merge, Observable, Subject } from 'rxjs';
+import { CircularsService } from 'src/app/_metronic/core/services/circulars.service';
+import { OrgsService } from 'src/app/_metronic/core/services/orgs.service';
+import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
+import { IncidentsService } from 'src/app/_metronic/core/services/incidents.service';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  skip,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { IStorageService } from 'src/app/core/services/storage.service';
+import { LayoutDataService } from 'src/app/pages/layout.service';
+import { MenuItem } from 'src/app/pages/_layout/components/header/header-menu/menu-item.model';
+import { TranslationService } from '../../i18n/translation.service';
+import { CommonService } from '@core/services/common.service';
 import { concat } from 'rxjs';
+import { TreeNode } from 'primeng/api';
+import { TreeHelper } from '@core/helpers/tree.helper';
+import { IAuthService } from '@core/services/auth.service';
+import { Select, Store } from '@ngxs/store';
+import { OrgAction, OrgState } from '@core/states';
+import { OrgStructure } from 'src/app/api/models';
 
 @Component({
   selector: 'app-form-circulars',
   templateUrl: './form-circulars.component.html',
   styleUrls: ['./form-circulars.component.scss'],
 })
-export class FormCircularsComponent implements OnInit {
+export class FormCircularsComponent implements OnInit, OnDestroy {
   // Variables
-  orgs$: Observable<any>;
+
   users$: Observable<any>;
   toList: any[] = [];
   storage: any;
@@ -50,6 +70,15 @@ export class FormCircularsComponent implements OnInit {
   currentMenu: MenuItem;
   toInternalOrgsList: any[];
 
+  @Select(OrgState.orgs)
+  public orgs$: Observable<OrgStructure[]>;
+
+  public internalOrgsTree$: Observable<TreeNode[]>;
+  public externalOrgsTree$: Observable<TreeNode[]>;
+  orgId: number;
+
+  private destroy$ = new Subject();
+
   constructor(
     private translationService: TranslationService,
     private incidentservice: IncidentsService,
@@ -64,8 +93,12 @@ export class FormCircularsComponent implements OnInit {
     private storageService: IStorageService,
     private layoutDataService: LayoutDataService,
     private urlHelper: UrlHelperService,
-    private readonly commonService: CommonService
+    private readonly commonService: CommonService,
+    private treeHelper: TreeHelper,
+    private auth: IAuthService,
+    private store: Store
   ) {
+    this.orgId = this.auth.getClaim('orgId');
   }
 
   ngOnInit(): void {
@@ -92,8 +125,52 @@ export class FormCircularsComponent implements OnInit {
     });
 
     this.createForm();
+    this.store
+      .dispatch(new OrgAction.LoadOrgs({ orgId: this.orgId }))
+      .pipe(
+        debounceTime(1000),
+        tap(() => this.store.dispatch(new OrgAction.LoadOrgs({}))),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+    this.externalOrgsTree$ = this.orgs$.pipe(
+      filter((orgs) => !!orgs),
+      skip(1),
+      map((orgs) =>
+        this.treeHelper.composeOrgTree({
+          orgs: orgs as any,
+          mapper(o) {
+            return {
+              key: o.id as any,
+              labelEn: o.nameEn,
+              labelAr: o.nameAr,
+              data: o,
+            } as TreeNode;
+          },
+        })
+      )
+    );
+    //
+    this.internalOrgsTree$ = this.orgs$.pipe(
+      filter((orgs) => !!orgs),
+      take(1),
+      map((orgs) =>
+        this.treeHelper.composeOrgTree({
+          orgs: orgs as any,
+          rootId: this.orgId,
+          mapper(o) {
+            return {
+              key: o.id as any,
+              labelEn: o.nameEn,
+              labelAr: o.nameAr,
+              data: o,
+            } as TreeNode;
+          },
+        })
+      )
+    );
     this.lang = this.translationService.getSelectedLanguage();
-    this.orgs$ = this.orgsService.getOrgsByID(this.storage.id);
+
     this.users$ = this.userService
       .getAll()
       .pipe(map((users) => users.result.content));
@@ -102,7 +179,7 @@ export class FormCircularsComponent implements OnInit {
       this.filterManagersList = this.managersList;
     });
     this.id = this.route.snapshot.params.id;
-    
+
     if (this.id) {
       this.cirService.getById(this.id).subscribe((cir) => {
         this.currentCir = cir;
@@ -125,16 +202,30 @@ export class FormCircularsComponent implements OnInit {
           id: cir.id,
           cc: cir.cc,
           incidentId: cir?.incident?.id || null,
-          orgs: cir.orgs.map((item) => {
-            if (item.internal == false) {
-              return item['orgStructure'];
-            }
-          }).filter(i => !!i),
-          internalOrgs: cir.orgs.map((item) => {
-            if (item.internal == true) {
-             return item['orgStructure'];
-            }
-          }).filter(i => !!i),
+          orgs: cir.orgs
+            .map((item) => {
+              if (item.internal == false) {
+                return {
+                  key: item?.orgStructure?.id,
+                  labelAr: item?.orgStructure?.nameAr,
+                  labelEn: item?.orgStructure?.nameEn,
+                  data: item?.orgStructure,
+                };
+              }
+            })
+            .filter((i) => !!i),
+          internalOrgs: cir.orgs
+            .map((item) => {
+              if (item.internal == true) {
+                return {
+                  key: item?.orgStructure?.id,
+                  labelAr: item?.orgStructure?.nameAr,
+                  labelEn: item?.orgStructure?.nameEn,
+                  data: item?.orgStructure,
+                };
+              }
+            })
+            .filter((i) => !!i),
         };
 
         this.form.setValue(obj);
@@ -143,37 +234,52 @@ export class FormCircularsComponent implements OnInit {
         });
       });
     }
-    this.form.get('orgs').valueChanges.subscribe((orgs) => {
-      this.toOrgsList = [];
-      if (!orgs.length) {
-        return;
-      }
-      orgs.forEach((org) => {
-        this.toOrgsList.push({
-          id: 0,
-          internal: false,
-          orgStructure: {
-            id: org.id,
-          },
+    this.form
+      .get('orgs')
+      .valueChanges.pipe(distinctUntilChanged())
+      .subscribe((orgs) => {
+        this.toOrgsList = [];
+        if (orgs?.length === 0) {
+          this.form.get('internalOrgs').setValidators([Validators.required]);
+          return;
+        } else {
+          this.form.get('internalOrgs').setValidators([]);
+          this.form.get('internalOrgs').updateValueAndValidity();
+        }
+        orgs.forEach((org) => {
+          this.toOrgsList.push({
+            id: 0,
+            internal: false,
+            orgStructure: {
+              id: org?.key,
+            },
+          });
         });
       });
-    });
 
-    this.form.get('internalOrgs').valueChanges.subscribe((orgs) => {
-      this.toInternalOrgsList = [];
-      if (!orgs.length) {
-        return;
-      }
-      orgs.forEach((org) => {
-        this.toInternalOrgsList.push({
-          id: 0,
-          internal: true,
-          orgStructure: {
-            id: org.id,
-          },
+    this.form
+      .get('internalOrgs')
+      .valueChanges.pipe(distinctUntilChanged())
+      .subscribe((orgs) => {
+        this.toInternalOrgsList = [];
+        if (orgs?.length === 0) {
+          this.form.get('orgs').setValidators([Validators.required]);
+          return;
+        } else {
+          this.form.get('orgs').setValidators([]);
+          this.form.get('orgs').updateValueAndValidity();
+        }
+
+        orgs.forEach((org) => {
+          this.toInternalOrgsList.push({
+            id: 0,
+            internal: true,
+            orgStructure: {
+              id: org?.key,
+            },
+          });
         });
       });
-    });
 
     this.form.get('cc').valueChanges.subscribe((users) => {
       this.toCCUsersList = [];
@@ -181,7 +287,7 @@ export class FormCircularsComponent implements OnInit {
         return;
       }
       users.forEach((user) => {
-        this.toCCUsersList.push({id: 0, user: {id: user.id}});
+        this.toCCUsersList.push({ id: 0, user: { id: user.id } });
       });
     });
     this.form.get('manager').valueChanges.subscribe((data) => {
@@ -189,10 +295,15 @@ export class FormCircularsComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   createForm() {
     const currentDate = new Date();
     this.form = this.fb.group({
-      internalOrgs:[[], [Validators.required]],
+      internalOrgs: [[], [Validators.required]],
       // number: ['',[ Validators.required,Validators.pattern(reg)]],
       number: ['', [Validators.required]],
       //posission: ['', Validators.required],
@@ -201,11 +312,13 @@ export class FormCircularsComponent implements OnInit {
       date: [new Date(), Validators.required],
       incidentId: [null],
       id: 0,
-      createdOrg: {id: this.storage?.id},
+      createdOrg: { id: this.storage?.id },
       orgs: ['', Validators.required],
       cc: [''],
       confidentialtyID: ['', Validators.required],
-      coordinatorMail: ['', Validators.required
+      coordinatorMail: [
+        '',
+        Validators.required,
         // 'ops@adloc.gov.ae',
         // Validators.compose([
         //   Validators.required,
@@ -214,15 +327,24 @@ export class FormCircularsComponent implements OnInit {
         //   Validators.maxLength(320),
         // ]),
       ],
-      coordinatorMobil: ['', [Validators.required, Validators.pattern(/((971|0){1}(50|51|52|54|55|56|58){1}([0-9]{7}))/)]],
-      coordinatorPhone: ['', [Validators.required, Validators.pattern(/^-?([0-9]\d*)?$/)]],
+      coordinatorMobil: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/((971|0){1}(50|51|52|54|55|56|58){1}([0-9]{7}))/),
+        ],
+      ],
+      coordinatorPhone: [
+        '',
+        [Validators.required, Validators.pattern(/^-?([0-9]\d*)?$/)],
+      ],
       manager: ['', Validators.required],
       createdBy: {
         id: this.user$['id'],
       },
       createdDate: [currentDate, Validators.required],
       sentDate: [currentDate, Validators.required],
-      priority: ['', Validators.required],
+      priority: [''],
     });
   }
 
@@ -230,6 +352,16 @@ export class FormCircularsComponent implements OnInit {
   public handleError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
   };
+
+  isRequiredField(field: string) {
+    const form_field = this.form.get(field);
+    if (!form_field.validator) {
+      return false;
+    }
+
+    const validator = form_field.validator({} as AbstractControl);
+    return validator && validator.required;
+  }
 
   /* Date */
   formatDate(e) {
@@ -246,7 +378,7 @@ export class FormCircularsComponent implements OnInit {
     }
     let val = this.form.value;
 
-    val.confidentialty = {id: this.form.value.confidentialtyID || null};
+    val.confidentialty = { id: this.form.value.confidentialtyID || null };
     delete this.form.value.cc;
     delete this.form.value.orgs;
     delete this.form.value.confidentialtyID;
@@ -260,12 +392,12 @@ export class FormCircularsComponent implements OnInit {
     val['incident'] =
       val.incidentId != null
         ? {
-          id: val.incidentId,
-        }
+            id: val.incidentId,
+          }
         : null;
     val['date'] = new Date();
 
-    val = {...val, number: this.form.get('number').value};
+    val = { ...val, number: this.form.get('number').value };
 
     if (!this.id) {
       this.cirService.create(val).then((x) => {
@@ -300,7 +432,7 @@ export class FormCircularsComponent implements OnInit {
     this.cdr.detectChanges();
 
     this.cirService.review(id).subscribe((response) => {
-      const newBlob = new Blob([response], {type: 'application/pdf'});
+      const newBlob = new Blob([response], { type: 'application/pdf' });
       this.urlHelper.downloadBlob(newBlob);
     });
   }
@@ -356,8 +488,7 @@ export class FormCircularsComponent implements OnInit {
   }
 
   archive() {
-    this.cirService.archive(this.id).subscribe((data) => {
-    });
+    this.cirService.archive(this.id).subscribe((data) => {});
   }
 
   backClicked() {
@@ -403,7 +534,7 @@ export class FormCircularsComponent implements OnInit {
         (x) => x.id === this.currentCir.status['id']
       );
     } else {
-      return {nameEn: 'New', nameAr: ' جديد'};
+      return { nameEn: 'New', nameAr: ' جديد' };
     }
   }
 

@@ -35,7 +35,7 @@ export class PhonebookOffcanvasComponent implements OnInit {
 
 
   public position$ = this.langFacade.vm$.pipe(
-    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
+    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'left' : 'right'))
   );
   public page$: Observable<ExternalPhonebook[]>;
   constructor(
