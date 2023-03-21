@@ -43,6 +43,7 @@ import {MapConfig, MapService} from "@shared/components/map/services/map.service
 import {AppCommonData, IncidentCategory2} from "@core/entities/AppCommonData";
 import {MapComponent} from "@shared/sh-components/map/map.component";
 import {__await} from "tslib";
+import {TabPanel} from "primeng/tabview";
 
 @Component({
   selector: 'app-group-dialog',
@@ -60,7 +61,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   @Select(OrgState.orgs)
   orgs$: Observable<OrgStructure[]>;
 
-  @Select(UserState.groupMapUsers)
+  @Select(GroupState.groupMapUsers)
   users$: Observable<UserAndRoleProjection[]>;
 
   @Select(CenterState.centerList)
@@ -96,7 +97,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   public selectedCat = [];
   public categories = [];
   public groupConfig: MapConfig[] = [];
-  public isUserActive;
+  public isUserActive = true;
 
   form: FormGroup;
   private defaultFormValue: { [key: string]: any } = {};
@@ -113,10 +114,10 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   checkMap = false;
 
   areaItems: AreaItem[] = [];
-  disabledUsers = [];
+  public disabledUsers = [];
   responseFromIncidentLoc: any = [];
 
-  _userId: number;
+  _groupId: number;
   _mode: string;
 
   get loggedinUserId() {
@@ -124,7 +125,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   }
 
   get editMode() {
-    return this._userId !== undefined && this._userId !== null;
+    return this._groupId !== undefined && this._groupId !== null;
   }
 
   groupGeometry: GroupGeometryLocation = {
@@ -141,15 +142,15 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   }[] = [];
 
   @Input()
-  set userId(v: number) {
-    this._userId = v;
+  set groupId(v: number) {
+    this._groupId = v;
     this.buildForm();
     this.mapContainer?.clear();
     this.mapComponent = undefined;
     if (v === undefined || v === null) {
       return;
     }
-    this.loadUsers('', true);
+    // this.loadUsers('', true);
     this.store
       .dispatch(new GroupAction.GetGroup({id: v}))
       .pipe(
@@ -157,6 +158,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         take(1),
         tap((user) => {
+
           this.form.patchValue({
             ...user,
             orgStructure: {
@@ -195,7 +197,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((id) => {
-        this.userId = id;
+        this.groupId = id;
       });
     this.route.queryParams.pipe(
       map((params) => params['_mode']),
@@ -251,7 +253,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$), auditTime(1000))
       .subscribe((name) => {
         this.store.dispatch(
-          new UserAction.LoadGroupMapUserPage({
+          new GroupAction.LoadGroupMapUserPage({
             name,
             page: 0,
             size: 15,
@@ -563,7 +565,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   loadUsers(name?: string, direct = false) {
     if (direct) {
       this.store.dispatch(
-        new UserAction.LoadGroupMapUserPage({
+        new GroupAction.LoadGroupMapUserPage({
           name,
           page: 0,
           size: 15,
@@ -781,8 +783,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       type: 1,
       user: null
     }];
-
-    if (!this.form.valid) {
+    const viewGroup = document.getElementById('viewGroup');
+    if (!this.form.valid && viewGroup !== null) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
         fc.markAsDirty();
@@ -805,11 +807,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
           type: 1,
           user: groupUserValue.id
         }
-        group.id = this._userId;
+        group.id = this._groupId;
         this.store.dispatch(new BrowseGroupsAction.UpdateGroup(group)).pipe(
           tap(() => {
             this.store.dispatch(new BrowseGroupsAction.UpdateManager({
-              groupId: this._userId,
+              groupId: this._groupId,
               user: manager
             }));
             takeUntil(this.destroy$);
@@ -864,11 +866,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         });
       }
 
-      if (this._userId) {
+      if (this._groupId) {
         if (this.editMode) {
-          this.store.dispatch(new BrowseGroupsAction.UpdateUser({groupId: this._userId, user: groupUser}));
+          this.store.dispatch(new BrowseGroupsAction.UpdateUser({groupId: this._groupId, user: groupUser}));
         } else {
-          this.store.dispatch(new BrowseGroupsAction.CreateUser({groupId: this._userId, user: groupUser}));
+          this.store.dispatch(new BrowseGroupsAction.CreateUser({groupId: this._groupId, user: groupUser}));
         }
       }
     }
@@ -931,14 +933,14 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
 
 
       // console.log('centers', center);
-      if (this._userId) {
+      if (this._groupId) {
         if (this.editMode) {
           this.store.dispatch(new BrowseGroupsAction.UpdateIncidentLocInfo({
-            groupId: this._userId, centers: center
+            groupId: this._groupId, centers: center
           }));
         } else {
           this.store.dispatch(new BrowseGroupsAction.AddIncidentLocInfo({
-            groupId: this._userId, centers: center
+            groupId: this._groupId, centers: center
           }));
         }
       }
@@ -959,7 +961,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     const selectedCategoriesIds = {
       ...this.incidentCategory.getRawValue(),
     };
-    this.groupGeometry.groupId = this._userId;
+    this.groupGeometry.groupId = this._groupId;
     this.namedLocations.forEach((loc, i, arr) => {
       if (loc.type.includes('POLYLINE')) {
         loc.geometry = loc.geometry
@@ -980,7 +982,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     const group = {
       ...this.form.getRawValue(),
     };
-    group.id = this._userId;
+    group.id = this._groupId;
     group.isActive = false;
     group.global = null;
     group.orgStructure = {id: group.orgStructure?.key};
@@ -1014,7 +1016,15 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
 
   async tab(index: number) {
     const mode = ''
+    const viewGroup = document.getElementById('viewGroup');
+    if (viewGroup !== null) {
+      } else {
+      index = index + 1;
+    }
     switch (index) {
+      case 1:
+        this.loadUsers('', true);
+        break;
       case 2:
         this.loadCenterListCall();
         await this.loadGeometry();
@@ -1044,7 +1054,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   }
 
   async loadGeometry() {
-    this.store.dispatch(new GroupAction.GetGeometryLocation({id: this._userId}))
+    this.store.dispatch(new GroupAction.GetGeometryLocation({id: this._groupId}))
       .pipe(
         switchMap(() => this.store.select(GroupState.geometryResponse)),
         takeUntil(this.destroy$),
@@ -1068,7 +1078,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   }
 
   async loadIncidentLocation() {
-    this.store.dispatch(new IncicentLocationInfoAction.GetIncidentLocationInfo({id: this._userId}))
+    this.store.dispatch(new IncicentLocationInfoAction.GetIncidentLocationInfo({id: this._groupId}))
       .pipe(
         switchMap(() => this.store.select(IncidentLocInfoState.getIncidentLocInfo)),
         takeUntil(this.destroy$),

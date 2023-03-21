@@ -112,11 +112,11 @@
                 <span
                   class="{{
                     'label label-lg label-light-' +
-                      priorities[row.priority.id]?.color +
+                      priorities[row.priority?.id]?.color +
                       ' label-inline'
                   }}"
                 >
-                  {{ priorities[row.priority.id] | propTranslator: "name" }}
+                  {{ priorities[row.priority?.id] | propTranslator: "name" }}
                 </span>
               </td>
               <!-- 5 -->
