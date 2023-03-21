@@ -653,7 +653,7 @@
       <button pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
       <div class="ml-dir-auto"></div>
       <ng-container *ngIf="!(viewOnly$ | async)">
-        <div class="mx-1" *ngIf="loggedinUserId == _userId">
+        <div class="mx-1" *ngIf="loggedinUserId == _groupId">
           <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
                   class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
         </div>
