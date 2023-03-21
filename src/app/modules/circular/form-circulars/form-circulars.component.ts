@@ -185,7 +185,7 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
         this.currentCir = cir;
         const obj = {
           confidentialtyID: cir.confidentialty.id,
-          priority: cir.priority.id,
+          priority: cir.priority?.id,
           manager: '',
           createdOrg: cir.createdOrg,
           createdBy: cir.createdBy,
@@ -228,7 +228,7 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
             .filter((i) => !!i),
         };
 
-        this.form.setValue(obj);
+        this.form.patchValue(obj);
         this.cirService.onManagersChange.subscribe((data) => {
           this.getCurrentManager(cir.manager.id);
         });
@@ -344,7 +344,7 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
       },
       createdDate: [currentDate, Validators.required],
       sentDate: [currentDate, Validators.required],
-      priority: [''],
+      priority: [null],
     });
   }
 
