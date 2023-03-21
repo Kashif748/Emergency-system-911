@@ -1,8 +1,9 @@
 <div class="container-fluid">
-  <div class="bg-white px-3">
+  <!--<div class="bg-white px-3">
     <h2>{{'GROUP.GROUP_BREAD' | translate}}</h2>
     <div class="spacer"></div>
-  </div>
+  </div>-->
+  <app-breadcrumb></app-breadcrumb>
   <div class="mx-4 my-10">
     <div class="row" *ngIf="state$ | async as state">
       <div class="col-12">

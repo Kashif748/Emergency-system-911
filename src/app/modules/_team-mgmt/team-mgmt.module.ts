@@ -57,6 +57,7 @@ import {UserManagementModule} from "../_user-mgmt/user-mgmt.module";
 import {BrowseGroupsState} from "./states/browse-groups.state";
 import {CenterState} from "@core/states/service-center-area/centers/center.state";
 import { GroupDialogComponent } from './browse-groups/group-dialog/group-dialog.component';
+import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcrumb.component";
 
 
 @NgModule({
@@ -112,6 +113,7 @@ import { GroupDialogComponent } from './browse-groups/group-dialog/group-dialog.
     InputTextareaModule,
     ProgressBarModule,
     FileUploadModule,
+    SharedBreadcrumbModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
