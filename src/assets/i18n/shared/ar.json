@@ -1467,7 +1467,7 @@
       "PERSON": "فرد",
       "PRIORITY": "الاهمية",
       "DUE_DATE": "تاريخ ووقت الاستحقاق",
-      "ASSIGNEE": "المحال إليه",
+      "ASSIGNEE": "المسند إليه",
       "INCIDENT_ID": "رقم البلاغ",
       "INCIDENT": "الحدث/البلاغ",
       "PHOTO_EDITOR": "محرر الصور",
