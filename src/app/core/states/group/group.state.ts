@@ -513,7 +513,7 @@ export class GroupState {
     }
     console.log(manager);
     setState(
-      patch<UserStateModel>({
+      patch<GroupStateModel>({
         loading: true,
       })
     );
