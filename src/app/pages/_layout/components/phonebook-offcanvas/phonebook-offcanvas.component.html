@@ -1,15 +1,17 @@
 <p-sidebar
+  #sideBar
   [(visible)]="display"
   [modal]="false"
-  [position]="position$ | async"
   [style]="{ width: '30em' }"
   [showCloseIcon]="false"
+  [position]="position$ | async"
   transitionOptions="300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)"
 >
   <div
     class="p-d-flex justify-content-between align-items-center py-5 header border-bottom"
   >
     <h3 class="m-0">{{ "PHONEBOOK.HEADER" | translate }}</h3>
+
     <button
       pButton
       pRipple
@@ -86,7 +88,7 @@
       <ng-container *ngIf="!(loading$ | async); else loadingSkelton">
         <ul class="navi navi-hover navi-active mt-4">
           <li *ngFor="let item of page$ | async" class="navi-item">
-            <div class=" rounded-lg">
+            <div class="rounded-lg">
               <div class="navi-text d-flex flex-column justify-content-between">
                 <span class="d-flex">
                   <span class="font-weight-bold">
@@ -129,7 +131,7 @@
                 class="p-button-rounded p-button-secondary p-button-text copy-btn"
               ></button> -->
             </div>
-            <hr>
+            <hr />
           </li>
         </ul>
       </ng-container>
@@ -150,13 +152,26 @@
   *appPrivileges="'PRIV_VW_PHONEBOOK_ENTRY'"
   class="float-phonebook d-flex flex-column shadow"
 >
-  <button type="button" class="btn btn-icon btn-light" (click)="openSideBar()">
-    <span
-      inlineSVG="/assets/media/svg/icons/Communication/Call.svg"
-      cacheSVG="true"
-      class="svg-icon svg-icon-success"
-    ></span>
-  </button>
+  <ng-container *ngIf="position$ | async as position">
+    <button
+      type="button"
+      class="btn btn-icon btn-light"
+      (click)="
+        openSideBar();
+        sideBar.transformOptions =
+          position === 'left'
+            ? 'translate3d(-100%, 0px, 0px)'
+            : 'translate3d(100%, 0px, 0px)'
+      "
+    >
+      <span
+        inlineSVG="/assets/media/svg/icons/Communication/Call.svg"
+        cacheSVG="true"
+        class="svg-icon svg-icon-success"
+      ></span>
+    </button>
+  </ng-container>
+
   <!-- <button  type="button" class="btn btn-icon btn-light" >
     <span
       inlineSVG="/assets/media/svg/icons/Text/Bullet-list.svg"
@@ -182,3 +197,5 @@
     </div>
   </div>
 </ng-template>
+<!-- transformOptions = 'translate3d(-100%, 0px, 0px)'
+ -->

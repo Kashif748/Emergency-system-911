@@ -26,6 +26,7 @@ export interface OrgStateModel {
    * temporary state to store entities and select them once
    */
   orgs: (OrgStructure | OrgStructureProjection)[];
+  extOrgs: (OrgStructure | OrgStructureProjection)[];
 
   /**
    * temporary state to store entities and select them once
@@ -51,6 +52,11 @@ export class OrgState {
   @Selector([OrgState])
   static orgs(state: OrgStateModel) {
     return state?.orgs;
+  }
+
+  @Selector([OrgState])
+  static extOrgs(state: OrgStateModel) {
+    return state?.extOrgs;
   }
 
   @Selector([OrgState])
@@ -93,6 +99,18 @@ export class OrgState {
     );
   }
 
+  @Action(OrgAction.LoadExtOrgs)
+  loadExtOrgs({ setState }: StateContext<OrgStateModel>) {
+    return this.orgService.getRestrictedOrgStructByType().pipe(
+      tap((r) => {
+        setState(
+          patch<OrgStateModel>({
+            extOrgs: r.result,
+          })
+        );
+      })
+    );
+  }
   @Action(OrgAction.LoadModules)
   loadModules(
     { setState }: StateContext<OrgStateModel>,
