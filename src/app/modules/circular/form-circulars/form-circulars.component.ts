@@ -73,6 +73,9 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
   @Select(OrgState.orgs)
   public orgs$: Observable<OrgStructure[]>;
 
+  @Select(OrgState.extOrgs)
+  public extOrgs$: Observable<OrgStructure[]>;
+
   public internalOrgsTree$: Observable<TreeNode[]>;
   public externalOrgsTree$: Observable<TreeNode[]>;
   orgId: number;
@@ -125,20 +128,17 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
     });
 
     this.createForm();
-    this.store
-      .dispatch(new OrgAction.LoadOrgs({ orgId: this.orgId }))
-      .pipe(
-        debounceTime(1000),
-        tap(() => this.store.dispatch(new OrgAction.LoadOrgs({}))),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-    this.externalOrgsTree$ = this.orgs$.pipe(
+
+    this.store.dispatch(new OrgAction.LoadExtOrgs());
+    this.store.dispatch(new OrgAction.LoadOrgs({ orgId: this.orgId }));
+
+    this.externalOrgsTree$ = this.extOrgs$.pipe(
       filter((orgs) => !!orgs),
-      skip(1),
-      map((orgs) =>
-        this.treeHelper.composeOrgTree({
+      map((orgs) => {
+        const heighOrg = orgs.find((org) => org['parent']?.id === 1);
+        return this.treeHelper.composeOrgTree({
           orgs: orgs as any,
+          rootId: heighOrg?.id,
           mapper(o) {
             return {
               key: o.id as any,
@@ -147,13 +147,13 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
               data: o,
             } as TreeNode;
           },
-        })
-      )
+        });
+      })
     );
-    //
+
     this.internalOrgsTree$ = this.orgs$.pipe(
       filter((orgs) => !!orgs),
-      take(1),
+      tap((orgs) => console.log('interanl', orgs)),
       map((orgs) =>
         this.treeHelper.composeOrgTree({
           orgs: orgs as any,
