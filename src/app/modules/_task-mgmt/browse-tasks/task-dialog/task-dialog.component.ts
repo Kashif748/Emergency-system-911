@@ -1,5 +1,6 @@
 import {
   AfterViewChecked,
+  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   Injector,
@@ -62,7 +63,9 @@ import { BrowseTasksAction } from '../../states/browse-tasks.action';
   templateUrl: './task-dialog.component.html',
   styleUrls: ['./task-dialog.component.scss'],
 })
-export class TaskDialogComponent implements OnInit, AfterViewChecked {
+export class TaskDialogComponent
+  implements OnInit, AfterViewChecked, AfterViewInit
+{
   UploadTagIdConst = UploadTagIdConst;
   opened$: Observable<boolean>;
   @Input()
@@ -173,7 +176,23 @@ export class TaskDialogComponent implements OnInit, AfterViewChecked {
         takeUntil(this.destroy$),
         take(1),
         filter((t) => !!t),
-        tap((task: TaskDetails) => {
+        tap((t: TaskDetails) => {
+          const task = { ...t };
+          if (task.statusId === 1) {
+            this.store
+              .dispatch(
+                new TaskAction.UpdateStatus({ id: task.id, statusId: 2 })
+              )
+              .pipe(
+                takeUntil(this.destroy$),
+                tap(() => {
+                  this.store.dispatch(new BrowseTasksAction.LoadTasks());
+                })
+              )
+              .subscribe();
+            task.statusId = 2;
+          }
+
           this.defaultFormValue = {
             ...this.defaultFormValue,
             ...task,
@@ -279,6 +298,30 @@ export class TaskDialogComponent implements OnInit, AfterViewChecked {
       })
     );
   }
+
+  initCreate() {
+    const incidentSubject = this.route.snapshot.queryParams['incidentSubject'];
+    let incidentId;
+    try {
+      incidentId = parseInt(this.route.snapshot.queryParams['incidentId']);
+    } catch {}
+
+    if ([undefined, null].includes(incidentId)) {
+      return;
+    }
+    this.form.patchValue({
+      incidentId: { id: incidentId, subject: incidentSubject },
+    });
+    this.form.get('incidentId').disable();
+
+    this.incidentDropdown.filterValue = incidentSubject;
+    this.loadIncidents(incidentSubject, true);
+  }
+
+  ngAfterViewInit(): void {
+    this.initCreate();
+  }
+
   ngAfterViewChecked(): void {
     if (this.editMode) {
       this.form.get('incidentId').disable();
@@ -292,6 +335,7 @@ export class TaskDialogComponent implements OnInit, AfterViewChecked {
       map((params) => params['_dialog'] === 'opened')
     );
     this.buildForm();
+
     this.auditLoadIncidents$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
       .subscribe((searchText) => {
@@ -672,18 +716,19 @@ export class TaskDialogComponent implements OnInit, AfterViewChecked {
     const task = this.store.selectSnapshot(TaskState.task);
 
     instance.config = {
-      mapType: MapViewType.TASK,
+      mapType: task.featureName ? MapViewType.TASK : MapViewType.INCIDENT,
       showSaveButton: false,
       zoomModel: {
-        referenceId: task?.id,
-        featureName: task?.featureName as any,
+        referenceId: task.featureName ? task?.id : (task.incidentId as any)?.id,
+        featureName: task.featureName
+          ? (task?.featureName as any)
+          : (task.incidentId as any)?.featureName,
       },
       showLayers: false,
       viewOnly: this.viewOnly,
     };
 
     instance.OnSaveMap.subscribe((response) => {
-      // this.addLocationToMapFunc = response?.ff;
       this.form.get('featureName').patchValue(response?.gType);
       if (response) {
         this.form.get('newLocation').patchValue(true);

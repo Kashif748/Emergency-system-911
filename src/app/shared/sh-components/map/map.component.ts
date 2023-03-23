@@ -432,113 +432,137 @@ export class MapComponent
       } as __esri.PopupTemplateProperties;
 
       // -------------------------------------------------------- START ONWANI LAYERS --------------------------------------
-
       const ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          // url: `/geosmart-imgupc/rest/services/Images/BaseMapOverview${
-          //   this.lang == 'en' ? '' : '_Ara'
-          // }/MapServer`,
-          // id: 'ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER',
-          // visible: true,
-          // title: 'Admin Boundries',
-          // opacity: 0.5,
-          // transparent: true,
-          // sublayers: [
-          //   {
-          //     id: 4,
-          //     visible: true,
-          //     title: 'Municipality',
-          //   },
-          // ],
-          // url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
-          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-          id: 'MunicipalityImage',
-          title: 'Municipality',
-          opacity: 0.5,
-          sublayers: [
-            {
-              id: 3,
-              visible: true,
-              // title: 'Municipality Areas',
-              title: 'Municipality Areas',
-            },
-          ],
-        } as __esri.MapImageLayerProperties);
+      new MapImageLayer({
+        // url: `/geosmart-imgupc/rest/services/Images/BaseMapOverview${
+        //   this.lang == 'en' ? '' : '_Ara'
+        // }/MapServer`,
+        // id: 'ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER',
+        // visible: true,
+        // title: 'Admin Boundries',
+        // opacity: 0.5,
+        // transparent: true,
+        // sublayers: [
+        //   {
+        //     id: 4,
+        //     visible: true,
+        //     title: 'Municipality',
+        //   },
+        // ],
+        url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
+        id: 'MunicipalityImage',
+        title: 'Municipality',
+        opacity: 0.5,
+        sublayers: [
+          {
+            id: 20,
+            visible: true,
+            title: 'Municipality Areas',
+          },
+        ],
 
-      /*      const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
-          id: 'TAWAJUDI_FACILITIES_IMAGE_LAYER',
-          title: 'Tawajudi Facilities',
-          opacity: 0.3,
-          sublayers: [
-            {
-              id: 12,
-              visible: true,
-              title: 'Tawajudi Facilities',
-            },
-          ],
-        } as __esri.MapImageLayerProperties);*/
+        // new layers start
+        /*url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+        id: 'MunicipalityImage',
+        title: 'Municipality',
+        opacity: 0.5,
+        sublayers: [
+          {
+            id: 3,
+            visible: true,
+            // title: 'Municipality Areas',
+            title: 'Municipality Areas',
+          },
+        ],*/
+        // new layers End
 
-      const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-          id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
-          tilte: 'Districts',
-          transparent: true,
-          minScale: 1155600,
-          sublayers: [
-            {
-              id: 2,
-              visible: true,
-            },
-          ],
-        } as __esri.MapImageLayerProperties);
-      /*        new MapImageLayer({
-          url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
-            this.lang == 'ar' ? '_Ara' : '_Eng'
+      } as __esri.MapImageLayerProperties);
+
+
+    const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
+      new MapImageLayer({
+        url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
+        id: 'TAWAJUDI_FACILITIES_IMAGE_LAYER',
+        title: 'Tawajudi Facilities',
+        opacity: 0.3,
+        sublayers: [
+          {
+            id: 12,
+            visible: true,
+            title: 'Tawajudi Facilities',
+          },
+        ],
+      } as __esri.MapImageLayerProperties);
+
+// new layer start
+
+    /*const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
+            new MapImageLayer({
+      url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+      id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
+      tilte: 'Districts',
+      transparent: true,
+      minScale: 1155600,
+      sublayers: [
+        {
+          id: 2,
+          visible: true,
+        },
+      ],
+    } as __esri.MapImageLayerProperties);*/
+
+    // new layer end
+    const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
+      new MapImageLayer({
+        url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
+          this.lang == 'ar' ? '_Ara' : '_Eng'
           }/MapServer`,
-          id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
-          tilte: 'Districts',
-          transparent: true,
-          minScale: 1155600,
-          sublayers: [
-            {
-              id: this.lang == 'ar' ? 147 : 23,
-              visible: true,
-            },
-          ],
-        } as __esri.MapImageLayerProperties);*/
+        id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
+        tilte: 'Districts',
+        transparent: true,
+        minScale: 1155600,
+        sublayers: [
+          {
+            id: this.lang == 'ar' ? 147 : 23,
+            visible: true,
+          },
+        ],
+      } as __esri.MapImageLayerProperties);
 
-      const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-          id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
-          tilte: 'Plots',
-          transparent: true,
-          minScale: 10000,
-          sublayers: [
-            {
-              id: 0,
-              visible: true,
-              // tilte: 'Plots',
-            },
-          ],
-        } as __esri.MapImageLayerProperties);
-      /*        new MapImageLayer({
-          url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
-          id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
-          tilte: 'Plots',
-          transparent: true,
-          minScale: 10000,
-          sublayers: [
-            {
-              id: this.lang == 'ar' ? 22 : 7,
-              visible: true,
-              // tilte: 'Plots',
-            },
-          ],
-        } as __esri.MapImageLayerProperties);*/
+      // new layer start here
+
+   /* const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
+      new MapImageLayer({
+        url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+        id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
+        tilte: 'Plots',
+        transparent: true,
+        minScale: 10000,
+        sublayers: [
+          {
+            id: 0,
+            visible: true,
+            // tilte: 'Plots',
+          },
+        ],
+      } as __esri.MapImageLayerProperties);*/
+
+    // new layer end here
+    const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
+      new MapImageLayer({
+        url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
+        id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
+        tilte: 'Plots',
+        transparent: true,
+        minScale: 10000,
+        sublayers: [
+          {
+            id: this.lang == 'ar' ? 22 : 7,
+            visible: true,
+            // tilte: 'Plots',
+          },
+        ],
+      } as __esri.MapImageLayerProperties);
 
       this.ONWANI_SEARCH_DZSP_IMAGE_LAYER = new MapImageLayer({
         // url: '/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer',
@@ -845,8 +869,12 @@ export class MapComponent
               ? polylineSymbol
               : pointSymbol,
           popupTemplate: {
-             title: address?.type == 'polygon' ? this.translationService.translateAWord('INCIDENTS.TEAM_LOCATION') :
-               this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
+            title:
+              address?.type == 'polygon'
+                ? this.translationService.translateAWord(
+                    'INCIDENTS.TEAM_LOCATION'
+                  )
+                : this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
             content: (feature: __esri.Feature) => {
               return `${address.Address}`;
             },

@@ -19,12 +19,14 @@ export namespace IncidentAction {
     /**
      *
      */
-    constructor(public payload:  {
-      filters?: { [key: string]: any };
-      sort?: string[];
-      page: number;
-      size: number;
-    }) {}
+    constructor(
+      public payload: {
+        filters?: { [key: string]: any };
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
   }
 
   export class LoadOrgs {
@@ -41,5 +43,17 @@ export namespace IncidentAction {
      *
      */
     constructor(public payload: { incidentId: number }) {}
+  }
+
+  export class GetIncident {
+    static readonly type = '[Incident] Get Incident';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
   }
 }
