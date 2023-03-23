@@ -409,6 +409,32 @@ export class TaskState {
       );
   }
 
+  @Action(TaskAction.UpdateStatus)
+  updateStatus(
+    { setState }: StateContext<TaskStateModel>,
+    { payload }: TaskAction.Update
+  ) {
+    setState(
+      patch<TaskStateModel>({
+        blocking: true,
+      })
+    );
+    return this.taskService
+      .updateStatus({
+        taskId: payload.id,
+        statusId: payload.statusId as any,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<TaskStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
   @Action(TaskAction.reOpenTask, { cancelUncompleted: true })
   reOpenTask(
     { setState }: StateContext<TaskStateModel>,

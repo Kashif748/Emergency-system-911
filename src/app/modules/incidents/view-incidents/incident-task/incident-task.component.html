@@ -130,7 +130,7 @@
           <!-- 7 -->
           <td class="actions bg-white">
             <button
-              (click)="updateTask(item.id)"
+              (click)="updateTask(item.id); $event.stopPropagation()"
               class="btn btn-sm btn-clean btn-icon mr-2"
               matTooltip="{{ 'TASK.UPDATE_TASK' | translate }}"
             >
