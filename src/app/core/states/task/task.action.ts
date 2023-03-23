@@ -60,6 +60,14 @@ export namespace TaskAction {
     constructor(public payload: TaskDetails) {}
   }
 
+  export class UpdateStatus {
+    static readonly type = '[Task] Update Status';
+    /**
+     *
+     */
+    constructor(public payload: { id: number; statusId: number }) {}
+  }
+
   export class reOpenTask {
     static readonly type = '[Task] Open Task';
     /**

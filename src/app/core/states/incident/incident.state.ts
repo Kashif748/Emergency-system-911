@@ -28,9 +28,11 @@ import { IncidentAction } from './incident.action';
 export interface IncidentStateModel {
   transLoading: boolean;
   incidents: IncidentProjection[];
+  incident: IncidentProjection;
   page: PageIncidentProjectionMinimum;
   orgs: IdNameProjection[];
   loading: boolean;
+  blocking: boolean;
 }
 
 const INCDINT_STATE_TOKEN = new StateToken<IncidentStateModel>('incident');
@@ -54,6 +56,12 @@ export class IncidentState {
   static incidents(state: IncidentStateModel) {
     return state?.incidents;
   }
+
+  @Selector([IncidentState])
+  static incident({ incident }: IncidentStateModel) {
+    return incident;
+  }
+
   @Selector([IncidentState])
   static transLoading(state: IncidentStateModel) {
     return state?.transLoading;
@@ -115,6 +123,42 @@ export class IncidentState {
           );
         })
       );
+  }
+
+  @Action(IncidentAction.GetIncident, { cancelUncompleted: true })
+  getIncident(
+    { setState }: StateContext<IncidentStateModel>,
+    { payload }: IncidentAction.GetIncident
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      setState(
+        patch<IncidentStateModel>({
+          incident: undefined,
+        })
+      );
+      return;
+    }
+    setState(
+      patch<IncidentStateModel>({
+        blocking: true,
+      })
+    );
+    return this.incidentService.get16({ id: payload.id }).pipe(
+      tap(({ result: incident }) => {
+        setState(
+          patch<IncidentStateModel>({
+            incident,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<IncidentStateModel>({
+            blocking: false,
+          })
+        );
+      })
+    );
   }
 
   @Action(IncidentAction.LoadOrgs, { cancelUncompleted: true })
