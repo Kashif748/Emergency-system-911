@@ -7,6 +7,7 @@ import {CategoryService} from 'src/app/_metronic/core/services/categories.servic
 import {IncidentsService} from 'src/app/_metronic/core/services/incidents.service';
 import AssetFormatter from './AssetFormatter';
 import {OrgsService} from "../../../../_metronic/core/services/orgs.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-assets-form',
@@ -118,7 +119,7 @@ export class AssetsFormComponent implements OnInit {
       quantity: new FormControl(null, [Validators.required]),
     });
 
-    this.form.get('orgStructure').valueChanges.subscribe((orgId) => {
+    this.form.get('orgStructure').valueChanges.pipe(first()).subscribe((orgId) => {
       this.loadAssets(orgId);
       this.selectedAsset = {
         organization: AssetFormatter.getOrganization(this.organizations, orgId),

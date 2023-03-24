@@ -21,7 +21,7 @@
     </p-blockUI>
     <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)">
 
-      <p-tabPanel id="viewGroup" header="{{'GROUP.GROUP_INFO' | translate }}" *checkPrivileges="['PRIV_UP_GRP','PRIV_VW_MNG_GRP']">
+      <p-tabPanel id="viewGroup" header="{{'GROUP.GROUP_INFO' | translate }}" *checkPrivileges="['PRIV_VW_MNG_GRP','PRIV_VW_GRP']">
         <ng-template pTemplate="content">
           <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
 
@@ -262,7 +262,7 @@
           </form>
         </ng-template>
       </p-tabPanel>
-      <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="'PRIV_ED_USR_GRP'">
+      <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="['PRIV_VW_MNG_GRP','PRIV_VW_GRP']">
         <ng-template pTemplate="content">
           <form [formGroup]="userGroupForm" class="p-fluid mt-4" autocomplete="off">
             <div class="p-field p-col-12 p-md-9" *ngIf="!(viewOnly$ | async)">
@@ -397,7 +397,7 @@
       </p-tabPanel>
 
 
-      <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="'PRIV_ED_LOC_INC_GRP'">
+      <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="['PRIV_VW_MNG_GRP','PRIV_VW_GRP']">
         <ng-template pTemplate="content">
           <div class="d-flex flex-column flex-grow-1 my-1" *ngIf="!(viewOnly$ | async)">
             <p class="text-warning  font-size-lg mb-1">
@@ -657,7 +657,7 @@
           <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
                   class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
         </div>
-        <div class="mx-1">
+        <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP','PRIV_ED_USR_GRP','PRIV_ED_LOC_INC_GRP']">
           <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
                   (click)="submit()"></button>
         </div>
