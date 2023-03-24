@@ -714,22 +714,16 @@ export class TaskDialogComponent
       this.mapContainer.createComponent(factory, null, this.injector);
 
     const task = this.store.selectSnapshot(TaskState.task);
+    const taskLocation = !this.viewOnly || task.featureName;
 
     instance.config = {
-      mapType:
-        this.viewOnly || task.featureName
-          ? MapViewType.TASK
-          : MapViewType.INCIDENT,
+      mapType: taskLocation ? MapViewType.TASK : MapViewType.INCIDENT,
       showSaveButton: false,
       zoomModel: {
-        referenceId:
-          this.viewOnly || task.featureName
-            ? task?.id
-            : (task.incidentId as any)?.id,
-        featureName:
-          this.viewOnly || task.featureName
-            ? (task?.featureName as any)
-            : (task.incidentId as any)?.featureName,
+        referenceId: taskLocation ? task?.id : (task.incidentId as any)?.id,
+        featureName: taskLocation
+          ? (task?.featureName as any)
+          : (task.incidentId as any)?.featureName,
       },
       showLayers: false,
       viewOnly: this.viewOnly,
