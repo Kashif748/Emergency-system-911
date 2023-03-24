@@ -218,7 +218,7 @@
                 </div>
               </th>
 
-              <th *checkPrivileges="['PRIV_VW_MNG_GRP', 'PRIV_VW_GRP']" style="width: 92px;">{{'ACTIONS.ACTIONS' | translate}}</th>
+              <th *checkPrivileges="['PRIV_UP_GRP','PRIV_ED_USR_GRP','PRIV_ED_LOC_INC_GRP']" style="width: 92px;">{{'ACTIONS.ACTIONS' | translate}}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
@@ -254,7 +254,7 @@
               <td>
                 <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
                         class="p-button-rounded p-button-text my-auto p-button-plain" (click)="menu.toggle($event)"
-                        *checkPrivileges="['PRIV_VW_MNG_GRP', 'PRIV_VW_GRP']"></button>
+                        *checkPrivileges="['PRIV_UP_GRP','PRIV_ED_USR_GRP', 'PRIV_ED_LOC_INC_GRP']"></button>
                 <p-menu #menu appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
               </td>
             </tr>
