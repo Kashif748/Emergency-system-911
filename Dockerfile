@@ -1,5 +1,6 @@
 # Choose the Image which has Node installed already
 FROM node:12.22.12-alpine as build
+ARG env=staging
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -14,8 +15,8 @@ RUN npm install
 COPY . .
 RUN npm install -g @angular/cli@10
 
-# build app for production with minification
-RUN ng build -c staging
+# build app for production | staging | develop with minification
+RUN ng build -c ${env}
 
 # use nginx to serve application
 FROM nginx:1.23.1-alpine as final
