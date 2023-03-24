@@ -11,6 +11,7 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
+import { MapActionType } from '@shared/sh-components/map/utils/MapActionType';
 import { EMPTY, of } from 'rxjs';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import {
@@ -230,36 +231,37 @@ export class TaskState {
       })
     );
     return this.taskService.getTaskDetails({ taskId: payload.id }).pipe(
-      switchMap(({ result: task }) =>
-        //   this.dmsService
-        //     .findAttachment({
-        //       entityId: payload.id,
-        //       entityTagId: UploadTagIdConst.TASKS,
-        //     })
-        //     .pipe(
-        //       map((a) => {
-        //         return {
-        //           ...task,
-        //           attachments: a.result,
-        //         } as TaskModel;
-        //       })
-        //     )
-        // ),
-        // switchMap((task) =>
+      map(({ result: task }) => {
+        return {
+          ...task,
+          taskType: {
+            ...task.taskType,
+            id: task.taskType?.typeId,
+          },
+          assignTo: {
+            ...task.assignTo,
+            id: task.assignTo?.assigneeId,
+          },
+        };
+      }),
+      switchMap((task) =>
         this.incidentService.get16({ id: task.incidentId }).pipe(
           map(({ result: incident }) => {
             return {
               ...task,
               incidentId: incident,
-              taskType: {
-                ...task.taskType,
-                id: task.taskType?.typeId,
-              },
-              assignTo: {
-                ...task.assignTo,
-                id: task.assignTo?.assigneeId,
-              },
             };
+          }),
+          //@WA work around until backend provied complete data
+          catchError(() => {
+            return of({
+              ...task,
+              incidentId: {
+                id: task.incidentId,
+                featureName: MapActionType.INCIDENT_POINT,
+                subject: task.incidentName,
+              },
+            });
           })
         )
       ),
