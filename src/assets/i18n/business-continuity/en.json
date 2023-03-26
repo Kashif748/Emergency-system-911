@@ -1,0 +1,36 @@
+{
+  "VERSIONS_SETTINGS": "Version Management",
+  "RES_ORG": "",
+  "ORG_INFO": "Organization Details",
+  "ORG_ARTCH": "",
+  "EFFECTS": "",
+  "EFFECTS_LEVELS": "",
+  "EFFECTS_MATRIX": "",
+  "HEAL_TIME_LIST": "",
+  "AV_LEVELS": "",
+  "RECVOVER_PRIORITIES": "",
+  "LOC_TYPE_LABEL": "",
+  "ACTIVETY_CYCLE": "",
+  "ORG_NAME_AR": "Organization Name (Arabic)",
+  "ORG_NAME_EN": "Organization Name (English)",
+  "DESC": "Description",
+  "EMPLOYEES": "Total Employees Number",
+  "ACTIVITIES": " Organization Activities Number",
+  "RTO_LIST": {
+    "CRITICALITY":"Criticality",
+    "RTO_ENG":"RTO(English)",
+    "RTO_DESC":"Description"
+  },
+  "ACTIVITY_FEQ": {
+    "FRQUENCY_AR":"Frquency (Arabic)",
+    "FRQUENCY_EN":"Frquency (English)"
+  },
+  "LOC_TYPE": {
+    "TYPE_AR":"Type (Arabic)",
+    "TYPE_EN":"Type (English)"
+  },
+  "ACTIVITY_PRIORITY_SEQ": {
+    "PRI_AR":"Priority (Arabic)",
+    "PRI_EN":"Priority (English)"
+  }
+}

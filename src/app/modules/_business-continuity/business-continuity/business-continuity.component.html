@@ -1,0 +1,23 @@
+<section class="p-flex-column">
+  <header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
+    <h2 class="p-text-bold">
+      قوائم إستمرارية الأعمال
+
+      <p-tag value="اصدار 2023/1" severity="info"></p-tag>
+    </h2>
+
+    <p-button
+      label="{{ 'VERSIONS_SETTINGS' | translate }}"
+      icon="pi pi-cog"
+      styleClass="p-button-lg p-button-warning"
+    ></p-button>
+  </header>
+  <div class="p-d-flex p-8" style="gap: 20px; min-height: 700px">
+    <div class="p-shadow-6 rounded p-3">
+      <p-panelMenu [model]="items" [style]="{ width: '300px' }"> </p-panelMenu>
+    </div>
+    <div class="p-shadow-6 rounded p-3 px-6 w-100">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</section>
