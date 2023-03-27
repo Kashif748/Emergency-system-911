@@ -1,5 +1,46 @@
-<div class="row">
+<!--<div>
+  <header class="py-4">
+    <h3 class="text-info p-text-bold">{{ "ORG_INFO" | translate }}</h3>
 
+      <button class="mx-1" pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
+
+  </header>
+</div>-->
+<!--<p-toolbar>
+  <div class="p-toolbar-group-left p-mr-2 py-4">
+    <h3 class="text-info p-text-bold">{{ "ORG_INFO" | translate }}</h3>
+  </div>
+  <div class="mx-1">
+    <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
+  </div>
+</p-toolbar>-->
+
+<!--<div class="py-4">
+  <div class="w-100 d-flex flex-wrap mx-1 px-2">
+    <div class="my-auto">
+      <h3 class="text-info p-text-bold">{{ "ORG_INFO" | translate }}</h3>
+    </div>
+
+    <div class="ml-dir-auto d-flex">
+      <button pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus"></button>
+    </div>
+  </div>
+</div>-->
+
+
+
+<div class="py-10">
+  <p-toolbar class="py-4">
+    <div class="p-toolbar-group-left">
+      <h3 class="text-info p-text-bold">{{ "LOC_TYPE_LABEL" | translate }}</h3>
+    </div>
+
+   <app-add-loc-type></app-add-loc-type>
+
+  </p-toolbar>
+</div>
+
+<div class="row">
   <div class="col-12">
     <ng-container>
       <ng-container *ngIf="loading ;else tableTemplate">
@@ -113,14 +154,14 @@
         </p-table>
       </ng-template>
     </ng-container>
-    <div class="p-col-6 p-d-flex">
+    <!--<div class="p-col-6 p-d-flex">
       <div class="ml-dir-auto"></div>
       <ng-container>
         <div class="mx-1">
           <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
         </div>
       </ng-container>
-    </div>
+    </div>-->
     <p-paginator></p-paginator>
   </div>
 </div>

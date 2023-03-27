@@ -17,21 +17,42 @@
   "EMPLOYEES": "Total Employees Number",
   "ACTIVITIES": " Organization Activities Number",
   "RTO_LIST": {
+    "ADD_NEW_RTO":"Add New RTO",
     "CRITICALITY": "Criticality",
     "RTO_ENG": "RTO(English)",
-    "RTO_DESC": "Description"
+    "RTO_AR": "RTO(Arabic)",
+    "RTO_DESC": "Description",
+    "CRITICALITY_EN": "Criticality (English)",
+    "CRITICALITY_AR": "Criticality (Arabic)",
+    "DESC_AR":"Description (Arabic)",
+    "DESC_EN":"Description (English)"
   },
 
   "ACTIVITY_FEQ": {
+    "ADD_NEW_ACQ_FEQ":"Add New Activity Frquency",
     "FRQUENCY_AR": "Frquency (Arabic)",
     "FRQUENCY_EN": "Frquency (English)"
   },
   "LOC_TYPE": {
+    "ADD_NEW_LOC_TYPE":"Add New Location Type",
     "TYPE_AR": "Type (Arabic)",
     "TYPE_EN": "Type (English)"
   },
   "ACTIVITY_PRIORITY_SEQ": {
+    "ADD_NEW_PRI_SEQ":"Add New Priority Sequency",
     "PRI_AR": "Priority (Arabic)",
     "PRI_EN": "Priority (English)"
+  },
+  "IMP_LEVEL_WORKING": {
+    "ADD_NEW_IMP_LEVEL":"Add New Importance Level",
+    "COLOR": "Color",
+    "IMP_LEVEL": "Important Level (English)",
+    "IMP_LEVEL_DESC": "Description (English)",
+    "CRITICALITY_EN":"Criticality (English)",
+    "CRITICALITY_AR":"Criticality (Arabic)",
+    "LEVEL_EN":"Level (English)",
+    "LEVEL_AR":"Level (Arabic)",
+    "DESC_AR":"Description (Arabic)",
+    "DESC_EN":"Description (English)"
   }
 }

@@ -7,6 +7,7 @@ import { LocTypeComponent } from './loc-type/loc-type.component';
 import { OrgDetailsComponent } from './org-details/org-details.component';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
 import { RtoListContentComponent } from './rto-list-content/rto-list-content.component';
+import {ImpLevelWorkingComponent} from "./imp-level-working/imp-level-working.component";
 
 const routes: Routes = [
   {
@@ -37,6 +38,10 @@ const routes: Routes = [
         path: 'loc-types',
         component: LocTypeComponent,
       },
+      {
+        path: 'imp-level-working',
+        component: ImpLevelWorkingComponent,
+      }
     ],
   },
 ];

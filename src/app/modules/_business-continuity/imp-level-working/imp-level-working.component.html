@@ -1,10 +1,10 @@
 <div class="py-10">
   <p-toolbar class="py-4">
     <div class="p-toolbar-group-left">
-      <h3 class="text-info p-text-bold">{{ "RTO_LIST_LABEL" | translate }}</h3>
+      <h3 class="text-info p-text-bold">{{ "AV_LEVELS" | translate }}</h3>
     </div>
 
-   <app-add-rto-dialog></app-add-rto-dialog>
+    <app-add-imp-level></app-add-imp-level>
 
   </p-toolbar>
 </div>
@@ -20,18 +20,24 @@
 
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO_LIST.CRITICALITY" | translate }}
+                  #
                 </div>
               </th>
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO_LIST.RTO_ENG" | translate }}
+                  {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
                 </div>
               </th>
 
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO_LIST.RTO_DESC" | translate }}
+                  {{ "IMP_LEVEL_WORKING.IMP_LEVEL" | translate }}
+                </div>
+              </th>
+
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "IMP_LEVEL_WORKING.IMP_LEVEL_DESC" | translate }}
                 </div>
               </th>
 
@@ -76,18 +82,23 @@
               <th></th>
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO_LIST.CRITICALITY" | translate }}
+                  #
                 </div>
               </th>
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO_LIST.RTO_ENG" | translate }}
+                  {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
+                </div>
+              </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "IMP_LEVEL_WORKING.IMP_LEVEL" | translate }}
                 </div>
               </th>
 
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO_LIST.RTO_DESC" | translate }}
+                  {{ "IMP_LEVEL_WORKING.IMP_LEVEL_DESC" | translate }}
                 </div>
               </th>
 
@@ -102,15 +113,19 @@
               </td>
 
               <td>
-                {{item.criticality}}
+                {{item.id}}
               </td>
 
               <td>
-                2nd
+                <p-colorPicker [(ngModel)]="item.color"></p-colorPicker>
               </td>
 
               <td>
-                3rd
+                {{item.imp_level}}
+              </td>
+
+              <td>
+                {{item.desc}}
               </td>
 
               <td>
@@ -144,13 +159,3 @@
     <p-paginator></p-paginator>
   </div>
 </div>
-
-<p-dialog [(visible)]="display">
-  <ng-template pTemplate="header">
-    Header content here
-  </ng-template>
-  Content
-  <p-footer>
-    //buttons
-  </p-footer>
-</p-dialog>

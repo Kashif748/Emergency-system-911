@@ -28,6 +28,15 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
 import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
 import { LocTypeComponent } from './loc-type/loc-type.component';
+import {ImpLevelWorkingComponent} from "./imp-level-working/imp-level-working.component";
+import { ColorPickerModule } from 'primeng/colorpicker';
+import {ToolbarModule} from "primeng/toolbar";
+import {DialogModule} from "primeng/dialog";
+import { AddRtoDialogComponent } from './dialog/add-rto-dialog/add-rto-dialog.component';
+import { AddImpLevelComponent } from './dialog/add-imp-level/add-imp-level.component';
+import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-seq.component';
+import { AddLocTypeComponent } from './dialog/add-loc-type/add-loc-type.component';
+import { AddActivityFrqComponent } from './dialog/add-activity-frq/add-activity-frq.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -46,6 +55,12 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ActivityFrquencyComponent,
     ActivityPrioritySeqComponent,
     LocTypeComponent,
+    ImpLevelWorkingComponent,
+    AddRtoDialogComponent,
+    AddImpLevelComponent,
+    AddPrioritySeqComponent,
+    AddLocTypeComponent,
+    AddActivityFrqComponent,
   ],
   imports: [
     CommonModule,
@@ -73,6 +88,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     MenuModule,
     SkeletonModule,
     NodataTableModule,
+    ColorPickerModule,
+    ToolbarModule,
+    DialogModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

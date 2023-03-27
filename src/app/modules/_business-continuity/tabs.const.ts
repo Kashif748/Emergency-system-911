@@ -35,6 +35,7 @@ export const TABS: MenuItem[] = [
   {
     label: 'AV_LEVELS',
     icon: 'pi pi-chart-bar',
+    routerLink: 'imp-level-working',
   },
   {
     label: 'RECVOVER_PRIORITIES',
