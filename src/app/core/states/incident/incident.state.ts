@@ -108,6 +108,11 @@ export class IncidentState {
         status: payload.status as any,
       })
       .pipe(
+        catchError(() => {
+          return of({
+            result: { content: [{ id: payload.id, subject: payload.subject }] },
+          });
+        }),
         tap(({ result: { content: list } }) => {
           setState(
             patch<IncidentStateModel>({
