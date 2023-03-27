@@ -431,13 +431,15 @@
           </div>
         </div>
       </p-tabPanel>
-      <p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_NOTIFICATIONS' | translate }}">
-        <div class="row h-100">
-          <div class="col-12 h-100">
-            <ng-container #notificationsContainer></ng-container>
+      <ng-container *checkPrivileges="'PRIV_VW_TSK_NOTIF'">
+        <p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_NOTIFICATIONS' | translate }}">
+          <div class="row h-100">
+            <div class="col-12 h-100">
+              <ng-container #notificationsContainer></ng-container>
+            </div>
           </div>
-        </div>
-      </p-tabPanel>
+        </p-tabPanel>
+      </ng-container>
 
     </p-tabView>
 

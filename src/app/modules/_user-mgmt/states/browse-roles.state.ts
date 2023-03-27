@@ -4,6 +4,7 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { RoleAction } from '@core/states';
+import { TextUtils } from '@core/utils';
 import {
   Action,
   Selector,
@@ -59,8 +60,11 @@ export class BrowseRolesState {
   @Selector([BrowseRolesState])
   static hasFilters(state: BrowseRolesStateModel): boolean {
     return (
-      Object.keys(state.pageRequest.filters).filter((k) => k !== 'status')
-        .length > 0
+      Object.keys(state.pageRequest.filters).filter(
+        (k) =>
+          k !== 'status' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+      ).length > 0
     );
   }
   /* ********************** ACTIONS ************************* */

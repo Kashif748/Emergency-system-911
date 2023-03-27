@@ -229,7 +229,11 @@ export class TaskDialogComponent
           // insure incident dropdown is in the right state
           const incidentSubject = (task.incidentId as any)?.subject;
           this.incidentDropdown.filterValue = incidentSubject;
-          this.loadIncidents(incidentSubject, true);
+          this.loadIncidents(
+            incidentSubject,
+            true,
+            (task.incidentId as any)?.id
+          );
 
           // insure assignee dropdown is in the right state
           this.dropdowns.changes
@@ -335,7 +339,7 @@ export class TaskDialogComponent
     this.form.get('incidentId').disable();
 
     this.incidentDropdown.filterValue = incidentSubject;
-    this.loadIncidents(incidentSubject, true);
+    this.loadIncidents(incidentSubject, true, incidentId);
   }
 
   updateStatus(status: IdNameProjection) {
@@ -414,10 +418,10 @@ export class TaskDialogComponent
     this.destroy$.complete();
   }
 
-  loadIncidents(searchText?: string, direct = false) {
+  loadIncidents(searchText?: string, direct = false, id?: number) {
     if (direct) {
       this.store.dispatch(
-        new IncidentAction.LoadIncidents({ subject: searchText })
+        new IncidentAction.LoadIncidents({ id, subject: searchText })
       );
       return;
     }
