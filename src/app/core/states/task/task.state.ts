@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import {
@@ -9,13 +8,15 @@ import {
   State,
   StateContext,
   StateToken,
+  Store,
 } from '@ngxs/store';
-import { patch } from '@ngxs/store/operators';
+import { patch, updateItem } from '@ngxs/store/operators';
 import { MapActionType } from '@shared/sh-components/map/utils/MapActionType';
 import { EMPTY, of } from 'rxjs';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import {
   GroupProjection,
+  IncidentTaskProjection,
   Pageable,
   PageIncidentTaskProjection,
   PriorityProjection,
@@ -30,8 +31,8 @@ import {
   PriorityControllerService,
   TaskControllerService,
   TaskStatusControllerService,
-  UserGroupMapControllerService,
 } from 'src/app/api/services';
+import { CommonDataState } from '../common-data/common-data.state';
 import { TaskAction } from './task.action';
 
 export interface TaskModel extends TaskDetails {
@@ -60,13 +61,13 @@ export class TaskState {
    *
    */
   constructor(
-    private messageHelper: MessageHelper,
     private taskService: TaskControllerService,
     private priorityService: PriorityControllerService,
     private statusService: TaskStatusControllerService,
     private groupService: ManageGroupsService,
     private incidentService: IncidentControllerService,
-    private dmsService: DmsControllerService
+    private messageHelper: MessageHelper,
+    private store: Store
   ) {}
   /* ************************ SELECTORS ******************** */
   @Selector([TaskState])
@@ -427,12 +428,34 @@ export class TaskState {
         statusId: payload.statusId as any,
       })
       .pipe(
+        tap(() => {
+          const status = this.store
+            .selectSnapshot(CommonDataState.taskStatuses)
+            .find((s) => s.id == payload.statusId);
+          setState(
+            patch<TaskStateModel>({
+              page: patch<PageIncidentTaskProjection>({
+                content: updateItem(
+                  (i) => i.id == payload.id,
+                  patch<IncidentTaskProjection>({
+                    status,
+                  })
+                ),
+              }),
+            })
+          );
+          this.messageHelper.success();
+        }),
         finalize(() => {
           setState(
             patch<TaskStateModel>({
               blocking: false,
             })
           );
+        }),
+        catchError((error) => {
+          this.messageHelper.error({ error });
+          return EMPTY;
         })
       );
   }
