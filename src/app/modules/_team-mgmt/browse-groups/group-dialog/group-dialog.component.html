@@ -618,14 +618,14 @@
                     <button *ngIf="location.geometry == null" (click)="openLocationDialoug(i, null)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-map-marker p-mx-2"></i></button>
                     <button *ngIf="location.geometry !== null" (click)="viewLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-eye p-mx-2"></i></button>
                     <button *ngIf="location.isEditing" (click)="save(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-save p-mx-2"></i></button>
-                    <button *ngIf="location.geometry !== null" (click)="updateLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-warning btn btn-sm" ><i class="pi pi-pencil p-mx-2"></i></button>
+                    <button *ngIf="location.geometry !== null && checkUpdateLocation" (click)="updateLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-warning btn btn-sm" ><i class="pi pi-pencil p-mx-2"></i></button>
                     <button [disabled]="namedLocations.length == 1" [ngClass]="{'disabled':namedLocations.length == 1}" (click)="removeLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-danger btn btn-sm" ><i class="pi pi-trash p-mx-2"></i></button>
                   </div>
 
                 </div>
               </form>
               <div class="ml-dir-auto d-flex p-md-offset-9 p-md-2">
-                <button pButton type="button" label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus"
+                <button *checkPrivileges="['PRIV_ED_LOC_INC_GRP']" pButton type="button" label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus"
                        [loading]="blocking$ | async" (click)="addNewLocation()"></button>
               </div>
             </div>
@@ -657,10 +657,29 @@
           <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
                   class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
         </div>
-        <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP','PRIV_ED_USR_GRP','PRIV_ED_LOC_INC_GRP']">
+        <div *ngIf="activeTab === 0">
+          <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP']">
+            <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+                    (click)="submit()"></button>
+          </div>
+        </div>
+        <div *ngIf="activeTab === 1">
+          <div class="mx-1" *checkPrivileges="['PRIV_ED_USR_GRP']">
+            <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+                    (click)="submit()"></button>
+          </div>
+        </div>
+        <div *ngIf="activeTab === 2">
+          <div class="mx-1" *checkPrivileges="['PRIV_ED_LOC_INC_GRP']">
+            <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+                    (click)="submit()"></button>
+          </div>
+        </div>
+
+        <!--<div class="mx-1" *checkPrivileges="['PRIV_UP_GRP','PRIV_ED_USR_GRP','PRIV_ED_LOC_INC_GRP']">
           <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
                   (click)="submit()"></button>
-        </div>
+        </div>-->
       </ng-container>
     </div>
   </ng-template>

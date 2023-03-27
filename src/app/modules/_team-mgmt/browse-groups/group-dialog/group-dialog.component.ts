@@ -1,4 +1,5 @@
 import {
+  AfterViewChecked,
   ChangeDetectorRef,
   Component,
   ComponentFactoryResolver,
@@ -44,13 +45,14 @@ import {AppCommonData, IncidentCategory2} from "@core/entities/AppCommonData";
 import {MapComponent} from "@shared/sh-components/map/map.component";
 import {__await} from "tslib";
 import {TabPanel} from "primeng/tabview";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-group-dialog',
   templateUrl: './group-dialog.component.html',
   styleUrls: ['./group-dialog.component.scss']
 })
-export class GroupDialogComponent implements OnInit, OnDestroy {
+export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked {
   commonData: AppCommonData;
   RegxConst = RegxConst;
 
@@ -98,6 +100,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
   public categories = [];
   public groupConfig: MapConfig[] = [];
   public isUserActive = true;
+  public checkUpdateGroup;
+  public checkUpdateLocation
 
   form: FormGroup;
   private defaultFormValue: { [key: string]: any } = {};
@@ -190,6 +194,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     protected mapService: MapService,
     private cfr: ComponentFactoryResolver,
     private injector: Injector,
+    private privilegesService: PrivilegesService
   ) {
     this.route.queryParams
       .pipe(
@@ -784,7 +789,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       user: null
     }];
     const viewGroup = document.getElementById('viewGroup');
-    if (!this.form.valid && viewGroup !== null) {
+    if (!this.form.valid && viewGroup !== null && this.checkUpdateGroup) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
         fc.markAsDirty();
@@ -1157,5 +1162,21 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     instance.smallSize = true;
     this.mapComponent = instance;
     cdr.detectChanges();
+  }
+
+  ngAfterViewChecked() {
+    this.checkUpdateGroup = this.privilegesService.checkActionPrivilege('PRIV_UP_GRP');
+    if (!this.checkUpdateGroup) {
+      this.form.disable();
+    }
+    const checkUpdateUser = this.privilegesService.checkActionPrivilege('PRIV_ED_USR_GRP');
+    if (!checkUpdateUser) {
+      this.userGroupForm.disable();
+    }
+    this.checkUpdateLocation = this.privilegesService.checkActionPrivilege('PRIV_ED_LOC_INC_GRP');
+    if (!this.checkUpdateLocation) {
+      this.incidentCategory.disable();
+      this.groupZoneIncidentCategory.disable();
+    }
   }
 }
