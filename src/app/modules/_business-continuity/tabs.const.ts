@@ -6,27 +6,31 @@ export const TABS: MenuItem[] = [
     icon: 'flaticon2-protection',
     items: [
       {
-        label: 'ORG_INFO',
+        label: 'ORG_DETAILS',
         routerLink: 'org-details',
       },
-      { label: 'ORG_ARTCH', routerLink: 'org-strucure' ,
-      routerLinkActiveOptions : 'active-one'},
+      {
+        label: 'ORG_ARTCH',
+        routerLink: 'org-strucure',
+        routerLinkActiveOptions: 'active-one',
+      },
     ],
   },
   {
-    label: 'EFFECTS',
+    label: 'IMPACTS',
     icon: 'flaticon-warning',
     items: [
       {
-        label: 'EFFECTS_LEVELS',
+        label: 'IMPACT_LEVELS',
+        routerLink: 'impact-levels',
       },
-      { label: 'EFFECTS_MATRIX' },
+      { label: 'IMPACT_ANALYSIS', routerLink: 'impact-analysis' },
     ],
   },
   {
-    label: 'HEAL_TIME_LIST',
+    label: 'RTO_LIST_LABEL',
     icon: 'pi pi-clock',
-    routerLink :'rto-list'
+    routerLink: 'rto-list',
   },
   {
     label: 'AV_LEVELS',
@@ -35,16 +39,16 @@ export const TABS: MenuItem[] = [
   {
     label: 'RECVOVER_PRIORITIES',
     icon: 'pi pi-sort-amount-up',
-    routerLink:'activey-priority'
+    routerLink: 'activey-priority',
   },
   {
     label: 'LOC_TYPE_LABEL',
     icon: 'pi pi-map-marker',
-    routerLink:'loc-types'
+    routerLink: 'loc-types',
   },
   {
-    label: 'ACTIVETY_CYCLE',
+    label: 'ACTIVETY_FREQUENCY',
     icon: 'flaticon2-refresh',
-    routerLink:'activey-frquency'
+    routerLink: 'activey-frquency',
   },
 ];

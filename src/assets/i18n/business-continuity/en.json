@@ -1,36 +1,37 @@
 {
   "VERSIONS_SETTINGS": "Version Management",
-  "RES_ORG": "",
-  "ORG_INFO": "Organization Details",
+  "RES_ORG": "Responsible Organization",
+  "ORG_DETAILS": "Organization Details",
   "ORG_ARTCH": "",
-  "EFFECTS": "",
-  "EFFECTS_LEVELS": "",
-  "EFFECTS_MATRIX": "",
-  "HEAL_TIME_LIST": "",
-  "AV_LEVELS": "",
-  "RECVOVER_PRIORITIES": "",
-  "LOC_TYPE_LABEL": "",
-  "ACTIVETY_CYCLE": "",
+  "IMPACTS": "Impacts",
+  "IMPACT_LEVELS": "Impacts Levels",
+  "IMPACT_ANALYSIS": "Impacts Analysis Matrix",
+  "RTO_LIST_LABEL": "RTO List",
+  "AV_LEVELS": "Importance Levels for Working",
+  "RECVOVER_PRIORITIES": "Activity Priority Sequence",
+  "LOC_TYPE_LABEL": "Location Type",
+  "ACTIVETY_FREQUENCY": "Activity Frequency",
   "ORG_NAME_AR": "Organization Name (Arabic)",
   "ORG_NAME_EN": "Organization Name (English)",
   "DESC": "Description",
   "EMPLOYEES": "Total Employees Number",
   "ACTIVITIES": " Organization Activities Number",
   "RTO_LIST": {
-    "CRITICALITY":"Criticality",
-    "RTO_ENG":"RTO(English)",
-    "RTO_DESC":"Description"
+    "CRITICALITY": "Criticality",
+    "RTO_ENG": "RTO(English)",
+    "RTO_DESC": "Description"
   },
+
   "ACTIVITY_FEQ": {
-    "FRQUENCY_AR":"Frquency (Arabic)",
-    "FRQUENCY_EN":"Frquency (English)"
+    "FRQUENCY_AR": "Frquency (Arabic)",
+    "FRQUENCY_EN": "Frquency (English)"
   },
   "LOC_TYPE": {
-    "TYPE_AR":"Type (Arabic)",
-    "TYPE_EN":"Type (English)"
+    "TYPE_AR": "Type (Arabic)",
+    "TYPE_EN": "Type (English)"
   },
   "ACTIVITY_PRIORITY_SEQ": {
-    "PRI_AR":"Priority (Arabic)",
-    "PRI_EN":"Priority (English)"
+    "PRI_AR": "Priority (Arabic)",
+    "PRI_EN": "Priority (English)"
   }
 }
