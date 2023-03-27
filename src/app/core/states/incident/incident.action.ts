@@ -10,6 +10,7 @@ export namespace IncidentAction {
       public payload: {
         status?: number[];
         subject?: string;
+        id?: number;
       }
     ) {}
   }

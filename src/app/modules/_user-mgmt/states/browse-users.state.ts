@@ -4,6 +4,7 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { UserAction } from '@core/states/user/user.action';
+import { TextUtils } from '@core/utils';
 import {
   Action,
   Selector,
@@ -67,8 +68,11 @@ export class BrowseUsersState {
   @Selector([BrowseUsersState])
   static hasFilters(state: BrowseUsersStateModel): boolean {
     return (
-      Object.keys(state.pageRequest.filters).filter((k) => k !== 'active')
-        .length > 0
+      Object.keys(state.pageRequest.filters).filter(
+        (k) =>
+          k !== 'active' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+      ).length > 0
     );
   }
   /* ********************** ACTIONS ************************* */
@@ -188,14 +192,14 @@ export class BrowseUsersState {
     return dispatch(new UserAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
+        dispatch([
+          new BrowseUsersAction.LoadUsers(),
+          new BrowseUsersAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
   }

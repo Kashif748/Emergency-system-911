@@ -4,6 +4,7 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { TaskAction } from '@core/states';
+import { TextUtils } from '@core/utils';
 import {
   Action,
   Selector,
@@ -83,8 +84,11 @@ export class BrowseTasksState {
   @Selector([BrowseTasksState])
   static hasFilters(state: BrowseTasksStateModel): boolean {
     return (
-      Object.keys(state.pageRequest.filters).filter((k) => k !== 'type')
-        .length > 0
+      Object.keys(state.pageRequest.filters).filter(
+        (k) =>
+          k !== 'type' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+      ).length > 0
     );
   }
   /* ********************** ACTIONS ************************* */

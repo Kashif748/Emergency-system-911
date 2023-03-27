@@ -91,13 +91,13 @@
                 >
                   <span *ngIf="lang == 'en'">
                     {{
-                      getConfidentialty(row["confidentialty"])["nameEn"] ||
+                      getConfidentialty(row["confidentialty"])?.nameEn ||
                         ("CIRCULARS.NO_VALUE" | translate)
                     }}
                   </span>
                   <span *ngIf="lang == 'ar'">
                     {{
-                      getConfidentialty(row["confidentialty"])["nameAr"] ||
+                      getConfidentialty(row["confidentialty"])?.nameAr ||
                         ("CIRCULARS.NO_VALUE" | translate)
                     }}
                   </span>
