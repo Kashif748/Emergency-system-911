@@ -1,11 +1,28 @@
 {
   "VERSIONS_SETTINGS": "Version Management",
+  "ADD_VERSION" : "Add new version",
+  "VERSION" : "Version" ,
   "RES_ORG": "Responsible Organization",
   "ORG_DETAILS": "Organization Details",
   "ORG_ARTCH": "",
   "IMPACTS": "Impacts",
-  "IMPACT_LEVELS": "Impacts Levels",
-  "IMPACT_ANALYSIS": "Impacts Analysis Matrix",
+  "ACTION": "ACTION",
+  "ADD": "Add",
+  "IMPACT_LEVELS": {
+    "TAB_LABEL": "Impacts Levels",
+    "HEADER": "Activate Impact Levels for the Organization",
+    "LEVEL_AR": "Level (Arabic)",
+    "LEVEL_EN": "Level (English)",
+    "COLOR": "Color"
+  },
+  "IMPACT_ANALYSIS": {
+    "HEADER": "Business Impact Analysis Matrix",
+    "TAB_LABEL": "Impacts Analysis Matrix",
+    "IMPACT_TYPES": "Impact Types",
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High"
+  },
   "RTO_LIST_LABEL": "RTO List",
   "AV_LEVELS": "Importance Levels for Working",
   "RECVOVER_PRIORITIES": "Activity Priority Sequence",

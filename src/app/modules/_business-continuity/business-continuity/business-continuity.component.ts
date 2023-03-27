@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from 'primeng/api';
@@ -11,14 +12,22 @@ import { TABS } from '../tabs.const';
 })
 export class BusinessContinuityComponent implements OnInit, AfterViewInit {
   items: MenuItem[] = [];
+  visible = false;
 
-  constructor(private lang: ILangFacade, private translate: TranslateService) {}
+  form: FormGroup;
+  constructor(
+    private lang: ILangFacade,
+    private translate: TranslateService,
+    private formBuilder: FormBuilder
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.createForm()
+  }
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.items = this.translateMenu(TABS);
-      console.log(this.items);
+      this.visible = true;
     }, 1000);
   }
   translateMenu(items: MenuItem[]): MenuItem[] {
@@ -28,6 +37,13 @@ export class BusinessContinuityComponent implements OnInit, AfterViewInit {
         tab.items = this.translateMenu(tab.items);
       }
       return tab;
+    });
+  }
+
+  createForm() {
+    this.form = this.formBuilder.group({
+      version: [null, [Validators.required]],
+      desc: [null, [Validators.required]],
     });
   }
 }

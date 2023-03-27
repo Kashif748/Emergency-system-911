@@ -156,6 +156,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'business-continuity',
+        loadChildren: () =>
+          import('../modules/_business-continuity/business-continuity.module').then(
+            (m) => m.BusinessContinuityModule
+          ),
+      },
+      {
         path: 'company-profile',
         loadChildren: () =>
           import('../modules/trade-license/trade-license.module').then(

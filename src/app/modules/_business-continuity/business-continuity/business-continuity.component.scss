@@ -1,6 +1,10 @@
 :host ::ng-deep {
   .p-panelmenu-icon {
-    display: none;
+    order: 1;
+    margin-right: auto !important;
+    &.pi-chevron-right {
+      rotate: 180deg;
+    }
   }
   .p-menuitem-icon {
     margin: 5px 10px;
@@ -10,6 +14,9 @@
   }
   .p-panelmenu-panel {
     margin-bottom: 10px;
+    .p-menuitem-link-active {
+      background-color: #2196f34f !important;
+    }
     .p-panelmenu-header-link {
       border-radius: 10px !important;
     }

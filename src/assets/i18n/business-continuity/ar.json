@@ -1,11 +1,28 @@
 {
   "VERSIONS_SETTINGS": "إعدادات الاصدارات",
+  "ADD_VERSION": "انشاء إصدار جديد",
+  "VERSION": "الإصدار",
   "RES_ORG": "الجهة المسؤولة",
   "ORG_DETAILS": "بيانات الجهة",
   "ORG_ARTCH": "الهيكل الإداري",
   "IMPACTS": "التأثيرات",
-  "IMPACT_LEVELS": "مستويات التأثير",
-  "IMPACT_ANALYSIS": "مصفوفة تحليل الأثر",
+  "IMPACT_LEVELS": {
+    "TAB_LABEL": "مستويات التأثير",
+    "HEADER": " تفعيل مستويات التأثير الخاصة بالمؤسسة",
+    "LEVEL_AR": " المستوى (عربي)",
+    "LEVEL_EN": " المستوى (انجليزي) ",
+    "COLOR": "اللون"
+  },
+  "ACTION": "الإجراء",
+  "ADD": "إضافة",
+  "IMPACT_ANALYSIS": {
+    "HEADER": "مصفوفة تحليل الأثر على الأعمال",
+    "TAB_LABEL": "مصفوفة تحليل الأثر",
+    "IMPACT_TYPES": " نوع التأثير",
+    "LOW": "منخفض",
+    "MEDIUM": "متوسط",
+    "HIGH": "مرتفع"
+  },
   "RTO_LIST_LABEL": "قائمة زمن التعافي",
   "AV_LEVELS": "مستويات التوافر للعمل",
   "RECVOVER_PRIORITIES": "أولوية الاسترجاع",
@@ -13,24 +30,24 @@
   "ACTIVETY_FREQUENCY": "دورية النشاط",
   "ORG_NAME_AR": "إسم الجهة (عربي)",
   "ORG_NAME_EN": "إسم الجهة (انجليزي)",
-  "DESC" : "وصف",
-  "EMPLOYEES" : "عدد الموظفين الإجمالي",
-  "ACTIVITIES" : "عدد العمليات المؤسسية",
+  "DESC": "وصف",
+  "EMPLOYEES": "عدد الموظفين الإجمالي",
+  "ACTIVITIES": "عدد العمليات المؤسسية",
   "RTO_LIST": {
-    "CRITICALITY":"Criticality",
-    "RTO_ENG":"RTO(English)",
-    "RTO_DESC":"Description"
+    "CRITICALITY": "Criticality",
+    "RTO_ENG": "RTO(English)",
+    "RTO_DESC": "Description"
   },
   "ACTIVITY_FEQ": {
-    "FRQUENCY_AR":"Frquency (Arabic)",
-    "FRQUENCY_EN":"Frquency (English)"
+    "FRQUENCY_AR": "Frquency (Arabic)",
+    "FRQUENCY_EN": "Frquency (English)"
   },
   "LOC_TYPE": {
-    "TYPE_AR":"Type (Arabic)",
-    "TYPE_EN":"Type (English)"
+    "TYPE_AR": "Type (Arabic)",
+    "TYPE_EN": "Type (English)"
   },
   "ACTIVITY_PRIORITY_SEQ": {
-    "PRI_AR":"Priority (Arabic)",
-    "PRI_EN":"Priority (English)"
+    "PRI_AR": "Priority (Arabic)",
+    "PRI_EN": "Priority (English)"
   }
 }

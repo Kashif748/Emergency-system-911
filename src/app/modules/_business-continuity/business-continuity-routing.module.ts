@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
 import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
 import { BusinessContinuityComponent } from './business-continuity/business-continuity.component';
+import { ImpactAnalysisComponent } from './impact-analysis/impact-analysis.component';
+import { ImpactLevelsComponent } from './impact-levels/impact-levels.component';
 import { LocTypeComponent } from './loc-type/loc-type.component';
 import { OrgDetailsComponent } from './org-details/org-details.component';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
@@ -21,6 +23,14 @@ const routes: Routes = [
       {
         path: 'org-strucure',
         component: OrgStrucureComponent,
+      },
+      {
+        path: 'impact-levels',
+        component: ImpactLevelsComponent,
+      },
+      {
+        path: 'impact-analysis',
+        component: ImpactAnalysisComponent,
       },
       {
         path: 'rto-list',

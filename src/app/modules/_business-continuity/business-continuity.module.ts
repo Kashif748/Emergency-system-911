@@ -10,6 +10,11 @@ import { BusinessContinuityComponent } from './business-continuity/business-cont
 import { BusinessContinuityRoutingModule } from './business-continuity-routing.module';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
 import { RtoListContentComponent } from './rto-list-content/rto-list-content.component';
+import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
+import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
+import { LocTypeComponent } from './loc-type/loc-type.component';
+import { ImpactLevelsComponent } from './impact-levels/impact-levels.component';
+import { ImpactAnalysisComponent } from './impact-analysis/impact-analysis.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -25,13 +30,11 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
 import { PaginatorModule } from 'primeng/paginator';
 import { MenuModule } from 'primeng/menu';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
-import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
-import { LocTypeComponent } from './loc-type/loc-type.component';
-import {ImpLevelWorkingComponent} from "./imp-level-working/imp-level-working.component";
 import { ColorPickerModule } from 'primeng/colorpicker';
-import {ToolbarModule} from "primeng/toolbar";
-import {DialogModule} from "primeng/dialog";
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { DialogModule } from 'primeng/dialog';
+import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
+import { ToolbarModule } from 'primeng/toolbar';
 import { AddRtoDialogComponent } from './dialog/add-rto-dialog/add-rto-dialog.component';
 import { AddImpLevelComponent } from './dialog/add-imp-level/add-imp-level.component';
 import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-seq.component';
@@ -61,6 +64,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     AddPrioritySeqComponent,
     AddLocTypeComponent,
     AddActivityFrqComponent,
+    ImpactLevelsComponent,
+    ImpactAnalysisComponent,
   ],
   imports: [
     CommonModule,
@@ -87,10 +92,12 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     PaginatorModule,
     MenuModule,
     SkeletonModule,
+    ColorPickerModule,
+    InputSwitchModule,
     NodataTableModule,
     ColorPickerModule,
     ToolbarModule,
-    DialogModule
+    DialogModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

@@ -1,0 +1,156 @@
+<section>
+  <header class="d-flex p-jc-between p-ai-center border-bottom py-4 mb-2">
+    <h4 class="text-info p-text-bold">
+      {{ "IMPACT_LEVELS.HEADER" | translate }}
+    </h4>
+  </header>
+  <div class="p-d-flex p-flex-column">
+    <ng-container *ngIf="loading; else tableTemplate">
+      <p-table [value]="[].constructor(10)">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_LEVELS.LEVEL_AR" | translate }}
+              </div>
+            </th>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_LEVELS.LEVEL_EN" | translate }}
+              </div>
+            </th>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_LEVELS.COLOR" | translate }}
+              </div>
+            </th>
+
+            <th style="width: 92px">{{ "ACTIONS.ACTIVE" | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr class="cursor-pointer hoverable">
+            <td class="flag-td">
+              <div class="bg-secondary"></div>
+            </td>
+
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+            <td>
+              <p-skeleton></p-skeleton>
+            </td>
+
+            <td>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-ellipsis-v"
+                class="p-button-rounded p-button-text my-auto p-button-plain"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-container>
+    <ng-template #tableTemplate>
+      <p-table
+        [columns]="columns"
+        totalRecords="20"
+        [value]="page"
+        dataKey="id"
+        [autoLayout]="true"
+      >
+        <ng-template pTemplate="colgroup" let-columns>
+          <colgroup>
+            <col *ngFor="let col of columns" [style.width]="'col.width'" />
+          </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">#</div>
+            </th>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_LEVELS.LEVEL_AR" | translate }}
+              </div>
+            </th>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_LEVELS.LEVEL_EN" | translate }}
+              </div>
+            </th>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_LEVELS.COLOR" | translate }}
+              </div>
+            </th>
+
+            <th style="width: 92px">{{ "ACTIONS.ACTIVE" | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr class="cursor-pointer hoverable">
+            <th>{{ item.id }}</th>
+            <td>
+              <input
+                type="text"
+                [value]="item.levelAr"
+                class="p-inputtext-sm"
+                pInputText
+              />
+            </td>
+
+            <td>
+              <input
+                type="text"
+                [value]="item.levelEn"
+                class="p-inputtext-sm"
+                pInputText
+              />
+            </td>
+
+            <td>
+              <p-colorPicker
+                [(ngModel)]="item.color"
+                format="rgb"
+              ></p-colorPicker>
+            </td>
+
+            <td>
+              <p-inputSwitch></p-inputSwitch>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="100%">
+              <div class="w-100">
+                <nodata-table></nodata-table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator></p-paginator>
+    </ng-template>
+    <div class="p-d-flex p-3 p-jc-center mt-10">
+      <p-button
+        label="{{ 'SHARED.SAVE' | translate }}"
+        icon="pi pi-save"
+        styleClass="p-button  "
+      ></p-button>
+    </div>
+  </div>
+</section>
