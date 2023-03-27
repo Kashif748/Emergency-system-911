@@ -66,7 +66,18 @@ export class BrowseTasksState {
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseTasksState])
   static state(state: BrowseTasksStateModel): BrowseTasksStateModel {
-    return state;
+    return {
+      ...state,
+      pageRequest: {
+        ...state.pageRequest,
+        filters: {
+          ...state.pageRequest.filters,
+          dueDate: state.pageRequest.filters['dueDate']
+            ? new Date(state.pageRequest.filters['dueDate'])
+            : undefined,
+        },
+      },
+    };
   }
 
   @Selector([BrowseTasksState])

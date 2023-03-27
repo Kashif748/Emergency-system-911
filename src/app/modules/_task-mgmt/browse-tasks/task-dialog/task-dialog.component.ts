@@ -15,6 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { IAuthService } from '@core/services/auth.service';
+import { PrivilegesService } from '@core/services/privileges.service';
 import {
   AssetAction,
   AssetState,
@@ -41,6 +42,7 @@ import {
   distinctUntilChanged,
   filter,
   map,
+  skip,
   switchMap,
   take,
   takeUntil,
@@ -152,6 +154,10 @@ export class TaskDialogComponent
     return this.auth.getClaim('orgId');
   }
 
+  get loggedinUserId() {
+    return this.auth.getClaim('sub');
+  }
+
   get editMode() {
     return this._taskId !== undefined && this._taskId !== null;
   }
@@ -178,18 +184,30 @@ export class TaskDialogComponent
         filter((t) => !!t),
         tap((t: TaskDetails) => {
           const task = { ...t };
-          if (task.statusId === 1) {
-            this.store
-              .dispatch(
-                new TaskAction.UpdateStatus({ id: task.id, statusId: 2 })
-              )
-              .pipe(
-                takeUntil(this.destroy$),
-                tap(() => {
-                  this.store.dispatch(new BrowseTasksAction.LoadTasks());
-                })
-              )
-              .subscribe();
+          let isAssignee = false;
+
+          switch (task?.assignTo?.type) {
+            case 'org':
+              isAssignee = task?.assignTo?.assigneeId == this.loggedinOrgId;
+              break;
+            case 'group':
+              isAssignee = !!this.store
+                .selectSnapshot(CommonDataState.currentGroup)
+                .find((g) => g.id == task?.assignTo?.assigneeId);
+              break;
+            case 'user':
+              isAssignee = task?.assignTo?.assigneeId == this.loggedinUserId;
+              break;
+          }
+
+          if (
+            task.statusId === 1 &&
+            this.privileges.checkActionPrivileges('PRIV_RCV_TASK') &&
+            isAssignee
+          ) {
+            this.store.dispatch(
+              new TaskAction.UpdateStatus({ id: task.id, statusId: 2 })
+            );
             task.statusId = 2;
           }
 
@@ -258,7 +276,8 @@ export class TaskDialogComponent
     private route: ActivatedRoute,
     private injector: Injector,
     private cfr: ComponentFactoryResolver,
-    private translateObj: TranslateObjPipe
+    private translateObj: TranslateObjPipe,
+    private privileges: PrivilegesService
   ) {
     this.route.queryParams
       .pipe(
@@ -290,6 +309,7 @@ export class TaskDialogComponent
           try {
             if (v) {
               this.form.disable();
+              this.form.get('statusId').enable();
             } else {
               this.form.enable();
             }
@@ -316,6 +336,12 @@ export class TaskDialogComponent
 
     this.incidentDropdown.filterValue = incidentSubject;
     this.loadIncidents(incidentSubject, true);
+  }
+
+  updateStatus(status: IdNameProjection) {
+    this.store.dispatch(
+      new TaskAction.UpdateStatus({ id: this._taskId, statusId: status.id })
+    );
   }
 
   ngAfterViewInit(): void {
