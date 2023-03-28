@@ -100,8 +100,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
   public categories = [];
   public groupConfig: MapConfig[] = [];
   public isUserActive = true;
-  public checkUpdateGroup;
-  public checkUpdateLocation
 
   form: FormGroup;
   private defaultFormValue: { [key: string]: any } = {};
@@ -789,7 +787,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       user: null
     }];
     const viewGroup = document.getElementById('viewGroup');
-    if (!this.form.valid && viewGroup !== null && this.checkUpdateGroup) {
+    if (!this.form.valid && viewGroup !== null && this.privilegesService.checkActionPrivilege('PRIV_UP_GRP')) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
         fc.markAsDirty();
@@ -1165,16 +1163,16 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngAfterViewChecked() {
-    this.checkUpdateGroup = this.privilegesService.checkActionPrivilege('PRIV_UP_GRP');
-    if (!this.checkUpdateGroup) {
+    const checkUpdateGroup = this.privilegesService.checkActionPrivilege('PRIV_UP_GRP');
+    if (!checkUpdateGroup) {
       this.form.disable();
     }
     const checkUpdateUser = this.privilegesService.checkActionPrivilege('PRIV_ED_USR_GRP');
     if (!checkUpdateUser) {
       this.userGroupForm.disable();
     }
-    this.checkUpdateLocation = this.privilegesService.checkActionPrivilege('PRIV_ED_LOC_INC_GRP');
-    if (!this.checkUpdateLocation) {
+    const checkUpdateLocation = this.privilegesService.checkActionPrivilege('PRIV_ED_LOC_INC_GRP');
+    if (!checkUpdateLocation) {
       this.incidentCategory.disable();
       this.groupZoneIncidentCategory.disable();
     }
