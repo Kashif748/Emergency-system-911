@@ -20,15 +20,13 @@ COPY . .
 # build app for production | staging | develop with minification
 RUN npm run build:${ENV}
 
-RUN apk add zip
-RUN zip -r ${VERSION}.zip dist
-
+# export build bundles to artifacts
 FROM scratch as artifact
 ARG ENV
 ARG VERSION
 
-WORKDIR /dist
-COPY --from=build /app/${VERSION}.zip /dist
+WORKDIR /
+COPY --from=build /app/dist /
 
 # use nginx to serve application
 FROM nginx:1.23.1-alpine as final
