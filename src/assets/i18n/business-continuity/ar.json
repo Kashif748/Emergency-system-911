@@ -34,20 +34,32 @@
   "EMPLOYEES": "عدد الموظفين الإجمالي",
   "ACTIVITIES": "عدد العمليات المؤسسية",
   "RTO_LIST": {
-    "CRITICALITY": "Criticality",
-    "RTO_ENG": "RTO(English)",
-    "RTO_DESC": "Description"
+    "CRITICALITY": "الحيوية",
+    "RTO_ENG": "زمن التعافي",
+    "RTO_DESC": "الوصف"
   },
   "ACTIVITY_FEQ": {
-    "FRQUENCY_AR": "Frquency (Arabic)",
-    "FRQUENCY_EN": "Frquency (English)"
+    "FRQUENCY_AR": "الدورية (عربي)",
+    "FRQUENCY_EN": "الدورية (عربي)"
   },
   "LOC_TYPE": {
-    "TYPE_AR": "Type (Arabic)",
-    "TYPE_EN": "Type (English)"
+    "TYPE_AR": "النوع (عربي)",
+    "TYPE_EN": "النوع (انجليزي)"
   },
   "ACTIVITY_PRIORITY_SEQ": {
-    "PRI_AR": "Priority (Arabic)",
-    "PRI_EN": "Priority (English)"
+    "PRI_AR": "الاولوية (عربي)",
+    "PRI_EN": "الاولوية (انجليزي)"
+  },
+  "IMP_LEVEL_WORKING": {
+    "ADD_NEW_IMP_LEVEL": " اضافة مستوى توافر جديد ",
+    "COLOR": "اللون",
+    "IMP_LEVEL": "Important Level (English)",
+    "IMP_LEVEL_DESC": "Description (English)",
+    "CRITICALITY_EN": "الحيوية(انجليزي)",
+    "CRITICALITY_AR": "الحيوية (عربي)",
+    "LEVEL_EN": " المستوى (انجليزي) ",
+    "LEVEL_AR": " المستوى (عربي)",
+    "DESC_AR": "الوصف (عربي)",
+    "DESC_EN": " الوصف (انجليزي)"
   }
 }
