@@ -53,6 +53,11 @@ build-job: # This job runs in the build for tags, which runs first.
     - autobot
   script:
     - docker build --target=artifact --output type=local,dest=$(pwd)/out/ --build-arg ENV=prod --build-arg VERSION=$TAG .
+    - ls -la
+    - ls -la $(pwd)
+    - ls -la $CI_PROJECT_DIR
+    - ls -la $(pwd)/out
+    - ls -la $(pwd)/out/dist
     - mv $(pwd)/out/dist/$TAG.zip $CI_PROJECT_DIR/$TAG.zip
     - echo "build project and prepare bundles completed."
   artifacts:
