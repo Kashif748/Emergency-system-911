@@ -1,11 +1,8 @@
 <app-phonebook-dialog></app-phonebook-dialog>
 
 <div class="container-fluid">
-  <mat-toolbar class="bg-white px-3 border-bottom">
-    <h2>{{ "PHONEBOOK.HEADER" | translate }}</h2>
+  <app-breadcrumb></app-breadcrumb>
 
-    <div class="spacer"></div>
-  </mat-toolbar>
   <div class="mx-4 my-10" *ngIf="state$ | async as state">
     <div class="row mb-4">
       <div class="col-12">
