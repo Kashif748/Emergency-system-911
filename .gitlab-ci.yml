@@ -55,6 +55,7 @@ build-job: # This job runs in the build for tags, which runs first.
     - DOCKER_BUILDKIT=1 docker build --target=artifact --output type=local,dest=$(pwd) --build-arg ENV=prod --build-arg VERSION=$TAG .
     - echo "build project and prepare bundles completed."
   artifacts:
+    name: "$TAG"
     paths:
       - dist/$TAG.zip
 
