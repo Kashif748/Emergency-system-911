@@ -5,6 +5,7 @@ export interface IncidentFilter {
   centerId?: number;
   fromDate?: string;
   priority?: number;
+  serial?: number;
   statusId?: number;
   toDate?: string;
 }

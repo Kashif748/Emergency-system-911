@@ -24,6 +24,52 @@ export class NewsTypeControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete5
+   */
+  static readonly Delete5Path = '/v1/news-type/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete5()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete5$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
+
+    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Delete5Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseNewsType>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete5$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete5(params: {
+    id: number;
+  }): Observable<RestApiResponseNewsType> {
+
+    return this.delete5$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
+    );
+  }
+
+  /**
    * Path part for operation findActivePage5
    */
   static readonly FindActivePage5Path = '/v1/news-type';
@@ -70,21 +116,21 @@ export class NewsTypeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update20
+   * Path part for operation update21
    */
-  static readonly Update20Path = '/v1/news-type';
+  static readonly Update21Path = '/v1/news-type';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update20()` instead.
+   * To access only the response body, use `update21()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update20$Response(params: {
+  update21$Response(params: {
     body: NewsType
   }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Update20Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Update21Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +148,35 @@ export class NewsTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update20$Response()` instead.
+   * To access the full response (for headers, for example), `update21$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update20(params: {
+  update21(params: {
     body: NewsType
   }): Observable<RestApiResponseNewsType> {
 
-    return this.update20$Response(params).pipe(
+    return this.update21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
     );
   }
 
   /**
-   * Path part for operation create19
+   * Path part for operation create20
    */
-  static readonly Create19Path = '/v1/news-type';
+  static readonly Create20Path = '/v1/news-type';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create19()` instead.
+   * To access only the response body, use `create20()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create19$Response(params: {
+  create20$Response(params: {
     body: NewsType
   }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Create19Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Create20Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +194,15 @@ export class NewsTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create19$Response()` instead.
+   * To access the full response (for headers, for example), `create20$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create19(params: {
+  create20(params: {
     body: NewsType
   }): Observable<RestApiResponseNewsType> {
 
-    return this.create19$Response(params).pipe(
+    return this.create20$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
     );
   }
@@ -203,52 +249,6 @@ export class NewsTypeControllerService extends BaseService {
   }): Observable<RestApiResponseNewsType> {
 
     return this.getActiveNewsType$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
-    );
-  }
-
-  /**
-   * Path part for operation delete10
-   */
-  static readonly Delete10Path = '/v1/news-type/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete10()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete10$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
-
-    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Delete10Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseNewsType>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete10$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete10(params: {
-    id: number;
-  }): Observable<RestApiResponseNewsType> {
-
-    return this.delete10$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
     );
   }

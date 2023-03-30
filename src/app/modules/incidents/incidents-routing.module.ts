@@ -13,6 +13,7 @@ import { PrivilegeGuard } from 'src/app/shared/guards/privilege.guard';
 import { ViewInterimIncidentComponent } from './incident/interim-incidents/view-interim-incident/view-interim-incident.component';
 import { NewIncidentsViewComponent } from './new-incidents-view/new-incidents-view.component';
 import { InquiryComponent } from './inquiry/inquiry.component';
+import { RedirectGuard } from '@shared/guards/redirect.guard';
 
 const routes: Routes = [
   { path: 'view/:id', component: ViewIncidentsComponent },
@@ -108,26 +109,71 @@ const routes: Routes = [
       {
         path: 'viewTask/:id',
         component: ViewTaskComponent,
+        canActivate: [PrivilegeGuard, RedirectGuard],
+        data: {
+          permission: 'PRIV_VW_TASK',
+          redirectTo: '/task-management?_dialog=opened&_id=:id&_mode=viewonly',
+        },
+      },
+      {
+        path: '_viewTask/:id',
+        component: ViewTaskComponent,
         canActivate: [PrivilegeGuard],
         data: { permission: 'PRIV_VW_TASK' },
       },
       {
         path: 'createTask',
         component: CreateTaskComponent,
+        canActivate: [PrivilegeGuard, RedirectGuard],
+        data: {
+          permission: 'PRIV_CR_TASK',
+          redirectTo:
+            '/task-management?_dialog=opened&incidentSubject=:title&incidentId=:id',
+        },
+      },
+
+      {
+        path: '_createTask',
+        component: CreateTaskComponent,
         canActivate: [PrivilegeGuard],
-        data: { permission: 'PRIV_CR_TASK' },
+        data: {
+          permission: 'PRIV_CR_TASK',
+        },
       },
       {
         path: 'updateTask/:tid',
         component: CreateTaskComponent,
+        canActivate: [PrivilegeGuard, RedirectGuard],
+        data: {
+          permission: 'PRIV_UP_TASK',
+          redirectTo: '/task-management?_dialog=opened&_id=:tid',
+        },
+      },
+      {
+        path: '_updateTask/:tid',
+        component: CreateTaskComponent,
         canActivate: [PrivilegeGuard],
-        data: { permission: 'PRIV_UP_TASK' },
+        data: {
+          permission: 'PRIV_UP_TASK',
+        },
       },
       {
         path: 'tasks/:filter',
         component: TasksComponent,
-        canActivate: [PrivilegeGuard],
-        data: { permission: 'PRIV_VW_TASK' },
+        canActivate: [PrivilegeGuard, RedirectGuard],
+        data: {
+          permission: 'PRIV_VW_TASK',
+          redirectTo: '/task-management?filter=:filter',
+        },
+      },
+
+      {
+        path: '_tasks/:filter',
+        component: TasksComponent,
+        canActivate: [PrivilegeGuard, RedirectGuard],
+        data: {
+          permission: 'PRIV_VW_TASK',
+        },
       },
       {
         path: 'private-position',

@@ -157,6 +157,13 @@ export const commonDataItem = [
     endPoint: '',
   },
   {
+    key: 'NOTIFICATION_MANAGEMENT',
+    icon: 'General/Notifications1',
+    type: '',
+    hidden: true,
+    endPoint: '',
+  },
+  {
     key: 'RANKS',
     icon: 'Media/DVD',
     type: '',
@@ -166,6 +173,14 @@ export const commonDataItem = [
   {
     key: 'MOBILE_VERSIONS',
     icon: 'Devices/Android',
+    type: '',
+    customTemplate: true,
+    hidden: true,
+    endPoint: 'mobile-versions',
+  },
+  {
+    key: 'NOTIFICATIONS',
+    icon: 'General/Notifications1',
     type: '',
     customTemplate: true,
     hidden: true,

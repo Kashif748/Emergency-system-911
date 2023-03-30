@@ -1,4 +1,4 @@
-<p-dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
+<p-dialog #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
   [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
   [resizable]="false">
   <ng-template pTemplate="header">
@@ -15,7 +15,7 @@
       </ng-container>
     </h3>
   </ng-template>
-  <div class="w-100 pt-2">
+  <div class="w-100 pt-2" [ngStyle]="{'height': dialog.maximized ? '100%' : '65vh'}">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
@@ -85,6 +85,9 @@
 
                 <p class="p-error mb-0" *ngIf="passwordControl?.hasError('pattern')">
                   {{ "VALIDATION_MSG.PASSWORD.INVALID" | translate }}
+                </p>
+                <p class="p-error mb-0" *ngIf="form.controls['password'].hasError('maxlength')">
+                  {{ "VALIDATION_MSG.MAX_LENGHT" | translate : {max:32} }}
                 </p>
               </ng-container>
             </div>
@@ -405,15 +408,16 @@
         <ng-template pTemplate="content">
           <div class="container mx-auto p-4" style="background-color: var(--background-secondary-color);">
             <div>
-              <div class="d-flex justify-content-center align-items-center p-10 min-h-350px text-center">
+              <div class="d-flex justify-content-center align-items-center p-10 min-h-450px text-center">
                 <div *ngIf="!signatureImg" class="text-center">
                   <p-fileUpload #simg mode="basic" accept="image/*" [maxFileSize]="1024 * 1024"
                     (onSelect)="signatureImgChange($event);simg.clear();" [auto]="false"
                     chooseLabel="{{ 'ACTIONS.BROWSE' | translate }}" chooseIcon="pi pi-image"
                     invalidFileSizeMessageSummary="{{ 'VALIDATION_MSG.INVALID_FILE_SIZE' | translate }}"
-                    invalidFileSizeMessageDetail="{{ 'VALIDATION_MSG.MAX_UPLOAD_SIZE' | translate }}"></p-fileUpload>
+                    invalidFileSizeMessageDetail="{{ 'VALIDATION_MSG.MAX_UPLOAD_SIZE' | translate }}"
+                    [disabled]="viewOnly$ | async"></p-fileUpload>
                 </div>
-                <img *ngIf="signatureImg" class="max-h-300px max-w-100" [src]="signatureImg.base64 | url" alt="">
+                <img *ngIf="signatureImg" class="max-h-400px max-w-100" [src]="signatureImg.base64 | url" alt="">
               </div>
             </div>
           </div>
@@ -423,21 +427,22 @@
         <ng-template pTemplate="content">
           <div class="container mx-auto p-4" style="background-color: var(--background-secondary-color);">
             <div>
-              <div class="d-flex justify-content-center align-items-center p-10 min-h-350px text-center">
+              <div class="d-flex justify-content-center align-items-center p-10 min-h-450px text-center">
                 <div class="text-center">
                   <ng-container *ngIf="!profileImg && _userId === loggedinUserId">
                     <p-fileUpload #pimg mode="basic" accept="image/*" [maxFileSize]="1024 * 1024"
                       (onSelect)="profileImgChange($event);pimg.clear();" [auto]="false"
                       chooseLabel="{{ 'ACTIONS.BROWSE' | translate }}" chooseIcon="pi pi-image"
                       invalidFileSizeMessageSummary="{{ 'VALIDATION_MSG.INVALID_FILE_SIZE' | translate }}"
-                      invalidFileSizeMessageDetail="{{ 'VALIDATION_MSG.MAX_UPLOAD_SIZE' | translate }}"></p-fileUpload>
+                      invalidFileSizeMessageDetail="{{ 'VALIDATION_MSG.MAX_UPLOAD_SIZE' | translate }}"
+                      [disabled]="viewOnly$ | async"></p-fileUpload>
                   </ng-container>
 
                   <h2 *ngIf="!profileImg && _userId !== loggedinUserId">
                     {{ 'SHARED.NO_IMAGE' | translate }}
                   </h2>
                 </div>
-                <img *ngIf="profileImg" class="max-h-300px max-w-100" [src]="profileImg?.base64 | url" alt="">
+                <img *ngIf="profileImg" class="max-h-400px max-w-100" [src]="profileImg?.base64 | url" alt="">
               </div>
 
             </div>

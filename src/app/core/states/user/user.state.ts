@@ -17,6 +17,7 @@ import {
   UserMiddlewareAuth,
   Ranks,
   OrgStructure,
+  Role,
 } from 'src/app/api/models';
 import {
   DmsControllerService,
@@ -31,14 +32,17 @@ import { ILangFacade } from '@core/facades/lang.facade';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { OrgState } from '../org/org.state';
-import { EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
+import { TextUtils } from '@core/utils';
 
 export interface UserStateModel {
   page: PageUserAndRoleProjection;
   user: User & UserInappAuthentication & UserMiddlewareAuth;
   ranks: Ranks[];
+  groupMapUser: UserAndRoleProjection[];
   loading: boolean;
   blocking: boolean;
+  users: UserAndRoleProjection[];
 }
 
 const USER_STATE_TOKEN = new StateToken<UserStateModel>('user');
@@ -65,6 +69,12 @@ export class UserState {
   static page(state: UserStateModel) {
     return state?.page?.content;
   }
+
+  @Selector([UserState])
+  static users(state: UserStateModel) {
+    return state?.users;
+  }
+
   @Selector([UserState])
   static totalRecords(state: UserStateModel) {
     return state?.page?.totalElements;
@@ -73,6 +83,11 @@ export class UserState {
   @Selector([UserState])
   static user(state: UserStateModel) {
     return state?.user;
+  }
+
+  @Selector([UserState])
+  static groupMapUsers(state: UserStateModel) {
+    return state?.groupMapUser;
   }
 
   @Selector([UserState])
@@ -107,17 +122,7 @@ export class UserState {
           size: payload.size,
           sort: payload.sort,
         },
-        request: {
-          ...payload.filters,
-          roleIds:
-            payload.filters?.roleIds?.length > 0
-              ? payload.filters?.roleIds
-              : undefined,
-          orgIds:
-            payload.filters?.orgIds?.length > 0
-              ? payload.filters?.orgIds
-              : undefined,
-        },
+        request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -146,6 +151,63 @@ export class UserState {
       );
   }
 
+  @Action(UserAction.LoadGroupMapUserPage, { cancelUncompleted: true })
+  LoadGroupMapUserPage(
+    { setState }: StateContext<UserStateModel>,
+    { payload }: UserAction.LoadGroupMapUserPage
+  ) {
+    setState(
+      patch<UserStateModel>({
+        loading: true,
+      })
+    );
+    return this.userService
+      .getAllForOrg({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload.name,
+      })
+      .pipe(
+        tap(({ result: { content: list } }) => {
+          setState(
+            patch<UserStateModel>({
+              groupMapUser: list.map((v) => {
+                return { ...v, inactive: true };
+              }),
+            })
+          );
+        })
+      );
+  }
+
+  @Action(UserAction.LoadUsers, { cancelUncompleted: true })
+  loadUsers(
+    { setState }: StateContext<UserStateModel>,
+    { payload }: UserAction.LoadUsers
+  ) {
+    return this.userService
+      .getAllForOrg({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload.search,
+      })
+      .pipe(
+        tap(({ result: { content: list } }) => {
+          setState(
+            patch<UserStateModel>({
+              users: list,
+            })
+          );
+        })
+      );
+  }
+
   @Action(UserAction.GetUser, { cancelUncompleted: true })
   getUser(
     { setState }: StateContext<UserStateModel>,
@@ -165,7 +227,7 @@ export class UserState {
       })
     );
     return this.userService.get1({ userId: payload.id }).pipe(
-      switchMap((res) =>
+      switchMap(({ result: user }) =>
         this.dmsService
           .findAttachment({
             entityId: payload.id,
@@ -174,13 +236,14 @@ export class UserState {
           .pipe(
             map((a) => {
               return {
-                ...res.result,
+                ...user,
                 signature: a.result[0]?.uuid,
               };
-            })
+            }),
+            catchError(() => of(user))
           )
       ),
-      switchMap((res) =>
+      switchMap((user) =>
         this.dmsService
           .findAttachment({
             entityId: payload.id,
@@ -189,43 +252,52 @@ export class UserState {
           .pipe(
             map((a) => {
               return {
-                ...res,
+                ...user,
                 profileImg: a.result[0]?.uuid,
               };
-            })
+            }),
+            catchError(() => of(user))
           )
       ),
-      switchMap((res) =>
+      switchMap((user) =>
         this.store.selectOnce(OrgState.orgs).pipe(
           map((orgs) => {
             if (!orgs) {
-              return res;
+              return user;
             }
             return {
-              ...res,
+              ...user,
               orgStructure: orgs.find(
-                (o) => o.id == res.orgStructure?.id
+                (o) => o.id == user.orgStructure?.id
               ) as OrgStructure,
             };
           })
         )
       ),
-      switchMap((res) =>
-        this.roleService.getByOrgId({ orgId: res.orgStructure?.id }).pipe(
+      switchMap((user) =>
+        this.roleService.getByOrgId({ orgId: user.orgStructure?.id }).pipe(
           map(({ result: roles }) => {
             return {
-              ...res,
-              roleIds: res?.roleIds
+              ...user,
+              roleIds: user?.roleIds
                 ?.map((id) => roles.find((r) => r.id == id))
                 ?.filter((v) => !!v) as any,
             };
-          })
+          }),
+          catchError(() =>
+            of({
+              ...user,
+              roleIds: user?.roleIds?.map((id) => {
+                return { id, ...TextUtils.OBFUSCATE_I18N_NAME };
+              }) as any,
+            })
+          )
         )
       ),
-      tap((res) => {
+      tap((user) => {
         setState(
           patch<UserStateModel>({
-            user: res,
+            user: user,
           })
         );
       }),

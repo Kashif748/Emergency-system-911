@@ -1,10 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiHelper } from '@core/helpers/api.helper';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { UserAction } from '@core/states/user/user.action';
+import { TextUtils } from '@core/utils';
 import {
   Action,
   Selector,
@@ -15,7 +15,7 @@ import {
 } from '@ngxs/store';
 import { iif, patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { BrowseUsersAction } from './browse-users.action';
 
 export interface BrowseUsersStateModel {
@@ -68,8 +68,11 @@ export class BrowseUsersState {
   @Selector([BrowseUsersState])
   static hasFilters(state: BrowseUsersStateModel): boolean {
     return (
-      Object.keys(state.pageRequest.filters).filter((k) => k !== 'active')
-        .length > 0
+      Object.keys(state.pageRequest.filters).filter(
+        (k) =>
+          k !== 'active' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+      ).length > 0
     );
   }
   /* ********************** ACTIONS ************************* */
@@ -92,11 +95,7 @@ export class BrowseUsersState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        filters: {
-          ...pageRequest.filters,
-          orgIds: pageRequest.filters.orgIds?.map((o) => o.key),
-          roleIds: pageRequest.filters.roleIds?.map((r) => r.id),
-        },
+        filters: this.filters(pageRequest),
       })
     );
   }
@@ -121,11 +120,7 @@ export class BrowseUsersState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        filters: {
-          ...pageRequest.filters,
-          orgIds: pageRequest.filters.orgIds?.map((o) => o.key),
-          roleIds: pageRequest.filters.roleIds?.map((r) => r.id),
-        },
+        filters: this.filters(pageRequest),
       })
     );
   }
@@ -184,7 +179,7 @@ export class BrowseUsersState {
     return dispatch(
       new UserAction.Export({
         type: payload.type,
-        filters: pageRequest.filters,
+        filters: this.filters(pageRequest),
       })
     );
   }
@@ -197,14 +192,14 @@ export class BrowseUsersState {
     return dispatch(new UserAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
+        dispatch([
+          new BrowseUsersAction.LoadUsers(),
+          new BrowseUsersAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
   }
@@ -217,14 +212,14 @@ export class BrowseUsersState {
     return dispatch(new UserAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
+        dispatch([
+          new BrowseUsersAction.LoadUsers(),
+          new BrowseUsersAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
   }
@@ -271,16 +266,9 @@ export class BrowseUsersState {
     { payload }: BrowseUsersAction.UploadSignature
   ) {
     return dispatch(new UserAction.UploadSignature(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
-      }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
   }
@@ -291,17 +279,21 @@ export class BrowseUsersState {
     { payload }: BrowseUsersAction.UploadSignature
   ) {
     return dispatch(new UserAction.UploadProfilePhoto(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch(new BrowseUsersAction.LoadUsers());
-      }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseUsersAction.ToggleDialog({}));
       })
     );
+  }
+
+  /* ********************** UTILS ************************* */
+  private filters(pageRequest: PageRequestModel) {
+    const orgIds = pageRequest.filters.orgIds?.map((o) => o.key);
+    const roleIds = pageRequest.filters.roleIds?.map((r) => r.id);
+    return {
+      ...pageRequest.filters,
+      orgIds: orgIds?.length > 0 ? orgIds : undefined,
+      roleIds: roleIds?.length > 0 ? roleIds : undefined,
+    };
   }
 }

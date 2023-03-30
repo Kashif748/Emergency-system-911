@@ -1,0 +1,22 @@
+:host ::ng-deep {
+  .attach-uppload-header,
+  .attach-header {
+    display: none !important;
+  }
+  #logs {
+    height: 100%;
+  }
+  .log-panel-header {
+    display: none !important;
+  }
+  .p-dialog .p-dialog-content {
+    height: 100%;
+  }
+  .p-tabview .p-tabview-panels {
+    height: 97%;
+    overflow-y: auto;
+    .p-tabview-panel {
+      height: 100%;
+    }
+  }
+}

@@ -1,5 +1,10 @@
 export const COLUMNS = [
   {
+    key: 'serial',
+    nameAr: 'الرقم التسلسلي',
+    nameEn: 'SERIAL NUMBER',
+  },
+  {
     key: 'id',
     nameAr: 'الرقم',
     nameEn: 'ID',
@@ -80,6 +85,11 @@ export const COLUMNS = [
     nameEn: 'CENTER',
   },
   {
+    key: 'locationUrl',
+    nameEn: 'LOCATION URL',
+    nameAr: 'رابط الموقع',
+  },
+  {
     key: 'reporterName',
     nameAr: 'اسم المبلغ',
     nameEn: 'REPORTER NAME',
@@ -88,11 +98,6 @@ export const COLUMNS = [
     key: 'reporterNumber',
     nameAr: 'رقم المبلغ',
     nameEn: 'REPORTER NUMBER',
-  },
-  {
-    key: 'reportedBy',
-    nameEn: 'REPORTED BY',
-    nameAr: 'تم الإبلاغ عبر',
   },
   {
     key: 'timeTakenToCloseText',

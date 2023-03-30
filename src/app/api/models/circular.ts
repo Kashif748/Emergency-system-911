@@ -27,8 +27,8 @@ export interface Circular {
   manager: (User | UserInappAuthentication | UserMiddlewareAuth);
   number: string;
   orgs?: Array<CircularOrg>;
-  posission: string;
-  priority: Priority;
+  posission?: string;
+  priority?: Priority;
   procedure: string;
   sentDate: string;
   status?: CircularStatus;

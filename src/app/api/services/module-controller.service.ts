@@ -66,21 +66,21 @@ export class ModuleControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update23
+   * Path part for operation update24
    */
-  static readonly Update23Path = '/v1/modules';
+  static readonly Update24Path = '/v1/modules';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update23()` instead.
+   * To access only the response body, use `update24()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update23$Response(params: {
+  update24$Response(params: {
     body: Module
   }): Observable<StrictHttpResponse<RestApiResponseModule>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ModuleControllerService.Update23Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ModuleControllerService.Update24Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -98,35 +98,35 @@ export class ModuleControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update23$Response()` instead.
+   * To access the full response (for headers, for example), `update24$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update23(params: {
+  update24(params: {
     body: Module
   }): Observable<RestApiResponseModule> {
 
-    return this.update23$Response(params).pipe(
+    return this.update24$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseModule>) => r.body as RestApiResponseModule)
     );
   }
 
   /**
-   * Path part for operation create21
+   * Path part for operation create22
    */
-  static readonly Create21Path = '/v1/modules';
+  static readonly Create22Path = '/v1/modules';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create21()` instead.
+   * To access only the response body, use `create22()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create21$Response(params: {
+  create22$Response(params: {
     body: Module
   }): Observable<StrictHttpResponse<RestApiResponseModule>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ModuleControllerService.Create21Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ModuleControllerService.Create22Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -144,15 +144,15 @@ export class ModuleControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create21$Response()` instead.
+   * To access the full response (for headers, for example), `create22$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create21(params: {
+  create22(params: {
     body: Module
   }): Observable<RestApiResponseModule> {
 
-    return this.create21$Response(params).pipe(
+    return this.create22$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseModule>) => r.body as RestApiResponseModule)
     );
   }

@@ -9,7 +9,6 @@ import {AlertsService} from 'src/app/_metronic/core/services/alerts.service';
 import {PersonalInquiryService} from 'src/app/_metronic/core/services/personal-inquiry.service';
 import {UserService} from '@core/api/services/user.service';
 import {TranslationService} from '../../i18n/translation.service';
-import {Role} from '../../user-management/models/Role';
 import {RegxConst} from '@core/constant/RegxConst';
 
 @Component({
@@ -26,7 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   userId: string;
   formGroup: FormGroup;
   appearance = 'fill';
-  roles: Role[] = [];
+  roles: any[] = [];
   profileImgUUID: string;
   lang;
   hidePassword = true;

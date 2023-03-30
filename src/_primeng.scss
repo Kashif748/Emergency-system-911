@@ -1,3 +1,7 @@
+@import "~primeicons/primeicons.css";
+@import "~primeng/resources/primeng.min.css";
+@import "~primeflex/primeflex.scss";
+
 .p-button .p-button-icon {
   margin-right: 0.5rem;
 }
@@ -68,6 +72,18 @@
     margin-right: unset;
   }
 
+  .p-inputnumber-buttons-stacked .p-button.p-inputnumber-button-up {
+    border-top-right-radius: 0;
+    border-top-left-radius: 3px;
+    padding: 0;
+  }
+
+  .p-inputnumber-buttons-stacked .p-button.p-inputnumber-button-down {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 3px;
+    padding: 0;
+  }
+
   .p-buttonset .p-button:first-of-type,
   .p-splitbutton .p-splitbutton-defaultbutton {
     border-radius: 3px;
@@ -77,7 +93,9 @@
   }
   .p-inputgroup-addon:first-child,
   .p-inputgroup button:first-child,
-  .p-inputgroup input:first-child {
+  .p-inputgroup input:first-child,
+  .p-calendar-w-btn .p-inputtext,
+  .p-inputnumber-buttons-stacked .p-inputnumber-input {
     border-radius: 0 !important;
     border-bottom-right-radius: 3px !important;
     border-top-right-radius: 3px !important;
@@ -88,7 +106,8 @@
   .p-inputgroup-addon:last-child,
   .p-inputgroup button:last-child,
   .p-inputgroup input:last-child,
-  .p-inputgroup .p-float-label:last-child input {
+  .p-inputgroup .p-float-label:last-child input,
+  .p-calendar-w-btn .p-datepicker-trigger {
     border-radius: 0 !important;
     border-top-left-radius: 3px !important;
     border-bottom-left-radius: 3px !important;
@@ -153,18 +172,16 @@
     text-align: right;
   }
 
-
-  
-.p-tree-wrapper {
-  .p-treenode-content{
-    .pi-chevron-right:before{
-      content: "\e900";
+  .p-tree-wrapper {
+    .p-treenode-content {
+      .pi-chevron-right:before {
+        content: "\e900";
+      }
     }
   }
-}
-.p-tree .p-treenode-children {
-  padding: 0 1rem 0 0;
-}
+  .p-tree .p-treenode-children {
+    padding: 0 1rem 0 0;
+  }
 }
 
 .p-datatable .p-datatable-tbody > tr > td {
@@ -548,3 +565,32 @@ button.bg-warning.active {
   box-shadow: 0 0 0 0.2rem #fde6ab;
 }
 
+.p-bg-help {
+  background-color: var(--purple-500);
+}
+.p-border-help {
+  border-color: var(--purple-500) !important;
+}
+
+button.p-bg-help.active,
+button.p-button-help.active {
+  // background-color: var(--purple-300) !important;
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem var(--purple-100);
+}
+
+.p-bg-secondary {
+  background-color: var(--bluegray-500);
+}
+.p-border-secondary {
+  border-color: var(--bluegray-500) !important;
+}
+
+button.p-bg-secondary.active,
+button.p-button-secondary.active {
+  // background-color: var(--bluegray-300) !important;
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem var(--bluegray-100);
+}

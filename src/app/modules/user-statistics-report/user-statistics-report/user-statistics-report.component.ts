@@ -13,6 +13,7 @@ import {MatTabChangeEvent} from "@angular/material/tabs";
 import {INCIDENTS_TABS} from "../../incidents/incidents.model";
 import {AdvancedSearchFieldsEnum} from "@shared/components/advanced-search/advancedSearch.model";
 import AssetFormatter from "../../incidents/assets-info/assets-form/AssetFormatter";
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-user-statistics-report',
@@ -149,14 +150,14 @@ export class UserStatisticsReportComponent implements OnInit {
     let filtersForm = { ...form.value };
 
     if (form.get('fromDate').value != '') {
-      filtersForm['fromDate'] = new Date(
+      filtersForm['fromDate'] = DateTimeUtil.format(new Date(
         form.get('fromDate').value
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
     if (form.get('toDate').value != '') {
-      filtersForm['toDate'] = new Date(
+      filtersForm['toDate'] = DateTimeUtil.format(new Date(
         form.get('toDate').value
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
     if (filtersForm['toDate'] == '1970-01-01') filtersForm['toDate'] = '';
     if (filtersForm['fromDate'] == '1970-01-01') filtersForm['fromDate'] = '';

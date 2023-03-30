@@ -9,6 +9,8 @@ export enum IncidentViewsEnum {
 
 export enum RowValueEnum {
   SR_NO = 'id',
+  SERIAL ='serial',
+  YEAR ='year',
   SUBJECT = 'subject',
   INCIDENT_DATE = 'incidentDate',
   CREATED_BY = 'createdByUser',
@@ -35,7 +37,8 @@ export enum RowValueEnum {
 
 export const COLUMNS = {
   Incidents: [
-    { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
+    // { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
+    { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
     {
       name: 'INCIDENTS.INCIDENT_SUBJECT',
       value: 'subject',
@@ -59,7 +62,8 @@ export const COLUMNS = {
     { name: 'INCIDENTS.TASKS', value: 'tasks', order: 10 },
   ],
   Inquiries: [
-    { value: 'id', name: 'INCIDENTS.INQUIRIES.ID', order: 1 },
+    // { value: 'id', name: 'INCIDENTS.INQUIRIES.ID', order: 1 },
+    { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
     { value: 'subject', name: 'INCIDENTS.INQUIRIES.SUBJECT', order: 2 },
     {
       value: 'createdDate',
@@ -73,6 +77,7 @@ export const COLUMNS = {
     },
   ],
   InterimIncidents: [
+    // { name: 'INCIDENTS.SERIAL', value: 'serial', order: 1 },
     { name: 'INCIDENTS.SR_NO', value: 'id', order: 1 },
     {
       name: 'INCIDENTS.INCIDENT_SUBJECT',

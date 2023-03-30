@@ -29,18 +29,20 @@ export class MessageHelper {
     param.severity = param.severity ?? 'error';
 
     if (param?.error instanceof HttpErrorResponse) {
-      const err = param.error.error.error;
-      param.detail =
-        err[
-          `message_${this.translate.currentLang[0].toUpperCase()}${
-            this.translate.currentLang[1]
-          }`
-        ] ??
-        err[
-          `message${this.translate.currentLang[0].toUpperCase()}${
-            this.translate.currentLang[1]
-          }`
-        ];
+      const err = param.error?.error?.error;
+      if (err) {
+        param.detail =
+          err[
+            `message_${this.translate.currentLang[0].toUpperCase()}${
+              this.translate.currentLang[1]
+            }`
+          ] ??
+          err[
+            `message${this.translate.currentLang[0].toUpperCase()}${
+              this.translate.currentLang[1]
+            }`
+          ];
+      }
     }
     this.messageService.add({
       severity: param.severity,

@@ -345,16 +345,15 @@
                         <!--begin::Text-->
                         <div class="d-flex flex-column font-weight-bold">
                           <a class="text-dark mb-1 text-size-sm">
-                            {{ "INCIDENTS.SR_NO" | translate }}
+                            {{ "INCIDENTS.SERIAL" | translate }}
+
                           </a>
                           <span class="text-muted">
                             <p
                               class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
                             >
-                              {{ incidentDetails?.id }}/{{
-                                incidentDetails?.createdOn
-                                  | customDate
-                                  | date : "yyyy"
+                              {{ incidentDetails?.year }}/{{
+                                incidentDetails?.serial
                               }}
                             </p>
                           </span>
@@ -735,10 +734,7 @@
                           </a>
                           <div class="text-dark">
                             <a
-                              [routerLink]="
-                                '/groups-management/groups/view/' +
-                                group.group?.id
-                              "
+                              [routerLink]="'/teams-management/teams'" [queryParams]="{_dialog: 'opened', _id: group.group?.id,_mode:'viewonly'}"
                               target="_blank"
                               *ngFor="
                                 let group of incidentDetails?.incidentGroups;

@@ -48,6 +48,7 @@ import { Log } from '../log/log.component';
 import { ShareLocationService } from '../../share-location/shareLocation.service';
 import { AddressSearchResultModel } from '@shared/components/map/utils/map.models';
 import { IncidentReminderComponent } from './incident-reminder/incident-reminder.component';
+import {MapService} from "@shared/components/map/services/map.service";
 
 @Component({
   selector: 'app-view-incidents',
@@ -213,7 +214,8 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     private dialogService: DialogService,
     private breakpointObserver: BreakpointObserver,
     private readonly commonService: CommonService,
-    private shareLocationService: ShareLocationService
+    private shareLocationService: ShareLocationService,
+    protected mapService: MapService,
   ) {
     super();
     this.incidentId = this.route.snapshot.params['id'];
@@ -657,7 +659,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  closeIncidentConfirm() {
+   closeIncidentConfirm() {
     const body = {
       createdBy: {
         id: this.commonData.currentUserDetails.id,
@@ -700,6 +702,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
                 this.incidentDetails.closedDate =
                   response['result']?.closedDate;
                 this.cd.markForCheck();
+                this.updateCloseDateOnGisMap();
               },
               (err) => {
                 this.alertService.openFailureSnackBar();
@@ -707,6 +710,29 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
             );
         }
       });
+  }
+
+  async updateCloseDateOnGisMap(){
+    // close date reflect on gis map
+
+    let layer;
+    layer = await this.mapService.getIncidentPointLayer();
+    try {
+      const featureSet = await this.mapService.queryGraphic(
+        layer,
+        'incident',
+        this.incidentId
+      );
+      const graphics = featureSet?.features?.map((g) => {
+        g.setAttribute('CLOSE_DATE', this.incidentDetails.closedDate);
+        return g;
+      });
+      this.mapService.applyEdits(
+        graphics,
+        layer,
+        'updateFeatures'
+      );
+    } catch (error) {}
   }
 
   getIncidentGroupName(index: number) {

@@ -10,6 +10,7 @@ import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 
 import { TranslationService } from '../../i18n/translation.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-list',
@@ -63,15 +64,15 @@ export class ListComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.loading = true;
     if (this.form.value.fromDate != '') {
-      this.form.value.fromDate = new Date(
+      this.form.value.fromDate = DateTimeUtil.format(new Date(
         this.form.value.fromDate
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
 
     if (this.form.value.toDate != '') {
-      this.form.value.toDate = new Date(
+      this.form.value.toDate = DateTimeUtil.format(new Date(
         this.form.value.toDate
-      ).toLocaleDateString('en-CA');
+      ), DateTimeUtil.DATE_FORMAT);
     }
     this.onPagination({ pageSize: 10, pageIndex: 0, length: 10 });
   }

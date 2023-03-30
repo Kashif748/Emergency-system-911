@@ -57,3 +57,14 @@ mat-form-field {
 input {
   direction: ltr !important;
 }
+
+
+:host{
+  ::ng-deep .p-treeselect{
+    width: 100%;
+    .p-treeselect-label {
+      height: 54px !important;
+    }
+  }
+
+}

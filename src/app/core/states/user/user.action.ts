@@ -20,6 +20,36 @@ export namespace UserAction {
     ) {}
   }
 
+  export class LoadGroupMapUserPage {
+    static readonly type = '[User] Load Page';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        name: string;
+        page: number;
+        size: number;
+        sort?: string[];
+      }
+    ) {}
+  }
+
+   export class LoadUsers {
+    static readonly type = '[User] Load Users';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        search?: string;
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+
   export class GetUser {
     static readonly type = '[User] Get User';
     /**

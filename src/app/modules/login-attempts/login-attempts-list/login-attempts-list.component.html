@@ -202,8 +202,8 @@
   <mat-paginator
                   *ngIf="this.dataSource?.data?.length > 0"
                   [length]="this.paginationConfig.totalItems"
-                  [showFirstLastButtons]
-                 (page)="onChangeTable($event)"
+                  (page)="onChangeTable($event)"
+                  [pageIndex]="0"
                  [pageSizeOptions]="[10, 20, 30]"
                  aria-label="Select page">
   </mat-paginator>

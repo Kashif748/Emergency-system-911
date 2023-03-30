@@ -128,7 +128,7 @@ export class CircularsService implements Resolve<any> {
 
   getManagers() {
     return this.http
-      .get<any>(environment.apiUrl + '/users/managers/15', {
+      .get<any>(environment.apiUrl + '/users/circular-managers', {
         headers: this.result,
       })
       .subscribe((res) => {
@@ -197,7 +197,7 @@ export class CircularsService implements Resolve<any> {
   publish(id) {
     return new Promise((resolve, reject) => {
       let httpParams = new HttpParams()
-        .append('id', id)
+        //.append('id', id)
         .append('withArch', 'true');
 
       this.http
@@ -253,8 +253,8 @@ export class CircularsService implements Resolve<any> {
     );
   }
 
-  getNextNumber() {
-    return this.http.get<any>(environment.apiUrl + '/circulars/nextNumber', {
+  getCircularNumber() {
+    return this.http.get<any>(environment.apiUrl + '/circulars/number', {
       headers: this.result,
     });
   }

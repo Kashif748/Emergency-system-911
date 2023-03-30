@@ -207,4 +207,53 @@ export class SystemEventControllerService extends BaseService {
     );
   }
 
+  /**
+   * Path part for operation getWorkLogTemplates
+   */
+  static readonly GetWorkLogTemplatesPath = '/v1/system-events/templates';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getWorkLogTemplates()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getWorkLogTemplates$Response(params: {
+    moduleId?: Array<number>;
+    page: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageSystemEventConfig>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SystemEventControllerService.GetWorkLogTemplatesPath, 'get');
+    if (params) {
+      rb.query('moduleId', params.moduleId, {});
+      rb.query('page', params.page, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageSystemEventConfig>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getWorkLogTemplates$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getWorkLogTemplates(params: {
+    moduleId?: Array<number>;
+    page: Pageable;
+  }): Observable<RestApiResponsePageSystemEventConfig> {
+
+    return this.getWorkLogTemplates$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageSystemEventConfig>) => r.body as RestApiResponsePageSystemEventConfig)
+    );
+  }
+
 }

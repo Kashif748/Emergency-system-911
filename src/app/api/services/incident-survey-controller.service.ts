@@ -73,22 +73,22 @@ export class IncidentSurveyControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation create30
+   * Path part for operation create31
    */
-  static readonly Create30Path = '/v1/incident-survey/ext/{id}';
+  static readonly Create31Path = '/v1/incident-survey/ext/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create30()` instead.
+   * To access only the response body, use `create31()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create30$Response(params: {
+  create31$Response(params: {
     id: string;
     body: IncidentSurvey
   }): Observable<StrictHttpResponse<RestApiResponseString>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentSurveyControllerService.Create30Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentSurveyControllerService.Create31Path, 'post');
     if (params) {
       rb.path('id', params.id, {});
       rb.body(params.body, 'application/json');
@@ -107,36 +107,36 @@ export class IncidentSurveyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create30$Response()` instead.
+   * To access the full response (for headers, for example), `create31$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create30(params: {
+  create31(params: {
     id: string;
     body: IncidentSurvey
   }): Observable<RestApiResponseString> {
 
-    return this.create30$Response(params).pipe(
+    return this.create31$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseString>) => r.body as RestApiResponseString)
     );
   }
 
   /**
-   * Path part for operation getById6
+   * Path part for operation getById7
    */
-  static readonly GetById6Path = '/v1/incident-survey/{id}';
+  static readonly GetById7Path = '/v1/incident-survey/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById6()` instead.
+   * To access only the response body, use `getById7()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById6$Response(params: {
+  getById7$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseIncidentSurvey>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentSurveyControllerService.GetById6Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, IncidentSurveyControllerService.GetById7Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -154,15 +154,15 @@ export class IncidentSurveyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById6$Response()` instead.
+   * To access the full response (for headers, for example), `getById7$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById6(params: {
+  getById7(params: {
     id: number;
   }): Observable<RestApiResponseIncidentSurvey> {
 
-    return this.getById6$Response(params).pipe(
+    return this.getById7$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentSurvey>) => r.body as RestApiResponseIncidentSurvey)
     );
   }

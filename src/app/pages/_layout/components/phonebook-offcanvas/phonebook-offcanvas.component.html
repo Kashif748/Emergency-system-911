@@ -1,0 +1,201 @@
+<p-sidebar
+  #sideBar
+  [(visible)]="display"
+  [modal]="false"
+  [style]="{ width: '30em' }"
+  [showCloseIcon]="false"
+  [position]="position$ | async"
+  transitionOptions="1000ms cubic-bezier(.5,-0.5,.5,1.5)"
+>
+  <div
+    class="p-d-flex justify-content-between align-items-center py-5 header border-bottom"
+  >
+    <h3 class="m-0">{{ "PHONEBOOK.HEADER" | translate }}</h3>
+
+    <button
+      pButton
+      pRipple
+      type="button"
+      icon="pi pi-times-circle"
+      (click)="display = false"
+      class="p-button-rounded p-button-secondary p-button-text copy-btn"
+    ></button>
+  </div>
+  <div *ngIf="state$ | async as state" class="pt-4" style="flex: auto">
+    <p-panel
+      header="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+      [toggleable]="true"
+      [collapsed]="!(hasFilters$ | async)"
+    >
+      <div class="p-fluid p-grid">
+        <div class="p-field p-col-12">
+          <input
+            type="text"
+            pInputText
+            [ngModel]="state?.pageRequest?.filters['name']"
+            (keyup)="updateFilter({ name: $event.target.value }, $event)"
+            placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
+          />
+        </div>
+        <div class="p-field p-col-12">
+          <input
+            type="text"
+            pInputText
+            [ngModel]="state?.pageRequest?.filters['orgName']"
+            (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
+            placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
+          />
+        </div>
+        <div class="p-field p-col-12">
+          <span class="p-float-label">
+            <input
+              type="text"
+              placeholder="{{ 'PHONEBOOK.MOBILE_NUMBER' | translate }}"
+              [ngModel]="state?.pageRequest?.filters['mobileNumber']"
+              pInputText
+              (keyup)="
+                updateFilter({ mobileNumber: $event.target.value }, $event)
+              "
+            />
+          </span>
+        </div>
+
+        <div class="p-col p-d-flex justify-content-between">
+          <div class="mx-1">
+            <button
+              pButton
+              type="button"
+              label="{{ 'ACTIONS.CLEAR' | translate }}"
+              icon="pi pi-times"
+              class="p-button-outlined"
+              [loading]="loading$ | async"
+              (click)="clear()"
+            ></button>
+          </div>
+          <div class="mx-1">
+            <button
+              pButton
+              label="{{ 'ACTIONS.SEARCH' | translate }}"
+              icon="pi pi-search"
+              [loading]="loading$ | async"
+              (click)="search()"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+    <perfect-scrollbar class="overflow-scroll h-auto">
+      <ng-container *ngIf="!(loading$ | async); else loadingSkelton">
+        <ul class="navi navi-hover navi-active mt-4">
+          <li *ngFor="let item of page$ | async" class="navi-item">
+            <div class="rounded-lg">
+              <div class="navi-text d-flex flex-column justify-content-between">
+                <span class="d-flex">
+                  <span class="font-weight-bold">
+                    {{ item.title }} {{ item.firstName }}
+                    {{ item.lastName }}
+                  </span>
+                  <div class="spacer"></div>
+                  <span class="label label-light-primary label-inline mr-2">
+                    {{ item.orgName }}
+                  </span>
+                </span>
+                <span class="d-flex text-muted mb-2">
+                  {{ item.jobTitle }}
+                </span>
+                <div class="d-flex text-muted">
+                  <span
+                    pTooltip="{{ 'PHONEBOOK.COPY_TOOLTIP' | translate }}  "
+                    (click)="copyToClipboard(item)"
+                    class="cursor-pointer"
+                  >
+                    <i class="pi pi-mobile"></i>
+
+                    {{ item.mobileNumber }}
+                  </span>
+                  <span class="px-3">|</span>
+                  <span *ngIf="item?.phoneNumber">
+                    <i class="pi pi-phone"></i>
+
+                    {{ item.phoneNumber }}
+                  </span>
+                </div>
+              </div>
+              <!-- <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-copy"
+                pTooltip="{{ 'PHONEBOOK.COPY_TOOLTIP' | translate }}  "
+                (click)="copyToClipboard(item)"
+                class="p-button-rounded p-button-secondary p-button-text copy-btn"
+              ></button> -->
+            </div>
+            <hr />
+          </li>
+        </ul>
+      </ng-container>
+    </perfect-scrollbar>
+    <div class="w-100 text-center border-top pg">
+      <p-paginator
+        [first]="state?.pageRequest?.first"
+        [rows]="state?.pageRequest?.rows"
+        [totalRecords]="totalRecords$ | async"
+        (onPageChange)="loadPage($event)"
+      ></p-paginator>
+    </div>
+  </div>
+</p-sidebar>
+
+<!-- float button -->
+<div
+  *appPrivileges="'PRIV_VW_PHONEBOOK_ENTRY'"
+  class="float-phonebook d-flex flex-column shadow"
+>
+  <ng-container *ngIf="position$ | async as position">
+    <button
+      type="button"
+      class="btn btn-icon btn-light"
+      (click)="
+        openSideBar();
+        sideBar.transformOptions =
+          position === 'left'
+            ? 'translate3d(-100%, 0px, 0px)'
+            : 'translate3d(100%, 0px, 0px)'
+      "
+    >
+      <span
+        inlineSVG="/assets/media/svg/icons/Communication/Call.svg"
+        cacheSVG="true"
+        class="svg-icon svg-icon-success"
+      ></span>
+    </button>
+  </ng-container>
+
+  <!-- <button  type="button" class="btn btn-icon btn-light" >
+    <span
+      inlineSVG="/assets/media/svg/icons/Text/Bullet-list.svg"
+      cacheSVG="true"
+      class="svg-icon svg-icon-primary"
+    ></span>
+  </button> -->
+</div>
+
+<ng-template #loadingSkelton>
+  <div class="d-flex flex-column mt-4">
+    <div
+      class="w-100 p-3 d-fllex border-bottom"
+      *ngFor="let _ of [].constructor(10)"
+    >
+      <div class="d-flex align-items-center">
+        <div style="flex: 1">
+          <p-skeleton width="30%" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="75%"></p-skeleton>
+        </div>
+        <p-skeleton shape="circle" size="2rem" styleClass="ml-2"></p-skeleton>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- transformOptions = 'translate3d(-100%, 0px, 0px)'
+ -->

@@ -98,16 +98,16 @@
             <tr>
               <!-- 1 -->
               <th mat-sort-header="id">
-                {{ "INCIDENTS.SR_NO" | translate }}
+                {{ "INCIDENTS.SERIAL" | translate }}
               </th>
               <!-- 2 -->
+              <th mat-sort-header="incidentDate"  width="17%">
+                {{ "INCIDENTS.INCIDENT_DATE_TIME" | translate }}
+              </th>
+              <!-- 3 -->
               <th mat-sort-header="subject">
                 {{ "INCIDENTS.SUBJECT" | translate }}
               </th>
-              <!-- 3 -->
-              <!-- <th mat-sort-header="emergencyLevel">
-              {{ "INCIDENTS.EMERGENCYLEVELS" | translate }}
-            </th> -->
               <!-- 4 -->
               <th mat-sort-header="priority">
                 {{ "INCIDENTS.PRIORITY" | translate }}
@@ -144,10 +144,15 @@
             >
               <!-- 1 -->
               <td>
-                {{ element?.id }} /
-                {{ element?.createdOn | customDate | date : "yyyy" }}
+                {{ element?.year }} /
+                {{ element?.serial }}
               </td>
               <!-- 2 -->
+              <td>
+                {{element.incidentDate | date : "dd/MM/yyyy hh:mm a"}}
+              </td>
+
+              <!-- 3 -->
               <td>
                 {{ element.subject }}
               </td>

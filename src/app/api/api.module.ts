@@ -26,13 +26,14 @@ import { RanksControllerService } from './services/ranks-controller.service';
 import { PushNotificationBodyControllerService } from './services/push-notification-body-controller.service';
 import { PushNotificationActionControllerService } from './services/push-notification-action-controller.service';
 import { PriorityControllerService } from './services/priority-controller.service';
+import { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
 import { OrgStructureControllerService } from './services/org-structure-controller.service';
 import { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
 import { OperationalReportControllerService } from './services/operational-report-controller.service';
 import { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
 import { NotificationControllerService } from './services/notification-controller.service';
-import { NewsTypeControllerService } from './services/news-type-controller.service';
 import { NewsControllerService } from './services/news-controller.service';
+import { NewsTypeControllerService } from './services/news-type-controller.service';
 import { MsExchangeOrgConfigControllerService } from './services/ms-exchange-org-config-controller.service';
 import { ModuleControllerService } from './services/module-controller.service';
 import { ModuleOrgControllerService } from './services/module-org-controller.service';
@@ -44,9 +45,9 @@ import { LeaveCalendarControllerService } from './services/leave-calendar-contro
 import { KpiControllerService } from './services/kpi-controller.service';
 import { InterimIncidentControllerService } from './services/interim-incident-controller.service';
 import { InquiryControllerService } from './services/inquiry-controller.service';
-import { IncidentControllerService } from './services/incident-controller.service';
 import { IncidentsWorkLogControllerService } from './services/incidents-work-log-controller.service';
 import { IncidentsChallengesReqControllerService } from './services/incidents-challenges-req-controller.service';
+import { IncidentControllerService } from './services/incident-controller.service';
 import { IncidentStatusControllerService } from './services/incident-status-controller.service';
 import { IncidentRiskImpactControllerService } from './services/incident-risk-impact-controller.service';
 import { IncidentReminderControllerService } from './services/incident-reminder-controller.service';
@@ -67,6 +68,7 @@ import { GroupCentersControllerService } from './services/group-centers-controll
 import { ManageGroupsService } from './services/manage-groups.service';
 import { GroupLocationGeometryControllerService } from './services/group-location-geometry-controller.service';
 import { SchedulerControllerService } from './services/scheduler-controller.service';
+import { AvayaControllerService } from './services/avaya-controller.service';
 import { ExerciseControllerService } from './services/exercise-controller.service';
 import { ExerciseTypeControllerService } from './services/exercise-type-controller.service';
 import { ExerciseStatusControllerService } from './services/exercise-status-controller.service';
@@ -74,9 +76,10 @@ import { ExerciseMemberRoleControllerService } from './services/exercise-member-
 import { ExerciseLessonControllerService } from './services/exercise-lesson-controller.service';
 import { ExerciseGoalControllerService } from './services/exercise-goal-controller.service';
 import { ExerciseGoalLessonControllerService } from './services/exercise-goal-lesson-controller.service';
-import { ExerciseCommitteeRoleControllerService } from './services/exercise-committee-role-controller.service';
 import { ExerciseCommitteeControllerService } from './services/exercise-committee-controller.service';
+import { ExerciseCommitteeRoleControllerService } from './services/exercise-committee-role-controller.service';
 import { EventsConfigControllerService } from './services/events-config-controller.service';
+import { EventsConfigSmsControllerService } from './services/events-config-sms-controller.service';
 import { EnviromentalImpactControllerService } from './services/enviromental-impact-controller.service';
 import { EmergencyLevelControllerService } from './services/emergency-level-controller.service';
 import { DmsControllerService } from './services/dms-controller.service';
@@ -120,6 +123,7 @@ import { PrivilegeControllerService } from './services/privilege-controller.serv
 import { OrganizationTypesService } from './services/organization-types.service';
 import { OrganizationHierarchicalStructureService } from './services/organization-hierarchical-structure.service';
 import { NotificationTransactionControllerService } from './services/notification-transaction-controller.service';
+import { NotificationPlaceHolderControllerService } from './services/notification-place-holder-controller.service';
 import { InspectionControllerService } from './services/inspection-controller.service';
 import { MsMailJobService } from './services/ms-mail-job.service';
 import { DohControllerService } from './services/doh-controller.service';
@@ -160,13 +164,14 @@ import { MigrationControllerService } from './services/migration-controller.serv
     PushNotificationBodyControllerService,
     PushNotificationActionControllerService,
     PriorityControllerService,
+    ExternalPhonebookControllerService,
     OrgStructureControllerService,
     OrgQuickLinkControllerService,
     OperationalReportControllerService,
     OperationalReportStatusControllerService,
     NotificationControllerService,
-    NewsTypeControllerService,
     NewsControllerService,
+    NewsTypeControllerService,
     MsExchangeOrgConfigControllerService,
     ModuleControllerService,
     ModuleOrgControllerService,
@@ -178,9 +183,9 @@ import { MigrationControllerService } from './services/migration-controller.serv
     KpiControllerService,
     InterimIncidentControllerService,
     InquiryControllerService,
-    IncidentControllerService,
     IncidentsWorkLogControllerService,
     IncidentsChallengesReqControllerService,
+    IncidentControllerService,
     IncidentStatusControllerService,
     IncidentRiskImpactControllerService,
     IncidentReminderControllerService,
@@ -201,6 +206,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     ManageGroupsService,
     GroupLocationGeometryControllerService,
     SchedulerControllerService,
+    AvayaControllerService,
     ExerciseControllerService,
     ExerciseTypeControllerService,
     ExerciseStatusControllerService,
@@ -208,9 +214,10 @@ import { MigrationControllerService } from './services/migration-controller.serv
     ExerciseLessonControllerService,
     ExerciseGoalControllerService,
     ExerciseGoalLessonControllerService,
-    ExerciseCommitteeRoleControllerService,
     ExerciseCommitteeControllerService,
+    ExerciseCommitteeRoleControllerService,
     EventsConfigControllerService,
+    EventsConfigSmsControllerService,
     EnviromentalImpactControllerService,
     EmergencyLevelControllerService,
     DmsControllerService,
@@ -254,6 +261,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     OrganizationTypesService,
     OrganizationHierarchicalStructureService,
     NotificationTransactionControllerService,
+    NotificationPlaceHolderControllerService,
     InspectionControllerService,
     MsMailJobService,
     DohControllerService,

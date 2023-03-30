@@ -6,6 +6,7 @@ export interface TaskCriteria {
   fromDate?: string;
   incidentId?: number;
   priority?: number;
+  serial?: number;
   status?: Array<number>;
   title?: string;
   toDate?: string;

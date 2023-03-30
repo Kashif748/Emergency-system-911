@@ -27,6 +27,52 @@ export class RoleControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteRole
+   */
+  static readonly DeleteRolePath = '/v1/roles/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteRole()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteRole$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseObject>> {
+
+    const rb = new RequestBuilder(this.rootUrl, RoleControllerService.DeleteRolePath, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseObject>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteRole$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteRole(params: {
+    id: number;
+  }): Observable<RestApiResponseObject> {
+
+    return this.deleteRole$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseObject>) => r.body as RestApiResponseObject)
+    );
+  }
+
+  /**
    * Path part for operation findByPage1
    */
   static readonly FindByPage1Path = '/v1/roles';
@@ -222,52 +268,6 @@ export class RoleControllerService extends BaseService {
 
     return this.getById2$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseRoleProjection>) => r.body as RestApiResponseRoleProjection)
-    );
-  }
-
-  /**
-   * Path part for operation deleteRole
-   */
-  static readonly DeleteRolePath = '/v1/roles/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteRole()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteRole$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, RoleControllerService.DeleteRolePath, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseObject>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteRole$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteRole(params: {
-    id: number;
-  }): Observable<RestApiResponseObject> {
-
-    return this.deleteRole$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseObject>) => r.body as RestApiResponseObject)
     );
   }
 

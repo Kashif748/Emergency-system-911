@@ -10,6 +10,8 @@ import {
   getToken,
   onMessage,
   isSupported,
+  Messaging,
+  MessagePayload,
 } from 'firebase/messaging';
 import { AppCacheKeys } from '@core/constant/AppCacheKeys';
 import { DashboardService } from 'src/app/pages/dashboard/dashboard.service';
@@ -19,6 +21,8 @@ import { DashboardService } from 'src/app/pages/dashboard/dashboard.service';
 export class NotifService {
   isSidebarVisible: boolean;
   sidebarVisibilityChange: Subject<boolean> = new Subject<boolean>();
+  isBrowserSupportFCM$: Subject<boolean> = new Subject<boolean>();
+  onNewMessage$: Subject<MessagePayload> = new Subject<MessagePayload>();
 
   notifications = [];
   private notifStore = new BehaviorSubject<any[]>([]);
@@ -31,6 +35,7 @@ export class NotifService {
   public get unreadCount$() {
     return this.unreadCountStore.asObservable();
   }
+
   constructor(
     private http: HttpClient,
     private readonly authService: IAuthService,
@@ -44,6 +49,7 @@ export class NotifService {
   }
   async requestPermission() {
     const isBrowserSupportFCM = await isSupported();
+    this.isBrowserSupportFCM$.next(isBrowserSupportFCM);
     console.log('isBrowserSupportFCM', isBrowserSupportFCM);
     if (!isBrowserSupportFCM) {
       return;
@@ -52,7 +58,6 @@ export class NotifService {
       AppCacheKeys.USER_FIREBASE_TOKEN
     );
     const messaging = getMessaging();
-
     if (!firebaseToken) {
       getToken(messaging, { vapidKey: environment.firebase.vapidKey })
         .then((currentToken) => {
@@ -75,9 +80,9 @@ export class NotifService {
 
   listen(messaging) {
     onMessage(messaging, (payload) => {
+      this.onNewMessage$.next(payload);
       console.log('Message received. ', payload);
       this.dashboardService.checkLogsChanges(payload);
-
       setTimeout(async () => {
         await this.getNotifications().subscribe();
       }, 8000);

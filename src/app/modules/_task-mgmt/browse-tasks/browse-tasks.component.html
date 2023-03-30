@@ -1,0 +1,177 @@
+<div class="container-fluid">
+  <app-breadcrumb></app-breadcrumb>
+  <div class="mx-4 my-10">
+    <div class="row" *ngIf="state$ | async as state">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12 position-relative">
+            <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
+              legend="{{'ACTIONS.ADVANCED_SEARCH' | translate}}" [collapsed]="!(hasFilters$ | async)">
+              <div class="p-fluid p-grid">
+                <div class="p-field p-col-6 p-md-3">
+                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['title']"
+                    placeholder="{{ 'SHARED.TITLE' | translate }}"
+                    (keyup)="updateFilter({title: $event.target.value}, $event)">
+                </div>
+
+                <div class="p-field p-col-6 p-md-3">
+                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['body']"
+                    placeholder="{{ 'SHARED.DESC' | translate }}"
+                    (keyup)="updateFilter({body: $event.target.value}, $event)">
+                </div>
+
+
+                <div class="p-field p-col-6 p-md-3">
+                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['incidentId']"
+                    placeholder="{{ 'SHARED.INCIDENT_ID' | translate }}"
+                    (keyup)="updateFilter({incidentId: $event.target.value}, $event)">
+                </div>
+
+                <div class="p-field p-col-6 p-md-3">
+
+                  <p-dropdown [options]="priorities$ | async" [ngModel]="state.pageRequest.filters['priority']"
+                    (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
+                    [showClear]="true" dataKey="id" placeholder="{{'SHARED.PRIORITY' | translate}}">
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj }}
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+
+
+                <div class="p-field p-col-6 p-md-3">
+
+                  <p-multiSelect [options]="statuses$ | async" placeholder="{{'SHARED.STATUS' | translate}}"
+                    defaultLabel="Select Items" styleClass="w-100" [ngModel]="state.pageRequest.filters['status']"
+                    optionDisabled="disabled" [filter]="false" (ngModelChange)="updateFilter({status: $event}, $event)"
+                    dataKey="id">
+                    <ng-template let-options pTemplate="selectedItems">
+                      <ng-container *ngIf="options?.length > 0">
+                        {{options?.length + ' ' + ('SHARED.SELCTED_ITEM' | translate)}}
+                      </ng-container>
+                      <ng-container *ngIf="!options || options.length === 0">
+                        {{'SHARED.STATUS' | translate}}
+                      </ng-container>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      {{ option | translateObj }}
+                    </ng-template>
+                  </p-multiSelect>
+                </div>
+
+                <div class="p-field p-col-6 p-md-3">
+                  <p-calendar placeholder="{{ 'SHARED.DUE_DATE' | translate }}"
+                    [ngModel]="state.pageRequest.filters['dueDate']"
+                    (ngModelChange)="updateFilter({dueDate: $event}, $event)" [showIcon]="true"
+                    showButtonBar="true"></p-calendar>
+
+                </div>
+
+                <div class="p-col p-d-flex">
+                  <div class="ml-dir-auto"></div>
+                  <div class="mx-1">
+                    <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-times"
+                      class="p-button-outlined" [loading]="loading$ | async" (click)="clear()"></button>
+                  </div>
+                  <div class="mx-1">
+                    <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search"
+                      [loading]="loading$ | async" (click)="search()"></button>
+                  </div>
+                </div>
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="col-12 mt-3">
+            <p-toolbar>
+
+              <div class="p-toolbar-group-left">
+
+                <div class="p-1 w-100 w-md-200px">
+                  <p-multiSelect [options]="columns" defaultLabel="Select Columns" optionLabel="name" styleClass="w-100"
+                    [ngModel]="state.columns" [optionValue]="'code'" optionDisabled="disabled"
+                    (onChange)="changeColumns($event)">
+                    <ng-template let-options pTemplate="selectedItems">
+                      <ng-container *ngIf="options?.length > 0">
+                        {{options?.length + ' ' + ('SHARED.SELCTED_ITEM' | translate)}}
+                      </ng-container>
+                      <ng-container *ngIf="!options || options.length === 0">
+                        {{'SHARED.SELECT_SHOWING_FIELDS' | translate}}
+                      </ng-container>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      {{ option.name | translate }}
+                    </ng-template>
+                  </p-multiSelect>
+                </div>
+                <div class="p-1 w-100 w-md-225px">
+                  <div class="p-inputgroup">
+                    <p-dropdown [options]="sortableColumns$ | async" [autoDisplayFirst]="false" [showClear]="true"
+                      [ngModel]="state.pageRequest.sortField"
+                      placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate}}" optionLabel="name" optionValue="code"
+                      styleClass="w-100 h-100" class="w-100 h-100" (onChange)="sort($event)">
+                      <ng-template let-option pTemplate="selectedItem">
+                        {{ option.name | translate }}
+                      </ng-template>
+                      <ng-template let-option pTemplate="item">
+                        {{ option.name | translate }}
+                      </ng-template>
+                    </p-dropdown>
+                    <div class="p-inputgroup-addon p-0">
+                      <p-toggleButton class="w-100 h-100" [onIcon]="'pi pi-sort-amount-up'"
+                        [ngModel]="state.pageRequest.sortOrder === 'desc'" offIcon="pi pi-sort-amount-down-alt"
+                        iconPos="right" styleClass="w-100 h-100" (onChange)="order($event)"></p-toggleButton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </p-toolbar>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="w-100 d-flex flex-wrap mx-1 px-6">
+              <div class="my-auto">
+                <button pButton type="button"
+                  class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
+                  [ngClass]="{'active':   !(type$ | async) || (type$ | async) === 'TO_MY_ORG'}"
+                  (click)="updateFilter({type: 'TO_MY_ORG'}, $event);">
+                  <span class="m-auto"> {{ 'TO_MY_ORG' | translate }} </span>
+                </button>
+                <button pButton type="button"
+                  class="p-tag w-95px mx-2 px-2 py-1 text-center p-button-rounded p-button-secondary p-button-sm text-white"
+                  [ngClass]="{'active': (type$ | async) === 'BY_MY_ORG'}"
+                  (click)="updateFilter({type: 'BY_MY_ORG'}, $event);">
+                  <span class="m-auto"> {{ 'BY_MY_ORG' | translate }} </span>
+                </button>
+              </div>
+
+              <div class="ml-dir-auto d-flex">
+                <button pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus" (click)="openDialog()"
+                  *checkPrivileges="'PRIV_CR_TASK'"></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <p-divider [align]="'left'" styleClass="bg-transparent">
+              <p-selectButton [options]="[{icon: 'pi pi-bars', view: 'TABLE'}, {icon: 'pi pi-th-large', view: 'CARDS'}]"
+                optionLabel="icon" optionValue="view" [ngModel]="state.view" (onChange)="changeView($event.value)">
+                <ng-template let-item>
+                  <i [class]="item.icon"></i>
+                </ng-template>
+              </p-selectButton>
+            </p-divider>
+          </div>
+        </div>
+        <app-content-tasks [view]="state.view" [type]="type$ | async" [loading]="loading$ | async"
+          [page]="page$ | async" [columns]="state.columns" [totalRecords]="totalRecords$ | async"
+          [pageRequest]="state.pageRequest" (onPageChange)="loadPage($event)"></app-content-tasks>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-task-dialog></app-task-dialog>

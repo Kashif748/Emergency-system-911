@@ -69,21 +69,21 @@ export class IncidentCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update43
+   * Path part for operation update44
    */
-  static readonly Update43Path = '/v1/incident-categories';
+  static readonly Update44Path = '/v1/incident-categories';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update43()` instead.
+   * To access only the response body, use `update44()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update43$Response(params: {
+  update44$Response(params: {
     body: IncidentCategory
   }): Observable<StrictHttpResponse<RestApiResponseIncidentCategoryProjaction>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentCategoryControllerService.Update43Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentCategoryControllerService.Update44Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -101,35 +101,35 @@ export class IncidentCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update43$Response()` instead.
+   * To access the full response (for headers, for example), `update44$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update43(params: {
+  update44(params: {
     body: IncidentCategory
   }): Observable<RestApiResponseIncidentCategoryProjaction> {
 
-    return this.update43$Response(params).pipe(
+    return this.update44$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentCategoryProjaction>) => r.body as RestApiResponseIncidentCategoryProjaction)
     );
   }
 
   /**
-   * Path part for operation create39
+   * Path part for operation create40
    */
-  static readonly Create39Path = '/v1/incident-categories';
+  static readonly Create40Path = '/v1/incident-categories';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create39()` instead.
+   * To access only the response body, use `create40()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create39$Response(params: {
+  create40$Response(params: {
     body: IncidentCategory
   }): Observable<StrictHttpResponse<RestApiResponseIncidentCategoryProjaction>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentCategoryControllerService.Create39Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentCategoryControllerService.Create40Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -147,15 +147,15 @@ export class IncidentCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create39$Response()` instead.
+   * To access the full response (for headers, for example), `create40$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create39(params: {
+  create40(params: {
     body: IncidentCategory
   }): Observable<RestApiResponseIncidentCategoryProjaction> {
 
-    return this.create39$Response(params).pipe(
+    return this.create40$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentCategoryProjaction>) => r.body as RestApiResponseIncidentCategoryProjaction)
     );
   }

@@ -159,7 +159,7 @@ export class CircularsComponent implements OnInit {
       () => {
         this.cirService.loadingSubject.next(false);
 
-        this.cirService.getCirculars(0, 10, 'asc');
+        this.cirService.getCirculars(0, 10, 'desc');
       },
       (err) => {
         this.cirService.loadingSubject.next(false);

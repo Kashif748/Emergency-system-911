@@ -40,24 +40,8 @@
         "Friday",
         "Saturday"
       ],
-      "dayNamesShort": [
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat"
-      ],
-      "dayNamesMin": [
-        "Su",
-        "Mo",
-        "Tu",
-        "We",
-        "Th",
-        "Fr",
-        "Sa"
-      ],
+      "dayNamesShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      "dayNamesMin": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
       "monthNames": [
         "January",
         "February",
@@ -294,7 +278,7 @@
     },
     "MAP": {
       "TOP_BAR": {
-        "ADDRESS_SEARCH": "Enter Building Address, Street Name, District Name, AAM PLOT Adrress [DID-CID-RID-PID]"
+        "ADDRESS_SEARCH": "Sector Name, District, Street"
       }
     },
     "DASHBOARD": {
@@ -306,8 +290,8 @@
       "REJECTED_INCIDENTS": "Rejected Incidents",
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
-      "OUTDATE_TASKS": "Outdate tasks",
-      "INCOMING_CORRERSPONDENCE": "Incoming correrspondence",
+      "OUTDATE_TASKS": "Incoming/Late Tasks",
+      "INCOMING_CORRERSPONDENCE": "Incoming correspondence",
       "OUTCOMING_CORRERSPONDENCE": "Outgoing correrspondence",
       "CORRERSPONDENCE": "Correspondence",
       "NEW_TASK": "Add New Task",
@@ -344,7 +328,7 @@
       "REGISTERED_INCIDENTS": "Registered Incidents (Today)",
       "UNDER_EVALUATION_INCIDENTS": "Under Evaluation Incidents",
       "LATE_INCIDENTS": "Late Incidents",
-      "COMPLETED_INCIDENTS": "Completed Incidents",
+      "COMPLETED_INCIDENTS": "Completed Incidents (today)",
       "INCOMING_LATE_TASK": "Incoming/Late Tasks",
       "TASK": "Task",
       "INCIDENT": "Incident"
@@ -510,6 +494,7 @@
       },
       "INCIDENTS": "Incidents",
       "REPORTER": "Location Shared By Reporter",
+      "TEAM_LOCATION":"Team Location",
       "OPEN_TASKS": "Open Tasks",
       "CLOSED_TASKS": "Closed Tasks",
       "DELAYED_TASKS": "Delayed Tasks",
@@ -522,6 +507,7 @@
       "INCIDENT_SUBJECT": "Incident Subject",
       "REVIEW_REPORT": "Incident Report‎",
       "RESPONSIBLE_ORG": "Responsible Org",
+      "INCIDENT_DATE_TIME": "Incident Date & Time",
       "UPDATE": "Update",
       "VIEW_INCIDENT": "Click to view incidnet",
       "INCIDENT_EX": "This Incident is expierd ",
@@ -575,7 +561,8 @@
       "REPORTINGVIA": "Reporting Via",
       "DATE": "Incident Date",
       "DESCRIPTION": "Description",
-      "SR_NO": "Sr no.",
+      "SR_NO": "Id",
+      "SERIAL": "Sequance Number",
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
       "REPORT_INCIDENT": "Incidents",
@@ -872,6 +859,7 @@
       "UPDATE_STATUS": "Update Task Status",
       "TASK_TITLE": "Title",
       "TASK_TYPE": "Task Type",
+      "TASK_ID": "Task Id",
       "ASSIGNED_TO": "Assigned To",
       "DETAILS": "Task Details",
       "ASSETS": "Assests",
@@ -881,7 +869,7 @@
       "DUE_DATE": "Due Date & Time",
       "DUE_TIME": "Due Time",
       "STATUS": "Status",
-      "TASK_INCIDENT_ID": "Incident Id",
+      "TASK_INCIDENT_ID": "Incident Serial",
       "REQUIRED_QUANTITY": "Required Quantity",
       "AVAILABLE_QUANTITY": " Available Quantity",
       "PROVISIONAL_QUANTITY": "Provisional Qauntity",
@@ -1005,19 +993,19 @@
     },
     "CIRCULARS": {
       "HEADER": "Create Circular",
-      "CONFIDENTIALITY": "The degree of confidentiality",
-      "PRIORITY": "The degree of priority",
+      "CONFIDENTIALITY": "Confidentiality Degree",
+      "PRIORITY": "Priority Level",
       "Date": "Date",
       "SUBJECT": "Subject",
       "NUMBER": "Number",
       "ORG": "Organization",
       "ORG_TO": "Organization To",
-      "CC": "Copied To",
+      "CC": "Copy To (CC) Sent to Users",
       "MEASURES": "Procedures",
       "POSISSION": "The Position",
       "COORDINATE": "Coordinate",
-      "EMAIL": "Email",
-      "Phone": "Phone",
+      "EMAIL": "Email Address",
+      "Phone": "Phone Number",
       "MOBILE": "Mobile Number",
       "NO_VALUE": "No Value",
       "STATUS": "Status",
@@ -1026,11 +1014,22 @@
       "NEW_ITEM": " Add Circular",
       "SAVE_REVIEW": "Save and Review",
       "REVIEW": "Review Circular",
-      "APPROVAL": "Approval",
+      "APPROVAL": "Approvals",
       "REJECT": "Reject Circular",
       "SEND": "Send for approval",
-      "MANAGER": "Approval By",
-      "PUBLISH": "Publish Circular"
+      "MANAGER": "Approved By",
+      "PUBLISH": "Publish Circular",
+      "SENT_TO": "Send To",
+      "TEXT": "Circular Text",
+      "COORDINATE_DATA": "Coordination Details",
+      "FOR_APPROVAL": "Approvals",
+      "TO_EXTERNAL_ORGANIZATION":"To External Organization",
+      "TO_INTERNAL_ORGANIZATION":"To Internal Organization",
+      "THIS_FIELD_IS_REQUIRED": "This field is required",
+      "MIN_LENGTH_FIELD": "Minimum field length:",
+      "MAX_LENGTH_FIELD": "Maximum field length:",
+      "EMAIL_ERR_MSG": "Please enter  valid email",
+      "MOBILE_ERR_MSG": "Invalid Mobile Number"
     },
     "DAILY_BREVITY": {
       "HEADER": "Daily brevity",
@@ -1227,7 +1226,9 @@
       "DATAMESSAGE": "No Data Found!",
       "SR_NO": "Serial Number",
       "SAME_LOCATION": "Same as Organization Location",
-      "CREATE_ASSET_POINT": "Create Asset Point"
+      "CREATE_ASSET_POINT": "Create Asset Point",
+      "MAIN_CATEGORY": "Main Category",
+      "ORG_SUB_CATEGORY": "Organizational Sub Category"
     },
     "EVENTSMODULES": {
       "correspondenceStatus": "Correspondence Status",
@@ -1303,6 +1304,7 @@
       "RANKS": "Ranks",
       "ADD_RANK": "Add Rank",
       "MOBILE_VERSIONS": "Mobile Version",
+      "NOTIFICATION_MANAGEMENT": "Notification Management",
       "ADD_MOBILE_VERSION": "Add version",
       "IS_ACTIVE": "Active",
       "YES": "Yes",
@@ -1311,7 +1313,27 @@
       "RELEASE_LINK": "Release link",
       "RELEASE_NOTE": "Release note",
       "VERSION_NAME": "Version name",
-      "VERSION_NUMBER": "Version number"
+      "VERSION_NUMBER": "Version number",
+      "NOTIFICATIONS": "Notifications Events",
+      "EMAIL_NOTI": "Email Notification",
+      "SMS_NOTI": "SMS Notification",
+      "PUSH_NOTI": "Push Notification",
+      "NAME": "Name",
+      "LAST_UPDATE_DATE": "Last Update Date",
+      "MODULE_NAME": "Module Name",
+      "ID": "id",
+      "TEMPLATE": "Template",
+      "TITLE_EN": "Title En",
+      "TITLE_AR": "Title Ar",
+      "BODY_En": "Body En",
+      "BODY_Ar": "Body Ar",
+      "NAME": "Name",
+      "NAME_En": "Name En",
+      "NAME_Ar": "Name Ar",
+      "SMS_NOTIFICATION": "SMS Notification",
+      "PUSH_NOTIFICATION": "Push Notification",
+      "WORKLOG": "Worklog Templates",
+      "COPY_CLIPBOARD": "Copy to clipboard"
     },
     "NEWS": {
       "NEWS": "News",
@@ -1365,6 +1387,7 @@
     "VALIDATION_MSG": {
       "INVALID_FILE_SIZE": "{0}: Invalid file size,",
       "MAX_UPLOAD_SIZE": "maximum upload size is {0}.",
+      "MAX_LENGHT": "The maximum number of characters allowed is {{max}}.",
       "REQUIRED": "This field is required.",
       "EMIRATE_ID": {
         "INVALID": "Emirate ID must be only 15 digit(0-9)."
@@ -1445,6 +1468,15 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "PROVISIONAL_QUANTITY": "Provisional Qauntity",
+      "QUANTITY": "Quantity",
+      "ASSETS": "Assests",
+      "PERSON": "Person",
+      "PRIORITY": "Priority",
+      "DUE_DATE": "Due Date & Time",
+      "ASSIGNEE": "Assignee",
+      "INCIDENT_ID": "Incident Id",
+      "INCIDENT": "Incident",
       "PHOTO_EDITOR": "Photo Editor",
       "PRIVILEGES": "Privileges",
       "NO_IMAGE": "No image",
@@ -1595,6 +1627,7 @@
       "GROUPS_AND_UNITS": "Team and Units",
       "NAME_AR": "Name(Ar)",
       "NAME_EN": "Name(En)",
+      "SHIFT_SCHEDULE": "Shift Schedule",
       "GROUP_NAME": "Name",
       "ORGANIZATION": "Organization",
       "DESCRIPTION_AR": "Description(Ar)",
@@ -1605,7 +1638,7 @@
       "ADD": "Create New Team",
       "VIEW": "View Team Details",
       "VIEW_GROUP": "View Team",
-      "EDIT_GROUP": "Edit Details",
+      "EDIT_GROUP": "Edit Team",
       "GROUP_INFO": "Team Details",
       "EDIT": "Update Team",
       "DELETE": "Delete",
@@ -1637,7 +1670,9 @@
       "WARNING_NOTE": "Please note that only map or selection would be saved , depends on what's you're opening right now",
       "CATEGORIES_LOCATIONS": "Assigned Categories & Locations",
       "INCIDENT_CATEGORIES": "Assigned Incident Categories",
-      "INCIDENT_LOCATION": "Assigned Incident Locations"
+      "INCIDENT_LOCATION": "Assigned Incident Locations",
+      "GROUP_INFO": "Group Info",
+      "GROUP_BREAD": "Teams & Groups"
     },
     "DAILY_REPORT": {
       "STATISTICS": {

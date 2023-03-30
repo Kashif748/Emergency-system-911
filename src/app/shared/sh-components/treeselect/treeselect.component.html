@@ -1,4 +1,4 @@
-<div #container [ngClass]="containerClass()" (click)="onClick($event)">
+<div #container [ngClass]="containerClass()" (click)="onClick($event)" class="h-100">
   <div class="p-hidden-accessible">
     <input #focusInput type="text" role="listbox" [attr.id]="inputId" readonly [disabled]="disabled" (focus)="onFocus()"
       (blur)="onBlur()" (keydown)="onKeyDown($event)" [attr.tabindex]="tabindex" aria-haspopup="true"
@@ -53,12 +53,12 @@
           {{node | translateObj : 'label'}}
         </ng-template>
       </p-tree>
-      <div *ngIf="emptyOptions" class="p-treeselect-empty-message">
+      <!-- <div *ngIf="emptyOptions" class="p-treeselect-empty-message">
         <ng-container *ngIf="!emptyTemplate">
           {{ emptyMessageText }}
         </ng-container>
         <ng-container *ngTemplateOutlet="emptyTemplate"></ng-container>
-      </div>
+      </div> -->
     </div>
     <ng-container *ngTemplateOutlet="
         footerTemplate;

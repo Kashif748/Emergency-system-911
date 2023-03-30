@@ -1,0 +1,45 @@
+mat-form-field {
+  width: 100%;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #36aef4;
+}
+
+form {
+  margin-top: 30px;
+
+  mat-form-field {
+    display: block !important;
+  }
+}
+
+::ng-deep {
+  .modal {
+    max-width: 960px !important;
+    height: fit-content !important;
+    padding: 0 !important;
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #aaa;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}

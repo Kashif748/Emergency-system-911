@@ -24,6 +24,52 @@ export class HospitalControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation delete16
+   */
+  static readonly Delete16Path = '/v1/hospitals/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete16()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete16$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<RestApiResponseHospital>> {
+
+    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.Delete16Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseHospital>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `delete16$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete16(params: {
+    id: number;
+  }): Observable<RestApiResponseHospital> {
+
+    return this.delete16$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseHospital>) => r.body as RestApiResponseHospital)
+    );
+  }
+
+  /**
    * Path part for operation findActivePage12
    */
   static readonly FindActivePage12Path = '/v1/hospitals';
@@ -203,52 +249,6 @@ export class HospitalControllerService extends BaseService {
   }): Observable<RestApiResponseHospital> {
 
     return this.getActiveHospital$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseHospital>) => r.body as RestApiResponseHospital)
-    );
-  }
-
-  /**
-   * Path part for operation delete22
-   */
-  static readonly Delete22Path = '/v1/hospitals/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete22()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete22$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseHospital>> {
-
-    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.Delete22Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseHospital>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete22$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  delete22(params: {
-    id: number;
-  }): Observable<RestApiResponseHospital> {
-
-    return this.delete22$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseHospital>) => r.body as RestApiResponseHospital)
     );
   }

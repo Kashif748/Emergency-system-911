@@ -1,22 +1,22 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {EventEmitter, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {UrlHelperService} from '@core/services/url-helper.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { EventEmitter, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { UrlHelperService } from '@core/services/url-helper.service';
 
 import { BehaviorSubject, Observable, observable } from 'rxjs';
-import {tap} from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
-import {AlertsService} from 'src/app/_metronic/core/services/alerts.service';
-import {environment} from 'src/environments/environment';
-import {TranslationService} from '../i18n/translation.service';
+import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
+import { environment } from 'src/environments/environment';
+import { TranslationService } from '../i18n/translation.service';
 
-import {commonDataItem} from './common-data-keys';
+import { commonDataItem } from './common-data-keys';
 
-import {ControllerModel} from './events-management/controller-view/reports-via';
-import {EmergencyLevelModel} from './events-management/emergency-level/emergency-level.model';
-import {IncidentsCategoryModel} from './events-management/incidents-categories/incidents-category-model';
-import {NavigationItem} from './events-management/navigations/navigation.model';
-import {Sla} from './events-management/sla/sla-modal/sla-modal';
+import { ControllerModel } from './events-management/controller-view/reports-via';
+import { EmergencyLevelModel } from './events-management/emergency-level/emergency-level.model';
+import { IncidentsCategoryModel } from './events-management/incidents-categories/incidents-category-model';
+import { NavigationItem } from './events-management/navigations/navigation.model';
+import { Sla } from './events-management/sla/sla-modal/sla-modal';
 import { map } from 'rxjs/internal/operators/map';
 
 @Injectable({
@@ -41,9 +41,8 @@ export class EventsManagementService {
   kpiInfo: any[] = [];
   onKpisChange: BehaviorSubject<any>;
   result = new HttpHeaders()
-  .set('Content-Type', 'application/json')
-  .set('Authorization', 'Bearer ' + localStorage.getItem('jwt'));
-
+    .set('Content-Type', 'application/json')
+    .set('Authorization', 'Bearer ' + localStorage.getItem('jwt'));
 
   Sla: any[] = [];
   SlaInfo: any[] = [];
@@ -57,6 +56,7 @@ export class EventsManagementService {
 
   navigations: NavigationItem[] = [];
   onNavigationsChange: BehaviorSubject<any>;
+
 
   lang: string;
 
@@ -73,6 +73,7 @@ export class EventsManagementService {
     this.onSLAChange = new BehaviorSubject([]);
     this.onRanksChange = new BehaviorSubject([]);
     this.onNavigationsChange = new BehaviorSubject([]);
+
     this.onResourceGrouping = new BehaviorSubject([]);
     this.lang = this.translationService.getSelectedLanguage();
   }
@@ -128,7 +129,6 @@ export class EventsManagementService {
       })
       .pipe(map((r) => r.result));
   }
-
 
   createControllers() {
     for (let index = 0; index < this.commonDataItem.length; index++) {
@@ -375,10 +375,6 @@ export class EventsManagementService {
     return this.httpClient.get<any>(`${environment.apiUrl}/assets-group`, {});
   }
 
-
-
-
-
   createAssetsGroup(asset: any) {
     return this.httpClient.post(
       `${environment.apiUrl}/assets-group`,
@@ -388,17 +384,14 @@ export class EventsManagementService {
   }
 
   updateAssetsGroup(asset: any) {
-    return this.httpClient.put(
-      `${environment.apiUrl}/assets-group`,
-      asset,
-      {}
-    );
+    return this.httpClient.put(`${environment.apiUrl}/assets-group`, asset, {});
   }
 
   getAssetsCategory() {
-    return this.httpClient.get<any>(`${environment.apiUrl}/assets/main-category`);
+    return this.httpClient.get<any>(
+      `${environment.apiUrl}/assets/main-category`
+    );
   }
-
 
   createAssetsCategory(asset: any) {
     return this.httpClient.post(
@@ -421,7 +414,10 @@ export class EventsManagementService {
    */
 
   //    the two paremeter  are to decide which level  on categories  we want from BE
-  getIncidentsCategories(level: 'parents' | 'children', parentId?): Promise<any> {
+  getIncidentsCategories(
+    level: 'parents' | 'children',
+    parentId?
+  ): Promise<any> {
     let endPoint = '/incident-categories';
     if (level == 'children') {
       endPoint += `/${parentId}/children`;
@@ -629,24 +625,22 @@ export class EventsManagementService {
 
   updateNavigationItem(level: any) {
     return new Promise((resolve, reject) => {
-      this.httpClient
-        .put(`${environment.apiUrl}/modules`, level, {})
-        .subscribe(
-          (res) => {
-            if (res && res['status']) {
-              this.alertService.openSuccessSnackBar();
-              this.getNavigationsMenu();
-              resolve(true);
-            } else {
-              this.alertService.openFailureSnackBar();
-              reject(new Error('faile'));
-            }
-          },
-          (err) => {
+      this.httpClient.put(`${environment.apiUrl}/modules`, level, {}).subscribe(
+        (res) => {
+          if (res && res['status']) {
+            this.alertService.openSuccessSnackBar();
+            this.getNavigationsMenu();
+            resolve(true);
+          } else {
             this.alertService.openFailureSnackBar();
-            reject(err);
+            reject(new Error('faile'));
           }
-        );
+        },
+        (err) => {
+          this.alertService.openFailureSnackBar();
+          reject(err);
+        }
+      );
     });
   }
 
@@ -830,7 +824,7 @@ export class EventsManagementService {
 
   createCategoriesForKpi(kpiob, kpiRes) {
     const configObj = {
-      group: {id: kpiob.group},
+      group: { id: kpiob.group },
       isActive: true,
       kpi: {
         id: kpiRes.result.id,
@@ -865,7 +859,7 @@ export class EventsManagementService {
   updateCategoriesForKpi(kpiob, kpiRes, configId) {
     const configObj = {
       id: configId,
-      group: kpiob.group == 'null' ? null : {id: kpiob.group},
+      group: kpiob.group == 'null' ? null : { id: kpiob.group },
       isActive: true,
       kpi: {
         id: kpiRes.result.id,
@@ -945,8 +939,7 @@ export class EventsManagementService {
               this.alertService.openSuccessSnackBar();
 
               // removed
-              this.createSlaDetails(level, res).then((ok) => {
-              });
+              this.createSlaDetails(level, res).then((ok) => {});
 
               // const newItem = new KpiModel(res["result"]);
               const newItem = res['result'];
@@ -1000,12 +993,11 @@ export class EventsManagementService {
             if (res && res['status']) {
               this.alertService.openSuccessSnackBar();
               // removed
-              this.updateSlaDetails(level, res).then((ok) => {
-              });
+              this.updateSlaDetails(level, res).then((ok) => {});
               this.Sla = this.Sla.map((el) => {
                 if (el.id == level.id) {
                   level.contractor = level.orgStructure;
-                  level.group = {id: level.group};
+                  level.group = { id: level.group };
                   return level;
                 } else {
                   return el;
@@ -1049,7 +1041,7 @@ export class EventsManagementService {
           kpi: {
             id: prior.kpis,
           },
-          priority: {id: prior.priority},
+          priority: { id: prior.priority },
           sla: {
             id: slaRes.result.id,
           },
@@ -1090,7 +1082,7 @@ export class EventsManagementService {
           kpi: {
             id: prior.kpis,
           },
-          priority: {id: prior.priority},
+          priority: { id: prior.priority },
           sla: {
             id: slaObj.id,
           },
@@ -1172,28 +1164,26 @@ export class EventsManagementService {
 
   deleteRank(id: number) {
     return new Promise((resolve, reject) => {
-      this.httpClient
-        .delete(`${environment.apiUrl}/ranks/${id}`, {})
-        .subscribe(
-          (res) => {
-            if (res && res['status']) {
-              this.alertService.openSuccessSnackBar();
-              this.Ranks = this.Ranks.filter((item) => {
-                return item.id !== id;
-              });
-              this.onRanksChange.next(this.Ranks);
+      this.httpClient.delete(`${environment.apiUrl}/ranks/${id}`, {}).subscribe(
+        (res) => {
+          if (res && res['status']) {
+            this.alertService.openSuccessSnackBar();
+            this.Ranks = this.Ranks.filter((item) => {
+              return item.id !== id;
+            });
+            this.onRanksChange.next(this.Ranks);
 
-              resolve(true);
-            } else {
-              this.alertService.openFailureSnackBar();
-              reject(new Error('failed'));
-            }
-          },
-          (err) => {
+            resolve(true);
+          } else {
             this.alertService.openFailureSnackBar();
-            reject(err);
+            reject(new Error('failed'));
           }
-        );
+        },
+        (err) => {
+          this.alertService.openFailureSnackBar();
+          reject(err);
+        }
+      );
     });
   }
 
@@ -1230,8 +1220,7 @@ export class EventsManagementService {
     return this.httpClient.get(`${environment.apiUrl}/version/ext/all`);
   }
 
-
-  getLocalRisks():Observable<any>{
+  getLocalRisks(): Observable<any> {
     return this.httpClient.get<any>(`${environment.apiUrl}/local-risk`);
   }
 
@@ -1241,5 +1230,26 @@ export class EventsManagementService {
 
   updateMobileVersion(data: any) {
     return this.httpClient.put(`${environment.apiUrl}/version`, data);
+  }
+
+  // Notifications
+  getNotifications(page = '0', size = '20') {
+    return this.httpClient.get<any>(`${environment.apiUrl}/events-config`, {
+      params: { page: page, size: size },
+    });
+  }
+
+  updateNotifications(data: any) {
+    return this.httpClient
+      .put(`${environment.apiUrl}/events-config/` + data?.id, data)
+      .pipe(
+        tap((res) => {
+          if (res && res['status']) {
+            this.alertService.openSuccessSnackBar();
+          } else {
+            this.alertService.openFailureSnackBar();
+          }
+        })
+      );
   }
 }

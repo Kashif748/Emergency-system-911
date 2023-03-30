@@ -1,5 +1,6 @@
 export enum AdvancedSearchFieldsEnum {
   SR_NO = 'id',
+  SERIAL ='serial',
   SUBJECT = 'subject',
   CREATED_BY = 'createdByUser',
   STATUS = 'status',
@@ -16,6 +17,7 @@ export enum AdvancedSearchFieldsEnum {
   INQUIRY = 'subject',
   REPORTING_CONTACT = 'reporterContact',
   LEADING_ORG = 'organization',
+  GROUP = 'groupId',
 }
 
 export interface IsExpiredOption {

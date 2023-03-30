@@ -1,0 +1,351 @@
+<div class="row">
+  <div [ngSwitch]="view" class="col-12">
+    <ng-container *ngSwitchCase="'CARDS'">
+      <ng-container *ngIf="loading;else cardsTemplate">
+        <ng-container *ngFor="let _ of [].constructor(10)">
+          <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border">
+            <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px">
+              <div class="flex-grow-1 p-grid p-fluid">
+                <div class="p-col-12 p-md-8">
+
+                  <div class="mt-1 mx-2 p-grid p-fluid">
+                    <div class="p-col-12 pb-0">
+                      <div class="p-fluid p-grid">
+                        <div class="p-col"><p-skeleton height="2rem"></p-skeleton></div>
+                      </div>
+                    </div>
+                    <div class="p-col-12">
+                      <div class="p-fluid p-grid">
+                        <div class="p-col"><p-skeleton></p-skeleton></div>
+                        <div class="p-col"><p-skeleton></p-skeleton></div>
+                      </div>
+                    </div>
+                    <div class="p-col-12">
+                      <p-skeleton height="1.5rem"></p-skeleton>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                  <p-skeleton width="100%" height="100%"></p-skeleton>
+                </div>
+              </div>
+              <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                class="p-button-rounded p-button-text mt-0 p-button-plain"></button>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-template #cardsTemplate>
+        <ng-container *ngFor="let item of page">
+          <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border">
+            <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
+              [ngClass]="{'p-border-help': !type || type === 'TO_MY_ORG', 'p-border-secondary': type === 'BY_MY_ORG' }">
+
+              <div class="flex-grow-1 p-grid p-fluid" (click)="openView(item.id)">
+                <div class="p-col-12">
+
+                  <div class="mt-1 mx-2 p-grid p-fluid">
+                    <div class="p-col-12 pb-0 p-d-flex">
+                      <div>
+                        <h4 class="mb-1 px-2 d-inline" pTooltip="{{ 'SHARED.TITLE' | translate }}" appendTo="body"
+                          tooltipPosition="top">
+                          {{ item.title }}
+                        </h4>
+                      </div>
+                    </div>
+                    <div class="p-col-12">
+                      <p-chip pTooltip="{{ 'SHARED.CREATED_BY' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} / {{item.createdBy?.orgStructure | translateObj }}"
+                        icon="pi pi-user" styleClass="bg-transparent text-muted"></p-chip>
+
+                      <p-chip pTooltip="{{ 'SHARED.INCIDENT_ID' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{ item.incident?.id }}" icon="pi pi-info" styleClass="m-1"></p-chip>
+
+                      <p-chip pTooltip="{{ 'SHARED.PRIORITY' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{ item.priority | translateObj }}" icon="pi pi-sort-numeric-up-alt"
+                        styleClass="m-1 text-white bg-{{item?.priority?.color}}"></p-chip>
+
+                      <p-chip pTooltip="{{ 'SHARED.DUE_DATE' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{ item.dueDate | cdate }}" icon="pi pi-clock" checkDueDate
+                        [closedDate]="item.closedDate" [dueDate]="item.dueDate" dueClass="text-white bg-danger"
+                        styleClass="m-1">
+                      </p-chip>
+
+                      <p-chip pTooltip="{{ 'SHARED.STATUS' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{item.status | translateObj }}" icon="pi pi-question-circle" styleClass="m-1"></p-chip>
+
+                      <p-chip pTooltip="{{ 'SHARED.ASSIGNEE' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{item.assignTo | translateObj }} ({{ 'SHARED.' + assigneeMap[item.assignTo?.type]?.text | translate }})"
+                        icon="pi pi-angle-double-up">
+                      </p-chip>
+
+                    </div>
+                  </div>
+                  <div class="mt-1 mx-2 p-grid p-fluid">
+                    <div class="p-col-12">
+                      <p>
+                        {{item.body }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                class="p-button-rounded p-button-text mt-0 p-button-plain" (click)="menu1.toggle($event)"
+                *checkPrivileges="'PRIV_UP_TASK'"></button>
+              <p-menu #menu1 appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
+            </div>
+          </div>
+        </ng-container>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <ng-container *ngIf="loading;else tableTemplate">
+        <p-table [value]="[].constructor(10)">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 0;"></th>
+
+              <th *ngIf="columns?.includes('title')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.TITLE" | translate }}
+                </div>
+              </th>
+              <th *ngIf="columns?.includes('desc')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.DESC" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('incidentId')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.INCIDENT_ID" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('priority')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.PRIORITY" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('dueDate')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.DUE_DATE" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('status')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.STATUS" | translate }}
+                </div>
+              </th>
+
+
+              <th *ngIf="columns?.includes('createdBy')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.CREATED_BY" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('assignee')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.ASSIGNEE" | translate }}
+                </div>
+              </th>
+
+
+              <th *checkPrivileges="'PRIV_UP_TASK'" style="width: 92px;">{{'ACTIONS.ACTIONS' | translate}}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr class="cursor-pointer hoverable">
+              <td class="flag-td">
+                <div class="bg-secondary">
+                </div>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('title')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('desc')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('incidentId')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('priority')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('dueDate')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('status')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('createdBy')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('assignee')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td *checkPrivileges="'PRIV_UP_TASK'" class="max-w-250px">
+                <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                  class="p-button-rounded p-button-text my-auto p-button-plain"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-container>
+      <ng-template #tableTemplate>
+        <p-table [columns]="columns" [totalRecords]="totalRecords" [value]="page" dataKey="id" [autoLayout]="true">
+
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" [style.width]="'col.width'">
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th></th>
+
+              <th *ngIf="columns?.includes('title')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.TITLE" | translate }}
+                </div>
+              </th>
+              <th *ngIf="columns?.includes('desc')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.DESC" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('incidentId')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.INCIDENT_ID" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('priority')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.PRIORITY" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('dueDate')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.DUE_DATE" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('status')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.STATUS" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('createdBy')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.CREATED_BY" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('assignee')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.ASSIGNEE" | translate }}
+                </div>
+              </th>
+
+
+              <th *checkPrivileges="'PRIV_UP_TASK'" style="width: 92px;">{{'ACTIONS.ACTIONS' | translate}}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr class="cursor-pointer hoverable" checkDueDate [closedDate]="item.closedDate" [dueDate]="item.dueDate"
+              [dueClass]="'highlight'">
+              <td class="flag-td">
+                <div [ngClass]="{'p-bg-help': !type || type === 'TO_MY_ORG', 'p-bg-secondary': type === 'BY_MY_ORG' }">
+                </div>
+              </td>
+              <td class="max-w-250px" *ngIf="columns?.includes('title')" (click)="openView(item.id)">
+                {{item.title}}
+              </td>
+              <td class="max-w-250px" *ngIf="columns?.includes('desc')" (click)="openView(item.id)">
+                {{item.body}}
+              </td>
+              <td class="max-w-250px" *ngIf="columns?.includes('incidentId')"
+                (click)="openView(item.id)">
+                {{item.incident?.id}}
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('priority')"
+                (click)="openView(item.id)">
+
+                <p-tag styleClass="m-1 bg-{{item?.priority?.color}}">
+                  {{ item.priority | translateObj }}
+                </p-tag>
+              </td>
+              <td class="max-w-250px" *ngIf="columns?.includes('dueDate')" (click)="openView(item.id)">
+                <p-tag styleClass="m-1" checkDueDate [closedDate]="item.closedDate" [dueDate]="item.dueDate">
+                  {{ item.dueDate | cdate }}
+                </p-tag>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('status')" (click)="openView(item.id)">
+                <p-tag styleClass="m-1">
+                  {{item.status | translateObj }}
+                </p-tag>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('createdBy')"
+                (click)="openView(item.id)">
+                {{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} /
+                {{item.createdBy?.orgStructure | translateObj }}
+              </td>
+              <td class="max-w-250px" *ngIf="columns?.includes('assignee')"
+                (click)="openView(item.id)">
+                {{item.assignTo | translateObj }}
+
+                <p-tag styleClass="m-1 bg-{{ assigneeMap[item.assignTo?.type]?.bg }}">
+                  {{ "SHARED." + assigneeMap[item.assignTo?.type]?.text | translate }}
+                </p-tag>
+              </td>
+
+
+              <td *checkPrivileges="'PRIV_UP_TASK'" class="max-w-250px">
+                <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                  class="p-button-rounded p-button-text my-auto p-button-plain" (click)="menu.toggle($event)"></button>
+                <p-menu #menu appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td class="max-w-250px" colspan="100%">
+                <div class="w-100">
+                  <nodata-table></nodata-table>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-template>
+    </ng-container>
+
+    <p-paginator #pg [first]="pageRequest.first" [rows]="pageRequest.rows" [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
+      currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)">
+    </p-paginator>
+  </div>
+</div>

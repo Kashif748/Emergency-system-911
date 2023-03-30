@@ -13,6 +13,7 @@ export interface IncidentStatisticsFilter {
   priority?: number;
   reportingVia?: number;
   responsibleOrg?: number;
+  serial?: number;
   status?: Array<IncidentStatus>;
   subject?: string;
   toDate?: string;

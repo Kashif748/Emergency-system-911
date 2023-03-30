@@ -17,6 +17,7 @@ import { RestApiResponseListTaskType } from '../models/rest-api-response-list-ta
 import { RestApiResponseLong } from '../models/rest-api-response-long';
 import { RestApiResponsePageIncidentTask } from '../models/rest-api-response-page-incident-task';
 import { RestApiResponsePageIncidentTaskProjection } from '../models/rest-api-response-page-incident-task-projection';
+import { RestApiResponseString } from '../models/rest-api-response-string';
 import { RestApiResponseTaskDetails } from '../models/rest-api-response-task-details';
 import { RestApiResponseTaskMetricsDetails } from '../models/rest-api-response-task-metrics-details';
 import { TaskCriteria } from '../models/task-criteria';
@@ -174,6 +175,55 @@ export class TaskControllerService extends BaseService {
 
     return this.updateTask$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseTaskDetails>) => r.body as RestApiResponseTaskDetails)
+    );
+  }
+
+  /**
+   * Path part for operation changeIncident
+   */
+  static readonly ChangeIncidentPath = '/v1/tasks/changeTaskStatus/{taskId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeIncident()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeIncident$Response(params: {
+    taskId: number;
+    language: boolean;
+  }): Observable<StrictHttpResponse<RestApiResponseString>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskControllerService.ChangeIncidentPath, 'put');
+    if (params) {
+      rb.path('taskId', params.taskId, {});
+      rb.query('language', params.language, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseString>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `changeIncident$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeIncident(params: {
+    taskId: number;
+    language: boolean;
+  }): Observable<RestApiResponseString> {
+
+    return this.changeIncident$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseString>) => r.body as RestApiResponseString)
     );
   }
 
@@ -658,6 +708,52 @@ export class TaskControllerService extends BaseService {
 
     return this.getTaskByOrgStructureAndDueDateAndIncidentId$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListIncidentTask>) => r.body as RestApiResponseListIncidentTask)
+    );
+  }
+
+  /**
+   * Path part for operation getCreatedByOrgTasks
+   */
+  static readonly GetCreatedByOrgTasksPath = '/v1/tasks/by-my-org/list-ids';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCreatedByOrgTasks()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCreatedByOrgTasks$Response(params: {
+    filter: TaskCriteria;
+  }): Observable<StrictHttpResponse<RestApiResponseListLong>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskControllerService.GetCreatedByOrgTasksPath, 'get');
+    if (params) {
+      rb.query('filter', params.filter, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListLong>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getCreatedByOrgTasks$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCreatedByOrgTasks(params: {
+    filter: TaskCriteria;
+  }): Observable<RestApiResponseListLong> {
+
+    return this.getCreatedByOrgTasks$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListLong>) => r.body as RestApiResponseListLong)
     );
   }
 

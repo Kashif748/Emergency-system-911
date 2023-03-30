@@ -22,7 +22,7 @@
       "dateBefore": "التأريخ قبل",
       "dateAfter": "التأريخ بعد",
       "custom": "تخصيص",
-      "clear": "واضح",
+      "clear": "مسح",
       "apply": "أضافة",
       "matchAll": "يطابق الكل",
       "matchAny": "لا يطافق احد",
@@ -311,7 +311,7 @@
     },
     "MAP": {
       "TOP_BAR": {
-        "ADDRESS_SEARCH": "اسم القطاع و عنوان القسيمة في بلدية مدينة العين [DID-CID-RID-PID]"
+        "ADDRESS_SEARCH": "اسم القطاع ، القسيمة ، الشارع "
       }
     },
     "DASHBOARD": {
@@ -324,7 +324,7 @@
       "REJECTED_INCIDENTS": "بلاغات  مرفوضة",
       "INCOMING_TSKS": "المهام  الواردة",
       "OUTCOMING_TASKS": "المهام  الموجهة",
-      "OUTDATE_TASKS": "المهام المتأخرة",
+      "OUTDATE_TASKS": "المهام الواردة / المتأخرة",
       "INCOMING_CORRERSPONDENCE": "المراسلات  المستقبلة",
       "OUTCOMING_CORRERSPONDENCE": "المراسلات  الصادرة",
       "CORRERSPONDENCE": "المراسلات",
@@ -528,6 +528,7 @@
       "LATE": "متأخر",
       "INCIDENTS": "البلاغات",
       "REPORTER": "الموقع المرسل من قبل المبلغ",
+      "TEAM_LOCATION":"موقع الفريق",
       "OPEN_TASKS": "مهام مفتوحة",
       "CLOSED_TASKS": "مهام مغلقة",
       "DELAYED_TASKS": "مهام متأخرة",
@@ -536,6 +537,7 @@
       "REVIEW_REPORT": "تقرير الحادث",
       "NO_CATEGORY_IN_ORG": "",
       "RESPONSIBLE_ORG": "الجهة المسؤولة",
+      "INCIDENT_DATE_TIME": "تاريخ و وقت البلاغ",
       "UPDATE": "تعديل",
       "VIEW_INCIDENT": "إنقر لعرض الحدث",
       "VIEW_INCIDENT_LOC": "إنقر لعرض موقع الحدث",
@@ -592,7 +594,8 @@
       "REPORTINGVIA": "طريقة التبليغ",
       "DATE": "تاريخ ووقت البلاغ",
       "DESCRIPTION": "الوصف",
-      "SR_NO": "الرقم",
+      "SR_NO": "الرمز",
+      "SERIAL": " الرقم التسلسلي",
       "ACTIONS": "الاجراء",
       "SUBMIT": "انشاء",
       "REPORT_INCIDENT": "البلاغات",
@@ -881,6 +884,7 @@
       "UPDATE_STATUS": "تحديث حالة المهمة",
       "TASK_TITLE": "عنوان المهمة",
       "TASK_TYPE": "نوع المهمة",
+      "TASK_ID": "رقم المهمة",
       "ASSIGNED_TO": "توجيه الى",
       "DETAILS": "تفاصيل المهمة",
       "ASSETS": "الموارد",
@@ -1025,7 +1029,7 @@
       "Date": "التاريخ",
       "NUMBER": "الرقم",
       "SUBJECT": "الموضوع",
-      "CC": "نسخة الى CC",
+      "CC": "نسخة الى (CC) المستخدم المرسل اليه",
       "CONFIDENTIALITY": "درجة السرية",
       "PRIORITY": "درجة الاسبقية",
       "ORG": "الجهة المنشأة",
@@ -1035,8 +1039,8 @@
       "POSISSION": "الموقف",
       "COORDINATE": "التنسيق",
       "EMAIL": "البريد الالكتروني",
-      "Phone": "الرقم المتحرك",
-      "MOBILE": "الهاتف",
+      "Phone": "الهاتف",
+      "MOBILE": "الرقم المتحرك",
       "NO_VALUE": "غير محدد",
       "STATUS": "الحالة",
       "RECEIVERS": "المستلمين",
@@ -1049,7 +1053,18 @@
       "UPDATE": "تحديث التعميم",
       "SEND": "إرسال من أجل الإعتماد",
       "MANAGER": "اعتماد من قبل",
-      "PUBLISH": "نشر التعميم"
+      "PUBLISH": "نشر التعميم",
+      "SENT_TO": "ارسال إلى",
+      "TEXT":"نص التعميم",
+      "COORDINATE_DATA": "بيانات التنسيق",
+      "FOR_APPROVAL": "الاعتمادات",
+      "TO_EXTERNAL_ORGANIZATION":"الجهات الخارجية المستقبلة",
+      "TO_INTERNAL_ORGANIZATION":"الجهات الداخلية المستقبلة",
+      "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب",
+      "MIN_LENGTH_FIELD": "اقل حجم للخانة:",
+      "MAX_LENGTH_FIELD": "اكبر حجم للخانة :",
+      "EMAIL_ERR_MSG": "الرجاء إدخال بريد  صالح ",
+      "MOBILE_ERR_MSG": "الرجاء ادخال رقم  صالح الموبايل"
     },
     "DAILY_BREVITY": {
       "HEADER": "الإيجاز اليومي",
@@ -1244,7 +1259,9 @@
       "DATAMESSAGE": "لا يوجد بيانات ",
       "SR_NO": "الرقم",
       "CREATE_ASSET_POINT": "انشاء نقاط المورد",
-      "SAME_LOCATION": "نفس موقع الجهة"
+      "SAME_LOCATION": "نفس موقع الجهة",
+      "MAIN_CATEGORY": "التصنيف الرئيسي",
+      "ORG_SUB_CATEGORY": "التصنيف المؤسسي الفرعي"
     },
     "EVENTSMODULES": {
       "correspondenceStatus": "حالات المراسلات",
@@ -1320,6 +1337,8 @@
       "RANKS": "الرتب",
       "ADD_RANK": "اضافة رتبة",
       "MOBILE_VERSIONS": "نسخة الهاتف",
+      "MODULE_NAME": "اسم الموديول",
+      "NOTIFICATION_MANAGEMENT": "ادارة التنبيهات",
       "ADD_MOBILE_VERSION": "إضافة نسخة",
       "IS_ACTIVE": "مفعل",
       "YES": "نعم",
@@ -1328,7 +1347,23 @@
       "RELEASE_LINK": "رابط الإصدار",
       "RELEASE_NOTE": "معلومات الإصدار",
       "VERSION_NAME": "إسم النسخة",
-      "VERSION_NUMBER": "رقم النسخة"
+      "VERSION_NUMBER": "رقم النسخة",
+      "NOTIFICATIONS": "أحداث التنبيهات ",
+      "EMAIL_NOTI": "إشعارات البريد",
+      "SMS_NOTI": "إشعارات الرسائل القصيرة",
+      "PUSH_NOTI": "إشعارات في الخلفية",
+      "NAME": "الاسم",
+      "LAST_UPDATE_DATE": "اخر تاريخ تحديث",
+      "ID": "الرمز",
+      "TEMPLATE": "نموذج",
+      "TITLE_EN": "العنوان بالانجليزية",
+      "TITLE_AR": "العنوان بالعربي",
+      "BODY_En": "النص بالانجليزية",
+      "BODY_Ar": "النص بالعربية",
+      "COPY_CLIPBOARD": "حفظ",
+      "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
+      "PUSH_NOTIFICATION": "تنبيهات البرنامج",
+      "WORKLOG": "نموذج سجل المهمة/البلاغ"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",
@@ -1426,6 +1461,15 @@
       "NEW_SUGG": "مقترح جديد"
     },
     "SHARED": {
+      "PROVISIONAL_QUANTITY": "الكمية المزودة",
+      "QUANTITY": "الكمية",
+      "ASSETS": "الموارد",
+      "PERSON": "فرد",
+      "PRIORITY": "الاهمية",
+      "DUE_DATE": "تاريخ ووقت الاستحقاق",
+      "ASSIGNEE": "المسند إليه",
+      "INCIDENT_ID": "رقم البلاغ",
+      "INCIDENT": "الحدث/البلاغ",
       "PHOTO_EDITOR": "محرر الصور",
       "PRIVILEGES": "الصلاحيات",
       "NO_IMAGE": "لا يوجد صورة",
@@ -1564,6 +1608,7 @@
     "VALIDATION_MSG": {
       "INVALID_FILE_SIZE": "{0}: حجم الملف غير صالح ،",
       "MAX_UPLOAD_SIZE": "أقصى حجم للتحميل هو {0}.",
+      "MAX_LENGHT": "أقصى عدد محارف مسموح به هو {{max}}.",
       "REQUIRED": "هذا الحقل مطلوب.",
       "EMIRATE_ID": {
         "INVALID": "الهوية الإماراتية يجب ان تكون 15 رقم (0-9)."
@@ -1612,6 +1657,7 @@
       "NAME_AR": "الاسم(عربي)",
       "NAME_EN": "الاسم(انكليزي)",
       "GROUP_NAME": "الاسم",
+      "SHIFT_SCHEDULE": "جدول المناوبة",
       "ORGANIZATION": "الجهة",
       "DESCRIPTION_AR": "الوصف(عربي)",
       "DESCRIPTION_EN": "الوصف (انكليزي)",
@@ -1626,7 +1672,7 @@
       "VIEW": "عرض تفاصيل الفريق",
       "GROUP_INFO": "بيانات الفريق",
       "VIEW_GROUP": "معاينة الفريق",
-      "EDIT_GROUP": "تعديل البيانات",
+      "EDIT_GROUP": "عدل التفاصيل",
       "UPDATE": "حفظ التعديلات",
       "MATCHING_THE_FILTER": "لا توجد بيانات مطابقة",
       "FILTER": "فلتر",
@@ -1653,7 +1699,8 @@
       "WARNING_NOTE": "من فضلك اعلم ان احد الاختيارات سيتم حفظها  طبقا لما  هو نشط عند الحفظ",
       "CATEGORIES_LOCATIONS": "التصنيفات والنطاقات المسندة",
       "INCIDENT_CATEGORIES": "تصنيفات البلاغات المسندة",
-      "INCIDENT_LOCATION": "نطاقات البلاغت المسندة"
+      "INCIDENT_LOCATION": "نطاقات البلاغت المسندة",
+      "GROUP_BREAD": "فرق و مجموعات"
     },
     "Survey": {
       "Satisfaction": "ما  مدى  رضاكم  عن  خدمات  الطوارئ؟",

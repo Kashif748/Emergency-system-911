@@ -5,6 +5,7 @@ import { PrivilegeGuard } from '@shared/guards/privilege.guard';
 import { IncidentsService } from '../_metronic/core/services/incidents.service';
 import { LayoutComponent } from './_layout/layout.component';
 import { DashboardService } from './dashboard/dashboard.service';
+import {GroupsManagementModule} from "../modules/_team-mgmt/team-mgmt.module";
 
 const routes: Routes = [
   {
@@ -132,13 +133,6 @@ const routes: Routes = [
             '../modules/exercises-management/exercises-management.module'
           ).then((m) => m.ExercisesManagementModule),
       },
-      // {
-      //   path: 'user-management',
-      //   loadChildren: () =>
-      //     import('../modules/user-management/user-management.module').then(
-      //       (m) => m.UserManagementModule
-      //     ),
-      // },
       {
         path: 'user-management',
         loadChildren: () =>
@@ -147,10 +141,33 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'task-management',
+        loadChildren: () =>
+          import('../modules/_task-mgmt/task-mgmt.module').then(
+            (m) => m.TaskMgmtModule
+          ),
+      },
+      {
+        path: 'incidents-management',
+        loadChildren: () =>
+          import('../modules/_incidents-mgmt/incidents-mgmt.module').then(
+            (m) => m.IncidentsMgmtModule
+          ),
+      },
+      {
         path: 'company-profile',
         loadChildren: () =>
           import('../modules/trade-license/trade-license.module').then(
             (m) => m.TradeLicenseModule
+          ),
+      },
+      {
+        path: 'teams-management',
+        canLoad: [PrivilegeGuard],
+        data: { permission: ['PRIV_VW_GRP', 'PRIV_VW_MNG_GRP'], type: 'or' },
+        loadChildren: () =>
+          import('../modules/_team-mgmt/team-mgmt.module').then(
+            (m) => m.GroupsManagementModule
           ),
       },
       {
@@ -258,6 +275,15 @@ const routes: Routes = [
         loadChildren: () =>
           import('../modules/agenda-management/agenda-management.module').then(
             (m) => m.AgendaManagementModule
+          ),
+      },
+      {
+        path: 'emergencies-phonebook',
+        canLoad: [PrivilegeGuard],
+        data: { permission: 'PRIV_VW_PHONEBOOK_ENTRY' },
+        loadChildren: () =>
+          import('../modules/emergencies-phonebook/emergencies-phonebook.module').then(
+            (m) => m.EmergenciesPhonebookModule
           ),
       },
       {

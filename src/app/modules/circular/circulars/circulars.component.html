@@ -91,13 +91,13 @@
                 >
                   <span *ngIf="lang == 'en'">
                     {{
-                      getConfidentialty(row["confidentialty"])["nameEn"] ||
+                      getConfidentialty(row["confidentialty"])?.nameEn ||
                         ("CIRCULARS.NO_VALUE" | translate)
                     }}
                   </span>
                   <span *ngIf="lang == 'ar'">
                     {{
-                      getConfidentialty(row["confidentialty"])["nameAr"] ||
+                      getConfidentialty(row["confidentialty"])?.nameAr ||
                         ("CIRCULARS.NO_VALUE" | translate)
                     }}
                   </span>
@@ -112,11 +112,11 @@
                 <span
                   class="{{
                     'label label-lg label-light-' +
-                      priorities[row.priority.id]?.color +
+                      priorities[row.priority?.id]?.color +
                       ' label-inline'
                   }}"
                 >
-                  {{ priorities[row.priority.id] | propTranslator: "name" }}
+                  {{ priorities[row.priority?.id] | propTranslator: "name" }}
                 </span>
               </td>
               <!-- 5 -->

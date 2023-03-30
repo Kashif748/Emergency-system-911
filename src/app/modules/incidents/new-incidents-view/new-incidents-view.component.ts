@@ -93,6 +93,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   advancedSearchFormFields: FormFieldName[] = [
     { formControlName: AdvancedSearchFieldsEnum.SUBJECT },
     { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+    { formControlName: AdvancedSearchFieldsEnum.SERIAL },
     { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
     { formControlName: AdvancedSearchFieldsEnum.END_DATE },
     { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
@@ -326,6 +327,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     this.advancedSearchFormFields = [
       { formControlName: AdvancedSearchFieldsEnum.SUBJECT },
       { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+      { formControlName: AdvancedSearchFieldsEnum.SERIAL },
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
@@ -458,6 +460,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     this.advancedSearchFormFields = [
       { formControlName: AdvancedSearchFieldsEnum.SUBJECT },
       { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+      { formControlName: AdvancedSearchFieldsEnum.SERIAL },
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
@@ -506,6 +509,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     this.advancedSearchFormFields = [
       { formControlName: AdvancedSearchFieldsEnum.SUBJECT },
       { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+      { formControlName: AdvancedSearchFieldsEnum.SERIAL },
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
@@ -566,6 +570,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     this.advancedSearchFormFields = [
       { formControlName: AdvancedSearchFieldsEnum.INQUIRY },
       { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+      { formControlName: AdvancedSearchFieldsEnum.SERIAL },
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
@@ -625,6 +630,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     this.setTableDisplyedColumns(COLUMNS.InterimIncidents);
     this.advancedSearchFormFields = [
       { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+      { formControlName: AdvancedSearchFieldsEnum.SERIAL },
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
@@ -685,6 +691,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     this.advancedSearchFormFields = [
       { formControlName: AdvancedSearchFieldsEnum.SUBJECT },
       { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+      { formControlName: AdvancedSearchFieldsEnum.SERIAL },
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
@@ -965,11 +972,15 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     });
   }
 
-  canUserUpdate(Porg, respID) {
-    if (this.commonData.currentOrgDetails.id == Porg) {
-      return true;
+  canUserUpdate(Porg, respID , incident: any) {
+    if (incident.status.id !== 2 && incident.status.id !== 3) {
+      if (this.commonData.currentOrgDetails.id == Porg) {
+        return true;
+      } else {
+        return this.commonData.currentOrgDetails.id == respID;
+      }
     } else {
-      return this.commonData.currentOrgDetails.id == respID;
+      return false;
     }
   }
 

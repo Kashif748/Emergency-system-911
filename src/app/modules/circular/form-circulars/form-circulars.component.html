@@ -5,13 +5,15 @@
         class="btn btn-icon btn-sm btn-light-primary"
         (click)="backClicked()"
       >
-      <span
-        [inlineSVG]="lang == 'en'
+        <span
+          [inlineSVG]="
+            lang == 'en'
               ? '/assets/media/svg/icons/Navigation/Arrow-left.svg'
-              : '/assets/media/svg/icons/Navigation/Arrow-right.svg'"
-        cacheSVG="true"
-        class="svg-icon svg-icon-md"
-      ></span>
+              : '/assets/media/svg/icons/Navigation/Arrow-right.svg'
+          "
+          cacheSVG="true"
+          class="svg-icon svg-icon-md"
+        ></span>
       </button>
       <app-breadcrumbs></app-breadcrumbs>
       <span
@@ -35,16 +37,16 @@
         <div class="col-md">
           <mat-form-field
             [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
+            appearance="outline"
           >
             <mat-label
-            >{{ "CIRCULARS.NUMBER" | translate }}
+              >{{ "CIRCULARS.NUMBER" | translate }}
               <span class="required-asterisk">*</span>
             </mat-label>
 
-            <input matInput formControlName="number"/>
+            <input matInput formControlName="number" />
             <mat-error *ngIf="handleError('number', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
             <!-- <mat-error *ngIf="handleError('number', 'pattern')">
                            not match
@@ -52,10 +54,26 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "INCIDENTS.SUBJECT" | translate }} </mat-label>
+            <mat-select placeholder="INCIDENTS" formControlName="incidentId">
+              <!-- <mat-option [value]="null">
+                -- {{ "SHARED.NONE" | translate }} --
+              </mat-option> -->
+              <mat-option
+                *ngFor="let type of incidents$ | async"
+                [value]="type?.id"
+              >
+                {{ lang === "en" ? type?.subject : type?.subject }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- <div class="col-md">
           <mat-form-field
             [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
+            appearance="outline"
           >
             <mat-label
             >{{ "CIRCULARS.ORG" | translate }}
@@ -67,17 +85,36 @@
               [value]="storage.nameEn || storage.nameAr"
             />
           </mat-form-field>
-        </div>
+        </div> -->
       </div>
 
       <div class="row">
         <div class="col-md-6">
           <mat-form-field
             [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
+            appearance="outline"
+          >
+            <mat-label>{{ "CIRCULARS.PRIORITY" | translate }} </mat-label>
+
+            <mat-select formControlName="priority">
+              <mat-option *ngFor="let proi of priorities" [value]="proi.id">
+                <span *ngIf="lang == 'en'">
+                  {{ proi.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
+                </span>
+                <span *ngIf="lang == 'ar'">
+                  {{ proi.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
+                </span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            appearance="outline"
           >
             <mat-label
-            >{{ "CIRCULARS.CONFIDENTIALITY" | translate }}
+              >{{ "CIRCULARS.CONFIDENTIALITY" | translate }}
               <span class="required-asterisk">*</span>
             </mat-label>
 
@@ -93,48 +130,99 @@
             </mat-select>
 
             <mat-error *ngIf="handleError('confidentialtyID', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
             </mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-6">
-          <mat-form-field appearance="fill">
-            <mat-label>{{ "INCIDENTS.SUBJECT" | translate }} </mat-label>
-            <mat-select placeholder="INCIDENTS" formControlName="incidentId">
-              <mat-option [value]="null">
-                -- {{ "SHARED.NONE" | translate }} --
-              </mat-option>
-              <mat-option
-                *ngFor="let type of incidents$ | async"
-                [value]="type?.id"
-              >
-                {{ lang === "en" ? type?.subject : type?.subject }}
-              </mat-option>
-            </mat-select>
           </mat-form-field>
         </div>
       </div>
 
       <div class="row">
-        <div class="col-md-6">
-          <app-to-orgs
-            [placeholder]="'CIRCULARS.ORG_TO' | translate"
-            formControlName="orgs"
-            [appearance]="'fill'"
-            [hasCCbutton]="false"
-            [required]="true"
-            [isRequired]="true"
-          ></app-to-orgs>
+        <div class="col-12 mb-4">
+          <h4>{{ "CIRCULARS.SENT_TO" | translate }}</h4>
+        </div>
+        <div class="p-field p-col-6 p-md-6">
+          <span class="p-float-label">
+            <p-treeSelect
+              [options]="externalOrgsTree$ | async"
+              display="chip"
+              [metaKeySelection]="false"
+              [filter]="true"
+              [filterBy]="'data.nameAr,data.nameEn,data.code'"
+              selectionMode="checkbox"
+              formControlName="orgs"
+              [propagateSelectionDown]="false"
+              [propagateSelectionUp]="false"
+            >
+            </p-treeSelect>
+            <label>
+              {{ "CIRCULARS.TO_EXTERNAL_ORGANIZATION" | translate }}
+              <strong *ngIf="isRequiredField('orgs')" class="required-asterisk">
+                *
+              </strong>
+            </label>
+          </span>
+
+          <ng-container
+            *ngIf="
+              form.controls['orgs'].touched &&
+              !form.controls['orgs'].valid &&
+              form.controls['orgs'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['orgs'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
+        </div>
+        <div class="p-field p-col-6 p-md-6">
+          <span class="p-float-label">
+            <p-treeSelect
+              [options]="internalOrgsTree$ | async"
+              display="chip"
+              [metaKeySelection]="false"
+              [filter]="true"
+              [filterBy]="'data.nameAr,data.nameEn,data.code'"
+              selectionMode="checkbox"
+              formControlName="internalOrgs"
+              [propagateSelectionDown]="false"
+              [propagateSelectionUp]="false"
+            >
+            </p-treeSelect>
+            <label>
+              {{ "CIRCULARS.TO_INTERNAL_ORGANIZATION" | translate }}
+              <strong
+                *ngIf="isRequiredField('internalOrgs')"
+                class="required-asterisk"
+              >
+                *
+              </strong>
+            </label>
+          </span>
+
+          <ng-container
+            *ngIf="
+              form.controls['internalOrgs'].touched &&
+              !form.controls['internalOrgs'].valid &&
+              form.controls['internalOrgs'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['internalOrgs'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-12">
           <app-to-users
-            [placeholder]="
-              ('CIRCULARS.CC' | translate) + ('CIRCULARS.USER' | translate)
-            "
+            [placeholder]="'CIRCULARS.CC' | translate"
             formControlName="cc"
-            [appearance]="'fill'"
+            [appearance]="'outline'"
             [hasCCbutton]="false"
           >
           </app-to-users>
@@ -142,10 +230,123 @@
       </div>
 
       <div class="row">
+        <div class="col-12">
+          <h4>{{ "CIRCULARS.TEXT" | translate }}</h4>
+        </div>
+        <div class="col-12">
+          <mat-form-field
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            appearance="outline"
+          >
+            <mat-label
+              >{{ "CIRCULARS.SUBJECT" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+
+            <input matInput formControlName="subject" />
+            <mat-error>
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            appearance="outline"
+          >
+            <mat-label
+              >{{ "CIRCULARS.MEASURES" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+
+            <textarea rows="5" formControlName="procedure" matInput></textarea>
+
+            <mat-error *ngIf="handleError('procedure', 'required')">
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <h4>{{ "CIRCULARS.COORDINATE_DATA" | translate }}</h4>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            appearance="outline"
+          >
+            <mat-label
+              >{{ "CIRCULARS.Phone" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+
+            <input
+              placeholder="02 345 6577"
+              (keypress)="numberOnly($event)"
+              type="text"
+              matInput
+              formControlName="coordinatorPhone"
+            />
+            <mat-error *ngIf="handleError('coordinatorPhone', 'required')">
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            appearance="outline"
+          >
+            <mat-label
+              >{{ "CIRCULARS.MOBILE" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+
+            <input
+              placeholder="056 9999887"
+              (keypress)="numberOnly($event)"
+              type="text"
+              matInput
+              formControlName="coordinatorMobil"
+            />
+            <mat-error *ngIf="handleError('coordinatorMobil', 'required')">
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
+            </mat-error>
+            <mat-error *ngIf="handleError('coordinatorMobil', 'pattern')">
+              {{ "CIRCULARS.MOBILE_ERR_MSG" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
         <div class="col-md-6">
           <mat-form-field
             [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
+            appearance="outline"
+          >
+            <mat-label>
+              {{ "CIRCULARS.EMAIL" | translate }}
+              <span class="required-asterisk">*</span>
+            </mat-label>
+
+            <input type="email" matInput formControlName="coordinatorMail" />
+            <mat-error *ngIf="form.get('coordinatorMail').invalid">
+              {{ "SHARED.EMAIL_ERR_MSG" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <h4>{{ "CIRCULARS.FOR_APPROVAL" | translate }}</h4>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            appearance="outline"
           >
             <mat-label>
               {{ "CIRCULARS.MANAGER" | translate }}
@@ -156,17 +357,16 @@
               [matAutocomplete]="auto"
               formControlName="manager"
             />
+            <mat-error *ngIf="handleError('manager', 'required')">
+              {{ "CIRCULARS.THIS_FIELD_IS_REQUIRED" | translate }}
+            </mat-error>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
               <mat-option
                 *ngFor="let manager of filterManagersList"
                 [value]="manager"
               >
                 <span
-                  class="
-                    symbol symbol-45 symbol-circle
-                    mx-2
-                    symbol-light-primary
-                  "
+                  class="symbol symbol-45 symbol-circle mx-2 symbol-light-primary"
                 >
                   <span class="symbol-label font-size-h5 font-weight-bold">
                     {{ manager.firstNameEn | firstLetter }}
@@ -180,133 +380,13 @@
             </mat-autocomplete>
           </mat-form-field>
         </div>
-        <div class="col-md-6">
-          <mat-form-field
-            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
-          >
-            <mat-label
-            >{{ "CIRCULARS.PRIORITY" | translate }}
-              <span class="required-asterisk">*</span>
-            </mat-label>
-
-            <mat-select formControlName="priority">
-              <mat-option *ngFor="let proi of priorities" [value]="proi.id">
-                <span *ngIf="lang == 'en'">
-                  {{ proi.nameEn || ("CIRCULARS.NO_VALUE" | translate) }}
-                </span>
-                <span *ngIf="lang == 'ar'">
-                  {{ proi.nameAr || ("CIRCULARS.NO_VALUE" | translate) }}
-                </span>
-              </mat-option>
-            </mat-select>
-
-            <mat-error *ngIf="handleError('priority', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-3">
-          <mat-form-field
-            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
-          >
-            <mat-label
-            >{{ "CIRCULARS.Phone" | translate }}
-              <span class="required-asterisk">*</span>
-            </mat-label>
-
-            <input
-              placeholder="02 345 6577"
-              (keypress)="numberOnly($event)"
-              type="text"
-              matInput
-              formControlName="coordinatorPhone"
-            />
-            <mat-error *ngIf="handleError('coordinatorPhone', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
-            </mat-error>
-            <mat-error *ngIf="handleError('coordinatorPhone', 'minlength')">
-              {{ "VALIDATION.MIN_LENGTH_FIELD" | translate }}
-            </mat-error>
-            <mat-error *ngIf="handleError('coordinatorPhone', 'maxlength')">
-              {{ "VALIDATION.MAX_LENGTH_FIELD" | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-3">
-          <mat-form-field
-            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
-          >
-            <mat-label>
-              {{ "CIRCULARS.MOBILE" | translate }}
-              <span class="required-asterisk">*</span>
-            </mat-label>
-
-            <input
-              placeholder="056 9999887"
-              matInput
-              (keypress)="numberOnly($event)"
-              type="text"
-              formControlName="coordinatorMobil"
-            />
-            <mat-error *ngIf="handleError('coordinatorMobil', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
-              <mat-error *ngIf="handleError('coordinatorMobil', 'minlength')">
-                {{ "VALIDATION.MIN_LENGTH_FIELD" | translate }}
-              </mat-error>
-              <mat-error *ngIf="handleError('coordinatorMobil', 'maxlength')">
-                {{ "VALIDATION.MAX_LENGTH_FIELD" | translate }}
-              </mat-error>
-            </mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-6">
-          <mat-form-field
-            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
-          >
-            <mat-label>
-              {{ "CIRCULARS.EMAIL" | translate }}
-              <span class="required-asterisk">*</span>
-            </mat-label>
-
-            <input type="email" matInput formControlName="coordinatorMail"/>
-            <mat-error *ngIf="form.get('coordinatorMail').invalid">
-              {{ "SHARED.EMAIL_ERR_MSG" | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-12">
-          <mat-form-field
-            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
-          >
-            <mat-label
-            >{{ "CIRCULARS.SUBJECT" | translate }}
-              <span class="required-asterisk">*</span>
-            </mat-label>
-
-            <input matInput formControlName="subject"/>
-            <mat-error>
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-md">
           <mat-form-field
             [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
+            appearance="outline"
           >
             <mat-label
             >{{ "CIRCULARS.POSISSION" | translate }}
@@ -320,38 +400,15 @@
             </mat-error>
           </mat-form-field>
         </div>
-      </div>
+      </div> -->
 
-      <div class="row">
-        <div class="col-md">
-          <mat-form-field
-            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-            appearance="fill"
-          >
-            <mat-label
-            >{{ "CIRCULARS.MEASURES" | translate }}
-              <span class="required-asterisk">*</span>
-            </mat-label>
-
-            <textarea rows="5" formControlName="procedure" matInput></textarea>
-
-            <mat-error *ngIf="handleError('procedure', 'required')">
-              {{ "SHARED.REQUIRED_FIELD" | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
+      <div class="row"></div>
 
       <div class="m-auto d-flex">
         <div *ngIf="!id" class="d-flex w-100">
           <button
-            class="
-              btn btn-md btn-primary
-              font-weight-bolder
-              py-2
-              px-5
-              cursor-pointer
-            "
+            class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
+            [disabled]="form.invalid"
             color="primary"
             (click)="onSubmit()"
           >
@@ -369,14 +426,7 @@
           <!--  this  is Send   to  aprroval   action  status  :     -->
           <button
             *ngIf="currentCir?.status.id == 2 || currentCir?.status.id == 1"
-            class="
-              btn btn-md btn-primary
-              font-weight-bolder
-              mx-3
-              py-2
-              px-5
-              cursor-pointer
-            "
+            class="btn btn-md btn-primary font-weight-bolder mx-3 py-2 px-5 cursor-pointer"
             color="primary"
             (click)="sendCircular()"
           >
@@ -395,14 +445,7 @@
             *ngIf="
               currentCir?.manager?.id == user$?.id && currentCir?.status.id == 8
             "
-            class="
-              btn btn-md btn-primary
-              font-weight-bolder
-              mx-3
-              py-2
-              px-5
-              cursor-pointer
-            "
+            class="btn btn-md btn-primary font-weight-bolder mx-3 py-2 px-5 cursor-pointer"
             (click)="approval()"
           >
             {{ "CIRCULARS.APPROVAL" | translate }}
@@ -420,14 +463,9 @@
           <!-- -->
           <button
             *ngIf="[1, 2, 8, 6].includes(currentCir?.status.id)"
-            class="
-              btn btn-md btn-primary
-              font-weight-bolder
-              py-2
-              px-5
-              cursor-pointer
-            "
+            class="btn btn-md btn-primary font-weight-bolder py-2 px-5 cursor-pointer"
             color="primary"
+            [disabled]="form.invalid"
             (click)="onSubmit()"
           >
             {{ "ACTIONS.UPDATE" | translate }}
@@ -446,14 +484,7 @@
             *ngIf="
               currentCir?.manager?.id == user$?.id && currentCir?.status.id == 8
             "
-            class="
-              d-flex
-              btn btn-md btn-light-danger
-              py-2
-              px-2
-              mx-4
-              cursor-pointer
-            "
+            class="d-flex btn btn-md btn-light-danger py-2 px-2 mx-4 cursor-pointer"
             (click)="reject()"
             style="min-width: 125px !important"
           >

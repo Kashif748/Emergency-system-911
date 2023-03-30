@@ -33,6 +33,10 @@ import { KpiPrioritiesModalComponent } from './events-management/kpi-v2/kpi-prio
 import { LocalRisksComponent } from './events-management/local-risks/local-risks.component';
 import { AddEditMobileVersionComponent } from './events-management/mobile-versions/add-edit-mobile-version/add-edit-mobile-version.component';
 import { MobileVersionsComponent } from './events-management/mobile-versions/mobile-versions.component';
+import { NotificationsComponent } from './events-management/notifications/notifications.component';
+import { NotificationsModalComponent } from './events-management/notifications/notifications-modal/notifications-modal.component';
+import { NotificationManagementComponent } from './events-management/notification-management/notification-management.component';
+import { NotificationFormComponent } from './events-management/notification-management/notification-form/notification-form.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +61,10 @@ import { MobileVersionsComponent } from './events-management/mobile-versions/mob
     MobileVersionsComponent,
     AddEditMobileVersionComponent,
     LocalRisksComponent,
-  ],
+	NotificationManagementComponent,
+    NotificationFormComponent,
+	NotificationsComponent,
+    NotificationsModalComponent  ],
   imports: [
     EventsManagementRoutingModule,
     ConfirmDialogModule,

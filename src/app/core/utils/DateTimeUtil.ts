@@ -2,6 +2,8 @@ import * as moment from 'moment';
 import Diff = moment.unitOfTime.Diff;
 
 export class DateTimeUtil {
+  static readonly DATE_FORMAT = 'YYYY-MM-DD';
+  static readonly DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm a';
   static isDateElapsed(date: any, dateToCompareWith: any = null) {
     if (dateToCompareWith) {
       return moment(dateToCompareWith).isBefore(date);
@@ -42,7 +44,10 @@ export class DateTimeUtil {
 
   // +400 means emirates diff time from utc.
   static getDateInGMTFormat(date: any, gmtDiffFromUTC = '+0400') {
-    return new Date(`${date} GMT${gmtDiffFromUTC}`);
+    if (date) {
+      return new Date(`${date} GMT${gmtDiffFromUTC}`);
+    }
+    return date;
   }
 
   static getTodayDateFormatted(format = 'YYYY-MM-DD') {
@@ -61,7 +66,6 @@ export class DateTimeUtil {
     return moment().startOf('month').toDate();
   }
 
-
   static isFirstDateBeforeSecond(firstDate: any, secondDate: any) {
     const momentFirstDate = moment(firstDate);
     const momentSecondDate = moment(secondDate);
@@ -73,5 +77,4 @@ export class DateTimeUtil {
     const momentSecondDate = moment(secondDate);
     return momentFirstDate.isAfter(momentSecondDate);
   }
-
 }

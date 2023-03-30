@@ -13,6 +13,7 @@ import { ReceiversListComponent } from "./circulars/receivers-list/receivers-lis
 import { CoreModule } from "src/app/_metronic/core";
 import { SharedModule } from "src/app/shared/shared.module";
 import { NgxPaginationModule } from "ngx-pagination";
+import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { NgxPaginationModule } from "ngx-pagination";
     CoreModule,
     SharedModule,
     NgxPaginationModule,
+    TreeSelectModule
   ],
 })
 export class CircularModule {}

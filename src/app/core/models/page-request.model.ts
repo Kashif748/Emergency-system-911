@@ -1,4 +1,4 @@
-export interface PageRequestModel {
+export interface  PageRequestModel {
   filters?: { [key: string]: any };
   first: number;
   rows: number;
