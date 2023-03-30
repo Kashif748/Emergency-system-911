@@ -1,9 +1,6 @@
-ARG ENV=stg
-ARG VERSION=1.0.0
 # Choose the Image which has Node installed already
 FROM node:12.22.12-alpine as build
-ARG ENV
-ARG VERSION
+ARG BUILD_ARG='-c staging'
 # make the 'app' folder the current working directory
 WORKDIR /app
 
@@ -15,18 +12,15 @@ RUN npm install
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
-# RUN npm install -g @angular/cli@10
+RUN npm install -g @angular/cli@10
 
 # build app for production | staging | develop with minification
-RUN npm run build:${ENV}
+RUN ng build ${BUILD_ARG}
 
 # export build bundles to artifacts
 FROM scratch as artifact
-ARG ENV
-ARG VERSION
-
 WORKDIR /
-COPY --from=build /app/dist /
+COPY --from=build /app/dist .
 
 # use nginx to serve application
 FROM nginx:1.23.1-alpine as final

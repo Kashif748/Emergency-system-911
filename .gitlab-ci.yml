@@ -44,7 +44,7 @@ build-job: # This job runs in the build stage, which runs first.
   tags:
     - autobot
   script:
-    - docker build -t $IMG_NAME:$TAG .
+    - DOCKER_BUILDKIT=1 docker build -t $IMG_NAME:$TAG --progress plain .
     - echo "build docker image completed."
 
 publish-job: # This job runs in the build for tags, which runs first.
@@ -53,7 +53,7 @@ publish-job: # This job runs in the build for tags, which runs first.
   tags:
     - autobot
   script:
-    - DOCKER_BUILDKIT=1 docker build --target=artifact --output type=local,dest=$(pwd)/dist --build-arg ENV=prod --build-arg VERSION=$TAG .
+    - DOCKER_BUILDKIT=1 docker build --target=artifact --output type=local,dest=$(pwd)/dist --build-arg BUILD_ARG='--prod' --progress plain .
     - echo "build project and prepare bundles completed."
   artifacts:
     name: "$TAG"
