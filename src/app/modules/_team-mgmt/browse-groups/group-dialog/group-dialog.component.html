@@ -618,9 +618,9 @@
                     <button *ngIf="location.geometry == null" (click)="openLocationDialoug(i, null)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-map-marker p-mx-2"></i></button>
                     <button *ngIf="location.geometry !== null" (click)="viewLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-eye p-mx-2"></i></button>
                     <button *ngIf="location.isEditing" (click)="save(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-save p-mx-2"></i></button>
-                    <ng-template *checkPrivileges="['PRIV_ED_LOC_INC_GRP']" >
+                    <ng-container *checkPrivileges="['PRIV_ED_LOC_INC_GRP']" >
                       <button *ngIf="location.geometry !== null" (click)="updateLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-warning btn btn-sm" ><i class="pi pi-pencil p-mx-2"></i></button>
-                    </ng-template>
+                    </ng-container>
                     <button [disabled]="namedLocations.length == 1" [ngClass]="{'disabled':namedLocations.length == 1}" (click)="removeLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-danger btn btn-sm" ><i class="pi pi-trash p-mx-2"></i></button>
                   </div>
 
