@@ -1877,10 +1877,10 @@
       "ID": "ID"
     },
     "Survey": {
-      "Satisfaction": "How  satisfied  are you with  our emergency services?  ",
+      "Satisfaction": "What's your level of satisfaction for the Emergency Services?",
       "Reason": "Please  provide us  with  the  reason of  your  evaluation",
-      "otherReason": "Feedback (Thanks/Complaint)",
-      "Submit": "Send",
+      "otherReason": "Notes (Thanks/Complaint)",
+      "Submit": "Submit",
       "PleaseWait": "Please  wait ,processing... ",
       "InvalidUUID": "This  survey  has already been applyed",
       "SuccessMSG": "Your  Survey  has been  saved ....Thank you ",
