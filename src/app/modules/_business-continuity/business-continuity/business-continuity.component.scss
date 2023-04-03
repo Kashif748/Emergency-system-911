@@ -1,5 +1,9 @@
 :host ::ng-deep {
-  .p-panelmenu-icon {
+  :lang(en) > .p-panelmenu-icon {
+    order: 1;
+    margin-left: auto !important;
+  }
+  :lang(ar) > .p-panelmenu-icon {
     order: 1;
     margin-right: auto !important;
     &.pi-chevron-right {
