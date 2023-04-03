@@ -1,0 +1,16 @@
+{
+  "BUSINESS_SETUP": "إعدادات إستمرارية الأعمال",
+  "ACTION": "ACTION",
+  "ADD": "Add",
+  "TABS": {
+    "SYSTEMS":"الأنظمة",
+    "LOCATIONS":"المواقع",
+    "VENDER_PARTNERS":"الموردين / الشركاء"
+  },
+  "SYSTEMS": {
+    "NO": "مقرلا",
+    "DEPARTMENT_NAME": "إسم الإدارة",
+    "SYSTEM_NAME": "إسم النظام",
+    "SYSTEM_RTO": "زمن التعافي الأمثل للنظام"
+  }
+}

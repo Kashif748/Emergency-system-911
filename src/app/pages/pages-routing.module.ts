@@ -4,8 +4,6 @@ import { UnderBuildComponent } from '../under-build/under-build.component';
 import { PrivilegeGuard } from '@shared/guards/privilege.guard';
 import { IncidentsService } from '../_metronic/core/services/incidents.service';
 import { LayoutComponent } from './_layout/layout.component';
-import { DashboardService } from './dashboard/dashboard.service';
-import {GroupsManagementModule} from "../modules/_team-mgmt/team-mgmt.module";
 
 const routes: Routes = [
   {
@@ -93,7 +91,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../modules/survey-management-report/survey-management-report.module'
-          ).then((m) => m.SurveyManagementReportModule),
+            ).then((m) => m.SurveyManagementReportModule),
       },
       {
         path: 'incidents-statistics',
@@ -102,7 +100,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../modules/incidents-statistics/incidents-statistics.module'
-          ).then((m) => m.IncidentsStatisticsModule),
+            ).then((m) => m.IncidentsStatisticsModule),
       },
       {
         path: 'notifications-management',
@@ -131,7 +129,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../modules/exercises-management/exercises-management.module'
-          ).then((m) => m.ExercisesManagementModule),
+            ).then((m) => m.ExercisesManagementModule),
       },
       {
         path: 'user-management',
@@ -228,7 +226,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../modules/ad-ports-dashboard/ad-ports-dashboard.module'
-          ).then((m) => m.AdPortsDashboardModule),
+            ).then((m) => m.AdPortsDashboardModule),
       },
 
       {
@@ -314,7 +312,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../modules/availability-report/availability-report.module'
-          ).then((m) => m.AvailabilityReportModule),
+            ).then((m) => m.AvailabilityReportModule),
       },
       {
         path: 'organizations',
@@ -389,7 +387,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../modules/user-statistics-report/user-statistics-report.module'
-          ).then((m) => m.UserStatisticsReportModule),
+            ).then((m) => m.UserStatisticsReportModule),
         canLoad: [PrivilegeGuard],
       },
       {
@@ -414,6 +412,13 @@ const routes: Routes = [
           import(
             '../modules/login-attempts/login-attempts.module'
             ).then((m) => m.LoginAttemptsModule),
+      },
+      {
+        path: 'business-continuity-setup',
+        loadChildren: () =>
+          import(
+            '../modules/_business-continuity-setup/business-continuity-setup.module'
+            ).then((m) => m.BusinessContinuitySetupModule),
       },
     ],
   },
