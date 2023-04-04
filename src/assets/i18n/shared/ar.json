@@ -279,7 +279,8 @@
       "DECLINE": "رفض",
       "CONFIRM": "تأكيد",
       "STEP_ONE": "الخطوة الأولى",
-      "STEP_TWO": "الخطوة الثانية"
+      "STEP_TWO": "الخطوة الثانية",
+      "BACK": "عودة للخلف"
     },
     "ATTACHMENT_SHADER": {
       "REQUIRED": "مطلوب",
@@ -528,7 +529,7 @@
       "LATE": "متأخر",
       "INCIDENTS": "البلاغات",
       "REPORTER": "الموقع المرسل من قبل المبلغ",
-      "TEAM_LOCATION":"موقع الفريق",
+      "TEAM_LOCATION": "موقع الفريق",
       "OPEN_TASKS": "مهام مفتوحة",
       "CLOSED_TASKS": "مهام مغلقة",
       "DELAYED_TASKS": "مهام متأخرة",
@@ -1055,11 +1056,11 @@
       "MANAGER": "اعتماد من قبل",
       "PUBLISH": "نشر التعميم",
       "SENT_TO": "ارسال إلى",
-      "TEXT":"نص التعميم",
+      "TEXT": "نص التعميم",
       "COORDINATE_DATA": "بيانات التنسيق",
       "FOR_APPROVAL": "الاعتمادات",
-      "TO_EXTERNAL_ORGANIZATION":"الجهات الخارجية المستقبلة",
-      "TO_INTERNAL_ORGANIZATION":"الجهات الداخلية المستقبلة",
+      "TO_EXTERNAL_ORGANIZATION": "الجهات الخارجية المستقبلة",
+      "TO_INTERNAL_ORGANIZATION": "الجهات الداخلية المستقبلة",
       "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب",
       "MIN_LENGTH_FIELD": "اقل حجم للخانة:",
       "MAX_LENGTH_FIELD": "اكبر حجم للخانة :",

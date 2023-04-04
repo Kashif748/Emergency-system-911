@@ -246,7 +246,8 @@
       "DECLINE": "Decline",
       "CONFIRM": "Confirm",
       "STEP_ONE": "Step One",
-      "STEP_TWO": "Step Two"
+      "STEP_TWO": "Step Two",
+      "BACK": "Back"
     },
     "ATTACHMENT_SHADER": {
       "REQUIRED": "Required",
@@ -494,7 +495,7 @@
       },
       "INCIDENTS": "Incidents",
       "REPORTER": "Location Shared By Reporter",
-      "TEAM_LOCATION":"Team Location",
+      "TEAM_LOCATION": "Team Location",
       "OPEN_TASKS": "Open Tasks",
       "CLOSED_TASKS": "Closed Tasks",
       "DELAYED_TASKS": "Delayed Tasks",
@@ -1023,8 +1024,8 @@
       "TEXT": "Circular Text",
       "COORDINATE_DATA": "Coordination Details",
       "FOR_APPROVAL": "Approvals",
-      "TO_EXTERNAL_ORGANIZATION":"To External Organization",
-      "TO_INTERNAL_ORGANIZATION":"To Internal Organization",
+      "TO_EXTERNAL_ORGANIZATION": "To External Organization",
+      "TO_INTERNAL_ORGANIZATION": "To Internal Organization",
       "THIS_FIELD_IS_REQUIRED": "This field is required",
       "MIN_LENGTH_FIELD": "Minimum field length:",
       "MAX_LENGTH_FIELD": "Maximum field length:",

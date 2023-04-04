@@ -1,22 +1,57 @@
-<p-dialog #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
-  [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
-  [resizable]="false">
+<!-- as a dialog -->
+<p-dialog *ngIf="asDialog;else page" #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true"
+  [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
+  [baseZIndex]="10000" [draggable]="true" [resizable]="false">
   <ng-template pTemplate="header">
-    <h3>
-      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'TASK_MANGEMENT.EDIT.TITLE' | translate}}
-      </ng-container>
-      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'TASK_MANGEMENT.CREATE.TITLE' | translate}}
-      </ng-container>
-      <ng-container *ngIf="viewOnly$ | async">
-        {{'TASK_MANGEMENT.VIEW.TITLE' | translate}}
-      </ng-container>
-    </h3>
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
-  <div class="w-100 pt-2" [ngStyle]="{'height': dialog.maximized ? '100%' : '65vh'}">
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
+
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh;">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px">
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- templates -->
+<ng-template #header>
+  <h3>
+    <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+      {{'TASK_MANGEMENT.EDIT.TITLE' | translate}}
+    </ng-container>
+    <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+      {{'TASK_MANGEMENT.CREATE.TITLE' | translate}}
+    </ng-container>
+    <ng-container *ngIf="viewOnly$ | async">
+      {{'TASK_MANGEMENT.VIEW.TITLE' | translate}}
+    </ng-container>
+  </h3>
+  <span class="flex-grow-1"></span>
+  <a *ngIf="asDialog" [routerLink]="['task']" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"></a>
+</ng-template>
+
+<ng-template #content>
+
+  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')     }">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
-      <i class="pi pi-lock" style="font-size: 3rem"></i>
+      <p-progressSpinner ></p-progressSpinner>
     </p-blockUI>
 
     <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)" styleClass="h-100">
@@ -445,20 +480,26 @@
 
   </div>
 
-  <ng-template pTemplate="footer">
-    <div class="p-col p-d-flex">
-      <button pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
-      <div class="ml-dir-auto"></div>
-      <ng-container *ngIf="!(viewOnly$ | async) && ![3,4].includes(tabv.activeIndex)">
-        <div class="mx-1">
-          <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
-            class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
-        </div>
-        <div class="mx-1">
-          <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-            (click)="submit()"></button>
-        </div>
-      </ng-container>
-    </div>
-  </ng-template>
-</p-dialog>
+</ng-template>
+
+
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()"
+      label="{{'ACTIONS.CLOSE' | translate }}"></button>
+
+    <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" [routerLink]="['..']"
+      label="{{'ACTIONS.BACK' | translate }}"></button>
+    <div class="ml-dir-auto"></div>
+    <ng-container *ngIf="!(viewOnly$ | async)">
+      <div class="mx-1">
+        <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
+          class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
+      </div>
+      <div class="mx-1">
+        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+          (click)="submit()"></button>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>

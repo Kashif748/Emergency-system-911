@@ -12,7 +12,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { IAuthService } from '@core/services/auth.service';
 import { PrivilegesService } from '@core/services/privileges.service';
@@ -59,6 +59,7 @@ import {
   TaskType,
 } from 'src/app/api/models';
 import { BrowseTasksAction } from '../../states/browse-tasks.action';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-task-dialog',
@@ -68,6 +69,8 @@ import { BrowseTasksAction } from '../../states/browse-tasks.action';
 export class TaskDialogComponent
   implements OnInit, AfterViewChecked, AfterViewInit
 {
+  @ViewChild(Dialog) dialog: Dialog;
+
   UploadTagIdConst = UploadTagIdConst;
   opened$: Observable<boolean>;
   @Input()
@@ -126,6 +129,10 @@ export class TaskDialogComponent
 
   public get minDate() {
     return new Date();
+  }
+
+  public get asDialog() {
+    return this.route.component !== TaskDialogComponent;
   }
 
   @Input()
@@ -281,7 +288,8 @@ export class TaskDialogComponent
     private injector: Injector,
     private cfr: ComponentFactoryResolver,
     private translateObj: TranslateObjPipe,
-    private privileges: PrivilegesService
+    private privileges: PrivilegesService,
+    private router: Router
   ) {
     this.route.queryParams
       .pipe(
@@ -646,7 +654,7 @@ export class TaskDialogComponent
             await this.attachComponent?.upload(this._taskId, false);
             this.saveMap(task);
             setTimeout(() => {
-              this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+              this.close();
             }, 1200);
           }),
           catchError(() => {
@@ -670,7 +678,7 @@ export class TaskDialogComponent
           task.id = t.id;
           this.saveMap(task);
           setTimeout(() => {
-            this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+            this.close();
           }, 1200);
         });
     }
@@ -708,7 +716,11 @@ export class TaskDialogComponent
   }
 
   close() {
-    this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+    if (this.asDialog) {
+      this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+    } else {
+      this.router.navigate(['..'], { relativeTo: this.route });
+    }
   }
 
   async loadAttachComponent() {
