@@ -7,7 +7,17 @@
 
         <div class="p-field p-col-4 p-md-2">
           <input type="text" pInputText [ngModel]=""
-                 placeholder="{{ 'GROUP.GROUP_NAME' | translate }}"
+                 placeholder="{{ 'SYSTEMS.DEPARTMENT_NAME' | translate }}"
+                 (keyup)="updateFilter({name: $event.target.value}, $event)">
+        </div>
+        <div class="p-field p-col-4 p-md-2">
+          <input type="text" pInputText [ngModel]=""
+                 placeholder="{{ 'SYSTEMS.SYSTEM_NAME' | translate }}"
+                 (keyup)="updateFilter({name: $event.target.value}, $event)">
+        </div>
+        <div class="p-field p-col-4 p-md-2">
+          <input type="text" pInputText [ngModel]=""
+                 placeholder="{{ 'SYSTEMS.SYSTEM_RTO' | translate }}"
                  (keyup)="updateFilter({name: $event.target.value}, $event)">
         </div>
         <div class="p-col p-d-flex">
