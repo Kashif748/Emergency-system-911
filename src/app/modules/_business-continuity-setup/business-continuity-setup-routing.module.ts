@@ -10,6 +10,7 @@ const routes: Routes = [
     path: '',
     component: BusinessContinuitySetupComponent,
     children: [
+      { path: "", redirectTo: "systems" },
       {
         path: 'systems',
         component: SystemsContentComponent,

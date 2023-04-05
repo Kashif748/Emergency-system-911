@@ -27,22 +27,19 @@ import { SystemsContentComponent } from './business-continuity-setup/systems-con
 import { LocationsContentComponent } from './business-continuity-setup/locations-content/locations-content.component';
 import { VendersPartnersContentComponent } from './business-continuity-setup/venders-partners-content/venders-partners-content.component';
 import {BadgeModule} from 'primeng/badge';
-import { NodataTableModule } from '../../shared/components/nodata-table/nodata-table.module';
+import { NodataTableModule } from '@shared/components/nodata-table/nodata-table.module';
 import { AddSystemDialogComponent } from './business-continuity-setup/dialog/add-system-dialog/add-system-dialog.component';
 import { AddLocationDialogComponent } from './business-continuity-setup/dialog/add-location-dialog/add-location-dialog.component';
 import { AddVendersDialogComponent } from './business-continuity-setup/dialog/add-venders-dialog/add-venders-dialog.component';
-import {TranslateObjModule} from "../../shared/sh-pipes/translate-obj.pipe";
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import {MultiSelectModule} from "primeng/multiselect";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import { NgxIntlTelInputModule } from '@shared/sh-components/ngx-intl-tel-input/ngx-intl-tel-input.module';
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(
-    http,
-    'assets/i18n/business-continuity-setup/',
-    '.json'
-  );
+  return new TranslateHttpLoader(http, 'assets/i18n/business-continuity-setup/', '.json');
 }
 
 @NgModule({
@@ -53,15 +50,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   imports: [
     CommonModule,
     BusinessContinuitySetupRoutingModule,
-    TranslateModule.forChild({
-      extend: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: TranslateHttpLoaderFactory,
-        deps: [HttpClient],
-      },
-      isolate: true,
-    }),
     ReactiveFormsModule,
     FormsModule,
     InputTextModule,
@@ -84,7 +72,17 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     MultiSelectModule,
     ToggleButtonModule,
-    NgxIntlTelInputModule
+    NgxIntlTelInputModule,
+    SharedBreadcrumbModule,
+    TranslateModule.forChild({
+      extend: true,
+      loader: {
+        provide: TranslateLoader,
+        useFactory: TranslateHttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      isolate: true,
+    }),
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
