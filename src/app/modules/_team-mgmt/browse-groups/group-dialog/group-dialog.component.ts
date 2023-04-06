@@ -12,17 +12,16 @@ import {
 } from '@angular/core';
 import {TreeNode} from "primeng/api";
 import {DistrictNameProjection, IdNameProjection, OrgStructure, UserAndRoleProjection} from "../../../../api/models";
-import {auditTime, catchError, distinctUntilChanged, filter, finalize, map, pluck, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {GroupAction, OrgAction, OrgState, RoleAction, RoleState, TaskState, UserAction, UserState} from "@core/states";
-import {EMPTY, Observable, Subject} from "rxjs";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {GroupAction, OrgAction, OrgState, TaskState} from "@core/states";
+import {Observable, Subject} from "rxjs";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RegxConst} from "@core/constant/RegxConst";
 import {Select, Store} from "@ngxs/store";
-import {CroppedEvent} from "@shared/sh-components/photo-editor";
 import {GenericValidators} from "@shared/validators/generic-validators";
 import {FormUtils} from "@core/utils/form.utils";
 import {IAuthService} from "@core/services/auth.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BrowseGroupsAction} from "../../states/browse-groups.action";
 import {TranslationService} from "../../../i18n/translation.service";
 import {GroupState} from "@core/states/group/group.state";
@@ -32,20 +31,14 @@ import {CenterState} from "@core/states/service-center-area/centers/center.state
 import {CenterAction} from "@core/states/service-center-area/centers/center.action";
 import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
 import {IncicentLocationInfoAction} from "@core/states/incident-location-info/incidentLocInfo.action";
-import {
-  AreaItem,
-  Center,
-  GeometryType,
-  GroupGeometryLocation,
-  Zone
-} from "../../../groups-management/group-incidents-categroies/center.model";
+import {AreaItem, Center, GeometryType, GroupGeometryLocation} from "../../../groups-management/group-incidents-categroies/center.model";
 import {MapViewType} from "@shared/components/map/utils/MapViewType";
 import {MapConfig, MapService} from "@shared/components/map/services/map.service";
-import {AppCommonData, IncidentCategory2} from "@core/entities/AppCommonData";
+import {AppCommonData} from "@core/entities/AppCommonData";
 import {MapComponent} from "@shared/sh-components/map/map.component";
 import {__await} from "tslib";
-import {TabPanel} from "primeng/tabview";
 import {PrivilegesService} from "@core/services/privileges.service";
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-group-dialog',
@@ -53,6 +46,7 @@ import {PrivilegesService} from "@core/services/privileges.service";
   styleUrls: ['./group-dialog.component.scss']
 })
 export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild(Dialog) dialog: Dialog;
   commonData: AppCommonData;
   RegxConst = RegxConst;
 
@@ -143,6 +137,10 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     isEditing?: boolean;
   }[] = [];
 
+  public get asDialog() {
+    return this.route.component !== GroupDialogComponent;
+  }
+
   @Input()
   set groupId(v: number) {
     this._groupId = v;
@@ -192,7 +190,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     protected mapService: MapService,
     private cfr: ComponentFactoryResolver,
     private injector: Injector,
-    private privilegesService: PrivilegesService
+    private privilegesService: PrivilegesService,
+    private router: Router
   ) {
     this.route.queryParams
       .pipe(
@@ -1009,7 +1008,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   close() {
-    this.store.dispatch(new BrowseGroupsAction.ToggleDialog({}));
+    if (this.asDialog) {
+      this.store.dispatch(new BrowseGroupsAction.ToggleDialog({}));
+    } else {
+      this.router.navigate(['..'], { relativeTo: this.route });
+    }
   }
 
   loadCenterListCall() {

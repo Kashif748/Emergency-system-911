@@ -1,7 +1,37 @@
-<p-dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
+<p-dialog *ngIf="asDialog;else page" #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
           [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
           [resizable]="false">
   <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
+
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh;">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px">
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- templates -->
+  <ng-template #header>
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
         {{'GROUP.EDIT_GROUP' | translate}}
@@ -14,10 +44,15 @@
         {{'USER_MANAGEMENT.USERS.VIEW.TITLE' | translate}}
       </ng-container>
     </h3>
+    <span class="flex-grow-1"></span>
+    <a *ngIf="asDialog" [routerLink]="['teams']" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
+       class="p-button-rounded p-button-text p-button-plain"></a>
   </ng-template>
-  <div class="w-100 pt-2">
+
+<ng-template #content>
+  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')}">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
-      <i class="pi pi-lock" style="font-size: 3rem"></i>
+      <p-progressSpinner ></p-progressSpinner>
     </p-blockUI>
     <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)">
 
@@ -203,7 +238,7 @@
                   formControlName="descEn"
                   rows="5"
                 ></textarea>
-<!--                <input type="text" formControlName="descEn" pInputText>-->
+                <!--                <input type="text" formControlName="descEn" pInputText>-->
                 <label>{{ 'GROUP.DESCRIPTION_EN' | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
@@ -346,21 +381,21 @@
             <div *ngIf="viewOnly$ | async">
               <div class="col-md-12">
                 <h3>{{ "GROUP.MEMBERS" | translate }}</h3>
-                  <div class="row">
-                    <div class="p-md-6 p-sm-6 info-item p-1" *ngFor="let userObj of users">
-                      <!--begin::Item-->
-                      <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
-                        <!--begin::Symbol-->
-                        <div class="symbol symbol-40 mx-5">
+                <div class="row">
+                  <div class="p-md-6 p-sm-6 info-item p-1" *ngFor="let userObj of users">
+                    <!--begin::Item-->
+                    <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                      <!--begin::Symbol-->
+                      <div class="symbol symbol-40 mx-5">
                                   <span class="">
                                     <span
                                       [inlineSVG]="'./assets/media/svg/icons/General/User.svg'"
                                       class="svg-icon svg-icon-lg svg-icon-primary"
                                     ></span>
                                   </span></div>
-                        <!--end::Symbol-->
-                        <!--begin::Text-->
-                        <div class="d-flex flex-column font-weight-bold">
+                      <!--end::Symbol-->
+                      <!--begin::Text-->
+                      <div class="d-flex flex-column font-weight-bold">
                                   <span class="text-muted">
                                     <p
                                       class="text-dark-75 font-weight-bolder mb-1 font-size-lg">
@@ -369,15 +404,15 @@
                                       {{ userObj?.user | translateObj: "lastName" }}
                                     </p>
                                   </span>
-                          <a class="mb-1 user-phone text-size-sm">
-                            {{ userObj?.user?.mobile }}
-                          </a>
-                          <a class="text-dark mb-1 text-size-sm">
-                            {{ userObj?.user?.email }}
-                          </a>
-                          <span
-                            class="text-dark mb-1 text-size-md font-weight-500 label label-rounded label-inline"
-                            [ngClass]="{'label-success': userObj.type == userTypes.MANAGER,
+                        <a class="mb-1 user-phone text-size-sm">
+                          {{ userObj?.user?.mobile }}
+                        </a>
+                        <a class="text-dark mb-1 text-size-sm">
+                          {{ userObj?.user?.email }}
+                        </a>
+                        <span
+                          class="text-dark mb-1 text-size-md font-weight-500 label label-rounded label-inline"
+                          [ngClass]="{'label-success': userObj.type == userTypes.MANAGER,
                                     'label-light-primary': userObj.type.MEMBER}">
                                       {{
                                         userObj.type == userTypes.MANAGER
@@ -385,11 +420,11 @@
                                           : ("SHARED.MEMBER" | translate)
                                       }}
                                   </span>
-                        </div>
-                        <!--end::Text-->
                       </div>
+                      <!--end::Text-->
                     </div>
                   </div>
+                </div>
               </div>
             </div>
           </form>
@@ -443,35 +478,35 @@
               <div class="col-md-12 col-sm-12 info-item p-3">
                 <!--begin::Item-->
                 <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
-                    <!--begin::Symbol-->
-                    <div class="symbol symbol-40 mx-5">
+                  <!--begin::Symbol-->
+                  <div class="symbol symbol-40 mx-5">
                       <span class="">
                         <span [inlineSVG]="'./assets/media/svg/icons/Layout/Layout-grid.svg'"
                               class="svg-icon svg-icon-lg svg-icon-primary">
                         </span>
                       </span>
-                    </div>
-                    <!--end::Symbol-->
+                  </div>
+                  <!--end::Symbol-->
 
-                    <!--begin::Text-->
-                    <div class="d-flex flex-column font-weight-bold">
-                      <a class="text-dark mb-1 text-size-sm">
-                        {{ "GROUP.INCIDENT_CATEGORIES" | translate }}
-                      </a>
-                      <span *ngIf="selectedCat" class="text-muted">
+                  <!--begin::Text-->
+                  <div class="d-flex flex-column font-weight-bold">
+                    <a class="text-dark mb-1 text-size-sm">
+                      {{ "GROUP.INCIDENT_CATEGORIES" | translate }}
+                    </a>
+                    <span *ngIf="selectedCat" class="text-muted">
                         <div class="mr-4 alert alert-danger" style="display: inline-block"
                              *ngFor="let categ of selectedCat">
                           {{ categ | translateObj: "name"}}
                         </div>
                       </span>
-                      <span *ngIf="categories" class="text-muted">
+                    <span *ngIf="categories" class="text-muted">
                         <div class="mr-4 alert alert-danger" style="display: inline-block"
                              *ngFor="let categ of categories">
                           {{ categ | translateObj: "name"}}
                         </div>
                       </span>
-                    </div>
-                    <!--end::Text-->
+                  </div>
+                  <!--end::Text-->
                 </div>
               </div>
             </div>
@@ -532,7 +567,7 @@
               <span class="p-float-label">
                 <p-multiSelect [options]="areaItems" [filter]="true" filterBy="nameEn,nameAr"
                                formControlName="centerList" dataKey="center.id" display="chip" tabindex="0" appendTo="body"
-                                (onChange)="loadDistrictList($event)">
+                               (onChange)="loadDistrictList($event)">
                   <ng-template let-options pTemplate="selectedItems">
                     <ng-container *ngFor="let option of options">
                       <div class="p-multiselect-token">
@@ -628,7 +663,7 @@
               </form>
               <div class="ml-dir-auto d-flex p-md-offset-9 p-md-2">
                 <button *checkPrivileges="['PRIV_ED_LOC_INC_GRP']" pButton type="button" label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus"
-                       [loading]="blocking$ | async" (click)="addNewLocation()"></button>
+                        [loading]="blocking$ | async" (click)="addNewLocation()"></button>
               </div>
             </div>
           </form>
@@ -649,10 +684,13 @@
       </p-tabPanel>
     </p-tabView>
   </div>
+</ng-template>
 
-  <ng-template pTemplate="footer">
+
+  <ng-template #footer>
     <div class="p-col p-d-flex">
-      <button pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
+      <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
+      <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" [routerLink]="['..']" label="{{'ACTIONS.BACK' | translate }}"></button>
       <div class="ml-dir-auto"></div>
       <ng-container *ngIf="!(viewOnly$ | async)">
         <div class="mx-1" *ngIf="loggedinUserId == _groupId">
@@ -677,12 +715,6 @@
                     (click)="submit()"></button>
           </div>
         </div>
-
-        <!--<div class="mx-1" *checkPrivileges="['PRIV_UP_GRP','PRIV_ED_USR_GRP','PRIV_ED_LOC_INC_GRP']">
-          <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-                  (click)="submit()"></button>
-        </div>-->
       </ng-container>
     </div>
   </ng-template>
-</p-dialog>

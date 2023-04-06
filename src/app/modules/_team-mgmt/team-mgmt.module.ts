@@ -1,12 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/user-mgmt/', '.json');
-}
-
-import { TeamMgmtRoutingModule } from './team-mgmt-routing.module';
-import { TeamMgmtComponent } from './team-mgmt.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TeamMgmtRoutingModule} from './team-mgmt-routing.module';
+import {TeamMgmtComponent} from './team-mgmt.component';
 import {HttpClient} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {ChipModule} from "primeng/chip";
@@ -15,8 +10,6 @@ import {NodataTableModule} from "../../shared/components/nodata-table/nodata-tab
 import {TagModule} from "primeng/tag";
 import {BlockUIModule} from "primeng/blockui";
 import {ProgressBarModule} from "primeng/progressbar";
-import {BrowseUsersState} from "../_user-mgmt/states/browse-users.state";
-import {BrowseRolesState} from "../_user-mgmt/states/browse-roles.state";
 import {DropdownModule} from "primeng/dropdown";
 import {FieldsetModule} from "primeng/fieldset";
 import {DividerModule} from "primeng/divider";
@@ -51,13 +44,16 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {CalendarModule} from "primeng/calendar";
 import {CheckboxModule} from "primeng/checkbox";
 import {ILangFacade, LangFacade} from "../../core/facades/lang.facade";
-import { BrowseGroupsComponent } from './browse-groups/browse-groups.component';
-import { ContentGroupsComponent } from './browse-groups/content-groups/content-groups.component';
-import {UserManagementModule} from "../_user-mgmt/user-mgmt.module";
+import {BrowseGroupsComponent} from './browse-groups/browse-groups.component';
+import {ContentGroupsComponent} from './browse-groups/content-groups/content-groups.component';
 import {BrowseGroupsState} from "./states/browse-groups.state";
-import {CenterState} from "@core/states/service-center-area/centers/center.state";
-import { GroupDialogComponent } from './browse-groups/group-dialog/group-dialog.component';
+import {GroupDialogComponent} from './browse-groups/group-dialog/group-dialog.component';
 import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcrumb.component";
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
+export function TranslateHttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/user-mgmt/', '.json');
+}
 
 
 @NgModule({
@@ -114,6 +110,7 @@ import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcru
     ProgressBarModule,
     FileUploadModule,
     SharedBreadcrumbModule,
+    ProgressSpinnerModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
