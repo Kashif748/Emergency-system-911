@@ -6,6 +6,7 @@ import { IncidentsService } from '../_metronic/core/services/incidents.service';
 import { LayoutComponent } from './_layout/layout.component';
 import { DashboardService } from './dashboard/dashboard.service';
 import {GroupsManagementModule} from "../modules/_team-mgmt/team-mgmt.module";
+import {BusinessImpactAnalysisModule} from "../modules/_business-impact-analysis/business-impact-analysis.module";
 
 const routes: Routes = [
   {
@@ -414,6 +415,13 @@ const routes: Routes = [
           import(
             '../modules/login-attempts/login-attempts.module'
             ).then((m) => m.LoginAttemptsModule),
+      },
+      {
+        path: 'business-impact-analysis',
+        loadChildren: () =>
+          import(
+            '../modules/_business-impact-analysis/business-impact-analysis.module'
+            ).then((m) => m.BusinessImpactAnalysisModule),
       },
     ],
   },
