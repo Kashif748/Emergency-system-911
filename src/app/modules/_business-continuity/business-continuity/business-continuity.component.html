@@ -1,22 +1,55 @@
-<section class="p-flex-column">
-  <header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
-    <h2 class="p-text-bold">
-      قوائم إستمرارية الأعمال
+<header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
+  <ng-container *ngIf="position$ | async as position">
+    <button
+      *ngIf="smallScreen"
+      pButton
+      type="button"
+      icon="pi pi-bars"
+      class="p-button-outlined"
+      (click)="
+        sidebar = !sidebar;
+        sideBar.transformOptions =
+          position === 'left'
+            ? 'translate3d(-100%, 0px, 0px)'
+            : 'translate3d(100%, 0px, 0px)'
+      "
+    ></button>
+  </ng-container>
+  <div class="d-block d-sm-flex p-ai-center text-center">
+    <h2 class="p-text-bold mb-0 mx-2">قوائم إستمرارية الأعمال</h2>
+    <p-tag value="اصدار 2023/1" severity="info"></p-tag>
+  </div>
 
-      <p-tag value="اصدار 2023/1" severity="info"></p-tag>
-    </h2>
+  <button
+    pButton
+    pRipple
+    type="button"
+    label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
+    icon="pi pi-cog"
+    class="p-button-warning"
+  ></button>
+</header>
 
-    <p-button
-      label="{{ 'VERSIONS_SETTINGS' | translate }}"
-      icon="pi pi-cog"
-      styleClass="p-button-lg p-button-warning"
-    ></p-button>
-  </header>
-  <div class="p-d-flex p-8" style="gap: 20px; min-height: 700px">
-    <div class="p-shadow-6 rounded p-3">
-      <p-panelMenu [model]="items" [style]="{ width: '300px' }"> </p-panelMenu>
-    </div>
-    <div class="p-shadow-6 rounded p-3 px-6 w-100">
+<section [class]="smallScreen ? 'py-6' : 'p-3'">
+  <div
+    #wrapper
+    class="p-d-flex position-relative justify-content-end"
+    style="min-height: 700px"
+  >
+    <p-sidebar
+      #sideBar
+      [(visible)]="sidebar"
+      [modal]="false"
+      [style]="{ width: '350px', position: 'absolute' }"
+      styleClass="rounded p-shadow-6 py-2"
+      [showCloseIcon]="false"
+      [baseZIndex]="-1000"
+      [position]="position$ | async"
+    >
+      <p-panelMenu [model]="items"> </p-panelMenu>
+    </p-sidebar>
+
+    <div class="p-shadow-6 rounded px-6 w-100 col-12 col-md-9">
       <router-outlet></router-outlet>
     </div>
   </div>
@@ -29,7 +62,6 @@
   [breakpoints]="{ '960px': '40vw', '640px': '100vw' }"
   [maximizable]="true"
   [baseZIndex]="10000"
-  [resizable]="false"
 >
   <ng-template pTemplate="header">
     <h3>

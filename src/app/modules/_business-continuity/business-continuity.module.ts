@@ -35,6 +35,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { DialogModule } from 'primeng/dialog';
 import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
 import { ToolbarModule } from 'primeng/toolbar';
+import {SidebarModule} from 'primeng/sidebar';
+
 import { AddRtoDialogComponent } from './dialog/add-rto-dialog/add-rto-dialog.component';
 import { AddImpLevelComponent } from './dialog/add-imp-level/add-imp-level.component';
 import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-seq.component';
@@ -98,6 +100,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ColorPickerModule,
     ToolbarModule,
     DialogModule,
+    SidebarModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

@@ -1,8 +1,11 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from 'primeng/api';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil, tap } from 'rxjs/operators';
 import { TABS } from '../tabs.const';
 
 @Component({
@@ -10,19 +13,44 @@ import { TABS } from '../tabs.const';
   templateUrl: './business-continuity.component.html',
   styleUrls: ['./business-continuity.component.scss'],
 })
-export class BusinessContinuityComponent implements OnInit, AfterViewInit {
+export class BusinessContinuityComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   items: MenuItem[] = [];
   visible = false;
+  sidebar = false;
 
   form: FormGroup;
+  public position$ = this.langFacade.vm$.pipe(
+    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
+  );
+  public smallScreen: boolean;
+  private destroy$ = new Subject();
+
   constructor(
-    private lang: ILangFacade,
+    private langFacade: ILangFacade,
     private translate: TranslateService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   ngOnInit() {
-    this.createForm()
+    this.createForm();
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(
+        takeUntil(this.destroy$),
+        map((c) => c.matches),
+        tap((c) => {
+        this.smallScreen = c;
+          c ? (this.sidebar = false) : (this.sidebar = true);
+        })
+      )
+      .subscribe();
   }
   ngAfterViewInit(): void {
     setTimeout(() => {

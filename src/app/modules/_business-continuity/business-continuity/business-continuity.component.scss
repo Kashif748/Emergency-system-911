@@ -1,4 +1,11 @@
 :host ::ng-deep {
+  .p-sidebar {
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
+    .p-sidebar-header {
+      display: none;
+    }
+  }
   :lang(en) > .p-panelmenu-icon {
     order: 1;
     margin-left: auto !important;
@@ -23,6 +30,7 @@
     }
     .p-panelmenu-header-link {
       border-radius: 10px !important;
+      border-top: 1px solid #dee2e6 !important;
     }
 
     .p-toggleable-content {
