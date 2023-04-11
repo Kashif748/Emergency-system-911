@@ -1416,8 +1416,8 @@
         "END_DATE_SHOULD_AFTER_START": "End date should be after start date",
         "START_DATE_SHOULD_BEFORE_END": "Start date should be before end date"
       },
-      "MUST_BE_IN_ARABIC": "Only Arabic letters",
-      "MUST_BE_IN_ENGLISH": "Only English letters allowed.",
+      "MUST_BE_IN_ARABIC": "Only Arabic letters allowed, and following special characters #$%&()_-/\\[].:;,.",
+      "MUST_BE_IN_ENGLISH": "Only English letters allowed, and following special characters #$%&()_-/\\[].:;,.",
       "NOT_SAME_TYPE": "Cannot assign to different type",
       "INVALID_URL": "Invalid url"
     },
@@ -1469,6 +1469,8 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "REPORTED_BY_INFO": "Reported By Info",
+      "CLOSE_DATE": "Close Date",
       "PROVISIONAL_QUANTITY": "Provisional Qauntity",
       "QUANTITY": "Quantity",
       "ASSETS": "Assests",

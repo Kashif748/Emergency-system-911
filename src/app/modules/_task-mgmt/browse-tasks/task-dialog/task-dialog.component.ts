@@ -60,6 +60,7 @@ import {
 } from 'src/app/api/models';
 import { BrowseTasksAction } from '../../states/browse-tasks.action';
 import { Dialog } from 'primeng/dialog';
+import { TabView } from 'primeng/tabview';
 
 @Component({
   selector: 'app-task-dialog',
@@ -70,6 +71,7 @@ export class TaskDialogComponent
   implements OnInit, AfterViewChecked, AfterViewInit
 {
   @ViewChild(Dialog) dialog: Dialog;
+  @ViewChild(TabView) tabv: TabView;
 
   UploadTagIdConst = UploadTagIdConst;
   opened$: Observable<boolean>;
@@ -87,6 +89,9 @@ export class TaskDialogComponent
 
   @Select(TaskState.blocking)
   blocking$: Observable<boolean>;
+
+  @Select(TaskState.task)
+  task$: Observable<TaskDetails>;
 
   @Select(CommonDataState.priorities)
   public priorities$: Observable<PriorityProjection[]>;
@@ -647,23 +652,29 @@ export class TaskDialogComponent
     }
 
     if (this.editMode) {
-      this.store
-        .dispatch(new BrowseTasksAction.UpdateTask(task))
-        .pipe(
-          tap(async () => {
-            await this.attachComponent?.upload(this._taskId, false);
-            this.saveMap(task);
-            setTimeout(() => {
-              this.close();
-            }, 1200);
-          }),
-          catchError(() => {
-            return EMPTY;
-          }),
-          takeUntil(this.destroy$),
-          take(1)
-        )
-        .subscribe();
+      !this.viewOnly &&
+        this.store
+          .dispatch(new BrowseTasksAction.UpdateTask(task))
+          .pipe(
+            tap(() => {
+              this.saveMap(task);
+              setTimeout(() => {
+                this.close();
+              }, 1200);
+            }),
+            catchError(() => {
+              return EMPTY;
+            }),
+            takeUntil(this.destroy$),
+            take(1)
+          )
+          .subscribe();
+      await this.attachComponent?.upload(this._taskId, false);
+      if (this.viewOnly) {
+        setTimeout(() => {
+          this.close();
+        }, 1200);
+      }
     } else {
       this.store
         .dispatch(new BrowseTasksAction.CreateTask(task))
@@ -715,11 +726,15 @@ export class TaskDialogComponent
     this.taskId = taskId;
   }
 
+  get redirect() {
+    return [this.route.snapshot.queryParams['_redirect'] ?? '..'];
+  }
+
   close() {
     if (this.asDialog) {
       this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
     } else {
-      this.router.navigate(['..'], { relativeTo: this.route });
+      this.router.navigate(this.redirect, { relativeTo: this.route });
     }
   }
 
@@ -738,7 +753,7 @@ export class TaskDialogComponent
 
     instance.recordId = this._taskId;
     instance.tagId = UploadTagIdConst.TASKS;
-    instance.inline = !this.viewOnly;
+    instance.inline = true;
     this.attachComponent = instance;
     cdr.detectChanges();
   }

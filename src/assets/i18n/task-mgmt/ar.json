@@ -22,5 +22,11 @@
   "TASK_LOCATION": "موقع المهمة",
   "TASK_ATTACHMENTS": "مرفقات المهمة",
   "TASK_WORKLOG": "سجل المهمة",
-  "TASK_NOTIFICATIONS": "تنبيهات المهمة"
+  "TASK_NOTIFICATIONS": "تنبيهات المهمة",
+
+  "COMPLETED": "تم الاغلاق في {{day}}",
+  "DELAYED_DELIVER": "مهمة متأخرة عن يوم التسليم  {{day}}",
+  "REMAIN_DELIVER_HOURS": "متبقى {{hours}} ساعات",
+  "REMAIN_DELIVER_MINUTES": "متبقى {{minutes}} دقيقة",
+  "REMAIN_DELIVER_DAYS": "متبقى {{days}} أيام"
 }
