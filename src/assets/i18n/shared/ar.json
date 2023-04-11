@@ -279,7 +279,8 @@
       "DECLINE": "رفض",
       "CONFIRM": "تأكيد",
       "STEP_ONE": "الخطوة الأولى",
-      "STEP_TWO": "الخطوة الثانية"
+      "STEP_TWO": "الخطوة الثانية",
+      "BACK": "عودة للخلف"
     },
     "ATTACHMENT_SHADER": {
       "REQUIRED": "مطلوب",
@@ -528,7 +529,7 @@
       "LATE": "متأخر",
       "INCIDENTS": "البلاغات",
       "REPORTER": "الموقع المرسل من قبل المبلغ",
-      "TEAM_LOCATION":"موقع الفريق",
+      "TEAM_LOCATION": "موقع الفريق",
       "OPEN_TASKS": "مهام مفتوحة",
       "CLOSED_TASKS": "مهام مغلقة",
       "DELAYED_TASKS": "مهام متأخرة",
@@ -1055,11 +1056,11 @@
       "MANAGER": "اعتماد من قبل",
       "PUBLISH": "نشر التعميم",
       "SENT_TO": "ارسال إلى",
-      "TEXT":"نص التعميم",
+      "TEXT": "نص التعميم",
       "COORDINATE_DATA": "بيانات التنسيق",
       "FOR_APPROVAL": "الاعتمادات",
-      "TO_EXTERNAL_ORGANIZATION":"الجهات الخارجية المستقبلة",
-      "TO_INTERNAL_ORGANIZATION":"الجهات الداخلية المستقبلة",
+      "TO_EXTERNAL_ORGANIZATION": "الجهات الخارجية المستقبلة",
+      "TO_INTERNAL_ORGANIZATION": "الجهات الداخلية المستقبلة",
       "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب",
       "MIN_LENGTH_FIELD": "اقل حجم للخانة:",
       "MAX_LENGTH_FIELD": "اكبر حجم للخانة :",
@@ -1461,6 +1462,8 @@
       "NEW_SUGG": "مقترح جديد"
     },
     "SHARED": {
+      "REPORTED_BY_INFO": "بيانات صاحب البلاغ",
+      "CLOSE_DATE": "تاريخ الاغلاق",
       "PROVISIONAL_QUANTITY": "الكمية المزودة",
       "QUANTITY": "الكمية",
       "ASSETS": "الموارد",
@@ -1636,8 +1639,8 @@
         "END_DATE_SHOULD_AFTER_START": "التاريخ إلى يجب ان يكون بعد التاريخ من",
         "START_DATE_SHOULD_BEFORE_END": "التاريخ من يجب ان يكون قبل التاريخ الى"
       },
-      "MUST_BE_IN_ARABIC": "لا يُسمح إلا بالأحرف العربية",
-      "MUST_BE_IN_ENGLISH": "لا يُسمح إلا بالأحرف الأنجليزية.",
+      "MUST_BE_IN_ARABIC": "لا يُسمح إلا بالأحرف العربية، وعلامات الترقيم التالية #$%&()_-/\\[].:;.",
+      "MUST_BE_IN_ENGLISH": "لا يُسمح إلا بالأحرف الإنجليزية، وعلامات الترقيم التالية #$%&()_-/\\[].:;..",
       "NOT_SAME_TYPE": "لا يسمح ان تختار نوع مختلف",
       "INVALID_URL": "رابط غير صحيح"
     },

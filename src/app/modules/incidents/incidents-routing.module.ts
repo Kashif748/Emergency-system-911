@@ -112,7 +112,7 @@ const routes: Routes = [
         canActivate: [PrivilegeGuard, RedirectGuard],
         data: {
           permission: 'PRIV_VW_TASK',
-          redirectTo: '/task-management?_dialog=opened&_id=:id&_mode=viewonly',
+          redirectTo: '/task-management/task?_dialog=opened&_id=:id&_mode=viewonly&_redirect=:_redirect',
         },
       },
       {
@@ -128,7 +128,8 @@ const routes: Routes = [
         data: {
           permission: 'PRIV_CR_TASK',
           redirectTo:
-            '/task-management?_dialog=opened&incidentSubject=:title&incidentId=:id',
+            '/task-management/task?_dialog=opened&incidentSubject=:title&incidentId=:id&_redirect=:_redirect',
+
         },
       },
 
@@ -146,7 +147,7 @@ const routes: Routes = [
         canActivate: [PrivilegeGuard, RedirectGuard],
         data: {
           permission: 'PRIV_UP_TASK',
-          redirectTo: '/task-management?_dialog=opened&_id=:tid',
+          redirectTo: '/task-management/task?_dialog=opened&_id=:tid&_redirect=:_redirect',
         },
       },
       {

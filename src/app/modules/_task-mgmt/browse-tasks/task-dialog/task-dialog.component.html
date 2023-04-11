@@ -1,7 +1,37 @@
-<p-dialog #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
-  [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
-  [resizable]="false">
+<!-- as a dialog -->
+<p-dialog *ngIf="asDialog;else page" #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true"
+  [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
+  [baseZIndex]="10000" [draggable]="true" [resizable]="false">
   <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
+
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh;">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px">
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- templates -->
+<ng-template #header>
+  <div class="d-flex">
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
         {{'TASK_MANGEMENT.EDIT.TITLE' | translate}}
@@ -13,10 +43,28 @@
         {{'TASK_MANGEMENT.VIEW.TITLE' | translate}}
       </ng-container>
     </h3>
-  </ng-template>
-  <div class="w-100 pt-2" [ngStyle]="{'height': dialog.maximized ? '100%' : '65vh'}">
+    <div *ngIf="task$ | async as task" class="mx-2">
+      <p-tag severity="{{task['dueDateStatus']?.color}}">
+        {{ task['dueDateStatus']?.text | translate :
+        { day: task['dueDateStatus']?.param | cdate,
+        hours: task['dueDateStatus']?.param,
+        minutes: task['dueDateStatus']?.param,
+        days: task['dueDateStatus']?.param }
+        }}
+      </p-tag>
+    </div>
+  </div>
+
+  <span class="flex-grow-1"></span>
+  <a *ngIf="asDialog" [routerLink]="['task']" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"></a>
+</ng-template>
+
+<ng-template #content>
+
+  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')     }">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
-      <i class="pi pi-lock" style="font-size: 3rem"></i>
+      <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
 
     <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)" styleClass="h-100">
@@ -24,18 +72,24 @@
 
         <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
           <div class="p-field p-col-12 p-md-4" [ngClass]="{'p-md-6': editMode}">
-            <span class="p-float-label">
-              <p-dropdown #incidentId [options]="incidents$ | async" [autoDisplayFirst]="false"
-                formControlName="incidentId" [filter]="true" (onFilter)="loadIncidents($event?.filter)" dataKey="id"
-                (onShow)="loadIncidents(incidentId.filterValue, true)" [showClear]="true" appendTo="body"
-                optionLabel="subject"
-                [dropdownIcon]="(incidentLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
-              </p-dropdown>
-              <label>
-                {{ 'SHARED.INCIDENT' | translate }}
-                <strong class="required-asterisk"> * </strong>
-              </label>
-            </span>
+            <div class="p-inputgroup">
+
+              <span class="p-float-label">
+                <p-dropdown #incidentId [options]="incidents$ | async" [autoDisplayFirst]="false"
+                  formControlName="incidentId" [filter]="true" (onFilter)="loadIncidents($event?.filter)" dataKey="id"
+                  (onShow)="loadIncidents(incidentId.filterValue, true)" [showClear]="true" appendTo="body"
+                  optionLabel="subject" styleClass="w-100" class="w-100"
+                  [dropdownIcon]="(incidentLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
+                </p-dropdown>
+                <label>
+                  {{ 'SHARED.INCIDENT' | translate }}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+
+              <button *ngIf="viewOnly" type="button" pButton pRipple icon="pi pi-external-link"
+                [routerLink]="['/incidents','view', form.controls['incidentId'].value?.id]"></button>
+            </div>
             <ng-container
               *ngIf="form.controls['incidentId'].touched && !form.controls['incidentId'].valid && form.controls['incidentId'].dirty">
               <p class="p-error mb-0" *ngIf="form.controls['incidentId'].hasError('required')">
@@ -65,7 +119,7 @@
 
 
           <div class="p-field p-col-12 p-md-6" *ngIf="editMode">
-            <span class="p-float-label">
+            <span class="p-float-label" [ngClass]="{'outline-primary rounded-sm': viewOnly}">
               <p-dropdown [options]="statuses$ | async" [autoDisplayFirst]="false" [showClear]="false" dataKey="id"
                 appendTo="body" formControlName="statusId" (onChange)="viewOnly && updateStatus($event.value)">
                 <ng-template let-item pTemplate="selectedItem">
@@ -94,7 +148,7 @@
           <div class="p-field p-col-12 p-md-4" [ngClass]="{'p-md-6': editMode}">
             <span class="p-float-label">
               <p-calendar formControlName="dueDate" [minDate]="minDate" [showIcon]="true" showButtonBar="true"
-                [showTime]="true" appendTo="body"></p-calendar>
+                [showTime]="true" appendTo="body" hourFormat="12"></p-calendar>
               <label>
                 {{ 'SHARED.DUE_DATE' | translate }}
                 <strong class="required-asterisk"> * </strong>
@@ -126,6 +180,40 @@
               </p>
             </ng-container>
           </div>
+
+          <ng-container *ngIf="(viewOnly$ | async) && task$ | async as task">
+
+            <div class="p-field p-col-6">
+              <span class="p-float-label">
+                <input type="text" pInputText value="{{task.createdDate | cdate}}" disabled>
+                <label>
+                  {{ 'SHARED.CREATION_DATE' | translate }}
+                </label>
+              </span>
+            </div>
+
+            <div class="p-field p-col-6">
+              <span class="p-float-label">
+                <input type="text" pInputText value="{{ task.closedDate ? (task.closedDate | cdate) : ' ' }}" disabled>
+                <label>
+                  {{ 'SHARED.CLOSE_DATE' | translate }}
+                </label>
+              </span>
+            </div>
+
+
+            <div class="p-field p-col-12">
+              <span class="p-float-label">
+                <input type="text" pInputText
+                  value="{{ task.reportedByName }} - {{ task.reportedByMobile }} - {{ task.reportedByEmail }}" disabled>
+                <label>
+                  {{ 'SHARED.REPORTED_BY_INFO' | translate }}
+                </label>
+              </span>
+            </div>
+
+          </ng-container>
+
 
           <ng-container *ngIf="![null, undefined].includes(form.get('incidentId').value)">
 
@@ -445,20 +533,27 @@
 
   </div>
 
-  <ng-template pTemplate="footer">
-    <div class="p-col p-d-flex">
-      <button pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
-      <div class="ml-dir-auto"></div>
-      <ng-container *ngIf="!(viewOnly$ | async) && ![3,4].includes(tabv.activeIndex)">
-        <div class="mx-1">
-          <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
-            class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
-        </div>
-        <div class="mx-1">
-          <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-            (click)="submit()"></button>
-        </div>
-      </ng-container>
+</ng-template>
+
+
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()"
+      label="{{'ACTIONS.CLOSE' | translate }}"></button>
+
+    <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" (click)="close()"
+      label="{{'ACTIONS.BACK' | translate }}"></button>
+    <div class="ml-dir-auto"></div>
+    <ng-container *ngIf="!(viewOnly$ | async)">
+      <div class="mx-1">
+        <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
+          class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
+      </div>
+    </ng-container>
+
+    <div class="mx-1" *ngIf="!(viewOnly$ | async) || tabv?.activeIndex === 2">
+      <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+        (click)="submit()"></button>
     </div>
-  </ng-template>
-</p-dialog>
+  </div>
+</ng-template>

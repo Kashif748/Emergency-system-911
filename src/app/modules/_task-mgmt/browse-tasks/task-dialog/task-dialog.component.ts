@@ -12,7 +12,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { IAuthService } from '@core/services/auth.service';
 import { PrivilegesService } from '@core/services/privileges.service';
@@ -59,6 +59,8 @@ import {
   TaskType,
 } from 'src/app/api/models';
 import { BrowseTasksAction } from '../../states/browse-tasks.action';
+import { Dialog } from 'primeng/dialog';
+import { TabView } from 'primeng/tabview';
 
 @Component({
   selector: 'app-task-dialog',
@@ -68,6 +70,9 @@ import { BrowseTasksAction } from '../../states/browse-tasks.action';
 export class TaskDialogComponent
   implements OnInit, AfterViewChecked, AfterViewInit
 {
+  @ViewChild(Dialog) dialog: Dialog;
+  @ViewChild(TabView) tabv: TabView;
+
   UploadTagIdConst = UploadTagIdConst;
   opened$: Observable<boolean>;
   @Input()
@@ -84,6 +89,9 @@ export class TaskDialogComponent
 
   @Select(TaskState.blocking)
   blocking$: Observable<boolean>;
+
+  @Select(TaskState.task)
+  task$: Observable<TaskDetails>;
 
   @Select(CommonDataState.priorities)
   public priorities$: Observable<PriorityProjection[]>;
@@ -126,6 +134,10 @@ export class TaskDialogComponent
 
   public get minDate() {
     return new Date();
+  }
+
+  public get asDialog() {
+    return this.route.component !== TaskDialogComponent;
   }
 
   @Input()
@@ -281,7 +293,8 @@ export class TaskDialogComponent
     private injector: Injector,
     private cfr: ComponentFactoryResolver,
     private translateObj: TranslateObjPipe,
-    private privileges: PrivilegesService
+    private privileges: PrivilegesService,
+    private router: Router
   ) {
     this.route.queryParams
       .pipe(
@@ -639,23 +652,29 @@ export class TaskDialogComponent
     }
 
     if (this.editMode) {
-      this.store
-        .dispatch(new BrowseTasksAction.UpdateTask(task))
-        .pipe(
-          tap(async () => {
-            await this.attachComponent?.upload(this._taskId, false);
-            this.saveMap(task);
-            setTimeout(() => {
-              this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
-            }, 1200);
-          }),
-          catchError(() => {
-            return EMPTY;
-          }),
-          takeUntil(this.destroy$),
-          take(1)
-        )
-        .subscribe();
+      !this.viewOnly &&
+        this.store
+          .dispatch(new BrowseTasksAction.UpdateTask(task))
+          .pipe(
+            tap(() => {
+              this.saveMap(task);
+              setTimeout(() => {
+                this.close();
+              }, 1200);
+            }),
+            catchError(() => {
+              return EMPTY;
+            }),
+            takeUntil(this.destroy$),
+            take(1)
+          )
+          .subscribe();
+      await this.attachComponent?.upload(this._taskId, false);
+      if (this.viewOnly) {
+        setTimeout(() => {
+          this.close();
+        }, 1200);
+      }
     } else {
       this.store
         .dispatch(new BrowseTasksAction.CreateTask(task))
@@ -670,7 +689,7 @@ export class TaskDialogComponent
           task.id = t.id;
           this.saveMap(task);
           setTimeout(() => {
-            this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+            this.close();
           }, 1200);
         });
     }
@@ -707,8 +726,16 @@ export class TaskDialogComponent
     this.taskId = taskId;
   }
 
+  get redirect() {
+    return [this.route.snapshot.queryParams['_redirect'] ?? '..'];
+  }
+
   close() {
-    this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+    if (this.asDialog) {
+      this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+    } else {
+      this.router.navigate(this.redirect, { relativeTo: this.route });
+    }
   }
 
   async loadAttachComponent() {
@@ -726,7 +753,7 @@ export class TaskDialogComponent
 
     instance.recordId = this._taskId;
     instance.tagId = UploadTagIdConst.TASKS;
-    instance.inline = !this.viewOnly;
+    instance.inline = true;
     this.attachComponent = instance;
     cdr.detectChanges();
   }
