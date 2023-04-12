@@ -312,9 +312,9 @@ export class BrowseGroupsState {
         this.messageHelper.error({ error: err });
         return EMPTY;
       }),
-      finalize(() => {
+     /* finalize(() => {
         dispatch(new BrowseGroupsAction.ToggleDialog({}));
-      })
+      })*/
     );
   }
 

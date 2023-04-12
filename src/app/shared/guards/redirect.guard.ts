@@ -21,12 +21,19 @@ export class RedirectGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    let redirectTo = next.data?.redirectTo;
+    let redirectTo = next.data?.redirectTo as string;
     if (!!redirectTo) {
       next.paramMap.keys.forEach((k) => {
         redirectTo = redirectTo.replace(`:${k}`, next.params[k]);
       });
-      return this.router.parseUrl(redirectTo as string);
+      next.queryParamMap.keys.forEach((k) => {
+        redirectTo = redirectTo.replace(`:${k}`, next.queryParams[k]);
+      });
+      const unmatches = redirectTo.split('&').filter((s) => s.includes('=:'));
+      unmatches.forEach((um) => {
+        redirectTo = redirectTo.replace(um, '');
+      });
+      return this.router.parseUrl(redirectTo);
     }
     return true;
   }

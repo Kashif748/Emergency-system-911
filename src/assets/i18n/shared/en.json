@@ -246,7 +246,8 @@
       "DECLINE": "Decline",
       "CONFIRM": "Confirm",
       "STEP_ONE": "Step One",
-      "STEP_TWO": "Step Two"
+      "STEP_TWO": "Step Two",
+      "BACK": "Back"
     },
     "ATTACHMENT_SHADER": {
       "REQUIRED": "Required",
@@ -494,7 +495,7 @@
       },
       "INCIDENTS": "Incidents",
       "REPORTER": "Location Shared By Reporter",
-      "TEAM_LOCATION":"Team Location",
+      "TEAM_LOCATION": "Team Location",
       "OPEN_TASKS": "Open Tasks",
       "CLOSED_TASKS": "Closed Tasks",
       "DELAYED_TASKS": "Delayed Tasks",
@@ -1023,8 +1024,8 @@
       "TEXT": "Circular Text",
       "COORDINATE_DATA": "Coordination Details",
       "FOR_APPROVAL": "Approvals",
-      "TO_EXTERNAL_ORGANIZATION":"To External Organization",
-      "TO_INTERNAL_ORGANIZATION":"To Internal Organization",
+      "TO_EXTERNAL_ORGANIZATION": "To External Organization",
+      "TO_INTERNAL_ORGANIZATION": "To Internal Organization",
       "THIS_FIELD_IS_REQUIRED": "This field is required",
       "MIN_LENGTH_FIELD": "Minimum field length:",
       "MAX_LENGTH_FIELD": "Maximum field length:",
@@ -1415,8 +1416,8 @@
         "END_DATE_SHOULD_AFTER_START": "End date should be after start date",
         "START_DATE_SHOULD_BEFORE_END": "Start date should be before end date"
       },
-      "MUST_BE_IN_ARABIC": "Only Arabic letters",
-      "MUST_BE_IN_ENGLISH": "Only English letters allowed.",
+      "MUST_BE_IN_ARABIC": "Only Arabic letters allowed, and following special characters #$%&()_-/\\[].:;,.",
+      "MUST_BE_IN_ENGLISH": "Only English letters allowed, and following special characters #$%&()_-/\\[].:;,.",
       "NOT_SAME_TYPE": "Cannot assign to different type",
       "INVALID_URL": "Invalid url"
     },
@@ -1468,6 +1469,8 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "REPORTED_BY_INFO": "Reported By Info",
+      "CLOSE_DATE": "Close Date",
       "PROVISIONAL_QUANTITY": "Provisional Qauntity",
       "QUANTITY": "Quantity",
       "ASSETS": "Assests",
@@ -1623,7 +1626,7 @@
       "USERS": "Users"
     },
     "GROUP": {
-      "IncindentsCatTitle": "Group Zones and  Incindents  Categories",
+      "IncindentsCatTitle": "Group Zones and  Incidents  Categories",
       "GROUPS_AND_UNITS": "Team and Units",
       "NAME_AR": "Name(Ar)",
       "NAME_EN": "Name(En)",

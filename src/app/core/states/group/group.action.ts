@@ -149,7 +149,7 @@ export namespace GroupAction {
   }
 
   export class LoadGroupMapUserPage {
-    static readonly type = '[Group] Load Page';
+    static readonly type = '[Group] Load User Page';
     /**
      *
      */

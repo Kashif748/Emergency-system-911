@@ -6,6 +6,6 @@ export class TextUtils {
   };
 
   public static IsEmptyOrWhiteSpaces(str) {
-    return (str?.match(/^\s*$/) || [])?.length > 0;
+    return typeof str === 'string' && (str?.match(/^\s*$/) || [])?.length > 0;
   }
 }
