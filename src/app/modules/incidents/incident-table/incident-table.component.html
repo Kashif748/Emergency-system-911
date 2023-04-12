@@ -200,7 +200,7 @@
     <ng-container *appPrivileges="'PRIV_CR_TASK'">
       <button
         *ngIf="canUserTaskUpdate(element?.responsibleOrg?.id)"
-        (click)="createTask(element.subject, element.id)"
+        (click)="$event.stopPropagation(); createTask(element.subject, element.id)"
         class="btn btn-sm btn-clean btn-icon mr-2"
         data-toggle="tooltip"
         data-theme="dark"
