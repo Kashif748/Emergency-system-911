@@ -327,19 +327,7 @@ export class TaskDialogComponent
       )
     );
     this.viewOnly$ = this.route.queryParams.pipe(
-      map((params) => params['_mode'] === 'viewonly'),
-      tap((v) => {
-        if (this.form) {
-          try {
-            if (v) {
-              this.form.disable();
-              this.form.get('statusId').enable();
-            } else {
-              this.form.enable();
-            }
-          } catch {}
-        }
-      })
+      map((params) => params['_mode'] === 'viewonly')
     );
   }
 
@@ -373,6 +361,17 @@ export class TaskDialogComponent
   }
 
   ngAfterViewChecked(): void {
+    if (this.form) {
+      try {
+        if (this.viewOnly) {
+          this.form.disable();
+          this.form.get('statusId').enable();
+        } else {
+          this.form.enable();
+        }
+      } catch {}
+    }
+
     if (this.editMode) {
       this.form.get('incidentId').disable();
       this.form.get('assigneeType').disable();
