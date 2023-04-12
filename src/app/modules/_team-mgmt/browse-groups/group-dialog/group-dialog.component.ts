@@ -12,13 +12,12 @@ import {
 } from '@angular/core';
 import {TreeNode} from "primeng/api";
 import {DistrictNameProjection, IdNameProjection, OrgStructure, UserAndRoleProjection} from "../../../../api/models";
-import {auditTime, catchError, distinctUntilChanged, filter, finalize, map, pluck, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {GroupAction, OrgAction, OrgState, RoleAction, RoleState, TaskState, UserAction, UserState} from "@core/states";
-import {EMPTY, Observable, Subject} from "rxjs";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {GroupAction, OrgAction, OrgState, TaskState} from "@core/states";
+import {Observable, Subject} from "rxjs";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RegxConst} from "@core/constant/RegxConst";
 import {Select, Store} from "@ngxs/store";
-import {CroppedEvent} from "@shared/sh-components/photo-editor";
 import {GenericValidators} from "@shared/validators/generic-validators";
 import {FormUtils} from "@core/utils/form.utils";
 import {IAuthService} from "@core/services/auth.service";
@@ -32,19 +31,12 @@ import {CenterState} from "@core/states/service-center-area/centers/center.state
 import {CenterAction} from "@core/states/service-center-area/centers/center.action";
 import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
 import {IncicentLocationInfoAction} from "@core/states/incident-location-info/incidentLocInfo.action";
-import {
-  AreaItem,
-  Center,
-  GeometryType,
-  GroupGeometryLocation,
-  Zone
-} from "../../../groups-management/group-incidents-categroies/center.model";
+import {AreaItem, Center, GeometryType, GroupGeometryLocation} from "../../../groups-management/group-incidents-categroies/center.model";
 import {MapViewType} from "@shared/components/map/utils/MapViewType";
 import {MapConfig, MapService} from "@shared/components/map/services/map.service";
-import {AppCommonData, IncidentCategory2} from "@core/entities/AppCommonData";
+import {AppCommonData} from "@core/entities/AppCommonData";
 import {MapComponent} from "@shared/sh-components/map/map.component";
 import {__await} from "tslib";
-import {TabPanel} from "primeng/tabview";
 import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
@@ -152,7 +144,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     if (v === undefined || v === null) {
       return;
     }
-    // this.loadUsers('', true);
+    this.loadUsers('', true);
     this.store
       .dispatch(new GroupAction.GetGroup({id: v}))
       .pipe(
@@ -225,18 +217,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
         }
       })
     );
-
-    /*    this.districtList$.pipe(
-          tap((v) => {
-            console.log(v);
-          })
-        ).subscribe();
-
-        this.centerList$.pipe(
-          tap((v) => {
-            console.log(v);
-          })
-        ).subscribe();*/
   }
 
   ngOnInit(): void {
@@ -541,14 +521,14 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     const zoneControl = this.groupZoneIncidentCategory.get('zoneId');
     if (value) {
       this.checkMap = true;
-      this.groupZoneIncidentCategory.get('centerList').setValue('');
-      this.groupZoneIncidentCategory.get('incidentCategory').setValue('');
-      this.groupZoneIncidentCategory.get('zoneId').setValue('');
+      // this.groupZoneIncidentCategory.get('centerList').setValue('');
+      // this.groupZoneIncidentCategory.get('incidentCategory').setValue('');
+      // this.groupZoneIncidentCategory.get('zoneId').setValue('');
       centerControl.clearValidators();
       zoneControl.clearValidators();
     } else {
       this.checkMap = false;
-      this.namedLocations = [];
+      // this.namedLocations = [];
       centerControl.setValidators(Validators.required);
       zoneControl.setValidators(Validators.required);
     }
@@ -887,17 +867,16 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
         incidentIds.markAsTouched();
         incidentIds.markAsDirty();
         return;
+      } else {
+        const geometryLocation = {
+          ...this.groupZoneIncidentCategory.getRawValue(),
+        };
+
+        if (this.groupGeometry.location) {
+          this.submitGeometryLocations(geometryLocation);
+        }
       }
-
-      const geometryLocation = {
-        ...this.groupZoneIncidentCategory.getRawValue(),
-      };
-
-      if (this.groupGeometry.location) {
-        this.submitGeometryLocations(geometryLocation);
-      }
-
-    } else {
+    } else if (this._groupId) {
       const centerList = this.groupZoneIncidentCategory.get('centerList');
       const zoneId = this.groupZoneIncidentCategory.get('zoneId');
       const incidentIds = this.incidentCategory.get('incidentCategory');

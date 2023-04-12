@@ -11,7 +11,7 @@
         {{'GROUP.ADD' | translate}}
       </ng-container>
       <ng-container *ngIf="viewOnly$ | async">
-        {{'USER_MANAGEMENT.USERS.VIEW.TITLE' | translate}}
+        {{'GROUP.VIEW_GROUP' | translate}}
       </ng-container>
     </h3>
   </ng-template>
@@ -48,14 +48,14 @@
               </ng-container>
             </div>
 
-
             <div class="p-field p-col-12 p-md-6">
 
               <span class="p-float-label">
                 <p-dropdown [options]="users$ | async" [filter]="true" filterBy="nameAr,nameEn" #selectedManager
-                            [disabled]="viewOnly$ | async" (onShow)="loadUsers(selectedManager.filterValue, true)" [virtualScroll]="true"
+                            (onShow)="loadUsers(selectedManager.filterValue, true)" [virtualScroll]="true"
                             formControlName="userStructure" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
-                            display="chip" appendTo="body" (onFilter)="loadUsers($event?.filter)">
+                            display="chip" appendTo="body" (onFilter)="loadUsers($event?.filter)"
+                            optionDisabled="false">
 
                   <ng-template let-option pTemplate="selectedItem">
                       {{ option | translateObj : 'name'  }}
@@ -267,18 +267,19 @@
           <form [formGroup]="userGroupForm" class="p-fluid mt-4" autocomplete="off">
             <div class="p-field p-col-12 p-md-9" *ngIf="!(viewOnly$ | async)">
               <span class="p-float-label">
-                <p-multiSelect [options]="users$ | async" [filter]="true" filterBy="name,roleName"
+                <p-multiSelect [options]="users$ | async" [filter]="true" filterBy="nameEn,nameAr" #users
                                formControlName="usersIds" dataKey="id" display="chip" appendTo="body"
-                               optionDisabled="disabled">
+                               optionDisabled="disabled" (onShow)="loadUsers(users.filterValue, true)"
+                               (onFilter)="loadUsers($event?.filter)">
                   <ng-template let-options pTemplate="selectedItems">
                     <ng-container *ngFor="let option of options">
                       <div class="p-multiselect-token">
                         <span class="p-multiselect-token-label">
-                          {{ option | translateObj : 'firstNameEn' }}
+                          {{ option | translateObj : 'firstName' }} {{ option | translateObj : 'lastName' }}
                         </span>
-                        <span class="p-multiselect-token-label">
+                       <!-- <span class="p-multiselect-token-label">
                           {{ option | translateObj : 'lastNameEn' }}
-                        </span>
+                        </span>-->
                       </div>
                     </ng-container>
                     <ng-container *ngIf="!options || options.length === 0">
