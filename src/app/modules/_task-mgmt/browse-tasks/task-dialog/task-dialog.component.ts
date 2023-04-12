@@ -140,6 +140,13 @@ export class TaskDialogComponent
     return this.route.component !== TaskDialogComponent;
   }
 
+  public get closedStatus() {
+    const task = this.store.selectSnapshot(TaskState.task);
+    return this.store
+      .selectSnapshot(CommonDataState.taskStatuses)
+      .find((s) => s.id === task?.statusId)?.closedStatus;
+  }
+
   @Input()
   orgsTree: TreeNode[];
   viewOnly$: Observable<boolean>;
@@ -370,6 +377,9 @@ export class TaskDialogComponent
       this.form.get('incidentId').disable();
       this.form.get('assigneeType').disable();
       this.form.get('taskType').disable();
+    }
+    if (this.closedStatus && this.viewOnly) {
+      this.form.get('statusId').disable();
     }
   }
 

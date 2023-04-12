@@ -119,7 +119,7 @@
 
 
           <div class="p-field p-col-12 p-md-6" *ngIf="editMode">
-            <span class="p-float-label" [ngClass]="{'outline-primary rounded-sm': viewOnly}">
+            <span class="p-float-label" [ngClass]="{'outline-primary rounded-sm': !closedStatus && viewOnly}">
               <p-dropdown [options]="statuses$ | async" [autoDisplayFirst]="false" [showClear]="false" dataKey="id"
                 appendTo="body" formControlName="statusId" (onChange)="viewOnly && updateStatus($event.value)">
                 <ng-template let-item pTemplate="selectedItem">
@@ -548,6 +548,14 @@
       <div class="mx-1">
         <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
           class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="(viewOnly$ | async) && !closedStatus">
+      <div class="mx-1" *checkPrivileges="'PRIV_UP_TASK'">
+        <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
+          class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
+          queryParamsHandling="merge"></button>
       </div>
     </ng-container>
 
