@@ -511,12 +511,6 @@ export class GroupState {
         }
       });
     }
-    console.log(manager);
-    setState(
-      patch<GroupStateModel>({
-        loading: true,
-      })
-    );
     return this.userService
       .getAllForOrg({
         pageable: {

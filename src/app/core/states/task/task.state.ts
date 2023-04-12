@@ -243,6 +243,7 @@ export class TaskState {
             ...task.assignTo,
             id: task.assignTo?.assigneeId,
           },
+          dueDateStatus: this.dueDateStatus(task),
         };
       }),
       switchMap((task) =>
@@ -281,6 +282,70 @@ export class TaskState {
         );
       })
     );
+  }
+  dueDateStatus(task: TaskDetails): any {
+    let status = {
+      cssClasses: 'text-dark',
+      color: 'secondary',
+    } as {
+      param?: string | number;
+      text?: string;
+      color?: string;
+    };
+
+    const dueDate = DateTimeUtil.getDateInGMTFormat(task.dueDate);
+    const closedDate = DateTimeUtil.getDateInGMTFormat(task.closedDate);
+    const diffDays = DateTimeUtil.getDiffBetweenDates(dueDate);
+
+    const isCompleted = closedDate && closedDate < dueDate;
+    if (isCompleted) {
+      status.param = closedDate;
+      status.text = 'COMPLETED';
+      status.color = 'success';
+      return status;
+    }
+
+    if (diffDays < 0) {
+      // task due date elapsed.
+      status.param = dueDate;
+      status.text = 'DELAYED_DELIVER';
+      status.color = 'danger';
+    } else if (diffDays === 0) {
+      // task delivery day today or remain time is in hours.
+      const diffHours = DateTimeUtil.getDiffBetweenDates(
+        dueDate,
+        null,
+        'hours'
+      );
+
+      if (diffHours > 0) {
+        status.text = 'REMAIN_DELIVER_HOURS';
+        status.param = diffHours;
+        status.color = 'warning';
+      } else {
+        const diffMinutes = DateTimeUtil.getDiffBetweenDates(
+          dueDate,
+          null,
+          'minutes'
+        );
+        if (diffMinutes > 0) {
+          status.text = 'REMAIN_DELIVER_MINUTES';
+          status.param = diffMinutes;
+          status.color = 'warning';
+        } else {
+          status.param = dueDate;
+          status.text = 'DELAYED_DELIVER';
+          status.color = 'danger';
+        }
+      }
+    } else {
+      // task have one day or more to accomplish.
+      status.param = diffDays as any;
+      status.text = 'REMAIN_DELIVER_DAYS';
+      status.color = 'info';
+    }
+
+    return status;
   }
 
   @Action(TaskAction.LoadPriorities)

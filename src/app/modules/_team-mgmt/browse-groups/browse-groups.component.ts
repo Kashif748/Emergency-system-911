@@ -1,14 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {OrgAction, OrgState, UserAction} from "../../../core/states";
+import {OrgAction, OrgState} from "../../../core/states";
 import {Select, Store} from "@ngxs/store";
 import {Observable, Subject} from "rxjs";
-import {OrgStructure, Role, UserAndRoleProjection} from "../../../api/models";
+import {OrgStructure} from "../../../api/models";
 import {LazyLoadEvent, MenuItem, TreeNode} from "primeng/api";
-import {BrowseUsersAction} from "../../_user-mgmt/states/browse-users.action";
 import {BrowseGroupsAction} from "../states/browse-groups.action";
 import {GroupState} from "@core/states/group/group.state";
 import {BrowseGroupsState, BrowseGroupsStateModel} from "../states/browse-groups.state";
-import {filter, map, take, takeUntil} from "rxjs/operators";
+import {filter, map, takeUntil} from "rxjs/operators";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {TranslateService} from "@ngx-translate/core";
 import {GroupUserAndRolesProjection} from "../../../api/models/group-user-and-roles-projection";

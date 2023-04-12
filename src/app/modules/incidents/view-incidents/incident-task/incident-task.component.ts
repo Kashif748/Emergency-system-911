@@ -5,22 +5,22 @@ import {
   NgModule,
   OnInit,
 } from '@angular/core';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {ActivatedRoute, Router} from '@angular/router';
-import {InlineSVGModule} from 'ng-inline-svg';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InlineSVGModule } from 'ng-inline-svg';
 import * as _ from 'lodash';
-import {NgxPaginationModule} from 'ngx-pagination';
-import {map, takeUntil} from 'rxjs/operators';
-import {TranslationModule} from 'src/app/modules/i18n/translation.module';
-import {TranslationService} from 'src/app/modules/i18n/translation.service';
-import {SharedModule} from 'src/app/shared/shared.module';
-import {IncidentsService} from 'src/app/_metronic/core/services/incidents.service';
-import {NgApexchartsModule} from 'ng-apexcharts';
-import {TaskChartsComponent} from './task-charts/task-charts.component';
-import {BaseComponent} from '@shared/components/base.component';
-import {AppCommonData} from "@core/entities/AppCommonData";
-import {AppCommonDataService} from "@core/services/app-common-data.service";
-import {AlertsService} from "../../../../_metronic/core/services/alerts.service";
+import { NgxPaginationModule } from 'ngx-pagination';
+import { map, takeUntil } from 'rxjs/operators';
+import { TranslationModule } from 'src/app/modules/i18n/translation.module';
+import { TranslationService } from 'src/app/modules/i18n/translation.service';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { IncidentsService } from 'src/app/_metronic/core/services/incidents.service';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { TaskChartsComponent } from './task-charts/task-charts.component';
+import { BaseComponent } from '@shared/components/base.component';
+import { AppCommonData } from '@core/entities/AppCommonData';
+import { AppCommonDataService } from '@core/services/app-common-data.service';
+import { AlertsService } from '../../../../_metronic/core/services/alerts.service';
 
 @Component({
   selector: 'app-incident-task',
@@ -50,7 +50,7 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
     private incidentsService: IncidentsService,
     private appCommonService: AppCommonDataService,
     private alertService: AlertsService,
-    public cd: ChangeDetectorRef,
+    public cd: ChangeDetectorRef
   ) {
     super();
   }
@@ -111,16 +111,19 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
             task?.status?.id,
           ]);
           if (!_.isEmpty(status)) {
-            task.status.name = this.lang === 'en' ? status.nameEn : status.nameAr;
+            task.status.name =
+              this.lang === 'en' ? status.nameEn : status.nameAr;
           }
         }
       }
     }
-    return {tasks, totalElements: data?.result?.totalElements};
+    return { tasks, totalElements: data?.result?.totalElements };
   };
 
   viewTask(id) {
-    this.router.navigate(['incidents/viewTask', id]);
+    this.router.navigate(['incidents/viewTask', id], {
+      queryParams: { _redirect: this.router.url },
+    });
   }
 
   pageChangedForMyTasks(event) {
@@ -147,17 +150,22 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
   }
 
   createTasks(id) {
-    this.router.navigate([
-      'incidents/createTask',
-      {
-        title: this.incidentDetails ? this.incidentDetails.subject : 'any',
-        id,
-      },
-    ]);
+    this.router.navigate(
+      [
+        'incidents/createTask',
+        {
+          title: this.incidentDetails ? this.incidentDetails.subject : 'any',
+          id,
+        },
+      ],
+      { queryParams: { _redirect: this.router.url } }
+    );
   }
 
   updateTask(id) {
-    this.router.navigate(['incidents/updateTask', id]);
+    this.router.navigate(['incidents/updateTask', id], {
+      queryParams: { _redirect: this.router.url },
+    });
   }
 }
 
@@ -172,5 +180,4 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
     NgApexchartsModule,
   ],
 })
-export class IncidentTaskModule {
-}
+export class IncidentTaskModule {}
