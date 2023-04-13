@@ -269,21 +269,21 @@
               <span class="p-float-label">
                 <p-multiSelect [options]="users$ | async" [filter]="true" filterBy="nameEn,nameAr" #users
                                formControlName="usersIds" dataKey="id" display="chip" appendTo="body"
-                               optionDisabled="disabled" (onShow)="loadUsers(users.filterValue, true)"
-                               (onFilter)="loadUsers($event?.filter)">
+                               optionDisabled="disabled" inputId="users" displaySelectedLabel = "true"
+                               (onFilter)="loadUsers($event?.filter)" [showToggleAll]="false"
+                                resetFilterOnHide="true" (onPanelHide)="loadUsers(users.filterValue, true)"
+                               (onShow)="loadUsers(users.filterValue, true)">
                   <ng-template let-options pTemplate="selectedItems">
                     <ng-container *ngFor="let option of options">
                       <div class="p-multiselect-token">
                         <span class="p-multiselect-token-label">
                           {{ option | translateObj : 'firstName' }} {{ option | translateObj : 'lastName' }}
                         </span>
-                       <!-- <span class="p-multiselect-token-label">
-                          {{ option | translateObj : 'lastNameEn' }}
-                        </span>-->
+                        <span class="p-multiselect-token-icon pi pi-times-circle" (click)="removeChip(option, $event)"></span>
                       </div>
                     </ng-container>
                     <ng-container *ngIf="!options || options.length === 0">
-                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
+                      {{'GROUP.groupsMembers' | translate}}
                     </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">

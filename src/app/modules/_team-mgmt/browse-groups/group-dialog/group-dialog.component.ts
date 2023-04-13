@@ -233,7 +233,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       new OrgAction.LoadOrgs({orgId: this.auth.getClaim('orgId')}),
     );
     this.LoadUsers$
-      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .pipe(takeUntil(this.destroy$), auditTime(900))
       .subscribe((name) => {
         this.store.dispatch(
           new GroupAction.LoadGroupMapUserPage({
@@ -1156,4 +1156,17 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       this.groupZoneIncidentCategory.disable();
     }
   }
+
+  removeChip(chip: any, event: MouseEvent) {
+    const selectedUser = this.userGroupForm.get('usersIds').value;
+    selectedUser.forEach((element, index) => {
+      if (element.id === chip.id) {
+        selectedUser.splice(index, 1);
+      }
+    });
+    this.userGroupForm.patchValue({
+      usersIds: selectedUser
+    });
+  }
+
 }
