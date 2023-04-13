@@ -364,8 +364,12 @@ export class TaskDialogComponent
     if (this.form) {
       try {
         if (this.viewOnly) {
-          this.form.disable();
-          this.form.get('statusId').enable();
+          const statusControl = this.form.get('statusId');
+          FormUtils.ForEach(this.form, (c) => {
+            if (c !== statusControl) {
+              c.disable();
+            }
+          });
         } else {
           this.form.enable();
         }
