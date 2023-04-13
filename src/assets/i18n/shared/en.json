@@ -1469,6 +1469,7 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "INCIDENT_SERIAL": "Incident Serial",
       "REPORTED_BY_INFO": "Reported By Info",
       "CLOSE_DATE": "Close Date",
       "PROVISIONAL_QUANTITY": "Provisional Qauntity",

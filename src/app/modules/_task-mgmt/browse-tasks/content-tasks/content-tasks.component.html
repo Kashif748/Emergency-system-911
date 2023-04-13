@@ -60,8 +60,8 @@
                         label="{{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} / {{item.createdBy?.orgStructure | translateObj }}"
                         icon="pi pi-user" styleClass="bg-transparent text-muted"></p-chip>
 
-                      <p-chip pTooltip="{{ 'SHARED.INCIDENT_ID' | translate }}" appendTo="body" tooltipPosition="top"
-                        label="{{ item.incident?.id }}" icon="pi pi-info" styleClass="m-1"></p-chip>
+                      <p-chip pTooltip="{{ 'SHARED.INCIDENT_SERIAL' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{ item.incident?.serial }}" icon="pi pi-info" styleClass="m-1"></p-chip>
 
                       <p-chip pTooltip="{{ 'SHARED.PRIORITY' | translate }}" appendTo="body" tooltipPosition="top"
                         label="{{ item.priority | translateObj }}" icon="pi pi-sort-numeric-up-alt"
@@ -124,7 +124,7 @@
 
               <th *ngIf="columns?.includes('incidentId')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.INCIDENT_ID" | translate }}
+                  {{ "SHARED.INCIDENT_SERIAL" | translate }}
                 </div>
               </th>
 
@@ -234,7 +234,7 @@
 
               <th *ngIf="columns?.includes('incidentId')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.INCIDENT_ID" | translate }}
+                  {{ "SHARED.INCIDENT_SERIAL" | translate }}
                 </div>
               </th>
 
@@ -286,7 +286,7 @@
                 {{item.body}}
               </td>
               <td class="max-w-250px" *ngIf="columns?.includes('incidentId')" (click)="openView(item.id)">
-                {{item.incident?.id}}
+                {{item.incident?.serial}}
               </td>
 
               <td class="max-w-250px" *ngIf="columns?.includes('priority')" (click)="openView(item.id)">
