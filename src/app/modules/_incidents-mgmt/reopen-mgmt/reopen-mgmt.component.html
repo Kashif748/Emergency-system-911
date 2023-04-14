@@ -4,11 +4,11 @@
       <app-breadcrumb></app-breadcrumb>
       <div class="col-12">
         <p-tabView>
-          <p-tabPanel header="{{ 'INCIDENTS.INCIDENTS' | translate }}">
+          <p-tabPanel header="{{ 'INCIDENTS.INCIDENTS' | translate }}" *checkPrivileges="'PRIV_VW_CHNG_INC_STATUSES'">
             <ng-template pTemplate="content">
               <app-browse-incidents></app-browse-incidents> </ng-template
           ></p-tabPanel>
-          <p-tabPanel header="{{ 'TASK.TASKS' | translate }}">
+          <p-tabPanel header="{{ 'TASK.TASKS' | translate }}" *checkPrivileges="'PRIV_VW_CHNG_TSK_STATUSES'">
             <ng-template pTemplate="content">
               <app-browse-tasks></app-browse-tasks>
             </ng-template>

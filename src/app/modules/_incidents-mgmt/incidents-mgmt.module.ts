@@ -44,6 +44,7 @@ import { ReopenMgmtComponent } from './reopen-mgmt/reopen-mgmt.component';
 import { BrowseTasksComponent } from './reopen-mgmt/browse-tasks/browse-tasks.component';
 import { ContentTasksComponent } from './reopen-mgmt/browse-tasks/content-tasks/content-tasks.component';
 import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
+import {PrivilegesDirectiveModule} from "@shared/sh-directives/privileges.directive";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/incident-mgmt/', '.json');
@@ -106,7 +107,8 @@ const routes: Routes = [
     InputNumberModule,
     SharedModule,
     ConfirmPopupModule,
-    SharedBreadcrumbModule
+    SharedBreadcrumbModule,
+    PrivilegesDirectiveModule
   ],
   providers: [
     { provide: ILangFacade, useClass: LangFacade },
