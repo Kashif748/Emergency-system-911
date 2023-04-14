@@ -10,7 +10,7 @@ import {SYSTEMS} from "../tempData.conts";
   styleUrls: ['./business-impact-analysis.component.scss']
 })
 export class BusinessImpactAnalysisComponent implements OnInit {
- /* public exportActions = [
+  public exportActions = [
     {
       label: this.translate.instant('ACTIONS.EXPORT_TO_XLSX'),
       icon: 'pi pi-file-excel',
@@ -21,23 +21,23 @@ export class BusinessImpactAnalysisComponent implements OnInit {
       icon: 'pi pi-file-pdf',
       command: () => this.export('PDF'),
     },
-  ] as MenuItem[];*/
+  ] as MenuItem[];
   public sortableColumns = [
-    {
-      name: 'SYSTEMS.DEPARTMENT_NAME',
-      code: 'dept',
-    },
-    {
-      name: 'SYSTEMS.SYSTEM_NAME',
-      code: 'name',
-    },
-    { name: 'SYSTEMS.SYSTEM_RTO', code: 'rto' }
+    { name: 'ACTIVITY_NAME', code: 'name' },
+    { name: 'ACTIVITY_FEQ', code: 'feq'},
+    { name: 'ANALYSIS_CRCLE',  code: 'name'},
+    { name: 'RTO', code: 'rto' },
+    { name: 'PRIORITY_LEVEL', code: 'priority'},
+    { name: 'STATUS', code: 'status'}
   ];
 
   public selectedColumns = [
-    { name: 'SYSTEMS.DEPARTMENT_NAME', code: 'dept', disabled: true },
-    { name: 'SYSTEMS.SYSTEM_NAME', code: 'name'},
-    { name: 'SYSTEMS.SYSTEM_RTO', code: 'rto'}
+    { name: 'ACTIVITY_NAME', code: 'name', disabled: true },
+    { name: 'ACTIVITY_FEQ', code: 'feq'},
+    { name: 'ANALYSIS_CRCLE', code: 'circle'},
+    { name: 'RTO', code: 'rto'},
+    { name: 'PRIORITY_LEVEL', code: 'priority'},
+    { name: 'STATUS', code: 'status'}
   ];
 
   public loading = false;
