@@ -437,7 +437,7 @@ const routes: Routes = [
           import(
             '../modules/_business-impact-analysis/business-impact-analysis.module'
             ).then((m) => m.BusinessImpactAnalysisModule),
-      }
+      },
       {
         path: 'business-continuity',
         loadChildren: () =>
