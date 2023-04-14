@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <app-breadcrumb></app-breadcrumb>
+
+  <!--divider-->
+  <div class="p-col-12">
+    <p-divider>
+    </p-divider>
+  </div>
+
+  <!-- tabs-->
+  <div class="p-col-12">
+    <div class="w-100 d-flex flex-wrap">
+      <div class="my-auto">
+        <div class="tabs">
+          <a class="btn btn-primary btn-lg mx-2 text-center" routerLink="systems">
+            <span class="link-title">{{ 'TABS.SYSTEMS' | translate }}</span>
+            <span class="link-number">241</span>
+          </a>
+          <a class="btn btn-primary btn-lg mx-2 text-center" routerLink="locations">
+            <span class="link-title">{{ 'TABS.LOCATIONS' | translate }}</span>
+            <span class="link-number">141</span>
+          </a>
+          <a class="btn btn-primary btn-lg mx-2 text-center" routerLink="venders">
+            <span class="link-title">{{ 'TABS.VENDER_PARTNERS' | translate }}</span>
+            <span class="link-number">41</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mx-4 my-10">
+    <div class="row" *ngIf="true">
+      <div class="col-12">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>
