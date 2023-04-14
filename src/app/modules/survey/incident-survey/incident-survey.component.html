@@ -1,21 +1,38 @@
-<div class="row survey-container " [dir]="directionality.value">
-    <div *ngIf="orgLogo" class="max-w-150px m-auto">
+<div class="container" style="background-color: white">
+  <ng-container *ngFor="let language of languages; let isLast = last">
+    <div *ngIf="!language.active" class="navi-item">
+      <a
+        href="javascript:;"
+        (click)="setLanguageWithRefresh(language.lang)"
+        class="navi-link px-0 py-2">
+      <span class="symbol symbol-20 mx-2 p-2">
+        <img src="{{ language.flag }}" />
+      </span>
+      </a>
+    </div>
+    <hr class="m-auto" style="width: 90%" />
+
+  </ng-container>
+<div class="row">
+
+<div class="survey-container col-sm-12 col-md-8" [dir]="directionality.value">
+    <div *ngIf="orgLogo" class="max-w-300px m-auto">
     <img class="max-w-150px" src="{{ orgLogo }}" alt="" />
   </div>
     <ng-container *ngIf="!(isPosted$ | async) && processState == 'VALID_UUID'">
-        <div [dir]="directionality.value">
+        <div >
             <h4 class="d-flex mt-3">{{'Survey.Satisfaction' | translate }} <span style="color: red;">*</span></h4>
             <div *ngFor="let config of surveyConfigs$ | async"
-                class="d-flex justify-content-between align-items-center my-2 p-3 ">
-                <h5 class="mx-5 col-4 text-right d-flex flex-column align-items-center">
+                class="d-flex  my-2 p-3 ">
+                <h5 class=" mx-auto text-right d-flex flex-column align-items-center">
                     <mat-icon [color]="'primary'" [svgIcon]="config.icon"></mat-icon>
-                    <span>{{config | propTranslator:'name'}}</span>
+                    <span class="questions">{{config | propTranslator:'name'}}</span>
                 </h5>
                 <span *ngFor="let type of config?.types"
-                    class="d-flex flex-column justify-content-between align-items-center m-1 cursor-pointer"
-                    [ngClass]="{'selected': hasSelected(type, config)}" (click)="chooseType(type, config)">
-                    <angular-emojis [name]="type.icon" [size]="50"></angular-emojis>
-                    <span>{{type | propTranslator:'name'}}</span>
+                      class="d-flex flex-column justify-content-between align-items-center m-3 cursor-pointer"
+                      [ngClass]="{'selected': hasSelected(type, config)}" (click)="chooseType(type, config)">
+                    <angular-emojis [name]="type.icon" [size]="25"></angular-emojis>
+                    <span style="text-align: center">{{type | propTranslator:'name'}}</span>
                 </span>
             </div>
         </div>
@@ -56,4 +73,6 @@
     </div>
 
 
+</div>
+</div>
 </div>
