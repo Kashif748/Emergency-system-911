@@ -25,17 +25,32 @@
 
           <div class="p-field p-col-4 p-md-2">
             <input type="text" pInputText [ngModel]=""
-                   placeholder="{{ 'SYSTEMS.DEPARTMENT_NAME' | translate }}"
+                   placeholder="{{ 'ACTIVITY_NAME' | translate }}"
                    (keyup)="updateFilter({name: $event.target.value}, $event)">
           </div>
           <div class="p-field p-col-4 p-md-2">
             <input type="text" pInputText [ngModel]=""
-                   placeholder="{{ 'SYSTEMS.SYSTEM_NAME' | translate }}"
+                   placeholder="{{ 'ACTIVITY_FEQ' | translate }}"
                    (keyup)="updateFilter({name: $event.target.value}, $event)">
           </div>
           <div class="p-field p-col-4 p-md-2">
             <input type="text" pInputText [ngModel]=""
-                   placeholder="{{ 'SYSTEMS.SYSTEM_RTO' | translate }}"
+                   placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
+                   (keyup)="updateFilter({name: $event.target.value}, $event)">
+          </div>
+          <div class="p-field p-col-4 p-md-2">
+            <input type="text" pInputText [ngModel]=""
+                   placeholder="{{ 'RTO' | translate }}"
+                   (keyup)="updateFilter({name: $event.target.value}, $event)">
+          </div>
+          <div class="p-field p-col-4 p-md-2">
+            <input type="text" pInputText [ngModel]=""
+                   placeholder="{{ 'PRIORITY_LEVEL' | translate }}"
+                   (keyup)="updateFilter({name: $event.target.value}, $event)">
+          </div>
+          <div class="p-field p-col-4 p-md-2">
+            <input type="text" pInputText [ngModel]=""
+                   placeholder="{{ 'STATUS' | translate }}"
                    (keyup)="updateFilter({name: $event.target.value}, $event)">
           </div>
           <div class="p-col p-d-flex">
@@ -98,7 +113,9 @@
           </div>
         </div>
         <div class="p-toolbar-group-right">
-          <p-splitButton label="{{'ACTIONS.EXPORT' | translate}}" icon="pi pi-external-link"></p-splitButton>
+          <p-splitButton label="{{'ACTIONS.EXPORT' | translate}}" icon="pi pi-external-link"
+                         [model]="exportActions" (onClick)="export('EXCEL')">
+          </p-splitButton>
         </div>
       </p-toolbar>
     </div>
