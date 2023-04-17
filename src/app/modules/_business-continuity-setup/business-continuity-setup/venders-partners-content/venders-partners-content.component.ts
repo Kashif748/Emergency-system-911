@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {VENDERS} from "../../tempData.conts";
 import {Store} from "@ngxs/store";
 import {BrowseGroupsAction} from "../../../_team-mgmt/states/browse-groups.action";
+import {MenuItem} from "primeng/api";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-venders-partners-content',
@@ -9,7 +11,18 @@ import {BrowseGroupsAction} from "../../../_team-mgmt/states/browse-groups.actio
   styleUrls: ['./venders-partners-content.component.scss']
 })
 export class VendersPartnersContentComponent implements OnInit {
-
+  public exportActions = [
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_XLSX'),
+      icon: 'pi pi-file-excel',
+      command: () => this.export('EXCEL'),
+    },
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_PDF'),
+      icon: 'pi pi-file-pdf',
+      command: () => this.export('PDF'),
+    },
+  ] as MenuItem[];
   public loading = false;
   public display = false;
   public columns: string[] = [ 'criticality', 'rto' , 'desc' ];
@@ -28,6 +41,7 @@ export class VendersPartnersContentComponent implements OnInit {
   ];
   constructor(
     private store: Store,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {
