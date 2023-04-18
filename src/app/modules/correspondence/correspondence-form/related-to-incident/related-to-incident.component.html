@@ -1,5 +1,5 @@
 <mat-form-field class="w-100" [appearance]="appearance">
-  <mat-label>{{ "CORRERSPONDENCE.INCIDENTS" | translate }}</mat-label>
+  <mat-label>{{ "INCIDENTS.SUBJECT" | translate }}</mat-label>
   <input
     type="text"
     [placeholder]="'CORRERSPONDENCE.PICK_ONE' | translate"
@@ -9,6 +9,12 @@
     [matAutocomplete]="auto"
     (blur)="onChange($event.target.value)"
   />
+  <mat-spinner
+    *ngIf="incidentLoading$ | async"
+    matSuffix
+    [diameter]="18"
+    style="float: right; margin-left: 8px"
+  ></mat-spinner>
 
   <mat-autocomplete
     autoActiveFirstOption
@@ -16,7 +22,7 @@
     (optionSelected)="onChange($event.option.value)"
     [displayWith]="displayWith"
   >
-    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+    <mat-option *ngFor="let option of incidents$ | async" [value]="option">
       {{ option.subject }}
     </mat-option>
   </mat-autocomplete>

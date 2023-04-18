@@ -18,11 +18,18 @@
         ></span>
       </button>
       <h3 class="d-inline-block">
-        {{ getTitle()| translate}}
+        {{ getTitle() | translate }}
       </h3>
       <h6 *ngIf="isAddMode" class="timer d-inline-block mx-4">
         {{ incidentDurationFormatted }} {{ "INCIDENTS.SECONDS" | translate }}
       </h6>
+
+      <span
+        *ngIf="!isAddMode && incidentStatus == 5"
+        class="text-dark-75 font-weight-bolder label label-lg label-light-primary label-inline"
+      >
+        {{ "INCIDENTS.DRAFT" | translate }}
+      </span>
     </div>
   </div>
 
@@ -61,7 +68,7 @@
                   >
                     <mat-label class="asterisk_input">{{
                       "INCIDENTS.STATUS" | translate
-                      }}</mat-label>
+                    }}</mat-label>
                     <mat-select
                       placeholder="{{ 'TASK.STATUS' | translate }}"
                       (selectionChange)="onStatusChange($event)"
@@ -70,7 +77,7 @@
                       [disabled]="checkStatus()"
                     >
                       <mat-option *ngFor="let stat of status" [value]="stat.id">
-                        {{ stat | propTranslator:'name' }}
+                        {{ stat | propTranslator : "name" }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -84,7 +91,7 @@
                   >
                     <mat-label class="asterisk_input">{{
                       "INCIDENTS.COMPLETION_DATE" | translate
-                      }}</mat-label>
+                    }}</mat-label>
                     <input
                       matInput
                       [ngxMatDatetimePicker]="picker"
@@ -129,16 +136,17 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.REPORTINGVIA" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <mat-select
                     placeholder="{{ 'INCIDENTS.REPORTINGVIA' | translate }}"
                     formControlName="reportingVia"
                   >
-                    <mat-option (onSelectionChange)="reportingChanging(report.id)"
+                    <mat-option
+                      (onSelectionChange)="reportingChanging(report.id)"
                       *ngFor="let report of reportingVia"
                       [value]="report.id"
                     >
-                      {{ report | propTranslator:'name' }}
+                      {{ report | propTranslator : "name" }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -151,7 +159,7 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.REPORTEDBYNAME" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <input
                     matInput
                     type="text"
@@ -172,7 +180,7 @@
                         ? 'asterisk_input'
                         : ''
                     "
-                  >{{ "INCIDENTS.REPORTEDBYMOBILE" | translate }}</mat-label
+                    >{{ "INCIDENTS.REPORTEDBYMOBILE" | translate }}</mat-label
                   >
 
                   <ngx-mat-intl-tel-input
@@ -204,7 +212,7 @@
                         ? 'asterisk_input'
                         : ''
                     "
-                  >{{ "INCIDENTS.REPORTEDBYEMAIL" | translate }}</mat-label
+                    >{{ "INCIDENTS.REPORTEDBYEMAIL" | translate }}</mat-label
                   >
                   <input
                     id="reported_by_email"
@@ -231,7 +239,7 @@
                 >
                   <section [dir]="directionality.value" class="example-section">
                     <mat-checkbox formControlName="dontNotifyReporter"
-                    >{{ "INCIDENTS.NOT_NOTIFY_REPORTER" | translate }}
+                      >{{ "INCIDENTS.NOT_NOTIFY_REPORTER" | translate }}
                     </mat-checkbox>
                   </section>
                 </div>
@@ -242,12 +250,15 @@
                   style="display: inline-flex"
                 >
                   <section [dir]="directionality.value" class="example-section">
-                    <mat-checkbox formControlName="getLocationFromReporter"
-                                  [disabled]="formGroup.get('reportingVia')?.value !== 2 &&
-                                              formGroup.get('reportingVia')?.value !== 4 &&
-                                              formGroup.get('reportingVia')?.value !== 7 ||
-                                              formGroup.get('reportedByMobile')?.value.length<8"
-                    >{{ "INCIDENTS.ASK_LOCATION_FROM_REPORTER" | translate }}
+                    <mat-checkbox
+                      formControlName="getLocationFromReporter"
+                      [disabled]="
+                        (formGroup.get('reportingVia')?.value !== 2 &&
+                          formGroup.get('reportingVia')?.value !== 4 &&
+                          formGroup.get('reportingVia')?.value !== 7) ||
+                        formGroup.get('reportedByMobile')?.value.length < 8
+                      "
+                      >{{ "INCIDENTS.ASK_LOCATION_FROM_REPORTER" | translate }}
                     </mat-checkbox>
                   </section>
                 </div>
@@ -267,7 +278,7 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.SUBJECT" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <input
                     matInput
                     placeholder="{{ 'INCIDENTS.SUBJECT' | translate }}"
@@ -282,13 +293,13 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.CITY" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <mat-select
                     placeholder="{{ 'INCIDENTS.CITY' | translate }}"
                     formControlName="city"
                   >
                     <mat-option *ngFor="let city of cities" [value]="city.id">
-                      {{ city | propTranslator:'name' }}
+                      {{ city | propTranslator : "name" }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -300,7 +311,7 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.CATEGORY" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <mat-select
                     placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
                     formControlName="incidentParentCategory"
@@ -310,7 +321,7 @@
                       *ngFor="let category of incidentCategories"
                       [value]="category.id"
                     >
-                      {{ category | propTranslator:'name' }}
+                      {{ category | propTranslator : "name" }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -322,7 +333,7 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.SUB_CATEGORY" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <mat-select
                     placeholder="{{ 'INCIDENTS.SUB_CATEGORY' | translate }}"
                     (selectionChange)="onSubCategoryChange($event)"
@@ -345,7 +356,7 @@
                 >
                   <mat-label>{{
                     "INCIDENTS.ANOTHER_CATEGORY" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <input
                     matInput
                     placeholder="{{ 'INCIDENTS.OTHER' | translate }}"
@@ -360,7 +371,7 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.PRIORITY" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <mat-select
                     placeholder="{{ 'INCIDENTS.PRIORITY' | translate }}"
                     (selectionChange)="getKpis()"
@@ -383,7 +394,7 @@
                 >
                   <mat-label class="asterisk_input">{{
                     "INCIDENTS.DATE" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <input
                     matInput
                     [ngxMatDatetimePicker]="picker2"
@@ -421,7 +432,7 @@
                 >
                   <mat-label>{{
                     "INCIDENTS.DESCRIPTION" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <textarea
                     matInput
                     placeholder="{{ 'INCIDENTS.DESCRIPTION' | translate }}"
@@ -455,7 +466,8 @@
                   formControlName="incidentDistrict"
                   (selectedDist)="onChangeDist($event)"
                   (outLoadedDistricts)="inputLoadedDistricts($event)"
-                  [city]="formGroup.value.city">
+                  [city]="formGroup.value.city"
+                >
                 </app-districts>
               </div>
 
@@ -477,7 +489,7 @@
                 >
                   <mat-label>{{
                     "INCIDENTS.LOCATION_URL" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <input
                     matInput
                     type="url"
@@ -495,7 +507,7 @@
                 >
                   <mat-label>{{
                     "INCIDENTS.LOCATION_IN_DEGREES" | translate
-                    }}</mat-label>
+                  }}</mat-label>
                   <input
                     matInput
                     type="url"
@@ -525,9 +537,9 @@
                       [value]="kpiItem.kpi.id"
                     >
                       {{
-                      this.lang === "en"
-                        ? kpiItem.kpi.nameEn
-                        : kpiItem.kpi.nameAr
+                        this.lang === "en"
+                          ? kpiItem.kpi.nameEn
+                          : kpiItem.kpi.nameAr
                       }}
                     </mat-option>
                   </mat-select>
@@ -545,8 +557,8 @@
                 >
                   <mat-label>{{
                     "INCIDENTS.KPI_PERIOD" | translate
-                    }}</mat-label>
-                  <input matInput readonly formControlName="kpiperiod"/>
+                  }}</mat-label>
+                  <input matInput readonly formControlName="kpiperiod" />
                 </mat-form-field>
               </div>
             </div>
@@ -557,13 +569,13 @@
               </div>
               <div class="col-sm-12 col-md-6">
                 <app-pick-org
-                [multipleSelection]="false"
+                  [multipleSelection]="false"
                   formControlName="primaryOrg"
-                [returnFullObj]="true"
-                [label]="'INCIDENTS.SPECIALIZED_CENTER'"
-                [childrenOfCurrentOrg]="true"
-                [appearance]="'outline'"
-              ></app-pick-org>
+                  [returnFullObj]="true"
+                  [label]="'INCIDENTS.SPECIALIZED_CENTER'"
+                  [childrenOfCurrentOrg]="true"
+                  [appearance]="'outline'"
+                ></app-pick-org>
                 <!--  -->
                 <!-- <app-org-input
                 [placeholder]="'INCIDENTS.SPECIALIZED_CENTER' | translate"
@@ -592,7 +604,7 @@
                       <div class="d-flex align-items-center">
                         <span class="text-size-sm truncate">{{
                           getIncidentGroupName(i)
-                          }}</span>
+                        }}</span>
                         <span class="spacer"></span>
                         <span
                           class="label label-inline label-outline-primary py-0"
@@ -640,22 +652,32 @@
               <mat-spinner class="m-auto" diameter="50"></mat-spinner>
             </div>
 
-            <div class="row section border rounded justify-content-center">
-              <div class="col-sm-4 d-flex justify-content-center py-2">
-                <button
-                  [disabled]="disableSubmitButton()"
-                  mat-raised-button
-                  color="primary"
-                  type="submit"
-                  class="button w-200px"
-                  (click)="onSubmit()"
-                >
-                  {{
-                  (isAddMode ? "INCIDENTS.SUBMIT" : "INCIDENTS.UPDATE")
-                    | translate
-                  }}
-                </button>
-              </div>
+            <div class="row section border rounded justify-content-between p-4">
+              <button
+                [disabled]="disableSubmitButton()"
+                mat-raised-button
+                color="primary"
+                type="submit"
+                class="button w-200px"
+                (click)="onSubmit()"
+              >
+                <span *ngIf="incidentStatus == '5' || isAddMode">
+                  {{ "INCIDENTS.SUBMIT" | translate }}
+                </span>
+                <span *ngIf="incidentStatus != '5' && !isAddMode">
+                  {{ "INCIDENTS.UPDATE" | translate }}
+                </span>
+              </button>
+              <button
+                [disabled]="disableSubmitButton()"
+                mat-raised-button
+                color="accent"
+                type="submit"
+                class="button w-200px"
+                (click)="saveAsDraft()"
+              >
+                {{ "INCIDENTS.saveAsDraft" | translate }}
+              </button>
             </div>
           </div>
         </div>

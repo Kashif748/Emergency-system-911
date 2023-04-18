@@ -66,6 +66,7 @@ import {HtmlBodyComponent} from './correspondences/message/html-body/html-body.c
     NgxPaginationModule,
     MatFormFieldModule,
     MatAutocompleteModule,
+    MatProgressSpinnerModule,
     InlineSVGModule,
     CoreModule,
     AngularSplitModule,

@@ -288,6 +288,7 @@
       "ALL_STATS": "All Stats",
       "STATESTICS": "Statistics",
       "IN_PROGRESS_INCIDENTS": "In Progress Incidents",
+      "DRAFTED_INCIDENTS" : "Drafts",
       "REJECTED_INCIDENTS": "Rejected Incidents",
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
@@ -566,6 +567,7 @@
       "SERIAL": "Sequance Number",
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
+      "saveAsDraft" : "Save as Draft",
       "REPORT_INCIDENT": "Incidents",
       "NEW_INCIDENTS": "Add Incident",
       "NEW_INQUIRY": "Add Inquiry",
@@ -694,6 +696,7 @@
       "SELECT_PRIORITY_ERROR": "Please select Priority",
       "GET_KPI_INFO": "Get Kpi Information",
       "SECONDS": "Seconds",
+      "DRAFT" :  "Draft",
       "IsExpired": "Kpi Expiry ?",
       "EXPIRED": "Expired ",
       "NOT_EXPIRED": "Not Expired",
@@ -736,6 +739,8 @@
       "SHARE_LOCATION_GOOGLE_MAPS": "Share location on google maps",
       "URL": "url",
       "CLOSE_INCIDENT": "Close Incident",
+      "DELETE_DRAFT" : "Delete Draft",
+
       "TO": "TO",
       "HAPPINESS_LEVEL": {
         "SAD": "Sad",
