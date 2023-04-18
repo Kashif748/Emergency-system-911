@@ -103,7 +103,7 @@ export class IncidentState {
     );
     return this.incidentService
       .search4({
-        filter: { subject: payload.subject },
+        filter: { subject: payload.subject  ,id : payload.id},
         pageable: { page: 0, size: 15, sort: ['id', 'desc'] },
         status: payload.status as any,
       })

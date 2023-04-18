@@ -1,0 +1,34 @@
+{
+  "BUSINESS_IMPACT_ANALYSIS":"تحليل الأثر على الأعمال",
+  "NEW_ANALYSIS_CYCLIE":"دورة تحليل جديدة",
+  "DEPARTMENT":"إدارة ",
+  "SECTOR":"قطاع ",
+  "ORG_ACTIVITIES":"الأنشطة المؤسسية",
+  "NEW_ACTIVITY":"إضافة نشاط",
+  "RES_REQ":"متطلبات الموارد",
+  "ACTIVITY_NAME":"إسم النشاط",
+  "ACTIVITY_FEQ":"دورية النشاط",
+  "ANALYSIS_CRCLE":"دورة التحليل",
+  "RTO": "زمن التعافي الأمثل",
+  "PRIORITY_LEVEL": "مستوى الأهمية",
+  "STATUS":"الحالة",
+  "ACTIVITY_DIALOG": {
+    "ADD_NEW_ACTIVITY":"إضافة نشاط جديد",
+    "ACTIVITY_DETAILS":"بيانات النشاط",
+    "NAME_AR":"الإسم (عربي)",
+    "NAME_EN":"الإسم (انجليزي)",
+    "ACTIVITY_DESC":"وصف النشاط",
+    "ACTIVITY_FEQ":"دورية النشاط",
+    "ARIC_GUID":"الرقم المرجعي في أريس",
+    "ACTIVITY_AREA":"نطاق النشاط",
+    "INTERNAL":"داخلي",
+    "EXTERNAL":"خارجي"
+  },
+  "ANALYSIS_DIALOG": {
+    "ADD_NEW_ANALYSIS":"إضافة دورة تحليل جديدة",
+    "ANALYSIS_DETAILS":"بيانات النشاط",
+    "NAME":"اسم دورة التحليل",
+    "NAME_BC":"اصدار قوائم الاستمرارية",
+    "DATE":"تاريخ استحقاق ادخال التحليل "
+  }
+}

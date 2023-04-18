@@ -150,7 +150,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     if (v === undefined || v === null) {
       return;
     }
-    // this.loadUsers('', true);
+    this.loadUsers('', true);
     this.store
       .dispatch(new GroupAction.GetGroup({id: v}))
       .pipe(
@@ -224,18 +224,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
         }
       })
     );
-
-    /*    this.districtList$.pipe(
-          tap((v) => {
-            console.log(v);
-          })
-        ).subscribe();
-
-        this.centerList$.pipe(
-          tap((v) => {
-            console.log(v);
-          })
-        ).subscribe();*/
   }
 
   ngOnInit(): void {
@@ -252,7 +240,7 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       new OrgAction.LoadOrgs({orgId: this.auth.getClaim('orgId')}),
     );
     this.LoadUsers$
-      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .pipe(takeUntil(this.destroy$), auditTime(900))
       .subscribe((name) => {
         this.store.dispatch(
           new GroupAction.LoadGroupMapUserPage({
@@ -540,14 +528,14 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     const zoneControl = this.groupZoneIncidentCategory.get('zoneId');
     if (value) {
       this.checkMap = true;
-      this.groupZoneIncidentCategory.get('centerList').setValue('');
-      this.groupZoneIncidentCategory.get('incidentCategory').setValue('');
-      this.groupZoneIncidentCategory.get('zoneId').setValue('');
+      // this.groupZoneIncidentCategory.get('centerList').setValue('');
+      // this.groupZoneIncidentCategory.get('incidentCategory').setValue('');
+      // this.groupZoneIncidentCategory.get('zoneId').setValue('');
       centerControl.clearValidators();
       zoneControl.clearValidators();
     } else {
       this.checkMap = false;
-      this.namedLocations = [];
+      // this.namedLocations = [];
       centerControl.setValidators(Validators.required);
       zoneControl.setValidators(Validators.required);
     }
@@ -886,17 +874,16 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
         incidentIds.markAsTouched();
         incidentIds.markAsDirty();
         return;
+      } else {
+        const geometryLocation = {
+          ...this.groupZoneIncidentCategory.getRawValue(),
+        };
+
+        if (this.groupGeometry.location) {
+          this.submitGeometryLocations(geometryLocation);
+        }
       }
-
-      const geometryLocation = {
-        ...this.groupZoneIncidentCategory.getRawValue(),
-      };
-
-      if (this.groupGeometry.location) {
-        this.submitGeometryLocations(geometryLocation);
-      }
-
-    } else {
+    } else if (this._groupId) {
       const centerList = this.groupZoneIncidentCategory.get('centerList');
       const zoneId = this.groupZoneIncidentCategory.get('zoneId');
       const incidentIds = this.incidentCategory.get('incidentCategory');
@@ -1180,8 +1167,18 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       this.groupZoneIncidentCategory.disable();
     }
   }
-
   enableForm() {
     this.form.enable();
+  }
+  removeChip(chip: any, event: MouseEvent) {
+    const selectedUser = this.userGroupForm.get('usersIds').value;
+    selectedUser.forEach((element, index) => {
+      if (element.id === chip.id) {
+        selectedUser.splice(index, 1);
+      }
+    });
+    this.userGroupForm.patchValue({
+      usersIds: selectedUser
+    });
   }
 }

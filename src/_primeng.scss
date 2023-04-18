@@ -594,3 +594,28 @@ button.p-button-secondary.active {
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem var(--bluegray-100);
 }
+
+.outline {
+  &-primary {
+    outline: 1px solid var(--primary);
+  }
+  &-secondary {
+    outline: 1px solid var(--secondary);
+  }
+  &-warning {
+    outline: 1px solid var(--warning);
+  }
+  &-help {
+    outline: 1px solid var(--purple-500);
+  }
+
+  &-success {
+    outline: 1px solid var(--success);
+  }
+  &-info {
+    outline: 1px solid var(--info);
+  }
+  &-danger {
+    outline: 1px solid var(--danger);
+  }
+}

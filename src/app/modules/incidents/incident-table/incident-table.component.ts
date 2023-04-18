@@ -41,8 +41,8 @@ export class IncidentTableComponent implements OnInit, OnChanges {
     currentPage: 0,
     totalItems: 10,
     id: 'test',
-    sort:'desc',
-    active:''
+    sort: 'desc',
+    active: '',
   };
   @Input() loading: Observable<boolean>;
   @Input() status: INCIDENT_STATUS;
@@ -54,8 +54,8 @@ export class IncidentTableComponent implements OnInit, OnChanges {
   @Output() onSortChange: EventEmitter<any> = new EventEmitter(null);
   commonData: AppCommonData;
   @ViewChild(MatSort) sort: MatSort;
-  pageSort='';
-  pageActive='';
+  pageSort = '';
+  pageActive = '';
 
   constructor(
     private router: Router,
@@ -70,8 +70,8 @@ export class IncidentTableComponent implements OnInit, OnChanges {
       currentPage: 0,
       totalItems: 10,
       id: this.id,
-      sort:this.pageSort,
-      active:this.pageActive
+      sort: this.pageSort,
+      active: this.pageActive,
     };
   }
 
@@ -138,7 +138,9 @@ export class IncidentTableComponent implements OnInit, OnChanges {
   }
 
   createTask(title, id) {
-    this.router.navigate(['incidents/createTask', { title, id }]);
+    this.router.navigate(['incidents/createTask', { title, id }], {
+      queryParams: { _redirect: this.router.url },
+    });
   }
 
   openModal(type, id, incId) {
@@ -165,8 +167,8 @@ export class IncidentTableComponent implements OnInit, OnChanges {
         currentPage: this.currentPage,
         totalItems: this.totalElements,
         id: this.id,
-        sort:this.pageSort,
-        active:this.pageActive
+        sort: this.pageSort,
+        active: this.pageActive,
       };
       this.onSortChange.emit(event);
     }

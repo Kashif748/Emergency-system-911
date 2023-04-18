@@ -8,13 +8,32 @@
         active:
           currentView == incidentViews.COMPLETED_INCIDENTS ||
           currentView == incidentViews.REJECTED_INCIDENTS ||
-          currentView == incidentViews.IN_PROGRESS_INCIDENTS
+          currentView == incidentViews.IN_PROGRESS_INCIDENTS ||
+          currentView == incidentViews.DRAFTED_INCIDENTS
       }"
       (click)="changeView(incidentViews.ALL_INCIDENTS)"
     >
       <span class="link-title">{{ "INCIDENTS.INCIDENTS" | translate }}</span>
       <span class="link-number">{{ dashboardData?.incidents?.total }}</span>
       <div class="menu" [ngClass]="{ 'd-none': !showIncidentsMenu }">
+        <a
+          class="btn btn-primary btn-lg mx-2 text-center menu-item"
+          [ngClass]="{
+            active: currentView == incidentViews.DRAFTED_INCIDENTS
+          }"
+          (click)="
+            changeView(incidentViews.DRAFTED_INCIDENTS);
+            $event.stopPropagation()
+          "
+        >
+          <span class="link-title">{{
+            "DASHBOARD.DRAFTED_INCIDENTS" | translate
+          }}</span>
+          <span class="link-number d-flex justify-content-center"
+            ><span>{{ dashboardData?.incidents?.draft?.total }}</span>
+            <mat-icon>insert_drive_file</mat-icon></span
+          >
+        </a>
         <a
           class="btn btn-primary btn-lg mx-2 text-center menu-item"
           [ngClass]="{
@@ -201,6 +220,7 @@
           currentView === incidentViews.IN_PROGRESS_INCIDENTS ||
           currentView === incidentViews.COMPLETED_INCIDENTS ||
           currentView === incidentViews.REJECTED_INCIDENTS ||
+          currentView === incidentViews.DRAFTED_INCIDENTS ||
           currentView === incidentViews.ALL_INCIDENTS
         "
       >
@@ -277,6 +297,7 @@
               currentView === incidentViews.IN_PROGRESS_INCIDENTS ||
               currentView === incidentViews.COMPLETED_INCIDENTS ||
               currentView === incidentViews.REJECTED_INCIDENTS ||
+              currentView === incidentViews.DRAFTED_INCIDENTS ||
               currentView === incidentViews.ALL_INCIDENTS
             "
           ></th>
@@ -294,6 +315,7 @@
           (currentView === incidentViews.IN_PROGRESS_INCIDENTS ||
             currentView === incidentViews.COMPLETED_INCIDENTS ||
             currentView === incidentViews.REJECTED_INCIDENTS ||
+            currentView === incidentViews.DRAFTED_INCIDENTS ||
             currentView === incidentViews.ALL_INCIDENTS) &&
           !(isLoading$ | async)
         "
@@ -428,9 +450,13 @@
             </button>
             <mat-menu #menu="matMenu">
               <ng-container *appPrivileges="'PRIV_CR_TASK'">
+                <!-- status 5 not draft -->
                 <button
                   mat-menu-item
-                  *ngIf="canUserTaskUpdate(row.responsibleOrg?.id)"
+                  *ngIf="
+                    canUserTaskUpdate(row.responsibleOrg?.id) &&
+                    row.status.id !== 5
+                  "
                   (click)="createTask(row.subject, row.id)"
                 >
                   <mat-icon>add_box</mat-icon>
@@ -439,7 +465,11 @@
               </ng-container>
 
               <ng-container *appPrivileges="'PRIV_SHR_INC'">
-                <button mat-menu-item (click)="sendMail($event, row.id)">
+                <button
+                  *ngIf="row.status.id !== 5"
+                  mat-menu-item
+                  (click)="sendMail($event, row.id)"
+                >
                   <mat-icon>send</mat-icon>
                   <span>{{ "INCIDENTS.SHARE_VIA_EMAIL" | translate }}</span>
                 </button>
@@ -448,7 +478,7 @@
               <ng-container *appPrivileges="'PRIV_ESC_INC'">
                 <button
                   mat-menu-item
-                  *ngIf="canEditResponsibleOrg(row)"
+                  *ngIf="canEditResponsibleOrg(row) && row.status.id !== 5"
                   (click)="
                     openModal('edit', row?.responsibleOrg?.id, row?.id);
                     $event.stopPropagation()
@@ -475,6 +505,16 @@
                 >
                   <mat-icon>edit</mat-icon>
                   <span>{{ "INCIDENTS.UPDATE_INCIDENT" | translate }}</span>
+                </button>
+              </ng-container>
+              <ng-container *appPrivileges="'PRV_ED_INC'">
+                <button
+                  mat-menu-item
+                  *ngIf="row.status.id == 5"
+                  (click)="deleteIncident(row)"
+                >
+                  <mat-icon>delete</mat-icon>
+                  <span>{{ "INCIDENTS.DELETE_DRAFT" | translate }}</span>
                 </button>
               </ng-container>
             </mat-menu>

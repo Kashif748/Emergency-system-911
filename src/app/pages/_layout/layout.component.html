@@ -7,7 +7,7 @@
   </mat-drawer>
 
   <div class="example-sidenav-content">
-    <div [class]="wrapperCss" id="kt_wrapper">
+    <div [class]="wrapperCss" id="kt_wrapper" style="min-height: 100vh;">
       <app-header (openSideMenu)="drawer.toggle()" [isMobileView]="isMobileView" #ktHeader id="kt_header"
         class="{{ headerCss }}" [ngClass]="headerCSSClasses" [isSideDisplay]="isSideDisplay"></app-header>
       <div class="custom-main-content content d-flex flex-column flex-column-fluid h-100 mat-app-background"

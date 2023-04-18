@@ -22,5 +22,11 @@
   "TASK_LOCATION": "Task Location",
   "TASK_ATTACHMENTS": "Task Attachments",
   "TASK_WORKLOG": "Task Log",
-  "TASK_NOTIFICATIONS": "Task Notifications"
+  "TASK_NOTIFICATIONS": "Task Notifications",
+
+  "COMPLETED": "closed at {{day}}",
+  "DELAYED_DELIVER": "delayed task on deliver day  {{day}}",
+  "REMAIN_DELIVER_HOURS": "remain {{hours}} hours",
+  "REMAIN_DELIVER_MINUTES": "remain {{minutes}} minutes",
+  "REMAIN_DELIVER_DAYS": "remain {{days}} days"
 }

@@ -60,12 +60,12 @@
                         label="{{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} / {{item.createdBy?.orgStructure | translateObj }}"
                         icon="pi pi-user" styleClass="bg-transparent text-muted"></p-chip>
 
-                      <p-chip pTooltip="{{ 'SHARED.INCIDENT_ID' | translate }}" appendTo="body" tooltipPosition="top"
-                        label="{{ item.incident?.id }}" icon="pi pi-info" styleClass="m-1"></p-chip>
+                      <p-chip pTooltip="{{ 'SHARED.INCIDENT_SERIAL' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{ item.incident?.serial }}" icon="pi pi-info" styleClass="m-1"></p-chip>
 
                       <p-chip pTooltip="{{ 'SHARED.PRIORITY' | translate }}" appendTo="body" tooltipPosition="top"
                         label="{{ item.priority | translateObj }}" icon="pi pi-sort-numeric-up-alt"
-                        styleClass="m-1 text-white bg-{{item?.priority?.color}}"></p-chip>
+                        styleClass="m-1 text-white bg-{{item?.priority['color']}}"></p-chip>
 
                       <p-chip pTooltip="{{ 'SHARED.DUE_DATE' | translate }}" appendTo="body" tooltipPosition="top"
                         label="{{ item.dueDate | cdate }}" icon="pi pi-clock" checkDueDate
@@ -93,10 +93,12 @@
                 </div>
 
               </div>
-              <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
-                class="p-button-rounded p-button-text mt-0 p-button-plain" (click)="menu1.toggle($event)"
-                *checkPrivileges="'PRIV_UP_TASK'"></button>
-              <p-menu #menu1 appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
+              <ng-container *ngIf="!item.status['closedStatus']">
+                <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                  class="p-button-rounded p-button-text mt-0 p-button-plain" (click)="menu1.toggle($event)"
+                  *checkPrivileges="'PRIV_UP_TASK'"></button>
+                <p-menu #menu1 appendTo="body" [popup]="true" [model]="item['actions']"></p-menu>
+              </ng-container>
             </div>
           </div>
         </ng-container>
@@ -122,7 +124,7 @@
 
               <th *ngIf="columns?.includes('incidentId')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.INCIDENT_ID" | translate }}
+                  {{ "SHARED.INCIDENT_SERIAL" | translate }}
                 </div>
               </th>
 
@@ -156,7 +158,6 @@
                   {{ "SHARED.ASSIGNEE" | translate }}
                 </div>
               </th>
-
 
               <th *checkPrivileges="'PRIV_UP_TASK'" style="width: 92px;">{{'ACTIONS.ACTIONS' | translate}}</th>
             </tr>
@@ -233,7 +234,7 @@
 
               <th *ngIf="columns?.includes('incidentId')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.INCIDENT_ID" | translate }}
+                  {{ "SHARED.INCIDENT_SERIAL" | translate }}
                 </div>
               </th>
 
@@ -284,13 +285,11 @@
               <td class="max-w-250px" *ngIf="columns?.includes('desc')" (click)="openView(item.id)">
                 {{item.body}}
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('incidentId')"
-                (click)="openView(item.id)">
-                {{item.incident?.id}}
+              <td class="max-w-250px" *ngIf="columns?.includes('incidentId')" (click)="openView(item.id)">
+                {{item.incident?.serial}}
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('priority')"
-                (click)="openView(item.id)">
+              <td class="max-w-250px" *ngIf="columns?.includes('priority')" (click)="openView(item.id)">
 
                 <p-tag styleClass="m-1 bg-{{item?.priority?.color}}">
                   {{ item.priority | translateObj }}
@@ -308,13 +307,11 @@
                 </p-tag>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('createdBy')"
-                (click)="openView(item.id)">
+              <td class="max-w-250px" *ngIf="columns?.includes('createdBy')" (click)="openView(item.id)">
                 {{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} /
                 {{item.createdBy?.orgStructure | translateObj }}
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('assignee')"
-                (click)="openView(item.id)">
+              <td class="max-w-250px" *ngIf="columns?.includes('assignee')" (click)="openView(item.id)">
                 {{item.assignTo | translateObj }}
 
                 <p-tag styleClass="m-1 bg-{{ assigneeMap[item.assignTo?.type]?.bg }}">
@@ -324,9 +321,14 @@
 
 
               <td *checkPrivileges="'PRIV_UP_TASK'" class="max-w-250px">
-                <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
-                  class="p-button-rounded p-button-text my-auto p-button-plain" (click)="menu.toggle($event)"></button>
-                <p-menu #menu appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
+
+                <ng-container *ngIf="!item.status?.closedStatus">
+                  <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                    class="p-button-rounded p-button-text my-auto p-button-plain"
+                    (click)="menu.toggle($event)"></button>
+                  <p-menu #menu appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
+                </ng-container>
+
               </td>
             </tr>
           </ng-template>
