@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -20,6 +21,7 @@ import {
   filter,
   map,
   skip,
+  startWith,
   take,
   takeUntil,
   tap,
@@ -33,9 +35,12 @@ import { concat } from 'rxjs';
 import { TreeNode } from 'primeng/api';
 import { TreeHelper } from '@core/helpers/tree.helper';
 import { IAuthService } from '@core/services/auth.service';
-import { Select, Store } from '@ngxs/store';
 import { OrgAction, OrgState } from '@core/states';
 import { OrgStructure } from 'src/app/api/models';
+import { IncidentAction } from '@core/states/incident/incident.action';
+import { IncidentState } from '@core/states/incident/incident.state';
+import { Select, Store } from '@ngxs/store';
+import { IncidentIdSubjectProjection } from 'src/app/api/models';
 
 @Component({
   selector: 'app-form-circulars',
@@ -63,12 +68,20 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
   user$: any;
   formId = '';
   circularStatus: any[];
-  incidents$ = this.incidentservice
-    .getIncidents(0)
-    .pipe(map((r) => r.result.content));
+
   currentCir: any;
   currentMenu: MenuItem;
   toInternalOrgsList: any[];
+
+  control = new FormControl('');
+
+  @Select(IncidentState.transLoading)
+  incidentLoading$: Observable<boolean>;
+
+  @Select(IncidentState.incidents)
+  incidents$: Observable<IncidentIdSubjectProjection[]>;
+
+  private auditLoadIncidents$ = new Subject<string>();
 
   @Select(OrgState.orgs)
   public orgs$: Observable<OrgStructure[]>;
@@ -106,6 +119,16 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const commonData = this.commonService.getCommonData();
+    this.control.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((val) => typeof val === 'string'),
+        startWith(''),
+        debounceTime(800),
+        distinctUntilChanged(),
+        tap((val) => this.loadIncidents(val || '', true))
+      )
+      .subscribe();
     this.layoutDataService.currentMenuItem.subscribe((data) => {
       if (data) {
         this.currentMenu = data;
@@ -228,6 +251,7 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
             .filter((i) => !!i),
         };
 
+        this.loadIncidents('', true, cir.incident?.id);
         this.form.patchValue(obj);
         this.cirService.onManagersChange.subscribe((data) => {
           this.getCurrentManager(cir.manager.id);
@@ -293,6 +317,33 @@ export class FormCircularsComponent implements OnInit, OnDestroy {
     this.form.get('manager').valueChanges.subscribe((data) => {
       this.applyFilter(data);
     });
+  }
+
+  loadIncidents(searchText?: string, direct = false, id?: number) {
+    if (direct) {
+      this.store.dispatch(
+        new IncidentAction.LoadIncidents({
+          status: [1, 2],
+          subject: searchText,
+          id,
+        })
+      );
+      return;
+    }
+    this.auditLoadIncidents$.next(searchText);
+  }
+  // Functions
+  onChange($event) {
+    if ($event && typeof $event === 'object') {
+      this.form.get('incidentId').setValue($event);
+    }
+  }
+
+  displayWith(value) {
+    if (value) {
+      return value['subject'];
+    }
+    return null;
   }
 
   ngOnDestroy(): void {
