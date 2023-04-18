@@ -20,7 +20,7 @@
         <ng-template [ngTemplateOutlet]="content"></ng-template>
       </div>
     </div>
-    <div class="row h-30px">
+    <div class="row h-150px">
     </div>
     <div class="row">
       <div class="col-12">
@@ -453,7 +453,7 @@
                       </div>
                     </ng-container>
                     <ng-container *ngIf="!options || options.length === 0">
-                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
+                      {{'INCIDENTS.MAIN_CAT' | translate}}
                     </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
@@ -577,7 +577,7 @@
                       </div>
                     </ng-container>
                     <ng-container *ngIf="!options || options.length === 0">
-                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
+                      {{'INCIDENTS.CENTER' | translate}}
                     </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
@@ -620,7 +620,7 @@
                       </div>
                     </ng-container>
                   <ng-container *ngIf="!selected || selected.length === 0">
-                      {{'USER_MANAGEMENT.USERS.ROLES.LABEL' | translate}}
+                      {{'INCIDENTS.DISTRICT' | translate}}
                     </ng-container>
                   </ng-template>
 
@@ -690,13 +690,38 @@
   <ng-template #footer>
     <div class="p-col p-d-flex">
       <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
-      <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" [routerLink]="['..']" label="{{'ACTIONS.BACK' | translate }}"></button>
+      <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" (click)="close()" label="{{'ACTIONS.BACK' | translate }}"></button>
       <div class="ml-dir-auto"></div>
       <ng-container *ngIf="!(viewOnly$ | async)">
         <div class="mx-1" *ngIf="loggedinUserId == _groupId">
           <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
                   class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
         </div>
+      </ng-container>
+      <ng-container *ngIf="(viewOnly$ | async)">
+        <div *ngIf="activeTab === 0">
+          <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP']">
+            <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
+                    (click)="enableForm()" class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
+                    queryParamsHandling="merge"></button>
+          </div>
+        </div>
+        <div *ngIf="activeTab ===1">
+          <div class="mx-1" *checkPrivileges="['PRIV_ED_USR_GRP']">
+            <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
+                    class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
+                    queryParamsHandling="merge"></button>
+          </div>
+        </div>
+        <div *ngIf="activeTab === 2">
+          <div class="mx-1" *checkPrivileges="['PRIV_ED_LOC_INC_GRP']">
+            <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
+                    class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
+                    queryParamsHandling="merge"></button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!(viewOnly$ | async)">
         <div *ngIf="activeTab === 0">
           <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP']">
             <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"

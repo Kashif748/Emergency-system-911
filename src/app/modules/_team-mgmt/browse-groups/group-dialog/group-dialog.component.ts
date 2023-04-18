@@ -1180,4 +1180,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       this.groupZoneIncidentCategory.disable();
     }
   }
+
+  enableForm() {
+    this.form.enable();
+  }
 }
