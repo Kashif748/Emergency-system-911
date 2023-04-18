@@ -21,7 +21,7 @@ import {Select, Store} from "@ngxs/store";
 import {GenericValidators} from "@shared/validators/generic-validators";
 import {FormUtils} from "@core/utils/form.utils";
 import {IAuthService} from "@core/services/auth.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BrowseGroupsAction} from "../../states/browse-groups.action";
 import {TranslationService} from "../../../i18n/translation.service";
 import {GroupState} from "@core/states/group/group.state";
@@ -38,6 +38,7 @@ import {AppCommonData} from "@core/entities/AppCommonData";
 import {MapComponent} from "@shared/sh-components/map/map.component";
 import {__await} from "tslib";
 import {PrivilegesService} from "@core/services/privileges.service";
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-group-dialog',
@@ -45,6 +46,7 @@ import {PrivilegesService} from "@core/services/privileges.service";
   styleUrls: ['./group-dialog.component.scss']
 })
 export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild(Dialog) dialog: Dialog;
   commonData: AppCommonData;
   RegxConst = RegxConst;
 
@@ -135,6 +137,10 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     isEditing?: boolean;
   }[] = [];
 
+  public get asDialog() {
+    return this.route.component !== GroupDialogComponent;
+  }
+
   @Input()
   set groupId(v: number) {
     this._groupId = v;
@@ -184,7 +190,8 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
     protected mapService: MapService,
     private cfr: ComponentFactoryResolver,
     private injector: Injector,
-    private privilegesService: PrivilegesService
+    private privilegesService: PrivilegesService,
+    private router: Router
   ) {
     this.route.queryParams
       .pipe(
@@ -988,7 +995,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   close() {
-    this.store.dispatch(new BrowseGroupsAction.ToggleDialog({}));
+    if (this.asDialog) {
+      this.store.dispatch(new BrowseGroupsAction.ToggleDialog({}));
+    } else {
+      this.router.navigate(['..'], { relativeTo: this.route });
+    }
   }
 
   loadCenterListCall() {
@@ -1156,7 +1167,9 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       this.groupZoneIncidentCategory.disable();
     }
   }
-
+  enableForm() {
+    this.form.enable();
+  }
   removeChip(chip: any, event: MouseEvent) {
     const selectedUser = this.userGroupForm.get('usersIds').value;
     selectedUser.forEach((element, index) => {
@@ -1168,5 +1181,4 @@ export class GroupDialogComponent implements OnInit, OnDestroy, AfterViewChecked
       usersIds: selectedUser
     });
   }
-
 }

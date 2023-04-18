@@ -1,12 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/user-mgmt/', '.json');
-}
-
-import { TeamMgmtRoutingModule } from './team-mgmt-routing.module';
-import { TeamMgmtComponent } from './team-mgmt.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TeamMgmtRoutingModule} from './team-mgmt-routing.module';
+import {TeamMgmtComponent} from './team-mgmt.component';
 import {HttpClient} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {ChipModule} from "primeng/chip";
@@ -54,6 +49,11 @@ import {ContentGroupsComponent} from './browse-groups/content-groups/content-gro
 import {BrowseGroupsState} from "./states/browse-groups.state";
 import {GroupDialogComponent} from './browse-groups/group-dialog/group-dialog.component';
 import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcrumb.component";
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
+export function TranslateHttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/user-mgmt/', '.json');
+}
 
 
 @NgModule({
@@ -110,6 +110,7 @@ import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcru
     ProgressBarModule,
     FileUploadModule,
     SharedBreadcrumbModule,
+    ProgressSpinnerModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
