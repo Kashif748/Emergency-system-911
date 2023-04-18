@@ -20,7 +20,8 @@ export enum INCIDENT_STATUS {
   IN_PROCESSING = '1',
   DONE = '2',
   REJECTED= '3',
-  DELETED= '4'
+  DELETED= '4',
+  DRAFT ='5'
 }
 
 export interface DisplayColumn {

@@ -3,6 +3,7 @@ import {LOCATIONS} from "../../tempData.conts";
 import {Store} from "@ngxs/store";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {BrowseGroupsAction} from "../../../_team-mgmt/states/browse-groups.action";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-locations-content',
@@ -10,7 +11,18 @@ import {BrowseGroupsAction} from "../../../_team-mgmt/states/browse-groups.actio
   styleUrls: ['./locations-content.component.scss']
 })
 export class LocationsContentComponent implements OnInit {
-
+  public exportActions = [
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_XLSX'),
+      icon: 'pi pi-file-excel',
+      command: () => this.export('EXCEL'),
+    },
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_PDF'),
+      icon: 'pi pi-file-pdf',
+      command: () => this.export('PDF'),
+    },
+  ] as MenuItem[];
 
   public loading = false;
   public display = false;
@@ -30,6 +42,7 @@ export class LocationsContentComponent implements OnInit {
   ];
   constructor(
     private store: Store,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {

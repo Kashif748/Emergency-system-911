@@ -48,7 +48,7 @@ import { Log } from '../log/log.component';
 import { ShareLocationService } from '../../share-location/shareLocation.service';
 import { AddressSearchResultModel } from '@shared/components/map/utils/map.models';
 import { IncidentReminderComponent } from './incident-reminder/incident-reminder.component';
-import {MapService} from "@shared/components/map/services/map.service";
+import { MapService } from '@shared/components/map/services/map.service';
 
 @Component({
   selector: 'app-view-incidents',
@@ -194,6 +194,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
   showMapLocation = true;
   addressPointLocation: AddressSearchResultModel = null;
   showMapComponent: boolean = false;
+  isDraft: boolean = false;
 
   constructor(
     private cfr: ComponentFactoryResolver,
@@ -215,7 +216,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private readonly commonService: CommonService,
     private shareLocationService: ShareLocationService,
-    protected mapService: MapService,
+    protected mapService: MapService
   ) {
     super();
     this.incidentId = this.route.snapshot.params['id'];
@@ -278,7 +279,14 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
         }
 
         if (incidentDetails) {
+
           this.incidentDetails = incidentDetails.result;
+           // draft incident
+           if (this.incidentDetails?.status?.id === 5) {
+            this.isDraft= true;
+            this.hideCloseAndExportIncidentReportBtn =true
+            this.hideDraftTabs();
+          }
           this.form
             .get('incidentHospitals')
             .patchValue(this.incidentDetails?.incidentHospitals);
@@ -306,6 +314,23 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     );
   }
 
+  deleteIncident() {
+    this.incidentsService
+      .updateIncidentStatus({
+        incidentId: this.incidentDetails?.id,
+        statusId: 4,
+        finalStatement: '',
+      })
+      .subscribe(
+        (response) => {
+          this.alertService.openSuccessSnackBar();
+           this.back()
+        },
+        (err) => {
+          this.alertService.openFailureSnackBar();
+        }
+      );
+  }
   back() {
     this.location.back();
   }
@@ -341,6 +366,10 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
         await this.loadNotifications();
         break;
     }
+  }
+  hideDraftTabs() {
+    const visiableTabs = [0, 5, 2, 6, 11];
+    this.tabs = this.tabs.filter((tab) => visiableTabs.includes(tab.index));
   }
 
   async getReporterLocation(incidentId?: string) {
@@ -659,7 +688,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     });
   }
 
-   closeIncidentConfirm() {
+  closeIncidentConfirm() {
     const body = {
       createdBy: {
         id: this.commonData.currentUserDetails.id,
@@ -712,7 +741,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
       });
   }
 
-  async updateCloseDateOnGisMap(){
+  async updateCloseDateOnGisMap() {
     // close date reflect on gis map
 
     let layer;
@@ -727,11 +756,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
         g.setAttribute('CLOSE_DATE', this.incidentDetails.closedDate);
         return g;
       });
-      this.mapService.applyEdits(
-        graphics,
-        layer,
-        'updateFeatures'
-      );
+      this.mapService.applyEdits(graphics, layer, 'updateFeatures');
     } catch (error) {}
   }
 

@@ -450,7 +450,7 @@ export class TaskDialogComponent
   loadIncidents(searchText?: string, direct = false, id?: number) {
     if (direct) {
       this.store.dispatch(
-        new IncidentAction.LoadIncidents({ id, subject: searchText })
+        new IncidentAction.LoadIncidents({ id, subject: searchText , status : [1,2] })
       );
       return;
     }
