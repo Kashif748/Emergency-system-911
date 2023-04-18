@@ -182,7 +182,10 @@ export class TaskDialogComponent
   }
 
   get viewOnly() {
-    return this.route.snapshot.queryParams['_mode'] === 'viewonly';
+    return (
+      this.route.snapshot.queryParams['_mode'] === 'viewonly' ||
+      this.closedStatus
+    );
   }
   @Input()
   set taskId(v: number) {
