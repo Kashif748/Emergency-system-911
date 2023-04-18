@@ -57,13 +57,24 @@
         <button
           [hidden]="
             incidentDetails?.status?.id > 1 ||
-            hideCloseAndExportIncidentReportBtn
+            hideCloseAndExportIncidentReportBtn ||
+            isDraft
           "
           class="btn btn-md btn-square btn-danger font-weight-bold cursor-pointer py-2 mx-2"
           (click)="closeIncidentConfirm()"
           style="width: 200px !important"
         >
           {{ "INCIDENTS.CLOSE_INCIDENT" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *appPrivileges="'PRV_ED_INC'">
+        <button
+          *ngIf="isDraft"
+          class="btn btn-md btn-square btn-danger font-weight-bold cursor-pointer py-2 mx-2"
+          (click)="deleteIncident()"
+          style="width: 200px !important"
+        >
+          {{ "INCIDENTS.DELETE_DRAFT" | translate }}
         </button>
       </ng-container>
       <button
@@ -346,7 +357,6 @@
                         <div class="d-flex flex-column font-weight-bold">
                           <a class="text-dark mb-1 text-size-sm">
                             {{ "INCIDENTS.SERIAL" | translate }}
-
                           </a>
                           <span class="text-muted">
                             <p
@@ -734,7 +744,12 @@
                           </a>
                           <div class="text-dark">
                             <a
-                              [routerLink]="'/teams-management/teams'" [queryParams]="{_dialog: 'opened', _id: group.group?.id,_mode:'viewonly'}"
+                              [routerLink]="'/teams-management/teams'"
+                              [queryParams]="{
+                                _dialog: 'opened',
+                                _id: group.group?.id,
+                                _mode: 'viewonly'
+                              }"
                               target="_blank"
                               *ngFor="
                                 let group of incidentDetails?.incidentGroups;

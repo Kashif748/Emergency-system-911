@@ -1076,6 +1076,9 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.formGroup.get('status').setValue(1);
+     this.formGroup.get('incidentDistrict').setValidators(Validators.required);
+    this.formGroup.get('incidentDistrict').updateValueAndValidity();
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
       this.alertService.customFailureSnackBar(
@@ -1097,6 +1100,30 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
       });
     }
   }
+  saveAsDraft() {
+    let controlers = [
+      'primaryOrg',
+      'incidentDistrict',
+      'zone',
+      'incidentGroups',
+    ];
+    controlers.forEach((element) => {
+      this.formGroup.get(element).setValidators([]);
+      this.formGroup.get(element).updateValueAndValidity();
+    });
+    this.formGroup.get('status').setValue(5);
+    this.formGroup.get('dontNotifyReporter').setValue(true);
+    this.formGroup.get('getLocationFromReporter').setValue(true);
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      this.alertService.customFailureSnackBar(
+        this.translationService.get('INCIDENTS.INVALID_FORM')
+      );
+      this.loading = false;
+      return;
+    }
+    this.sendIncidentDataToServer();
+  }
 
   private sendIncidentDataToServer() {
     this.loading = true;
@@ -1111,7 +1138,10 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     const formData = this.formGroup.value;
     formData.notifyReporter = !formData.dontNotifyReporter;
     const res = new CreateIncident(formData, 0);
+    console.log(res);
+
     // timer for create only
+
     res.processingTime = moment
       .duration(this.incidentDurationFormatted)
       .asSeconds();
@@ -1123,7 +1153,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
       ? (res.interimIncident = Number(this.interimId))
       : (res.interimIncident = null);
 
-    this.incidentService.createIncident(res).subscribe(
+     this.incidentService.createIncident(res).subscribe(
       async (data) => {
         if (data) {
           this.incidentId = data.result.id;
@@ -1180,7 +1210,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
 
   onChange(ids: any[]) {
     const groupIds = ids;
-    if (groupIds.length == 0) {
+    if (groupIds?.length == 0) {
       this.formGroup.get('primaryOrg').reset([]);
       return;
     }

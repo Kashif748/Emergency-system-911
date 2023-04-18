@@ -182,7 +182,10 @@ export class TaskDialogComponent
   }
 
   get viewOnly() {
-    return this.route.snapshot.queryParams['_mode'] === 'viewonly';
+    return (
+      this.route.snapshot.queryParams['_mode'] === 'viewonly' ||
+      this.closedStatus
+    );
   }
   @Input()
   set taskId(v: number) {
@@ -447,7 +450,7 @@ export class TaskDialogComponent
   loadIncidents(searchText?: string, direct = false, id?: number) {
     if (direct) {
       this.store.dispatch(
-        new IncidentAction.LoadIncidents({ id, subject: searchText })
+        new IncidentAction.LoadIncidents({ id, subject: searchText , status : [1,2] })
       );
       return;
     }

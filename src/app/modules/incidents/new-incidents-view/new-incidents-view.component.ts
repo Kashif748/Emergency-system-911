@@ -1,5 +1,13 @@
 import { ThrowStmt } from '@angular/compiler';
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncidentStatistics } from '@core/api/models/incident.model';
@@ -25,7 +33,9 @@ import {
   map,
   distinctUntilChanged,
   debounceTime,
-  takeUntil, tap, switchMap,
+  takeUntil,
+  tap,
+  switchMap,
 } from 'rxjs/operators';
 import { ICategory } from '../../reporting/model/incidents-report';
 import { EmailListComponent } from '../email-list/email-list.component';
@@ -50,18 +60,22 @@ import {
   UpdateFilter,
 } from './store/incidents-dashboard.actions';
 import { IncidentDashboardStateModel } from './store/incidents-dashboard.reducer';
-import {DateTimeUtil} from "@core/utils/DateTimeUtil";
-import {MapComponent} from "@shared/components/map/map.component";
-import {MapActionType} from "@shared/components/map/utils/MapActionType";
-import {OrgService} from "@core/api/services/org.service";
-import {BaseComponent} from "@shared/components/base.component";
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import { MapComponent } from '@shared/components/map/map.component';
+import { MapActionType } from '@shared/components/map/utils/MapActionType';
+import { OrgService } from '@core/api/services/org.service';
+import { BaseComponent } from '@shared/components/base.component';
+import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 
 @Component({
   selector: 'app-new-incidents-view',
   templateUrl: './new-incidents-view.component.html',
   styleUrls: ['./new-incidents-view.component.scss'],
 })
-export class NewIncidentsViewComponent extends BaseComponent implements OnInit, OnDestroy, AfterViewInit {
+export class NewIncidentsViewComponent
+  extends BaseComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   incidentDisplayedColumns: DisplayedColumn[] = [];
   selectedDisplayedCols: DisplayedColumn[] = [];
   isLoading$: Subject<boolean> = new Subject();
@@ -112,7 +126,9 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   ) as string[];
   constructor(
     private translateService: TranslateService,
-    private incidentService: IncidentsService,
+    private incidentsService: IncidentsService,
+    private alertService: AlertsService,
+
     private inquiryService: InquiryService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -120,7 +136,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     private cdr: ChangeDetectorRef,
     public dialog: MatDialog,
     private store: Store,
-    private orgService: OrgService,
+    private orgService: OrgService
   ) {
     super();
   }
@@ -180,14 +196,14 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   }
 
   getDashboardData() {
-    this.incidentService.getIncidentDashboardStatistics().subscribe((data) => {
+    this.incidentsService.getIncidentDashboardStatistics().subscribe((data) => {
       this.dashboardData = data as IncidentStatistics;
       this.cdr.detectChanges();
     });
   }
 
   updateDashboardData(module: DashboardModules, filter: any) {
-    this.incidentService
+    this.incidentsService
       .getIncidentDashboardStatistics(module, filter)
       .subscribe((data) => {
         this.dashboardData = data as IncidentStatistics;
@@ -297,7 +313,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     });
   }
 
-  ngAfterViewInit()  {
+  ngAfterViewInit() {
     if (this.mapView) {
       this.maps.changes
         .pipe(
@@ -316,7 +332,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     }
   }
 
-   async loadInProgressIncidents() {
+  async loadInProgressIncidents() {
     this.currentView = IncidentViewsEnum.IN_PROGRESS_INCIDENTS;
     this.tableTitle = this.translateService.instant(
       'DASHBOARD.IN_PROGRESS_INCIDENTS'
@@ -345,12 +361,12 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
     forkJoin({
-      data: this.incidentService.getAllWithFilters(
+      data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         { status: INCIDENT_STATUS.IN_PROCESSING, ...this.advancedSearchFilter },
         { active: 'incidentDate', direction: 'desc' }
       ),
-      dashboardData: this.incidentService.getIncidentDashboardStatistics(
+      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
         DashboardModules.INCIDENTS,
         { status: INCIDENT_STATUS.IN_PROCESSING, ...this.advancedSearchFilter }
       ),
@@ -405,7 +421,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     } else if (this.currentView === this.incidentViews.REJECTED_INCIDENTS) {
       incidentType = 3;
     }
-    const incidentIds: string[] = await this.incidentService
+    const incidentIds: string[] = await this.incidentsService
       .getIncidentsIds(
         0,
         {
@@ -477,12 +493,12 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
     forkJoin({
-      data: this.incidentService.getAllWithFilters(
+      data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         { status: INCIDENT_STATUS.REJECTED, ...this.advancedSearchFilter },
         { active: 'incidentDate', direction: 'desc' }
       ),
-      dashboardData: this.incidentService.getIncidentDashboardStatistics(
+      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
         DashboardModules.INCIDENTS,
         { status: INCIDENT_STATUS.REJECTED, ...this.advancedSearchFilter }
       ),
@@ -526,12 +542,12 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
     forkJoin({
-      data: this.incidentService.getAllWithFilters(
+      data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         { status: INCIDENT_STATUS.DONE, ...this.advancedSearchFilter },
         { active: 'incidentDate', direction: 'desc' }
       ),
-      dashboardData: this.incidentService.getIncidentDashboardStatistics(
+      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
         DashboardModules.INCIDENTS,
         { status: INCIDENT_STATUS.DONE, ...this.advancedSearchFilter }
       ),
@@ -547,7 +563,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   }
 
   viewChange(value) {
-    if (value.checked){
+    if (value.checked) {
       this.mapView = true;
       this.ngAfterViewInit();
     } else {
@@ -556,7 +572,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   }
 
   loadInquiries() {
-    this.mapView = false
+    this.mapView = false;
     this.currentView = IncidentViewsEnum.INQUIRIES;
     this.showIncidentsMenuDisplay(this.currentView);
     this.tableTitle = this.translateService.instant(
@@ -583,7 +599,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
         this.advancedSearchFilter,
         this.paginationConfig.currentPage - 1 || 0
       ),
-      dashboardData: this.incidentService.getIncidentDashboardStatistics(
+      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
         DashboardModules.INQUIRIES,
         this.advancedSearchFilter
       ),
@@ -620,7 +636,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   }
 
   loadInterimIncidents() {
-    this.mapView = false
+    this.mapView = false;
     this.currentView = IncidentViewsEnum.INTERIM_INCIDENTS;
     this.showIncidentsMenuDisplay(this.currentView);
     this.tableTitle = this.translateService.instant(
@@ -640,7 +656,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
 
     this.isLoading$.next(true);
     forkJoin({
-      data: this.incidentService
+      data: this.incidentsService
         .searchInterimIncidents(
           this.paginationConfig.currentPage - 1 || 0,
           this.advancedSearchFilter,
@@ -651,7 +667,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
             return res['result'];
           })
         ),
-      dashboardData: this.incidentService.getIncidentDashboardStatistics(
+      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
         DashboardModules.INTERIM_INCIDENTS,
         this.advancedSearchFilter
       ),
@@ -670,6 +686,54 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
       }
     );
   }
+  async loadDraftedIncidintes() {
+    this.currentView = IncidentViewsEnum.DRAFTED_INCIDENTS;
+    this.tableTitle = this.translateService.instant(
+      'DASHBOARD.DRAFTED_INCIDENTS'
+    );
+    this.showIncidentsMenuDisplay(this.currentView);
+    this.setTableDisplyedColumns(COLUMNS.Incidents);
+
+    this.advancedSearchFormFields = [
+      { formControlName: AdvancedSearchFieldsEnum.SUBJECT },
+      { formControlName: AdvancedSearchFieldsEnum.SR_NO },
+      { formControlName: AdvancedSearchFieldsEnum.SERIAL },
+      { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
+      { formControlName: AdvancedSearchFieldsEnum.END_DATE },
+      { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
+      { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
+      { formControlName: AdvancedSearchFieldsEnum.REPORTING_VIA },
+      { formControlName: AdvancedSearchFieldsEnum.RESPONSIBLE_ORG },
+      { formControlName: AdvancedSearchFieldsEnum.LEADING_ORG },
+      { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+    ];
+
+    this.isLoading$.next(true);
+    if (this.mapView) {
+      this.filterQuery = this.getFilterQuery();
+      this.map.mapView?.graphics?.removeAll();
+      await this.showIncidentDashboardGraphics(this.filterLayers);
+    }
+    forkJoin({
+      data: this.incidentsService.getAllWithFilters(
+        this.paginationConfig.currentPage - 1 || 0,
+        { status: INCIDENT_STATUS.DRAFT, ...this.advancedSearchFilter },
+        { active: 'incidentDate', direction: 'desc' }
+      ),
+      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
+        DashboardModules.INCIDENTS,
+        { status: INCIDENT_STATUS.DRAFT, ...this.advancedSearchFilter }
+      ),
+    }).subscribe(({ data, dashboardData }) => {
+      this.data = data.result.content;
+      this.paginationConfig.totalItems = data.result.totalElements;
+      this.dashboardData = dashboardData as IncidentStatistics;
+      // this.getAssignedCities();
+      // this.getAssignedIncidentsCategories();
+      this.isLoading$.next(false);
+      this.cdr.detectChanges();
+    });
+  }
 
   disableNavigation(event$: any) {
     return event$.stopPropagation();
@@ -680,7 +744,8 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
       view === IncidentViewsEnum.ALL_INCIDENTS ||
       view === IncidentViewsEnum.IN_PROGRESS_INCIDENTS ||
       view === IncidentViewsEnum.COMPLETED_INCIDENTS ||
-      view === IncidentViewsEnum.REJECTED_INCIDENTS;
+      view === IncidentViewsEnum.REJECTED_INCIDENTS ||
+      view === IncidentViewsEnum.DRAFTED_INCIDENTS;
   }
 
   async loadAllIncidents() {
@@ -709,7 +774,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
     forkJoin({
-      data: this.incidentService.getAllWithFilters(
+      data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         this.advancedSearchFilter,
         {
@@ -717,7 +782,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
           direction: 'desc',
         }
       ),
-      dashboardData: this.incidentService.getIncidentDashboardStatistics(
+      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
         DashboardModules.INCIDENTS,
         this.advancedSearchFilter
       ),
@@ -760,13 +825,13 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
   }
 
   private loadCenters() {
-    this.incidentService.getCenters().subscribe((res) => {
+    this.incidentsService.getCenters().subscribe((res) => {
       this.centers = res['result'];
     });
   }
 
   private loadCategories() {
-    this.incidentService.getIncidentCategories().subscribe(
+    this.incidentsService.getIncidentCategories().subscribe(
       (data) => {
         if (data) {
           this.categories = data.result;
@@ -902,6 +967,9 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
       case IncidentViewsEnum.INTERIM_INCIDENTS:
         this.loadInterimIncidents();
         break;
+      case IncidentViewsEnum.DRAFTED_INCIDENTS:
+        this.loadDraftedIncidintes();
+        break;
     }
   }
 
@@ -972,7 +1040,7 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
     });
   }
 
-  canUserUpdate(Porg, respID , incident: any) {
+  canUserUpdate(Porg, respID, incident: any) {
     if (incident.status.id !== 2 && incident.status.id !== 3) {
       if (this.commonData.currentOrgDetails.id == Porg) {
         return true;
@@ -986,6 +1054,24 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
 
   updateIncident(id) {
     this.router.navigate(['incidents/edit', id]);
+  }
+  deleteIncident(incidentDetails) {
+    this.incidentsService
+      .updateIncidentStatus({
+        incidentId: +incidentDetails?.id,
+        statusId: 4,
+        finalStatement: '',
+      })
+      .subscribe(
+        (response) => {
+          this.alertService.openSuccessSnackBar();
+          this.loadDraftedIncidintes();
+          this.getDashboardData();
+        },
+        (err) => {
+          this.alertService.openFailureSnackBar();
+        }
+      );
   }
 
   canUserTaskUpdate(respID) {
@@ -1030,11 +1116,16 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
         ? INCIDENT_STATUS.REJECTED
         : null;
     this.isLoading$.next(true);
-    this.incidentService
-      .downloadReport('PDF', this.paginationConfig.currentPage, {
-        ...this.advancedSearchFilter,
-        status,
-      } ,[])
+    this.incidentsService
+      .downloadReport(
+        'PDF',
+        this.paginationConfig.currentPage,
+        {
+          ...this.advancedSearchFilter,
+          status,
+        },
+        []
+      )
       .subscribe((response) => {
         const blob = new Blob([response.body], { type: 'pdf' });
         window.URL.createObjectURL(blob);
@@ -1055,11 +1146,16 @@ export class NewIncidentsViewComponent extends BaseComponent implements OnInit, 
         ? INCIDENT_STATUS.REJECTED
         : null;
     this.isLoading$.next(true);
-    this.incidentService
-      .downloadReport('EXCEL', this.paginationConfig.currentPage, {
-        ...this.advancedSearchFilter,
-        status,
-      } ,[])
+    this.incidentsService
+      .downloadReport(
+        'EXCEL',
+        this.paginationConfig.currentPage,
+        {
+          ...this.advancedSearchFilter,
+          status,
+        },
+        []
+      )
       .subscribe((response) => {
         const blob = new Blob([response.body], { type: 'excel' });
         window.URL.createObjectURL(blob);

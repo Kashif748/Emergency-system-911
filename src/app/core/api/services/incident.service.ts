@@ -746,6 +746,17 @@ export class IncidentsService {
     );
   }
 
+  updateIncidentStatus(body: {
+    incidentId: number;
+    statusId: number;
+    finalStatement: string;
+  }) {
+    return this.http
+      .put<any>(`${environment.apiUrl}/incidents/closeIncident/`, body)
+      .pipe((incident) => {
+        return incident;
+      });
+  }
   getIncidentHospitalStatistics(incidentId: number) {
     return this.http.get<any>(
       `${environment.apiUrl}/incident-hospitals/${incidentId}`
