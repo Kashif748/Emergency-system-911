@@ -1,5 +1,10 @@
 <div class="p-toolbar-group-right">
-  <button pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus" (click)="openDialog()"></button>
+  <button
+    pButton
+    label="{{ 'ACTIONS.ADD' | translate }}"
+    icon="pi pi-plus"
+    (click)="openDialog()"
+  ></button>
 </div>
 
 <p-dialog
@@ -31,7 +36,6 @@
   </ng-template>
 
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
-
     <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
         <input type="text" formControlName="priEn" pInputText />
@@ -53,9 +57,14 @@
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['priEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
       </ng-container>
     </div>
-
 
     <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
@@ -79,9 +88,14 @@
         >
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['priAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
       </ng-container>
     </div>
-
   </form>
 
   <ng-template pTemplate="footer">

@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,7 +31,8 @@ export class BusinessContinuityComponent
     private langFacade: ILangFacade,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private cdr :ChangeDetectorRef
   ) {}
 
   ngOnDestroy(): void {
@@ -41,7 +42,7 @@ export class BusinessContinuityComponent
   ngOnInit() {
     this.createForm();
     this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .observe([Breakpoints.XSmall, Breakpoints.Small ])
       .pipe(
         takeUntil(this.destroy$),
         map((c) => c.matches),
@@ -56,6 +57,7 @@ export class BusinessContinuityComponent
     setTimeout(() => {
       this.items = this.translateMenu(TABS);
       this.visible = true;
+      this.cdr.detectChanges();
     }, 1000);
   }
   translateMenu(items: MenuItem[]): MenuItem[] {

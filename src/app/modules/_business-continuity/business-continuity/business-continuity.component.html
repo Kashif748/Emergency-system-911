@@ -16,7 +16,7 @@
     ></button>
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
-    <h2 class="p-text-bold mb-0 mx-2">قوائم إستمرارية الأعمال</h2>
+     <app-breadcrumb></app-breadcrumb>
     <p-tag value="اصدار 2023/1" severity="info"></p-tag>
   </div>
 
@@ -41,7 +41,7 @@
       [(visible)]="sidebar"
       [modal]="false"
       [style]="{ width: '350px', position: 'absolute' }"
-      styleClass="rounded p-shadow-6 py-2"
+      styleClass="rounded p-shadow-6 py-5"
       [showCloseIcon]="false"
       [baseZIndex]="-1000"
       [position]="position$ | async"
