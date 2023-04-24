@@ -256,7 +256,7 @@
                         (formGroup.get('reportingVia')?.value !== 2 &&
                           formGroup.get('reportingVia')?.value !== 4 &&
                           formGroup.get('reportingVia')?.value !== 7) ||
-                        formGroup.get('reportedByMobile')?.value.length < 8
+                        formGroup.get('reportedByMobile')?.value?.length < 8
                       "
                       >{{ "INCIDENTS.ASK_LOCATION_FROM_REPORTER" | translate }}
                     </mat-checkbox>
