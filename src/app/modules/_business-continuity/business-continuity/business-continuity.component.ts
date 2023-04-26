@@ -1,8 +1,15 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
+import { GenericValidators } from '@shared/validators/generic-validators';
 import { MenuItem } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
@@ -32,7 +39,7 @@ export class BusinessContinuityComponent
     private translate: TranslateService,
     private formBuilder: FormBuilder,
     private breakpointObserver: BreakpointObserver,
-    private cdr :ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnDestroy(): void {
@@ -42,12 +49,12 @@ export class BusinessContinuityComponent
   ngOnInit() {
     this.createForm();
     this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small ])
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
         takeUntil(this.destroy$),
         map((c) => c.matches),
         tap((c) => {
-        this.smallScreen = c;
+          this.smallScreen = c;
           c ? (this.sidebar = false) : (this.sidebar = true);
         })
       )
@@ -72,8 +79,8 @@ export class BusinessContinuityComponent
 
   createForm() {
     this.form = this.formBuilder.group({
-      version: [null, [Validators.required]],
-      desc: [null, [Validators.required]],
+      versionAr: [null, [Validators.required, GenericValidators.arabic]],
+      versionEn: [null, [Validators.required, GenericValidators.english]],
     });
   }
 }
