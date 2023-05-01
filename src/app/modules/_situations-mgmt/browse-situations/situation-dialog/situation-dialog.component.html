@@ -1,0 +1,212 @@
+<p-dialog
+  [visible]="opened$ | async"
+  (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw', 'min-hight': '50vh' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <h3>
+      <span>{{ "SITUATIONS.ADD_HEADER" | translate }}</span>
+      <span
+        *ngIf="!editMode"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="editMode"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </h3>
+  </ng-template>
+
+  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <!--Name Ar -->
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameAr" pInputText />
+        <label>
+          {{ "SITUATIONS.NAME_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['nameAr'].touched &&
+          !form.controls['nameAr'].valid &&
+          form.controls['nameAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+    <!-- Name En -->
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameEn" pInputText />
+        <label>
+          {{ "SITUATIONS.NAME_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['nameEn'].touched &&
+          !form.controls['nameEn'].valid &&
+          form.controls['nameEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+    <!-- Type filter -->
+    <div class="p-field p-col-4 p-md-6">
+      <p-dropdown
+        [options]="newsTypes$ | async"
+        formControlName="type"
+        [autoDisplayFirst]="false"
+        [showClear]="true"
+        dataKey="id"
+        placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
+      >
+        <ng-template let-item pTemplate="selectedItem">
+          {{ item | translateObj }}
+        </ng-template>
+
+        <ng-template let-item pTemplate="item">
+          {{ item | translateObj }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <!-- theme -->
+    <div class="p-field p-col-4 p-md-6">
+      <p-dropdown
+        [options]="themeTypes"
+        formControlName="theme"
+        [autoDisplayFirst]="false"
+        [showClear]="true"
+        dataKey="id"
+        placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
+      >
+        <ng-template let-item pTemplate="selectedItem">
+          {{ item | translateObj }}
+        </ng-template>
+
+        <ng-template let-item pTemplate="item">
+          {{ item | translateObj }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <!--  From Date  -->
+    <div class="p-field p-col-12 p-md-6" [ngClass]="{ 'p-md-6': editMode }">
+      <span class="p-float-label">
+        <p-calendar
+          formControlName="startDate"
+          [showIcon]="true"
+          showButtonBar="true"
+          [showTime]="true"
+          appendTo="body"
+          hourFormat="12"
+        ></p-calendar>
+        <label>
+          {{ "SITUATIONS.START_DATE" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['startDate'].touched &&
+          !form.controls['startDate'].valid &&
+          form.controls['startDate'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['startDate'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+      </ng-container>
+    </div>
+    <!--  To Date  -->
+    <div class="p-field p-col-12 p-md-6" [ngClass]="{ 'p-md-6': editMode }">
+      <span class="p-float-label">
+        <p-calendar
+          formControlName="endDate"
+          [showIcon]="true"
+          showButtonBar="true"
+          [showTime]="true"
+          appendTo="body"
+          hourFormat="12"
+        ></p-calendar>
+        <label>
+          {{ "SITUATIONS.END_DATE" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['endDate'].touched &&
+          !form.controls['endDate'].valid &&
+          form.controls['endDate'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['endDate'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+      </ng-container>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="p-col p-d-flex">
+      <button
+        pButton
+        icon="pi pi-times"
+        (click)="close()"
+        label="{{ 'ACTIONS.CLOSE' | translate }}"
+      ></button>
+      <div class="mx-1">
+        <button
+          pButton
+          (click)="submit()"
+          [loading]="blocking$ | async"
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
