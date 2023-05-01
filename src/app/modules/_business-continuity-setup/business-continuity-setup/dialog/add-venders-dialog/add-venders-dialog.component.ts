@@ -18,6 +18,7 @@ export class AddVendersDialogComponent implements OnInit {
   // variable
   public display = false;
   form: FormGroup;
+  private defaultFormValue: { [key: string]: any } = {};
 
 
 
@@ -38,12 +39,14 @@ export class AddVendersDialogComponent implements OnInit {
     this.form = this.formBuilder.group({
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
-      criticalityType: [null, [Validators.required, GenericValidators.english]],
+      criticalityType: [null, [Validators.required]],
       address: [null, [Validators.required]],
       supply_services: [null],
       service_level_Agree: [null],
-      primary_contact_nameEn: [null, [Validators.required, GenericValidators.english]],
-      primary_contact_nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      p_nameEn: [null, [Validators.required, GenericValidators.english]],
+      p_nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      s_nameEn: [null, [Validators.required, GenericValidators.english]],
+      s_nameAr: [null, [Validators.required, GenericValidators.arabic]],
       landlineNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
       homeNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
@@ -52,5 +55,9 @@ export class AddVendersDialogComponent implements OnInit {
         [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
       ],
     });
+
+    this.defaultFormValue = {
+      ...this.defaultFormValue
+    };
   }
 }
