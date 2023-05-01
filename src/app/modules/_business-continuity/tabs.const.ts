@@ -145,4 +145,39 @@ export const DATA = {
       },
     },
   ],
+  impactLevelsWorking: [
+    { id: 1, color: '#1976D2', imp_level: 'phaseOne', desc: 'imp_level' },
+    { id: 2, color: '#ff1a1a', imp_level: 'phaseTwo', desc: 'imp_level' },
+    { id: 3, color: '#00ff00', imp_level: 'phaseTwo', desc: 'imp_levelt3' },
+    { id: 4, color: '#ffff00', imp_level: 'phaseTwo', desc: 'imp_level3' },
+    { id: 5, color: '#1976D2', imp_level: 'phaseTwo', desc: 'test3' },
+  ],
+  rtoList: [
+    { id: 1, criticality: 'test1', rto: 'phaseOne', desc: 'test3' },
+    { id: 2, criticality: 'test2', rto: 'phaseTwo', desc: 'test3' },
+    { id: 3, criticality: 'test3', rto: 'phaseTwo', desc: 'test3' },
+    { id: 4, criticality: 'test4', rto: 'phaseTwo', desc: 'test3' },
+    { id: 5, criticality: 'test5', rto: 'phaseTwo', desc: 'test3' },
+  ],
+  locTypes: [
+    { id: 1, type_ar: 'test1', type_en: 'phaseOne' },
+    { id: 2, type_ar: 'test1', type_en: 'phaseOne' },
+    { id: 3, type_ar: 'test1', type_en: 'phaseOne' },
+    { id: 4, type_ar: 'test1', type_en: 'phaseOne' },
+    { id: 5, type_ar: 'test1', type_en: 'phaseOne' },
+  ],
+  activityPrioritySeq: [
+    { id: 1, priority_ar: 'test1', priority_en: 'phaseOne' },
+    { id: 2, priority_ar: 'test1', priority_en: 'phaseOne' },
+    { id: 3, priority_ar: 'test1', priority_en: 'phaseOne' },
+    { id: 4, priority_ar: 'test1', priority_en: 'phaseOne' },
+    { id: 5, priority_ar: 'peri', priority_en: 'phaseOne' },
+  ],
+  activityFrquency:[
+    {id: 1, frq_ar: 'test1', feq_en: 'phaseOne'},
+    {id: 2, frq_ar: 'test1', feq_en: 'phaseOne'},
+    {id: 3, frq_ar: 'test1', feq_en: 'phaseOne'},
+    {id: 4, frq_ar: 'test1', feq_en: 'phaseOne'},
+    {id: 5, frq_ar: 'test1', feq_en: 'phaseOne'},
+  ]
 };
