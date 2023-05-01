@@ -98,9 +98,6 @@
             </ng-template>
           </p-selectButton>
         </div>
-        <div class="ml-dir-auto d-flex">
-          <app-add-system-dialog></app-add-system-dialog>
-        </div>
       </div>
     </p-divider>
   </div>
@@ -108,10 +105,17 @@
 
 
 <div class="col-12 py-3">
-    <div class="text-center tab-title text-medium-slate-blue">
+  <div class="d-flex flex-wrap mx-1 px-6">
+    <div class="text-center col-11 tab-title text-medium-slate-blue">
       {{ "SYSTEM" | translate }}
     </div>
+
+    <div class="ml-dir-auto d-flex">
+      <app-add-system-dialog></app-add-system-dialog>
+    </div>
+  </div>
 </div>
+
 
 <div class="row">
   <div class="col-12">
