@@ -1,0 +1,38 @@
+{
+  "data":
+  [
+    {
+      "labelAr": "أفلام",
+      "labelEn": "Movies",
+      "data": "department",
+      "expandedIcon": "pi pi-folder-open",
+      "collapsedIcon": "pi pi-folder",
+      "children": [
+        {
+        "labelAr": "آل باتشينو",
+        "labelEn": "Al Pacino",
+        "data": "section",
+        "children": [{
+          "labelAr": "سكارفيس",
+          "labelEn": "Scarface",
+          "icon": "pi pi-video",
+          "data": "section"
+        },
+          {
+            "labelAr": "سيربيكو",
+            "labelEn": "Serpico",
+            "icon": "pi pi-file-video",
+            "data": "section"
+          }
+        ]
+      },
+        {
+          "labelAr": "روبرت دي نيرو",
+          "labelEn": "Robert De Niro",
+          "data": "section",
+          "children": [{"label": "Goodfellas", "icon": "pi pi-video", "data": "section"},
+            {"label": "Untouchables", "icon": "pi pi-video", "data": "section"}]
+        }]
+    }
+  ]
+}

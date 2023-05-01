@@ -4,7 +4,7 @@
   "VERSION" : "Version" ,
   "RES_ORG": "Responsible Organization",
   "ORG_DETAILS": "Organization Details",
-  "ORG_ARTCH": "",
+  "ORG_ARTCH": "Organization Hierarchy",
   "IMPACTS": "Impacts",
   "ACTION": "ACTION",
   "ADD": "Add",
@@ -71,5 +71,33 @@
     "LEVEL_AR":"Level (Arabic)",
     "DESC_AR":"Description (Arabic)",
     "DESC_EN":"Description (English)"
+  },
+  "ORG_HIE": {
+    "ADD_SECTOR":"Add Sector",
+    "ADD_DEPARTMENT":"Add Department",
+    "ADD_SECTION":"Add Section",
+    "SECTOR_DETAILS": "Sector Details",
+    "DELETE": "Delete",
+    "SECTOR": {
+      "DEPT_NAME_EN": "Sector Name (English)",
+      "DEPT_NAME_AR": "Sector Name (Arabic)"
+    },
+    "DEPT_DETAILS": "Department Details",
+    "USER_MGMT": "User Management",
+    "DEPARTMENT": {
+      "MANA_DATA": "Management Data",
+      "DEPT_NAME_EN": "Department Name (English)",
+      "DEPT_NAME_AR": "Department Name (Arabic)",
+      "DEPT_MGMT": "Department Manager",
+      "FIRST_BUSI_COORDINATOR": "First Business Continuity Coordinator",
+      "SECOND_BUSI_COORDINATOR": "Second Business Continuity Coordinator"
+    },
+    "SECTION": {
+      "DEPT_DETAILS": "Section Details",
+      "DEPT_NAME_EN": "Section Name (English)",
+      "DEPT_NAME_AR": "Section Name (Arabic)",
+      "USER_DATA": "User Data",
+      "SECTION_HEAD": "Section Head"
+    }
   }
 }

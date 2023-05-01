@@ -42,6 +42,12 @@ import { AddImpLevelComponent } from './dialog/add-imp-level/add-imp-level.compo
 import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-seq.component';
 import { AddLocTypeComponent } from './dialog/add-loc-type/add-loc-type.component';
 import { AddActivityFrqComponent } from './dialog/add-activity-frq/add-activity-frq.component';
+import { OrgHierarchyComponent } from './org-hierarchy/org-hierarchy.component';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import {DividerModule} from "primeng/divider";
+import { AddSectorComponent } from './org-hierarchy/add-sector/add-sector.component';
+import { AddDepartmentComponent } from './org-hierarchy/add-department/add-department.component';
+import { AddSectionComponent } from './org-hierarchy/add-section/add-section.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -68,6 +74,10 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     AddActivityFrqComponent,
     ImpactLevelsComponent,
     ImpactAnalysisComponent,
+    OrgHierarchyComponent,
+    AddSectorComponent,
+    AddDepartmentComponent,
+    AddSectionComponent,
   ],
   imports: [
     CommonModule,
@@ -100,7 +110,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ColorPickerModule,
     ToolbarModule,
     DialogModule,
-    SidebarModule
+    SidebarModule,
+    TranslateObjModule,
+    DividerModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

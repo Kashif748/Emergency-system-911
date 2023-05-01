@@ -1,0 +1,10 @@
+.ui-treenode-children > :first-child .p-tree-toggler.p-link.p-ripple {
+  display: none;
+}
+:host ::ng-deep {
+  .p-tree-container > .p-treenode > .p-treenode-children > :first-child {
+    .p-tree .p-tree-container .p-treenode .p-treenode-content .p-treenode-icon {
+      color: red !important;
+    }
+  }
+}
