@@ -3,6 +3,7 @@
 </div>
 
 <p-dialog
+  #dialog
   [(visible)]="display"
   [modal]="true"
   [style]="{ width: '55vw' }"
@@ -52,17 +53,13 @@
         </label>
       </span>
       <ng-container
-        *ngIf="
-          form.controls['nameEn'].touched &&
-          !form.controls['nameEn'].valid &&
-          form.controls['nameEn'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        *ngIf="form.controls['nameEn'].touched && !form.controls['nameEn'].valid && form.controls['nameEn'].dirty">
+        <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
+          {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+        </p>
+
+        <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
+          {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
         </p>
       </ng-container>
     </div>
@@ -78,17 +75,13 @@
       </span>
 
       <ng-container
-        *ngIf="
-          form.controls['nameAr'].touched &&
-          !form.controls['nameAr'].valid &&
-          form.controls['nameAr'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        *ngIf="form.controls['nameAr'].touched && !form.controls['nameAr'].valid && form.controls['nameAr'].dirty">
+        <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
+          {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+        </p>
+
+        <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
+          {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
         </p>
       </ng-container>
     </div>

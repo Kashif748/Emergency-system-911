@@ -15,7 +15,7 @@ export const LOCATIONS = [
 ];
 
 export const VENDERS = [
-  {id: 7, no: 107, dept_name: 'loocation', comp_name: 'phaseOne', type: 'test3',  services: 'services'},
-  {id: 7, no: 107, dept_name: 'loocation', comp_name: 'phaseOne', type: 'test3',  services: 'test3'},
-  {id: 7, no: 107, dept_name: 'loocation', comp_name: 'phaseOne', type: 'test3',  services: 'test3'}
+  {id: 7, no: 107, dept_name: 'loocation', comp_name: 'phaseOne', criticality: 'test3',  address: 'services'},
+  {id: 7, no: 107, dept_name: 'loocation', comp_name: 'phaseOne', criticality: 'test3',  address: 'test3'},
+  {id: 7, no: 107, dept_name: 'loocation', comp_name: 'phaseOne', criticality: 'test3',  address: 'test3'}
 ];
