@@ -10,6 +10,7 @@ export { SuggestionStatusControllerService } from './services/suggestion-status-
 export { SuggestionControllerService } from './services/suggestion-controller.service';
 export { SlaControllerService } from './services/sla-controller.service';
 export { SlaDetailsControllerService } from './services/sla-details-controller.service';
+export { SituationControllerService } from './services/situation-controller.service';
 export { ShiftConfigurationControllerService } from './services/shift-configuration-controller.service';
 export { ShiftControllerService } from './services/shift-controller.service';
 export { RoleControllerService } from './services/role-controller.service';

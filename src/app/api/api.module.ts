@@ -16,6 +16,7 @@ import { SuggestionStatusControllerService } from './services/suggestion-status-
 import { SuggestionControllerService } from './services/suggestion-controller.service';
 import { SlaControllerService } from './services/sla-controller.service';
 import { SlaDetailsControllerService } from './services/sla-details-controller.service';
+import { SituationControllerService } from './services/situation-controller.service';
 import { ShiftConfigurationControllerService } from './services/shift-configuration-controller.service';
 import { ShiftControllerService } from './services/shift-controller.service';
 import { RoleControllerService } from './services/role-controller.service';
@@ -154,6 +155,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     SuggestionControllerService,
     SlaControllerService,
     SlaDetailsControllerService,
+    SituationControllerService,
     ShiftConfigurationControllerService,
     ShiftControllerService,
     RoleControllerService,
