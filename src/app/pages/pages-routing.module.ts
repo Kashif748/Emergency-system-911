@@ -408,20 +408,7 @@ const routes: Routes = [
           ).then((m) => m.UserStatisticsReportModule),
         canLoad: [PrivilegeGuard],
       },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
-      {
-        path: 'under-build',
-        component: UnderBuildComponent,
-      },
-      {
-        path: '**',
-        redirectTo: 'errors/404',
-        pathMatch: 'full',
-      },
+
       {
         path: 'login-attempts',
         canLoad: [PrivilegeGuard],
@@ -451,6 +438,15 @@ const routes: Routes = [
           import(
             '../modules/_business-continuity/business-continuity.module'
           ).then((m) => m.BusinessContinuityModule),
+      },
+      {
+        path: 'under-build',
+        component: UnderBuildComponent,
+      },
+      {
+        path: '**',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
       },
     ],
   },
