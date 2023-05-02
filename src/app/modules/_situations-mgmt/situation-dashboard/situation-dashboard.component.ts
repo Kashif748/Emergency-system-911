@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SituationsAction } from '@core/states/situations/situations.action';
 import { SituationsState } from '@core/states/situations/situations.state';
 import { TranslateService } from '@ngx-translate/core';
@@ -46,9 +46,9 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
         take(1),
         filter((t) => !!t),
         tap((t: SituationProjection) => {
-          console.log(t);
           this.getStatistics(this._situationId);
           this.getChartReport(this._situationId);
+          this.loadPage({ first: 0, rows: 20 });
         })
       );
   }
@@ -57,6 +57,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
+    private router: Router,
     private translate: TranslateService
   ) {
     // status chart
@@ -135,10 +136,9 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
       .subscribe((id) => {
         this.situationId = id;
       });
-    this.suggestions$ = this.store.select(SituationsState.page).pipe(
-      filter((p) => !!p),
-      tap(console.log)
-    );
+    this.suggestions$ = this.store
+      .select(SituationsState.page)
+      .pipe(filter((p) => !!p));
 
     this.statistics$ = this.store.select(SituationsState.statistics).pipe(
       filter((p) => !!p),
@@ -149,8 +149,6 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
       filter((p) => !!p),
       tap((data) => {
         const statuses = data.priority as any[];
-        console.log(statuses);
-
         this.chartOptions.labels = statuses?.map((s) =>
           this.translate.currentLang == 'en' ? s.nameEn : s.nameAr
         );
@@ -176,21 +174,29 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
       new BrowseSituationsAction.GetChartReport({ situationId })
     );
   }
+
+  onSuggestionSelect(event) {
+    if (event?.data) {
+      this.router.navigate(['/situations-management/situation', event.data.id]);
+    }
+  }
   search() {
     this.store.dispatch(new BrowseSituationsAction.LoadSituations());
   }
-  updateFilter(event) {
-    console.log(event);
+
+  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
     if (event?.key === 'Enter') {
       return this.search();
     }
-    if (event?.query) {
-      console.log();
 
-      this.store.dispatch(
-        new BrowseSituationsAction.UpdateFilter({ name: event.query })
-      );
-    }
+    this.store
+      .dispatch(new BrowseSituationsAction.UpdateFilter(filter))
+      .toPromise()
+      .then(() => {
+        if (filter.type) {
+          this.search();
+        }
+      });
   }
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(

@@ -4,7 +4,7 @@
 
   <div class="mx-4 my-10" *ngIf="state$ | async as state">
     <div class="row mb-4">
-      <div class="col-12">
+      <div class="col-12 mb-8">
         <p-fieldset
           [toggleable]="true"
           styleClass="px-3 py-2 search-section"
@@ -30,7 +30,7 @@
                 [autoDisplayFirst]="false"
                 [showClear]="true"
                 dataKey="id"
-                optionValue="'id"
+                optionValue="id"
                 placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
               >
                 <ng-template let-item pTemplate="selectedItem">
@@ -93,6 +93,38 @@
         </p-fieldset>
       </div>
       <div class="w-100 d-flex flex-wrap mx-1 my-2 px-6">
+        <div class="my-auto">
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
+            (click)="loadByStatus({ active: null })"
+            [ngClass]="{
+              active: state?.pageRequest?.filters['active'] == null
+            }"
+            label="{{ 'SITUATIONS.ALL' | translate }}"
+          ></button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px mx-2 px-2 text-center py-1 p-button-rounded p-button-sm p-button-warning"
+            (click)="loadByStatus({ active: false })"
+            [ngClass]="{
+              active: !state?.pageRequest?.filters['active']
+            }"
+            label="{{ 'ACTIONS.INACTIVE' | translate }}"
+          ></button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 py-1 text-center p-button-rounded p-button-primary p-button-sm text-white"
+            (click)="loadByStatus({ active: true })"
+            [ngClass]="{
+              active: state?.pageRequest?.filters['active']
+            }"
+            label="{{ 'ACTIONS.ACTIVE' | translate }}"
+          ></button>
+        </div>
         <div class="ml-dir-auto d-flex">
           <button
             pButton

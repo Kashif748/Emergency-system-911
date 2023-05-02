@@ -211,7 +211,17 @@
                 *ngIf="columns?.includes('themeType')"
                 (click)="openView(item.id)"
               >
-                {{ item.themeType | translateObj }}
+                <p-tag
+                  [severity]="
+                    item.themeType?.id === 0
+                      ? 'primary'
+                      : item.themeType?.id === 1
+                      ? 'info'
+                      : 'warning'
+                  "
+                >
+                  {{ item.themeType | translateObj }}
+                </p-tag>
               </td>
 
               <td

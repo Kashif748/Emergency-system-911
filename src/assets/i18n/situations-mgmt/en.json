@@ -14,7 +14,9 @@
     "END_DATE": "End Date & Time",
     "RCV_INCIDENTS" : "Received Incidents",
     "CLS_INCIDENTS" : "Closed Incidents",
-    "TOTAL" :"Total"
+    "TOTAL" :"Total",
+    "ALL": "All"
+
 
   }
 }

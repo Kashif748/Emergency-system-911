@@ -38,8 +38,9 @@ import { CdateModule } from '@shared/sh-pipes/cdate.pipe';
 import { DropdownModule } from 'primeng/dropdown';
 import { SituationDashboardComponent } from './situation-dashboard/situation-dashboard.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { AutoCompleteModule } from 'primeng/autocomplete';
 import { InlineSVGModule } from 'ng-inline-svg';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/situations-mgmt/', '.json');
@@ -92,8 +93,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     DropdownModule,
     CdateModule,
     NgApexchartsModule,
-    AutoCompleteModule,
     InlineSVGModule,
+    OverlayPanelModule,
+    TagModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

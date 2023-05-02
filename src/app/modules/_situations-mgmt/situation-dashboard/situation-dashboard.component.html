@@ -1,19 +1,17 @@
 <section class="d-flex flex-column px-6">
   <p-toolbar *ngIf="situation$ | async as situation">
     <div class="p-toolbar-group-left">
-      <p-autoComplete
-        [(ngModel)]="situationModel"
-        [suggestions]="suggestions$ | async"
-        (onKeyUp)="updateFilter( $event)"
-        (completeMethod)="updateFilter($event)"
-        [dropdown]="true"
-      >
-        <ng-template let-suggestion pTemplate="item">
-          <div style="font-size: 18px; float: right; margin: 10px 10px 0 0">
-            <div>{{ situation | translateObj }}</div>
-          </div>
-        </ng-template>
-      </p-autoComplete>
+      <h3>
+        {{ situation | translateObj }}
+        <button
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-angle-double-down"
+          class="p-button-rounded p-button-text"
+          (click)="op.toggle($event)"
+        ></button>
+      </h3>
     </div>
 
     <div class="p-toolbar-group-right">
@@ -105,7 +103,6 @@
     </div>
   </div>
 </section>
-<!-- state$ | async as state -->
 <section class="p-10">
   <div *ngIf="statistics$ | async as statistics">
     <ng-container *ngIf="loading$ | async; else tableTemplate">
@@ -178,3 +175,37 @@
     </ng-template>
   </div>
 </section>
+
+<p-overlayPanel #op [style]="{ width: '450px' }">
+  <div class="p-field mb-10 mt-3">
+    <input
+      type="text"
+      class="w-100"
+      pInputText
+      (keyup)="updateFilter({ name: $event.target.value }, $event)"
+      placeholder="{{ 'SITUATIONS.NAME' | translate }}"
+    />
+  </div>
+  <ng-template pTemplate>
+    <p-table
+      [value]="suggestions$ | async"
+      selectionMode="single"
+      [paginator]="true"
+      [rows]="10"
+      (onRowSelect)="onSuggestionSelect($event)"
+    >
+      <ng-template pTemplate="header">
+        <tr >
+          <th>{{ "SITUATIONS.NAME" | translate }}</th>
+          <th>{{ "SITUATIONS.TYPE" | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-suggestion>
+        <tr  [pSelectableRow]="rowData">
+          <td>{{ suggestion | translateObj }}</td>
+          <td>{{ suggestion.newsType | translateObj }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+</p-overlayPanel>

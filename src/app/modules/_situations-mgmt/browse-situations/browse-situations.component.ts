@@ -44,7 +44,6 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private messageHelper: MessageHelper,
     private breakpointObserver: BreakpointObserver,
-    private langFacade: ILangFacade,
     private router: Router
   ) {}
 
@@ -91,7 +90,10 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
               {
                 ...situationsActions[1],
                 command: () => {
-                  this.router.navigate(['/situations-management/situation', u.id]);
+                  this.router.navigate([
+                    '/situations-management/situation',
+                    u.id,
+                  ]);
                 },
                 disabled: !u.isActive,
               },
@@ -167,6 +169,14 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
       });
   }
 
+  loadByStatus(filter: { [key: string]: any }) {
+    this.store
+      .dispatch(new BrowseSituationsAction.UpdateFilter(filter))
+      .toPromise()
+      .then(() => {
+        this.search();
+      });
+  }
   // changeColumns(event) {
   //   this.store.dispatch(
   //     new BrowseSituationsAction.ChangeColumns({ columns: event.value })
