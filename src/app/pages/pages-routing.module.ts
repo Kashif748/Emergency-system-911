@@ -157,6 +157,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'situations-management',
+        loadChildren: () =>
+          import('../modules/_situations-mgmt/situations-mgmt.module').then(
+            (m) => m.SituationsMgmtModule
+          ),
+      },
+      {
         path: 'business-continuity',
         loadChildren: () =>
           import(

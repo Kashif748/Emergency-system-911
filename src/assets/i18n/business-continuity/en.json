@@ -2,13 +2,17 @@
   "VERSIONS_SETTINGS": "Version Management",
   "ADD_VERSION" : "Add new version",
   "VERSION" : "Version" ,
+  "VERSION_EN" : "Version name (Arabic)",
+  "VERSION_AR" :"Version name (English)",
+
   "RES_ORG": "Responsible Organization",
   "ORG_DETAILS": "Organization Details",
-  "ORG_ARTCH": "",
+  "ORG_ARTCH": "Administrative Structure",
   "IMPACTS": "Impacts",
   "ACTION": "ACTION",
   "ADD": "Add",
   "IMPACT_LEVELS": {
+    "LEVEL" : "Level",
     "TAB_LABEL": "Impacts Levels",
     "HEADER": "Activate Impact Levels for the Organization",
     "LEVEL_AR": "Level (Arabic)",

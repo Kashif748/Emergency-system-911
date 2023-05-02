@@ -36,12 +36,16 @@ import { DialogModule } from 'primeng/dialog';
 import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import {SidebarModule} from 'primeng/sidebar';
+import {InputNumberModule} from 'primeng/inputnumber';
+
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 
 import { AddRtoDialogComponent } from './dialog/add-rto-dialog/add-rto-dialog.component';
 import { AddImpLevelComponent } from './dialog/add-imp-level/add-imp-level.component';
 import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-seq.component';
 import { AddLocTypeComponent } from './dialog/add-loc-type/add-loc-type.component';
 import { AddActivityFrqComponent } from './dialog/add-activity-frq/add-activity-frq.component';
+import { AddImpactTypeComponent } from './dialog/add-impact-type/add-impact-type.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -68,6 +72,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     AddActivityFrqComponent,
     ImpactLevelsComponent,
     ImpactAnalysisComponent,
+    AddImpactTypeComponent,
   ],
   imports: [
     CommonModule,
@@ -98,9 +103,11 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     InputSwitchModule,
     NodataTableModule,
     ColorPickerModule,
+    InputNumberModule,
     ToolbarModule,
     DialogModule,
-    SidebarModule
+    SidebarModule,
+    SharedBreadcrumbModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

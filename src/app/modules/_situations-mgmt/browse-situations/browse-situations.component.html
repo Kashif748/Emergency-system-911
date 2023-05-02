@@ -1,0 +1,167 @@
+<app-situation-dialog></app-situation-dialog>
+<div class="container-fluid">
+  <app-breadcrumb></app-breadcrumb>
+
+  <div class="mx-4 my-10" *ngIf="state$ | async as state">
+    <div class="row mb-4">
+      <div class="col-12 mb-8">
+        <p-fieldset
+          [toggleable]="true"
+          styleClass="px-3 py-2 search-section"
+          legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+          [collapsed]="true"
+        >
+          <div class="p-fluid p-grid">
+            <div class="p-field p-col-4 p-md-3">
+              <input
+                type="text"
+                pInputText
+                [ngModel]="state?.pageRequest?.filters['name']"
+                (keyup)="updateFilter({ name: $event.target.value }, $event)"
+                placeholder="{{ 'SITUATIONS.NAME' | translate }}"
+              />
+            </div>
+            <!-- Type filter -->
+            <div class="p-field p-col-4 p-md-3">
+              <p-dropdown
+                [options]="newsTypes$ | async"
+                [ngModel]="state.pageRequest.filters['newsType']"
+                (ngModelChange)="updateFilter({ newsType: $event }, $event)"
+                [autoDisplayFirst]="false"
+                [showClear]="true"
+                dataKey="id"
+                optionValue="id"
+                placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
+              >
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item | translateObj }}
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  {{ item | translateObj }}
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <!--  From Date  -->
+            <div class="p-field p-col-12 p-md-3">
+              <span class="p-float-label">
+                <p-calendar
+                  placeholder="{{ 'SITUATIONS.START_DATE' | translate }}"
+                  [ngModel]="state.pageRequest.filters['fromDate']"
+                  (ngModelChange)="updateFilter({ fromDate: $event }, $event)"
+                  [showIcon]="true"
+                  showButtonBar="true"
+                ></p-calendar>
+              </span>
+            </div>
+            <!--  To Date  -->
+            <div class="p-field p-col-12 p-md-3">
+              <span class="p-float-label">
+                <p-calendar
+                  placeholder="{{ 'SITUATIONS.END_DATE' | translate }}"
+                  [ngModel]="state.pageRequest.filters['toDate']"
+                  (ngModelChange)="updateFilter({ toDate: $event }, $event)"
+                  [showIcon]="true"
+                  showButtonBar="true"
+                ></p-calendar>
+              </span>
+            </div>
+            <div class="p-col p-d-flex">
+              <div class="ml-dir-auto"></div>
+              <div class="mx-1">
+                <button
+                  pButton
+                  type="button"
+                  label="{{ 'ACTIONS.CLEAR' | translate }}"
+                  icon="pi pi-times"
+                  class="p-button-outlined"
+                  [loading]="loading$ | async"
+                  (click)="clear()"
+                ></button>
+              </div>
+              <div class="mx-1">
+                <button
+                  pButton
+                  label="{{ 'ACTIONS.SEARCH' | translate }}"
+                  icon="pi pi-search"
+                  [loading]="loading$ | async"
+                  (click)="search()"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="w-100 d-flex flex-wrap mx-1 my-2 px-6">
+        <div class="my-auto">
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
+            (click)="loadByStatus({ active: null })"
+            [ngClass]="{
+              active: state?.pageRequest?.filters['active'] == null
+            }"
+            label="{{ 'SITUATIONS.ALL' | translate }}"
+          ></button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px mx-2 px-2 text-center py-1 p-button-rounded p-button-sm p-button-warning"
+            (click)="loadByStatus({ active: false })"
+            [ngClass]="{
+              active: !state?.pageRequest?.filters['active']
+            }"
+            label="{{ 'ACTIONS.INACTIVE' | translate }}"
+          ></button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 py-1 text-center p-button-rounded p-button-primary p-button-sm text-white"
+            (click)="loadByStatus({ active: true })"
+            [ngClass]="{
+              active: state?.pageRequest?.filters['active']
+            }"
+            label="{{ 'ACTIONS.ACTIVE' | translate }}"
+          ></button>
+        </div>
+        <div class="ml-dir-auto d-flex">
+          <button
+            pButton
+            label="{{ 'ACTIONS.ADD' | translate }}"
+            icon="pi pi-plus"
+            (click)="openDialog()"
+          ></button>
+        </div>
+      </div>
+      <div class="col-12">
+        <p-divider [align]="'left'" styleClass="bg-transparent">
+          <p-selectButton
+            [options]="[
+              { icon: 'pi pi-bars', view: 'TABLE' },
+              { icon: 'pi pi-th-large', view: 'CARDS' }
+            ]"
+            optionLabel="icon"
+            optionValue="view"
+            [ngModel]="state.view"
+            (onChange)="changeView($event.value)"
+          >
+            <ng-template let-item>
+              <i [class]="item.icon"></i>
+            </ng-template>
+          </p-selectButton>
+        </p-divider>
+      </div>
+    </div>
+
+    <app-content-situations
+      [view]="state.view"
+      [loading]="loading$ | async"
+      [page]="page$ | async"
+      [columns]="state.columns"
+      [totalRecords]="totalRecords$ | async"
+      [pageRequest]="state.pageRequest"
+      (onPageChange)="loadPage($event)"
+    ></app-content-situations>
+  </div>
+</div>

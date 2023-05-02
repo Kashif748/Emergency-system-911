@@ -1,5 +1,5 @@
 <section>
-  <header class="border-bottom py-4">
+  <header class="border-bottom py-8">
     <h4 class="text-info p-text-bold mb-0">{{ "ORG_DETAILS" | translate }}</h4>
   </header>
   <div class="p-d-flex p-flex-column">
@@ -25,6 +25,12 @@
             *ngIf="form.controls['nameAr'].hasError('required')"
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['nameAr'].hasError('arabic')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
           </p>
         </ng-container>
       </div>
@@ -52,6 +58,12 @@
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['nameEn'].hasError('english')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+          </p>
         </ng-container>
       </div>
 
@@ -69,14 +81,29 @@
       <!-- employee  -->
       <div class="p-field p-col-12 p-md-6 mt-4">
         <span class="p-float-label">
-          <input type="text" formControlName="employee" pInputText />
+          <p-inputNumber
+            formControlName="employee"
+            inputId="minmax"
+            inputId="minmax"
+            mode="decimal"
+            [min]="0"
+          >
+          </p-inputNumber>
+
           <label>{{ "EMPLOYEES" | translate }} </label>
         </span>
       </div>
       <!--  activities -->
       <div class="p-field p-col-12 p-md-6 mt-4">
         <span class="p-float-label">
-          <input type="text" formControlName="activities" pInputText />
+          <p-inputNumber
+            formControlName="activities"
+            inputId="minmax"
+            inputId="minmax"
+            mode="decimal"
+            [min]="0"
+          >
+          </p-inputNumber>
           <label>{{ "ACTIVITIES" | translate }} </label>
         </span>
       </div>
