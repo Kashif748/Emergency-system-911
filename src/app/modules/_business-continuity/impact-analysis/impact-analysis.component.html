@@ -1,13 +1,9 @@
 <section>
-  <header class="d-flex p-jc-between p-ai-center border-bottom py-4">
+  <header class="d-flex p-jc-between p-ai-center border-bottom py-8">
     <h4 class="text-info p-text-bold mb-0">
       {{ "IMPACT_ANALYSIS.HEADER" | translate }}
     </h4>
-    <button
-      pButton
-      label="{{ 'ACTIONS.ADD' | translate }}"
-      icon="pi pi-plus"
-    ></button>
+    <app-add-impact-type></app-add-impact-type>
   </header>
   <div class="p-d-flex p-flex-column">
     <ng-container *ngIf="loading; else tableTemplate">

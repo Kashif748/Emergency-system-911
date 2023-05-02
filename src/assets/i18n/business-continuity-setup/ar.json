@@ -12,7 +12,7 @@
     "VENDER_PARTNERS":"الموردين / الشركاء"
   },
   "SYSTEMS": {
-    "NO": "مقرلا",
+    "NO": "الرقم",
     "DEPARTMENT_NAME": "إسم الإدارة",
     "SYSTEM_NAME": "إسم النظام",
     "SYSTEM_RTO": "زمن التعافي الأمثل للنظام",
@@ -25,7 +25,7 @@
     }
   },
   "LOCATIONS": {
-    "NO": "مقرلا",
+    "NO": "الرقم",
     "DEPARTMENT_NAME": "إسم الإدارة",
     "LOCATION_NAME": "إسم الموقع",
     "LOCATION_TYPE": "نوع الموقع",
@@ -43,7 +43,7 @@
     }
   },
   "VENDERS": {
-    "NO": "مقرلا",
+    "NO": "الرقم",
     "DEPARTMENT_NAME": "إسم الإدارة",
     "COMPANY_NAME": "اسم الشركة",
     "TYPE": "Type",
