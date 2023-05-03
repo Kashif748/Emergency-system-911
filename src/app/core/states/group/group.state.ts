@@ -302,7 +302,7 @@ export class GroupState {
       })
     );
     return this.groupLocationGeometry
-      .update50({
+      .update51({
         body: payload,
       }).pipe(
         finalize(() => {
@@ -327,7 +327,7 @@ export class GroupState {
       })
     );
     return this.groupService
-      .create45({
+      .create46({
         body: payload,
       })
       .pipe(
@@ -359,7 +359,7 @@ export class GroupState {
       })
     );
     return this.groupService
-      .update49({
+      .update50({
         body: payload,
       })
       .pipe(
@@ -391,7 +391,7 @@ export class GroupState {
       })
     );
     return this.groupService
-      .update49({
+      .update50({
         body: payload,
       })
       .pipe(
