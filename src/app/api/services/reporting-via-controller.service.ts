@@ -70,21 +70,21 @@ export class ReportingViaControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update10
+   * Path part for operation update11
    */
-  static readonly Update10Path = '/v1/reporting-via';
+  static readonly Update11Path = '/v1/reporting-via';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update10()` instead.
+   * To access only the response body, use `update11()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update10$Response(params: {
+  update11$Response(params: {
     body: ReportingVia
   }): Observable<StrictHttpResponse<RestApiResponseReportingVia>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ReportingViaControllerService.Update10Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ReportingViaControllerService.Update11Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class ReportingViaControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update10$Response()` instead.
+   * To access the full response (for headers, for example), `update11$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update10(params: {
+  update11(params: {
     body: ReportingVia
   }): Observable<RestApiResponseReportingVia> {
 
-    return this.update10$Response(params).pipe(
+    return this.update11$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseReportingVia>) => r.body as RestApiResponseReportingVia)
     );
   }
 
   /**
-   * Path part for operation create10
+   * Path part for operation create11
    */
-  static readonly Create10Path = '/v1/reporting-via';
+  static readonly Create11Path = '/v1/reporting-via';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create10()` instead.
+   * To access only the response body, use `create11()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create10$Response(params: {
+  create11$Response(params: {
     body: ReportingVia
   }): Observable<StrictHttpResponse<RestApiResponseReportingVia>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ReportingViaControllerService.Create10Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ReportingViaControllerService.Create11Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class ReportingViaControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create10$Response()` instead.
+   * To access the full response (for headers, for example), `create11$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create10(params: {
+  create11(params: {
     body: ReportingVia
   }): Observable<RestApiResponseReportingVia> {
 
-    return this.create10$Response(params).pipe(
+    return this.create11$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseReportingVia>) => r.body as RestApiResponseReportingVia)
     );
   }

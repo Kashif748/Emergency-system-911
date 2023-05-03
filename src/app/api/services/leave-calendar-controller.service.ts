@@ -70,21 +70,21 @@ export class LeaveCalendarControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update29
+   * Path part for operation update30
    */
-  static readonly Update29Path = '/v1/leave-calendar';
+  static readonly Update30Path = '/v1/leave-calendar';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update29()` instead.
+   * To access only the response body, use `update30()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update29$Response(params: {
+  update30$Response(params: {
     body: LeaveCalendar
   }): Observable<StrictHttpResponse<RestApiResponseLeaveCalendar>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LeaveCalendarControllerService.Update29Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, LeaveCalendarControllerService.Update30Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class LeaveCalendarControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update29$Response()` instead.
+   * To access the full response (for headers, for example), `update30$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update29(params: {
+  update30(params: {
     body: LeaveCalendar
   }): Observable<RestApiResponseLeaveCalendar> {
 
-    return this.update29$Response(params).pipe(
+    return this.update30$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLeaveCalendar>) => r.body as RestApiResponseLeaveCalendar)
     );
   }
 
   /**
-   * Path part for operation create24
+   * Path part for operation create25
    */
-  static readonly Create24Path = '/v1/leave-calendar';
+  static readonly Create25Path = '/v1/leave-calendar';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create24()` instead.
+   * To access only the response body, use `create25()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create24$Response(params: {
+  create25$Response(params: {
     body: LeaveCalendar
   }): Observable<StrictHttpResponse<RestApiResponseLeaveCalendar>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LeaveCalendarControllerService.Create24Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, LeaveCalendarControllerService.Create25Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,35 +148,35 @@ export class LeaveCalendarControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create24$Response()` instead.
+   * To access the full response (for headers, for example), `create25$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create24(params: {
+  create25(params: {
     body: LeaveCalendar
   }): Observable<RestApiResponseLeaveCalendar> {
 
-    return this.create24$Response(params).pipe(
+    return this.create25$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLeaveCalendar>) => r.body as RestApiResponseLeaveCalendar)
     );
   }
 
   /**
-   * Path part for operation getById5
+   * Path part for operation getById6
    */
-  static readonly GetById5Path = '/v1/leave-calendar/{id}';
+  static readonly GetById6Path = '/v1/leave-calendar/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById5()` instead.
+   * To access only the response body, use `getById6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById5$Response(params: {
+  getById6$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseLeaveCalendar>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LeaveCalendarControllerService.GetById5Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, LeaveCalendarControllerService.GetById6Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -194,15 +194,15 @@ export class LeaveCalendarControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById5$Response()` instead.
+   * To access the full response (for headers, for example), `getById6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById5(params: {
+  getById6(params: {
     id: number;
   }): Observable<RestApiResponseLeaveCalendar> {
 
-    return this.getById5$Response(params).pipe(
+    return this.getById6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLeaveCalendar>) => r.body as RestApiResponseLeaveCalendar)
     );
   }

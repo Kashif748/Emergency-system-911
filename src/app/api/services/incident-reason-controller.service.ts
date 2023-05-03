@@ -68,21 +68,21 @@ export class IncidentReasonControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update39
+   * Path part for operation update40
    */
-  static readonly Update39Path = '/v1/incident-reasons';
+  static readonly Update40Path = '/v1/incident-reasons';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update39()` instead.
+   * To access only the response body, use `update40()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update39$Response(params: {
+  update40$Response(params: {
     body: IncidentReason
   }): Observable<StrictHttpResponse<RestApiResponseIncidentReason>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentReasonControllerService.Update39Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentReasonControllerService.Update40Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -100,35 +100,35 @@ export class IncidentReasonControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update39$Response()` instead.
+   * To access the full response (for headers, for example), `update40$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update39(params: {
+  update40(params: {
     body: IncidentReason
   }): Observable<RestApiResponseIncidentReason> {
 
-    return this.update39$Response(params).pipe(
+    return this.update40$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentReason>) => r.body as RestApiResponseIncidentReason)
     );
   }
 
   /**
-   * Path part for operation create36
+   * Path part for operation create37
    */
-  static readonly Create36Path = '/v1/incident-reasons';
+  static readonly Create37Path = '/v1/incident-reasons';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create36()` instead.
+   * To access only the response body, use `create37()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create36$Response(params: {
+  create37$Response(params: {
     body: IncidentReason
   }): Observable<StrictHttpResponse<RestApiResponseIncidentReason>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentReasonControllerService.Create36Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentReasonControllerService.Create37Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -146,15 +146,15 @@ export class IncidentReasonControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create36$Response()` instead.
+   * To access the full response (for headers, for example), `create37$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create36(params: {
+  create37(params: {
     body: IncidentReason
   }): Observable<RestApiResponseIncidentReason> {
 
-    return this.create36$Response(params).pipe(
+    return this.create37$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentReason>) => r.body as RestApiResponseIncidentReason)
     );
   }

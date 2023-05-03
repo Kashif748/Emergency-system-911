@@ -70,21 +70,21 @@ export class PriorityControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update15
+   * Path part for operation update16
    */
-  static readonly Update15Path = '/v1/priorities';
+  static readonly Update16Path = '/v1/priorities';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update15()` instead.
+   * To access only the response body, use `update16()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update15$Response(params: {
+  update16$Response(params: {
     body: Priority
   }): Observable<StrictHttpResponse<RestApiResponsePriorityProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, PriorityControllerService.Update15Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, PriorityControllerService.Update16Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class PriorityControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update15$Response()` instead.
+   * To access the full response (for headers, for example), `update16$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update15(params: {
+  update16(params: {
     body: Priority
   }): Observable<RestApiResponsePriorityProjection> {
 
-    return this.update15$Response(params).pipe(
+    return this.update16$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePriorityProjection>) => r.body as RestApiResponsePriorityProjection)
     );
   }
 
   /**
-   * Path part for operation create15
+   * Path part for operation create16
    */
-  static readonly Create15Path = '/v1/priorities';
+  static readonly Create16Path = '/v1/priorities';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create15()` instead.
+   * To access only the response body, use `create16()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create15$Response(params: {
+  create16$Response(params: {
     body: Priority
   }): Observable<StrictHttpResponse<RestApiResponsePriorityProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, PriorityControllerService.Create15Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, PriorityControllerService.Create16Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class PriorityControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create15$Response()` instead.
+   * To access the full response (for headers, for example), `create16$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create15(params: {
+  create16(params: {
     body: Priority
   }): Observable<RestApiResponsePriorityProjection> {
 
-    return this.create15$Response(params).pipe(
+    return this.create16$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePriorityProjection>) => r.body as RestApiResponsePriorityProjection)
     );
   }
