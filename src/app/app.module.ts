@@ -67,6 +67,7 @@ import { IncidentState } from '@core/states/incident/incident.state';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import {CenterState} from "@core/states/service-center-area/centers/center.state";
 import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
+import { SituationsState } from '@core/states/situations/situations.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -131,6 +132,7 @@ export function getHighlightLanguages() {
         CommonDataState,
         AssetState,
         PhonebookState,
+        SituationsState
       ],
       {
         developmentMode: !environment.production,

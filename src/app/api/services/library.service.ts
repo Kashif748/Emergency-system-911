@@ -71,21 +71,21 @@ export class LibraryService extends BaseService {
   }
 
   /**
-   * Path part for operation update28
+   * Path part for operation update29
    */
-  static readonly Update28Path = '/v1/library';
+  static readonly Update29Path = '/v1/library';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update28()` instead.
+   * To access only the response body, use `update29()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update28$Response(params: {
+  update29$Response(params: {
     body: BaseLibrary
   }): Observable<StrictHttpResponse<RestApiResponseBaseLibrary>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LibraryService.Update28Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, LibraryService.Update29Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -103,15 +103,15 @@ export class LibraryService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update28$Response()` instead.
+   * To access the full response (for headers, for example), `update29$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update28(params: {
+  update29(params: {
     body: BaseLibrary
   }): Observable<RestApiResponseBaseLibrary> {
 
-    return this.update28$Response(params).pipe(
+    return this.update29$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBaseLibrary>) => r.body as RestApiResponseBaseLibrary)
     );
   }

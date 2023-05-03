@@ -84,6 +84,11 @@ export class CommonDataState {
     return state?.data?.incidentStatus;
   }
 
+  @Selector([CommonDataState])
+  static newsTypes(state: CommonDataStateModel) {
+    return state?.data?.newsTypes;
+  }
+
   /* ********************** ACTIONS ************************* */
 
   @Action(CommonDataAction.Load)

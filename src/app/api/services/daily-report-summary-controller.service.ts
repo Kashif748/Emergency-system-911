@@ -83,21 +83,21 @@ export class DailyReportSummaryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update69
+   * Path part for operation update70
    */
-  static readonly Update69Path = '/v1/dailysummaries';
+  static readonly Update70Path = '/v1/dailysummaries';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update69()` instead.
+   * To access only the response body, use `update70()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update69$Response(params: {
+  update70$Response(params: {
     body: DailySummaryReport
   }): Observable<StrictHttpResponse<RestApiResponseDailySummaryReportProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DailyReportSummaryControllerService.Update69Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, DailyReportSummaryControllerService.Update70Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -115,35 +115,35 @@ export class DailyReportSummaryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update69$Response()` instead.
+   * To access the full response (for headers, for example), `update70$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update69(params: {
+  update70(params: {
     body: DailySummaryReport
   }): Observable<RestApiResponseDailySummaryReportProjection> {
 
-    return this.update69$Response(params).pipe(
+    return this.update70$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDailySummaryReportProjection>) => r.body as RestApiResponseDailySummaryReportProjection)
     );
   }
 
   /**
-   * Path part for operation create63
+   * Path part for operation create64
    */
-  static readonly Create63Path = '/v1/dailysummaries';
+  static readonly Create64Path = '/v1/dailysummaries';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create63()` instead.
+   * To access only the response body, use `create64()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create63$Response(params: {
+  create64$Response(params: {
     body: DailySummaryReport
   }): Observable<StrictHttpResponse<RestApiResponseDailySummaryReportProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DailyReportSummaryControllerService.Create63Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, DailyReportSummaryControllerService.Create64Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -161,15 +161,15 @@ export class DailyReportSummaryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create63$Response()` instead.
+   * To access the full response (for headers, for example), `create64$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create63(params: {
+  create64(params: {
     body: DailySummaryReport
   }): Observable<RestApiResponseDailySummaryReportProjection> {
 
-    return this.create63$Response(params).pipe(
+    return this.create64$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDailySummaryReportProjection>) => r.body as RestApiResponseDailySummaryReportProjection)
     );
   }
@@ -221,21 +221,21 @@ export class DailyReportSummaryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation generate2
+   * Path part for operation generate3
    */
-  static readonly Generate2Path = '/v1/dailysummaries/review/{id}';
+  static readonly Generate3Path = '/v1/dailysummaries/review/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `generate2()` instead.
+   * To access only the response body, use `generate3()` instead.
    *
    * This method doesn't expect any request body.
    */
-  generate2$Response(params: {
+  generate3$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DailyReportSummaryControllerService.Generate2Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, DailyReportSummaryControllerService.Generate3Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -253,15 +253,15 @@ export class DailyReportSummaryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `generate2$Response()` instead.
+   * To access the full response (for headers, for example), `generate3$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  generate2(params: {
+  generate3(params: {
     id: number;
   }): Observable<void> {
 
-    return this.generate2$Response(params).pipe(
+    return this.generate3$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

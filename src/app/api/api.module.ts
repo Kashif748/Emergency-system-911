@@ -16,6 +16,7 @@ import { SuggestionStatusControllerService } from './services/suggestion-status-
 import { SuggestionControllerService } from './services/suggestion-controller.service';
 import { SlaControllerService } from './services/sla-controller.service';
 import { SlaDetailsControllerService } from './services/sla-details-controller.service';
+import { SituationControllerService } from './services/situation-controller.service';
 import { ShiftConfigurationControllerService } from './services/shift-configuration-controller.service';
 import { ShiftControllerService } from './services/shift-controller.service';
 import { RoleControllerService } from './services/role-controller.service';
@@ -96,6 +97,13 @@ import { CircularCcControllerService } from './services/circular-cc-controller.s
 import { CircularControllerService } from './services/circular-controller.service';
 import { CircularStatusControllerService } from './services/circular-status-controller.service';
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+import { BcVersionsControllerService } from './services/bc-versions-controller.service';
+import { BcrtoControllerService } from './services/bcrto-controller.service';
+import { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
+import { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
+import { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
+import { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
+import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
 import { AssetControllerService } from './services/asset-controller.service';
 import { AssetsGroupControllerService } from './services/assets-group-controller.service';
 import { AssetsCategoryControllerService } from './services/assets-category-controller.service';
@@ -130,6 +138,7 @@ import { DohControllerService } from './services/doh-controller.service';
 import { DashboardControllerService } from './services/dashboard-controller.service';
 import { TradeLicenseControllerService } from './services/trade-license-controller.service';
 import { CommonControllerService } from './services/common-controller.service';
+import { ResponsibleOrganizationControllerService } from './services/responsible-organization-controller.service';
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
@@ -154,6 +163,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     SuggestionControllerService,
     SlaControllerService,
     SlaDetailsControllerService,
+    SituationControllerService,
     ShiftConfigurationControllerService,
     ShiftControllerService,
     RoleControllerService,
@@ -234,6 +244,13 @@ import { MigrationControllerService } from './services/migration-controller.serv
     CircularControllerService,
     CircularStatusControllerService,
     ConfidentialtyControllerService,
+    BcVersionsControllerService,
+    BcrtoControllerService,
+    BcRecoveryPrioritiesControllerService,
+    BcLocationTypeControllerService,
+    BcWorkImportanceLevelsControllerService,
+    BcImpactLevelControllerService,
+    BcActivityFrequenciesControllerService,
     AssetControllerService,
     AssetsGroupControllerService,
     AssetsCategoryControllerService,
@@ -268,6 +285,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     DashboardControllerService,
     TradeLicenseControllerService,
     CommonControllerService,
+    ResponsibleOrganizationControllerService,
     AdcmcCategoryControllerService,
     TagControllerService,
     MigrationControllerService,

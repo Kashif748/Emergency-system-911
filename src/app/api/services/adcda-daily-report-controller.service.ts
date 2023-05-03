@@ -122,21 +122,21 @@ export class AdcdaDailyReportControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update83
+   * Path part for operation update91
    */
-  static readonly Update83Path = '/v1/adcda-daily-report';
+  static readonly Update91Path = '/v1/adcda-daily-report';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update83()` instead.
+   * To access only the response body, use `update91()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update83$Response(params: {
+  update91$Response(params: {
     body: AdcdaDailyReport
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaDailyReport>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Update83Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Update91Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class AdcdaDailyReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update83$Response()` instead.
+   * To access the full response (for headers, for example), `update91$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update83(params: {
+  update91(params: {
     body: AdcdaDailyReport
   }): Observable<RestApiResponseAdcdaDailyReport> {
 
-    return this.update83$Response(params).pipe(
+    return this.update91$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaDailyReport>) => r.body as RestApiResponseAdcdaDailyReport)
     );
   }
 
   /**
-   * Path part for operation create78
+   * Path part for operation create79
    */
-  static readonly Create78Path = '/v1/adcda-daily-report';
+  static readonly Create79Path = '/v1/adcda-daily-report';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create78()` instead.
+   * To access only the response body, use `create79()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create78$Response(params: {
+  create79$Response(params: {
     body: AdcdaDailyReport
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaDailyReport>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Create78Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Create79Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,15 +200,15 @@ export class AdcdaDailyReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create78$Response()` instead.
+   * To access the full response (for headers, for example), `create79$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create78(params: {
+  create79(params: {
     body: AdcdaDailyReport
   }): Observable<RestApiResponseAdcdaDailyReport> {
 
-    return this.create78$Response(params).pipe(
+    return this.create79$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaDailyReport>) => r.body as RestApiResponseAdcdaDailyReport)
     );
   }
@@ -309,22 +309,22 @@ export class AdcdaDailyReportControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation search8
+   * Path part for operation search9
    */
-  static readonly Search8Path = '/v1/adcda-daily-report/search';
+  static readonly Search9Path = '/v1/adcda-daily-report/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search8()` instead.
+   * To access only the response body, use `search9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search8$Response(params: {
+  search9$Response(params: {
     filter?: string;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageAdcdaDailyReportProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Search8Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Search9Path, 'get');
     if (params) {
       rb.query('filter', params.filter, {});
       rb.query('pageable', params.pageable, {});
@@ -343,16 +343,16 @@ export class AdcdaDailyReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search8$Response()` instead.
+   * To access the full response (for headers, for example), `search9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search8(params: {
+  search9(params: {
     filter?: string;
     pageable: Pageable;
   }): Observable<RestApiResponsePageAdcdaDailyReportProjection> {
 
-    return this.search8$Response(params).pipe(
+    return this.search9$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageAdcdaDailyReportProjection>) => r.body as RestApiResponsePageAdcdaDailyReportProjection)
     );
   }

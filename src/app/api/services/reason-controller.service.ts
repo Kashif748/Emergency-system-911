@@ -70,21 +70,21 @@ export class ReasonControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update11
+   * Path part for operation update12
    */
-  static readonly Update11Path = '/v1/reasons';
+  static readonly Update12Path = '/v1/reasons';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update11()` instead.
+   * To access only the response body, use `update12()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update11$Response(params: {
+  update12$Response(params: {
     body: Reason
   }): Observable<StrictHttpResponse<RestApiResponseReason>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ReasonControllerService.Update11Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ReasonControllerService.Update12Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class ReasonControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update11$Response()` instead.
+   * To access the full response (for headers, for example), `update12$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update11(params: {
+  update12(params: {
     body: Reason
   }): Observable<RestApiResponseReason> {
 
-    return this.update11$Response(params).pipe(
+    return this.update12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseReason>) => r.body as RestApiResponseReason)
     );
   }
 
   /**
-   * Path part for operation create11
+   * Path part for operation create12
    */
-  static readonly Create11Path = '/v1/reasons';
+  static readonly Create12Path = '/v1/reasons';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create11()` instead.
+   * To access only the response body, use `create12()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create11$Response(params: {
+  create12$Response(params: {
     body: Reason
   }): Observable<StrictHttpResponse<RestApiResponseReason>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ReasonControllerService.Create11Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ReasonControllerService.Create12Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class ReasonControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create11$Response()` instead.
+   * To access the full response (for headers, for example), `create12$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create11(params: {
+  create12(params: {
     body: Reason
   }): Observable<RestApiResponseReason> {
 
-    return this.create11$Response(params).pipe(
+    return this.create12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseReason>) => r.body as RestApiResponseReason)
     );
   }

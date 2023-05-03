@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { catchError, map, share, tap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, map, share, take, tap } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 import { isEmpty } from 'lodash';
 import { environment } from 'src/environments/environment';
@@ -98,7 +98,8 @@ export class AuthService implements IAuthService {
     private router: Router,
     private translationService: TranslationService,
     private apiCache: LiquidCacheService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private route: ActivatedRoute
   ) {
     this.lang = this.translationService.getSelectedLanguage();
     let tokenModel = this.storageService.getItem<TokenModel>('token');
@@ -255,14 +256,8 @@ export class AuthService implements IAuthService {
       AppCacheKeys.FIRST_LOGIN,
       result?.result?.firstLogin
     );
-    this.commonService.loadCommonData().subscribe(
-      (res) => {
-        this.router.navigate(['/']);
-      },
-      (e) => {
-        this.router.navigate(['/']);
-      }
-    );
+    const redirect = this.route?.snapshot?.queryParams['_redirect'] as string;
+    this.router.navigateByUrl(redirect ?? '/');
   }
 
   loadUserPrivileges(): Observable<any> {
