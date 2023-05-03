@@ -1,0 +1,250 @@
+<div class="p-toolbar-group-right">
+  <button
+    pButton
+    label="{{ 'ACTIONS.ADD' | translate }}"
+    icon="pi pi-plus"
+    (click)="openDialog()"
+  ></button>
+</div>
+
+<p-dialog
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <h3>
+      <span>{{ "RTO_LIST.ADD_NEW_RTO" | translate }}</span>
+      <span
+        *ngIf="true"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="false"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </h3>
+  </ng-template>
+
+  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="criticalityEn" pInputText />
+        <label>
+          {{ "RTO_LIST.CRITICALITY_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['criticalityEn'].touched &&
+          !form.controls['criticalityEn'].valid &&
+          form.controls['criticalityEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['criticalityEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['criticalityEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="criticalityAr" pInputText />
+        <label>
+          {{ "RTO_LIST.CRITICALITY_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['criticalityAr'].touched &&
+          !form.controls['criticalityAr'].valid &&
+          form.controls['criticalityAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['criticalityAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['criticalityAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="rtoEn" pInputText />
+        <label>
+          {{ "RTO_LIST.RTO_ENG" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['rtoEn'].touched &&
+          !form.controls['rtoEn'].valid &&
+          form.controls['rtoEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['rtoEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['rtoEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="rtoAr" pInputText />
+        <label>
+          {{ "RTO_LIST.RTO_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['rtoAr'].touched &&
+          !form.controls['rtoAr'].valid &&
+          form.controls['rtoAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['rtoAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['rtoAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <textarea
+          pInputText
+          type="text"
+          formControlName="descEn"
+          rows="5"
+        ></textarea>
+        <!--                <input type="text" formControlName="descEn" pInputText>-->
+        <label
+        >{{ "RTO_LIST.DESC_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['descEn'].touched &&
+          !form.controls['descEn'].valid &&
+          form.controls['descEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['descEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['descEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <textarea
+          pInputText
+          type="text"
+          formControlName="descAr"
+          rows="5"
+        ></textarea>
+        <!--<input type="text" formControlName="descAr" >-->
+        <label
+        >{{ "RTO_LIST.DESC_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['descAr'].touched &&
+          !form.controls['descAr'].valid &&
+          form.controls['descAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['descAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['descAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [disabled]="form.invalid"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
