@@ -22,21 +22,21 @@ export class IncidentReporterLocationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation create34
+   * Path part for operation create35
    */
-  static readonly Create34Path = '/v1/incident-reporter-location/ext';
+  static readonly Create35Path = '/v1/incident-reporter-location/ext';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create34()` instead.
+   * To access only the response body, use `create35()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create34$Response(params: {
+  create35$Response(params: {
     body: IncidentReporterLocationModel
   }): Observable<StrictHttpResponse<RestApiResponseIncidentReporterLocation>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentReporterLocationControllerService.Create34Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentReporterLocationControllerService.Create35Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -54,15 +54,15 @@ export class IncidentReporterLocationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create34$Response()` instead.
+   * To access the full response (for headers, for example), `create35$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create34(params: {
+  create35(params: {
     body: IncidentReporterLocationModel
   }): Observable<RestApiResponseIncidentReporterLocation> {
 
-    return this.create34$Response(params).pipe(
+    return this.create35$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentReporterLocation>) => r.body as RestApiResponseIncidentReporterLocation)
     );
   }

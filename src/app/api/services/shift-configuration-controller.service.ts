@@ -70,21 +70,21 @@ export class ShiftConfigurationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update8
+   * Path part for operation update9
    */
-  static readonly Update8Path = '/v1/shifts/configuration';
+  static readonly Update9Path = '/v1/shifts/configuration';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update8()` instead.
+   * To access only the response body, use `update9()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update8$Response(params: {
+  update9$Response(params: {
     body: ShiftConfiguration
   }): Observable<StrictHttpResponse<RestApiResponseShiftConfiguration>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ShiftConfigurationControllerService.Update8Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ShiftConfigurationControllerService.Update9Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class ShiftConfigurationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update8$Response()` instead.
+   * To access the full response (for headers, for example), `update9$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update8(params: {
+  update9(params: {
     body: ShiftConfiguration
   }): Observable<RestApiResponseShiftConfiguration> {
 
-    return this.update8$Response(params).pipe(
+    return this.update9$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseShiftConfiguration>) => r.body as RestApiResponseShiftConfiguration)
     );
   }
 
   /**
-   * Path part for operation create8
+   * Path part for operation create9
    */
-  static readonly Create8Path = '/v1/shifts/configuration';
+  static readonly Create9Path = '/v1/shifts/configuration';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create8()` instead.
+   * To access only the response body, use `create9()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create8$Response(params: {
+  create9$Response(params: {
     body: ShiftConfiguration
   }): Observable<StrictHttpResponse<RestApiResponseShiftConfiguration>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ShiftConfigurationControllerService.Create8Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ShiftConfigurationControllerService.Create9Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,35 +148,35 @@ export class ShiftConfigurationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create8$Response()` instead.
+   * To access the full response (for headers, for example), `create9$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create8(params: {
+  create9(params: {
     body: ShiftConfiguration
   }): Observable<RestApiResponseShiftConfiguration> {
 
-    return this.create8$Response(params).pipe(
+    return this.create9$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseShiftConfiguration>) => r.body as RestApiResponseShiftConfiguration)
     );
   }
 
   /**
-   * Path part for operation getById1
+   * Path part for operation getById2
    */
-  static readonly GetById1Path = '/v1/shifts/configuration/{id}';
+  static readonly GetById2Path = '/v1/shifts/configuration/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById1()` instead.
+   * To access only the response body, use `getById2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById1$Response(params: {
+  getById2$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseShiftConfiguration>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ShiftConfigurationControllerService.GetById1Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ShiftConfigurationControllerService.GetById2Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -194,15 +194,15 @@ export class ShiftConfigurationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById1$Response()` instead.
+   * To access the full response (for headers, for example), `getById2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById1(params: {
+  getById2(params: {
     id: number;
   }): Observable<RestApiResponseShiftConfiguration> {
 
-    return this.getById1$Response(params).pipe(
+    return this.getById2$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseShiftConfiguration>) => r.body as RestApiResponseShiftConfiguration)
     );
   }

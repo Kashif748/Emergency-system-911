@@ -68,21 +68,21 @@ export class IncidentGroupControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update42
+   * Path part for operation update43
    */
-  static readonly Update42Path = '/v1/incident-groups';
+  static readonly Update43Path = '/v1/incident-groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update42()` instead.
+   * To access only the response body, use `update43()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update42$Response(params: {
+  update43$Response(params: {
     body: IncidentGroup
   }): Observable<StrictHttpResponse<RestApiResponseIncidentGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Update42Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Update43Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -100,35 +100,35 @@ export class IncidentGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update42$Response()` instead.
+   * To access the full response (for headers, for example), `update43$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update42(params: {
+  update43(params: {
     body: IncidentGroup
   }): Observable<RestApiResponseIncidentGroup> {
 
-    return this.update42$Response(params).pipe(
+    return this.update43$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentGroup>) => r.body as RestApiResponseIncidentGroup)
     );
   }
 
   /**
-   * Path part for operation create38
+   * Path part for operation create39
    */
-  static readonly Create38Path = '/v1/incident-groups';
+  static readonly Create39Path = '/v1/incident-groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create38()` instead.
+   * To access only the response body, use `create39()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create38$Response(params: {
+  create39$Response(params: {
     body: IncidentGroup
   }): Observable<StrictHttpResponse<RestApiResponseIncidentGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Create38Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentGroupControllerService.Create39Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -146,15 +146,15 @@ export class IncidentGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create38$Response()` instead.
+   * To access the full response (for headers, for example), `create39$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create38(params: {
+  create39(params: {
     body: IncidentGroup
   }): Observable<RestApiResponseIncidentGroup> {
 
-    return this.create38$Response(params).pipe(
+    return this.create39$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentGroup>) => r.body as RestApiResponseIncidentGroup)
     );
   }

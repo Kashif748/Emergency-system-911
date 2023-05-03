@@ -73,22 +73,22 @@ export class GroupIncidentCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update47
+   * Path part for operation update48
    */
-  static readonly Update47Path = '/v1/groups/{groupId}/incident-category';
+  static readonly Update48Path = '/v1/groups/{groupId}/incident-category';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update47()` instead.
+   * To access only the response body, use `update48()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update47$Response(params: {
+  update48$Response(params: {
     groupId: number;
     body: GroupIncidentCatRequest
   }): Observable<StrictHttpResponse<RestApiResponseListGroupIncidentCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, GroupIncidentCategoryControllerService.Update47Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, GroupIncidentCategoryControllerService.Update48Path, 'put');
     if (params) {
       rb.path('groupId', params.groupId, {});
       rb.body(params.body, 'application/json');
@@ -107,37 +107,37 @@ export class GroupIncidentCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update47$Response()` instead.
+   * To access the full response (for headers, for example), `update48$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update47(params: {
+  update48(params: {
     groupId: number;
     body: GroupIncidentCatRequest
   }): Observable<RestApiResponseListGroupIncidentCategory> {
 
-    return this.update47$Response(params).pipe(
+    return this.update48$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListGroupIncidentCategory>) => r.body as RestApiResponseListGroupIncidentCategory)
     );
   }
 
   /**
-   * Path part for operation create43
+   * Path part for operation create44
    */
-  static readonly Create43Path = '/v1/groups/{groupId}/incident-category';
+  static readonly Create44Path = '/v1/groups/{groupId}/incident-category';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create43()` instead.
+   * To access only the response body, use `create44()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create43$Response(params: {
+  create44$Response(params: {
     groupId: number;
     body: GroupIncidentCatRequest
   }): Observable<StrictHttpResponse<RestApiResponseListGroupIncidentCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, GroupIncidentCategoryControllerService.Create43Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, GroupIncidentCategoryControllerService.Create44Path, 'post');
     if (params) {
       rb.path('groupId', params.groupId, {});
       rb.body(params.body, 'application/json');
@@ -156,16 +156,16 @@ export class GroupIncidentCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create43$Response()` instead.
+   * To access the full response (for headers, for example), `create44$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create43(params: {
+  create44(params: {
     groupId: number;
     body: GroupIncidentCatRequest
   }): Observable<RestApiResponseListGroupIncidentCategory> {
 
-    return this.create43$Response(params).pipe(
+    return this.create44$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListGroupIncidentCategory>) => r.body as RestApiResponseListGroupIncidentCategory)
     );
   }

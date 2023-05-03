@@ -71,21 +71,21 @@ export class InquiryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update31
+   * Path part for operation update32
    */
-  static readonly Update31Path = '/v1/inquiry';
+  static readonly Update32Path = '/v1/inquiry';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update31()` instead.
+   * To access only the response body, use `update32()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update31$Response(params: {
+  update32$Response(params: {
     body: Inquiry
   }): Observable<StrictHttpResponse<RestApiResponseInquiry>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InquiryControllerService.Update31Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, InquiryControllerService.Update32Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -103,35 +103,35 @@ export class InquiryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update31$Response()` instead.
+   * To access the full response (for headers, for example), `update32$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update31(params: {
+  update32(params: {
     body: Inquiry
   }): Observable<RestApiResponseInquiry> {
 
-    return this.update31$Response(params).pipe(
+    return this.update32$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseInquiry>) => r.body as RestApiResponseInquiry)
     );
   }
 
   /**
-   * Path part for operation create27
+   * Path part for operation create28
    */
-  static readonly Create27Path = '/v1/inquiry';
+  static readonly Create28Path = '/v1/inquiry';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create27()` instead.
+   * To access only the response body, use `create28()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create27$Response(params: {
+  create28$Response(params: {
     body: Inquiry
   }): Observable<StrictHttpResponse<RestApiResponseInquiryProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InquiryControllerService.Create27Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, InquiryControllerService.Create28Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -149,15 +149,15 @@ export class InquiryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create27$Response()` instead.
+   * To access the full response (for headers, for example), `create28$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create27(params: {
+  create28(params: {
     body: Inquiry
   }): Observable<RestApiResponseInquiryProjection> {
 
-    return this.create27$Response(params).pipe(
+    return this.create28$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseInquiryProjection>) => r.body as RestApiResponseInquiryProjection)
     );
   }
@@ -255,22 +255,22 @@ export class InquiryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation search3
+   * Path part for operation search4
    */
-  static readonly Search3Path = '/v1/inquiry/search';
+  static readonly Search4Path = '/v1/inquiry/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search3()` instead.
+   * To access only the response body, use `search4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search3$Response(params: {
+  search4$Response(params: {
     filter: InquirySearchCriteria;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageInquiryProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InquiryControllerService.Search3Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, InquiryControllerService.Search4Path, 'get');
     if (params) {
       rb.query('filter', params.filter, {});
       rb.query('pageable', params.pageable, {});
@@ -289,16 +289,16 @@ export class InquiryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search3$Response()` instead.
+   * To access the full response (for headers, for example), `search4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search3(params: {
+  search4(params: {
     filter: InquirySearchCriteria;
     pageable: Pageable;
   }): Observable<RestApiResponsePageInquiryProjection> {
 
-    return this.search3$Response(params).pipe(
+    return this.search4$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageInquiryProjection>) => r.body as RestApiResponsePageInquiryProjection)
     );
   }

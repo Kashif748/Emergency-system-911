@@ -279,21 +279,21 @@ export class DmsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getById9
+   * Path part for operation getById10
    */
-  static readonly GetById9Path = '/v1/dms/{id}';
+  static readonly GetById10Path = '/v1/dms/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById9()` instead.
+   * To access only the response body, use `getById10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById9$Response(params: {
+  getById10$Response(params: {
     id: string;
   }): Observable<StrictHttpResponse<RestApiResponseDocuments>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DmsControllerService.GetById9Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, DmsControllerService.GetById10Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -311,15 +311,15 @@ export class DmsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById9$Response()` instead.
+   * To access the full response (for headers, for example), `getById10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById9(params: {
+  getById10(params: {
     id: string;
   }): Observable<RestApiResponseDocuments> {
 
-    return this.getById9$Response(params).pipe(
+    return this.getById10$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDocuments>) => r.body as RestApiResponseDocuments)
     );
   }

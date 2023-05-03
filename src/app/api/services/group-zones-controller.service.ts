@@ -69,22 +69,22 @@ export class GroupZonesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update46
+   * Path part for operation update47
    */
-  static readonly Update46Path = '/v1/groups/{groupId}/zones';
+  static readonly Update47Path = '/v1/groups/{groupId}/zones';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update46()` instead.
+   * To access only the response body, use `update47()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update46$Response(params: {
+  update47$Response(params: {
     groupId: number;
     body: GroupZones
   }): Observable<StrictHttpResponse<RestApiResponseListGroupZones>> {
 
-    const rb = new RequestBuilder(this.rootUrl, GroupZonesControllerService.Update46Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, GroupZonesControllerService.Update47Path, 'put');
     if (params) {
       rb.path('groupId', params.groupId, {});
       rb.body(params.body, 'application/json');
@@ -103,37 +103,37 @@ export class GroupZonesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update46$Response()` instead.
+   * To access the full response (for headers, for example), `update47$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update46(params: {
+  update47(params: {
     groupId: number;
     body: GroupZones
   }): Observable<RestApiResponseListGroupZones> {
 
-    return this.update46$Response(params).pipe(
+    return this.update47$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListGroupZones>) => r.body as RestApiResponseListGroupZones)
     );
   }
 
   /**
-   * Path part for operation create42
+   * Path part for operation create43
    */
-  static readonly Create42Path = '/v1/groups/{groupId}/zones';
+  static readonly Create43Path = '/v1/groups/{groupId}/zones';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create42()` instead.
+   * To access only the response body, use `create43()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create42$Response(params: {
+  create43$Response(params: {
     groupId: number;
     body: GroupZones
   }): Observable<StrictHttpResponse<RestApiResponseListGroupZones>> {
 
-    const rb = new RequestBuilder(this.rootUrl, GroupZonesControllerService.Create42Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, GroupZonesControllerService.Create43Path, 'post');
     if (params) {
       rb.path('groupId', params.groupId, {});
       rb.body(params.body, 'application/json');
@@ -152,16 +152,16 @@ export class GroupZonesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create42$Response()` instead.
+   * To access the full response (for headers, for example), `create43$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create42(params: {
+  create43(params: {
     groupId: number;
     body: GroupZones
   }): Observable<RestApiResponseListGroupZones> {
 
-    return this.create42$Response(params).pipe(
+    return this.create43$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListGroupZones>) => r.body as RestApiResponseListGroupZones)
     );
   }

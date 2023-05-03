@@ -70,21 +70,21 @@ export class SchedulerControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update51
+   * Path part for operation update52
    */
-  static readonly Update51Path = '/v1/ext/schedulers';
+  static readonly Update52Path = '/v1/ext/schedulers';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update51()` instead.
+   * To access only the response body, use `update52()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update51$Response(params: {
+  update52$Response(params: {
     body: Scheduler
   }): Observable<StrictHttpResponse<RestApiResponseScheduler>> {
 
-    const rb = new RequestBuilder(this.rootUrl, SchedulerControllerService.Update51Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, SchedulerControllerService.Update52Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class SchedulerControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update51$Response()` instead.
+   * To access the full response (for headers, for example), `update52$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update51(params: {
+  update52(params: {
     body: Scheduler
   }): Observable<RestApiResponseScheduler> {
 
-    return this.update51$Response(params).pipe(
+    return this.update52$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseScheduler>) => r.body as RestApiResponseScheduler)
     );
   }
 
   /**
-   * Path part for operation create47
+   * Path part for operation create48
    */
-  static readonly Create47Path = '/v1/ext/schedulers';
+  static readonly Create48Path = '/v1/ext/schedulers';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create47()` instead.
+   * To access only the response body, use `create48()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create47$Response(params: {
+  create48$Response(params: {
     body: Scheduler
   }): Observable<StrictHttpResponse<RestApiResponseScheduler>> {
 
-    const rb = new RequestBuilder(this.rootUrl, SchedulerControllerService.Create47Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, SchedulerControllerService.Create48Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class SchedulerControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create47$Response()` instead.
+   * To access the full response (for headers, for example), `create48$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create47(params: {
+  create48(params: {
     body: Scheduler
   }): Observable<RestApiResponseScheduler> {
 
-    return this.create47$Response(params).pipe(
+    return this.create48$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseScheduler>) => r.body as RestApiResponseScheduler)
     );
   }

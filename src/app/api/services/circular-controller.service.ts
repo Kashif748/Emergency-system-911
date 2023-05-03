@@ -88,21 +88,21 @@ export class CircularControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update75
+   * Path part for operation update76
    */
-  static readonly Update75Path = '/v1/circulars';
+  static readonly Update76Path = '/v1/circulars';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update75()` instead.
+   * To access only the response body, use `update76()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update75$Response(params: {
+  update76$Response(params: {
     body: Circular
   }): Observable<StrictHttpResponse<RestApiResponseCircularMinimumProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CircularControllerService.Update75Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, CircularControllerService.Update76Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -120,35 +120,35 @@ export class CircularControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update75$Response()` instead.
+   * To access the full response (for headers, for example), `update76$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update75(params: {
+  update76(params: {
     body: Circular
   }): Observable<RestApiResponseCircularMinimumProjection> {
 
-    return this.update75$Response(params).pipe(
+    return this.update76$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCircularMinimumProjection>) => r.body as RestApiResponseCircularMinimumProjection)
     );
   }
 
   /**
-   * Path part for operation create70
+   * Path part for operation create71
    */
-  static readonly Create70Path = '/v1/circulars';
+  static readonly Create71Path = '/v1/circulars';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create70()` instead.
+   * To access only the response body, use `create71()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create70$Response(params: {
+  create71$Response(params: {
     body: Circular
   }): Observable<StrictHttpResponse<RestApiResponseCircularProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CircularControllerService.Create70Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, CircularControllerService.Create71Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -166,15 +166,15 @@ export class CircularControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create70$Response()` instead.
+   * To access the full response (for headers, for example), `create71$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create70(params: {
+  create71(params: {
     body: Circular
   }): Observable<RestApiResponseCircularProjection> {
 
-    return this.create70$Response(params).pipe(
+    return this.create71$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCircularProjection>) => r.body as RestApiResponseCircularProjection)
     );
   }
@@ -275,21 +275,21 @@ export class CircularControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation generate3
+   * Path part for operation generate4
    */
-  static readonly Generate3Path = '/v1/circulars/review/{id}';
+  static readonly Generate4Path = '/v1/circulars/review/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `generate3()` instead.
+   * To access only the response body, use `generate4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  generate3$Response(params: {
+  generate4$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CircularControllerService.Generate3Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, CircularControllerService.Generate4Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -307,15 +307,15 @@ export class CircularControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `generate3$Response()` instead.
+   * To access the full response (for headers, for example), `generate4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  generate3(params: {
+  generate4(params: {
     id: number;
   }): Observable<void> {
 
-    return this.generate3$Response(params).pipe(
+    return this.generate4$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
