@@ -29,6 +29,8 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {ContentRtoComponent} from "./browse-rto/content-rto/content-rto.component";
 import {BrowseRtoComponent} from "./browse-rto/browse-rto.component";
 import {RtoDialogComponent} from "./browse-rto/rto-dialog/rto-dialog.component";
+import {NgxsModule} from "@ngxs/store";
+import {BrowseRtoState} from "./states/browse-rto.state";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -43,6 +45,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   imports: [
     CommonModule,
     RtoRoutingModule,
+    NgxsModule.forFeature([BrowseRtoState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
