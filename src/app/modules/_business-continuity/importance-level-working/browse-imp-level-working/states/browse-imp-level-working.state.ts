@@ -1,27 +1,28 @@
-import {PageRequestModel} from '@core/models/page-request.model';
+import {PageRequestModel} from "@core/models/page-request.model";
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
+import {ApiHelper} from "@core/helpers/api.helper";
+import {MessageHelper} from "@core/helpers/message.helper";
 import {Injectable} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {MessageHelper} from "@core/helpers/message.helper";
 import {iif, patch} from "@ngxs/store/operators";
-import {BrowseRtoAction} from "./browse-rto.action";
-import {RtoAction} from "@core/states/bc/rto.action";
-import {ApiHelper} from "@core/helpers/api.helper";
 import {catchError, tap} from "rxjs/operators";
+import {BrowseRtoStateModel} from "../../../rto/states/browse-rto.state";
 import {EMPTY} from "rxjs";
+import {BrowseImpLevelWorkingAction} from "./browse-imp-level-working.action";
+import {ImpLevelWorkingAction} from "@core/states";
 
 
-export interface BrowseRtoStateModel {
+export interface BrowseImpLevelWorkingStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
   view: 'TABLE' | 'CARDS';
 }
 
-export const BROWSE_RTO_UI_STATE_TOKEN =
-  new StateToken<BrowseRtoStateModel>('browse_rto');
+export const BROWSE_IMP_LEVEL_WORKING_UI_STATE_TOKEN =
+  new StateToken<BrowseImpLevelWorkingStateModel>('browse_imp_level_working');
 
-@State<BrowseRtoStateModel>({
-  name: BROWSE_RTO_UI_STATE_TOKEN,
+@State<BrowseImpLevelWorkingStateModel>({
+  name: BROWSE_IMP_LEVEL_WORKING_UI_STATE_TOKEN,
   defaults: {
     pageRequest: {
       filters: {},
@@ -36,9 +37,10 @@ export const BROWSE_RTO_UI_STATE_TOKEN =
     view: 'TABLE',
   },
 })
+
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-export class BrowseRtoState {
+export class BrowseImpLevelWorkingState {
   /**
    *
    */
@@ -51,19 +53,19 @@ export class BrowseRtoState {
   }
 
   /* ************************ SELECTORS ******************** */
-  @Selector([BrowseRtoState])
-  static state(state: BrowseRtoStateModel): BrowseRtoStateModel {
+  @Selector([BrowseImpLevelWorkingState])
+  static state(state: BrowseImpLevelWorkingStateModel): BrowseImpLevelWorkingStateModel {
     return state;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(BrowseRtoAction.LoadRto)
-  LoadRto(
-    { setState, dispatch, getState }: StateContext<BrowseRtoStateModel>,
-    { payload }: BrowseRtoAction.LoadRto
+  @Action(BrowseImpLevelWorkingAction.LoadImpLevelWorking)
+  LoadImpLevelWorking(
+    { setState, dispatch, getState }: StateContext<BrowseImpLevelWorkingStateModel>,
+    { payload }: BrowseImpLevelWorkingAction.LoadImpLevelWorking
   ) {
     setState(
-      patch<BrowseRtoStateModel>({
+      patch<BrowseImpLevelWorkingStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
@@ -72,7 +74,7 @@ export class BrowseRtoState {
     );
     const pageRequest = getState().pageRequest;
     return dispatch(
-      new RtoAction.LoadPage({
+      new ImpLevelWorkingAction.LoadPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -81,17 +83,17 @@ export class BrowseRtoState {
     );
   }
 
-  @Action(BrowseRtoAction.CreateRto)
+  @Action(BrowseImpLevelWorkingAction.CreateImpLevelWorking)
   createRto(
     { dispatch }: StateContext<BrowseRtoStateModel>,
-    { payload }: BrowseRtoAction.CreateRto
+    { payload }: BrowseImpLevelWorkingAction.CreateImpLevelWorking
   ) {
-    return dispatch(new RtoAction.Create(payload)).pipe(
+    return dispatch(new ImpLevelWorkingAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseRtoAction.LoadRto(),
-          new BrowseRtoAction.ToggleDialog({}),
+          new BrowseImpLevelWorkingAction.LoadImpLevelWorking(),
+          new BrowseImpLevelWorkingAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {

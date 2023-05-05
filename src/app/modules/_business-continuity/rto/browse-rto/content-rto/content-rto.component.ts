@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 import {DATA} from "../../../tabs.const";
 import {ILangFacade} from "@core/facades/lang.facade";
+import {PageRequestModel} from "@core/models/page-request.model";
+import {UserAndRoleProjection} from "../../../../../api/models";
+import {LazyLoadEvent} from "primeng/api";
+import {Bcrto} from "../../../../../api/models/bcrto";
 
 @Component({
   selector: 'app-content-rto',
@@ -9,16 +13,34 @@ import {ILangFacade} from "@core/facades/lang.facade";
   styleUrls: ['./content-rto.component.scss']
 })
 export class ContentRtoComponent implements OnInit {
-  public loading = false;
+
+  @Input()
+  loading: boolean;
+  @Input()
+  page: Bcrto[];
+  @Input()
+  columns: string[];
+  @Input()
+  totalRecords: number;
+  @Input()
+  pageRequest: PageRequestModel;
+
+  @Output()
+  onPageChange = new EventEmitter<LazyLoadEvent>();
+
   public display = false;
-  public columns: string[] = ['criticality', 'rto', 'desc'];
-  public page = [];
+
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade) {}
 
   ngOnInit(): void {
-    this.page = DATA.rtoList.map((item) => {
+    this.onPageChange.emit({
+      first: this.pageRequest?.first,
+      rows: this.pageRequest?.rows,
+    });
+    console.log(this.page);
+/*    this.page = DATA.rtoList.map((item) => {
       return {
         ...item,
         actions: [
@@ -31,7 +53,7 @@ export class ContentRtoComponent implements OnInit {
           },
         ],
       };
-    });
+    });*/
   }
 
   openView(Id?: number) {

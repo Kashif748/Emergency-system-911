@@ -9,6 +9,7 @@ import { LocTypeComponent } from './loc-type/loc-type.component';
 import { OrgDetailsComponent } from './org-details/org-details.component';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
 import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
+import {ImportanceLevelWorkingModule} from "./importance-level-working/importance-level-working.module";
 
 const routes: Routes = [
   {
@@ -50,7 +51,7 @@ const routes: Routes = [
       },
       {
         path: 'imp-level-working',
-        component: ImpLevelWorkingComponent,
+        loadChildren: () => import('./importance-level-working/importance-level-working.module').then((m) => m.ImportanceLevelWorkingModule),
       },
     ],
   },

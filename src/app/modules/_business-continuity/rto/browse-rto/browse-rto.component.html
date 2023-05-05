@@ -1,1 +1,6 @@
-<p>browse-rto works!</p>
+<div *ngIf="state$ | async as state">
+  <app-content-rto  [loading]="loading$ | async" [page]="page$ | async"
+                    [columns]="state.columns"
+                    [pageRequest]="state?.pageRequest"
+                    (onPageChange)="loadPage($event)"></app-content-rto>
+</div>
