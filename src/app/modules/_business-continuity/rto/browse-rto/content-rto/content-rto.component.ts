@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
-import {DATA} from "../../../tabs.const";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {PageRequestModel} from "@core/models/page-request.model";
-import {UserAndRoleProjection} from "../../../../../api/models";
 import {LazyLoadEvent} from "primeng/api";
 import {Bcrto} from "../../../../../api/models/bcrto";
+import {BrowseRtoAction} from "../../states/browse-rto.action";
+import {Store} from "@ngxs/store";
 
 @Component({
   selector: 'app-content-rto',
@@ -32,7 +32,8 @@ export class ContentRtoComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private lang: ILangFacade) {}
+    private lang: ILangFacade,
+    private store: Store) {}
 
   ngOnInit(): void {
     this.onPageChange.emit({
@@ -56,8 +57,8 @@ export class ContentRtoComponent implements OnInit {
     });*/
   }
 
-  openView(Id?: number) {
-    // this.store.dispatch(new BrowseGroupsAction.OpenView({ id: groupId }));
+  openView(id?: number) {
+    this.store.dispatch(new BrowseRtoAction.OpenView({ rtoId: id }));
   }
 
   openDialog(Id?: number) {

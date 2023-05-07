@@ -30,4 +30,12 @@ export namespace BrowseRtoAction {
      */
     constructor(public payload: { rtoId?: number }) {}
   }
+
+  export class OpenView {
+    static readonly type = '[BrowseRto] Open View';
+    /**
+     *
+     */
+    constructor(public payload: { rtoId: number }) {}
+  }
 }

@@ -9,6 +9,8 @@ import {RtoAction} from "@core/states/bc/rto.action";
 import {ApiHelper} from "@core/helpers/api.helper";
 import {catchError, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
+import {BrowseUsersStateModel} from "../../../_user-mgmt/states/browse-users.state";
+import {BrowseUsersAction} from "../../../_user-mgmt/states/browse-users.action";
 
 
 export interface BrowseRtoStateModel {
@@ -99,5 +101,41 @@ export class BrowseRtoState {
         return EMPTY;
       })
     );
+  }
+
+  @Action(BrowseRtoAction.ToggleDialog, { cancelUncompleted: true })
+  openDialog(
+    {}: StateContext<BrowseUsersStateModel>,
+    { payload }: BrowseRtoAction.ToggleDialog
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'opened',
+        _id: payload.rtoId,
+        _mode: undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  @Action(BrowseRtoAction.OpenView, { cancelUncompleted: true })
+  openView(
+    {}: StateContext<BrowseUsersStateModel>,
+    { payload }: BrowseRtoAction.OpenView
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'opened',
+        _id: payload.rtoId,
+        _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

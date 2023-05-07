@@ -1,15 +1,16 @@
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {EMPTY} from "rxjs";
+import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
+import {EMPTY, of} from "rxjs";
 import {Bcrto} from "../../../api/models/bcrto";
-import {RtoAction} from "@core/states/bc/rto.action";
+import { RtoAction} from "@core/states/bc/rto.action";
 import {BcrtoControllerService} from "../../../api/services/bcrto-controller.service";
 
 
 export interface RtoStateModel {
   page: Bcrto[];
+  rto: Bcrto;
   loading: boolean;
   blocking: boolean;
 }
@@ -32,6 +33,11 @@ export class RtoState {
   @Selector([RtoState])
   static page(state: RtoStateModel) {
     return state?.page;
+  }
+
+  @Selector([RtoState])
+  static rto(state: RtoStateModel) {
+    return state?.rto;
   }
 
 /*  @Selector([RtoState])
@@ -121,5 +127,41 @@ export class RtoState {
           );
         })
       );
+  }
+
+  @Action(RtoAction.GetRto, { cancelUncompleted: true })
+  getRto(
+    { setState }: StateContext<RtoStateModel>,
+    { payload }: RtoAction.GetRto
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      setState(
+        patch<RtoStateModel>({
+          rto: undefined,
+        })
+      );
+      return;
+    }
+    setState(
+      patch<RtoStateModel>({
+        blocking: true,
+      })
+    );
+    return this.rto.getOne1({ id: payload.id }).pipe(
+      tap((rto) => {
+        setState(
+          patch<RtoStateModel>({
+            rto: rto.result,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<RtoStateModel>({
+            blocking: false,
+          })
+        );
+      })
+    );
   }
 }

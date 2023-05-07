@@ -27,4 +27,16 @@ export namespace RtoAction {
       public payload: Bcrto
     ) {}
   }
+
+  export class GetRto {
+    static readonly type = '[Rto] Get Rto';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

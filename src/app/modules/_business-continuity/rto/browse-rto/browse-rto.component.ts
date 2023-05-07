@@ -95,14 +95,14 @@ export class BrowseRtoComponent implements OnInit {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                // disabled: !u.isActive,
+                 disabled: !u.isActive,
               },
               {
                 ...userActions[1],
                 command: () => {
                   this.activate(u.id);
                 },
-                // disabled: u.isActive,
+                 disabled: u.isActive,
               },
             ],
           };
@@ -112,7 +112,7 @@ export class BrowseRtoComponent implements OnInit {
   }
 
   openDialog(id?: number) {
-    // this.store.dispatch(new BrowseUsersAction.ToggleDialog({ userId: id }));
+     this.store.dispatch(new BrowseRtoAction.ToggleDialog({ rtoId: id }));
   }
 
   activate(id: number) {

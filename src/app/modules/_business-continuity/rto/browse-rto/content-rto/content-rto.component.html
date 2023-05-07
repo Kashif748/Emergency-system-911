@@ -108,13 +108,17 @@
                   ></div>
                 </td>
 
-                <td>
-                  {{ item.criticality }}
+                <td (click)="item.isActive && openView(item.id)">
+                  {{ item | translateObj : 'criticality'}}
                 </td>
 
-                <td>2nd</td>
+                <td (click)="item.isActive && openView(item.id)">
+                  {{ item | translateObj : 'name'}}
+                </td>
 
-                <td>3rd</td>
+                <td (click)="item.isActive && openView(item.id)">
+                  {{ item | translateObj : 'description'}}
+                </td>
 
                 <td>
                   <button

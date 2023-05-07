@@ -31,6 +31,7 @@ import {BrowseRtoComponent} from "./browse-rto/browse-rto.component";
 import {RtoDialogComponent} from "./browse-rto/rto-dialog/rto-dialog.component";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseRtoState} from "./states/browse-rto.state";
+import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -76,6 +77,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ToolbarModule,
     DialogModule,
     SidebarModule,
+    TranslateObjModule,
     SharedBreadcrumbModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],

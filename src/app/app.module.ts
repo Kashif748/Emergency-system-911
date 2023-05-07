@@ -59,7 +59,7 @@ import {
   OrgState,
   RoleState,
   TaskState,
-  UserState,
+  UserState, RtoState,
 } from '@core/states';
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
@@ -68,6 +68,7 @@ import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import {CenterState} from "@core/states/service-center-area/centers/center.state";
 import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
 import { SituationsState } from '@core/states/situations/situations.state';
+import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -132,7 +133,9 @@ export function getHighlightLanguages() {
         CommonDataState,
         AssetState,
         PhonebookState,
-        SituationsState
+        SituationsState,
+        RtoState,
+        ImpLevelWorkingState
       ],
       {
         developmentMode: !environment.production,
