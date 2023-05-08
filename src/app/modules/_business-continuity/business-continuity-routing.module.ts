@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
-import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
 import { BusinessContinuityComponent } from './business-continuity/business-continuity.component';
 import { ImpactAnalysisComponent } from './impact-analysis/impact-analysis.component';
 import { ImpactLevelsComponent } from './impact-levels/impact-levels.component';
 import { LocTypeComponent } from './loc-type/loc-type.component';
 import { OrgDetailsComponent } from './org-details/org-details.component';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
-import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
-import {ImportanceLevelWorkingModule} from "./importance-level-working/importance-level-working.module";
 
 const routes: Routes = [
   {
@@ -43,7 +40,7 @@ const routes: Routes = [
       },
       {
         path: 'activey-priority',
-        component: ActivityPrioritySeqComponent,
+        loadChildren: () => import('./activity-priority-sequence/activity-priority-sequence.module').then((m) => m.ActivityPrioritySequenceModule),
       },
       {
         path: 'loc-types',
