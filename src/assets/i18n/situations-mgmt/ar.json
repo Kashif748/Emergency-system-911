@@ -1,6 +1,6 @@
 {
   "SITUATIONS": {
-    "ADD_HEADER" :"",
+    "SITUATIONS_LIST": "اختيار حالة",
     "VIEW_DASHBOARD": "عرض لوحة التحكم",
     "PRINT": "طباعة تقرير",
     "DELETE": "حذف",
@@ -12,10 +12,12 @@
     "ALERTNESS_LEVEL": " مستوى الاستعداد",
     "START_DATE": " تاريخ و وقت بدء الحالة",
     "END_DATE": "تاريخ و وقت انتهاء الحالة ",
-    "RCV_INCIDENTS" : "عدد البلاغات المستلمة",
-    "CLS_INCIDENTS" : "عدد البلاغات المغلقة",
-    "TOTAL" :"الاجمالي",
-    "ALL" :"الكل"
-
+    "RCV_INCIDENTS": "عدد البلاغات المستلمة",
+    "CLS_INCIDENTS": "عدد البلاغات المغلقة",
+    "TOTAL": "الاجمالي",
+    "ALL": "الكل",
+    "RECOVERY_RATE": "نسبة التعافي",
+    "INCIDENT_MAIN_CATEGORY": "تصنيف البلاغ الرئيسي",
+    "CHART_TITLE": "توزع البلاغات حسب الأهمية"
   }
 }

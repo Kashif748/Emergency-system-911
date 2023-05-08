@@ -12,7 +12,7 @@
           [collapsed]="true"
         >
           <div class="p-fluid p-grid">
-            <div class="p-field p-col-4 p-md-3">
+            <div class="p-field p-col-12 p-md-3">
               <input
                 type="text"
                 pInputText
@@ -21,8 +21,9 @@
                 placeholder="{{ 'SITUATIONS.NAME' | translate }}"
               />
             </div>
+
             <!-- Type filter -->
-            <div class="p-field p-col-4 p-md-3">
+            <div class="p-field p-col-12 p-md-3">
               <p-dropdown
                 [options]="newsTypes$ | async"
                 [ngModel]="state.pageRequest.filters['newsType']"
@@ -50,7 +51,12 @@
                   [ngModel]="state.pageRequest.filters['fromDate']"
                   (ngModelChange)="updateFilter({ fromDate: $event }, $event)"
                   [showIcon]="true"
+                  [maxDate]="state.pageRequest.filters['toDate']"
+                  appendTo="body"
+                  dateFormat="dd/mm/yy"
                   showButtonBar="true"
+                  [showTime]="true"
+                  hourFormat="12"
                 ></p-calendar>
               </span>
             </div>
@@ -62,7 +68,12 @@
                   [ngModel]="state.pageRequest.filters['toDate']"
                   (ngModelChange)="updateFilter({ toDate: $event }, $event)"
                   [showIcon]="true"
+                  [minDate]="state.pageRequest.filters['fromDate']"
+                  appendTo="body"
+                  dateFormat="dd/mm/yy"
                   showButtonBar="true"
+                  [showTime]="true"
+                  hourFormat="12"
                 ></p-calendar>
               </span>
             </div>
@@ -127,6 +138,7 @@
         </div>
         <div class="ml-dir-auto d-flex">
           <button
+            *checkPrivileges="'PRIV_ADD_SITUATION'"
             pButton
             label="{{ 'ACTIONS.ADD' | translate }}"
             icon="pi pi-plus"
