@@ -41,7 +41,7 @@
       </ng-container>
       <ng-template #cardsTemplate>
         <ng-container *ngFor="let item of page">
-          <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border">
+          <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border" [ngClass]="{'highlight': item.expireDate && item.expireDate < nowDate}">
             <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
               [ngClass]="{ 'border-primary': item.isActive, 'border-warning': !item.isActive}">
               <ng-container *ngIf="!item.photo?.length; else profileImg">
