@@ -74,4 +74,12 @@ export namespace SituationsAction {
       }
     ) {}
   }
+
+  export class ExportPdf {
+    static readonly type = '[Situations] Export PDF';
+    /**
+     *
+     */
+    constructor(public payload: { situationId: number , }) {}
+  }
 }

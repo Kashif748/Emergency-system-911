@@ -43,6 +43,7 @@ export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
       'themeType',
       'startDate',
       'endDate',
+      'actions',
     ],
 
     view: 'TABLE',
@@ -80,6 +81,7 @@ export class BrowseSituationsState {
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+          filters: iif(!!payload?.pageRequest, payload?.pageRequest?.filters),
         }),
       })
     );
@@ -103,14 +105,14 @@ export class BrowseSituationsState {
     return dispatch(new SituationsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseSituationsAction.LoadSituations());
+        dispatch([
+          new BrowseSituationsAction.LoadSituations(),
+          new BrowseSituationsAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseSituationsAction.ToggleDialog({}));
       })
     );
   }
@@ -123,14 +125,14 @@ export class BrowseSituationsState {
     return dispatch(new SituationsAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseSituationsAction.LoadSituations());
+        dispatch([
+          new BrowseSituationsAction.LoadSituations(),
+          new BrowseSituationsAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseSituationsAction.ToggleDialog({}));
       })
     );
   }
@@ -142,15 +144,39 @@ export class BrowseSituationsState {
   ) {
     this.router.navigate([], {
       queryParams: {
-        _dialog:
-          this.route.snapshot.queryParams['_dialog'] == 'opened'
-            ? undefined
-            : 'opened',
+        _dialog: this.route.snapshot.queryParams['_dialog']
+          ? undefined
+          : payload.dialogName,
+
         _id: payload.situationId,
         _mode: undefined,
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseSituationsAction.ChangeView)
+  changeView(
+    { setState }: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.ChangeView
+  ) {
+    setState(
+      patch<BrowseSituationsStateModel>({
+        view: payload.view,
+      })
+    );
+  }
+
+  @Action(BrowseSituationsAction.ExportPdf, { cancelUncompleted: true })
+  exportPdf(
+    { dispatch }: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.ExportPdf
+  ) {
+    return dispatch(new SituationsAction.ExportPdf(payload)).pipe(
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 
   @Action(BrowseSituationsAction.UpdateFilter, { cancelUncompleted: true })

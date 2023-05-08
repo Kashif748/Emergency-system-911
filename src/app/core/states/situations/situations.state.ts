@@ -15,12 +15,18 @@ import { PageSituationProjection } from 'src/app/api/models/page-situation-proje
 import { SituationControllerService } from 'src/app/api/services/situation-controller.service';
 import { SituationProjection } from 'src/app/api/models/situation-projection';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import {
+  SituationChartReportResponse,
+  SituationStatisticsResponse,
+} from 'src/app/api/models';
+import { UrlHelperService } from '@core/services/url-helper.service';
+import { ILangFacade } from '@core/facades/lang.facade';
 
 export interface SituationsStateModel {
   page: PageSituationProjection;
   situation: SituationProjection;
-  statistics: any;
-  chartReport: any;
+  statistics: SituationStatisticsResponse;
+  chartReport: SituationChartReportResponse;
   loading: boolean;
   statisticsLoading: boolean;
   blocking: boolean;
@@ -34,7 +40,11 @@ const SITUATIONS_STATE_TOKEN = new StateToken<SituationsStateModel>(
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
 export class SituationsState {
-  constructor(private situationsService: SituationControllerService) {}
+  constructor(
+    private situationsService: SituationControllerService,
+    private urlHelper: UrlHelperService,
+    private langFacade: ILangFacade
+  ) {}
   /* ************************ SELECTORS ******************** */
   @Selector([SituationsState])
   static situation(state: SituationsStateModel) {
@@ -221,7 +231,7 @@ export class SituationsState {
         setState(
           patch<SituationsStateModel>({
             statistics: res.result,
-            statisticsLoading : false
+            statisticsLoading: false,
           })
         );
       })
@@ -247,5 +257,29 @@ export class SituationsState {
         );
       })
     );
+  }
+  @Action(SituationsAction.ExportPdf)
+  exportPdf(
+    { setState }: StateContext<SituationsStateModel>,
+    { payload }: SituationsAction.GetStatistics
+  ) {
+    setState(
+      patch<SituationsStateModel>({
+        statisticsLoading: true,
+      })
+    );
+    return this.situationsService
+      .generate1({
+        situationId: payload.situationId,
+        lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar' + '',
+      })
+      .pipe(
+        tap((res: any) => {
+          const newBlob = new Blob([res], {
+            type: `application/pdf`,
+          });
+          this.urlHelper.downloadBlob(newBlob);
+        })
+      );
   }
 }

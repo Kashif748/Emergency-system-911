@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { MessageHelper } from '@core/helpers/message.helper';
+import { PrivilegesService } from '@core/services/privileges.service';
 import { CommonDataState } from '@core/states';
 import { SituationsAction } from '@core/states/situations/situations.action';
 import { SituationsState } from '@core/states/situations/situations.state';
@@ -44,7 +45,9 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private messageHelper: MessageHelper,
     private breakpointObserver: BreakpointObserver,
-    private router: Router
+    private router: Router,
+    private lang: ILangFacade,
+    private privilegesService: PrivilegesService
   ) {}
 
   ngOnDestroy(): void {
@@ -53,24 +56,6 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const situationsActions = [
-      {
-        label: this.translate.instant('ACTIONS.EDIT'),
-        icon: 'pi pi-pencil',
-      },
-      {
-        label: this.translate.instant('SITUATIONS.VIEW_DASHBOARD'),
-        icon: 'pi pi-chart-bar',
-      },
-      {
-        label: this.translate.instant('SITUATIONS.PRINT'),
-        icon: 'pi pi-print',
-      },
-      {
-        label: this.translate.instant('SITUATIONS.DELETE'),
-        icon: 'pi pi-trash',
-      },
-    ] as MenuItem[];
     this.page$ = this.store.select(SituationsState.page).pipe(
       filter((p) => !!p),
       tap(console.log),
@@ -80,35 +65,48 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
             ...u,
             actions: [
               {
-                ...situationsActions[0],
+                label: this.translate.instant('ACTIONS.EDIT'),
+                icon: 'pi pi-pencil',
                 command: () => {
                   this.openDialog(u.id);
                 },
-                disabled: !u.isActive,
+                disabled:
+                  !u.isActive ||
+                  !this.privilegesService.checkActionPrivileges(
+                    'PRIV_ED_DEL_SITUATION'
+                  ),
               },
               // view dashbaord
               {
-                ...situationsActions[1],
+                label: this.translate.instant('SITUATIONS.VIEW_DASHBOARD'),
+                icon: 'pi pi-chart-bar',
                 command: () => {
-                  this.router.navigate([
-                    '/situations-management/situation',
-                    u.id,
-                  ]);
+                  this.router.navigate(['/situations-management/dashboard'], {
+                    queryParams: { _id: u.id },
+                  });
                 },
                 disabled: !u.isActive,
               },
               // print
               {
-                ...situationsActions[2],
-                command: () => {},
+                label: this.translate.instant('SITUATIONS.PRINT'),
+                icon: 'pi pi-print',
+                command: () => {
+                  this.exportPDF(u.id);
+                },
                 disabled: !u.isActive,
               },
               {
-                ...situationsActions[3],
+                label: this.translate.instant('SITUATIONS.DELETE'),
+                icon: 'pi pi-trash',
                 command: () => {
                   this.activate(u.id);
                 },
-                disabled: u.isActive,
+                disabled:
+                  !u.isActive ||
+                  !this.privilegesService.checkActionPrivileges(
+                    'PRIV_ED_DEL_SITUATION'
+                  ),
               },
             ],
           };
@@ -132,7 +130,16 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
 
   openDialog(id?: number) {
     this.store.dispatch(
-      new BrowseSituationsAction.ToggleDialog({ situationId: id })
+      new BrowseSituationsAction.ToggleDialog({
+        dialogName: '_form_dialog',
+        situationId: id,
+      })
+    );
+  }
+
+  exportPDF(id) {
+    this.store.dispatch(
+      new BrowseSituationsAction.ExportPdf({ situationId: id })
     );
   }
 

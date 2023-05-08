@@ -26,6 +26,9 @@ export class ContentSituationsComponent implements OnInit {
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
+
+  @Output()
+  onRowSelect = new EventEmitter<{ _id: string }>();
   constructor(private store: Store) {}
 
   ngOnInit(): void {
@@ -35,6 +38,11 @@ export class ContentSituationsComponent implements OnInit {
     });
   }
   openView(id?: number) {
-    this.store.dispatch(new BrowseSituationsAction.OpenView({ situationId: id }));
+    this.store.dispatch(
+      new BrowseSituationsAction.OpenView({ situationId: id })
+    );
+  }
+  rowSelect(_id) {
+    this.onRowSelect.emit({ _id });
   }
 }

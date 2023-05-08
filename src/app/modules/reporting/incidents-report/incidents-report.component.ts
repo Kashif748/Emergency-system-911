@@ -17,10 +17,12 @@ import { AdvancedSearchFieldsEnum } from '@shared/components/advanced-search/adv
 import { IncidentFilter } from '@core/api/models/filters.model';
 import { AppCommonData } from '@core/entities/AppCommonData';
 import { CommonService } from '@core/services/common.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { INTERIM_STATUS } from '../../incidents/new-incidents-view/const';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
-import {GroupService} from "@core/api/services/group.service";
+import { GroupService } from '@core/api/services/group.service';
+import { Store } from '@ngrx/store';
+import { UpdateFilter } from '../../incidents/new-incidents-view/store/incidents-dashboard.actions';
 
 @Component({
   selector: 'app-incidents-report',
@@ -39,6 +41,8 @@ export class IncidentsReportComponent implements OnInit {
     private commonService: CommonService,
     private router: Router,
     protected groupService: GroupService,
+    private route: ActivatedRoute,
+    private store: Store
   ) {
     this.commonData = this.commonService.getCommonData();
     this.paginationConfig = {
@@ -480,10 +484,26 @@ export class IncidentsReportComponent implements OnInit {
     },
   };
 
-  async ngOnInit() {
+  ngOnInit() {
     this.lang = this.translationService.getSelectedLanguage();
+
     // initialize search form
     this.createForm();
+    this.route.queryParams.subscribe(async (params) => {
+      console.log(params);
+      // this.form.patchValue(params);
+      this.filter = {
+        ...params,
+        fromDate: params['startDate'],
+        toDate: params['endDate'],
+        responsibleOrg: params['orgId'],
+        category: params['mainCategoryId'],
+        categoryId: params['mainCategoryId'],
+      };
+      this.store.dispatch(UpdateFilter({ filter: this.filter }));
+      this.search();
+      await this.initCharts();
+    });
     const statuses: DataOptions = {
       formControlName: AdvancedSearchFieldsEnum.STATUS,
       children: this.commonData.incidentStatus,
@@ -516,15 +536,14 @@ export class IncidentsReportComponent implements OnInit {
       mainCategories,
       reportingVias,
       statuses,
-      group
+      group,
     ];
-    console.log(statuses)
-    console.log(group)
+    console.log(statuses);
+    console.log(group);
     this.filter = {};
-    this.getIncidents(this.paginationConfig.currentPage);
+    // this.getIncidents(this.paginationConfig.currentPage);
     const org = this.commonData.currentOrgDetails;
     this.loadNonGlobalGroups(org.id, 0, 10);
-    await this.initCharts();
   }
 
   export({ selectedColumns, isPDF }): void {
@@ -596,15 +615,17 @@ export class IncidentsReportComponent implements OnInit {
     this.loading = true;
 
     if (this.form.value.createdDate != '') {
-      this.form.value.createdDate = DateTimeUtil.format(new Date(
-        this.form.value.createdDate
-      ), DateTimeUtil.DATE_FORMAT);
+      this.form.value.createdDate = DateTimeUtil.format(
+        new Date(this.form.value.createdDate),
+        DateTimeUtil.DATE_FORMAT
+      );
     }
 
     if (this.form.value.endDate != '') {
-      this.form.value.endDate = DateTimeUtil.format(new Date(
-        this.form.value.endDate
-      ), DateTimeUtil.DATE_FORMAT);
+      this.form.value.endDate = DateTimeUtil.format(
+        new Date(this.form.value.endDate),
+        DateTimeUtil.DATE_FORMAT
+      );
     }
 
     this.pageChanged(1);

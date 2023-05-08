@@ -1,27 +1,36 @@
 <section class="d-flex flex-column px-6">
-  <p-toolbar *ngIf="situation$ | async as situation">
+  <p-toolbar *ngIf="situation">
     <div class="p-toolbar-group-left">
-      <h3>
+      <button
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-bars"
+        class="p-button-rounded p-button-text"
+        (click)="openDialog()"
+      ></button>
+      <h3 class="m-0">
         {{ situation | translateObj }}
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-angle-double-down"
-          class="p-button-rounded p-button-text"
-          (click)="op.toggle($event)"
-        ></button>
       </h3>
     </div>
 
     <div class="p-toolbar-group-right">
-      {{ "SITUATIONS.START_DATE" | translate }}
-      :
-      {{ situation.startDate | cdate }}
+      <p class="m-0">
+        {{ "SITUATIONS.START_DATE" | translate }}
+        <p-tag
+          dir="ltr"
+          value=" {{ situation.startDate | cdate | date : 'yyyy-MM-dd h:mm' }}"
+        ></p-tag>
+      </p>
+
       <div class="w-200px"></div>
-      {{ "SITUATIONS.END_DATE" | translate }}
-      :
-      {{ situation.endDate | cdate }}
+      <p class="m-0">
+        {{ "SITUATIONS.END_DATE" | translate }}
+        <p-tag
+          dir="ltr"
+          value="{{ situation.endDate | cdate | date : 'yyyy-MM-dd h:mm' }}"
+        ></p-tag>
+      </p>
     </div>
   </p-toolbar>
   <div class="row p-10">
@@ -29,7 +38,14 @@
       <!-- registerd incidents  -->
       <div class="col-12 mb-8">
         <!--begin::Stats Widget 27-->
-        <div class="card card-custom m-0 border h-100 p-10">
+        <div
+          (click)="
+            redirectToReport({
+              status: '1'
+            })
+          "
+          class="card card-custom m-0 border h-100 p-10 cursor-pointer"
+        >
           <!--begin::Body-->
           <div
             class="card-body p-0 d-flex justify-content-between align-items-center"
@@ -38,9 +54,9 @@
               <h1 class="card-title font-weight-bolder m-0 d-block number">
                 {{ chartReport.registeredIncidents }}
               </h1>
-              <a class="d-block font-size-h5 font-weight-bold text-dark">
+              <p class="d-block font-size-h5 font-weight-bold text-dark">
                 {{ "SITUATIONS.RCV_INCIDENTS" | translate }}
-              </a>
+              </p>
             </div>
 
             <div class="d-flex align-items-center">
@@ -60,7 +76,14 @@
       <!-- closed incidents -->
       <div class="col-12">
         <!--begin::Stats Widget 27-->
-        <div class="card card-custom m-0 border h-100 p-10">
+        <div
+          (click)="
+            redirectToReport({
+              status: '2,3'
+            })
+          "
+          class="card card-custom m-0 border h-100 p-10 cursor-pointer"
+        >
           <!--begin::Body-->
           <div
             class="card-body p-0 d-flex justify-content-between align-items-center"
@@ -105,7 +128,7 @@
 </section>
 <section class="p-10">
   <div *ngIf="statistics$ | async as statistics">
-    <ng-container *ngIf="loading$ | async; else tableTemplate">
+    <ng-container *ngIf="statisticsLoading$ | async; else tableTemplate">
       <p-table [value]="[].constructor(10)">
         <ng-template pTemplate="header">
           <tr>
@@ -127,38 +150,62 @@
     </ng-container>
     <ng-template #tableTemplate>
       <p-table
-        [value]="statistics"
-        [columns]="statistics[0]?.orgs"
-        dataKey="nameEn"
+        [value]="statistics?.value"
+        [columns]="statistics?.columns"
         [autoLayout]="true"
+        selectionMode="single"
       >
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th>
-              <div class="p-d-flex p-jc-between p-ai-center"></div>
+              <div>
+                {{ "SITUATIONS.INCIDENT_MAIN_CATEGORY" | translate }}
+              </div>
             </th>
             <th *ngFor="let column of columns">
-              <div class="p-d-flex p-jc-between p-ai-center">
+              <div>
                 {{ column | translateObj }}
               </div>
             </th>
             <th>
-              <div class="p-d-flex p-jc-between p-ai-center">
+              <div>
                 {{ "SITUATIONS.TOTAL" | translate }}
               </div>
             </th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-item>
-          <tr class="cursor-pointer hoverable">
-            <td class="max-w-250px font-weight-bold">
-              {{ item | translateObj }}
+        <ng-template pTemplate="body" let-item let-rowData>
+          <tr class="cursor-pointer hoverable" [pSelectableRow]="rowData">
+            <td class="max-w-250px">
+              {{ item | translateObj : "incidentMainCategoryName" }}
             </td>
-            <td class="max-w-250px" *ngFor="let org of item?.orgs">
+            <td
+              class="max-w-250px"
+              *ngFor="let org of item?.primaryOrgs"
+              (click)="
+                redirectToReport({
+                  orgId: org.id,
+                  mainCategoryId: item.mainCategoryId
+                })
+              "
+            >
               {{ org.count }}
             </td>
             <td class="max-w-250px font-weight-bold">
               {{ item.total }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer" let-columns>
+          <tr>
+            <td class="max-w-250px">
+              {{ "SITUATIONS.RECOVERY_RATE" | translate }}
+            </td>
+            <td
+              class="max-w-250px"
+              *ngFor="let rate of statistics.recoveryRate"
+            >
+              {{ rate | number | percent }}
             </td>
           </tr>
         </ng-template>
@@ -176,36 +223,58 @@
   </div>
 </section>
 
-<p-overlayPanel #op [style]="{ width: '450px' }">
-  <div class="p-field mb-10 mt-3">
-    <input
-      type="text"
-      class="w-100"
-      pInputText
-      (keyup)="updateFilter({ name: $event.target.value }, $event)"
-      placeholder="{{ 'SITUATIONS.NAME' | translate }}"
-    />
+<p-dialog
+  [visible]="situationsDialog$ | async"
+  (visibleChange)="close()"
+  [closable]="_situationId"
+  [modal]="true"
+  [style]="{ width: '30vw' }"
+  [breakpoints]="{ '960px': '40vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  #op
+  [style]="{ width: '650px' }"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex">
+      <h3 class="m-0">
+        {{ "SITUATIONS.SITUATIONS_LIST" | translate }}
+      </h3>
+    </div>
+  </ng-template>
+  <div class="d-flex mb-10 mt-3">
+    <div class="p-field w-100">
+      <input
+        type="text"
+        class="w-100"
+        pInputText
+        (keyup)="updateFilter({ name: $event.target.value }, $event)"
+        placeholder="{{ 'SITUATIONS.NAME' | translate }}"
+      />
+    </div>
+    <div class="mx-1">
+      <button
+        pButton
+        label="{{ 'ACTIONS.SEARCH' | translate }}"
+        icon="pi pi-search"
+        [loading]="loading$ | async"
+        (click)="search()"
+      ></button>
+    </div>
   </div>
   <ng-template pTemplate>
-    <p-table
-      [value]="suggestions$ | async"
-      selectionMode="single"
-      [paginator]="true"
-      [rows]="10"
-      (onRowSelect)="onSuggestionSelect($event)"
-    >
-      <ng-template pTemplate="header">
-        <tr >
-          <th>{{ "SITUATIONS.NAME" | translate }}</th>
-          <th>{{ "SITUATIONS.TYPE" | translate }}</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-rowData let-suggestion>
-        <tr  [pSelectableRow]="rowData">
-          <td>{{ suggestion | translateObj }}</td>
-          <td>{{ suggestion.newsType | translateObj }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <app-content-situations
+      *ngIf="state$ | async as state"
+      [view]="state.view"
+      [loading]="loading$ | async"
+      [page]="page$ | async"
+      [columns]="columns"
+      [totalRecords]="totalRecords$ | async"
+      [pageRequest]="state.pageRequest"
+      (onPageChange)="loadPage($event)"
+      (onRowSelect)="redirectToDashboard( $event._id )"
+    ></app-content-situations>
   </ng-template>
-</p-overlayPanel>
+</p-dialog>
+
+<a #outer></a>

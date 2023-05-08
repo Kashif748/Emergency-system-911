@@ -1,12 +1,28 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from '@core/services/common.service';
 import { SituationsAction } from '@core/states/situations/situations.action';
 import { SituationsState } from '@core/states/situations/situations.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { iif, Observable, Subject } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { SituationStatisticsResponse } from 'src/app/api/models';
 import { SituationProjection } from 'src/app/api/models/situation-projection';
 import { BrowseSituationsAction } from '../states/browse-situations.action';
 import {
@@ -20,25 +36,35 @@ import {
   styleUrls: ['./situation-dashboard.component.scss'],
 })
 export class SituationDashboardComponent implements OnInit, OnDestroy {
+  @ViewChild('outer') outer: ElementRef<HTMLLinkElement>;
   public chartOptions: any;
+  situationsDialog$: Observable<boolean>;
+
+  public page$: Observable<SituationProjection[]>;
+  @Select(SituationsState.loading)
+  public totalRecords$: Observable<number>;
+
+  @Select(SituationsState.loading)
+  public loading$: Observable<boolean>;
 
   @Select(SituationsState.statisticsLoading)
-  public loading$: Observable<boolean>;
+  public statisticsLoading$: Observable<boolean>;
 
   @Select(BrowseSituationsState.state)
   public state$: Observable<BrowseSituationsStateModel>;
 
-  public suggestions$: Observable<SituationProjection[]>;
+  public columns = ['id', 'name', 'newsType'];
   public statistics$: Observable<any>;
+  public dataTable: any;
   public chartReport$: Observable<any>;
 
   situationModel;
-  situation$: Observable<SituationProjection>;
+  situation: SituationProjection;
 
   _situationId: number;
   set situationId(v: number) {
     this._situationId = v;
-    this.situation$ = this.store
+    this.store
       .dispatch(new SituationsAction.GetSituation({ id: v }))
       .pipe(
         switchMap(() => this.store.select(SituationsState.situation)),
@@ -46,11 +72,12 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
         take(1),
         filter((t) => !!t),
         tap((t: SituationProjection) => {
+          this.situation = t;
           this.getStatistics(this._situationId);
           this.getChartReport(this._situationId);
-          this.loadPage({ first: 0, rows: 20 });
         })
-      );
+      )
+      .subscribe();
   }
   destroy$ = new Subject();
 
@@ -58,7 +85,8 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private commonService: CommonService
   ) {
     // status chart
     this.chartOptions = {
@@ -99,6 +127,12 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
           },
           autoSelected: 'zoom',
         },
+        events: {
+          dataPointSelection: (event, chartContext, opts) => {
+            const label = opts.w.config.labels[opts.dataPointIndex];
+            this.redirectToReport({ priority: label });
+          },
+        },
       },
       dataLabels: {
         enabled: true,
@@ -108,7 +142,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
       },
       labels: [],
       title: {
-        text: this.translate.instant('REPORTING.INCIDENTS.BY_STATUS.TITLE'),
+        text: this.translate.instant('SITUATIONS.CHART_TITLE'),
         align: 'center',
         margin: 10,
         offsetX: 0,
@@ -128,20 +162,25 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.params
+    this.situationsDialog$ = this.route.queryParams.pipe(
+      map((params) => params['_dialog'] === '_situations_dialog')
+    );
+    this.route.queryParams
       .pipe(
+        takeUntil(this.destroy$),
         map((params) => params['_id']),
-        takeUntil(this.destroy$)
+        distinctUntilChanged(),
+        tap((id) => (!!id ? (this.situationId = id) : this.openDialog()))
       )
-      .subscribe((id) => {
-        this.situationId = id;
-      });
-    this.suggestions$ = this.store
+      .subscribe();
+
+    this.page$ = this.store
       .select(SituationsState.page)
       .pipe(filter((p) => !!p));
 
     this.statistics$ = this.store.select(SituationsState.statistics).pipe(
       filter((p) => !!p),
+      tap(console.log),
       map((s) => this.prepareStatistics(s))
     );
 
@@ -149,6 +188,9 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
       filter((p) => !!p),
       tap((data) => {
         const statuses = data.priority as any[];
+        this.chartOptions.title.text = this.translate.instant(
+          'SITUATIONS.CHART_TITLE'
+        );
         this.chartOptions.labels = statuses?.map((s) =>
           this.translate.currentLang == 'en' ? s.nameEn : s.nameAr
         );
@@ -175,10 +217,13 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSuggestionSelect(event) {
-    if (event?.data) {
-      this.router.navigate(['/situations-management/situation', event.data.id]);
-    }
+  redirectToDashboard(_id) {
+    this.store.dispatch(
+      new BrowseSituationsAction.ToggleDialog({
+        dialogName: '_situations_dialog',
+        situationId: _id,
+      })
+    );
   }
   search() {
     this.store.dispatch(new BrowseSituationsAction.LoadSituations());
@@ -204,35 +249,71 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
         pageRequest: {
           first: event.first,
           rows: event.rows,
+          filters: { active: true },
         },
       })
     );
   }
 
-  prepareStatistics(statistics: any[]) {
-    let categories = [];
-    statistics.forEach((element) => {
-      let orgs = [];
-      let category = {
-        nameAr: element['MAINCATEGORYNAMEAR'],
-        nameEn: element['MAINCATEGORYNAMEEN'],
-        total: element['TOTAL'],
-      };
-      for (const [key, value] of Object.entries(element)) {
-        if (
-          !['MAINCATEGORYNAMEAR', 'MAINCATEGORYNAMEEN', 'TOTAL'].includes(key)
-        ) {
-          const name = key.split('|'); // key is with format => "englishName |arabicName"
-          orgs.push({
-            nameEn: name[0], // english name
-            nameAr: name[1], // arabic name
-            count: value,
-          });
-        }
-      }
-      category['orgs'] = orgs;
-      categories.push(category);
-    });
-    return categories;
+  prepareStatistics(statistics: SituationStatisticsResponse) {
+    let table = {};
+    table['columns'] = [];
+    table['value'] = [];
+
+    if (statistics.mainCategory?.length > 0) {
+      table['value'] = statistics.mainCategory;
+      table['columns'] = statistics.mainCategory[0].primaryOrgs;
+    }
+    if (statistics.recoveryRate) {
+      table['recoveryRate'] = statistics.recoveryRate.map(
+        (item) => (item.closedIncidents * 100) / item.registeredIncidents
+      );
+      table['recoveryRate']?.push(
+        (statistics.totalClosedIncidents * 100) /
+          statistics.totalRegisteredIncidents
+      );
+    }
+    return table;
+  }
+  redirectToReport(payload: { [key: string]: string }) {
+    const commonData = this.commonService.getCommonData();
+    payload = {
+      ...payload,
+      startDate: this.situation.startDate.slice(0, 10),
+      endDate: this.situation.endDate.slice(0, 10),
+    };
+
+    if (payload?.priority) {
+      const priority = commonData.priorities.find(
+        (item) =>
+          item.nameAr === payload.priority || item.nameEn === payload.priority
+      );
+      payload['priority'] = priority.id.toString();
+    }
+
+    let query = Object.entries(payload)
+      .map(([key, val]) => `${key}=${val}`)
+      .join('&');
+
+    let url = location.origin + '/reporting/incidents?' + query;
+    this.outer.nativeElement.href = url;
+    this.outer.nativeElement.setAttribute('target', '_blank');
+    this.outer.nativeElement.click();
+  }
+  openDialog() {
+    this.store.dispatch(
+      new BrowseSituationsAction.ToggleDialog({
+        dialogName: '_situations_dialog',
+        situationId: this._situationId,
+      })
+    );
+  }
+  close() {
+    this.store.dispatch(
+      new BrowseSituationsAction.ToggleDialog({
+        dialogName: '_situations_dialog',
+        situationId: this._situationId,
+      })
+    );
   }
 }
