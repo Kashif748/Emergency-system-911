@@ -120,21 +120,21 @@ export class NewsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update22
+   * Path part for operation update23
    */
-  static readonly Update22Path = '/v1/news';
+  static readonly Update23Path = '/v1/news';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update22()` instead.
+   * To access only the response body, use `update23()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update22$Response(params: {
+  update23$Response(params: {
     body: News
   }): Observable<StrictHttpResponse<RestApiResponseNews>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.Update22Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.Update23Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -152,15 +152,15 @@ export class NewsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update22$Response()` instead.
+   * To access the full response (for headers, for example), `update23$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update22(params: {
+  update23(params: {
     body: News
   }): Observable<RestApiResponseNews> {
 
-    return this.update22$Response(params).pipe(
+    return this.update23$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNews>) => r.body as RestApiResponseNews)
     );
   }
@@ -254,6 +254,52 @@ export class NewsControllerService extends BaseService {
 
     return this.getActiveNews$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNews>) => r.body as RestApiResponseNews)
+    );
+  }
+
+  /**
+   * Path part for operation getAllActiveNewsRelatedToThemes
+   */
+  static readonly GetAllActiveNewsRelatedToThemesPath = '/v1/news/theme-details';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllActiveNewsRelatedToThemes()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllActiveNewsRelatedToThemes$Response(params: {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageNewsProjection>> {
+
+    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.GetAllActiveNewsRelatedToThemesPath, 'get');
+    if (params) {
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageNewsProjection>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllActiveNewsRelatedToThemes$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllActiveNewsRelatedToThemes(params: {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageNewsProjection> {
+
+    return this.getAllActiveNewsRelatedToThemes$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageNewsProjection>) => r.body as RestApiResponsePageNewsProjection)
     );
   }
 

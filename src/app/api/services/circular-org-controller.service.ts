@@ -72,22 +72,22 @@ export class CircularOrgControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update73
+   * Path part for operation update74
    */
-  static readonly Update73Path = '/v1/circulars/{circularId}/org';
+  static readonly Update74Path = '/v1/circulars/{circularId}/org';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update73()` instead.
+   * To access only the response body, use `update74()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update73$Response(params: {
+  update74$Response(params: {
     circularId: number;
     body: CircularOrg
   }): Observable<StrictHttpResponse<RestApiResponseCircularOrg>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CircularOrgControllerService.Update73Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, CircularOrgControllerService.Update74Path, 'put');
     if (params) {
       rb.path('circularId', params.circularId, {});
       rb.body(params.body, 'application/json');
@@ -106,37 +106,37 @@ export class CircularOrgControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update73$Response()` instead.
+   * To access the full response (for headers, for example), `update74$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update73(params: {
+  update74(params: {
     circularId: number;
     body: CircularOrg
   }): Observable<RestApiResponseCircularOrg> {
 
-    return this.update73$Response(params).pipe(
+    return this.update74$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCircularOrg>) => r.body as RestApiResponseCircularOrg)
     );
   }
 
   /**
-   * Path part for operation create68
+   * Path part for operation create69
    */
-  static readonly Create68Path = '/v1/circulars/{circularId}/org';
+  static readonly Create69Path = '/v1/circulars/{circularId}/org';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create68()` instead.
+   * To access only the response body, use `create69()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create68$Response(params: {
+  create69$Response(params: {
     circularId: number;
     body: CircularOrg
   }): Observable<StrictHttpResponse<RestApiResponseCircularOrg>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CircularOrgControllerService.Create68Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, CircularOrgControllerService.Create69Path, 'post');
     if (params) {
       rb.path('circularId', params.circularId, {});
       rb.body(params.body, 'application/json');
@@ -155,16 +155,16 @@ export class CircularOrgControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create68$Response()` instead.
+   * To access the full response (for headers, for example), `create69$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create68(params: {
+  create69(params: {
     circularId: number;
     body: CircularOrg
   }): Observable<RestApiResponseCircularOrg> {
 
-    return this.create68$Response(params).pipe(
+    return this.create69$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCircularOrg>) => r.body as RestApiResponseCircularOrg)
     );
   }

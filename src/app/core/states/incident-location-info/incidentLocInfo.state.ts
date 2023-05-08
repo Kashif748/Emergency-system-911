@@ -83,7 +83,7 @@ export class IncidentLocInfoState {
     { payload }: IncicentLocationInfoAction.UpdateIncidentLocationInfo
   ) {
     return this.incidentLocInfo
-      .update41({
+      .update42({
         body: payload
       })
       .pipe(

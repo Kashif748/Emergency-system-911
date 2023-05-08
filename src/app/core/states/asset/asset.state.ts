@@ -58,7 +58,7 @@ export class AssetState {
     );
     // return this.commonDataService.commonData()
     return this.assetService
-      .search7({
+      .search8({
         orgId: payload.orgId,
         categoryId: payload.categoryId,
         details: payload.search,

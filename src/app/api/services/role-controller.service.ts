@@ -226,21 +226,21 @@ export class RoleControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getById2
+   * Path part for operation getById3
    */
-  static readonly GetById2Path = '/v1/roles/{id}';
+  static readonly GetById3Path = '/v1/roles/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById2()` instead.
+   * To access only the response body, use `getById3()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById2$Response(params: {
+  getById3$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseRoleProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, RoleControllerService.GetById2Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, RoleControllerService.GetById3Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -258,15 +258,15 @@ export class RoleControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById2$Response()` instead.
+   * To access the full response (for headers, for example), `getById3$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById2(params: {
+  getById3(params: {
     id: number;
   }): Observable<RestApiResponseRoleProjection> {
 
-    return this.getById2$Response(params).pipe(
+    return this.getById3$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseRoleProjection>) => r.body as RestApiResponseRoleProjection)
     );
   }

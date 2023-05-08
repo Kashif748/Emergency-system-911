@@ -14,7 +14,7 @@ const routes: Routes = [
         component: BrowseSituationsComponent,
       },
       {
-        path: 'situation/:_id',
+        path: 'dashboard',
         component: SituationDashboardComponent,
       },
     ],

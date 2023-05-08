@@ -70,21 +70,21 @@ export class EmergencyLevelControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update65
+   * Path part for operation update66
    */
-  static readonly Update65Path = '/v1/emergency-levels';
+  static readonly Update66Path = '/v1/emergency-levels';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update65()` instead.
+   * To access only the response body, use `update66()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update65$Response(params: {
+  update66$Response(params: {
     body: EmergencyLevel
   }): Observable<StrictHttpResponse<RestApiResponseEmergencyLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EmergencyLevelControllerService.Update65Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, EmergencyLevelControllerService.Update66Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class EmergencyLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update65$Response()` instead.
+   * To access the full response (for headers, for example), `update66$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update65(params: {
+  update66(params: {
     body: EmergencyLevel
   }): Observable<RestApiResponseEmergencyLevel> {
 
-    return this.update65$Response(params).pipe(
+    return this.update66$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseEmergencyLevel>) => r.body as RestApiResponseEmergencyLevel)
     );
   }
 
   /**
-   * Path part for operation create59
+   * Path part for operation create60
    */
-  static readonly Create59Path = '/v1/emergency-levels';
+  static readonly Create60Path = '/v1/emergency-levels';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create59()` instead.
+   * To access only the response body, use `create60()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create59$Response(params: {
+  create60$Response(params: {
     body: EmergencyLevel
   }): Observable<StrictHttpResponse<RestApiResponseEmergencyLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EmergencyLevelControllerService.Create59Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, EmergencyLevelControllerService.Create60Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class EmergencyLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create59$Response()` instead.
+   * To access the full response (for headers, for example), `create60$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create59(params: {
+  create60(params: {
     body: EmergencyLevel
   }): Observable<RestApiResponseEmergencyLevel> {
 
-    return this.create59$Response(params).pipe(
+    return this.create60$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseEmergencyLevel>) => r.body as RestApiResponseEmergencyLevel)
     );
   }

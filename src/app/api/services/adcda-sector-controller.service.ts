@@ -70,21 +70,21 @@ export class AdcdaSectorControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update82
+   * Path part for operation update91
    */
-  static readonly Update82Path = '/v1/adcda-sector';
+  static readonly Update91Path = '/v1/adcda-sector';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update82()` instead.
+   * To access only the response body, use `update91()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update82$Response(params: {
+  update91$Response(params: {
     body: AdcdaSector
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaSector>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaSectorControllerService.Update82Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaSectorControllerService.Update91Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class AdcdaSectorControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update82$Response()` instead.
+   * To access the full response (for headers, for example), `update91$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update82(params: {
+  update91(params: {
     body: AdcdaSector
   }): Observable<RestApiResponseAdcdaSector> {
 
-    return this.update82$Response(params).pipe(
+    return this.update91$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaSector>) => r.body as RestApiResponseAdcdaSector)
     );
   }
 
   /**
-   * Path part for operation create77
+   * Path part for operation create78
    */
-  static readonly Create77Path = '/v1/adcda-sector';
+  static readonly Create78Path = '/v1/adcda-sector';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create77()` instead.
+   * To access only the response body, use `create78()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create77$Response(params: {
+  create78$Response(params: {
     body: AdcdaSector
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaSector>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaSectorControllerService.Create77Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaSectorControllerService.Create78Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class AdcdaSectorControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create77$Response()` instead.
+   * To access the full response (for headers, for example), `create78$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create77(params: {
+  create78(params: {
     body: AdcdaSector
   }): Observable<RestApiResponseAdcdaSector> {
 
-    return this.create77$Response(params).pipe(
+    return this.create78$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaSector>) => r.body as RestApiResponseAdcdaSector)
     );
   }
