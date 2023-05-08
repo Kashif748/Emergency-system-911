@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface BcLocationTypes {
+export interface BcImpactTypes {
   createdBy?: number;
   createdOn?: string;
   id?: number;

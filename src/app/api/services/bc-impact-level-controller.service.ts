@@ -23,28 +23,77 @@ export class BcImpactLevelControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update84
+   * Path part for operation getAll15
    */
-  static readonly Update84Path = '/v1/bia/impactLevel';
+  static readonly GetAll15Path = '/v1/bc/impactLevel';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update84()` instead.
+   * To access only the response body, use `getAll15()` instead.
    *
    * This method doesn't expect any request body.
    */
-  update84$Response(params: {
-    bcImpactLevel: BcImpactLevel;
-  }): Observable<StrictHttpResponse<RestApiResponseBcImpactLevel>> {
+  getAll15$Response(params?: {
+    isActive?: boolean;
+    versionId?: number;
+  }): Observable<StrictHttpResponse<RestApiResponseListBcImpactLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.Update84Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.GetAll15Path, 'get');
     if (params) {
-      rb.query('bcImpactLevel', params.bcImpactLevel, {});
+      rb.query('isActive', params.isActive, {});
+      rb.query('versionId', params.versionId, {});
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListBcImpactLevel>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAll15$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAll15(params?: {
+    isActive?: boolean;
+    versionId?: number;
+  }): Observable<RestApiResponseListBcImpactLevel> {
+
+    return this.getAll15$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListBcImpactLevel>) => r.body as RestApiResponseListBcImpactLevel)
+    );
+  }
+
+  /**
+   * Path part for operation update85
+   */
+  static readonly Update85Path = '/v1/bc/impactLevel';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `update85()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  update85$Response(params: {
+    body: BcImpactLevel
+  }): Observable<StrictHttpResponse<RestApiResponseBcImpactLevel>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.Update85Path, 'put');
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -55,42 +104,42 @@ export class BcImpactLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update84$Response()` instead.
+   * To access the full response (for headers, for example), `update85$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update84(params: {
-    bcImpactLevel: BcImpactLevel;
+  update85(params: {
+    body: BcImpactLevel
   }): Observable<RestApiResponseBcImpactLevel> {
 
-    return this.update84$Response(params).pipe(
+    return this.update85$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactLevel>) => r.body as RestApiResponseBcImpactLevel)
     );
   }
 
   /**
-   * Path part for operation insertOne5
+   * Path part for operation insertOne6
    */
-  static readonly InsertOne5Path = '/v1/bia/impactLevel';
+  static readonly InsertOne6Path = '/v1/bc/impactLevel';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne5()` instead.
+   * To access only the response body, use `insertOne6()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne5$Response(params: {
-    bcImpactLevel: BcImpactLevel;
+  insertOne6$Response(params: {
+    body: BcImpactLevel
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.InsertOne5Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.InsertOne6Path, 'post');
     if (params) {
-      rb.query('bcImpactLevel', params.bcImpactLevel, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -101,42 +150,42 @@ export class BcImpactLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne5$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne6$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne5(params: {
-    bcImpactLevel: BcImpactLevel;
+  insertOne6(params: {
+    body: BcImpactLevel
   }): Observable<RestApiResponseBcImpactLevel> {
 
-    return this.insertOne5$Response(params).pipe(
+    return this.insertOne6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactLevel>) => r.body as RestApiResponseBcImpactLevel)
     );
   }
 
   /**
-   * Path part for operation getOne5
+   * Path part for operation getOne6
    */
-  static readonly GetOne5Path = '/v1/bia/impactLevel/{id}';
+  static readonly GetOne6Path = '/v1/bc/impactLevel/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne5()` instead.
+   * To access only the response body, use `getOne6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne5$Response(params: {
+  getOne6$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.GetOne5Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.GetOne6Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -147,35 +196,35 @@ export class BcImpactLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne5$Response()` instead.
+   * To access the full response (for headers, for example), `getOne6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne5(params: {
+  getOne6(params: {
     id: number;
   }): Observable<RestApiResponseBcImpactLevel> {
 
-    return this.getOne5$Response(params).pipe(
+    return this.getOne6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactLevel>) => r.body as RestApiResponseBcImpactLevel)
     );
   }
 
   /**
-   * Path part for operation deleteById6
+   * Path part for operation deleteById7
    */
-  static readonly DeleteById6Path = '/v1/bia/impactLevel/{id}';
+  static readonly DeleteById7Path = '/v1/bc/impactLevel/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById6()` instead.
+   * To access only the response body, use `deleteById7()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById6$Response(params: {
+  deleteById7$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.DeleteById6Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.DeleteById7Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -193,59 +242,16 @@ export class BcImpactLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById6$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById7$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById6(params: {
+  deleteById7(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById6$Response(params).pipe(
+    return this.deleteById7$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
-    );
-  }
-
-  /**
-   * Path part for operation getAll14
-   */
-  static readonly GetAll14Path = '/v1/bia/impactLevel/all';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll14()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAll14$Response(params?: {
-  }): Observable<StrictHttpResponse<RestApiResponseListBcImpactLevel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.GetAll14Path, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcImpactLevel>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll14$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAll14(params?: {
-  }): Observable<RestApiResponseListBcImpactLevel> {
-
-    return this.getAll14$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcImpactLevel>) => r.body as RestApiResponseListBcImpactLevel)
     );
   }
 

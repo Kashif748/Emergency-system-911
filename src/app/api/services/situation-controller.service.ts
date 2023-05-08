@@ -10,10 +10,10 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { Pageable } from '../models/pageable';
-import { RestApiResponseListMapStringObject } from '../models/rest-api-response-list-map-string-object';
 import { RestApiResponsePageSituationProjection } from '../models/rest-api-response-page-situation-projection';
 import { RestApiResponseSituationChartReportResponse } from '../models/rest-api-response-situation-chart-report-response';
 import { RestApiResponseSituationProjection } from '../models/rest-api-response-situation-projection';
+import { RestApiResponseSituationStatisticsResponse } from '../models/rest-api-response-situation-statistics-response';
 import { Situation } from '../models/situation';
 
 @Injectable()
@@ -240,7 +240,7 @@ export class SituationControllerService extends BaseService {
    */
   statistics2$Response(params: {
     situationId: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListMapStringObject>> {
+  }): Observable<StrictHttpResponse<RestApiResponseSituationStatisticsResponse>> {
 
     const rb = new RequestBuilder(this.rootUrl, SituationControllerService.Statistics2Path, 'get');
     if (params) {
@@ -253,7 +253,7 @@ export class SituationControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListMapStringObject>;
+        return r as StrictHttpResponse<RestApiResponseSituationStatisticsResponse>;
       })
     );
   }
@@ -266,10 +266,10 @@ export class SituationControllerService extends BaseService {
    */
   statistics2(params: {
     situationId: number;
-  }): Observable<RestApiResponseListMapStringObject> {
+  }): Observable<RestApiResponseSituationStatisticsResponse> {
 
     return this.statistics2$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListMapStringObject>) => r.body as RestApiResponseListMapStringObject)
+      map((r: StrictHttpResponse<RestApiResponseSituationStatisticsResponse>) => r.body as RestApiResponseSituationStatisticsResponse)
     );
   }
 
