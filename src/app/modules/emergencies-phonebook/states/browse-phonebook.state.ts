@@ -97,14 +97,14 @@ export class BrowsePhonebookState {
     return dispatch(new PhonebookAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowsePhonebookAction.LoadPhonebook());
+        dispatch([
+          new BrowsePhonebookAction.LoadPhonebook(),
+          new BrowsePhonebookAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowsePhonebookAction.ToggleDialog({}));
       })
     );
   }
@@ -117,15 +117,16 @@ export class BrowsePhonebookState {
     return dispatch(new PhonebookAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowsePhonebookAction.LoadPhonebook());
+        dispatch([
+          new BrowsePhonebookAction.LoadPhonebook(),
+          new BrowsePhonebookAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
       }),
-      finalize(() => {
-        dispatch(new BrowsePhonebookAction.ToggleDialog({}));
-      })
+      finalize(() => {})
     );
   }
 
