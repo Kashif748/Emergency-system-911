@@ -5,11 +5,11 @@ import {ILangFacade} from "@core/facades/lang.facade";
 import {Select, Store} from "@ngxs/store";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {filter, map} from "rxjs/operators";
-import {RtoState} from "@core/states/bc/rto.state";
-import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
-import {BrowseRtoState, BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
 import {Observable} from "rxjs";
-import {Bcrto} from "../../../../api/models/bcrto";
+import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-priorities";
+import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
+import {BrowseActivityPrioritySeqState, BrowseActivityPrioritySeqStateModel} from "../states/browse-activity-priority-seq.state";
+import {BrowseActivityPrioritySeqAction} from "../states/browse-activity-priority-seq.action";
 
 @Component({
   selector: 'app-browse-activity-priority',
@@ -18,13 +18,13 @@ import {Bcrto} from "../../../../api/models/bcrto";
 })
 export class BrowseActivityPriorityComponent implements OnInit {
 
-  public page$: Observable<Bcrto[]>;
+  public page$: Observable<BcRecoveryPriorities[]>;
 
-  @Select(RtoState.loading)
+  @Select(ActivityPrioritySeqState.loading)
   public loading$: Observable<boolean>;
 
-  @Select(BrowseRtoState.state)
-  public state$: Observable<BrowseRtoStateModel>;
+  @Select(BrowseActivityPrioritySeqState.state)
+  public state$: Observable<BrowseActivityPrioritySeqStateModel>;
 
   constructor(
     private translate: TranslateService,
@@ -45,7 +45,7 @@ export class BrowseActivityPriorityComponent implements OnInit {
       },
     ] as MenuItem[];
 
-    this.page$ = this.store.select(RtoState.page).pipe(
+    this.page$ = this.store.select(ActivityPrioritySeqState.page).pipe(
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
@@ -73,8 +73,8 @@ export class BrowseActivityPriorityComponent implements OnInit {
     );
   }
 
-  openDialog(id?: number) {
-    this.store.dispatch(new BrowseRtoAction.ToggleDialog({ rtoId: id }));
+  openDialog(Id?: number) {
+    this.store.dispatch(new BrowseActivityPrioritySeqAction.ToggleDialog({ id: Id }));
   }
 
   activate(id: number) {
@@ -93,7 +93,7 @@ export class BrowseActivityPriorityComponent implements OnInit {
 
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
-      new BrowseRtoAction.LoadRto({
+      new BrowseActivityPrioritySeqAction.LoadActivityPrioritySeq({
         pageRequest: {
           first: event.first,
           rows: event.rows,

@@ -117,19 +117,19 @@
                   ></div>
                 </td>
 
-                <td>
+                <td (click)="item.isActive && openView(item.id)">
                   {{ item.id }}
                 </td>
 
-                <td>
+                <td >
                   <p-colorPicker [(ngModel)]="item.color"></p-colorPicker>
                 </td>
 
-                <td>
+                <td (click)="item.isActive && openView(item.id)">
                   {{ item.imp_level }}
                 </td>
 
-                <td>
+                <td (click)="item.isActive && openView(item.id)">
                   {{ item.desc }}
                 </td>
 

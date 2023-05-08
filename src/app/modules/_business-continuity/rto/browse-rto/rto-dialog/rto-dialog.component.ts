@@ -8,9 +8,8 @@ import {BrowseRtoAction} from "../../states/browse-rto.action";
 import {Observable, Subject} from "rxjs";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
-import {BrowseUsersAction} from "../../../../_user-mgmt/states/browse-users.action";
 import {IAuthService} from "@core/services/auth.service";
-import {RtoAction, RtoState, UserAction, UserState} from "@core/states";
+import {RtoAction, RtoState} from "@core/states";
 
 @Component({
   selector: 'app-rto-dialog',

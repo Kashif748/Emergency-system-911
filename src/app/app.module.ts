@@ -69,6 +69,8 @@ import {CenterState} from "@core/states/service-center-area/centers/center.state
 import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
 import { SituationsState } from '@core/states/situations/situations.state';
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
+import {BrowseActivityPrioritySeqState} from "./modules/_business-continuity/activity-priority-sequence/states/browse-activity-priority-seq.state";
+import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -135,7 +137,8 @@ export function getHighlightLanguages() {
         PhonebookState,
         SituationsState,
         RtoState,
-        ImpLevelWorkingState
+        ImpLevelWorkingState,
+        ActivityPrioritySeqState
       ],
       {
         developmentMode: !environment.production,

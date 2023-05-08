@@ -6,10 +6,9 @@ import {Injectable} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {iif, patch} from "@ngxs/store/operators";
 import {catchError, tap} from "rxjs/operators";
-import {BrowseRtoStateModel} from "../../../rto/states/browse-rto.state";
 import {EMPTY} from "rxjs";
-import {BrowseImpLevelWorkingAction} from "./browse-imp-level-working.action";
 import {ImpLevelWorkingAction} from "@core/states";
+import {BrowseImpLevelWorkingAction} from "./browse-imp-level-working.action";
 
 
 export interface BrowseImpLevelWorkingStateModel {
@@ -84,8 +83,8 @@ export class BrowseImpLevelWorkingState {
   }
 
   @Action(BrowseImpLevelWorkingAction.CreateImpLevelWorking)
-  createRto(
-    { dispatch }: StateContext<BrowseRtoStateModel>,
+  CreateImpLevelWorking(
+    { dispatch }: StateContext<BrowseImpLevelWorkingStateModel>,
     { payload }: BrowseImpLevelWorkingAction.CreateImpLevelWorking
   ) {
     return dispatch(new ImpLevelWorkingAction.Create(payload)).pipe(
@@ -102,4 +101,42 @@ export class BrowseImpLevelWorkingState {
       })
     );
   }
+
+  @Action(BrowseImpLevelWorkingAction.ToggleDialog, { cancelUncompleted: true })
+  openDialog(
+    {}: StateContext<BrowseImpLevelWorkingStateModel>,
+    { payload }: BrowseImpLevelWorkingAction.ToggleDialog
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'opened',
+        _id: payload.id,
+        _mode: undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+
+  @Action(BrowseImpLevelWorkingAction.OpenView, { cancelUncompleted: true })
+  openView(
+    {}: StateContext<BrowseImpLevelWorkingStateModel>,
+    { payload }: BrowseImpLevelWorkingAction.OpenView
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'opened',
+        _id: payload.id,
+        _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
 }

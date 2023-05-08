@@ -6,10 +6,12 @@ import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
 import {ImpLevelWorkingAction} from "@core/states/bc/imp-level-working/imp-level-working.action";
+import {RtoStateModel} from "@core/states/bc/rto.state";
 
 
 export interface ImpLevelWorkingStateModel {
   page: BcWorkImportanceLevels[];
+  ImpLevelWorking: BcWorkImportanceLevels;
   loading: boolean;
   blocking: boolean;
 }
@@ -33,6 +35,11 @@ export class ImpLevelWorkingState {
   @Selector([ImpLevelWorkingState])
   static page(state: ImpLevelWorkingStateModel) {
     return state?.page;
+  }
+
+  @Selector([ImpLevelWorkingState])
+  static ImpLevelWorking(state: ImpLevelWorkingStateModel) {
+    return state?.ImpLevelWorking;
   }
 
   /*  @Selector([ImpLevelWorkingState])
@@ -122,5 +129,41 @@ export class ImpLevelWorkingState {
           );
         })
       );
+  }
+
+  @Action(ImpLevelWorkingAction.GetImpLevelWorking, { cancelUncompleted: true })
+  getRto(
+    { setState }: StateContext<ImpLevelWorkingStateModel>,
+    { payload }: ImpLevelWorkingAction.GetImpLevelWorking
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      setState(
+        patch<ImpLevelWorkingStateModel>({
+          ImpLevelWorking: undefined,
+        })
+      );
+      return;
+    }
+    setState(
+      patch<RtoStateModel>({
+        blocking: true,
+      })
+    );
+    return this.impLevelWorking.getOne4({ id: payload.id }).pipe(
+      tap((rto) => {
+        setState(
+          patch<ImpLevelWorkingStateModel>({
+            ImpLevelWorking: rto.result,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<ImpLevelWorkingStateModel>({
+            blocking: false,
+          })
+        );
+      })
+    );
   }
 }

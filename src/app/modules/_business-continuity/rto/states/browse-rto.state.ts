@@ -9,8 +9,7 @@ import {RtoAction} from "@core/states/bc/rto.action";
 import {ApiHelper} from "@core/helpers/api.helper";
 import {catchError, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
-import {BrowseUsersStateModel} from "../../../_user-mgmt/states/browse-users.state";
-import {BrowseUsersAction} from "../../../_user-mgmt/states/browse-users.action";
+
 
 
 export interface BrowseRtoStateModel {
@@ -105,7 +104,7 @@ export class BrowseRtoState {
 
   @Action(BrowseRtoAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
-    {}: StateContext<BrowseUsersStateModel>,
+    {}: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.ToggleDialog
   ) {
     this.router.navigate([], {
@@ -123,7 +122,7 @@ export class BrowseRtoState {
 
   @Action(BrowseRtoAction.OpenView, { cancelUncompleted: true })
   openView(
-    {}: StateContext<BrowseUsersStateModel>,
+    {}: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.OpenView
   ) {
     this.router.navigate([], {

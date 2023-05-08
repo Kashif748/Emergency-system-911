@@ -27,4 +27,16 @@ export namespace ImpLevelWorkingAction {
       public payload: BcWorkImportanceLevels
     ) {}
   }
+
+  export class GetImpLevelWorking {
+    static readonly type = '[ImpLevelWorking] Get ImpLevelWorking';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

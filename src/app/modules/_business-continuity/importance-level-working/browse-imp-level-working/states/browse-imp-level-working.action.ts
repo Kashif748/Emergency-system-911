@@ -24,10 +24,18 @@ export namespace BrowseImpLevelWorkingAction {
   }
 
   export class ToggleDialog {
-    static readonly type = '[BrowseRto] Toggle Dialog';
+    static readonly type = '[BrowseImpLevelWorking] Toggle Dialog';
     /**
      *
      */
     constructor(public payload: { id?: number }) {}
+  }
+
+  export class OpenView {
+    static readonly type = '[BrowseImpLevelWorking] Open View';
+    /**
+     *
+     */
+    constructor(public payload: { id: number }) {}
   }
 }
