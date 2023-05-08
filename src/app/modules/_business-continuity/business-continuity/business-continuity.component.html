@@ -17,7 +17,21 @@
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
     <app-breadcrumb></app-breadcrumb>
-    <p-tag value="اصدار 2023/1" severity="info"></p-tag>
+
+    <p-dropdown
+      [options]="versions"
+      [(ngModel)]="selectedVersion"
+      placeholder="Select a version"
+    >
+      <ng-template pTemplate="selectedItem">
+        <div *ngIf="selectedVersion">
+          {{ selectedVersion | translateObj }}
+        </div>
+      </ng-template>
+      <ng-template let-version pTemplate="item">
+        <div>{{ version | translateObj }}</div>
+      </ng-template>
+    </p-dropdown>
   </div>
 
   <button
@@ -33,14 +47,17 @@
 <section [class]="smallScreen ? 'py-6' : 'p-3'">
   <div
     #wrapper
-    class="p-d-flex position-relative justify-content-end"
-    style="min-height: 700px"
+    class="p-d-flex position-relative justify-content-between"
+    style="min-height: 700px; gap: 20px"
   >
     <p-sidebar
       #sideBar
       [(visible)]="sidebar"
       [modal]="false"
-      [style]="{ width: '350px', position: 'absolute' }"
+      [style]="{
+        width: '350px',
+        position: smallScreen ? 'absolute' : 'initial'
+      }"
       styleClass="rounded p-shadow-6 py-5"
       [showCloseIcon]="false"
       [baseZIndex]="-1000"
@@ -49,7 +66,7 @@
       <p-panelMenu [model]="items"> </p-panelMenu>
     </p-sidebar>
 
-    <div class="p-shadow-6 rounded px-6 w-100 col-12 col-md-9">
+    <div class="p-shadow-6 rounded px-6 w-100">
       <router-outlet></router-outlet>
     </div>
   </div>
