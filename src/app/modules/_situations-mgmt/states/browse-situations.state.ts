@@ -166,12 +166,12 @@ export class BrowseSituationsState {
     );
   }
 
-  @Action(BrowseSituationsAction.ExportPdf, { cancelUncompleted: true })
-  exportPdf(
+  @Action(BrowseSituationsAction.Export, { cancelUncompleted: true })
+  export(
     { dispatch }: StateContext<BrowseSituationsStateModel>,
-    { payload }: BrowseSituationsAction.ExportPdf
+    { payload }: BrowseSituationsAction.Export
   ) {
-    return dispatch(new SituationsAction.ExportPdf(payload)).pipe(
+    return dispatch(new SituationsAction.Export(payload)).pipe(
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;

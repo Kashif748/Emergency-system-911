@@ -1,5 +1,5 @@
 <section class="d-flex flex-column px-6">
-  <p-toolbar *ngIf="situation">
+  <p-toolbar *ngIf="situation$ | async as situation">
     <div class="p-toolbar-group-left">
       <button
         pButton

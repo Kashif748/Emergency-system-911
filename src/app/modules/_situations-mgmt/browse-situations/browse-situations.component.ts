@@ -139,7 +139,7 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
 
   exportPDF(id) {
     this.store.dispatch(
-      new BrowseSituationsAction.ExportPdf({ situationId: id })
+      new BrowseSituationsAction.Export({ type: 'PDF', situationId: id })
     );
   }
 

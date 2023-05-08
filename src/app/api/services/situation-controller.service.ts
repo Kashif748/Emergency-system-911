@@ -287,7 +287,7 @@ export class SituationControllerService extends BaseService {
   generate1$Response(params: {
     situationId: number;
     lang: boolean;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<any>> {
 
     const rb = new RequestBuilder(this.rootUrl, SituationControllerService.Generate1Path, 'get');
     if (params) {
@@ -296,12 +296,12 @@ export class SituationControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'text',
+      responseType: 'blob',
       accept: '*/*'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<any>;
       })
     );
   }
@@ -315,10 +315,10 @@ export class SituationControllerService extends BaseService {
   generate1(params: {
     situationId: number;
     lang: boolean;
-  }): Observable<void> {
+  }): Observable<any> {
 
     return this.generate1$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }
 

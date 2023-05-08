@@ -258,27 +258,30 @@ export class SituationsState {
       })
     );
   }
-  @Action(SituationsAction.ExportPdf)
-  exportPdf(
-    { setState }: StateContext<SituationsStateModel>,
-    { payload }: SituationsAction.GetStatistics
+
+  @Action(SituationsAction.Export, { cancelUncompleted: true })
+  export(
+    {}: StateContext<SituationsStateModel>,
+    { payload }: SituationsAction.Export
   ) {
-    setState(
-      patch<SituationsStateModel>({
-        statisticsLoading: true,
-      })
-    );
     return this.situationsService
       .generate1({
+        lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
         situationId: payload.situationId,
-        lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar' + '',
       })
       .pipe(
         tap((res: any) => {
           const newBlob = new Blob([res], {
-            type: `application/pdf`,
+            type: `application/${
+              payload.type === 'PDF'
+                ? 'pdf'
+                : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(
+            newBlob,
+            `SITUATIONS - ${new Date().toISOString().split('.')[0]}`
+          );
         })
       );
   }

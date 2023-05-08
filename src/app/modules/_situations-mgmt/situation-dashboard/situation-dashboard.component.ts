@@ -5,14 +5,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@core/services/common.service';
 import { SituationsAction } from '@core/states/situations/situations.action';
 import { SituationsState } from '@core/states/situations/situations.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
-import { iif, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -53,18 +53,18 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   @Select(BrowseSituationsState.state)
   public state$: Observable<BrowseSituationsStateModel>;
 
+  situationModel;
+  situation$: Observable<SituationProjection>;
+
   public columns = ['id', 'name', 'newsType'];
   public statistics$: Observable<any>;
   public dataTable: any;
   public chartReport$: Observable<any>;
 
-  situationModel;
-  situation: SituationProjection;
-
   _situationId: number;
   set situationId(v: number) {
     this._situationId = v;
-    this.store
+    this.situation$ = this.store
       .dispatch(new SituationsAction.GetSituation({ id: v }))
       .pipe(
         switchMap(() => this.store.select(SituationsState.situation)),
@@ -72,19 +72,16 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
         take(1),
         filter((t) => !!t),
         tap((t: SituationProjection) => {
-          this.situation = t;
           this.getStatistics(this._situationId);
           this.getChartReport(this._situationId);
         })
-      )
-      .subscribe();
+      );
   }
   destroy$ = new Subject();
 
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private router: Router,
     private translate: TranslateService,
     private commonService: CommonService
   ) {
@@ -180,7 +177,6 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
 
     this.statistics$ = this.store.select(SituationsState.statistics).pipe(
       filter((p) => !!p),
-      tap(console.log),
       map((s) => this.prepareStatistics(s))
     );
 
@@ -277,10 +273,12 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   }
   redirectToReport(payload: { [key: string]: string }) {
     const commonData = this.commonService.getCommonData();
+    const situation = this.store.selectSnapshot(SituationsState.situation);
+
     payload = {
       ...payload,
-      startDate: this.situation.startDate.slice(0, 10),
-      endDate: this.situation.endDate.slice(0, 10),
+      startDate: situation.startDate.slice(0, 10),
+      endDate: situation.endDate.slice(0, 10),
     };
 
     if (payload?.priority) {

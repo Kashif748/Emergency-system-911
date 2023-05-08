@@ -29,9 +29,14 @@ export namespace BrowseSituationsAction {
     constructor(public payload: { view: 'TABLE' | 'CARDS' }) {}
   }
 
-  export class ExportPdf {
-    static readonly type = '[BrowseSituations]  Export Pdf';
-    constructor(public payload: { situationId: number }) {}
+  export class Export {
+    static readonly type = '[BrowseSituations] Export';
+    /**
+     *
+     */
+    constructor(
+      public payload: { type: 'PDF' | 'EXCEL'; situationId: number }
+    ) {}
   }
 
   export class CreateSituations {
@@ -55,7 +60,9 @@ export namespace BrowseSituationsAction {
     /**
      *
      */
-    constructor(public payload: { dialogName?: string; situationId?: number }) {}
+    constructor(
+      public payload: { dialogName?: string; situationId?: number }
+    ) {}
   }
 
   export class OpenView {
