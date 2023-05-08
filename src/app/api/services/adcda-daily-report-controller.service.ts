@@ -122,21 +122,21 @@ export class AdcdaDailyReportControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update91
+   * Path part for operation update92
    */
-  static readonly Update91Path = '/v1/adcda-daily-report';
+  static readonly Update92Path = '/v1/adcda-daily-report';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update91()` instead.
+   * To access only the response body, use `update92()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update91$Response(params: {
+  update92$Response(params: {
     body: AdcdaDailyReport
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaDailyReport>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Update91Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaDailyReportControllerService.Update92Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,15 +154,15 @@ export class AdcdaDailyReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update91$Response()` instead.
+   * To access the full response (for headers, for example), `update92$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update91(params: {
+  update92(params: {
     body: AdcdaDailyReport
   }): Observable<RestApiResponseAdcdaDailyReport> {
 
-    return this.update91$Response(params).pipe(
+    return this.update92$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaDailyReport>) => r.body as RestApiResponseAdcdaDailyReport)
     );
   }

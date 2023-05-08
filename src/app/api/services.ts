@@ -96,6 +96,7 @@ export { BcrtoControllerService } from './services/bcrto-controller.service';
 export { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
 export { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
 export { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
+export { BcImpactTypeControllerService } from './services/bc-impact-type-controller.service';
 export { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
 export { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
 export { AssetControllerService } from './services/asset-controller.service';

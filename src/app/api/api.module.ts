@@ -102,6 +102,7 @@ import { BcrtoControllerService } from './services/bcrto-controller.service';
 import { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
 import { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
 import { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
+import { BcImpactTypeControllerService } from './services/bc-impact-type-controller.service';
 import { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
 import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
 import { AssetControllerService } from './services/asset-controller.service';
@@ -249,6 +250,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     BcRecoveryPrioritiesControllerService,
     BcLocationTypeControllerService,
     BcWorkImportanceLevelsControllerService,
+    BcImpactTypeControllerService,
     BcImpactLevelControllerService,
     BcActivityFrequenciesControllerService,
     AssetControllerService,

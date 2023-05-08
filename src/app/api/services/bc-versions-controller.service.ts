@@ -25,7 +25,7 @@ export class BcVersionsControllerService extends BaseService {
   /**
    * Path part for operation getAll9
    */
-  static readonly GetAll9Path = '/v1/bia/version';
+  static readonly GetAll9Path = '/v1/bc/version';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -34,15 +34,19 @@ export class BcVersionsControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAll9$Response(params?: {
+    isActive?: boolean;
+    versionId?: number;
   }): Observable<StrictHttpResponse<RestApiResponseListBcVersions>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.GetAll9Path, 'get');
     if (params) {
+      rb.query('isActive', params.isActive, {});
+      rb.query('versionId', params.versionId, {});
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -58,6 +62,8 @@ export class BcVersionsControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAll9(params?: {
+    isActive?: boolean;
+    versionId?: number;
   }): Observable<RestApiResponseListBcVersions> {
 
     return this.getAll9$Response(params).pipe(
@@ -68,26 +74,26 @@ export class BcVersionsControllerService extends BaseService {
   /**
    * Path part for operation update79
    */
-  static readonly Update79Path = '/v1/bia/version';
+  static readonly Update79Path = '/v1/bc/version';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `update79()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   update79$Response(params: {
-    bcVersions: BcVersions;
+    body: BcVersions
   }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.Update79Path, 'put');
     if (params) {
-      rb.query('bcVersions', params.bcVersions, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -100,10 +106,10 @@ export class BcVersionsControllerService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `update79$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   update79(params: {
-    bcVersions: BcVersions;
+    body: BcVersions
   }): Observable<RestApiResponseBcVersions> {
 
     return this.update79$Response(params).pipe(
@@ -114,26 +120,26 @@ export class BcVersionsControllerService extends BaseService {
   /**
    * Path part for operation insertOne
    */
-  static readonly InsertOnePath = '/v1/bia/version';
+  static readonly InsertOnePath = '/v1/bc/version';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `insertOne()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   insertOne$Response(params: {
-    bcVersions: BcVersions;
+    body: BcVersions
   }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.InsertOnePath, 'post');
     if (params) {
-      rb.query('bcVersions', params.bcVersions, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -146,10 +152,10 @@ export class BcVersionsControllerService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `insertOne$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   insertOne(params: {
-    bcVersions: BcVersions;
+    body: BcVersions
   }): Observable<RestApiResponseBcVersions> {
 
     return this.insertOne$Response(params).pipe(
@@ -160,7 +166,7 @@ export class BcVersionsControllerService extends BaseService {
   /**
    * Path part for operation getOne
    */
-  static readonly GetOnePath = '/v1/bia/version/{id}';
+  static readonly GetOnePath = '/v1/bc/version/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -178,8 +184,8 @@ export class BcVersionsControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -206,7 +212,7 @@ export class BcVersionsControllerService extends BaseService {
   /**
    * Path part for operation deleteById
    */
-  static readonly DeleteByIdPath = '/v1/bia/version/{id}';
+  static readonly DeleteByIdPath = '/v1/bc/version/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

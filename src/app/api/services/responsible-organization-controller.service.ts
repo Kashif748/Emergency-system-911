@@ -22,28 +22,28 @@ export class ResponsibleOrganizationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation insertOne7
+   * Path part for operation insertOne8
    */
-  static readonly InsertOne7Path = '/v1/bia/org/save';
+  static readonly InsertOne8Path = '/v1/bc/org/save';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne7()` instead.
+   * To access only the response body, use `insertOne8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  insertOne7$Response(params: {
+  insertOne8$Response(params: {
     orgStructure: OrgStructure;
   }): Observable<StrictHttpResponse<RestApiResponseOrgStructure>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ResponsibleOrganizationControllerService.InsertOne7Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ResponsibleOrganizationControllerService.InsertOne8Path, 'get');
     if (params) {
       rb.query('orgStructure', params.orgStructure, {});
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -54,15 +54,15 @@ export class ResponsibleOrganizationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne7$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  insertOne7(params: {
+  insertOne8(params: {
     orgStructure: OrgStructure;
   }): Observable<RestApiResponseOrgStructure> {
 
-    return this.insertOne7$Response(params).pipe(
+    return this.insertOne8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
     );
   }
@@ -70,7 +70,7 @@ export class ResponsibleOrganizationControllerService extends BaseService {
   /**
    * Path part for operation deleteById2
    */
-  static readonly DeleteById2Path = '/v1/bia/org/{id}';
+  static readonly DeleteById2Path = '/v1/bc/org/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

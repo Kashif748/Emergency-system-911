@@ -25,7 +25,7 @@ export class BcLocationTypeControllerService extends BaseService {
   /**
    * Path part for operation getAll12
    */
-  static readonly GetAll12Path = '/v1/bia/locationType';
+  static readonly GetAll12Path = '/v1/bc/locationType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -34,15 +34,19 @@ export class BcLocationTypeControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAll12$Response(params?: {
+    isActive?: boolean;
+    versionId?: number;
   }): Observable<StrictHttpResponse<RestApiResponseListBcLocationTypes>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.GetAll12Path, 'get');
     if (params) {
+      rb.query('isActive', params.isActive, {});
+      rb.query('versionId', params.versionId, {});
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -58,6 +62,8 @@ export class BcLocationTypeControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAll12(params?: {
+    isActive?: boolean;
+    versionId?: number;
   }): Observable<RestApiResponseListBcLocationTypes> {
 
     return this.getAll12$Response(params).pipe(
@@ -68,26 +74,26 @@ export class BcLocationTypeControllerService extends BaseService {
   /**
    * Path part for operation update82
    */
-  static readonly Update82Path = '/v1/bia/locationType';
+  static readonly Update82Path = '/v1/bc/locationType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `update82()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   update82$Response(params: {
-    bCLocationTypes: BcLocationTypes;
+    body: BcLocationTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcLocationTypes>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.Update82Path, 'put');
     if (params) {
-      rb.query('bCLocationTypes', params.bCLocationTypes, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -100,10 +106,10 @@ export class BcLocationTypeControllerService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `update82$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   update82(params: {
-    bCLocationTypes: BcLocationTypes;
+    body: BcLocationTypes
   }): Observable<RestApiResponseBcLocationTypes> {
 
     return this.update82$Response(params).pipe(
@@ -114,26 +120,26 @@ export class BcLocationTypeControllerService extends BaseService {
   /**
    * Path part for operation insertOne3
    */
-  static readonly InsertOne3Path = '/v1/bia/locationType';
+  static readonly InsertOne3Path = '/v1/bc/locationType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `insertOne3()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   insertOne3$Response(params: {
-    bCLocationTypes: BcLocationTypes;
+    body: BcLocationTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcLocationTypes>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.InsertOne3Path, 'post');
     if (params) {
-      rb.query('bCLocationTypes', params.bCLocationTypes, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -146,10 +152,10 @@ export class BcLocationTypeControllerService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `insertOne3$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   insertOne3(params: {
-    bCLocationTypes: BcLocationTypes;
+    body: BcLocationTypes
   }): Observable<RestApiResponseBcLocationTypes> {
 
     return this.insertOne3$Response(params).pipe(
@@ -160,7 +166,7 @@ export class BcLocationTypeControllerService extends BaseService {
   /**
    * Path part for operation getOne3
    */
-  static readonly GetOne3Path = '/v1/bia/locationType/{id}';
+  static readonly GetOne3Path = '/v1/bc/locationType/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -178,8 +184,8 @@ export class BcLocationTypeControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -206,7 +212,7 @@ export class BcLocationTypeControllerService extends BaseService {
   /**
    * Path part for operation deleteById4
    */
-  static readonly DeleteById4Path = '/v1/bia/locationType/{id}';
+  static readonly DeleteById4Path = '/v1/bc/locationType/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

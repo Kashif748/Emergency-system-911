@@ -25,7 +25,7 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
   /**
    * Path part for operation getAll11
    */
-  static readonly GetAll11Path = '/v1/bia/loopbackPriority';
+  static readonly GetAll11Path = '/v1/bc/loopbackPriority';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -34,15 +34,19 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAll11$Response(params?: {
+    isActive?: boolean;
+    versionId?: number;
   }): Observable<StrictHttpResponse<RestApiResponseListBcRecoveryPriorities>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.GetAll11Path, 'get');
     if (params) {
+      rb.query('isActive', params.isActive, {});
+      rb.query('versionId', params.versionId, {});
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -58,6 +62,8 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAll11(params?: {
+    isActive?: boolean;
+    versionId?: number;
   }): Observable<RestApiResponseListBcRecoveryPriorities> {
 
     return this.getAll11$Response(params).pipe(
@@ -68,26 +74,26 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
   /**
    * Path part for operation update81
    */
-  static readonly Update81Path = '/v1/bia/loopbackPriority';
+  static readonly Update81Path = '/v1/bc/loopbackPriority';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `update81()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   update81$Response(params: {
-    bCRecoveryPriorities: BcRecoveryPriorities;
+    body: BcRecoveryPriorities
   }): Observable<StrictHttpResponse<RestApiResponseBcRecoveryPriorities>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.Update81Path, 'put');
     if (params) {
-      rb.query('bCRecoveryPriorities', params.bCRecoveryPriorities, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -100,10 +106,10 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `update81$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   update81(params: {
-    bCRecoveryPriorities: BcRecoveryPriorities;
+    body: BcRecoveryPriorities
   }): Observable<RestApiResponseBcRecoveryPriorities> {
 
     return this.update81$Response(params).pipe(
@@ -114,26 +120,26 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
   /**
    * Path part for operation insertOne2
    */
-  static readonly InsertOne2Path = '/v1/bia/loopbackPriority';
+  static readonly InsertOne2Path = '/v1/bc/loopbackPriority';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `insertOne2()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   insertOne2$Response(params: {
-    bCRecoveryPriorities: BcRecoveryPriorities;
+    body: BcRecoveryPriorities
   }): Observable<StrictHttpResponse<RestApiResponseBcRecoveryPriorities>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.InsertOne2Path, 'post');
     if (params) {
-      rb.query('bCRecoveryPriorities', params.bCRecoveryPriorities, {});
+      rb.body(params.body, 'application/json');
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -146,10 +152,10 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `insertOne2$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   insertOne2(params: {
-    bCRecoveryPriorities: BcRecoveryPriorities;
+    body: BcRecoveryPriorities
   }): Observable<RestApiResponseBcRecoveryPriorities> {
 
     return this.insertOne2$Response(params).pipe(
@@ -160,7 +166,7 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
   /**
    * Path part for operation getOne2
    */
-  static readonly GetOne2Path = '/v1/bia/loopbackPriority/{id}';
+  static readonly GetOne2Path = '/v1/bc/loopbackPriority/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -178,8 +184,8 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -206,7 +212,7 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
   /**
    * Path part for operation deleteById3
    */
-  static readonly DeleteById3Path = '/v1/bia/loopbackPriority/{id}';
+  static readonly DeleteById3Path = '/v1/bc/loopbackPriority/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

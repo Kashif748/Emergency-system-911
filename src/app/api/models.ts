@@ -383,6 +383,9 @@ export { RestApiResponseBcLocationTypes } from './models/rest-api-response-bc-lo
 export { BcWorkImportanceLevels } from './models/bc-work-importance-levels';
 export { ApiErrorBcWorkImportanceLevels } from './models/api-error-bc-work-importance-levels';
 export { RestApiResponseBcWorkImportanceLevels } from './models/rest-api-response-bc-work-importance-levels';
+export { BcImpactTypes } from './models/bc-impact-types';
+export { ApiErrorBcImpactTypes } from './models/api-error-bc-impact-types';
+export { RestApiResponseBcImpactTypes } from './models/rest-api-response-bc-impact-types';
 export { BcImpactLevel } from './models/bc-impact-level';
 export { ApiErrorBcImpactLevel } from './models/api-error-bc-impact-level';
 export { RestApiResponseBcImpactLevel } from './models/rest-api-response-bc-impact-level';
@@ -621,8 +624,12 @@ export { RestApiResponsePageSuggestionProjection } from './models/rest-api-respo
 export { ApiErrorPageSlaDetails } from './models/api-error-page-sla-details';
 export { PageSlaDetails } from './models/page-sla-details';
 export { RestApiResponsePageSlaDetails } from './models/rest-api-response-page-sla-details';
-export { ApiErrorListMapStringObject } from './models/api-error-list-map-string-object';
-export { RestApiResponseListMapStringObject } from './models/rest-api-response-list-map-string-object';
+export { ApiErrorSituationStatisticsResponse } from './models/api-error-situation-statistics-response';
+export { MainCategoryStatisticsResponse } from './models/main-category-statistics-response';
+export { PrimaryOrgs } from './models/primary-orgs';
+export { RecoveryRate } from './models/recovery-rate';
+export { RestApiResponseSituationStatisticsResponse } from './models/rest-api-response-situation-statistics-response';
+export { SituationStatisticsResponse } from './models/situation-statistics-response';
 export { ApiErrorSituationChartReportResponse } from './models/api-error-situation-chart-report-response';
 export { RestApiResponseSituationChartReportResponse } from './models/rest-api-response-situation-chart-report-response';
 export { SituationChartReportResponse } from './models/situation-chart-report-response';
@@ -646,6 +653,8 @@ export { RestApiResponseListDistrictNameProjection } from './models/rest-api-res
 export { ApiErrorListCommunityNameProjection } from './models/api-error-list-community-name-projection';
 export { CommunityNameProjection } from './models/community-name-projection';
 export { RestApiResponseListCommunityNameProjection } from './models/rest-api-response-list-community-name-projection';
+export { ApiErrorListMapStringObject } from './models/api-error-list-map-string-object';
+export { RestApiResponseListMapStringObject } from './models/rest-api-response-list-map-string-object';
 export { ApiErrorListIdNameProjection } from './models/api-error-list-id-name-projection';
 export { RestApiResponseListIdNameProjection } from './models/rest-api-response-list-id-name-projection';
 export { ApiErrorPageServiceCenterArea } from './models/api-error-page-service-center-area';
@@ -1110,6 +1119,8 @@ export { ApiErrorListBcLocationTypes } from './models/api-error-list-bc-location
 export { RestApiResponseListBcLocationTypes } from './models/rest-api-response-list-bc-location-types';
 export { ApiErrorListBcWorkImportanceLevels } from './models/api-error-list-bc-work-importance-levels';
 export { RestApiResponseListBcWorkImportanceLevels } from './models/rest-api-response-list-bc-work-importance-levels';
+export { ApiErrorListBcImpactTypes } from './models/api-error-list-bc-impact-types';
+export { RestApiResponseListBcImpactTypes } from './models/rest-api-response-list-bc-impact-types';
 export { ApiErrorListBcImpactLevel } from './models/api-error-list-bc-impact-level';
 export { RestApiResponseListBcImpactLevel } from './models/rest-api-response-list-bc-impact-level';
 export { ApiErrorListBcActivityFrequencies } from './models/api-error-list-bc-activity-frequencies';
