@@ -1,5 +1,5 @@
 <p-dialog
-  [visible]="opened$ | async"
+  [visible]="formDialog$ | async"
   (visibleChange)="close()"
   [modal]="true"
   [style]="{ width: '55vw', 'min-hight': '50vh' }"
@@ -10,21 +10,21 @@
   [resizable]="false"
 >
   <ng-template pTemplate="header">
-    <h3>
-      <span>{{ "SITUATIONS.ADD_HEADER" | translate }}</span>
-      <span
-        *ngIf="!editMode"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="editMode"
-        class="label label-lg label-light-success label-inline"
-      >
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
-    </h3>
+    <div class="d-flex">
+      <app-breadcrumb></app-breadcrumb>
+      <ng-container *ngIf="editMode; else elseTemplate">
+        <p-tag
+          value=" {{ 'ACTIONS.UPDATE_ITEM' | translate }}"
+          severity="warning"
+        ></p-tag>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <p-tag
+          value=" {{ 'ACTIONS.NEW_ITEM' | translate }}"
+          severity="primary"
+        ></p-tag>
+      </ng-template>
+    </div>
   </ng-template>
 
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
@@ -118,22 +118,42 @@
         placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
       >
         <ng-template let-item pTemplate="selectedItem">
-          {{ item | translateObj }}
+          <div class="d-flex p-ai-center">
+            <p-tag
+              class="d-flex d-flex p-ai-center"
+              [severity]="item.color"
+              rounded="true"
+              value=""
+              styleClass="mx-1 p-2"
+            ></p-tag>
+            {{ item | translateObj }}
+          </div>
         </ng-template>
 
         <ng-template let-item pTemplate="item">
-          {{ item | translateObj }}
+          <div class="d-flex p-ai-center">
+            <p-tag
+              class="d-flex d-flex p-ai-center"
+              [severity]="item.color"
+              rounded="true"
+              value=""
+              styleClass="mx-1 p-2"
+            ></p-tag>
+            {{ item | translateObj }}
+          </div>
         </ng-template>
       </p-dropdown>
     </div>
     <!--  From Date  -->
-    <div class="p-field p-col-12 p-md-6" [ngClass]="{ 'p-md-6': editMode }">
+    <div class="p-field p-md-6">
       <span class="p-float-label">
         <p-calendar
           formControlName="startDate"
+          [maxDate]="form.get('endDate').value"
           [showIcon]="true"
           showButtonBar="true"
           [showTime]="true"
+          dateFormat="dd/mm/yy"
           appendTo="body"
           hourFormat="12"
         ></p-calendar>
@@ -158,13 +178,15 @@
       </ng-container>
     </div>
     <!--  To Date  -->
-    <div class="p-field p-col-12 p-md-6" [ngClass]="{ 'p-md-6': editMode }">
+    <div class="p-field p-md-6">
       <span class="p-float-label">
         <p-calendar
           formControlName="endDate"
+          [minDate]="form.get('startDate').value"
           [showIcon]="true"
           showButtonBar="true"
           [showTime]="true"
+          dateFormat="dd/mm/yy"
           appendTo="body"
           hourFormat="12"
         ></p-calendar>
@@ -190,6 +212,7 @@
     </div>
   </form>
 
+  <!-- Actions -->
   <ng-template pTemplate="footer">
     <div class="p-col p-d-flex">
       <button
@@ -197,6 +220,7 @@
         icon="pi pi-times"
         (click)="close()"
         label="{{ 'ACTIONS.CLOSE' | translate }}"
+        class="p-button-outlined"
       ></button>
       <div class="mx-1">
         <button
