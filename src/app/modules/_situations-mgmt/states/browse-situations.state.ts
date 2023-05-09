@@ -22,6 +22,7 @@ export interface BrowseSituationsStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
   view: 'TABLE' | 'CARDS';
+  themeTypes: any[];
 }
 
 export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
@@ -47,6 +48,26 @@ export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
     ],
 
     view: 'TABLE',
+    themeTypes: [
+      {
+        id: 0,
+        color: 'golden',
+        nameAr: 'المستوى الاستراتيجي',
+        nameEn: 'Strategic Level',
+      },
+      {
+        id: 1,
+        color: 'silver',
+        nameAr: 'المستوى العملياتي',
+        nameEn: 'Operational Level',
+      },
+      {
+        id: 2,
+        color: 'bronze',
+        nameAr: 'المستوى التكتيكي',
+        nameEn: 'Tactical Level',
+      },
+    ],
   },
 })
 @Injectable()
