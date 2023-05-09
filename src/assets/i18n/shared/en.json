@@ -761,6 +761,7 @@
         "REASON_5": "Other"
       },
       "INCIDENT": "Incident",
+      "INCIDENT_REPORT": "Incident {{serial}} Report ",
       "EDIT_INQUIRY": "Edit inquiry",
       "INQUIRY_SUBJECT": "Description",
       "INQUIRY_ANSWER": "Answer",
