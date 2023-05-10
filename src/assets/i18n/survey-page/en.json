@@ -7,7 +7,7 @@
     "PleaseWait": "Please  wait ,processing... ",
     "InvalidUUID": "This  survey  has already been applyed",
     "SuccessMSG": "Your  Survey  has been  saved ....Thank you ",
-    "SurvyReport": "Happiness Reports",
+    "SURVEY_REPORT": "Customer Satisfaction Report",
     "Table": {
       "happiness": "happiness",
       "other": "other",
