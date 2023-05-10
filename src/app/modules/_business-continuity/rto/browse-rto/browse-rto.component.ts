@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Observable} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {Bcrto} from "../../../../api/models/bcrto";
-import {RtoState} from "@core/states/bc/rto.state";
+import {RtoState} from "@core/states/bc/rto/rto.state";
 import {BrowseRtoState, BrowseRtoStateModel} from "../states/browse-rto.state";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {filter, map, takeUntil} from "rxjs/operators";
@@ -18,6 +18,9 @@ import {BrowseRtoAction} from "../states/browse-rto.action";
 })
 export class BrowseRtoComponent implements OnInit {
   public page$: Observable<Bcrto[]>;
+
+  @Select(RtoState.totalRecords)
+  public totalRecords$: Observable<number>;
 
   @Select(RtoState.loading)
   public loading$: Observable<boolean>;

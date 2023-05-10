@@ -1,4 +1,7 @@
 {
+  "SHARED":{
+    "PAGE_REPORT": "{first} - {last} من {totalRecords}"
+  },
   "VERSIONS_SETTINGS": "إعدادات الاصدارات",
   "ADD_VERSION": "انشاء إصدار جديد",
   "VERSION": "الإصدار",

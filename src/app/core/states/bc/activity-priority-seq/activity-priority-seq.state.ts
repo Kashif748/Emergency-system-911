@@ -6,10 +6,11 @@ import {patch} from "@ngxs/store/operators";
 import {BcRecoveryPrioritiesControllerService} from "../../../../api/services/bc-recovery-priorities-controller.service";
 import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-priorities";
 import {ActivityPrioritySeqAction} from "@core/states/bc/activity-priority-seq/activity-priority-seq.action";
+import {PageBcRecoveryPriorities} from "../../../../api/models/page-bc-recovery-priorities";
 
 
 export interface ActivityPrioritySeqStateModel {
-  page: BcRecoveryPriorities[];
+  page: PageBcRecoveryPriorities;
   singleActivity: BcRecoveryPriorities;
   loading: boolean;
   blocking: boolean;
@@ -33,7 +34,7 @@ export class ActivityPrioritySeqState {
   /* ************************ SELECTORS ******************** */
   @Selector([ActivityPrioritySeqState])
   static page(state: ActivityPrioritySeqStateModel) {
-    return state?.page;
+    return state?.page?.content;
   }
 
   @Selector([ActivityPrioritySeqState])
@@ -41,10 +42,10 @@ export class ActivityPrioritySeqState {
     return state?.singleActivity;
   }
 
-  /*  @Selector([ActivityPrioritySeqState])
+  @Selector([ActivityPrioritySeqState])
     static totalRecords(state: ActivityPrioritySeqStateModel) {
-      return state?.page;
-    }*/
+    return state?.page?.totalElements;
+    }
 
   @Selector([ActivityPrioritySeqState])
   static loading(state: ActivityPrioritySeqStateModel) {
@@ -70,13 +71,13 @@ export class ActivityPrioritySeqState {
     return this.activityPrioritySeq
       .getAll11({
         isActive: true,
-        versionId: 1
-        /* pageable: {
+        versionId: 1,
+        pageable: {
            page: payload.page,
            size: payload.size,
            sort: payload.sort,
          },
-         request: payload.filters,*/
+         // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -90,7 +91,7 @@ export class ActivityPrioritySeqState {
         catchError(() => {
           setState(
             patch<ActivityPrioritySeqStateModel>({
-              // page: { content: [], totalElements: 0 },
+               page: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;

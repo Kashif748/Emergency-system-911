@@ -1,4 +1,7 @@
 {
+  "SHARED":{
+    "PAGE_REPORT": "{first} - {last} of {totalRecords}"
+  },
   "VERSIONS_SETTINGS": "Version Management",
   "ADD_VERSION" : "Add new version",
   "VERSION" : "Version" ,

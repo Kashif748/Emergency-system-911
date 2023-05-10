@@ -1,4 +1,4 @@
-import {Bcrto} from "../../../api/models/bcrto";
+import {Bcrto} from "../../../../api/models/bcrto";
 
 export namespace RtoAction {
   export class LoadPage {

@@ -6,11 +6,12 @@ import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
 import {ImpLevelWorkingAction} from "@core/states/bc/imp-level-working/imp-level-working.action";
-import {RtoStateModel} from "@core/states/bc/rto.state";
+import {RtoStateModel} from "@core/states/bc/rto/rto.state";
+import {PageBcWorkImportanceLevels} from "../../../../api/models/page-bc-work-importance-levels";
 
 
 export interface ImpLevelWorkingStateModel {
-  page: BcWorkImportanceLevels[];
+  page: PageBcWorkImportanceLevels;
   ImpLevelWorking: BcWorkImportanceLevels;
   loading: boolean;
   blocking: boolean;
@@ -34,7 +35,7 @@ export class ImpLevelWorkingState {
   /* ************************ SELECTORS ******************** */
   @Selector([ImpLevelWorkingState])
   static page(state: ImpLevelWorkingStateModel) {
-    return state?.page;
+    return state?.page?.content;
   }
 
   @Selector([ImpLevelWorkingState])
@@ -42,10 +43,10 @@ export class ImpLevelWorkingState {
     return state?.ImpLevelWorking;
   }
 
-  /*  @Selector([ImpLevelWorkingState])
+  @Selector([ImpLevelWorkingState])
   static totalRecords(state: ImpLevelWorkingStateModel) {
-    return state?.page;
-  }*/
+    return state?.page?.totalElements;
+  }
 
   @Selector([ImpLevelWorkingState])
   static loading(state: ImpLevelWorkingStateModel) {
@@ -71,13 +72,13 @@ export class ImpLevelWorkingState {
     return this.impLevelWorking
       .getAll13({
         isActive: true,
-        versionId: 1
-        /* pageable: {
+        versionId: 1,
+         pageable: {
            page: payload.page,
            size: payload.size,
            sort: payload.sort,
          },
-         request: payload.filters,*/
+         // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -91,7 +92,7 @@ export class ImpLevelWorkingState {
         catchError(() => {
           setState(
             patch<ImpLevelWorkingStateModel>({
-              // page: { content: [], totalElements: 0 },
+              page: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;

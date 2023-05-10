@@ -101,11 +101,17 @@
                   ></div>
                 </td>
 
-                <td>{{ item.id }}</td>
+                <td (click)="item.isActive && openView(item.id)">
+                  {{ item.id }}
+                </td>
 
-                <td>{{ item.priority_ar }}</td>
+                <td (click)="item.isActive && openView(item.id)">
+                  {{ item.priority_ar }}
+                </td>
 
-                <td>{{ item.priority_en }}</td>
+                <td (click)="item.isActive && openView(item.id)">
+                  {{ item.priority_en }}
+                </td>
 
                 <td>
                   <button

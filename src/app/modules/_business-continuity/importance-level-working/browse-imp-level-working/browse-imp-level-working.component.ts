@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {RtoState} from "@core/states/bc/rto.state";
+import {RtoState} from "@core/states/bc/rto/rto.state";
 import {filter, map} from "rxjs/operators";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {TranslateService} from "@ngx-translate/core";
@@ -21,6 +21,9 @@ import {BrowseImpLevelWorkingAction} from "./states/browse-imp-level-working.act
 export class BrowseImpLevelWorkingComponent implements OnInit {
 
   public page$: Observable<BcWorkImportanceLevels[]>;
+
+  @Select(ImpLevelWorkingState.totalRecords)
+  public totalRecords$: Observable<number>;
 
   @Select(ImpLevelWorkingState.loading)
   public loading$: Observable<boolean>;

@@ -6,10 +6,11 @@ import {EMPTY} from "rxjs";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {ActivityFrquencyAction} from "@core/states/bc/activity-frquency/activity-frquency.action";
+import {PageBcActivityFrequencies} from "../../../../api/models/page-bc-activity-frequencies";
 
 
 export interface ActivityFrquencyStateModel {
-  page: BcActivityFrequencies[];
+  page: PageBcActivityFrequencies;
   activityFrq: BcActivityFrequencies;
   loading: boolean;
   blocking: boolean;
@@ -33,7 +34,7 @@ export class ActivityFrquencyState {
   /* ************************ SELECTORS ******************** */
   @Selector([ActivityFrquencyState])
   static page(state: ActivityFrquencyStateModel) {
-    return state?.page;
+    return state?.page?.content;
   }
 
   @Selector([ActivityFrquencyState])
@@ -41,10 +42,10 @@ export class ActivityFrquencyState {
     return state?.activityFrq;
   }
 
-  /*  @Selector([ActivityFrquencyState])
+  @Selector([ActivityFrquencyState])
     static totalRecords(state: ActivityFrquencyStateModel) {
-      return state?.page;
-    }*/
+    return state?.page?.totalElements;
+    }
 
   @Selector([ActivityFrquencyState])
   static loading(state: ActivityFrquencyStateModel) {
@@ -70,13 +71,13 @@ export class ActivityFrquencyState {
     return this.activityFrquency
       .getAll16({
         isActive: true,
-        versionId: 1
-        /* pageable: {
+        versionId: 1,
+        pageable: {
            page: payload.page,
            size: payload.size,
            sort: payload.sort,
          },
-         request: payload.filters,*/
+//         request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -90,7 +91,7 @@ export class ActivityFrquencyState {
         catchError(() => {
           setState(
             patch<ActivityFrquencyStateModel>({
-              // page: { content: [], totalElements: 0 },
+              page: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;

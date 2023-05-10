@@ -10,6 +10,7 @@ import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-prioritie
 import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
 import {BrowseActivityPrioritySeqState, BrowseActivityPrioritySeqStateModel} from "../states/browse-activity-priority-seq.state";
 import {BrowseActivityPrioritySeqAction} from "../states/browse-activity-priority-seq.action";
+import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
 
 @Component({
   selector: 'app-browse-activity-priority',
@@ -19,6 +20,9 @@ import {BrowseActivityPrioritySeqAction} from "../states/browse-activity-priorit
 export class BrowseActivityPriorityComponent implements OnInit {
 
   public page$: Observable<BcRecoveryPriorities[]>;
+
+  @Select(ActivityPrioritySeqState.totalRecords)
+  public totalRecords$: Observable<number>;
 
   @Select(ActivityPrioritySeqState.loading)
   public loading$: Observable<boolean>;

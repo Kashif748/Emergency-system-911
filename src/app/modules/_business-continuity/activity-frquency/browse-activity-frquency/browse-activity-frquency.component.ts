@@ -10,6 +10,7 @@ import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequenc
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
 import {BrowseActivityFrquencyState, BrowseActivityFrquencyStateModel} from "../states/browse-activity-frquency.state";
 import {BrowseActivityFrquencyAction} from "../states/browse-activity-frquency.action";
+import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 
 @Component({
   selector: 'app-browse-activity-frquency',
@@ -18,6 +19,9 @@ import {BrowseActivityFrquencyAction} from "../states/browse-activity-frquency.a
 })
 export class BrowseActivityFrquencyComponent implements OnInit {
   public page$: Observable<BcActivityFrequencies[]>;
+
+  @Select(ActivityFrquencyState.totalRecords)
+  public totalRecords$: Observable<number>;
 
   @Select(ActivityFrquencyState.loading)
   public loading$: Observable<boolean>;

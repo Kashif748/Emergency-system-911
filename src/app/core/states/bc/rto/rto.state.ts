@@ -3,13 +3,14 @@ import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
 import {EMPTY, of} from "rxjs";
-import {Bcrto} from "../../../api/models/bcrto";
-import { RtoAction} from "@core/states/bc/rto.action";
-import {BcrtoControllerService} from "../../../api/services/bcrto-controller.service";
+import {Bcrto} from "../../../../api/models/bcrto";
+import {BcrtoControllerService} from "../../../../api/services/bcrto-controller.service";
+import {PageBcrto} from "../../../../api/models/page-bcrto";
+import {RtoAction} from "@core/states";
 
 
 export interface RtoStateModel {
-  page: Bcrto[];
+  page: PageBcrto;
   rto: Bcrto;
   loading: boolean;
   blocking: boolean;
@@ -32,7 +33,7 @@ export class RtoState {
   /* ************************ SELECTORS ******************** */
   @Selector([RtoState])
   static page(state: RtoStateModel) {
-    return state?.page;
+    return state?.page?.content;
   }
 
   @Selector([RtoState])
@@ -40,10 +41,10 @@ export class RtoState {
     return state?.rto;
   }
 
-/*  @Selector([RtoState])
+  @Selector([RtoState])
   static totalRecords(state: RtoStateModel) {
-    return state?.page;
-  }*/
+    return state?.page?.totalElements;
+  }
 
   @Selector([RtoState])
   static loading(state: RtoStateModel) {
@@ -69,13 +70,13 @@ export class RtoState {
     return this.rto
       .getAll10({
         isActive: true,
-        versionId: 1
-       /* pageable: {
+        versionId: 1,
+        pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
-        request: payload.filters,*/
+         // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -89,7 +90,7 @@ export class RtoState {
         catchError(() => {
           setState(
             patch<RtoStateModel>({
-               // page: { content: [], totalElements: 0 },
+              page: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;

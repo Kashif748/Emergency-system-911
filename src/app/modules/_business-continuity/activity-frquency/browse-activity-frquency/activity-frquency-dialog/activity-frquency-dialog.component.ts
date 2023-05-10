@@ -77,8 +77,8 @@ export class ActivityFrquencyDialogComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      frqEn: [null, [Validators.required, GenericValidators.english]],
-      frqAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
     });
   }
 

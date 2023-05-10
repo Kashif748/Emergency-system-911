@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {iif, patch} from "@ngxs/store/operators";
 import {BrowseRtoAction} from "./browse-rto.action";
-import {RtoAction} from "@core/states/bc/rto.action";
+import {RtoAction} from "@core/states/bc/rto/rto.action";
 import {ApiHelper} from "@core/helpers/api.helper";
 import {catchError, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
