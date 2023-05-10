@@ -1,10 +1,9 @@
-:host ::ng-deep {
-  .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
-    border-radius: 30px;
+::ng-deep {
+  .p-inputtext {
+    font-family: "Tajawal";
   }
-  .p-fieldset .p-fieldset-legend {
-    font-weight: 600;
-    font-size: 1rem;
-    border-radius: 30px;
+  .p-calendar .p-inputtext,
+  .p-timepicker {
+    direction: ltr;
   }
 }

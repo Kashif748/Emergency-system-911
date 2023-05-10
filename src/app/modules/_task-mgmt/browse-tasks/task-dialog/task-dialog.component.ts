@@ -768,6 +768,7 @@ export class TaskDialogComponent
     const task = this.store.selectSnapshot(TaskState.task);
 
     instance.recordId = this._taskId;
+    instance.foreignHelperId = (task.incidentId as any)?.id;
     instance.tagId = UploadTagIdConst.TASKS;
     instance.inline = true;
     this.attachComponent = instance;

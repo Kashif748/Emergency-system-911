@@ -20,7 +20,6 @@
         border-width: 1px 0px !important;
         padding-top: 1.6rem;
         padding-bottom: 1.6rem;
-        font-weight: 700;
       }
 
       > tr > td:first-child:not([colspan="100%"]).flag-td {
@@ -43,5 +42,20 @@
         }
       }
     }
+  }
+  .golden {
+    color: black;
+    background-color: #fbb034;
+    background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);
+  }
+
+  .bronze {
+    background-color: #804a00;
+    background-image: linear-gradient(315deg, #804a00 0%, #b08d57 74%);
+  }
+
+  .silver {
+    background-color: #5b6467;
+    background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%);
   }
 }

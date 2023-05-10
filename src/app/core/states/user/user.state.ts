@@ -34,6 +34,7 @@ import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { OrgState } from '../org/org.state';
 import { EMPTY, of } from 'rxjs';
 import { TextUtils } from '@core/utils';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 export interface UserStateModel {
   page: PageUserAndRoleProjection;
@@ -125,10 +126,20 @@ export class UserState {
         request: payload.filters,
       })
       .pipe(
-        tap((res) => {
+        tap(({ result }) => {
           setState(
             patch<UserStateModel>({
-              page: res.result,
+              page: {
+                ...result,
+                content: result?.content?.map((u) => {
+                  return {
+                    ...u,
+                    expireDate: DateTimeUtil.getDateInGMTFormat(
+                      u.expireDate
+                    ) as any,
+                  };
+                }),
+              },
               loading: false,
             })
           );
@@ -151,37 +162,6 @@ export class UserState {
       );
   }
 
-  @Action(UserAction.LoadGroupMapUserPage, { cancelUncompleted: true })
-  LoadGroupMapUserPage(
-    { setState }: StateContext<UserStateModel>,
-    { payload }: UserAction.LoadGroupMapUserPage
-  ) {
-    setState(
-      patch<UserStateModel>({
-        loading: true,
-      })
-    );
-    return this.userService
-      .getAllForOrg({
-        pageable: {
-          page: payload.page,
-          size: payload.size,
-          sort: payload.sort,
-        },
-        name: payload.name,
-      })
-      .pipe(
-        tap(({ result: { content: list } }) => {
-          setState(
-            patch<UserStateModel>({
-              groupMapUser: list.map((v) => {
-                return { ...v, inactive: true };
-              }),
-            })
-          );
-        })
-      );
-  }
 
   @Action(UserAction.LoadUsers, { cancelUncompleted: true })
   loadUsers(
@@ -227,7 +207,13 @@ export class UserState {
       })
     );
     return this.userService.get1({ userId: payload.id }).pipe(
-      switchMap(({ result: user }) =>
+      map(({ result: u }) => {
+        return {
+          ...u,
+          expireDate: DateTimeUtil.getDateInGMTFormat(u.expireDate) as any,
+        };
+      }),
+      switchMap((user) =>
         this.dmsService
           .findAttachment({
             entityId: payload.id,

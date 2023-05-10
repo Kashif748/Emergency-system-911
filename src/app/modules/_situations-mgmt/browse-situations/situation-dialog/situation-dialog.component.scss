@@ -1,8 +1,8 @@
-:host {
-  ::ng-deep {
-    .p-dialog-content {
-      overflow: visible;
-      height: 100%;
-    }
+:host ::ng-deep {
+  .p-dialog-content {
+    overflow: visible;
+    height: 100%;
   }
 }
+
+

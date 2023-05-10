@@ -41,6 +41,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TagModule } from 'primeng/tag';
+import { ChipModule } from 'primeng/chip';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/situations-mgmt/', '.json');
@@ -56,7 +57,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   ],
   imports: [
     CommonModule,
-    SituationsMgmtRoutingModule,
     SharedBreadcrumbModule,
     TranslateModule.forChild({
       extend: true,
@@ -68,6 +68,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
       isolate: true,
     }),
     NgxsModule.forFeature([BrowseSituationsState]),
+    SituationsMgmtRoutingModule,
+
     FieldsetModule,
     FormsModule,
     ReactiveFormsModule,
@@ -95,7 +97,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     NgApexchartsModule,
     InlineSVGModule,
     OverlayPanelModule,
-    TagModule
+    TagModule,
+    ChipModule,
+
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

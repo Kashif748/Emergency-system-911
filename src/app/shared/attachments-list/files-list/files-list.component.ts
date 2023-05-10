@@ -613,19 +613,19 @@ export class FilesListComponent implements OnInit, AfterViewInit {
       tasksAttachmentsRes: this.attachmentsService.getTaskAttachments(
         this.recordId
       ),
-      // incidentsAttachmentsRes: this.attachmentsService.getIncidentAttachments(
-      //   this.foreignHelperId ?? this.recordId
-      // ),
+      incidentsAttachmentsRes: this.attachmentsService.getIncidentAttachments(
+        this.foreignHelperId ?? this.recordId
+      ),
     }).subscribe(
       ({
         logsAttachmentsRes,
         tasksAttachmentsRes,
-        // incidentsAttachmentsRes,
+        incidentsAttachmentsRes,
       }) => {
         this.fillAttachmentsList(
           logsAttachmentsRes,
-          tasksAttachmentsRes
-          // incidentsAttachmentsRes
+          tasksAttachmentsRes,
+          incidentsAttachmentsRes
         );
         this.groupAttachmentsForUI();
         this.cd.detectChanges();

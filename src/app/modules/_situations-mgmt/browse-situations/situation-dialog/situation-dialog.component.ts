@@ -27,7 +27,7 @@ import { BrowseSituationsAction } from '../../states/browse-situations.action';
   styleUrls: ['./situation-dialog.component.scss'],
 })
 export class SituationDialogComponent implements OnInit, OnDestroy {
-  opened$: Observable<boolean>;
+  formDialog$: Observable<boolean>;
 
   @Select(CommonDataState.newsTypes)
   public newsTypes$: Observable<any[]>;
@@ -70,10 +70,26 @@ export class SituationDialogComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
 
   themeTypes = [
-    { id: 0, nameAr: 'المستوى الاستراتيجي', nameEn: 'Strategic Level' },
-    { id: 1, nameAr: 'المستوى العملياتي', nameEn: 'Operational Level' },
-    { id: 2, nameAr: 'المستوى التكتيكي', nameEn: 'Tactical Level' },
+    {
+      id: 0,
+      color: 'golden',
+      nameAr: 'المستوى الاستراتيجي',
+      nameEn: 'Strategic Level',
+    },
+    {
+      id: 1,
+      color: 'silver',
+      nameAr: 'المستوى العملياتي',
+      nameEn: 'Operational Level',
+    },
+    {
+      id: 2,
+      color: 'bronze',
+      nameAr: 'المستوى التكتيكي',
+      nameEn: 'Tactical Level',
+    },
   ];
+
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -81,8 +97,8 @@ export class SituationDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.opened$ = this.route.queryParams.pipe(
-      map((params) => params['_dialog'] === 'opened')
+    this.formDialog$ = this.route.queryParams.pipe(
+      map((params) => params['_dialog'] === '_form_dialog')
     );
     this.buildForm();
     this.route.queryParams

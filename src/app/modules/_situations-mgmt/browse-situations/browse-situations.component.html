@@ -12,7 +12,7 @@
           [collapsed]="true"
         >
           <div class="p-fluid p-grid">
-            <div class="p-field p-col-4 p-md-3">
+            <div class="p-field p-col-12 p-md-3">
               <input
                 type="text"
                 pInputText
@@ -21,8 +21,9 @@
                 placeholder="{{ 'SITUATIONS.NAME' | translate }}"
               />
             </div>
+
             <!-- Type filter -->
-            <div class="p-field p-col-4 p-md-3">
+            <div class="p-field p-col-12 p-md-3">
               <p-dropdown
                 [options]="newsTypes$ | async"
                 [ngModel]="state.pageRequest.filters['newsType']"
@@ -50,7 +51,12 @@
                   [ngModel]="state.pageRequest.filters['fromDate']"
                   (ngModelChange)="updateFilter({ fromDate: $event }, $event)"
                   [showIcon]="true"
+                  [maxDate]="state.pageRequest.filters['toDate']"
+                  appendTo="body"
+                  dateFormat="dd/mm/yy"
                   showButtonBar="true"
+                  [showTime]="true"
+                  hourFormat="12"
                 ></p-calendar>
               </span>
             </div>
@@ -62,7 +68,12 @@
                   [ngModel]="state.pageRequest.filters['toDate']"
                   (ngModelChange)="updateFilter({ toDate: $event }, $event)"
                   [showIcon]="true"
+                  [minDate]="state.pageRequest.filters['fromDate']"
+                  appendTo="body"
+                  dateFormat="dd/mm/yy"
                   showButtonBar="true"
+                  [showTime]="true"
+                  hourFormat="12"
                 ></p-calendar>
               </span>
             </div>
@@ -94,39 +105,34 @@
       </div>
       <div class="w-100 d-flex flex-wrap mx-1 my-2 px-6">
         <div class="my-auto">
-          <button
-            pButton
-            type="button"
-            class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
-            (click)="loadByStatus({ active: null })"
-            [ngClass]="{
-              active: state?.pageRequest?.filters['active'] == null
-            }"
-            label="{{ 'SITUATIONS.ALL' | translate }}"
-          ></button>
-          <button
-            pButton
-            type="button"
-            class="p-tag w-95px mx-2 px-2 text-center py-1 p-button-rounded p-button-sm p-button-warning"
-            (click)="loadByStatus({ active: false })"
-            [ngClass]="{
-              active: !state?.pageRequest?.filters['active']
-            }"
-            label="{{ 'ACTIONS.INACTIVE' | translate }}"
-          ></button>
-          <button
-            pButton
-            type="button"
-            class="p-tag w-95px px-2 py-1 text-center p-button-rounded p-button-primary p-button-sm text-white"
-            (click)="loadByStatus({ active: true })"
-            [ngClass]="{
-              active: state?.pageRequest?.filters['active']
-            }"
-            label="{{ 'ACTIONS.ACTIVE' | translate }}"
-          ></button>
+          <div class="p-field m-0">
+            <p-dropdown
+              [options]="state.themeTypes"
+              [ngModel]="state.pageRequest.filters['themeType']"
+              (ngModelChange)="loadByTheme({ themeType: $event })"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              optionValue="id"
+              placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                <div class="status-item">
+                  <div class="level-badge" [class]="item.color"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+              <ng-template let-item pTemplate="item">
+                <div class="status-item">
+                  <div class="level-badge" [class]="item.color"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
         </div>
         <div class="ml-dir-auto d-flex">
           <button
+            *checkPrivileges="'PRIV_ADD_SITUATION'"
             pButton
             label="{{ 'ACTIONS.ADD' | translate }}"
             icon="pi pi-plus"
