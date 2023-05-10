@@ -1,0 +1,6 @@
+<div *ngIf="state$ | async as state">
+  <app-content-activity-frquency  [loading]="loading$ | async" [page]="page$ | async"
+                    [columns]="state.columns"
+                    [pageRequest]="state?.pageRequest"
+                    (onPageChange)="loadPage($event)"></app-content-activity-frquency>
+</div>

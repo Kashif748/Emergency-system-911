@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
+import { ActivityFrquencyComponent } from './activity-frq/activity-frquency.component';
 import { BusinessContinuityComponent } from './business-continuity/business-continuity.component';
 import { ImpactAnalysisComponent } from './impact-analysis/impact-analysis.component';
 import { ImpactLevelsComponent } from './impact-levels/impact-levels.component';
 import { LocTypeComponent } from './loc-type/loc-type.component';
 import { OrgDetailsComponent } from './org-details/org-details.component';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
+import {ActivityFrquencyModule} from "./activity-frquency/activity-frquency.module";
 
 const routes: Routes = [
   {
@@ -36,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'activey-frquency',
-        component: ActivityFrquencyComponent,
+        loadChildren: () => import('./activity-frquency/activity-frquency.module').then((m) => m.ActivityFrquencyModule),
       },
       {
         path: 'activey-priority',

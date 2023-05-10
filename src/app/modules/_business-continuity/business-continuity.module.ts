@@ -9,7 +9,7 @@ import { BusinessContinuityComponent } from './business-continuity/business-cont
 import { BusinessContinuityRoutingModule } from './business-continuity-routing.module';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
 import { RtoListContentComponent } from './rto-list-content/rto-list-content.component';
-import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
+import { ActivityFrquencyComponent } from './activity-frq/activity-frquency.component';
 import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
 import { LocTypeComponent } from './loc-type/loc-type.component';
 import { ImpactLevelsComponent } from './impact-levels/impact-levels.component';
@@ -45,6 +45,7 @@ import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-
 import { AddLocTypeComponent } from './dialog/add-loc-type/add-loc-type.component';
 import { AddActivityFrqComponent } from './dialog/add-activity-frq/add-activity-frq.component';
 import { AddImpactTypeComponent } from './dialog/add-impact-type/add-impact-type.component';
+import { BrowseActivityFrquencyComponent } from './activity-frq/browse-activity-frquency/browse-activity-frquency.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -72,6 +73,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ImpactLevelsComponent,
     ImpactAnalysisComponent,
     AddImpactTypeComponent,
+    BrowseActivityFrquencyComponent,
   ],
   imports: [
     CommonModule,

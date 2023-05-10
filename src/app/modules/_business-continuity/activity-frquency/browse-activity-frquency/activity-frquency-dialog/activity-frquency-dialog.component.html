@@ -1,0 +1,112 @@
+<div class="p-toolbar-group-right">
+  <button
+    pButton
+    label="{{ 'ACTIONS.ADD' | translate }}"
+    icon="pi pi-plus"
+    (click)="openDialog()"
+  ></button>
+</div>
+
+<p-dialog
+  [visible]="opened$ | async" (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <h3>
+      <span>{{ "ACTIVITY_FEQ.ADD_NEW_ACQ_FEQ" | translate }}</span>
+      <span
+        *ngIf="true"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="false"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </h3>
+  </ng-template>
+
+  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="frqEn" pInputText />
+        <label>
+          {{ "ACTIVITY_FEQ.FRQUENCY_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['frqEn'].touched &&
+          !form.controls['frqEn'].valid &&
+          form.controls['frqEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['frqEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['frqEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="frqAr" pInputText />
+        <label>
+          {{ "ACTIVITY_FEQ.FRQUENCY_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['frqAr'].touched &&
+          !form.controls['frqAr'].valid &&
+          form.controls['frqAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['frqAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['frqAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
