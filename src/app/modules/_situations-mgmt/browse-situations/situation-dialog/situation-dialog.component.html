@@ -115,30 +115,18 @@
         [autoDisplayFirst]="false"
         [showClear]="true"
         dataKey="id"
+
         placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
       >
         <ng-template let-item pTemplate="selectedItem">
-          <div class="d-flex p-ai-center">
-            <p-tag
-              class="d-flex d-flex p-ai-center"
-              [severity]="item.color"
-              rounded="true"
-              value=""
-              styleClass="mx-1 p-2"
-            ></p-tag>
+          <div class="status-item">
+            <div class="level-badge" [class]="item.color"></div>
             {{ item | translateObj }}
           </div>
         </ng-template>
-
         <ng-template let-item pTemplate="item">
-          <div class="d-flex p-ai-center">
-            <p-tag
-              class="d-flex d-flex p-ai-center"
-              [severity]="item.color"
-              rounded="true"
-              value=""
-              styleClass="mx-1 p-2"
-            ></p-tag>
+          <div class="status-item">
+            <div class="level-badge" [class]="item.color"></div>
             {{ item | translateObj }}
           </div>
         </ng-template>

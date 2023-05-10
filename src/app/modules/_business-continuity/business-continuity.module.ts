@@ -5,6 +5,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 
 import { BusinessContinuityComponent } from './business-continuity/business-continuity.component';
 import { BusinessContinuityRoutingModule } from './business-continuity-routing.module';
@@ -104,6 +105,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     NodataTableModule,
     ColorPickerModule,
     InputNumberModule,
+    TranslateObjModule,
     ToolbarModule,
     DialogModule,
     SidebarModule,

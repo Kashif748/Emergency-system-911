@@ -34,13 +34,21 @@ export class BusinessContinuityComponent
   public smallScreen: boolean;
   private destroy$ = new Subject();
 
+  versions = [
+    { nameAr: 'اصدار 2022/6', nameEn: 'version 6/2022' },
+    { nameAr: 'اصدار 2023/1', nameEn: 'version 1/2023' },
+    { nameAr: 'اصدار 2023/6', nameEn: 'version 6/2023' },
+  ];
+  selectedVersion;
   constructor(
     private langFacade: ILangFacade,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
     private breakpointObserver: BreakpointObserver,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.selectedVersion = this.versions[0];
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

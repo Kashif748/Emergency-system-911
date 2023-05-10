@@ -53,11 +53,6 @@
           >
             <div
               class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
-              [ngClass]="{
-                'p-border-help':
-                  !item.isActive || item.isActive === 'TO_MY_ORG',
-                'p-border-secondary': item.isActive === 'BY_MY_ORG'
-              }"
             >
               <div
                 class="flex-grow-1 p-grid p-fluid"
@@ -84,12 +79,12 @@
                         }}"
                         appendTo="body"
                         tooltipPosition="top"
-                        [severity]="
+                        [styleClass]="
                           item.themeType?.id === 0
-                            ? 'danger'
+                            ? 'golden'
                             : item.themeType?.id === 1
-                            ? 'primary'
-                            : 'warning'
+                            ? 'silver'
+                            : 'bronze'
                         "
                       >
                         {{ item.themeType | translateObj }}
@@ -341,8 +336,9 @@
               <td class="flag-td">
                 <div
                   [ngClass]="{
-                    'bg-primary': item.isActive,
-                    'bg-warning': !item.isActive
+                    golden: item.themeType?.id === 0,
+                    silver: item.themeType?.id === 1,
+                    bronze: item.themeType?.id === 2
                   }"
                 ></div>
               </td>
@@ -364,12 +360,12 @@
               </td>
               <td class="max-w-250px" *ngIf="columns?.includes('themeType')">
                 <p-tag
-                  [severity]="
+                  [styleClass]="
                     item.themeType?.id === 0
-                      ? 'danger'
+                      ? 'golden'
                       : item.themeType?.id === 1
-                      ? 'primary'
-                      : 'warning'
+                      ? 'silver'
+                      : 'bronze'
                   "
                 >
                   {{ item.themeType | translateObj }}
