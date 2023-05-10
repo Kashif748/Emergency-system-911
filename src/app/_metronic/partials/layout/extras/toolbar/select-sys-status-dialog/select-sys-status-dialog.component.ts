@@ -24,6 +24,23 @@ export class SelectSysStatusDialogComponent implements OnInit, OnDestroy {
   public control: FormControl;
   public reasonControl: FormControl;
 
+  themeTypes = [
+    {
+      value: 'golden',
+      nameAr: 'المستوى الاستراتيجي',
+      nameEn: 'Strategic Level',
+    },
+    {
+      value: 'silver',
+      nameAr: 'المستوى العملياتي',
+      nameEn: 'Operational Level',
+    },
+    {
+      value: 'bronze',
+      nameAr: 'المستوى التكتيكي',
+      nameEn: 'Tactical Level',
+    },
+  ];
   private destroy$ = new Subject();
   constructor(
     private langFacade: ILangFacade,
@@ -44,18 +61,19 @@ export class SelectSysStatusDialogComponent implements OnInit, OnDestroy {
       this.reasonControl.markAllAsTouched();
       return;
     }
-    this.sysStatusService.saveChanges().subscribe(data => {
-      
-    }, (error) => {
-      const errorMsg =
-      this.lang == 'en'
-        ? error?.error?.error?.message_En
-        : error?.error?.error?.message_Ar;
+    this.sysStatusService.saveChanges().subscribe(
+      (data) => {},
+      (error) => {
+        const errorMsg =
+          this.lang == 'en'
+            ? error?.error?.error?.message_En
+            : error?.error?.error?.message_Ar;
         this.alertService.customFailureSnackBar(errorMsg);
-    }, () => {
-      this.dialogRef.close(true);
-    })
-    
+      },
+      () => {
+        this.dialogRef.close(true);
+      }
+    );
   }
 
   public prevState: SysStatusModel;

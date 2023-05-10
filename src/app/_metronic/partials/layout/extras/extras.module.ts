@@ -12,6 +12,9 @@ import { NotificationsDropdownComponent } from "./dropdown-inner/notifications-d
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import {NgModule} from '@angular/core';
 import { SelectSysStatusDialogComponent } from "./toolbar/select-sys-status-dialog/select-sys-status-dialog.component";
+import { TranslateObjModule } from "@shared/sh-pipes/translate-obj.pipe";
+import { DropdownModule } from "primeng/dropdown";
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [
@@ -30,13 +33,17 @@ import { SelectSysStatusDialogComponent } from "./toolbar/select-sys-status-dial
     SharedModule,
     OverlayModule,
     NgbDropdownModule,
+    TranslateObjModule,
+    DropdownModule,
+    InputTextareaModule
   ],
   exports: [
     UserDropdownInnerComponent,
     NotificationsOffcanvasComponent,
     NotificationsDropdownComponent,
     ToolbarComponent,
-    SelectSysStatusDialogComponent
+    SelectSysStatusDialogComponent,
+
   ],
 })
 export class ExtrasModule {}
