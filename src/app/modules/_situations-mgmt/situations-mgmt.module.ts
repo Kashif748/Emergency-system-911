@@ -99,6 +99,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     OverlayPanelModule,
     TagModule,
     ChipModule,
+
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

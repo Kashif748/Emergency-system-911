@@ -72,23 +72,24 @@ export class SituationDialogComponent implements OnInit, OnDestroy {
   themeTypes = [
     {
       id: 0,
+      color: 'golden',
       nameAr: 'المستوى الاستراتيجي',
       nameEn: 'Strategic Level',
-      color: 'danger',
     },
     {
       id: 1,
+      color: 'silver',
       nameAr: 'المستوى العملياتي',
       nameEn: 'Operational Level',
-      color: 'primary',
     },
     {
       id: 2,
+      color: 'bronze',
       nameAr: 'المستوى التكتيكي',
       nameEn: 'Tactical Level',
-      color: 'warning',
     },
   ];
+
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,

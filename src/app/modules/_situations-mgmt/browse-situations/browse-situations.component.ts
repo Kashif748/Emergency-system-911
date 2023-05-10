@@ -176,7 +176,7 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadByStatus(filter: { [key: string]: any }) {
+  loadByTheme(filter: { [key: string]: any }) {
     this.store
       .dispatch(new BrowseSituationsAction.UpdateFilter(filter))
       .toPromise()
