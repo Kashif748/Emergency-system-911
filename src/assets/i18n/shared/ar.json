@@ -1090,6 +1090,7 @@
       "UPDATE": "التحديث",
       "MAIL_REPORT": "تقرير المراسلات",
       "GENERAL_REPORT": "تقرير المهام",
+      "INCIDENTS_REPORT" : "تقرير البلاغات",
       "RESOURCES_REPORT": " الموارد والإمكانيات",
       "SHIFTS_REPORTS": "المناوبات",
       "USER_NAME": "اسم المستخدم",
