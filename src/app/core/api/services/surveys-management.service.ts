@@ -145,6 +145,15 @@ export class SurveysManagementService {
       })
       .pipe(
         tap((res) => {
+          const fileLabel = `${this.translateService.instant(
+            'Survey.SURVEY_REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm a'
+          )}`;
+
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               exportAs === 'PDF'
@@ -152,7 +161,7 @@ export class SurveysManagementService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }
@@ -267,7 +276,7 @@ export class SurveysManagementService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob ,fileName);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }
