@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface ApiErrorListBcImpactTypes {
+export interface ApiErrorPageBcActivityFrequencies {
   code?: string;
   message_Ar?: string;
   message_En?: string;

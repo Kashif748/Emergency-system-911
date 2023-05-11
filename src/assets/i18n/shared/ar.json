@@ -792,6 +792,8 @@
         "REASON_5": "شئ آخر"
       },
       "INCIDENT": "بلاغ",
+      "INCIDENT_REPORT": " تقرير بلاغ {{serial}}",
+
       "EDIT_INQUIRY": "تعديل بيانات المكالمة",
       "INQUIRY_SUBJECT": "الوصف",
       "INQUIRY_ANSWER": "الاجابة",
@@ -1090,6 +1092,7 @@
       "UPDATE": "التحديث",
       "MAIL_REPORT": "تقرير المراسلات",
       "GENERAL_REPORT": "تقرير المهام",
+      "INCIDENTS_REPORT" : "تقرير البلاغات",
       "RESOURCES_REPORT": " الموارد والإمكانيات",
       "SHIFTS_REPORTS": "المناوبات",
       "USER_NAME": "اسم المستخدم",

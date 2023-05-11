@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcLocationTypes } from '../models/bc-location-types';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcLocationTypes } from '../models/rest-api-response-bc-location-types';
-import { RestApiResponseListBcLocationTypes } from '../models/rest-api-response-list-bc-location-types';
+import { RestApiResponsePageBcLocationTypes } from '../models/rest-api-response-page-bc-location-types';
 
 @Injectable()
 export class BcLocationTypeControllerService extends BaseService {
@@ -20,6 +21,52 @@ export class BcLocationTypeControllerService extends BaseService {
     http: HttpClient
   ) {
     super(config, http);
+  }
+
+  /**
+   * Path part for operation deleteById4
+   */
+  static readonly DeleteById4Path = '/v1/bc/locationType/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById4()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById4$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.DeleteById4Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById4$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById4(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById4$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
@@ -33,15 +80,17 @@ export class BcLocationTypeControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll12$Response(params?: {
+  getAll12$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcLocationTypes>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcLocationTypes>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.GetAll12Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +99,7 @@ export class BcLocationTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcLocationTypes>;
+        return r as StrictHttpResponse<RestApiResponsePageBcLocationTypes>;
       })
     );
   }
@@ -61,13 +110,14 @@ export class BcLocationTypeControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll12(params?: {
+  getAll12(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcLocationTypes> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcLocationTypes> {
 
     return this.getAll12$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcLocationTypes>) => r.body as RestApiResponseListBcLocationTypes)
+      map((r: StrictHttpResponse<RestApiResponsePageBcLocationTypes>) => r.body as RestApiResponsePageBcLocationTypes)
     );
   }
 
@@ -206,52 +256,6 @@ export class BcLocationTypeControllerService extends BaseService {
 
     return this.getOne3$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcLocationTypes>) => r.body as RestApiResponseBcLocationTypes)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById4
-   */
-  static readonly DeleteById4Path = '/v1/bc/locationType/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById4()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById4$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.DeleteById4Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById4$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById4(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById4$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
