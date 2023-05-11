@@ -99,7 +99,7 @@ export class IncidentReportService {
       .pipe(
         tap((res) => {
           const fileLabel = `${this.translateService.instant(
-            'INCIDENTS.INCIDENT_REPORT'
+            'REPORTS.INCIDENTS_REPORT'
           )}`;
           const fileDate = `${DateTimeUtil.format(
             new Date(),
@@ -168,7 +168,7 @@ export class IncidentReportService {
       .pipe(
         tap((res) => {
           const fileLabel = `${this.translateService.instant(
-            'INCIDENTS.INCIDENT_REPORT'
+            'REPORTS.INCIDENTS_REPORT'
           )}`;
           const fileDate = `${DateTimeUtil.format(
             new Date(),
