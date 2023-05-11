@@ -24,6 +24,52 @@ export class BcImpactLevelControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteById7
+   */
+  static readonly DeleteById7Path = '/v1/bc/impactLevel/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById7()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById7$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.DeleteById7Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById7$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById7(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById7$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getAll15
    */
   static readonly GetAll15Path = '/v1/bc/impactLevel';
@@ -210,52 +256,6 @@ export class BcImpactLevelControllerService extends BaseService {
 
     return this.getOne6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactLevel>) => r.body as RestApiResponseBcImpactLevel)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById7
-   */
-  static readonly DeleteById7Path = '/v1/bc/impactLevel/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById7()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById7$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.DeleteById7Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById7$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById7(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById7$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

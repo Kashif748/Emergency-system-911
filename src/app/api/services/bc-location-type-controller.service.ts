@@ -24,6 +24,52 @@ export class BcLocationTypeControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteById4
+   */
+  static readonly DeleteById4Path = '/v1/bc/locationType/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById4()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById4$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.DeleteById4Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById4$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById4(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById4$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getAll12
    */
   static readonly GetAll12Path = '/v1/bc/locationType';
@@ -210,52 +256,6 @@ export class BcLocationTypeControllerService extends BaseService {
 
     return this.getOne3$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcLocationTypes>) => r.body as RestApiResponseBcLocationTypes)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById4
-   */
-  static readonly DeleteById4Path = '/v1/bc/locationType/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById4()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById4$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.DeleteById4Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById4$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById4(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById4$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

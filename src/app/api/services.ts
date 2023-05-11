@@ -93,6 +93,7 @@ export { CircularStatusControllerService } from './services/circular-status-cont
 export { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
 export { BcVersionsControllerService } from './services/bc-versions-controller.service';
 export { BcrtoControllerService } from './services/bcrto-controller.service';
+export { ResponsibleOrganizationControllerService } from './services/responsible-organization-controller.service';
 export { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
 export { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
 export { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
@@ -133,7 +134,6 @@ export { DohControllerService } from './services/doh-controller.service';
 export { DashboardControllerService } from './services/dashboard-controller.service';
 export { TradeLicenseControllerService } from './services/trade-license-controller.service';
 export { CommonControllerService } from './services/common-controller.service';
-export { ResponsibleOrganizationControllerService } from './services/responsible-organization-controller.service';
 export { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 export { TagControllerService } from './services/tag-controller.service';
 export { MigrationControllerService } from './services/migration-controller.service';

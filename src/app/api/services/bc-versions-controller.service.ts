@@ -24,6 +24,52 @@ export class BcVersionsControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteById
+   */
+  static readonly DeleteByIdPath = '/v1/bc/version/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.DeleteByIdPath, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getAll9
    */
   static readonly GetAll9Path = '/v1/bc/version';
@@ -210,52 +256,6 @@ export class BcVersionsControllerService extends BaseService {
 
     return this.getOne$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById
-   */
-  static readonly DeleteByIdPath = '/v1/bc/version/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.DeleteByIdPath, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

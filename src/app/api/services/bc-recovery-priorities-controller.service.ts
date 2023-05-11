@@ -24,6 +24,52 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteById3
+   */
+  static readonly DeleteById3Path = '/v1/bc/loopbackPriority/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById3()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById3$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.DeleteById3Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById3$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById3(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById3$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getAll11
    */
   static readonly GetAll11Path = '/v1/bc/loopbackPriority';
@@ -210,52 +256,6 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
 
     return this.getOne2$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcRecoveryPriorities>) => r.body as RestApiResponseBcRecoveryPriorities)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById3
-   */
-  static readonly DeleteById3Path = '/v1/bc/loopbackPriority/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById3()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById3$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.DeleteById3Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById3$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById3(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById3$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

@@ -24,6 +24,52 @@ export class BcActivityFrequenciesControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteById8
+   */
+  static readonly DeleteById8Path = '/v1/bc/activityFrequency/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById8()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById8$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.DeleteById8Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById8$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById8(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById8$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getAll16
    */
   static readonly GetAll16Path = '/v1/bc/activityFrequency';
@@ -210,52 +256,6 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
     return this.getOne7$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityFrequencies>) => r.body as RestApiResponseBcActivityFrequencies)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById8
-   */
-  static readonly DeleteById8Path = '/v1/bc/activityFrequency/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById8()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById8$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.DeleteById8Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById8$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById8(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById8$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

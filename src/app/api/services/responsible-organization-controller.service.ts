@@ -22,6 +22,52 @@ export class ResponsibleOrganizationControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation deleteById2
+   */
+  static readonly DeleteById2Path = '/v1/bc/org/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById2()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById2$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ResponsibleOrganizationControllerService.DeleteById2Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById2$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById2(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById2$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation insertOne8
    */
   static readonly InsertOne8Path = '/v1/bc/org/save';
@@ -64,52 +110,6 @@ export class ResponsibleOrganizationControllerService extends BaseService {
 
     return this.insertOne8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById2
-   */
-  static readonly DeleteById2Path = '/v1/bc/org/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById2()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById2$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ResponsibleOrganizationControllerService.DeleteById2Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById2$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById2(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById2$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

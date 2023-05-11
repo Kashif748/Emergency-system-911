@@ -99,6 +99,7 @@ import { CircularStatusControllerService } from './services/circular-status-cont
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
 import { BcVersionsControllerService } from './services/bc-versions-controller.service';
 import { BcrtoControllerService } from './services/bcrto-controller.service';
+import { ResponsibleOrganizationControllerService } from './services/responsible-organization-controller.service';
 import { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
 import { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
 import { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
@@ -139,7 +140,6 @@ import { DohControllerService } from './services/doh-controller.service';
 import { DashboardControllerService } from './services/dashboard-controller.service';
 import { TradeLicenseControllerService } from './services/trade-license-controller.service';
 import { CommonControllerService } from './services/common-controller.service';
-import { ResponsibleOrganizationControllerService } from './services/responsible-organization-controller.service';
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
@@ -247,6 +247,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     ConfidentialtyControllerService,
     BcVersionsControllerService,
     BcrtoControllerService,
+    ResponsibleOrganizationControllerService,
     BcRecoveryPrioritiesControllerService,
     BcLocationTypeControllerService,
     BcWorkImportanceLevelsControllerService,
@@ -287,7 +288,6 @@ import { MigrationControllerService } from './services/migration-controller.serv
     DashboardControllerService,
     TradeLicenseControllerService,
     CommonControllerService,
-    ResponsibleOrganizationControllerService,
     AdcmcCategoryControllerService,
     TagControllerService,
     MigrationControllerService,
