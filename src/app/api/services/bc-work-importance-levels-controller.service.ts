@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcWorkImportanceLevels } from '../models/bc-work-importance-levels';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcWorkImportanceLevels } from '../models/rest-api-response-bc-work-importance-levels';
-import { RestApiResponseListBcWorkImportanceLevels } from '../models/rest-api-response-list-bc-work-importance-levels';
+import { RestApiResponsePageBcWorkImportanceLevels } from '../models/rest-api-response-page-bc-work-importance-levels';
 
 @Injectable()
 export class BcWorkImportanceLevelsControllerService extends BaseService {
@@ -33,15 +34,17 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll13$Response(params?: {
+  getAll13$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcWorkImportanceLevels>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcWorkImportanceLevels>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.GetAll13Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +53,7 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcWorkImportanceLevels>;
+        return r as StrictHttpResponse<RestApiResponsePageBcWorkImportanceLevels>;
       })
     );
   }
@@ -61,13 +64,14 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll13(params?: {
+  getAll13(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcWorkImportanceLevels> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcWorkImportanceLevels> {
 
     return this.getAll13$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcWorkImportanceLevels>) => r.body as RestApiResponseListBcWorkImportanceLevels)
+      map((r: StrictHttpResponse<RestApiResponsePageBcWorkImportanceLevels>) => r.body as RestApiResponsePageBcWorkImportanceLevels)
     );
   }
 

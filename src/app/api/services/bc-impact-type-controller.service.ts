@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcImpactTypes } from '../models/bc-impact-types';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcImpactTypes } from '../models/rest-api-response-bc-impact-types';
-import { RestApiResponseListBcImpactTypes } from '../models/rest-api-response-list-bc-impact-types';
+import { RestApiResponsePageBcImpactTypes } from '../models/rest-api-response-page-bc-impact-types';
 
 @Injectable()
 export class BcImpactTypeControllerService extends BaseService {
@@ -33,15 +34,17 @@ export class BcImpactTypeControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll14$Response(params?: {
+  getAll14$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcImpactTypes>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcImpactTypes>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.GetAll14Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +53,7 @@ export class BcImpactTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcImpactTypes>;
+        return r as StrictHttpResponse<RestApiResponsePageBcImpactTypes>;
       })
     );
   }
@@ -61,13 +64,14 @@ export class BcImpactTypeControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll14(params?: {
+  getAll14(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcImpactTypes> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcImpactTypes> {
 
     return this.getAll14$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcImpactTypes>) => r.body as RestApiResponseListBcImpactTypes)
+      map((r: StrictHttpResponse<RestApiResponsePageBcImpactTypes>) => r.body as RestApiResponsePageBcImpactTypes)
     );
   }
 

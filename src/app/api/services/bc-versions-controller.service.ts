@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcVersions } from '../models/bc-versions';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcVersions } from '../models/rest-api-response-bc-versions';
-import { RestApiResponseListBcVersions } from '../models/rest-api-response-list-bc-versions';
+import { RestApiResponsePageBcVersions } from '../models/rest-api-response-page-bc-versions';
 
 @Injectable()
 export class BcVersionsControllerService extends BaseService {
@@ -33,15 +34,17 @@ export class BcVersionsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll9$Response(params?: {
+  getAll9$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcVersions>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcVersions>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.GetAll9Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +53,7 @@ export class BcVersionsControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcVersions>;
+        return r as StrictHttpResponse<RestApiResponsePageBcVersions>;
       })
     );
   }
@@ -61,13 +64,14 @@ export class BcVersionsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll9(params?: {
+  getAll9(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcVersions> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcVersions> {
 
     return this.getAll9$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcVersions>) => r.body as RestApiResponseListBcVersions)
+      map((r: StrictHttpResponse<RestApiResponsePageBcVersions>) => r.body as RestApiResponsePageBcVersions)
     );
   }
 

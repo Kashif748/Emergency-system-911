@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcActivityFrequencies } from '../models/bc-activity-frequencies';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcActivityFrequencies } from '../models/rest-api-response-bc-activity-frequencies';
-import { RestApiResponseListBcActivityFrequencies } from '../models/rest-api-response-list-bc-activity-frequencies';
+import { RestApiResponsePageBcActivityFrequencies } from '../models/rest-api-response-page-bc-activity-frequencies';
 
 @Injectable()
 export class BcActivityFrequenciesControllerService extends BaseService {
@@ -33,15 +34,17 @@ export class BcActivityFrequenciesControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll16$Response(params?: {
+  getAll16$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcActivityFrequencies>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetAll16Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +53,7 @@ export class BcActivityFrequenciesControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcActivityFrequencies>;
+        return r as StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>;
       })
     );
   }
@@ -61,13 +64,14 @@ export class BcActivityFrequenciesControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll16(params?: {
+  getAll16(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcActivityFrequencies> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcActivityFrequencies> {
 
     return this.getAll16$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcActivityFrequencies>) => r.body as RestApiResponseListBcActivityFrequencies)
+      map((r: StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>) => r.body as RestApiResponsePageBcActivityFrequencies)
     );
   }
 

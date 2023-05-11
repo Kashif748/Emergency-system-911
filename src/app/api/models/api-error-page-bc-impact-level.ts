@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface ApiErrorListBcrto {
+export interface ApiErrorPageBcImpactLevel {
   code?: string;
   message_Ar?: string;
   message_En?: string;

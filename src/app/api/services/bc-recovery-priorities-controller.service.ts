@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcRecoveryPriorities } from '../models/bc-recovery-priorities';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcRecoveryPriorities } from '../models/rest-api-response-bc-recovery-priorities';
-import { RestApiResponseListBcRecoveryPriorities } from '../models/rest-api-response-list-bc-recovery-priorities';
+import { RestApiResponsePageBcRecoveryPriorities } from '../models/rest-api-response-page-bc-recovery-priorities';
 
 @Injectable()
 export class BcRecoveryPrioritiesControllerService extends BaseService {
@@ -33,15 +34,17 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll11$Response(params?: {
+  getAll11$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcRecoveryPriorities>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcRecoveryPriorities>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.GetAll11Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +53,7 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcRecoveryPriorities>;
+        return r as StrictHttpResponse<RestApiResponsePageBcRecoveryPriorities>;
       })
     );
   }
@@ -61,13 +64,14 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll11(params?: {
+  getAll11(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcRecoveryPriorities> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcRecoveryPriorities> {
 
     return this.getAll11$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcRecoveryPriorities>) => r.body as RestApiResponseListBcRecoveryPriorities)
+      map((r: StrictHttpResponse<RestApiResponsePageBcRecoveryPriorities>) => r.body as RestApiResponsePageBcRecoveryPriorities)
     );
   }
 
