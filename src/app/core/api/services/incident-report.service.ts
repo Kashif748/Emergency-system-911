@@ -7,6 +7,8 @@ import { map, tap } from 'rxjs/operators';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { UrlHelperService } from '@core/services/url-helper.service';
 import * as moment from 'moment';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,8 @@ export class IncidentReportService {
     private http: HttpClient,
     private langFacade: ILangFacade,
     private urlHelper: UrlHelperService,
-    private alertService: AlertsService
+    private alertService: AlertsService,
+    private translateService: TranslateService
   ) {
     this.statisticsChangeListener = new BehaviorSubject([]);
   }
@@ -95,8 +98,15 @@ export class IncidentReportService {
       })
       .pipe(
         tap((res) => {
-          console.log('here 2', res);
+          const fileLabel = `${this.translateService.instant(
+            'INCIDENTS.INCIDENT_REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm a'
+          )}`;
 
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               exportAs === 'PDF'
@@ -104,7 +114,7 @@ export class IncidentReportService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }
@@ -139,22 +149,33 @@ export class IncidentReportService {
   downloadReportForMainOrg(exportAs: 'PDF' | 'EXCEL', filterForm?) {
     const headers = new HttpHeaders().set('Content-Type', 'application/pdf');
     return this.http
-      .get<any>(`${this.baseUrl}/incidents/main-organization/statistics/report`, {
-        headers,
-        params: {
-          exportAs,
-          language: (this.langFacade.stateSanpshot.ActiveLang.key == 'ar') + '',
-          fromDate: filterForm?.fromDate ?? '',
-          toDate: filterForm?.toDate ?? '',
-          centerId: filterForm?.centerId ?? '',
-        },
+      .get<any>(
+        `${this.baseUrl}/incidents/main-organization/statistics/report`,
+        {
+          headers,
+          params: {
+            exportAs,
+            language:
+              (this.langFacade.stateSanpshot.ActiveLang.key == 'ar') + '',
+            fromDate: filterForm?.fromDate ?? '',
+            toDate: filterForm?.toDate ?? '',
+            centerId: filterForm?.centerId ?? '',
+          },
 
-        responseType: 'blob' as any,
-      })
+          responseType: 'blob' as any,
+        }
+      )
       .pipe(
         tap((res) => {
-          console.log('here 2', res);
+          const fileLabel = `${this.translateService.instant(
+            'INCIDENTS.INCIDENT_REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm a'
+          )}`;
 
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               exportAs === 'PDF'
@@ -162,7 +183,7 @@ export class IncidentReportService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }
