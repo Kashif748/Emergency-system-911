@@ -4,7 +4,6 @@ import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
 import {EMPTY, of} from "rxjs";
 import {BcLocationTypes} from "../../../../api/models/bc-location-types";
-import {PageBcLocationTypes} from "../../../../api/models/page-bc-location-types";
 import {BcLocationTypeControllerService} from "../../../../api/services/bc-location-type-controller.service";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
 
