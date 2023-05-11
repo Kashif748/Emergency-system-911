@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcActivityFrequencies } from '../models/bc-activity-frequencies';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcActivityFrequencies } from '../models/rest-api-response-bc-activity-frequencies';
-import { RestApiResponseListBcActivityFrequencies } from '../models/rest-api-response-list-bc-activity-frequencies';
+import { RestApiResponsePageBcActivityFrequencies } from '../models/rest-api-response-page-bc-activity-frequencies';
 
 @Injectable()
 export class BcActivityFrequenciesControllerService extends BaseService {
@@ -20,6 +21,52 @@ export class BcActivityFrequenciesControllerService extends BaseService {
     http: HttpClient
   ) {
     super(config, http);
+  }
+
+  /**
+   * Path part for operation deleteById8
+   */
+  static readonly DeleteById8Path = '/v1/bc/activityFrequency/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById8()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById8$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.DeleteById8Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById8$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById8(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById8$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
@@ -33,15 +80,17 @@ export class BcActivityFrequenciesControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll16$Response(params?: {
+  getAll16$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcActivityFrequencies>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetAll16Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +99,7 @@ export class BcActivityFrequenciesControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcActivityFrequencies>;
+        return r as StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>;
       })
     );
   }
@@ -61,13 +110,14 @@ export class BcActivityFrequenciesControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll16(params?: {
+  getAll16(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcActivityFrequencies> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcActivityFrequencies> {
 
     return this.getAll16$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcActivityFrequencies>) => r.body as RestApiResponseListBcActivityFrequencies)
+      map((r: StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>) => r.body as RestApiResponsePageBcActivityFrequencies)
     );
   }
 
@@ -206,52 +256,6 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
     return this.getOne7$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityFrequencies>) => r.body as RestApiResponseBcActivityFrequencies)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById8
-   */
-  static readonly DeleteById8Path = '/v1/bc/activityFrequency/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById8()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById8$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.DeleteById8Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById8$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById8(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById8$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

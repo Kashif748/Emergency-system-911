@@ -10,8 +10,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcImpactLevel } from '../models/bc-impact-level';
+import { Pageable } from '../models/pageable';
 import { RestApiResponseBcImpactLevel } from '../models/rest-api-response-bc-impact-level';
-import { RestApiResponseListBcImpactLevel } from '../models/rest-api-response-list-bc-impact-level';
+import { RestApiResponsePageBcImpactLevel } from '../models/rest-api-response-page-bc-impact-level';
 
 @Injectable()
 export class BcImpactLevelControllerService extends BaseService {
@@ -20,6 +21,52 @@ export class BcImpactLevelControllerService extends BaseService {
     http: HttpClient
   ) {
     super(config, http);
+  }
+
+  /**
+   * Path part for operation deleteById7
+   */
+  static readonly DeleteById7Path = '/v1/bc/impactLevel/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById7()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById7$Response(params: {
+    id: number;
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.DeleteById7Path, 'put');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteById7$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById7(params: {
+    id: number;
+  }): Observable<void> {
+
+    return this.deleteById7$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
@@ -33,15 +80,17 @@ export class BcImpactLevelControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll15$Response(params?: {
+  getAll15$Response(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<StrictHttpResponse<RestApiResponseListBcImpactLevel>> {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcImpactLevel>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.GetAll15Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -50,7 +99,7 @@ export class BcImpactLevelControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListBcImpactLevel>;
+        return r as StrictHttpResponse<RestApiResponsePageBcImpactLevel>;
       })
     );
   }
@@ -61,13 +110,14 @@ export class BcImpactLevelControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAll15(params?: {
+  getAll15(params: {
     isActive?: boolean;
     versionId?: number;
-  }): Observable<RestApiResponseListBcImpactLevel> {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcImpactLevel> {
 
     return this.getAll15$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListBcImpactLevel>) => r.body as RestApiResponseListBcImpactLevel)
+      map((r: StrictHttpResponse<RestApiResponsePageBcImpactLevel>) => r.body as RestApiResponsePageBcImpactLevel)
     );
   }
 
@@ -206,52 +256,6 @@ export class BcImpactLevelControllerService extends BaseService {
 
     return this.getOne6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactLevel>) => r.body as RestApiResponseBcImpactLevel)
-    );
-  }
-
-  /**
-   * Path part for operation deleteById7
-   */
-  static readonly DeleteById7Path = '/v1/bc/impactLevel/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById7()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById7$Response(params: {
-    id: number;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.DeleteById7Path, 'delete');
-    if (params) {
-      rb.path('id', params.id, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById7$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteById7(params: {
-    id: number;
-  }): Observable<void> {
-
-    return this.deleteById7$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
