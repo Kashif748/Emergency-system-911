@@ -61,7 +61,7 @@
                     <!-- delete btn -->
                     <button
                       (click)="deleteFile(fileItem['uuid'])"
-                      [hidden]="tagId == 28"
+                      [hidden]="tagId == 28 || foreignHelperId == fileItem?.recordId"
                       class="btn btn-sm btn-icon text-hover-danger"
                       style="right: 30px"
                     >

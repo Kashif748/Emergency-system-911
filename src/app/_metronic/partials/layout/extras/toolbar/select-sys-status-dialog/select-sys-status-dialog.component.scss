@@ -32,52 +32,28 @@
       background-position: 0% 50%;
     }
   }
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    .level-badge {
+      width: 25px;
+      height: 25px;
+      border-radius: 5px;
+      &.golden {
+        background-color: #fbb034;
+        background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);
+      }
 
-  .mat-select-panel .mat-option.golden {
-    background-color: #fbb034;
-    background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);
-    -webkit-animation: ripple 30s ease infinite;
-    -moz-animation: ripple 30s ease infinite;
-    animation: ripple 30s ease infinite;
-  }
-  .mat-select-panel .mat-option.mat-selected.golden {
-    background-color: #fbb034;
-    background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);
-    -webkit-animation: ripple 30s ease infinite;
-    -moz-animation: ripple 30s ease infinite;
-    animation: ripple 30s ease infinite;
-    color: rgb(14, 14, 14);
-  }
+      &.bronze {
+        background-color: #804a00;
+        background-image: linear-gradient(315deg, #804a00 0%, #b08d57 74%);
+      }
 
-  .mat-select-panel .mat-option.bronze {
-    background-color: #804a00;
-    background-image: linear-gradient(315deg, #804a00 0%, #b08d57 74%);
-    -webkit-animation: ripple 30s ease infinite;
-    -moz-animation: ripple 30s ease infinite;
-    animation: ripple 30s ease infinite;
-  }
-  .mat-select-panel .mat-option.mat-selected.bronze {
-    background-color: #804a00;
-    background-image: linear-gradient(315deg, #804a00 0%, #b08d57 74%);
-    -webkit-animation: ripple 30s ease infinite;
-    -moz-animation: ripple 30s ease infinite;
-    animation: ripple 30s ease infinite;
-    color: rgb(14, 14, 14);
-  }
-
-  .mat-select-panel .mat-option.silver {
-    background-color: #5b6467;
-    background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%);
-    -webkit-animation: ripple 30s ease infinite;
-    -moz-animation: ripple 30s ease infinite;
-    animation: ripple 30s ease infinite;
-  }
-  .mat-select-panel .mat-option.mat-selected.silver {
-    background-color: #5b6467;
-    background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%);
-    -webkit-animation: ripple 30s ease infinite;
-    -moz-animation: ripple 30s ease infinite;
-    animation: ripple 30s ease infinite;
-    color: rgb(14, 14, 14);
+      &.silver {
+        background-color: #5b6467;
+        background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%);
+      }
+    }
   }
 }

@@ -163,7 +163,7 @@ export class RoleState {
         blocking: true,
       })
     );
-    return this.roleService.getById2({ id: payload.id }).pipe(
+    return this.roleService.getById3({ id: payload.id }).pipe(
       tap((res) => {
         setState(
           patch<RoleStateModel>({
@@ -186,7 +186,7 @@ export class RoleState {
     { setState }: StateContext<RoleStateModel>,
     { payload }: RoleAction.Activate
   ) {
-    return this.roleService.getById2({ id: payload.id }).pipe(
+    return this.roleService.getById3({ id: payload.id }).pipe(
       switchMap((res) => {
         return this.roleService
           .updateRole({

@@ -70,21 +70,21 @@ export class PushNotificationActionControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update14
+   * Path part for operation update15
    */
-  static readonly Update14Path = '/v1/push-notificatio-actions';
+  static readonly Update15Path = '/v1/push-notificatio-actions';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update14()` instead.
+   * To access only the response body, use `update15()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update14$Response(params: {
+  update15$Response(params: {
     body: PushNotificationAction
   }): Observable<StrictHttpResponse<RestApiResponsePushNotificationAction>> {
 
-    const rb = new RequestBuilder(this.rootUrl, PushNotificationActionControllerService.Update14Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, PushNotificationActionControllerService.Update15Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class PushNotificationActionControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update14$Response()` instead.
+   * To access the full response (for headers, for example), `update15$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update14(params: {
+  update15(params: {
     body: PushNotificationAction
   }): Observable<RestApiResponsePushNotificationAction> {
 
-    return this.update14$Response(params).pipe(
+    return this.update15$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePushNotificationAction>) => r.body as RestApiResponsePushNotificationAction)
     );
   }
 
   /**
-   * Path part for operation create14
+   * Path part for operation create15
    */
-  static readonly Create14Path = '/v1/push-notificatio-actions';
+  static readonly Create15Path = '/v1/push-notificatio-actions';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create14()` instead.
+   * To access only the response body, use `create15()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create14$Response(params: {
+  create15$Response(params: {
     body: PushNotificationAction
   }): Observable<StrictHttpResponse<RestApiResponsePushNotificationAction>> {
 
-    const rb = new RequestBuilder(this.rootUrl, PushNotificationActionControllerService.Create14Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, PushNotificationActionControllerService.Create15Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class PushNotificationActionControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create14$Response()` instead.
+   * To access the full response (for headers, for example), `create15$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create14(params: {
+  create15(params: {
     body: PushNotificationAction
   }): Observable<RestApiResponsePushNotificationAction> {
 
-    return this.create14$Response(params).pipe(
+    return this.create15$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePushNotificationAction>) => r.body as RestApiResponsePushNotificationAction)
     );
   }

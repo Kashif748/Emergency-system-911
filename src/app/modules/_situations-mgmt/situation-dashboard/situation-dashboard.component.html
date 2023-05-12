@@ -1,0 +1,280 @@
+<section class="d-flex flex-column px-6">
+  <p-toolbar *ngIf="situation$ | async as situation">
+    <div class="p-toolbar-group-left">
+      <button
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-bars"
+        class="p-button-rounded p-button-text"
+        (click)="openDialog()"
+      ></button>
+      <h3 class="m-0">
+        {{ situation | translateObj }}
+      </h3>
+    </div>
+
+    <div class="p-toolbar-group-right">
+      <p class="m-0">
+        {{ "SITUATIONS.START_DATE" | translate }}
+        <p-tag
+          dir="ltr"
+          value=" {{ situation.startDate | cdate | date : 'yyyy-MM-dd h:mm' }}"
+        ></p-tag>
+      </p>
+
+      <div class="w-200px"></div>
+      <p class="m-0">
+        {{ "SITUATIONS.END_DATE" | translate }}
+        <p-tag
+          dir="ltr"
+          value="{{ situation.endDate | cdate | date : 'yyyy-MM-dd h:mm' }}"
+        ></p-tag>
+      </p>
+    </div>
+  </p-toolbar>
+  <div class="row p-10">
+    <div *ngIf="chartReport$ | async as chartReport" class="col-4">
+      <!-- registerd incidents  -->
+      <div class="col-12 mb-8">
+        <!--begin::Stats Widget 27-->
+        <div
+          (click)="
+            redirectToReport({
+              status: '1'
+            })
+          "
+          class="card card-custom m-0 border h-100 p-10 cursor-pointer"
+        >
+          <!--begin::Body-->
+          <div
+            class="card-body p-0 d-flex justify-content-between align-items-center"
+          >
+            <div class="d-flex flex-column">
+              <h1 class="card-title font-weight-bolder m-0 d-block number">
+                {{ chartReport.registeredIncidents }}
+              </h1>
+              <p class="d-block font-size-h5 font-weight-bold text-dark">
+                {{ "SITUATIONS.RCV_INCIDENTS" | translate }}
+              </p>
+            </div>
+
+            <div class="d-flex align-items-center">
+              <span
+                [inlineSVG]="
+                  '/assets/media/svg/icons/Custome/registered-incidents.svg'
+                "
+                cacheSVG="true"
+                class="svg-icon svg-icon-6x"
+              ></span>
+            </div>
+          </div>
+          <!--end::Body-->
+        </div>
+        <!--end::Stats Widget 27-->
+      </div>
+      <!-- closed incidents -->
+      <div class="col-12">
+        <!--begin::Stats Widget 27-->
+        <div
+          (click)="
+            redirectToReport({
+              status: '2,3'
+            })
+          "
+          class="card card-custom m-0 border h-100 p-10 cursor-pointer"
+        >
+          <!--begin::Body-->
+          <div
+            class="card-body p-0 d-flex justify-content-between align-items-center"
+          >
+            <div class="d-flex flex-column">
+              <h1 class="card-title font-weight-bolder m-0 d-block number">
+                {{ chartReport.closedIncidents }}
+              </h1>
+              <a class="d-block font-size-h5 font-weight-bold text-dark">
+                {{ "SITUATIONS.CLS_INCIDENTS" | translate }}
+              </a>
+            </div>
+
+            <div class="d-flex align-items-center">
+              <span
+                [inlineSVG]="
+                  '/assets/media/svg/icons/Custome/completed-incidents.svg'
+                "
+                cacheSVG="true"
+                class="svg-icon svg-icon-6x"
+              ></span>
+            </div>
+          </div>
+          <!--end::Body-->
+        </div>
+        <!--end::Stats Widget 27-->
+      </div>
+    </div>
+    <div class="col-1"></div>
+    <div class="col-md-7 p-5 border rounded">
+      <apx-chart
+        [chart]="chartOptions.chart"
+        [series]="chartOptions.series"
+        [labels]="chartOptions.labels"
+        [legend]="chartOptions.legend"
+        [title]="chartOptions.title"
+        [dataLabels]="chartOptions.dataLabels"
+      >
+      </apx-chart>
+    </div>
+  </div>
+</section>
+<section class="p-10">
+  <div *ngIf="statistics$ | async as statistics">
+    <ng-container *ngIf="statisticsLoading$ | async; else tableTemplate">
+      <p-table [value]="[].constructor(10)">
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let item of [].constructor(10)">
+              <div class="p-d-flex p-jc-between p-ai-center">
+                <p-skeleton></p-skeleton>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr class="cursor-pointer hoverable">
+            <td class="max-w-250px" *ngFor="let item of [].constructor(10)">
+              <p-skeleton></p-skeleton>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-container>
+    <ng-template #tableTemplate>
+      <p-table
+        [value]="statistics?.value"
+        [columns]="statistics?.columns"
+        [autoLayout]="true"
+        selectionMode="single"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th>
+              <div>
+                {{ "SITUATIONS.INCIDENT_MAIN_CATEGORY" | translate }}
+              </div>
+            </th>
+            <th *ngFor="let column of columns">
+              <div>
+                {{ column | translateObj }}
+              </div>
+            </th>
+            <th>
+              <div>
+                {{ "SITUATIONS.TOTAL" | translate }}
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-rowData>
+          <tr class="cursor-pointer hoverable" [pSelectableRow]="rowData">
+            <td class="max-w-250px">
+              {{ item | translateObj : "incidentMainCategoryName" }}
+            </td>
+            <td
+              class="max-w-250px"
+              *ngFor="let org of item?.primaryOrgs"
+              (click)="
+                redirectToReport({
+                  orgId: org.id,
+                  mainCategoryId: item.mainCategoryId
+                })
+              "
+            >
+              {{ org.count }}
+            </td>
+            <td class="max-w-250px font-weight-bold">
+              {{ item.total }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer" let-columns>
+          <tr>
+            <td class="max-w-250px">
+              {{ "SITUATIONS.RECOVERY_RATE" | translate }}
+            </td>
+            <td
+              class="max-w-250px"
+              *ngFor="let rate of statistics.recoveryRate"
+            >
+              {{ rate | number | percent }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td class="max-w-250px" colspan="100%">
+              <div class="w-100">
+                <nodata-table></nodata-table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
+  </div>
+</section>
+
+<p-dialog
+  [visible]="situationsDialog$ | async"
+  (visibleChange)="close()"
+  [closable]="_situationId"
+  [modal]="true"
+  [style]="{ width: '30vw' }"
+  [breakpoints]="{ '960px': '40vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  #op
+  [style]="{ width: '650px' }"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex">
+      <h3 class="m-0">
+        {{ "SITUATIONS.SITUATIONS_LIST" | translate }}
+      </h3>
+    </div>
+  </ng-template>
+  <div class="d-flex mb-10 mt-3">
+    <div class="p-field w-100">
+      <input
+        type="text"
+        class="w-100"
+        pInputText
+        (keyup)="updateFilter({ name: $event.target.value }, $event)"
+        placeholder="{{ 'SITUATIONS.NAME' | translate }}"
+      />
+    </div>
+    <div class="mx-1">
+      <button
+        pButton
+        label="{{ 'ACTIONS.SEARCH' | translate }}"
+        icon="pi pi-search"
+        [loading]="loading$ | async"
+        (click)="search()"
+      ></button>
+    </div>
+  </div>
+  <ng-template pTemplate>
+    <app-content-situations
+      *ngIf="state$ | async as state"
+      [view]="state.view"
+      [loading]="loading$ | async"
+      [page]="page$ | async"
+      [columns]="columns"
+      [totalRecords]="totalRecords$ | async"
+      [pageRequest]="state.pageRequest"
+      (onPageChange)="loadPage($event)"
+      (onRowSelect)="redirectToDashboard( $event._id )"
+    ></app-content-situations>
+  </ng-template>
+</p-dialog>
+
+<a #outer></a>

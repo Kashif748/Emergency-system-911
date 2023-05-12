@@ -619,3 +619,8 @@ button.p-button-secondary.active {
     outline: 1px solid var(--danger);
   }
 }
+
+
+.p-inputgroup .p-float-label {
+  max-width: calc(100% - 2.357rem);
+}

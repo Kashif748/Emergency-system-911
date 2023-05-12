@@ -70,21 +70,21 @@ export class DashboardCardControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update66
+   * Path part for operation update67
    */
-  static readonly Update66Path = '/v1/dashboard-cards';
+  static readonly Update67Path = '/v1/dashboard-cards';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update66()` instead.
+   * To access only the response body, use `update67()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update66$Response(params: {
+  update67$Response(params: {
     body: DashboardCard
   }): Observable<StrictHttpResponse<RestApiResponseDashboardCard>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Update66Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Update67Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class DashboardCardControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update66$Response()` instead.
+   * To access the full response (for headers, for example), `update67$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update66(params: {
+  update67(params: {
     body: DashboardCard
   }): Observable<RestApiResponseDashboardCard> {
 
-    return this.update66$Response(params).pipe(
+    return this.update67$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDashboardCard>) => r.body as RestApiResponseDashboardCard)
     );
   }
 
   /**
-   * Path part for operation create60
+   * Path part for operation create61
    */
-  static readonly Create60Path = '/v1/dashboard-cards';
+  static readonly Create61Path = '/v1/dashboard-cards';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create60()` instead.
+   * To access only the response body, use `create61()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create60$Response(params: {
+  create61$Response(params: {
     body: DashboardCard
   }): Observable<StrictHttpResponse<RestApiResponseDashboardCard>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Create60Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, DashboardCardControllerService.Create61Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class DashboardCardControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create60$Response()` instead.
+   * To access the full response (for headers, for example), `create61$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create60(params: {
+  create61(params: {
     body: DashboardCard
   }): Observable<RestApiResponseDashboardCard> {
 
-    return this.create60$Response(params).pipe(
+    return this.create61$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseDashboardCard>) => r.body as RestApiResponseDashboardCard)
     );
   }

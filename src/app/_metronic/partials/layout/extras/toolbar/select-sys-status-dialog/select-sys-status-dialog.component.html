@@ -1,39 +1,56 @@
 <h1 mat-dialog-title>{{ "SYS_STATUS.TITLE" | translate }}</h1>
-<div mat-dialog-content class="w-450px">
+<div mat-dialog-content class="w-450px min-h-300px">
   <p>{{ "SYS_STATUS.DETAILS" | translate }}</p>
-  <mat-form-field appearance="fill" class="w-100">
-    <mat-label>{{ "SYS_STATUS.TITLE" | translate }}</mat-label>
-    <mat-select [formControl]="control">
-      <mat-option>-- {{ "SHARED.NONE" | translate }} --</mat-option>
-      <mat-option value="golden" class="golden">{{
-        "SYS_STATUS.GOLDEN" | translate
-      }}</mat-option>
-      <mat-option value="silver" class="silver">{{
-        "SYS_STATUS.SILVER" | translate
-      }}</mat-option>
-      <mat-option value="bronze" class="bronze">{{
-        "SYS_STATUS.BRONZE" | translate
-      }}</mat-option>
-    </mat-select>
-  </mat-form-field>
 
-  <mat-form-field
-    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
-    class="w-100"
-    appearance="fill"
-    *ngIf="control.value"
-  >
-    <mat-label
-      >{{ "SHARED.REASON" | translate }}
-      <span class="required-asterisk">*</span>
-    </mat-label>
+  <div class="p-field">
+    <p-dropdown
+      [options]="themeTypes"
+      [formControl]="control"
+      [autoDisplayFirst]="false"
+      [showClear]="true"
+      placeholder=" {{ 'SYS_STATUS.TITLE' | translate }}"
+      [styleClass]="'w-100'"
+    >
+      <ng-template let-item pTemplate="selectedItem">
+        <div class="status-item">
+          <div class="level-badge" [class]="item.value"></div>
+          {{ item | translateObj }}
+        </div>
+      </ng-template>
+      <ng-template let-item pTemplate="item">
+        <div class="status-item">
+          <div class="level-badge" [class]="item.value"></div>
+          {{ item | translateObj }}
+        </div>
+      </ng-template>
+    </p-dropdown>
+  </div>
 
-    <textarea rows="5" [formControl]="reasonControl" matInput></textarea>
+  <div *ngIf="control.value" class="p-field mt-10">
+    <span class="p-float-label">
+      <textarea
+        pInputText
+        type="text"
+        [formControl]="reasonControl"
+        rows="5"
+        class="w-100"
+      ></textarea>
+      <label>
+        {{ "SHARED.REASON" | translate }}
+        <strong class="required-asterisk"> * </strong>
+      </label>
+    </span>
 
-    <mat-error>
-      {{ "SHARED.REQUIRED_FIELD" | translate }}
-    </mat-error>
-  </mat-form-field>
+    <ng-container
+      *ngIf="
+        reasonControl.touched && !reasonControl.valid && reasonControl.dirty
+      "
+    >
+      <p class="p-error mb-0" *ngIf="reasonControl.hasError('required')">
+        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+      </p></ng-container
+    >
+  </div>
 </div>
 <div mat-dialog-actions class="d-flex">
   <button

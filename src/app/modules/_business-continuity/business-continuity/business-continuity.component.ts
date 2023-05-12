@@ -1,8 +1,15 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
+import { GenericValidators } from '@shared/validators/generic-validators';
 import { MenuItem } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
@@ -27,12 +34,21 @@ export class BusinessContinuityComponent
   public smallScreen: boolean;
   private destroy$ = new Subject();
 
+  versions = [
+    { nameAr: 'اصدار 2022/6', nameEn: 'version 6/2022' },
+    { nameAr: 'اصدار 2023/1', nameEn: 'version 1/2023' },
+    { nameAr: 'اصدار 2023/6', nameEn: 'version 6/2023' },
+  ];
+  selectedVersion;
   constructor(
     private langFacade: ILangFacade,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
-    private breakpointObserver: BreakpointObserver
-  ) {}
+    private breakpointObserver: BreakpointObserver,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.selectedVersion = this.versions[0];
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -46,7 +62,7 @@ export class BusinessContinuityComponent
         takeUntil(this.destroy$),
         map((c) => c.matches),
         tap((c) => {
-        this.smallScreen = c;
+          this.smallScreen = c;
           c ? (this.sidebar = false) : (this.sidebar = true);
         })
       )
@@ -56,6 +72,7 @@ export class BusinessContinuityComponent
     setTimeout(() => {
       this.items = this.translateMenu(TABS);
       this.visible = true;
+      this.cdr.detectChanges();
     }, 1000);
   }
   translateMenu(items: MenuItem[]): MenuItem[] {
@@ -70,8 +87,8 @@ export class BusinessContinuityComponent
 
   createForm() {
     this.form = this.formBuilder.group({
-      version: [null, [Validators.required]],
-      desc: [null, [Validators.required]],
+      versionAr: [null, [Validators.required, GenericValidators.arabic]],
+      versionEn: [null, [Validators.required, GenericValidators.english]],
     });
   }
 }

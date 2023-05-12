@@ -66,21 +66,21 @@ export class LibraryAccessTypesService extends BaseService {
   }
 
   /**
-   * Path part for operation update27
+   * Path part for operation update28
    */
-  static readonly Update27Path = '/v1/library/accesstypes';
+  static readonly Update28Path = '/v1/library/accesstypes';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update27()` instead.
+   * To access only the response body, use `update28()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update27$Response(params: {
+  update28$Response(params: {
     body: LibraryAccessType
   }): Observable<StrictHttpResponse<RestApiResponseLibraryAccessType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LibraryAccessTypesService.Update27Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, LibraryAccessTypesService.Update28Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -98,15 +98,15 @@ export class LibraryAccessTypesService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update27$Response()` instead.
+   * To access the full response (for headers, for example), `update28$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update27(params: {
+  update28(params: {
     body: LibraryAccessType
   }): Observable<RestApiResponseLibraryAccessType> {
 
-    return this.update27$Response(params).pipe(
+    return this.update28$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLibraryAccessType>) => r.body as RestApiResponseLibraryAccessType)
     );
   }

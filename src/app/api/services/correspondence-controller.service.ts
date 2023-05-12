@@ -78,22 +78,22 @@ export class CorrespondenceControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation create64
+   * Path part for operation create65
    */
-  static readonly Create64Path = '/v1/correspondences';
+  static readonly Create65Path = '/v1/correspondences';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create64()` instead.
+   * To access only the response body, use `create65()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create64$Response(params: {
+  create65$Response(params: {
     correspondence: string;
     body?: { 'att_0'?: Blob, 'att_1'?: Blob, 'att_2'?: Blob, 'att_3'?: Blob }
   }): Observable<StrictHttpResponse<RestApiResponseCorrespondence>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CorrespondenceControllerService.Create64Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, CorrespondenceControllerService.Create65Path, 'post');
     if (params) {
       rb.query('correspondence', params.correspondence, {});
       rb.body(params.body, 'application/json');
@@ -112,16 +112,16 @@ export class CorrespondenceControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create64$Response()` instead.
+   * To access the full response (for headers, for example), `create65$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create64(params: {
+  create65(params: {
     correspondence: string;
     body?: { 'att_0'?: Blob, 'att_1'?: Blob, 'att_2'?: Blob, 'att_3'?: Blob }
   }): Observable<RestApiResponseCorrespondence> {
 
-    return this.create64$Response(params).pipe(
+    return this.create65$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCorrespondence>) => r.body as RestApiResponseCorrespondence)
     );
   }

@@ -16,8 +16,22 @@
     ></button>
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
-    <h2 class="p-text-bold mb-0 mx-2">قوائم إستمرارية الأعمال</h2>
-    <p-tag value="اصدار 2023/1" severity="info"></p-tag>
+    <app-breadcrumb></app-breadcrumb>
+
+    <p-dropdown
+      [options]="versions"
+      [(ngModel)]="selectedVersion"
+      placeholder="Select a version"
+    >
+      <ng-template pTemplate="selectedItem">
+        <div *ngIf="selectedVersion">
+          {{ selectedVersion | translateObj }}
+        </div>
+      </ng-template>
+      <ng-template let-version pTemplate="item">
+        <div>{{ version | translateObj }}</div>
+      </ng-template>
+    </p-dropdown>
   </div>
 
   <button
@@ -33,15 +47,18 @@
 <section [class]="smallScreen ? 'py-6' : 'p-3'">
   <div
     #wrapper
-    class="p-d-flex position-relative justify-content-end"
-    style="min-height: 700px"
+    class="p-d-flex position-relative justify-content-between"
+    style="min-height: 700px; gap: 20px"
   >
     <p-sidebar
       #sideBar
       [(visible)]="sidebar"
       [modal]="false"
-      [style]="{ width: '350px', position: 'absolute' }"
-      styleClass="rounded p-shadow-6 py-2"
+      [style]="{
+        width: '350px',
+        position: smallScreen ? 'absolute' : 'initial'
+      }"
+      styleClass="rounded p-shadow-6 py-5"
       [showCloseIcon]="false"
       [baseZIndex]="-1000"
       [position]="position$ | async"
@@ -49,7 +66,7 @@
       <p-panelMenu [model]="items"> </p-panelMenu>
     </p-sidebar>
 
-    <div class="p-shadow-6 rounded px-6 w-100 col-12 col-md-9">
+    <div class="p-shadow-6 rounded px-6 w-100">
       <router-outlet></router-outlet>
     </div>
   </div>
@@ -69,59 +86,70 @@
     </h3>
   </ng-template>
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
-    <!-- first name -->
+    <!-- version AR -->
     <div class="p-field p-col-12 p-md-12">
       <span class="p-float-label">
-        <input type="text" formControlName="version" pInputText />
+        <input type="text" formControlName="versionAr" pInputText />
         <label>
-          {{ "VERSION" | translate }}
+          {{ "VERSION_AR" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
       <ng-container
         *ngIf="
-          form.controls['version'].touched &&
-          !form.controls['version'].valid &&
-          form.controls['version'].dirty
+          form.controls['versionAr'].touched &&
+          !form.controls['versionAr'].valid &&
+          form.controls['versionAr'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['version'].hasError('required')"
+          *ngIf="form.controls['versionAr'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['versionAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
       </ng-container>
     </div>
 
-    <!-- desc-->
+    <!-- version EN -->
     <div class="p-field p-col-12 p-md-12">
       <span class="p-float-label">
-        <textarea pInputTextarea formArrayName="desc" rows="5"></textarea>
-
+        <input type="text" formControlName="versionEn" pInputText />
         <label>
-          {{ "DESC" | translate }}
+          {{ "VERSION_EN" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
       <ng-container
         *ngIf="
-          form.controls['desc'].touched &&
-          !form.controls['desc'].valid &&
-          form.controls['desc'].dirty
+          form.controls['versionEn'].touched &&
+          !form.controls['versionEn'].valid &&
+          form.controls['versionEn'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['desc'].hasError('required')"
+          *ngIf="form.controls['versionEn'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['versionEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
         </p>
       </ng-container>
     </div>
   </form>
   <ng-template pTemplate="footer">
-    <div class="p-col p-d-flex">
+    <div class="p-col p-d-flex p-jc-center">
       <div class="mx-1">
         <button
           pButton

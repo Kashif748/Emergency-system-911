@@ -10,6 +10,7 @@ export { SuggestionStatusControllerService } from './services/suggestion-status-
 export { SuggestionControllerService } from './services/suggestion-controller.service';
 export { SlaControllerService } from './services/sla-controller.service';
 export { SlaDetailsControllerService } from './services/sla-details-controller.service';
+export { SituationControllerService } from './services/situation-controller.service';
 export { ShiftConfigurationControllerService } from './services/shift-configuration-controller.service';
 export { ShiftControllerService } from './services/shift-controller.service';
 export { RoleControllerService } from './services/role-controller.service';
@@ -90,6 +91,15 @@ export { CircularCcControllerService } from './services/circular-cc-controller.s
 export { CircularControllerService } from './services/circular-controller.service';
 export { CircularStatusControllerService } from './services/circular-status-controller.service';
 export { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+export { BcVersionsControllerService } from './services/bc-versions-controller.service';
+export { BcrtoControllerService } from './services/bcrto-controller.service';
+export { ResponsibleOrganizationControllerService } from './services/responsible-organization-controller.service';
+export { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
+export { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
+export { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
+export { BcImpactTypeControllerService } from './services/bc-impact-type-controller.service';
+export { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
+export { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
 export { AssetControllerService } from './services/asset-controller.service';
 export { AssetsGroupControllerService } from './services/assets-group-controller.service';
 export { AssetsCategoryControllerService } from './services/assets-category-controller.service';

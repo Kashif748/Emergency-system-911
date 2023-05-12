@@ -117,21 +117,21 @@ export class ExerciseMemberRoleControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update56
+   * Path part for operation update57
    */
-  static readonly Update56Path = '/v1/exercise-member-roles';
+  static readonly Update57Path = '/v1/exercise-member-roles';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update56()` instead.
+   * To access only the response body, use `update57()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update56$Response(params: {
+  update57$Response(params: {
     body: ExerciseMemberRole
   }): Observable<StrictHttpResponse<RestApiResponseExerciseMemberRole>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExerciseMemberRoleControllerService.Update56Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ExerciseMemberRoleControllerService.Update57Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -149,35 +149,35 @@ export class ExerciseMemberRoleControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update56$Response()` instead.
+   * To access the full response (for headers, for example), `update57$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update56(params: {
+  update57(params: {
     body: ExerciseMemberRole
   }): Observable<RestApiResponseExerciseMemberRole> {
 
-    return this.update56$Response(params).pipe(
+    return this.update57$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExerciseMemberRole>) => r.body as RestApiResponseExerciseMemberRole)
     );
   }
 
   /**
-   * Path part for operation create52
+   * Path part for operation create53
    */
-  static readonly Create52Path = '/v1/exercise-member-roles';
+  static readonly Create53Path = '/v1/exercise-member-roles';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create52()` instead.
+   * To access only the response body, use `create53()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create52$Response(params: {
+  create53$Response(params: {
     body: ExerciseMemberRole
   }): Observable<StrictHttpResponse<RestApiResponseExerciseMemberRole>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExerciseMemberRoleControllerService.Create52Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ExerciseMemberRoleControllerService.Create53Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -195,15 +195,15 @@ export class ExerciseMemberRoleControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create52$Response()` instead.
+   * To access the full response (for headers, for example), `create53$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create52(params: {
+  create53(params: {
     body: ExerciseMemberRole
   }): Observable<RestApiResponseExerciseMemberRole> {
 
-    return this.create52$Response(params).pipe(
+    return this.create53$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExerciseMemberRole>) => r.body as RestApiResponseExerciseMemberRole)
     );
   }

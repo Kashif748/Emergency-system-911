@@ -5,6 +5,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 
 import { BusinessContinuityComponent } from './business-continuity/business-continuity.component';
 import { BusinessContinuityRoutingModule } from './business-continuity-routing.module';
@@ -36,6 +37,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import {SidebarModule} from 'primeng/sidebar';
+import {InputNumberModule} from 'primeng/inputnumber';
+
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 
 import { AddRtoDialogComponent } from './dialog/add-rto-dialog/add-rto-dialog.component';
 import { AddImpLevelComponent } from './dialog/add-imp-level/add-imp-level.component';
@@ -43,11 +47,11 @@ import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-
 import { AddLocTypeComponent } from './dialog/add-loc-type/add-loc-type.component';
 import { AddActivityFrqComponent } from './dialog/add-activity-frq/add-activity-frq.component';
 import { OrgHierarchyComponent } from './org-hierarchy/org-hierarchy.component';
-import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import {DividerModule} from "primeng/divider";
 import { AddSectorComponent } from './org-hierarchy/add-sector/add-sector.component';
 import { AddDepartmentComponent } from './org-hierarchy/add-department/add-department.component';
 import { AddSectionComponent } from './org-hierarchy/add-section/add-section.component';
+import { AddImpactTypeComponent } from './dialog/add-impact-type/add-impact-type.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -78,6 +82,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     AddSectorComponent,
     AddDepartmentComponent,
     AddSectionComponent,
+    AddImpactTypeComponent,
   ],
   imports: [
     CommonModule,
@@ -108,11 +113,14 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     InputSwitchModule,
     NodataTableModule,
     ColorPickerModule,
+    InputNumberModule,
+    TranslateObjModule,
     ToolbarModule,
     DialogModule,
     SidebarModule,
     TranslateObjModule,
-    DividerModule
+    DividerModule,
+    SharedBreadcrumbModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

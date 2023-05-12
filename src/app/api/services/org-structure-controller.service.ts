@@ -349,21 +349,21 @@ export class OrgStructureControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getById4
+   * Path part for operation getById5
    */
-  static readonly GetById4Path = '/v1/organizations/{id}';
+  static readonly GetById5Path = '/v1/organizations/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById4()` instead.
+   * To access only the response body, use `getById5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById4$Response(params: {
+  getById5$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseOrgStructure>> {
 
-    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.GetById4Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.GetById5Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -381,15 +381,15 @@ export class OrgStructureControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById4$Response()` instead.
+   * To access the full response (for headers, for example), `getById5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById4(params: {
+  getById5(params: {
     id: number;
   }): Observable<RestApiResponseOrgStructure> {
 
-    return this.getById4$Response(params).pipe(
+    return this.getById5$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
     );
   }

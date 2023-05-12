@@ -22,6 +22,8 @@ import { PushNotificationsService } from 'src/app/_metronic/core/services/push.n
 import { AssetsInfoComponent } from '../assets-info/assets-info.component';
 import { HospitalsComponent } from '../hospitals/hospitals.component';
 import { TranslationService } from '../../i18n/translation.service';
+import { TranslateService } from '@ngx-translate/core';
+
 import { HospitalsStatisticsComponent } from '../hospital-data/hospitals-statistics/hospitals-statistics.component';
 import { AlertsService } from '../../../_metronic/core/services/alerts.service';
 import { IncidentsService } from '../../../_metronic/core/services/incidents.service';
@@ -49,6 +51,7 @@ import { ShareLocationService } from '../../share-location/shareLocation.service
 import { AddressSearchResultModel } from '@shared/components/map/utils/map.models';
 import { IncidentReminderComponent } from './incident-reminder/incident-reminder.component';
 import { MapService } from '@shared/components/map/services/map.service';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-view-incidents',
@@ -203,6 +206,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private translationService: TranslationService,
+    private translateService: TranslateService,
     private alertService: AlertsService,
     private cd: ChangeDetectorRef,
     public matDialog: MatDialog,
@@ -279,12 +283,11 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
         }
 
         if (incidentDetails) {
-
           this.incidentDetails = incidentDetails.result;
-           // draft incident
-           if (this.incidentDetails?.status?.id === 5) {
-            this.isDraft= true;
-            this.hideCloseAndExportIncidentReportBtn =true
+          // draft incident
+          if (this.incidentDetails?.status?.id === 5) {
+            this.isDraft = true;
+            this.hideCloseAndExportIncidentReportBtn = true;
             this.hideDraftTabs();
           }
           this.form
@@ -324,7 +327,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
       .subscribe(
         (response) => {
           this.alertService.openSuccessSnackBar();
-           this.back()
+          this.back();
         },
         (err) => {
           this.alertService.openFailureSnackBar();
@@ -818,7 +821,17 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
       .subscribe((response) => {
         const blob = new Blob([response.body], { type: 'pdf' });
         window.URL.createObjectURL(blob);
-        const fileName = 'download.pdf';
+
+        const fileLabel = `${this.translateService.instant(
+          'INCIDENTS.INCIDENT_REPORT',
+          { serial: this.incidentDetails.serial }
+        )}`;
+        const fileDate = `${DateTimeUtil.format(
+          new Date(),
+          'YYYY-MM-DD H:mm a'
+        )}`;
+
+        const fileName = `${fileLabel} ${fileDate}.pdf`;
         importedSaveAs(blob, fileName);
         this.isExportingPDF = false;
         this.cd.detectChanges();

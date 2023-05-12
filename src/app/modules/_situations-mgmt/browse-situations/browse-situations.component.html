@@ -1,0 +1,173 @@
+<app-situation-dialog></app-situation-dialog>
+<div class="container-fluid">
+  <app-breadcrumb></app-breadcrumb>
+
+  <div class="mx-4 my-10" *ngIf="state$ | async as state">
+    <div class="row mb-4">
+      <div class="col-12 mb-8">
+        <p-fieldset
+          [toggleable]="true"
+          styleClass="px-3 py-2 search-section"
+          legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+          [collapsed]="true"
+        >
+          <div class="p-fluid p-grid">
+            <div class="p-field p-col-12 p-md-3">
+              <input
+                type="text"
+                pInputText
+                [ngModel]="state?.pageRequest?.filters['name']"
+                (keyup)="updateFilter({ name: $event.target.value }, $event)"
+                placeholder="{{ 'SITUATIONS.NAME' | translate }}"
+              />
+            </div>
+
+            <!-- Type filter -->
+            <div class="p-field p-col-12 p-md-3">
+              <p-dropdown
+                [options]="newsTypes$ | async"
+                [ngModel]="state.pageRequest.filters['newsType']"
+                (ngModelChange)="updateFilter({ newsType: $event }, $event)"
+                [autoDisplayFirst]="false"
+                [showClear]="true"
+                dataKey="id"
+                optionValue="id"
+                placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
+              >
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item | translateObj }}
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  {{ item | translateObj }}
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <!--  From Date  -->
+            <div class="p-field p-col-12 p-md-3">
+              <span class="p-float-label">
+                <p-calendar
+                  placeholder="{{ 'SITUATIONS.START_DATE' | translate }}"
+                  [ngModel]="state.pageRequest.filters['fromDate']"
+                  (ngModelChange)="updateFilter({ fromDate: $event }, $event)"
+                  [showIcon]="true"
+                  [maxDate]="state.pageRequest.filters['toDate']"
+                  appendTo="body"
+                  dateFormat="dd/mm/yy"
+                  showButtonBar="true"
+                  [showTime]="true"
+                  hourFormat="12"
+                ></p-calendar>
+              </span>
+            </div>
+            <!--  To Date  -->
+            <div class="p-field p-col-12 p-md-3">
+              <span class="p-float-label">
+                <p-calendar
+                  placeholder="{{ 'SITUATIONS.END_DATE' | translate }}"
+                  [ngModel]="state.pageRequest.filters['toDate']"
+                  (ngModelChange)="updateFilter({ toDate: $event }, $event)"
+                  [showIcon]="true"
+                  [minDate]="state.pageRequest.filters['fromDate']"
+                  appendTo="body"
+                  dateFormat="dd/mm/yy"
+                  showButtonBar="true"
+                  [showTime]="true"
+                  hourFormat="12"
+                ></p-calendar>
+              </span>
+            </div>
+            <div class="p-col p-d-flex">
+              <div class="ml-dir-auto"></div>
+              <div class="mx-1">
+                <button
+                  pButton
+                  type="button"
+                  label="{{ 'ACTIONS.CLEAR' | translate }}"
+                  icon="pi pi-times"
+                  class="p-button-outlined"
+                  [loading]="loading$ | async"
+                  (click)="clear()"
+                ></button>
+              </div>
+              <div class="mx-1">
+                <button
+                  pButton
+                  label="{{ 'ACTIONS.SEARCH' | translate }}"
+                  icon="pi pi-search"
+                  [loading]="loading$ | async"
+                  (click)="search()"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="w-100 d-flex flex-wrap mx-1 my-2 px-6">
+        <div class="my-auto">
+          <div class="p-field m-0">
+            <p-dropdown
+              [options]="state.themeTypes"
+              [ngModel]="state.pageRequest.filters['themeType']"
+              (ngModelChange)="loadByTheme({ themeType: $event })"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              optionValue="id"
+              placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                <div class="status-item">
+                  <div class="level-badge" [class]="item.color"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+              <ng-template let-item pTemplate="item">
+                <div class="status-item">
+                  <div class="level-badge" [class]="item.color"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+        <div class="ml-dir-auto d-flex">
+          <button
+            *checkPrivileges="'PRIV_ADD_SITUATION'"
+            pButton
+            label="{{ 'ACTIONS.ADD' | translate }}"
+            icon="pi pi-plus"
+            (click)="openDialog()"
+          ></button>
+        </div>
+      </div>
+      <div class="col-12">
+        <p-divider [align]="'left'" styleClass="bg-transparent">
+          <p-selectButton
+            [options]="[
+              { icon: 'pi pi-bars', view: 'TABLE' },
+              { icon: 'pi pi-th-large', view: 'CARDS' }
+            ]"
+            optionLabel="icon"
+            optionValue="view"
+            [ngModel]="state.view"
+            (onChange)="changeView($event.value)"
+          >
+            <ng-template let-item>
+              <i [class]="item.icon"></i>
+            </ng-template>
+          </p-selectButton>
+        </p-divider>
+      </div>
+    </div>
+
+    <app-content-situations
+      [view]="state.view"
+      [loading]="loading$ | async"
+      [page]="page$ | async"
+      [columns]="state.columns"
+      [totalRecords]="totalRecords$ | async"
+      [pageRequest]="state.pageRequest"
+      (onPageChange)="loadPage($event)"
+    ></app-content-situations>
+  </div>
+</div>

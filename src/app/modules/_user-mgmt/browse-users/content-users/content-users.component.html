@@ -41,7 +41,7 @@
       </ng-container>
       <ng-template #cardsTemplate>
         <ng-container *ngFor="let item of page">
-          <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border">
+          <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border" [ngClass]="{'highlight': item['expireDate'] && item['expireDate'] < nowDate}">
             <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
               [ngClass]="{ 'border-primary': item.isActive, 'border-warning': !item.isActive}">
               <ng-container *ngIf="!item.photo?.length; else profileImg">
@@ -116,7 +116,7 @@
               <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
                 class="p-button-rounded p-button-text mt-0 p-button-plain" (click)="menu1.toggle($event)"
                 *checkPrivileges="'PRIV_ED_USR'"></button>
-              <p-menu #menu1 appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
+              <p-menu #menu1 appendTo="body" [popup]="true" [model]="item['actions']"></p-menu>
             </div>
           </div>
         </ng-container>
@@ -272,7 +272,7 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
-            <tr class="cursor-pointer hoverable">
+            <tr class="cursor-pointer hoverable" [ngClass]="{'highlight': item.expireDate && item.expireDate < nowDate}">
               <td class="flag-td">
                 <div [ngClass]="{ 'bg-primary': item.isActive, 'bg-warning': !item.isActive}">
                 </div>

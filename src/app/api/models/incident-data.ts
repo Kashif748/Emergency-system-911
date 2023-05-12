@@ -3,6 +3,7 @@
 import { TotalData } from './total-data';
 export interface IncidentData {
   completed?: TotalData;
+  draft?: TotalData;
   inProgress?: TotalData;
   rejected?: TotalData;
   total?: number;

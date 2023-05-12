@@ -71,17 +71,17 @@ export class ExternalPhonebookControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation search1
+   * Path part for operation search2
    */
-  static readonly Search1Path = '/v1/phonebook';
+  static readonly Search2Path = '/v1/phonebook';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search1()` instead.
+   * To access only the response body, use `search2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search1$Response(params: {
+  search2$Response(params: {
     name?: string;
     mobileNumber?: string;
     orgName?: string;
@@ -89,7 +89,7 @@ export class ExternalPhonebookControllerService extends BaseService {
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageExternalPhonebook>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Search1Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Search2Path, 'get');
     if (params) {
       rb.query('name', params.name, {});
       rb.query('mobileNumber', params.mobileNumber, {});
@@ -111,11 +111,11 @@ export class ExternalPhonebookControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search1$Response()` instead.
+   * To access the full response (for headers, for example), `search2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search1(params: {
+  search2(params: {
     name?: string;
     mobileNumber?: string;
     orgName?: string;
@@ -123,27 +123,27 @@ export class ExternalPhonebookControllerService extends BaseService {
     pageable: Pageable;
   }): Observable<RestApiResponsePageExternalPhonebook> {
 
-    return this.search1$Response(params).pipe(
+    return this.search2$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageExternalPhonebook>) => r.body as RestApiResponsePageExternalPhonebook)
     );
   }
 
   /**
-   * Path part for operation update16
+   * Path part for operation update17
    */
-  static readonly Update16Path = '/v1/phonebook';
+  static readonly Update17Path = '/v1/phonebook';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update16()` instead.
+   * To access only the response body, use `update17()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update16$Response(params: {
+  update17$Response(params: {
     body: ExternalPhonebook
   }): Observable<StrictHttpResponse<RestApiResponseExternalPhonebook>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Update16Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Update17Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -161,35 +161,35 @@ export class ExternalPhonebookControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update16$Response()` instead.
+   * To access the full response (for headers, for example), `update17$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update16(params: {
+  update17(params: {
     body: ExternalPhonebook
   }): Observable<RestApiResponseExternalPhonebook> {
 
-    return this.update16$Response(params).pipe(
+    return this.update17$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExternalPhonebook>) => r.body as RestApiResponseExternalPhonebook)
     );
   }
 
   /**
-   * Path part for operation create16
+   * Path part for operation create17
    */
-  static readonly Create16Path = '/v1/phonebook';
+  static readonly Create17Path = '/v1/phonebook';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create16()` instead.
+   * To access only the response body, use `create17()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create16$Response(params: {
+  create17$Response(params: {
     body: ExternalPhonebook
   }): Observable<StrictHttpResponse<RestApiResponseExternalPhonebook>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Create16Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Create17Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -207,35 +207,35 @@ export class ExternalPhonebookControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create16$Response()` instead.
+   * To access the full response (for headers, for example), `create17$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create16(params: {
+  create17(params: {
     body: ExternalPhonebook
   }): Observable<RestApiResponseExternalPhonebook> {
 
-    return this.create16$Response(params).pipe(
+    return this.create17$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExternalPhonebook>) => r.body as RestApiResponseExternalPhonebook)
     );
   }
 
   /**
-   * Path part for operation getById3
+   * Path part for operation getById4
    */
-  static readonly GetById3Path = '/v1/phonebook/{id}';
+  static readonly GetById4Path = '/v1/phonebook/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById3()` instead.
+   * To access only the response body, use `getById4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById3$Response(params: {
+  getById4$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseExternalPhonebook>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.GetById3Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.GetById4Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -253,15 +253,15 @@ export class ExternalPhonebookControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById3$Response()` instead.
+   * To access the full response (for headers, for example), `getById4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById3(params: {
+  getById4(params: {
     id: number;
   }): Observable<RestApiResponseExternalPhonebook> {
 
-    return this.getById3$Response(params).pipe(
+    return this.getById4$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExternalPhonebook>) => r.body as RestApiResponseExternalPhonebook)
     );
   }
