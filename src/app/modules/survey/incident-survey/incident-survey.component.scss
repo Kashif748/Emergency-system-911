@@ -1,43 +1,37 @@
 .logo-container {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 .logo {
-    width: 500px;
-    height: 300px;
+  width: 500px;
+  height: 300px;
 }
 
 .survey-container {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    // width: 70%;
-
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  // width: 70%;
 }
 
 .selected {
-    border: 2px solid gray;
-    border-radius: 10px;
+  border: 2px solid gray;
+  border-radius: 10px;
 }
 
 .textarea-en {
-    border: 1px solid gray;
-    text-indent: 20px;
-    min-height: 200px;
-    width: 100%;
-    text-align: left;
+  border: 1px solid gray;
+  text-indent: 20px;
+  min-height: 200px;
+  width: 100%;
+  text-align: left;
 }
 
 .textarea-ar {
-    border: 1px solid gray;
-    text-indent: 20px;
-    min-height: 200px;
-    width: 100%;
-    text-align: right;
-}
-@media only screen and (max-width: 420px) {
-  .questions {
-    width: 105px;
-  }
+  border: 1px solid gray;
+  text-indent: 20px;
+  min-height: 200px;
+  width: 100%;
+  text-align: right;
 }
