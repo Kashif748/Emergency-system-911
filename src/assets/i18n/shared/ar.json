@@ -930,6 +930,7 @@
       "CREATION_DATE": "تاريخ الإنشاء"
     },
     "INQUIRIY": {
+      "REPORT" : "تقرير الاستفسارات",
       "ADVANCED_SEARCH": "بحث متقدم",
       "ID": "مسلسل",
       "SUBJECT": "الموضوع",

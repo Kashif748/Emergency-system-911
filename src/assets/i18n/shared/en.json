@@ -835,6 +835,7 @@
       }
     },
     "INQUIRIY": {
+      "REPORT" : "Inquiriy Report",
       "ADVANCED_SEARCH": "Advanced Search",
       "ID": "ID",
       "SUBJECT": "Subject",
