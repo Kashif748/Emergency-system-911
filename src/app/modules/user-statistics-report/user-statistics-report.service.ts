@@ -2,9 +2,11 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { UrlHelperService } from '@core/services/url-helper.service';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import { TranslateService } from '@ngx-translate/core';
 import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import {TranslationService} from "../i18n/translation.service";
+import { TranslationService } from '../i18n/translation.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +20,7 @@ export class UserStatisticsReportService {
     private langFacade: ILangFacade,
     private urlHelper: UrlHelperService,
     private translation: TranslationService,
+    private translateService:  TranslateService
   ) {
     this.lang = this.translation.getSelectedLanguage();
   }
@@ -35,31 +38,47 @@ export class UserStatisticsReportService {
     );
   }
 
-  downloadReport(exportAs: 'PDF' | 'EXCEL', category: 'incidents' | 'tasks', filterForm?) {
-    console.log(filterForm)
+  downloadReport(
+    exportAs: 'PDF' | 'EXCEL',
+    category: 'incidents' | 'tasks',
+    filterForm?
+  ) {
+    console.log(filterForm);
     return this.http
-      .get<any>(`${environment.apiUrl}/user-statistics-report/` + category + `/export`, {
-        params: {
-          as: exportAs,
-          lang: (this.lang == 'ar') + '',
-          orgId: filterForm?.orgId ?? '',
-          fromDate: filterForm?.fromDate ?? '',
-          toDate: filterForm?.toDate ?? '',
-          userId: filterForm?.userId.toString() ?? '',
-        },
+      .get<any>(
+        `${environment.apiUrl}/user-statistics-report/` + category + `/export`,
+        {
+          params: {
+            as: exportAs,
+            lang: (this.lang == 'ar') + '',
+            orgId: filterForm?.orgId ?? '',
+            fromDate: filterForm?.fromDate ?? '',
+            toDate: filterForm?.toDate ?? '',
+            userId: filterForm?.userId.toString() ?? '',
+          },
 
-        responseType: 'blob' as any,
-      })
+          responseType: 'blob' as any,
+        }
+      )
       .pipe(
         tap((res) => {
+          const fileLabel = `${this.translateService.instant(
+            'REPORTS.USERS_REPORT_TITLE'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm a'
+          )}`;
+
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               exportAs === 'PDF'
                 ? 'pdf'
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-              }`,
+            }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }

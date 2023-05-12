@@ -1060,6 +1060,7 @@
       "GENERAL_REPORT": "Tasks Report",
       "INCIDENTS_REPORT" : "Incidents Report",
       "RESOURCES_REPORT": "Resources Reports",
+      "USERS_REPORT_TITLE": "User Statistics Report",
       "SHIFTS_REPORTS": "Shifts",
       "USER_NAME": "User Name",
       "ORG": "Organization Name",
