@@ -69,7 +69,7 @@ export class InquiriesService {
           )}`;
           const fileDate = `${DateTimeUtil.format(
             new Date(),
-            'YYYY-MM-DD H:mm a'
+            'YYYY-MM-DD H:mm'
           )}`;
 
           const fileName = `${fileLabel} ${fileDate}`;
