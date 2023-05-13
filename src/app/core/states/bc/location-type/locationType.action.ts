@@ -1,4 +1,5 @@
 import {BcLocationTypes} from "../../../../api/models/bc-location-types";
+import {Bcrto} from "../../../../api/models/bcrto";
 
 export namespace LocationTypeAction {
   export class LoadPage {
@@ -20,6 +21,16 @@ export namespace LocationTypeAction {
 
   export class Create {
     static readonly type = '[LocationType] Create';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcLocationTypes
+    ) {}
+  }
+
+  export class Update {
+    static readonly type = '[LocationType] Update';
     /**
      *
      */

@@ -72,6 +72,8 @@ import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-
 import {BrowseActivityPrioritySeqState} from "./modules/_business-continuity/activity-priority-sequence/states/browse-activity-priority-seq.state";
 import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
+import {LocationTypeState} from "@core/states/bc/location-type/locationType.state";
+import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -140,7 +142,9 @@ export function getHighlightLanguages() {
         RtoState,
         ImpLevelWorkingState,
         ActivityPrioritySeqState,
-        ActivityFrquencyState
+        ActivityFrquencyState,
+        LocationTypeState,
+        ImpactLevelState
       ],
       {
         developmentMode: !environment.production,

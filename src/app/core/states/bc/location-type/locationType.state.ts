@@ -5,7 +5,10 @@ import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
 import {EMPTY, of} from "rxjs";
 import {BcLocationTypes} from "../../../../api/models/bc-location-types";
 import {BcLocationTypeControllerService} from "../../../../api/services/bc-location-type-controller.service";
+import {PageBcLocationTypes} from "../../../../api/models/page-bc-location-types";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
+import {RtoStateModel} from "@core/states/bc/rto/rto.state";
+import {RtoAction} from "@core/states";
 
 
 export interface LocationTypeStateModel {
@@ -129,8 +132,33 @@ export class LocationTypeState {
       );
   }
 
+  @Action(LocationTypeAction.Update)
+  update(
+    { setState }: StateContext<LocationTypeStateModel>,
+    { payload }: RtoAction.Update
+  ) {
+    setState(
+      patch<LocationTypeStateModel>({
+        blocking: true,
+      })
+    );
+    return this.locationType
+      .update82({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<LocationTypeStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
   @Action(LocationTypeAction.GetLocationType, { cancelUncompleted: true })
-  getRto(
+  GetLocationType(
     { setState }: StateContext<LocationTypeStateModel>,
     { payload }: LocationTypeAction.GetLocationType
   ) {

@@ -32,6 +32,8 @@ import {BrowseActivityPriorityComponent} from "./browse-activity-priority/browse
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseActivityPrioritySeqState} from "./states/browse-activity-priority-seq.state";
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {DividerModule} from "primeng/divider";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -78,7 +80,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     DialogModule,
     SidebarModule,
     TranslateObjModule,
-    SharedBreadcrumbModule
+    SharedBreadcrumbModule,
+    DividerModule,
+    ToggleButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

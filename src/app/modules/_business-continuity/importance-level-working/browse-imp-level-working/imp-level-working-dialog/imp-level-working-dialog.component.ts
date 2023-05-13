@@ -19,9 +19,12 @@ import {BrowseImpLevelWorkingAction} from "../states/browse-imp-level-working.ac
 export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
 
   opened$: Observable<boolean>;
+  viewOnly$: Observable<boolean>;
+
 
   public display = false;
   form: FormGroup;
+  public color;
 
   _id: number;
   get loggedinUserId() {
@@ -67,8 +70,23 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((id) => {
-        this._id = id;
+        this.workingId = id;
       });
+
+    this.viewOnly$ = this.route.queryParams.pipe(
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {}
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -80,12 +98,21 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      criticalityEn: [null, [Validators.required, GenericValidators.english]],
-      criticalityAr: [null, [Validators.required, GenericValidators.arabic]],
-      levelEn: [null, [Validators.required, GenericValidators.english]],
-      levelAr: [null, [Validators.required, GenericValidators.arabic]],
-      descEn: [null, [Validators.required, GenericValidators.english]],
-      descAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      /*levelEn: [null, [Validators.required, GenericValidators.english]],
+      levelAr: [null, [Validators.required, GenericValidators.arabic]],*/
+      descriptionEn: [null, [Validators.required, GenericValidators.english]],
+      descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
+      colorCode: [null, [Validators.required]],
+      isActive: [true, ]
+    });
+  }
+
+  setColor(color: string) {
+    this.color = color;
+    this.form.patchValue({
+      colorCode: color
     });
   }
 
@@ -108,14 +135,14 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     };
 
     impLevelWorking.versionId = 1;
-    impLevelWorking.isActive = true;
-    this.store.dispatch(new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking));
+    // impLevelWorking.isActive = true;
+    // this.store.dispatch(new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking));
 
-    /*if (this.editMode) {
-      this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
+    if (this.editMode) {
+      // this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
     } else {
-      this.store.dispatch(new BrowseUsersAction.CreateUser(user));
-    }*/
+      this.store.dispatch(new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking));
+    }
   }
 
   close() {

@@ -6,9 +6,12 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {iif, patch} from "@ngxs/store/operators";
 import {EMPTY} from "rxjs";
-import {catchError, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseActivityPrioritySeqAction} from "./browse-activity-priority-seq.action";
 import {ActivityPrioritySeqAction} from "@core/states/bc/activity-priority-seq/activity-priority-seq.action";
+import {BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
+import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
+import {BrowseLocationTypeAction} from "../../location-type/states/browse-locationType.action";
 
 
 export interface BrowseActivityPrioritySeqStateModel {
@@ -97,6 +100,26 @@ export class BrowseActivityPrioritySeqState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseActivityPrioritySeqAction.UpdateActivityPrioritySeq)
+  updateActivityPrioritySeq(
+    { dispatch }: StateContext<BrowseActivityPrioritySeqStateModel>,
+    { payload }: BrowseActivityPrioritySeqAction.UpdateActivityPrioritySeq
+  ) {
+    return dispatch(new ActivityPrioritySeqAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseActivityPrioritySeqAction.LoadActivityPrioritySeq());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseActivityPrioritySeqAction.ToggleDialog({}));
       })
     );
   }

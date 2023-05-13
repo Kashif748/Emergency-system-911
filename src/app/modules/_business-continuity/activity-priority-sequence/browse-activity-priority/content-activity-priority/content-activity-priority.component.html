@@ -106,11 +106,11 @@
                 </td>
 
                 <td (click)="item.isActive && openView(item.id)">
-                  {{ item.priority_ar }}
+                  {{ item.nameAr }}
                 </td>
 
                 <td (click)="item.isActive && openView(item.id)">
-                  {{ item.priority_en }}
+                  {{ item.nameEn }}
                 </td>
 
                 <td>
@@ -143,7 +143,10 @@
           </p-table>
         </ng-template>
       </ng-container>
-      <p-paginator></p-paginator>
+      <p-paginator #pg [first]="pageRequest?.first" [rows]="pageRequest?.rows" [totalRecords]="totalRecords"
+                   [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
+                   currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)">
+      </p-paginator>
     </div>
   </div>
 </section>

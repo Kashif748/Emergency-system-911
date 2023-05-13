@@ -19,19 +19,13 @@
 >
   <ng-template pTemplate="header">
     <h3>
-      <span>{{ "RTO_LIST.ADD_NEW_RTO" | translate }}</span>
-      <span
-        *ngIf="true"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="false"
-        class="label label-lg label-light-success label-inline"
-      >
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+        {{'RTO_LIST.EDIT_RTO' | translate}}
+
+      </ng-container>
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+        {{'RTO_LIST.ADD_NEW_RTO' | translate}}
+      </ng-container>
     </h3>
   </ng-template>
 
@@ -232,6 +226,18 @@
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
       </ng-container>
+    </div>
+
+    <div class="p-col-12">
+      <p-divider align="center">
+        <div class="p-d-inline-flex p-ai-center">
+          <div class="p-field p-col-12 p-md-12">
+            <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                            offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                            iconPos="right"></p-toggleButton>
+          </div>
+        </div>
+      </p-divider>
     </div>
   </form>
 

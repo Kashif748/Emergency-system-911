@@ -23,6 +23,16 @@ export namespace BrowseRtoAction {
     ) {}
   }
 
+  export class UpdateRto {
+    static readonly type = '[BrowseRto] Update Rto';
+    /**
+     *
+     */
+    constructor(
+      public payload: Bcrto
+    ) {}
+  }
+
   export class ToggleDialog {
     static readonly type = '[BrowseRto] Toggle Dialog';
     /**

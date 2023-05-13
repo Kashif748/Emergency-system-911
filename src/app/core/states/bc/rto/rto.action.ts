@@ -28,6 +28,16 @@ export namespace RtoAction {
     ) {}
   }
 
+  export class Update {
+    static readonly type = '[Rto] Update';
+    /**
+     *
+     */
+    constructor(
+      public payload: Bcrto
+    ) {}
+  }
+
   export class GetRto {
     static readonly type = '[Rto] Get Rto';
     /**

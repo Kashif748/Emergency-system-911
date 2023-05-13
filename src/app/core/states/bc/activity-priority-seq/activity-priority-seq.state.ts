@@ -131,8 +131,33 @@ export class ActivityPrioritySeqState {
       );
   }
 
+  @Action(ActivityPrioritySeqAction.Update)
+  update(
+    { setState }: StateContext<ActivityPrioritySeqStateModel>,
+    { payload }: ActivityPrioritySeqAction.Update
+  ) {
+    setState(
+      patch<ActivityPrioritySeqStateModel>({
+        blocking: true,
+      })
+    );
+    return this.activityPrioritySeq
+      .update81({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<ActivityPrioritySeqStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
   @Action(ActivityPrioritySeqAction.GetActivityPrioritySeq, { cancelUncompleted: true })
-  getRto(
+  getActivityPrioritySeq(
     { setState }: StateContext<ActivityPrioritySeqStateModel>,
     { payload }: ActivityPrioritySeqAction.GetActivityPrioritySeq
   ) {

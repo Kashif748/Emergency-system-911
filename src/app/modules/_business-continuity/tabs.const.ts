@@ -23,7 +23,7 @@ export const TABS: MenuItem[] = [
     items: [
       {
         label: 'IMPACT_LEVELS.TAB_LABEL',
-        routerLink: 'impact-levels',
+        routerLink: 'impact-level',
       },
       { label: 'IMPACT_ANALYSIS.TAB_LABEL', routerLink: 'impact-analysis' },
     ],

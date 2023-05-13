@@ -48,7 +48,7 @@
     "CRITICALITY": "الحيوية",
     "RTO_DESC": "الوصف",
     "ADD_NEW_RTO": " اضافة زمن تعافي جديد",
-
+    "EDIT_RTO":"زمن التعافي",
     "RTO_ENG": "زمن التعافي (انجليزي)",
     "RTO_AR": "زمن التعافي (عربي)",
 
@@ -64,17 +64,19 @@
   },
   "LOC_TYPE": {
     "TYPE_AR": "النوع (عربي)",
+    "EDIT_LOC_TYPE":"تحرير نوع الموقع",
     "TYPE_EN": "النوع (انجليزي)",
     "ADD_NEW_LOC_TYPE": "    اضافة نوع موقع جديد "
   },
   "ACTIVITY_PRIORITY_SEQ": {
     "ADD_NEW_PRI_SEQ": "  اضافة اولوية استرجاع جديدة ",
-
+    "EDIT_PRI_SEQ":"تحرير تسلسل الأولوية",
     "PRI_AR": "الاولوية (عربي)",
     "PRI_EN": "الاولوية (انجليزي)"
   },
 
   "IMP_LEVEL_WORKING": {
+    "EDIT_IMP_LEVEL":"تحرير مستوى الأهمية",
     "ADD_NEW_IMP_LEVEL": " اضافة مستوى توافر جديد ",
     "COLOR": "اللون",
     "IMP_LEVEL": "المستوى (انجليزي) ",

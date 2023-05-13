@@ -4,11 +4,14 @@ import {iif, patch} from "@ngxs/store/operators";
 import {EMPTY} from "rxjs";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {ApiHelper} from "@core/helpers/api.helper";
-import {catchError, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
 import {BrowseLocationTypeAction} from "./browse-locationType.action";
+import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
+import {BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
+import {RtoAction} from "@core/states/bc/rto/rto.action";
 
 
 export interface BrowseLocationTypeStateModel {
@@ -97,6 +100,26 @@ export class BrowseLocationTypeState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseLocationTypeAction.UpdateLocationType)
+  updateLocationType(
+    { dispatch }: StateContext<BrowseRtoStateModel>,
+    { payload }: BrowseLocationTypeAction.UpdateLocationType
+  ) {
+    return dispatch(new LocationTypeAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseLocationTypeAction.LoadLocationType());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseLocationTypeAction.ToggleDialog({}));
       })
     );
   }

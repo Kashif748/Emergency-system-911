@@ -1,4 +1,5 @@
 import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequencies";
+import {BcLocationTypes} from "../../../../api/models/bc-location-types";
 
 export namespace ActivityPrioritySeqAction {
   export class LoadPage {
@@ -20,6 +21,16 @@ export namespace ActivityPrioritySeqAction {
 
   export class Create {
     static readonly type = '[ActivityPrioritySeq] Create';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcActivityFrequencies
+    ) {}
+  }
+
+  export class Update {
+    static readonly type = '[ActivityPrioritySeq] Update';
     /**
      *
      */

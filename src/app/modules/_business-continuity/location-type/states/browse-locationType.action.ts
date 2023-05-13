@@ -23,6 +23,16 @@ export namespace BrowseLocationTypeAction {
     ) {}
   }
 
+  export class UpdateLocationType {
+    static readonly type = '[BrowseRto] Update LocationType';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcLocationTypes
+    ) {}
+  }
+
   export class ToggleDialog {
     static readonly type = '[BrowseLocationType] Toggle Dialog';
     /**

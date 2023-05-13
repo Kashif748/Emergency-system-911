@@ -7,6 +7,8 @@ import {Bcrto} from "../../../../api/models/bcrto";
 import {BcrtoControllerService} from "../../../../api/services/bcrto-controller.service";
 import {PageBcrto} from "../../../../api/models/page-bcrto";
 import {RtoAction} from "@core/states";
+import {GroupAction} from "@core/states/group/group.action";
+import {GroupStateModel} from "@core/states/group/group.state";
 
 
 export interface RtoStateModel {
@@ -117,6 +119,31 @@ export class RtoState {
     );
     return this.rto
       .insertOne1({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<RtoStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(RtoAction.Update)
+  update(
+    { setState }: StateContext<RtoStateModel>,
+    { payload }: RtoAction.Update
+  ) {
+    setState(
+      patch<RtoStateModel>({
+        blocking: true,
+      })
+    );
+    return this.rto
+      .update80({
         body: payload,
       })
       .pipe(

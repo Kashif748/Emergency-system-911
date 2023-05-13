@@ -19,6 +19,7 @@ import {RtoAction, RtoState} from "@core/states";
 export class RtoDialogComponent implements OnInit, OnDestroy {
 
   opened$: Observable<boolean>;
+  viewOnly$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -70,6 +71,21 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       .subscribe((id) => {
         this.rtoId = id;
       });
+
+    this.viewOnly$ = this.route.queryParams.pipe(
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {}
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -78,6 +94,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     );
     this.buildForm();
   }
+
   openDialog(id?: number) {
     this.store.dispatch(new BrowseRtoAction.ToggleDialog({ rtoId: id }));
   }
@@ -90,6 +107,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
+      isActive: [true]
     });
   }
 
@@ -111,14 +129,14 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     };
 
     rto.versionId = 1;
-    rto.isActive = true;
-    this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
+    // rto.isActive = true;
+    // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
 
-    /*if (this.editMode) {
-      this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
+    if (this.editMode) {
+      this.store.dispatch(new BrowseRtoAction.UpdateRto(rto));
     } else {
-      this.store.dispatch(new BrowseUsersAction.CreateUser(user));
-    }*/
+      this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
+    }
   }
 
   ngOnDestroy(): void {

@@ -19,6 +19,7 @@ import {BrowseActivityPrioritySeqAction} from "../../states/browse-activity-prio
 })
 export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
+  viewOnly$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -69,6 +70,20 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
       .subscribe((id) => {
         this._Id = id;
       });
+    this.viewOnly$ = this.route.queryParams.pipe(
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {}
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -85,8 +100,9 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      priEn: [null, [Validators.required, GenericValidators.english]],
-      priAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      isActive: [null]
     });
   }
 
@@ -108,14 +124,14 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
     };
 
     activityPriority.versionId = 1;
-    activityPriority.isActive = true;
-    this.store.dispatch(new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(activityPriority));
+    // activityPriority.isActive = true;
+    // this.store.dispatch(new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(activityPriority));
 
-    /*if (this.editMode) {
-      this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
+    if (this.editMode) {
+      this.store.dispatch(new BrowseActivityPrioritySeqAction.UpdateActivityPrioritySeq(activityPriority));
     } else {
-      this.store.dispatch(new BrowseUsersAction.CreateUser(user));
-    }*/
+      this.store.dispatch(new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(activityPriority));
+    }
   }
 
   ngOnDestroy(): void {

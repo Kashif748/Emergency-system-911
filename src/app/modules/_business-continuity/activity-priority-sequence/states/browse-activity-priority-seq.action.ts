@@ -1,5 +1,6 @@
 import { PageRequestModel } from '@core/models/page-request.model';
 import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-priorities";
+import {BcLocationTypes} from "../../../../api/models/bc-location-types";
 
 
 export namespace BrowseActivityPrioritySeqAction {
@@ -15,6 +16,16 @@ export namespace BrowseActivityPrioritySeqAction {
 
   export class CreateActivityPrioritySeq {
     static readonly type = '[BrowseActivityPrioritySeq] Create ActivityPrioritySeq';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcRecoveryPriorities
+    ) {}
+  }
+
+  export class UpdateActivityPrioritySeq {
+    static readonly type = '[BrowseActivityPrioritySeq] Update ActivityPrioritySeq';
     /**
      *
      */

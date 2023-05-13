@@ -7,7 +7,7 @@ import {iif, patch} from "@ngxs/store/operators";
 import {BrowseRtoAction} from "./browse-rto.action";
 import {RtoAction} from "@core/states/bc/rto/rto.action";
 import {ApiHelper} from "@core/helpers/api.helper";
-import {catchError, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
 
 
@@ -98,6 +98,26 @@ export class BrowseRtoState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseRtoAction.UpdateRto)
+  updateRto(
+    { dispatch }: StateContext<BrowseRtoStateModel>,
+    { payload }: BrowseRtoAction.UpdateRto
+  ) {
+    return dispatch(new RtoAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseRtoAction.LoadRto());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+         dispatch(new BrowseRtoAction.ToggleDialog({}));
       })
     );
   }

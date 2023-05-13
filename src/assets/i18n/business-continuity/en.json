@@ -41,6 +41,7 @@
   "EMPLOYEES": "Total Employees Number",
   "ACTIVITIES": " Organization Activities Number",
   "RTO_LIST": {
+    "EDIT_RTO":"Edit RTO",
     "ADD_NEW_RTO":"Add New RTO",
     "CRITICALITY": "Criticality",
     "RTO_ENG": "RTO(English)",
@@ -58,16 +59,19 @@
     "FRQUENCY_EN": "Frquency (English)"
   },
   "LOC_TYPE": {
+    "EDIT_LOC_TYPE":"Edit Location Type",
     "ADD_NEW_LOC_TYPE":"Add New Location Type",
     "TYPE_AR": "Type (Arabic)",
     "TYPE_EN": "Type (English)"
   },
   "ACTIVITY_PRIORITY_SEQ": {
     "ADD_NEW_PRI_SEQ":"Add New Priority Sequency",
+    "EDIT_PRI_SEQ":"Edit Priority Sequency",
     "PRI_AR": "Priority (Arabic)",
     "PRI_EN": "Priority (English)"
   },
   "IMP_LEVEL_WORKING": {
+    "EDIT_IMP_LEVEL":"Edit Importance Level",
     "ADD_NEW_IMP_LEVEL":"Add New Importance Level",
     "COLOR": "Color",
     "IMP_LEVEL": "Important Level (English)",

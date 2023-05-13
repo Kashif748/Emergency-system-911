@@ -32,6 +32,8 @@ import {RtoDialogComponent} from "./browse-rto/rto-dialog/rto-dialog.component";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseRtoState} from "./states/browse-rto.state";
 import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
+import {DividerModule} from "primeng/divider";
+import {ToggleButtonModule} from "primeng/togglebutton";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -78,7 +80,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     DialogModule,
     SidebarModule,
     TranslateObjModule,
-    SharedBreadcrumbModule
+    SharedBreadcrumbModule,
+    DividerModule,
+    ToggleButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

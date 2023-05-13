@@ -3,9 +3,9 @@ import {TranslateService} from "@ngx-translate/core";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {PageRequestModel} from "@core/models/page-request.model";
 import {LazyLoadEvent} from "primeng/api";
-import {Bcrto} from "../../../../../api/models/bcrto";
-import {BrowseRtoAction} from "../../states/browse-rto.action";
 import {Store} from "@ngxs/store";
+import {BrowseLocationTypeAction} from "../../../location-type/states/browse-locationType.action";
+import {BcLocationTypes} from "../../../../../api/models/bc-location-types";
 
 @Component({
   selector: 'app-content-rto',
@@ -17,7 +17,7 @@ export class ContentRtoComponent implements OnInit {
   @Input()
   loading: boolean;
   @Input()
-  page: Bcrto[];
+  page: BcLocationTypes[];
   @Input()
   columns: string[];
   @Input()
@@ -57,8 +57,8 @@ export class ContentRtoComponent implements OnInit {
     });*/
   }
 
-  openView(id?: number) {
-    this.store.dispatch(new BrowseRtoAction.OpenView({ rtoId: id }));
+  openView(Id?: number) {
+    this.store.dispatch(new BrowseLocationTypeAction.OpenView({ id: Id }));
   }
 
   openDialog(Id?: number) {

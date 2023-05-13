@@ -32,6 +32,8 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseRtoState} from "../rto/states/browse-rto.state";
 import {BrowseImpLevelWorkingState} from "./browse-imp-level-working/states/browse-imp-level-working.state";
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {DividerModule} from "primeng/divider";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -70,7 +72,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     PaginatorModule,
     MenuModule,
     SkeletonModule,
-    ColorPickerModule,
     InputSwitchModule,
     NodataTableModule,
     ColorPickerModule,
@@ -78,7 +79,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ToolbarModule,
     DialogModule,
     SidebarModule,
-    SharedBreadcrumbModule
+    SharedBreadcrumbModule,
+    DividerModule,
+    ToggleButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
