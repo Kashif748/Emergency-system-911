@@ -835,6 +835,7 @@
       }
     },
     "INQUIRIY": {
+      "REPORT" : "Inquiriy Report",
       "ADVANCED_SEARCH": "Advanced Search",
       "ID": "ID",
       "SUBJECT": "Subject",
@@ -1056,9 +1057,10 @@
       "CONFIDENTIALITY": "The degree of confidentiality",
       "UPDATE": "The Update",
       "MAIL_REPORT": "Mail Reports",
-      "GENERAL_REPORT": "General Reports",
+      "GENERAL_REPORT": "Tasks Report",
       "INCIDENTS_REPORT" : "Incidents Report",
       "RESOURCES_REPORT": "Resources Reports",
+      "USERS_REPORT_TITLE": "User Statistics Report",
       "SHIFTS_REPORTS": "Shifts",
       "USER_NAME": "User Name",
       "ORG": "Organization Name",

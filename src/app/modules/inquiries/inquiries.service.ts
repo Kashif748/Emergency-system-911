@@ -7,6 +7,8 @@ import { UrlHelperService } from '@core/services/url-helper.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 import { tap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Injectable({
   providedIn: 'root',
@@ -16,25 +18,22 @@ export class InquiriesService {
   private chartsData: any[] = [];
   private _onChartsData: BehaviorSubject<any>;
 
-
   constructor(
     private http: HttpClient,
     private translationService: TranslationService,
+    private translateService: TranslateService,
     private urlHelper: UrlHelperService,
     private alertService: AlertsService
   ) {
     this.lang = this.translationService.getSelectedLanguage();
     this._onChartsData = new BehaviorSubject([]);
-
   }
-
-
 
   public get onChartsData(): Observable<any> {
     return this._onChartsData.asObservable();
   }
 
-  getInquiries(data? , pageNumber? , pageSize?): Observable<any> {
+  getInquiries(data?, pageNumber?, pageSize?): Observable<any> {
     return this.http.get(`${environment.apiUrl}/inquiry/search`, {
       params: {
         fromDate: data?.fromDate ?? '',
@@ -42,7 +41,7 @@ export class InquiriesService {
         subject: data?.subject ?? '',
         userId: data?.userId?.id ?? '',
         page: pageNumber ?? '0',
-        size : pageSize ?? '10'
+        size: pageSize ?? '10',
         // sort: `${sort?.active ?? ''},${sort?.direction ?? ''}`,
       },
     });
@@ -65,6 +64,15 @@ export class InquiriesService {
       })
       .pipe(
         tap((res) => {
+          const fileLabel = `${this.translateService.instant(
+            'INQUIRIY.REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm'
+          )}`;
+
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               exportAs === 'PDF'
@@ -72,7 +80,7 @@ export class InquiriesService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }

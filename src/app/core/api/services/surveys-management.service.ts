@@ -150,7 +150,7 @@ export class SurveysManagementService {
           )}`;
           const fileDate = `${DateTimeUtil.format(
             new Date(),
-            'YYYY-MM-DD H:mm a'
+            'YYYY-MM-DD H:mm'
           )}`;
 
           const fileName = `${fileLabel} ${fileDate}`;
@@ -265,7 +265,7 @@ export class SurveysManagementService {
           )}`;
           const fileDate = `${DateTimeUtil.format(
             new Date(),
-            'YYYY-MM-DD H:mm a'
+            'YYYY-MM-DD H:mm'
           )}`;
 
           const fileName = `${fileLabel} ${fileDate}`;
