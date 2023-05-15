@@ -1,9 +1,8 @@
 import {Bcrto} from "../../../../api/models/bcrto";
-import {OrgStructure} from "../../../../api/models/org-structure";
 
-export namespace OrgDetailAction {
+export namespace ImpactMatrixAction {
   export class LoadPage {
-    static readonly type = '[OrgDetail] Load Page';
+    static readonly type = '[ImpactMatrix] Load Page';
 
     /**
      *
@@ -20,27 +19,27 @@ export namespace OrgDetailAction {
   }
 
   export class Create {
-    static readonly type = '[OrgDetail] Create';
+    static readonly type = '[ImpactMatrix] Create';
     /**
      *
      */
     constructor(
-      public payload: OrgStructure
+      public payload: BcImpactTypesMatrix
     ) {}
   }
 
   export class Update {
-    static readonly type = '[OrgDetail] Update';
+    static readonly type = '[ImpactMatrix] Update';
     /**
      *
      */
     constructor(
-      public payload: OrgStructure
+      public payload: Bcrto
     ) {}
   }
 
-  export class GetOrgDetail {
-    static readonly type = '[OrgDetail] Get OrgDetail';
+  export class GetImpactMatrix {
+    static readonly type = '[ImpactMatrix] Get ImpactMatrix';
     /**
      *
      */

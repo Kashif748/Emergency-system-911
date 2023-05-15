@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {BrowseRtoComponent} from "../rto/browse-rto/browse-rto.component";
+import {BrowseOrgDetailComponent} from "./browse-org-detail/browse-org-detail.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: BrowseRtoComponent,
+    component: BrowseOrgDetailComponent,
   },
 ];
 

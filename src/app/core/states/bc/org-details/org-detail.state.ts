@@ -3,27 +3,24 @@ import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
 import {EMPTY, of} from "rxjs";
-import {Bcrto} from "../../../../api/models/bcrto";
 import {BcrtoControllerService} from "../../../../api/services/bcrto-controller.service";
-import {PageBcrto} from "../../../../api/models/page-bcrto";
-import {RtoAction} from "@core/states";
-import {GroupAction} from "@core/states/group/group.action";
-import {GroupStateModel} from "@core/states/group/group.state";
+import {OrgStructure} from "../../../../api/models/org-structure";
+import {OrgDetailAction} from "@core/states/bc/org-details/org-detail.action";
 
 
-export interface RtoStateModel {
-  page: PageBcrto;
-  rto: Bcrto;
+export interface OrgDetailStateModel {
+  // page: PageBcrto;
+  orgDetail: OrgStructure;
   loading: boolean;
   blocking: boolean;
 }
 
-const RTO_STATE_TOKEN = new StateToken<RtoStateModel>('rto');
+const RTO_STATE_TOKEN = new StateToken<OrgDetailStateModel>('rto');
 
-@State<RtoStateModel>({ name: RTO_STATE_TOKEN })
+@State<OrgDetailStateModel>({ name: RTO_STATE_TOKEN })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-export class RtoState {
+export class OrgDetailState {
   /**
    *
    */
@@ -33,39 +30,39 @@ export class RtoState {
   }
 
   /* ************************ SELECTORS ******************** */
-  @Selector([RtoState])
-  static page(state: RtoStateModel) {
+/*  @Selector([OrgDetailState])
+  static page(state: OrgDetailStateModel) {
     return state?.page?.content;
+  }*/
+
+  @Selector([OrgDetailState])
+  static orgDetail(state: OrgDetailStateModel) {
+    return state?.orgDetail;
   }
 
-  @Selector([RtoState])
-  static rto(state: RtoStateModel) {
-    return state?.rto;
-  }
-
-  @Selector([RtoState])
-  static totalRecords(state: RtoStateModel) {
+/*  @Selector([OrgDetailState])
+  static totalRecords(state: OrgDetailStateModel) {
     return state?.page?.totalElements;
-  }
+  }*/
 
-  @Selector([RtoState])
-  static loading(state: RtoStateModel) {
+  @Selector([OrgDetailState])
+  static loading(state: OrgDetailStateModel) {
     return state?.loading;
   }
 
-  @Selector([RtoState])
-  static blocking(state: RtoStateModel) {
+  @Selector([OrgDetailState])
+  static blocking(state: OrgDetailStateModel) {
     return state?.blocking;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(RtoAction.LoadPage, { cancelUncompleted: true })
+  @Action(OrgDetailAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    { setState }: StateContext<RtoStateModel>,
-    { payload }: RtoAction.LoadPage
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.LoadPage
   ) {
     setState(
-      patch<RtoStateModel>({
+      patch<OrgDetailStateModel>({
         loading: true,
       })
     );
@@ -83,23 +80,23 @@ export class RtoState {
       .pipe(
         tap((res) => {
           setState(
-            patch<RtoStateModel>({
-              page: res.result,
+            patch<OrgDetailStateModel>({
+              // page: res.result,
               loading: false,
             })
           );
         }),
         catchError(() => {
           setState(
-            patch<RtoStateModel>({
-              page: { content: [], totalElements: 0 },
+            patch<OrgDetailStateModel>({
+              // page: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;
         }),
         finalize(() => {
           setState(
-            patch<RtoStateModel>({
+            patch<OrgDetailStateModel>({
               loading: false,
             })
           );
@@ -107,13 +104,13 @@ export class RtoState {
       );
   }
 
-  @Action(RtoAction.Create)
+  @Action(OrgDetailAction.Create)
   create(
-    { setState }: StateContext<RtoStateModel>,
-    { payload }: RtoAction.Create
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.Create
   ) {
     setState(
-      patch<RtoStateModel>({
+      patch<OrgDetailStateModel>({
         blocking: true,
       })
     );
@@ -124,7 +121,7 @@ export class RtoState {
       .pipe(
         finalize(() => {
           setState(
-            patch<RtoStateModel>({
+            patch<OrgDetailStateModel>({
               blocking: false,
             })
           );
@@ -132,13 +129,13 @@ export class RtoState {
       );
   }
 
-  @Action(RtoAction.Update)
+  @Action(OrgDetailAction.Update)
   update(
-    { setState }: StateContext<RtoStateModel>,
-    { payload }: RtoAction.Update
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.Update
   ) {
     setState(
-      patch<RtoStateModel>({
+      patch<OrgDetailStateModel>({
         blocking: true,
       })
     );
@@ -149,7 +146,7 @@ export class RtoState {
       .pipe(
         finalize(() => {
           setState(
-            patch<RtoStateModel>({
+            patch<OrgDetailStateModel>({
               blocking: false,
             })
           );
@@ -157,35 +154,35 @@ export class RtoState {
       );
   }
 
-  @Action(RtoAction.GetRto, { cancelUncompleted: true })
+  @Action(OrgDetailAction.GetOrgDetail, { cancelUncompleted: true })
   getRto(
-    { setState }: StateContext<RtoStateModel>,
-    { payload }: RtoAction.GetRto
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.GetOrgDetail
   ) {
     if (payload.id === undefined || payload.id === null) {
       setState(
-        patch<RtoStateModel>({
-          rto: undefined,
+        patch<OrgDetailStateModel>({
+          // rto: undefined,
         })
       );
       return;
     }
     setState(
-      patch<RtoStateModel>({
+      patch<OrgDetailStateModel>({
         blocking: true,
       })
     );
     return this.rto.getOne1({ id: payload.id }).pipe(
-      tap((rto) => {
+      tap((orgDetail) => {
         setState(
-          patch<RtoStateModel>({
-            rto: rto.result,
+          patch<OrgDetailStateModel>({
+            // orgDetail: orgDetail.result,
           })
         );
       }),
       finalize(() => {
         setState(
-          patch<RtoStateModel>({
+          patch<OrgDetailStateModel>({
             blocking: false,
           })
         );
