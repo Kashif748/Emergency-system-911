@@ -1,0 +1,46 @@
+<header class="border-bottom py-4">
+  <h4 class="text-info p-text-bold mb-0">{{ "ORG_ARTCH" | translate }}</h4>
+</header>
+<div class="d-flex">
+<div class="p-col-4">
+  <button class="mb-5 p-2 mx-2" pButton label="{{'ORG_HIE.ADD_SECTOR' | translate}}" icon="pi pi-plus" routerLink="add-sector"></button>
+  <p-tree class="p-8" [value]="data">
+    <ng-template let-node pTemplate="default">
+
+      <ng-container *ngIf="node.data === 'Add Sector'; else notButton">
+          <a class="mb-5 p-2 mx-2" routerLink="add-sector">
+            {{'ORG_HIE.ADD_SECTOR' | translate}}
+          </a>
+      </ng-container>
+
+      <ng-container *ngIf="node.data === 'Add Department'; else notButton">
+        <a class="mb-5 p-2 mx-2"  icon="pi pi-plus" routerLink="add-department">
+          {{'ORG_HIE.ADD_DEPARTMENT' | translate}}
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="node.data === 'Add Section'; else notButton">
+        <a class="mb-5 p-2 mx-2" icon="pi pi-plus" routerLink="add-section">
+          {{'ORG_HIE.ADD_SECTION' | translate}}
+        </a>
+      </ng-container>
+      {{ node | translateObj : 'label' }}
+      <ng-template #notButton let-node>
+        {{ node | translateObj : 'label' }}
+      </ng-template>
+    </ng-template>
+
+
+
+    <ng-template pTemplate="empty" let-node>
+      <div class="empty-node">No data available</div>
+    </ng-template>
+  </p-tree>
+</div>
+  <p-divider layout="vertical"></p-divider>
+  <div class="p-col-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+
