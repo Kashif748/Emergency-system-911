@@ -10,6 +10,10 @@ import { OrgDetailsComponent } from './org-details/org-details.component';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
 import { RtoListContentComponent } from './rto-list-content/rto-list-content.component';
 import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
+import {OrgHierarchyComponent} from "./org-hierarchy/org-hierarchy.component";
+import {AddSectorComponent} from "./org-hierarchy/add-sector/add-sector.component";
+import {AddSectionComponent} from "./org-hierarchy/add-section/add-section.component";
+import {AddDepartmentComponent} from "./org-hierarchy/add-department/add-department.component";
 
 const routes: Routes = [
   {
@@ -23,7 +27,19 @@ const routes: Routes = [
       },
       {
         path: 'org-strucure',
-        component: OrgStrucureComponent,
+        component: OrgHierarchyComponent,
+        children: [{
+            path: 'add-sector',
+            component: AddSectorComponent,
+        },
+          {
+            path: 'add-department',
+            component: AddDepartmentComponent,
+          },
+          {
+            path: 'add-section',
+            component: AddSectionComponent,
+          }]
       },
       {
         path: 'impact-levels',

@@ -828,7 +828,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
         )}`;
         const fileDate = `${DateTimeUtil.format(
           new Date(),
-          'YYYY-MM-DD H:mm a'
+          'YYYY-MM-DD H:mm'
         )}`;
 
         const fileName = `${fileLabel} ${fileDate}.pdf`;
