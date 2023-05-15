@@ -10,6 +10,10 @@ import {ILangFacade} from "../../../../core/facades/lang.facade";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {filter, map} from "rxjs/operators";
 import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
+import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
+import {BrowseImpactMatrixState, BrowseImpactMatrixStateModel} from "../states/browse-impact-matrix.state";
+import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
+import {BrowseImpactMatrixAction} from "../states/browse-impact-matrix.action";
 
 @Component({
   selector: 'app-browse-impact-matrix',
@@ -17,16 +21,16 @@ import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
   styleUrls: ['./browse-impact-matrix.component.scss']
 })
 export class BrowseImpactMatrixComponent implements OnInit {
-  public page$: Observable<Bcrto[]>;
+  public page$: Observable<BcImpactTypesMatrix[]>;
 
-  @Select(RtoState.totalRecords)
+  @Select(ImpactMatrixState.totalRecords)
   public totalRecords$: Observable<number>;
 
-  @Select(RtoState.loading)
+  @Select(ImpactMatrixState.loading)
   public loading$: Observable<boolean>;
 
-  @Select(BrowseRtoState.state)
-  public state$: Observable<BrowseRtoStateModel>;
+  @Select(BrowseImpactMatrixState.state)
+  public state$: Observable<BrowseImpactMatrixStateModel>;
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
@@ -46,7 +50,7 @@ export class BrowseImpactMatrixComponent implements OnInit {
       },
     ] as MenuItem[];
 
-    this.page$ = this.store.select(RtoState.page).pipe(
+    this.page$ = this.store.select(ImpactMatrixState.page).pipe(
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
@@ -74,8 +78,8 @@ export class BrowseImpactMatrixComponent implements OnInit {
     );
   }
 
-  openDialog(id?: number) {
-    this.store.dispatch(new BrowseRtoAction.ToggleDialog({ rtoId: id }));
+  openDialog(Id?: number) {
+    this.store.dispatch(new BrowseImpactMatrixAction.ToggleDialog({ id: Id }));
   }
 
   activate(id: number) {
@@ -93,7 +97,7 @@ export class BrowseImpactMatrixComponent implements OnInit {
   }
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
-      new BrowseRtoAction.LoadRto({
+      new BrowseImpactMatrixAction.LoadImpactMatrix({
         pageRequest: {
           first: event.first,
           rows: event.rows,

@@ -5,6 +5,7 @@ import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/ac
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
 import {LocationTypeState} from "@core/states/bc/location-type/locationType.state";
 import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
+import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 
 export { UserAction } from './user/user.action';
 export { RoleAction } from './role/role.action';
@@ -20,6 +21,7 @@ export { ActivityPrioritySeqAction } from './bc/activity-priority-seq/activity-p
 export { ActivityFrquencyAction } from './bc/activity-frquency/activity-frquency.action';
 export { LocationTypeAction } from './bc/location-type/locationType.action';
 export { ImpactLevelAction } from './bc/impact-level/impact-level.action';
+export { ImpactMatrixAction } from './bc/impact-matrix/impact-matrix.action';
 
 export { UserState } from './user/user.state';
 export { RoleState } from './role/role.state';
@@ -35,3 +37,4 @@ export { ActivityPrioritySeqState } from './bc/activity-priority-seq/activity-pr
 export { ActivityFrquencyState } from './bc/activity-frquency/activity-frquency.state';
 export { LocationTypeState } from './bc/location-type/locationType.state';
 export { ImpactLevelState } from './bc/impact-level/impact-level.state';
+export { ImpactMatrixState } from './bc/impact-matrix/impact-matrix.state';

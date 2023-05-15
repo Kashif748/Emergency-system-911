@@ -5,6 +5,7 @@ import { ImpactAnalysisComponent } from './impact-analysis/impact-analysis.compo
 import { OrgDetailsComponent } from './org-details/org-details.component';
 import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
 import {OrgDetailModule} from "./org-detail/org-detail.module";
+import {ImpactMatrixModule} from "./impact-matrix/impact-matrix.module";
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'impact-analysis',
-        component: ImpactAnalysisComponent,
+        loadChildren: () => import('./impact-matrix/impact-matrix.module').then((m) => m.ImpactMatrixModule),
       },
       {
         path: 'rto-list',

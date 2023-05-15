@@ -4,24 +4,24 @@ import {Injectable} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {iif, patch} from "@ngxs/store/operators";
-import {BrowseRtoAction} from "./browse-rto.action";
-import {RtoAction} from "@core/states/bc/rto/rto.action";
 import {ApiHelper} from "@core/helpers/api.helper";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
+import {BrowseImpactMatrixAction} from "./browse-impact-matrix.action";
+import {ImpactMatrixAction} from "@core/states";
 
 
-export interface BrowseRtoStateModel {
+export interface BrowseImpactMatrixStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
   view: 'TABLE' | 'CARDS';
 }
 
-export const BROWSE_RTO_UI_STATE_TOKEN =
-  new StateToken<BrowseRtoStateModel>('browse_rto');
+export const BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN =
+  new StateToken<BrowseImpactMatrixStateModel>('browse_impactMatrix');
 
-@State<BrowseRtoStateModel>({
-  name: BROWSE_RTO_UI_STATE_TOKEN,
+@State<BrowseImpactMatrixStateModel>({
+  name: BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN,
   defaults: {
     pageRequest: {
       filters: {},
@@ -38,7 +38,7 @@ export const BROWSE_RTO_UI_STATE_TOKEN =
 })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-export class BrowseRtoState {
+export class BrowseImpactMatrixState {
   /**
    *
    */
@@ -51,19 +51,19 @@ export class BrowseRtoState {
   }
 
   /* ************************ SELECTORS ******************** */
-  @Selector([BrowseRtoState])
-  static state(state: BrowseRtoStateModel): BrowseRtoStateModel {
+  @Selector([BrowseImpactMatrixState])
+  static state(state: BrowseImpactMatrixStateModel): BrowseImpactMatrixStateModel {
     return state;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(BrowseRtoAction.LoadRto)
-  LoadRto(
-    { setState, dispatch, getState }: StateContext<BrowseRtoStateModel>,
-    { payload }: BrowseRtoAction.LoadRto
+  @Action(BrowseImpactMatrixAction.LoadImpactMatrix)
+  LoadImpactMatrix(
+    { setState, dispatch, getState }: StateContext<BrowseImpactMatrixStateModel>,
+    { payload }: BrowseImpactMatrixAction.LoadImpactMatrix
   ) {
     setState(
-      patch<BrowseRtoStateModel>({
+      patch<BrowseImpactMatrixStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
@@ -72,7 +72,7 @@ export class BrowseRtoState {
     );
     const pageRequest = getState().pageRequest;
     return dispatch(
-      new RtoAction.LoadPage({
+      new ImpactMatrixAction.LoadPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -81,17 +81,17 @@ export class BrowseRtoState {
     );
   }
 
-  @Action(BrowseRtoAction.CreateRto)
-  createRto(
-    { dispatch }: StateContext<BrowseRtoStateModel>,
-    { payload }: BrowseRtoAction.CreateRto
+  @Action(BrowseImpactMatrixAction.CreateImpactMatrix)
+  CreateImpactMatrix(
+    { dispatch }: StateContext<BrowseImpactMatrixStateModel>,
+    { payload }: BrowseImpactMatrixAction.CreateImpactMatrix
   ) {
-    return dispatch(new RtoAction.Create(payload)).pipe(
+    return dispatch(new ImpactMatrixAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseRtoAction.LoadRto(),
-          new BrowseRtoAction.ToggleDialog({}),
+          new BrowseImpactMatrixAction.LoadImpactMatrix(),
+          new BrowseImpactMatrixAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {
@@ -101,30 +101,30 @@ export class BrowseRtoState {
     );
   }
 
-  @Action(BrowseRtoAction.UpdateRto)
-  updateRto(
-    { dispatch }: StateContext<BrowseRtoStateModel>,
-    { payload }: BrowseRtoAction.UpdateRto
+  @Action(BrowseImpactMatrixAction.UpdateImpactMatrix)
+  UpdateImpactMatrix(
+    { dispatch }: StateContext<BrowseImpactMatrixStateModel>,
+    { payload }: BrowseImpactMatrixAction.UpdateImpactMatrix
   ) {
-    return dispatch(new RtoAction.Update(payload)).pipe(
+    return dispatch(new ImpactMatrixAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseRtoAction.LoadRto());
+        dispatch(new BrowseImpactMatrixAction.LoadImpactMatrix());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
       }),
       finalize(() => {
-         dispatch(new BrowseRtoAction.ToggleDialog({}));
+        dispatch(new BrowseImpactMatrixAction.ToggleDialog({}));
       })
     );
   }
 
-  @Action(BrowseRtoAction.ToggleDialog, { cancelUncompleted: true })
+  @Action(BrowseImpactMatrixAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
-    {}: StateContext<BrowseRtoStateModel>,
-    { payload }: BrowseRtoAction.ToggleDialog
+    {}: StateContext<BrowseImpactMatrixStateModel>,
+    { payload }: BrowseImpactMatrixAction.ToggleDialog
   ) {
     this.router.navigate([], {
       queryParams: {
@@ -132,17 +132,17 @@ export class BrowseRtoState {
           this.route.snapshot.queryParams['_dialog'] == 'opened'
             ? undefined
             : 'opened',
-        _id: payload.rtoId,
+        _id: payload.id,
         _mode: undefined,
       },
       queryParamsHandling: 'merge',
     });
   }
 
-  @Action(BrowseRtoAction.OpenView, { cancelUncompleted: true })
+  @Action(BrowseImpactMatrixAction.OpenView, { cancelUncompleted: true })
   openView(
-    {}: StateContext<BrowseRtoStateModel>,
-    { payload }: BrowseRtoAction.OpenView
+    {}: StateContext<BrowseImpactMatrixStateModel>,
+    { payload }: BrowseImpactMatrixAction.OpenView
   ) {
     this.router.navigate([], {
       queryParams: {
@@ -150,7 +150,7 @@ export class BrowseRtoState {
           this.route.snapshot.queryParams['_dialog'] == 'opened'
             ? undefined
             : 'opened',
-        _id: payload.rtoId,
+        _id: payload.id,
         _mode: 'viewonly',
       },
       queryParamsHandling: 'merge',

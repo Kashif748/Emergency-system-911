@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { ImportanceLevelWorkingRoutingModule } from './importance-level-working-routing.module';
-import { BrowseImpLevelWorkingComponent } from './browse-imp-level-working/browse-imp-level-working.component';
-import { ImpLevelWorkingDialogComponent } from './browse-imp-level-working/imp-level-working-dialog/imp-level-working-dialog.component';
-import { ContentImpLevelWorkingComponent } from './browse-imp-level-working/content-imp-level-working/content-imp-level-working.component';
+import {ImportanceLevelWorkingRoutingModule} from './importance-level-working-routing.module';
+import {BrowseImpLevelWorkingComponent} from './browse-imp-level-working/browse-imp-level-working.component';
+import {ImpLevelWorkingDialogComponent} from './browse-imp-level-working/imp-level-working-dialog/imp-level-working-dialog.component';
+import {ContentImpLevelWorkingComponent} from './browse-imp-level-working/content-imp-level-working/content-imp-level-working.component';
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {ILangFacade, LangFacade} from "../../../core/facades/lang.facade";
 import {ColorPickerModule} from "primeng/colorpicker";
@@ -30,10 +30,10 @@ import {MenuModule} from "primeng/menu";
 import {ButtonModule} from "primeng/button";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NgxsModule} from "@ngxs/store";
-import {BrowseRtoState} from "../rto/states/browse-rto.state";
 import {BrowseImpLevelWorkingState} from "./browse-imp-level-working/states/browse-imp-level-working.state";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {DividerModule} from "primeng/divider";
+import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -81,7 +81,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SidebarModule,
     SharedBreadcrumbModule,
     DividerModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    TranslateObjModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

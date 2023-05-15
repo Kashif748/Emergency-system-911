@@ -126,11 +126,11 @@
                 </td>
 
                 <td (click)="item.isActive && openView(item.id)">
-                  {{ item.imp_level }}
+                  {{ item | translateObj : 'name'}}
                 </td>
 
                 <td (click)="item.isActive && openView(item.id)">
-                  {{ item.desc }}
+                  {{ item | translateObj : 'description'}}
                 </td>
 
                 <td>

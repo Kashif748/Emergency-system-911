@@ -59,7 +59,7 @@ import {
   OrgState,
   RoleState,
   TaskState,
-  UserState, RtoState,
+  UserState, RtoState, ImpactMatrixState,
 } from '@core/states';
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
@@ -144,7 +144,8 @@ export function getHighlightLanguages() {
         ActivityPrioritySeqState,
         ActivityFrquencyState,
         LocationTypeState,
-        ImpactLevelState
+        ImpactLevelState,
+        ImpactMatrixState
       ],
       {
         developmentMode: !environment.production,

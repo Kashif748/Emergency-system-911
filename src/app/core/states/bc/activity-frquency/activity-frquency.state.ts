@@ -69,7 +69,7 @@ export class ActivityFrquencyState {
       })
     );
     return this.activityFrquency
-      .getAll16({
+      .getAll17({
         isActive: true,
         versionId: 1,
         pageable: {
@@ -117,7 +117,7 @@ export class ActivityFrquencyState {
       })
     );
     return this.activityFrquency
-      .insertOne7({
+      .insertOne8({
         body: payload,
       })
       .pipe(
@@ -149,7 +149,7 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
-    return this.activityFrquency.getOne7({ id: payload.id }).pipe(
+    return this.activityFrquency.getOne8({ id: payload.id }).pipe(
       tap((activityFrq) => {
         setState(
           patch<ActivityFrquencyStateModel>({
