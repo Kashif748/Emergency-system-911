@@ -13,7 +13,7 @@ import { OrgStructure } from '../models/org-structure';
 import { RestApiResponseOrgStructure } from '../models/rest-api-response-org-structure';
 
 @Injectable()
-export class ResponsibleOrganizationControllerService extends BaseService {
+export class BcResponsibleOrganizationControllerService extends BaseService {
   constructor(
     config: ApiConfiguration,
     http: HttpClient
@@ -36,7 +36,7 @@ export class ResponsibleOrganizationControllerService extends BaseService {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ResponsibleOrganizationControllerService.DeleteById2Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcResponsibleOrganizationControllerService.DeleteById2Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -68,21 +68,21 @@ export class ResponsibleOrganizationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation insertOne8
+   * Path part for operation insertOne9
    */
-  static readonly InsertOne8Path = '/v1/bc/org/save';
+  static readonly InsertOne9Path = '/v1/bc/org/save';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne8()` instead.
+   * To access only the response body, use `insertOne9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  insertOne8$Response(params: {
+  insertOne9$Response(params: {
     orgStructure: OrgStructure;
   }): Observable<StrictHttpResponse<RestApiResponseOrgStructure>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ResponsibleOrganizationControllerService.InsertOne8Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcResponsibleOrganizationControllerService.InsertOne9Path, 'get');
     if (params) {
       rb.query('orgStructure', params.orgStructure, {});
     }
@@ -100,15 +100,15 @@ export class ResponsibleOrganizationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne8$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  insertOne8(params: {
+  insertOne9(params: {
     orgStructure: OrgStructure;
   }): Observable<RestApiResponseOrgStructure> {
 
-    return this.insertOne8$Response(params).pipe(
+    return this.insertOne9$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
     );
   }

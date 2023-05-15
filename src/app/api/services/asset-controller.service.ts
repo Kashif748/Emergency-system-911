@@ -126,21 +126,21 @@ export class AssetControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update89
+   * Path part for operation update90
    */
-  static readonly Update89Path = '/v1/assets';
+  static readonly Update90Path = '/v1/assets';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update89()` instead.
+   * To access only the response body, use `update90()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update89$Response(params: {
+  update90$Response(params: {
     body: OrgAsset
   }): Observable<StrictHttpResponse<RestApiResponseOrgAssetsProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Update89Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Update90Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -158,15 +158,15 @@ export class AssetControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update89$Response()` instead.
+   * To access the full response (for headers, for example), `update90$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update89(params: {
+  update90(params: {
     body: OrgAsset
   }): Observable<RestApiResponseOrgAssetsProjection> {
 
-    return this.update89$Response(params).pipe(
+    return this.update90$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgAssetsProjection>) => r.body as RestApiResponseOrgAssetsProjection)
     );
   }

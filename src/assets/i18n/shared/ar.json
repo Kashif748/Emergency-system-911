@@ -792,6 +792,8 @@
         "REASON_5": "شئ آخر"
       },
       "INCIDENT": "بلاغ",
+      "INCIDENT_REPORT": " تقرير بلاغ {{serial}}",
+
       "EDIT_INQUIRY": "تعديل بيانات المكالمة",
       "INQUIRY_SUBJECT": "الوصف",
       "INQUIRY_ANSWER": "الاجابة",
@@ -1720,7 +1722,7 @@
       "PleaseWait": "جار  المعالجة  يرجى اﻹنتظار",
       "InvalidUUID": "لقد  تم  تعبئة  الإستطلاع  مسبقاً",
       "SuccessMSG": "لقد  تم  الحفظ ...شكرا  لوقتك",
-      "SurvyReport": "تقارير  السعادة",
+      "SURVEY_REPORT": "تقرير رضا العملاء",
       "Table": {
         "happiness": "مدى  السعادة",
         "other": "أخرى",

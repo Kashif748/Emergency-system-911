@@ -19,6 +19,7 @@ export interface Situation {
   orgStructure?: OrgStructure;
   startDate: string;
   status?: string;
+  statusId?: number;
   theme: number;
   themeType?: Theme;
   type: number;
