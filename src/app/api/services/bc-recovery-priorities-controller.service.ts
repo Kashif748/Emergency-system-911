@@ -24,21 +24,21 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById3
+   * Path part for operation deleteById4
    */
-  static readonly DeleteById3Path = '/v1/bc/loopbackPriority/delete/{id}';
+  static readonly DeleteById4Path = '/v1/bc/loopbackPriority/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById3()` instead.
+   * To access only the response body, use `deleteById4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById3$Response(params: {
+  deleteById4$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.DeleteById3Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.DeleteById4Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,37 +56,37 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById3$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById3(params: {
+  deleteById4(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById3$Response(params).pipe(
+    return this.deleteById4$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll11
+   * Path part for operation getAll13
    */
-  static readonly GetAll11Path = '/v1/bc/loopbackPriority';
+  static readonly GetAll13Path = '/v1/bc/loopbackPriority';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll11()` instead.
+   * To access only the response body, use `getAll13()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll11$Response(params: {
+  getAll13$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcRecoveryPriorities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.GetAll11Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.GetAll13Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll11$Response()` instead.
+   * To access the full response (for headers, for example), `getAll13$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll11(params: {
+  getAll13(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcRecoveryPriorities> {
 
-    return this.getAll11$Response(params).pipe(
+    return this.getAll13$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcRecoveryPriorities>) => r.body as RestApiResponsePageBcRecoveryPriorities)
     );
   }
 
   /**
-   * Path part for operation update81
+   * Path part for operation update83
    */
-  static readonly Update81Path = '/v1/bc/loopbackPriority';
+  static readonly Update83Path = '/v1/bc/loopbackPriority';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update81()` instead.
+   * To access only the response body, use `update83()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update81$Response(params: {
+  update83$Response(params: {
     body: BcRecoveryPriorities
   }): Observable<StrictHttpResponse<RestApiResponseBcRecoveryPriorities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.Update81Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.Update83Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update81$Response()` instead.
+   * To access the full response (for headers, for example), `update83$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update81(params: {
+  update83(params: {
     body: BcRecoveryPriorities
   }): Observable<RestApiResponseBcRecoveryPriorities> {
 
-    return this.update81$Response(params).pipe(
+    return this.update83$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcRecoveryPriorities>) => r.body as RestApiResponseBcRecoveryPriorities)
     );
   }
 
   /**
-   * Path part for operation insertOne2
+   * Path part for operation insertOne4
    */
-  static readonly InsertOne2Path = '/v1/bc/loopbackPriority';
+  static readonly InsertOne4Path = '/v1/bc/loopbackPriority';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne2()` instead.
+   * To access only the response body, use `insertOne4()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne2$Response(params: {
+  insertOne4$Response(params: {
     body: BcRecoveryPriorities
   }): Observable<StrictHttpResponse<RestApiResponseBcRecoveryPriorities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.InsertOne2Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.InsertOne4Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,35 +200,35 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne2$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne4$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne2(params: {
+  insertOne4(params: {
     body: BcRecoveryPriorities
   }): Observable<RestApiResponseBcRecoveryPriorities> {
 
-    return this.insertOne2$Response(params).pipe(
+    return this.insertOne4$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcRecoveryPriorities>) => r.body as RestApiResponseBcRecoveryPriorities)
     );
   }
 
   /**
-   * Path part for operation getOne2
+   * Path part for operation getOne4
    */
-  static readonly GetOne2Path = '/v1/bc/loopbackPriority/{id}';
+  static readonly GetOne4Path = '/v1/bc/loopbackPriority/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne2()` instead.
+   * To access only the response body, use `getOne4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne2$Response(params: {
+  getOne4$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcRecoveryPriorities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.GetOne2Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcRecoveryPrioritiesControllerService.GetOne4Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcRecoveryPrioritiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne2$Response()` instead.
+   * To access the full response (for headers, for example), `getOne4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne2(params: {
+  getOne4(params: {
     id: number;
   }): Observable<RestApiResponseBcRecoveryPriorities> {
 
-    return this.getOne2$Response(params).pipe(
+    return this.getOne4$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcRecoveryPriorities>) => r.body as RestApiResponseBcRecoveryPriorities)
     );
   }

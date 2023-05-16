@@ -1,10 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface BcActivityFrequencies {
+export interface BcOrgHirType {
   id?: number;
   isActive?: boolean;
   nameAr?: string;
   nameEn?: string;
-  versionId?: number;
 }
 
