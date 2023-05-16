@@ -110,7 +110,7 @@ export class ImpactLevelState {
   @Action(ImpactLevelAction.Create)
   create(
     { setState }: StateContext<ImpactLevelStateModel>,
-    { payload }: RtoAction.Create
+    { payload }: ImpactLevelAction.Create
   ) {
     setState(
       patch<ImpactLevelStateModel>({

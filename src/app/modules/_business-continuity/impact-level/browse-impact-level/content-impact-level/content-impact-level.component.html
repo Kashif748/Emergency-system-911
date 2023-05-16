@@ -9,6 +9,7 @@
       <p-table [value]="[].constructor(10)">
         <ng-template pTemplate="header">
           <tr>
+            <th style="width: 0"></th>
             <th>
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_LEVELS.LEVEL_AR" | translate }}
@@ -43,12 +44,6 @@
             <td>
               <p-skeleton></p-skeleton>
             </td>
-            <td>
-              <p-skeleton></p-skeleton>
-            </td>
-            <td>
-              <p-skeleton></p-skeleton>
-            </td>
 
             <td>
               <button
@@ -64,9 +59,10 @@
       </p-table>
     </ng-container>
     <ng-template #tableTemplate>
+      <form [formGroup]="form">
       <p-table
         [columns]="columns"
-        totalRecords="20"
+        totalRecords="00"
         [value]="page"
         dataKey="id"
         [autoLayout]="true"
@@ -106,7 +102,8 @@
             <td>
               <input
                 type="text"
-                [value]="item.levelAr"
+                formControlName="nameAr"
+                [value]="item.nameAr"
                 class="p-inputtext-sm"
                 pInputText
               />
@@ -115,21 +112,24 @@
             <td>
               <input
                 type="text"
-                [value]="item.levelEn"
+                formControlName="nameEn"
+                [value]="item.nameEn"
                 class="p-inputtext-sm"
                 pInputText
               />
             </td>
 
             <td>
-              <p-colorPicker
-                [(ngModel)]="item.color"
-                format="rgb"
-              ></p-colorPicker>
+              <p-colorPicker [(ngModel)]="item.colorCode"
+                             [ngModelOptions]="{standalone: true}"
+                             [inputId]="'colorInput'"
+                             (onChange)="onValueChange($event.value)"></p-colorPicker>
+              <input hidden id="colorInput" type="hidden"
+                     formControlName="colorCode" pInputText />
             </td>
 
             <td>
-              <p-inputSwitch></p-inputSwitch>
+              <p-inputSwitch formControlName="isActive"></p-inputSwitch>
             </td>
           </tr>
         </ng-template>
@@ -143,16 +143,14 @@
           </tr>
         </ng-template>
       </p-table>
-      <p-paginator #pg [first]="pageRequest?.first" [rows]="pageRequest?.rows" [totalRecords]="totalRecords"
-                   [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
-                   currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)">
-      </p-paginator>
+      </form>
     </ng-template>
     <div class="p-d-flex p-3 p-jc-center mt-10">
       <p-button
         label="{{ 'SHARED.SAVE' | translate }}"
         icon="pi pi-save"
-        styleClass="p-button  "
+        styleClass="p-button"
+        (click)="submit()"
       ></p-button>
     </div>
   </div>

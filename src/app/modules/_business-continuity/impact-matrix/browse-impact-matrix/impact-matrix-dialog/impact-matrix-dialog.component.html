@@ -18,21 +18,19 @@
   [resizable]="false"
 >
   <ng-template pTemplate="header">
-    <h4>
-      <span>{{ "IMPACT_ANALYSIS.ADD_NEW" | translate }}</span>
-      <span
-        *ngIf="true"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="false"
-        class="label label-lg label-light-success label-inline"
-      >
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
-    </h4>
+    <h3>
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+        {{'IMPACT_ANALYSIS.EDIT_NEW' | translate}}
+
+      </ng-container>
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+        {{'IMPACT_ANALYSIS.ADD_NEW' | translate}}
+      </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'IMPACT_ANALYSIS.VIEW_NEW' | translate}}
+      </ng-container>
+    </h3>
   </ng-template>
 
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
@@ -326,15 +324,29 @@
       </div>
 
     </div>
+
+    <div class="p-col-12">
+      <p-divider align="center">
+        <div class="p-d-inline-flex p-ai-center">
+          <div class="p-field p-col-12 p-md-12">
+            <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                            offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                            iconPos="right"></p-toggleButton>
+          </div>
+        </div>
+      </p-divider>
+    </div>
   </form>
 
   <ng-template pTemplate="footer">
     <div class="p-col text-center">
-      <div class="text-center">
+      <div class="text-center" *ngIf="!(viewOnly$ | async)">
         <button
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
+          [disabled]="form.invalid"
+          (click)="submit()"
         ></button>
       </div>
     </div>

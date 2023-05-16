@@ -1,18 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import {BrowseRtoState, BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
-import {RtoState} from "@core/states/bc/rto/rto.state";
-import {Bcrto} from "../../../../api/models/bcrto";
-import {Observable} from "rxjs";
+import {Component, OnInit} from '@angular/core';
+import {Observable, of} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {TranslateService} from "@ngx-translate/core";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {ILangFacade} from "@core/facades/lang.facade";
-import {filter, map} from "rxjs/operators";
+import {filter, isEmpty, map} from "rxjs/operators";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {BrowseImpactLevelAction,} from "../states/browse-impact-level.action";
 import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
 import {BcImpactLevel} from "../../../../api/models/bc-impact-level";
 import {BrowseImpactLevelState, BrowseImpactLevelStateModel} from "../states/browse-impact-level.state";
+import {DATA} from "../../tabs.const";
 
 @Component({
   selector: 'app-browse-impact-level',
@@ -49,7 +47,10 @@ export class BrowseImpactLevelComponent implements OnInit {
       },
     ] as MenuItem[];
 
-    this.page$ = this.store.select(ImpactLevelState.page).pipe(
+    const impactLevels: BcImpactLevel[] = DATA.impactLevels;
+
+    this.page$ = this.store.select(ImpactLevelState.page)
+      .pipe(
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
@@ -75,6 +76,14 @@ export class BrowseImpactLevelComponent implements OnInit {
         })
       )
     );
+
+    this.page$.pipe(
+      map(items => items.length)
+    ).subscribe(length => {
+      if (length === 0) {
+        this.page$ = of(impactLevels);
+      }
+    });
   }
 
   openDialog(Id?: number) {

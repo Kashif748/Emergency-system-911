@@ -3,13 +3,15 @@ import {GenericValidators} from "@shared/validators/generic-validators";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Observable, Subject} from "rxjs";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {RtoAction, RtoState} from "@core/states";
+import {ImpactMatrixAction, RtoAction, RtoState} from "@core/states";
 import {Store} from "@ngxs/store";
 import {IAuthService} from "@core/services/auth.service";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {ActivatedRoute} from "@angular/router";
 import {BrowseRtoAction} from "../../../rto/states/browse-rto.action";
 import {FormUtils} from "@core/utils/form.utils";
+import {BrowseImpactMatrixAction} from "../../states/browse-impact-matrix.action";
+import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 
 @Component({
   selector: 'app-impact-matrix-dialog',
@@ -23,32 +25,32 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
   public display = false;
   form: FormGroup;
 
-  _rtoId: number;
+  _Id: number;
   get loggedinUserId() {
     return this.auth.getClaim('sub');
   }
   get editMode() {
-    return this._rtoId !== undefined && this._rtoId !== null;
+    return this._Id !== undefined && this._Id !== null;
   }
 
   destroy$ = new Subject();
 
   @Input()
-  set rtoId(v: number) {
-    this._rtoId = v;
+  set Id(v: number) {
+    this._Id = v;
     this.buildForm();
     if (v === undefined || v === null) {
       return;
     }
     this.store
-      .dispatch(new RtoAction.GetRto({ id: v }))
+      .dispatch(new ImpactMatrixAction.GetImpactMatrix({ id: v }))
       .pipe(
-        switchMap(() => this.store.select(RtoState.rto)),
+        switchMap(() => this.store.select(ImpactMatrixState.impactMatrix)),
         takeUntil(this.destroy$),
         take(1),
-        tap((rto) => {
+        tap((impactMatrix) => {
           this.form.patchValue({
-            ...rto,
+            ...impactMatrix,
           });
         })
       )
@@ -68,7 +70,7 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((id) => {
-        this.rtoId = id;
+        this.Id = id;
       });
 
     this.viewOnly$ = this.route.queryParams.pipe(
@@ -94,8 +96,8 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     this.buildForm();
   }
 
-  openDialog(id?: number) {
-    this.store.dispatch(new BrowseRtoAction.ToggleDialog({ rtoId: id }));
+  openDialog(Id?: number) {
+    this.store.dispatch(new BrowseImpactMatrixAction.ToggleDialog({ id: Id }));
   }
 
   buildForm() {
@@ -111,11 +113,12 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
 
       highDescEn: [null, [Validators.required, GenericValidators.english]],
       highDescAr: [null, [Validators.required, GenericValidators.arabic]],
+      isActive: [true]
     });
   }
 
   close() {
-    this.store.dispatch(new BrowseRtoAction.ToggleDialog({}));
+    this.store.dispatch(new BrowseImpactMatrixAction.ToggleDialog({}));
   }
 
   submit() {
@@ -127,18 +130,19 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const rto = {
+    const impactMartix = {
       ...this.form.getRawValue(),
     };
 
-    rto.versionId = 1;
+    impactMartix.versionId = 1;
     // rto.isActive = true;
     // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
 
     if (this.editMode) {
-      this.store.dispatch(new BrowseRtoAction.UpdateRto(rto));
+      impactMartix.id = this._Id;
+      this.store.dispatch(new BrowseImpactMatrixAction.UpdateImpactMatrix(impactMartix));
     } else {
-      this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
+      this.store.dispatch(new BrowseImpactMatrixAction.CreateImpactMatrix(impactMartix));
     }
   }
 

@@ -96,53 +96,38 @@ export const DATA = {
   impactLevels: [
     {
       id: 1,
-      levelAr: 'منخفض جدا',
-      levelEn: 'Very Low',
-      color: {
-        r: 100,
-        g: 200,
-        b: 100,
-      },
+      nameAr: 'منخفض جدا',
+      nameEn: 'Very Low',
+      isActive: true,
+      colorCode: '#a44f00'
     },
     {
       id: 2,
-      levelAr: 'منخفض',
-      levelEn: 'Low',
-      color: {
-        r: 100,
-        g: 256,
-        b: 30,
-      },
+      nameAr: 'منخفض',
+      nameEn: 'Low',
+      isActive: true,
+      colorCode: '#00ff00'
     },
     {
       id: 3,
-      levelAr: 'متوسط',
-      levelEn: 'Medium',
-      color: {
-        r: 100,
-        g: 100,
-        b: 150,
-      },
+      nameAr: 'متوسط',
+      nameEn: 'Medium',
+      isActive: true,
+      colorCode: '#ffff00'
     },
     {
       id: 4,
-      levelAr: 'مرتفع',
-      levelEn: 'High',
-      color: {
-        r: 100,
-        g: 100,
-        b: 100,
-      },
+      nameAr: 'مرتفع',
+      nameEn: 'High',
+      isActive: true,
+      colorCode: '#1976D2'
     },
     {
       id: 5,
-      levelAr: 'مرتفع جدا',
-      levelEn: 'Very High',
-      color: {
-        r: 100,
-        g: 130,
-        b: 0,
-      },
+      nameAr: 'مرتفع جدا',
+      nameEn: 'Very High',
+      isActive: true,
+      colorCode: '#ff1a1a'
     },
   ],
   impactLevelsWorking: [

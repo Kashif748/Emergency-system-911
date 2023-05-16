@@ -88,7 +88,7 @@ export class BrowseImpactLevelState {
     { dispatch }: StateContext<BrowseImpactLevelStateModel>,
     { payload }: BrowseImpactLevelAction.CreateImpactLevel
   ) {
-    return dispatch(new LocationTypeAction.Create(payload)).pipe(
+    return dispatch(new ImpactLevelAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch([

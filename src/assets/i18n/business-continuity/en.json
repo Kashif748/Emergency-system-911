@@ -23,6 +23,9 @@
     "COLOR": "Color"
   },
   "IMPACT_ANALYSIS": {
+    "VIEW_NEW":"View Impact type",
+    "EDIT_NEW":"Edit Impact type",
+    "ADD_NEW":"Add Impact type",
     "HEADER": "Business Impact Analysis Matrix",
     "TAB_LABEL": "Impacts Analysis Matrix",
     "IMPACT_TYPES": "Impact Types",

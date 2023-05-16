@@ -3,6 +3,7 @@
     <h4 class="text-info p-text-bold mb-0">
       {{ "IMPACT_ANALYSIS.HEADER" | translate }}
     </h4>
+    <app-impact-matrix-dialog></app-impact-matrix-dialog>
   </header>
   <div class="p-d-flex p-flex-column">
     <ng-container *ngIf="loading; else tableTemplate">
@@ -12,12 +13,22 @@
             <th style="width: 0"></th>
             <th>
               <div class="p-d-flex p-jc-between p-ai-center">
-                {{ "IMPACT_ANALYSIS.TYPE_AR" | translate }}
+                {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
             <th>
               <div class="p-d-flex p-jc-between p-ai-center">
-                {{ "IMPACT_ANALYSIS.TYPE_EN" | translate }}
+                {{ "IMPACT_ANALYSIS.LOW" | translate }}
+              </div>
+            </th>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_ANALYSIS.MEDIUM" | translate }}
+              </div>
+            </th>
+            <th>
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ "IMPACT_ANALYSIS.HIGH" | translate }}
               </div>
             </th>
 
@@ -29,7 +40,6 @@
             <td class="flag-td">
               <div class="bg-secondary"></div>
             </td>
-
             <td>
               <p-skeleton></p-skeleton>
             </td>
