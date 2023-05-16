@@ -18,6 +18,7 @@ import { RestApiResponseObject } from '../models/rest-api-response-object';
 import { RestApiResponseOrgStructure } from '../models/rest-api-response-org-structure';
 import { RestApiResponseOrgStructureLogoProjection } from '../models/rest-api-response-org-structure-logo-projection';
 import { RestApiResponseOrgStructureMinimumProjection } from '../models/rest-api-response-org-structure-minimum-projection';
+import { RestApiResponseSituationProjection } from '../models/rest-api-response-situation-projection';
 import { ThemeDetails } from '../models/theme-details';
 
 @Injectable()
@@ -42,7 +43,7 @@ export class OrgStructureControllerService extends BaseService {
    */
   active$Response(params: {
     body: ThemeDetails
-  }): Observable<StrictHttpResponse<RestApiResponseListOrgStructureProjection>> {
+  }): Observable<StrictHttpResponse<RestApiResponseSituationProjection>> {
 
     const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.ActivePath, 'put');
     if (params) {
@@ -55,7 +56,7 @@ export class OrgStructureControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListOrgStructureProjection>;
+        return r as StrictHttpResponse<RestApiResponseSituationProjection>;
       })
     );
   }
@@ -68,10 +69,10 @@ export class OrgStructureControllerService extends BaseService {
    */
   active(params: {
     body: ThemeDetails
-  }): Observable<RestApiResponseListOrgStructureProjection> {
+  }): Observable<RestApiResponseSituationProjection> {
 
     return this.active$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListOrgStructureProjection>) => r.body as RestApiResponseListOrgStructureProjection)
+      map((r: StrictHttpResponse<RestApiResponseSituationProjection>) => r.body as RestApiResponseSituationProjection)
     );
   }
 

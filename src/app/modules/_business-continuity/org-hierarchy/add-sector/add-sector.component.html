@@ -1,0 +1,69 @@
+<div class="p-d-flex p-flex-column">
+  <header class="border-bottom py-4">
+    <h4 class="text-info p-text-bold mb-0">{{ "ORG_HIE.SECTOR_DETAILS" | translate }}</h4>
+  </header>
+  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameEn" pInputText/>
+        <label>
+          {{ "ORG_HIE.SECTOR.DEPT_NAME_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['nameEn'].touched &&
+          !form.controls['nameEn'].valid &&
+          form.controls['nameEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameAr" pInputText/>
+        <label>
+          {{ "ORG_HIE.SECTOR.DEPT_NAME_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['nameAr'].touched &&
+          !form.controls['nameAr'].valid &&
+          form.controls['nameAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+  </form>
+
+  <div class="p-col p-d-flex">
+    <button pButton icon="pi pi-save"  label="{{'ACTIONS.CLOSE' | translate }}"></button>
+    <div class="ml-dir-auto"></div>
+    <ng-container>
+      <div class="mx-1" >
+        <button pButton type="button" label="{{'ORG_HIE.DELETE' | translate }}" icon="pi pi-trash"
+                class="p-button-outlined"  ></button>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

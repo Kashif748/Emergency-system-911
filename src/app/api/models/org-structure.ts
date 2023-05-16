@@ -14,6 +14,7 @@ export interface OrgStructure {
   contractorContractNo?: string;
   contractorExpDate?: string;
   currentSerial?: number;
+  description?: string;
   employeeNumbers?: number;
   entityType?: EntityType;
   id?: number;

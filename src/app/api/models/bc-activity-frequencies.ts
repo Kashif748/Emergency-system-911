@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface BcActivityFrequencies {
-  active?: boolean;
   id?: number;
+  isActive?: boolean;
   nameAr?: string;
   nameEn?: string;
   versionId?: number;

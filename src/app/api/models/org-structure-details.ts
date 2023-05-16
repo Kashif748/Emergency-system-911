@@ -14,6 +14,8 @@ export interface OrgStructureDetails {
   contractorContractNo?: string;
   contractorExpDate?: string;
   currentSerial?: number;
+  description?: string;
+  employeeNumbers?: number;
   entityType?: EntityType;
   id?: number;
   initialSerial?: number;
@@ -29,6 +31,7 @@ export interface OrgStructureDetails {
   nameAr: string;
   nameEn: string;
   officialEmail?: string;
+  operationNumbers?: number;
   parentOrg?: OrgStructure;
   radioFreq?: string;
   sector?: AdcdaSector;
