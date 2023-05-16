@@ -9,7 +9,8 @@ import {catchError, finalize, tap} from "rxjs/operators";
 import {RtoAction} from "@core/states/bc/rto/rto.action";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
-import {BrowseOrgDetailAction} from "./org-detail.action";
+import {BrowseOrgDetailAction} from "./browse-orgDetail.action";
+import {OrgDetailAction} from "@core/states";
 
 
 export interface BrowseOrgDetailModel {
@@ -104,11 +105,11 @@ export class BrowseOrgDetailState {
   }
 
   @Action(BrowseOrgDetailAction.UpdateOrgDetail)
-  updateRto(
+  UpdateOrgDetail(
     { dispatch }: StateContext<BrowseOrgDetailModel>,
     { payload }: BrowseOrgDetailAction.UpdateOrgDetail
   ) {
-    return dispatch(new RtoAction.Update(payload)).pipe(
+    return dispatch(new OrgDetailAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseOrgDetailAction.LoadOrgDetail());

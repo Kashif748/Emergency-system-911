@@ -34,6 +34,7 @@ import {OrganizationChartModule} from "primeng/organizationchart";
 import { BrowseOrgDetailComponent } from './browse-org-detail/browse-org-detail.component';
 import { ContentOrgDetailComponent } from './browse-org-detail/content-org-detail/content-org-detail.component';
 import { OrgDetailDialogComponent } from './browse-org-detail/org-detail-dialog/org-detail-dialog.component';
+import { BrowseOrgDetailState} from "./states/browse-orgDetail.state";
 
 
 @NgModule({
@@ -41,7 +42,7 @@ import { OrgDetailDialogComponent } from './browse-org-detail/org-detail-dialog/
   imports: [
     CommonModule,
     OrgDetailRoutingModule,
-    NgxsModule.forFeature([BrowseRtoState]),
+    NgxsModule.forFeature([BrowseOrgDetailState]),
     TranslateModule.forChild({
       extend: true,
       loader: {

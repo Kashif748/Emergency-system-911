@@ -1,21 +1,21 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
-import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
-import {EMPTY, of} from "rxjs";
-import {BcrtoControllerService} from "../../../../api/services/bcrto-controller.service";
+import {finalize, tap} from "rxjs/operators";
 import {OrgStructure} from "../../../../api/models/org-structure";
-import {OrgDetailAction} from "@core/states/bc/org-details/org-detail.action";
+import { OrgDetailAction} from "@core/states/bc/org-details/org-detail.action";
+import {OrgStructureControllerService} from "../../../../api/services/org-structure-controller.service";
+import {OrgStructureDetails} from "../../../../api/models/org-structure-details";
 
 
 export interface OrgDetailStateModel {
   // page: PageBcrto;
-  orgDetail: OrgStructure;
+  org: OrgStructure;
   loading: boolean;
   blocking: boolean;
 }
 
-const RTO_STATE_TOKEN = new StateToken<OrgDetailStateModel>('rto');
+const RTO_STATE_TOKEN = new StateToken<OrgDetailStateModel>('orgDetail');
 
 @State<OrgDetailStateModel>({ name: RTO_STATE_TOKEN })
 @Injectable()
@@ -25,7 +25,7 @@ export class OrgDetailState {
    *
    */
   constructor(
-    private rto: BcrtoControllerService
+    private org: OrgStructureControllerService
   ) {
   }
 
@@ -36,8 +36,8 @@ export class OrgDetailState {
   }*/
 
   @Selector([OrgDetailState])
-  static orgDetail(state: OrgDetailStateModel) {
-    return state?.orgDetail;
+  static org(state: OrgDetailStateModel) {
+    return state?.org;
   }
 
 /*  @Selector([OrgDetailState])
@@ -56,7 +56,7 @@ export class OrgDetailState {
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(OrgDetailAction.LoadPage, { cancelUncompleted: true })
+  /*@Action(OrgDetailAction.LoadPage, { cancelUncompleted: true })
   loadPage(
     { setState }: StateContext<OrgDetailStateModel>,
     { payload }: OrgDetailAction.LoadPage
@@ -102,9 +102,9 @@ export class OrgDetailState {
           );
         })
       );
-  }
+  }*/
 
-  @Action(OrgDetailAction.Create)
+  /*@Action(OrgDetailAction.Create)
   create(
     { setState }: StateContext<OrgDetailStateModel>,
     { payload }: OrgDetailAction.Create
@@ -127,11 +127,11 @@ export class OrgDetailState {
           );
         })
       );
-  }
+  }*/
 
   @Action(OrgDetailAction.Update)
   update(
-    { setState }: StateContext<OrgDetailStateModel>,
+    { setState, getState}: StateContext<OrgDetailStateModel>,
     { payload }: OrgDetailAction.Update
   ) {
     setState(
@@ -139,9 +139,11 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    return this.rto
-      .update80({
-        body: payload,
+    let orgBody = getState().org;
+    // orgBody.description = payload.description
+    return this.org
+      .active1({
+        id: {...orgBody, ...payload} as OrgStructure,
       })
       .pipe(
         finalize(() => {
@@ -155,7 +157,7 @@ export class OrgDetailState {
   }
 
   @Action(OrgDetailAction.GetOrgDetail, { cancelUncompleted: true })
-  getRto(
+  GetOrgDetail(
     { setState }: StateContext<OrgDetailStateModel>,
     { payload }: OrgDetailAction.GetOrgDetail
   ) {
@@ -172,11 +174,11 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    return this.rto.getOne1({ id: payload.id }).pipe(
+    return this.org.getById5({ id: payload.id }).pipe(
       tap((orgDetail) => {
         setState(
           patch<OrgDetailStateModel>({
-            // orgDetail: orgDetail.result,
+             org: orgDetail.result,
           })
         );
       }),

@@ -1,7 +1,4 @@
-<div *ngIf="state$ | async as state">
-  <app-content-org-detail  [loading]="loading$ | async" [page]="page$ | async"
-                    [columns]="state.columns"
-                    [pageRequest]="state?.pageRequest"
-                    [totalRecords]="totalRecords$ | async"
-                    (onPageChange)="loadPage($event)"></app-content-org-detail>
+<div >
+  <app-content-org-detail
+                    ></app-content-org-detail>
 </div>

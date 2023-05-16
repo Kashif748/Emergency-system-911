@@ -17,16 +17,16 @@ import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
   styleUrls: ['./browse-org-detail.component.scss']
 })
 export class BrowseOrgDetailComponent implements OnInit {
-  public page$: Observable<Bcrto[]>;
+/*  public page$: Observable<Bcrto[]>;
 
   @Select(RtoState.totalRecords)
-  public totalRecords$: Observable<number>;
+  public totalRecords$: Observable<number>;*/
 
-  @Select(RtoState.loading)
+/*  @Select(RtoState.loading)
   public loading$: Observable<boolean>;
 
   @Select(BrowseRtoState.state)
-  public state$: Observable<BrowseRtoStateModel>;
+  public state$: Observable<BrowseRtoStateModel>;*/
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
@@ -35,7 +35,7 @@ export class BrowseOrgDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const userActions = [
+    /*const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
         icon: 'pi pi-pencil',
@@ -71,14 +71,14 @@ export class BrowseOrgDetailComponent implements OnInit {
           };
         })
       )
-    );
+    );*/
   }
 
-  openDialog(id?: number) {
+/*  openDialog(id?: number) {
     this.store.dispatch(new BrowseRtoAction.ToggleDialog({ rtoId: id }));
-  }
+  }*/
 
-  activate(id: number) {
+/*  activate(id: number) {
     this.messageHelper.confirm({
       summary: 'SHARED.DIALOG.ARE_YOU_SURE',
       detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE',
@@ -90,9 +90,9 @@ export class BrowseOrgDetailComponent implements OnInit {
         this.messageHelper.closeConfirm();
       },
     });
-  }
+  }*/
 
-  public loadPage(event: LazyLoadEvent) {
+/*  public loadPage(event: any) {
     this.store.dispatch(
       new BrowseRtoAction.LoadRto({
         pageRequest: {
@@ -101,6 +101,6 @@ export class BrowseOrgDetailComponent implements OnInit {
         },
       })
     );
-  }
+  }*/
 
 }

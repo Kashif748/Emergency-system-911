@@ -30,6 +30,8 @@ import {SharedBreadcrumbModule} from '@shared/sh-components/breadcrumbs/breadcru
 import {OrgDetailsComponent} from "./org-details/org-details.component";
 import {OrgStrucureComponent} from "./org-strucure/org-strucure.component";
 import {ImpactAnalysisComponent} from "./impact-analysis/impact-analysis.component";
+import {BrowseRtoState} from "./rto/states/browse-rto.state";
+import {NgxsModule} from "@ngxs/store";
 
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -50,6 +52,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   imports: [
     CommonModule,
     BusinessContinuityRoutingModule,
+    NgxsModule.forFeature([BrowseRtoState]),
     TranslateModule.forChild({
       extend: true,
       loader: {

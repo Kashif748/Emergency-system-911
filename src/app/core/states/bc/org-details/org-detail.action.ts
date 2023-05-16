@@ -1,13 +1,14 @@
 import {Bcrto} from "../../../../api/models/bcrto";
 import {OrgStructure} from "../../../../api/models/org-structure";
+import {OrgStructureDetails} from "../../../../api/models/org-structure-details";
 
 export namespace OrgDetailAction {
-  export class LoadPage {
+/*  export class LoadPage {
     static readonly type = '[OrgDetail] Load Page';
 
-    /**
+    /!**
      *
-     */
+     *!/
     constructor(
       public payload: {
         filters?: { [key: string]: any };
@@ -17,17 +18,17 @@ export namespace OrgDetailAction {
       }
     ) {
     }
-  }
+  }*/
 
-  export class Create {
+/*  export class Create {
     static readonly type = '[OrgDetail] Create';
-    /**
+    /!**
      *
-     */
+     *!/
     constructor(
       public payload: OrgStructure
     ) {}
-  }
+  }*/
 
   export class Update {
     static readonly type = '[OrgDetail] Update';

@@ -1,5 +1,7 @@
 import { PageRequestModel } from '@core/models/page-request.model';
 import {Bcrto} from "../../../../api/models/bcrto";
+import {OrgStructureDetails} from "../../../../api/models/org-structure-details";
+import {OrgStructure} from "../../../../api/models/org-structure";
 
 
 export namespace BrowseOrgDetailAction {
@@ -19,7 +21,7 @@ export namespace BrowseOrgDetailAction {
      *
      */
     constructor(
-      public payload: Bcrto
+      public payload: OrgStructure
     ) {}
   }
 
@@ -29,7 +31,7 @@ export namespace BrowseOrgDetailAction {
      *
      */
     constructor(
-      public payload: Bcrto
+      public payload: OrgStructure
     ) {}
   }
 }

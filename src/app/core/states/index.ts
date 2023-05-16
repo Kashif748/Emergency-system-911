@@ -6,6 +6,7 @@ import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-
 import {LocationTypeState} from "@core/states/bc/location-type/locationType.state";
 import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
 import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
+import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
 
 export { UserAction } from './user/user.action';
 export { RoleAction } from './role/role.action';
@@ -22,6 +23,7 @@ export { ActivityFrquencyAction } from './bc/activity-frquency/activity-frquency
 export { LocationTypeAction } from './bc/location-type/locationType.action';
 export { ImpactLevelAction } from './bc/impact-level/impact-level.action';
 export { ImpactMatrixAction } from './bc/impact-matrix/impact-matrix.action';
+export { OrgDetailAction } from './bc/org-details/org-detail.action';
 
 export { UserState } from './user/user.state';
 export { RoleState } from './role/role.state';
@@ -38,3 +40,4 @@ export { ActivityFrquencyState } from './bc/activity-frquency/activity-frquency.
 export { LocationTypeState } from './bc/location-type/locationType.state';
 export { ImpactLevelState } from './bc/impact-level/impact-level.state';
 export { ImpactMatrixState } from './bc/impact-matrix/impact-matrix.state';
+export { OrgDetailState } from './bc/org-details/org-detail.state';

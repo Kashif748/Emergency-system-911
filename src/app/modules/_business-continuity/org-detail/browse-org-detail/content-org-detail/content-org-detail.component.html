@@ -70,7 +70,7 @@
       <!-- desc -->
       <div class="p-field p-col-12 p-md-12 mt-4">
         <span class="p-float-label">
-          <textarea pInputTextarea formArrayName="desc" rows="7"></textarea>
+          <textarea pInputTextarea formControlName="description" rows="7"></textarea>
 
           <label>
             {{ "DESC" | translate }}
@@ -82,7 +82,7 @@
       <div class="p-field p-col-12 p-md-6 mt-4">
         <span class="p-float-label">
           <p-inputNumber
-            formControlName="employee"
+            formControlName="employeeNumbers"
             inputId="minmax"
             inputId="minmax"
             mode="decimal"
@@ -97,7 +97,7 @@
       <div class="p-field p-col-12 p-md-6 mt-4">
         <span class="p-float-label">
           <p-inputNumber
-            formControlName="activities"
+            formControlName="operationNumbers"
             inputId="minmax"
             inputId="minmax"
             mode="decimal"
@@ -112,7 +112,9 @@
       <p-button
         label="{{ 'SHARED.SAVE' | translate }}"
         icon="pi pi-save"
-        styleClass="p-button  "
+        styleClass="p-button"
+        [disabled]="form.invalid"
+        (click)="submit()"
       ></p-button>
     </div>
   </div>

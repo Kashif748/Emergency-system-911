@@ -69,7 +69,7 @@ export class ImpactMatrixState {
       })
     );
     return this.impactMatrix
-      .getAll14({
+      .getAll16({
         isActive: true,
         versionId: 1,
         pageable: {
@@ -142,7 +142,7 @@ export class ImpactMatrixState {
       })
     );
     return this.impactMatrix
-      .update84({
+      .update86({
         body: payload,
       })
       .pipe(
@@ -174,7 +174,7 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    return this.impactMatrix.getOne5({id: payload.id}).pipe(
+    return this.impactMatrix.getOne7({id: payload.id}).pipe(
       tap((impactMatrix) => {
         setState(
           patch<ImpactMatrixStateModel>({
