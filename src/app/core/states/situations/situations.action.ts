@@ -27,6 +27,13 @@ export namespace SituationsAction {
       }
     ) {}
   }
+  export class GetActiveSituation {
+    static readonly type = '[Situations] Get Active Situation';
+    /**
+     *
+     */
+    constructor() {}
+  }
 
   export class Create {
     static readonly type = '[Situations] Create';
@@ -43,13 +50,16 @@ export namespace SituationsAction {
      */
     constructor(public payload: Situation) {}
   }
-
-  export class Activate {
-    static readonly type = '[Situations] Activate';
+  export class Delete {
+    static readonly type = '[Situations] Delete Situation';
     /**
      *
      */
-    constructor(public payload: { id: number }) {}
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
   }
 
   export class GetStatistics {

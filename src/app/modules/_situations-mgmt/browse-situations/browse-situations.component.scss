@@ -7,6 +7,29 @@
     font-size: 1rem;
     border-radius: 30px;
   }
+  .p-tag ,.p-chip  {
+    font-family: inherit;
+  }
+  .active-pulse {
+    position: relative;
+    background-color: red;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: 0 5px;
+    z-index: 1;
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      background-color: rgba(red, 0.6);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      animation: live 2s ease-in-out infinite;
+      z-index: -1;
+    }
+  }
 }
 
 .status-item {
@@ -18,18 +41,14 @@
     height: 25px;
     border-radius: 5px;
   }
-  .golden {
-    background-color: #fbb034;
-    background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);
-  }
+}
 
-  .bronze {
-    background-color: #804a00;
-    background-image: linear-gradient(315deg, #804a00 0%, #b08d57 74%);
+@keyframes live {
+  0% {
+    transform: scale(1, 1);
   }
-
-  .silver {
-    background-color: #5b6467;
-    background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%);
+  100% {
+    transform: scale(3.5, 3.5);
+    background-color: rgba(red, 0);
   }
 }

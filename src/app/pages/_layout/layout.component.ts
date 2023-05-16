@@ -8,25 +8,39 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {RouterOutlet} from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 
-import {PushNotificationsService} from 'src/app/_metronic/core/services/push.notifications.service';
+import { PushNotificationsService } from 'src/app/_metronic/core/services/push.notifications.service';
 
-import {distinctUntilChanged, map} from 'rxjs/operators';
-import {Subscription} from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
 
-import {animations} from 'src/app/shared/animations/animation';
-import {IAuthService} from 'src/app/core/services/auth.service';
-import {CommonService} from 'src/app/core/services/common.service';
-import {IStorageService} from 'src/app/core/services/storage.service';
+import { animations } from 'src/app/shared/animations/animation';
+import { IAuthService } from 'src/app/core/services/auth.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { IStorageService } from 'src/app/core/services/storage.service';
 
-import {LayoutInitService, LayoutService} from '../../_metronic/core';
+import { LayoutInitService, LayoutService } from '../../_metronic/core';
 import KTLayoutContent from '../../../assets/js/layout/base/content';
-import {SysStatusService} from '@core/services/sys-status.service';
-import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
-import {MatDrawer} from '@angular/material/sidenav';
+import { SysStatusService } from '@core/services/sys-status.service';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  BreakpointState,
+} from '@angular/cdk/layout';
+import { MatDrawer } from '@angular/material/sidenav';
+import { Select, Store } from '@ngxs/store';
+import { SituationsState } from '@core/states/situations/situations.state';
+import { SituationProjection } from 'src/app/api/models/situation-projection';
+import { SituationsAction } from '@core/states/situations/situations.action';
 
 @Component({
   selector: 'app-layout',
@@ -36,20 +50,20 @@ import {MatDrawer} from '@angular/material/sidenav';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
+  private destroy$ = new Subject();
 
   constructor(
     private initService: LayoutInitService,
     private layout: LayoutService,
     private notificationsService: PushNotificationsService,
-    private authService: IAuthService,
-    private commonService: CommonService,
-    private storageService: IStorageService,
+    private store: Store,
     private sysStatusService: SysStatusService,
     private cdr: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver) {
+    private breakpointObserver: BreakpointObserver
+  ) {
     this.initService.init();
   }
-  @ViewChild('drawer', {static: true}) drawer: MatDrawer;
+  @ViewChild('drawer', { static: true }) drawer: MatDrawer;
 
   // Public variables
   isMobileView = true;
@@ -63,18 +77,15 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   headerMobileAttributes = {};
   headerHTMLAttributes: any = {};
   isSideDisplay = true;
-  @ViewChild('ktAside', {static: true}) ktAside: ElementRef;
-  @ViewChild('ktHeaderMobile', {static: true}) ktHeaderMobile: ElementRef;
-  @ViewChild('ktHeader', {static: true}) ktHeader: ElementRef;
-
-  private subscriptions: Subscription[] = [];
+  @ViewChild('ktAside', { static: true }) ktAside: ElementRef;
+  @ViewChild('ktHeaderMobile', { static: true }) ktHeaderMobile: ElementRef;
+  @ViewChild('ktHeader', { static: true }) ktHeader: ElementRef;
 
   public headerMobileCss = 'header-mobile align-items-center';
 
   public headerCss = `header`;
 
   public wrapperCss = `d-flex flex-column flex-row-fluid wrapper h-100`;
-
 
   notify(msg) {
     const data = [];
@@ -88,10 +99,21 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.notificationsService.requestPermission();
-    let sub = this.sysStatusService.vm$
+    this.store.dispatch(new SituationsAction.GetActiveSituation());
+    this.store
+      .select(SituationsState.page)
+      .pipe(
+        filter((p) => !!p),
+        takeUntil(this.destroy$),
+        tap(console.log)
+      )
+      .subscribe();
+
+    this.sysStatusService.vm$
       .pipe(
         map((s) => s.status),
-        distinctUntilChanged()
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
       )
       .subscribe((s) => {
         this.headerMobileCss = `header-mobile align-items-center border-bottom-${s}`;
@@ -100,7 +122,6 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdr.detectChanges();
       });
 
-    this.subscriptions.push(sub);
     this.breakpointObserver
       .observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
@@ -110,7 +131,6 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.cdr.detectChanges();
       });
-    this.subscriptions.push(sub);
 
     // build view by layout config settings
     this.selfLayout = this.layout.getProp('self.layout');
@@ -168,12 +188,7 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => {
-      sub.unsubscribe();
-    });
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
-function tap(arg0: (v: any) => void): import("rxjs").OperatorFunction<import("@core/services/sys-status.service").SysStatusModel, unknown> {
-  throw new Error('Function not implemented.');
-}
-

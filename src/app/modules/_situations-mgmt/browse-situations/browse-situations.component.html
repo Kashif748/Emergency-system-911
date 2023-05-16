@@ -1,6 +1,93 @@
 <app-situation-dialog></app-situation-dialog>
 <div class="container-fluid">
   <app-breadcrumb></app-breadcrumb>
+  <div
+    *ngIf="activeSituation$ | async as activeSituation"
+    class="active-situation"
+  >
+    <div
+      class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border"
+    >
+      <div
+        class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
+      >
+        <div class="flex-grow-1 p-grid p-fluid">
+          <div class="p-col-12">
+            <div class="mt-1 mx-2 p-grid p-fluid">
+              <div class="p-col-12 pb-0 p-d-flex">
+                <div>
+                  <h4
+                    class="mb-1 px-2 d-inline"
+                    pTooltip="{{ 'SITUATIONS.NAME' | translate }}"
+                    appendTo="body"
+                    tooltipPosition="top"
+                  >
+                    {{ activeSituation | translateObj }}
+                  </h4>
+                </div>
+              </div>
+              <div class="p-col-12">
+                <p-tag
+                  pTooltip="{{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
+                  appendTo="body"
+                  tooltipPosition="top"
+                  [styleClass]="
+                    activeSituation.themeType?.id === 0
+                      ? 'golden'
+                      : activeSituation.themeType?.id === 1
+                      ? 'silver'
+                      : 'bronze'
+                  "
+                >
+                  {{ activeSituation.themeType | translateObj }}
+                </p-tag>
+
+                <p-chip
+                  dir="ltr"
+                  pTooltip="{{ 'SITUATIONS.START_DATE' | translate }}"
+                  appendTo="body"
+                  tooltipPosition="top"
+                  label="{{
+                    activeSituation.startDate | cdate | date : 'yyyy-MM-dd h:mm'
+                  }}
+                "
+                  icon="pi pi-calendar"
+                  styleClass="m-1"
+                ></p-chip>
+                <p-chip
+                  pTooltip="{{ 'SITUATIONS.END_DATE' | translate }}"
+                  appendTo="body"
+                  tooltipPosition="top"
+                  dir="ltr"
+                  label="{{
+                    activeSituation.endDate | cdate | date : 'yyyy-MM-dd h:mm'
+                  }}
+              "
+                  icon="pi pi-calendar"
+                  styleClass="m-1"
+                ></p-chip>
+
+                <p-chip
+                  pTooltip="{{ 'SITUATIONS.TYPE' | translate }}"
+                  appendTo="body"
+                  tooltipPosition="top"
+                  label="{{ activeSituation.newsType | translateObj }}"
+                  icon="pi pi-question-circle"
+                  styleClass="m-1 text-white"
+                ></p-chip>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container>
+          <p-chip
+            >{{ "SITUATIONS.ACTIVE_NOW" | translate }}
+            <span class="active-pulse"></span>
+          </p-chip>
+        </ng-container>
+      </div>
+    </div>
+  </div>
 
   <div class="mx-4 my-10" *ngIf="state$ | async as state">
     <div class="row mb-4">
@@ -168,6 +255,7 @@
       [totalRecords]="totalRecords$ | async"
       [pageRequest]="state.pageRequest"
       (onPageChange)="loadPage($event)"
+      (onRowSelect)="redirectToDashboard($event._id)"
     ></app-content-situations>
   </div>
 </div>
