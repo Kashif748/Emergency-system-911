@@ -41,6 +41,7 @@
   "EMPLOYEES": "Total Employees Number",
   "ACTIVITIES": " Organization Activities Number",
   "RTO_LIST": {
+    "TITLE_RTO":"View RTO",
     "EDIT_RTO":"Edit RTO",
     "ADD_NEW_RTO":"Add New RTO",
     "CRITICALITY": "Criticality",

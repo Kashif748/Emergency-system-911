@@ -26,6 +26,10 @@
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
         {{'RTO_LIST.ADD_NEW_RTO' | translate}}
       </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'RTO_LIST.TITLE_RTO' | translate}}
+      </ng-container>
     </h3>
   </ng-template>
 
@@ -243,7 +247,7 @@
 
   <ng-template pTemplate="footer">
     <div class="p-col text-center">
-      <div class="text-center">
+      <div class="text-center" *ngIf="!(viewOnly$ | async)">
         <button
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"

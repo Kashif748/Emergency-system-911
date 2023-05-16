@@ -4,8 +4,8 @@ import {ILangFacade} from "@core/facades/lang.facade";
 import {PageRequestModel} from "@core/models/page-request.model";
 import {LazyLoadEvent} from "primeng/api";
 import {Store} from "@ngxs/store";
-import {BrowseLocationTypeAction} from "../../../location-type/states/browse-locationType.action";
 import {BcLocationTypes} from "../../../../../api/models/bc-location-types";
+import {BrowseRtoAction} from "../../states/browse-rto.action";
 
 @Component({
   selector: 'app-content-rto',
@@ -58,7 +58,7 @@ export class ContentRtoComponent implements OnInit {
   }
 
   openView(Id?: number) {
-    this.store.dispatch(new BrowseLocationTypeAction.OpenView({ id: Id }));
+    this.store.dispatch(new BrowseRtoAction.OpenView({ rtoId: Id }));
   }
 
   openDialog(Id?: number) {

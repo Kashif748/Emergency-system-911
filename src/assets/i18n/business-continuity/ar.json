@@ -45,6 +45,7 @@
   "RTO_ENG": "زمن التعافي",
 
   "RTO_LIST": {
+    "TITLE_RTO":"مشاهدة ملف",
     "CRITICALITY": "الحيوية",
     "RTO_DESC": "الوصف",
     "ADD_NEW_RTO": " اضافة زمن تعافي جديد",

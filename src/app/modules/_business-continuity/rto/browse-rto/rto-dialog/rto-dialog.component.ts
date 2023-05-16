@@ -133,6 +133,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
 
     if (this.editMode) {
+      rto.id = this._rtoId;
       this.store.dispatch(new BrowseRtoAction.UpdateRto(rto));
     } else {
       this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
