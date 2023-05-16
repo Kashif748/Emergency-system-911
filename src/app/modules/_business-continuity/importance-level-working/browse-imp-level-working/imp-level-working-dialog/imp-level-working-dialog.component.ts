@@ -53,6 +53,7 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...ImpLevelWorking,
           });
+          this.setColor(ImpLevelWorking.colorCode);
         })
       )
       .subscribe();
@@ -105,7 +106,7 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
       colorCode: [null, [Validators.required]],
-      isActive: [true, ]
+      isActive: [true]
     });
   }
 
@@ -139,7 +140,8 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     // this.store.dispatch(new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking));
 
     if (this.editMode) {
-      // this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
+      impLevelWorking.id = this._id;
+      this.store.dispatch(new BrowseImpLevelWorkingAction.UpdateImpLevelWorking(impLevelWorking));
     } else {
       this.store.dispatch(new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking));
     }

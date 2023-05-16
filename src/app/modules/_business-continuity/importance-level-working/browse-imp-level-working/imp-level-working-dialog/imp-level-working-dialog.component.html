@@ -193,11 +193,23 @@
         </p>
       </ng-container>
     </div>
+
+    <div class="p-col-12">
+      <p-divider align="center">
+        <div class="p-d-inline-flex p-ai-center">
+          <div class="p-field p-col-12 p-md-12">
+            <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                            offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                            iconPos="right"></p-toggleButton>
+          </div>
+        </div>
+      </p-divider>
+    </div>
   </form>
 
   <ng-template pTemplate="footer">
     <div class="p-col text-center">
-      <div class="text-center">
+      <div class="text-center" *ngIf="!(viewOnly$ | async)">
         <button
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"

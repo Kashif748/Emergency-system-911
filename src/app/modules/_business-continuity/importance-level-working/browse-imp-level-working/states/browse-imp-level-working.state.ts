@@ -5,7 +5,7 @@ import {MessageHelper} from "@core/helpers/message.helper";
 import {Injectable} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {iif, patch} from "@ngxs/store/operators";
-import {catchError, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
 import {ImpLevelWorkingAction} from "@core/states";
 import {BrowseImpLevelWorkingAction} from "./browse-imp-level-working.action";
@@ -98,6 +98,26 @@ export class BrowseImpLevelWorkingState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseImpLevelWorkingAction.UpdateImpLevelWorking)
+  updateImpLevelWorking(
+    { dispatch }: StateContext<BrowseImpLevelWorkingStateModel>,
+    { payload }: BrowseImpLevelWorkingAction.UpdateImpLevelWorking
+  ) {
+    return dispatch(new ImpLevelWorkingAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseImpLevelWorkingAction.LoadImpLevelWorking());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseImpLevelWorkingAction.ToggleDialog({}));
       })
     );
   }

@@ -23,6 +23,16 @@ export namespace BrowseImpLevelWorkingAction {
     ) {}
   }
 
+  export class UpdateImpLevelWorking {
+    static readonly type = '[BrowseImpLevelWorking] Update ImpLevelWorking';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcWorkImportanceLevels
+    ) {}
+  }
+
   export class ToggleDialog {
     static readonly type = '[BrowseImpLevelWorking] Toggle Dialog';
     /**

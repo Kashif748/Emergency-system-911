@@ -59,7 +59,7 @@ export class BrowseLocationTypeState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseLocationTypeAction.LoadLocationType)
-  LoadRto(
+  LoadLocationType(
     { setState, dispatch, getState }: StateContext<BrowseLocationTypeStateModel>,
     { payload }: BrowseLocationTypeAction.LoadLocationType
   ) {

@@ -12,6 +12,7 @@ import {BcWorkImportanceLevels} from "../../../../api/models/bc-work-importance-
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 import {BrowseImpLevelWorkingState, BrowseImpLevelWorkingStateModel} from "./states/browse-imp-level-working.state";
 import {BrowseImpLevelWorkingAction} from "./states/browse-imp-level-working.action";
+import {BrowseLocationTypeAction} from "../../location-type/states/browse-locationType.action";
 
 @Component({
   selector: 'app-browse-imp-level-working',
@@ -71,14 +72,14 @@ export class BrowseImpLevelWorkingComponent implements OnInit {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                // disabled: !u.isActive,
+                 disabled: !u.isActive,
               },
               {
                 ...userActions[1],
                 command: () => {
                   this.activate(u.id);
                 },
-                // disabled: u.isActive,
+                 disabled: u.isActive,
               },
             ],
           };
@@ -87,8 +88,8 @@ export class BrowseImpLevelWorkingComponent implements OnInit {
     );
   }
 
-  openDialog(id?: number) {
-    // this.store.dispatch(new BrowseUsersAction.ToggleDialog({ userId: id }));
+  openDialog(Id?: number) {
+    this.store.dispatch(new BrowseImpLevelWorkingAction.ToggleDialog({ id: Id }));
   }
 
   activate(id: number) {

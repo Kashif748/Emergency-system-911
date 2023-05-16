@@ -8,6 +8,7 @@ import {EMPTY} from "rxjs";
 import {ImpLevelWorkingAction} from "@core/states/bc/imp-level-working/imp-level-working.action";
 import {RtoStateModel} from "@core/states/bc/rto/rto.state";
 import {PageBcWorkImportanceLevels} from "../../../../api/models/page-bc-work-importance-levels";
+import {RtoAction} from "@core/states";
 
 
 export interface ImpLevelWorkingStateModel {
@@ -119,6 +120,31 @@ export class ImpLevelWorkingState {
     );
     return this.impLevelWorking
       .insertOne6({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<ImpLevelWorkingStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(ImpLevelWorkingAction.Update)
+  update(
+    { setState }: StateContext<ImpLevelWorkingStateModel>,
+    { payload }: ImpLevelWorkingAction.Update
+  ) {
+    setState(
+      patch<ImpLevelWorkingStateModel>({
+        blocking: true,
+      })
+    );
+    return this.impLevelWorking
+      .update85({
         body: payload,
       })
       .pipe(
