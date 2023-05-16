@@ -1,12 +1,4 @@
 import {GroupState} from "@core/states/group/group.state";
-import {RtoState} from "@core/states/bc/rto/rto.state";
-import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
-import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
-import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
-import {LocationTypeState} from "@core/states/bc/location-type/locationType.state";
-import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
-import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
-import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
 
 export { UserAction } from './user/user.action';
 export { RoleAction } from './role/role.action';
