@@ -130,6 +130,7 @@ export class LocationTypeDialogComponent implements OnInit, OnDestroy {
     // this.store.dispatch(new BrowseLocationTypeAction.CreateLocationType(locationType));
 
     if (this.editMode) {
+      locationType.id = this._id;
       this.store.dispatch(new BrowseLocationTypeAction.UpdateLocationType(locationType));
     } else {
       this.store.dispatch(new BrowseLocationTypeAction.CreateLocationType(locationType));

@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {iif, patch} from "@ngxs/store/operators";
 import {EMPTY} from "rxjs";
-import {catchError, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseActivityFrquencyAction} from "./browse-activity-frquency.action";
 import {ActivityFrquencyAction} from "@core/states";
 
@@ -83,7 +83,7 @@ export class BrowseActivityFrquencyState {
   }
 
   @Action(BrowseActivityFrquencyAction.CreateActivityFrquency)
-  createRto(
+  createActivityFrq(
     { dispatch }: StateContext<BrowseActivityFrquencyStateModel>,
     { payload }: BrowseActivityFrquencyAction.CreateActivityFrquency
   ) {
@@ -98,6 +98,26 @@ export class BrowseActivityFrquencyState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseActivityFrquencyAction.UpdateActivityFrquency)
+  updateActivityFrq(
+    { dispatch }: StateContext<BrowseActivityFrquencyStateModel>,
+    { payload }: BrowseActivityFrquencyAction.UpdateActivityFrquency
+  ) {
+    return dispatch(new ActivityFrquencyAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseActivityFrquencyAction.LoadActivityFrquency());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseActivityFrquencyAction.ToggleDialog({}));
       })
     );
   }

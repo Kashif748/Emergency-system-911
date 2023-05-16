@@ -9,9 +9,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
 import {BrowseLocationTypeAction} from "./browse-locationType.action";
-import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
 import {BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
-import {RtoAction} from "@core/states/bc/rto/rto.action";
 
 
 export interface BrowseLocationTypeStateModel {

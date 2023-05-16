@@ -1,4 +1,5 @@
 import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequencies";
+import {Bcrto} from "../../../../api/models/bcrto";
 
 export namespace ActivityFrquencyAction {
   export class LoadPage {
@@ -20,6 +21,16 @@ export namespace ActivityFrquencyAction {
 
   export class Create {
     static readonly type = '[ActivityFrq] Create';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcActivityFrequencies
+    ) {}
+  }
+
+  export class Update {
+    static readonly type = '[ActivityFrq] Update';
     /**
      *
      */

@@ -102,7 +102,7 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
-      isActive: [null]
+      isActive: [true]
     });
   }
 
@@ -128,6 +128,7 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
     // this.store.dispatch(new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(activityPriority));
 
     if (this.editMode) {
+      activityPriority.id = this._id;
       this.store.dispatch(new BrowseActivityPrioritySeqAction.UpdateActivityPrioritySeq(activityPriority));
     } else {
       this.store.dispatch(new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(activityPriority));

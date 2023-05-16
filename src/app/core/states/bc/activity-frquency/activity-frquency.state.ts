@@ -7,6 +7,8 @@ import {catchError, finalize, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {ActivityFrquencyAction} from "@core/states/bc/activity-frquency/activity-frquency.action";
 import {PageBcActivityFrequencies} from "../../../../api/models/page-bc-activity-frequencies";
+import {RtoStateModel} from "@core/states/bc/rto/rto.state";
+import {RtoAction} from "@core/states";
 
 
 export interface ActivityFrquencyStateModel {
@@ -131,8 +133,34 @@ export class ActivityFrquencyState {
       );
   }
 
+  @Action(ActivityFrquencyAction.Update)
+  update(
+    { setState }: StateContext<ActivityFrquencyStateModel>,
+    { payload }: ActivityFrquencyAction.Update
+  ) {
+    setState(
+      patch<ActivityFrquencyStateModel>({
+        blocking: true,
+      })
+    );
+    return this.activityFrquency
+      .update89({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<ActivityFrquencyStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+
   @Action(ActivityFrquencyAction.GetActivityFrq, { cancelUncompleted: true })
-  getRto(
+  getActivityFrq(
     { setState }: StateContext<ActivityFrquencyStateModel>,
     { payload }: ActivityFrquencyAction.GetActivityFrq
   ) {

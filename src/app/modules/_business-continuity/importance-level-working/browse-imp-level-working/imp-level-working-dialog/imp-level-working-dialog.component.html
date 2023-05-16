@@ -26,6 +26,10 @@
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
         {{'IMP_LEVEL_WORKING.ADD_NEW_IMP_LEVEL' | translate}}
       </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'IMP_LEVEL_WORKING.TITLE_IMP_LEVEL' | translate}}
+      </ng-container>
     </h3>
 
   </ng-template>

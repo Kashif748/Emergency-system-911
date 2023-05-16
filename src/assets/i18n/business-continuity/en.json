@@ -54,23 +54,28 @@
   },
 
   "ACTIVITY_FEQ": {
+    "TITLE_ACQ_FEQ":"Activity Frquency",
     "ADD_NEW_ACQ_FEQ":"Add New Activity Frquency",
+    "EDIT_ACQ_FEQ":"Edit Activity Frquency",
     "FRQUENCY_AR": "Frquency (Arabic)",
     "FRQUENCY_EN": "Frquency (English)"
   },
   "LOC_TYPE": {
     "EDIT_LOC_TYPE":"Edit Location Type",
+    "TITLE_LOC_TYPE":"Location Type",
     "ADD_NEW_LOC_TYPE":"Add New Location Type",
     "TYPE_AR": "Type (Arabic)",
     "TYPE_EN": "Type (English)"
   },
   "ACTIVITY_PRIORITY_SEQ": {
+    "TITLE_PRI_SEQ":"Priority Sequency",
     "ADD_NEW_PRI_SEQ":"Add New Priority Sequency",
     "EDIT_PRI_SEQ":"Edit Priority Sequency",
     "PRI_AR": "Priority (Arabic)",
     "PRI_EN": "Priority (English)"
   },
   "IMP_LEVEL_WORKING": {
+    "TITLE_IMP_LEVEL":"Importance Level",
     "EDIT_IMP_LEVEL":"Edit Importance Level",
     "ADD_NEW_IMP_LEVEL":"Add New Importance Level",
     "COLOR": "Color",

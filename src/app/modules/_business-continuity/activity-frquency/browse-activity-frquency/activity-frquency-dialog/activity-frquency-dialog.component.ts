@@ -19,6 +19,7 @@ import {FormUtils} from "@core/utils/form.utils";
 })
 export class ActivityFrquencyDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
+  viewOnly$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -62,7 +63,31 @@ export class ActivityFrquencyDialogComponent implements OnInit, OnDestroy {
     private store: Store,
     private route: ActivatedRoute,
     private auth: IAuthService
-  ) { }
+  ) {
+    this.route.queryParams
+      .pipe(
+        map((params) => params['_id']),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((id) => {
+        this.id = id;
+      });
+
+    this.viewOnly$ = this.route.queryParams.pipe(
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {}
+        }
+      })
+    );
+  }
 
   ngOnInit(): void {
     this.opened$ = this.route.queryParams.pipe(
@@ -79,6 +104,7 @@ export class ActivityFrquencyDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      isActive: [true]
     });
   }
 
@@ -100,14 +126,15 @@ export class ActivityFrquencyDialogComponent implements OnInit, OnDestroy {
     };
 
     activityFrquency.versionId = 1;
-    activityFrquency.isActive = true;
-    this.store.dispatch(new BrowseActivityFrquencyAction.CreateActivityFrquency(activityFrquency));
+    // activityFrquency.isActive = true;
 
-    /*if (this.editMode) {
-      this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
+
+    if (this.editMode) {
+      activityFrquency.id = this._id;
+      this.store.dispatch(new BrowseActivityFrquencyAction.UpdateActivityFrquency(activityFrquency));
     } else {
-      this.store.dispatch(new BrowseUsersAction.CreateUser(user));
-    }*/
+      this.store.dispatch(new BrowseActivityFrquencyAction.CreateActivityFrquency(activityFrquency));
+    }
   }
 
   ngOnDestroy(): void {

@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
-import {DATA} from "../../../tabs.const";
-import {Bcrto} from "../../../../../api/models/bcrto";
 import {PageRequestModel} from "@core/models/page-request.model";
 import {LazyLoadEvent} from "primeng/api";
 import {BcWorkImportanceLevels} from "../../../../../api/models/bc-work-importance-levels";
+import {Store} from "@ngxs/store";
+import {ILangFacade} from "@core/facades/lang.facade";
+import {BrowseImpLevelWorkingAction} from "../states/browse-imp-level-working.action";
 
 @Component({
   selector: 'app-content-imp-level-working',
@@ -26,7 +27,11 @@ export class ContentImpLevelWorkingComponent implements OnInit {
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
 
-  constructor(private translate: TranslateService) {}
+  constructor(
+    private translate: TranslateService,
+    private lang: ILangFacade,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.onPageChange.emit({
@@ -48,7 +53,7 @@ export class ContentImpLevelWorkingComponent implements OnInit {
       };
     });*/
   }
-  openView(groupId?: number) {
-    // this.store.dispatch(new BrowseGroupsAction.OpenView({ id: groupId }));
+  openView(Id?: number) {
+    this.store.dispatch(new BrowseImpLevelWorkingAction.OpenView({ id: Id }));
   }
 }

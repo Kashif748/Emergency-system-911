@@ -6,6 +6,7 @@ import {PageRequestModel} from "@core/models/page-request.model";
 import {BcRecoveryPriorities} from "../../../../../api/models/bc-recovery-priorities";
 import {BrowseRtoAction} from "../../../rto/states/browse-rto.action";
 import {Store} from "@ngxs/store";
+import {BrowseActivityPrioritySeqAction} from "../../states/browse-activity-priority-seq.action";
 
 @Component({
   selector: 'app-content-activity-priority',
@@ -56,8 +57,8 @@ export class ContentActivityPriorityComponent implements OnInit {
     });*/
   }
 
-  openView(id?: number) {
-    this.store.dispatch(new BrowseRtoAction.OpenView({ rtoId: id }));
+  openView(Id?: number) {
+    this.store.dispatch(new BrowseActivityPrioritySeqAction.OpenView({ id: Id }));
   }
 
   openDialog(id?: number) {

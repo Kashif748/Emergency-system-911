@@ -43,6 +43,9 @@
                 <td>
                   <p-skeleton></p-skeleton>
                 </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
 
                 <td>
                   <button
@@ -101,11 +104,11 @@
                   ></div>
                 </td>
 
-                <td>{{ item.id }}</td>
+                <td (click)="item.isActive && openView(item.id)">{{ item.id }}</td>
 
-                <td>{{ item.nameAr }}</td>
+                <td (click)="item.isActive && openView(item.id)">{{ item.nameAr }}</td>
 
-                <td>{{ item.nameEn }}</td>
+                <td (click)="item.isActive && openView(item.id)">{{ item.nameEn }}</td>
 
                 <td>
                   <button

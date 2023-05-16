@@ -32,6 +32,8 @@ import {OrganizationChartModule} from "primeng/organizationchart";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseActivityFrquencyState} from "./states/browse-activity-frquency.state";
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {DividerModule} from "primeng/divider";
 
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -79,7 +81,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     DialogModule,
     SidebarModule,
     TranslateObjModule,
-    SharedBreadcrumbModule
+    SharedBreadcrumbModule,
+    DividerModule,
+    ToggleButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

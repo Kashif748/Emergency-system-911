@@ -23,6 +23,16 @@ export namespace BrowseActivityFrquencyAction {
     ) {}
   }
 
+  export class UpdateActivityFrquency {
+    static readonly type = '[BrowseActivityFrquency] Update ActivityFrquency';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcActivityFrequencies
+    ) {}
+  }
+
   export class ToggleDialog {
     static readonly type = '[BrowseActivityFrquency] Toggle Dialog';
     /**

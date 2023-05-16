@@ -26,6 +26,10 @@
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
         {{'ACTIVITY_PRIORITY_SEQ.ADD_NEW_PRI_SEQ' | translate}}
       </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'ACTIVITY_PRIORITY_SEQ.TITLE_PRI_SEQ' | translate}}
+      </ng-container>
     </h3>
   </ng-template>
 
@@ -106,7 +110,7 @@
 
   <ng-template pTemplate="footer">
     <div class="p-col text-center">
-      <div class="text-center">
+      <div class="text-center" *ngIf="!(viewOnly$ | async)">
         <button
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"

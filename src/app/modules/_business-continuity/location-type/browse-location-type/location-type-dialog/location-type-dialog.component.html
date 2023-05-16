@@ -26,6 +26,10 @@
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
         {{'LOC_TYPE.ADD_NEW_LOC_TYPE' | translate}}
       </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'LOC_TYPE.TITLE_LOC_TYPE' | translate}}
+      </ng-container>
     </h3>
   </ng-template>
 
@@ -106,7 +110,7 @@
 
   <ng-template pTemplate="footer">
     <div class="p-col text-center">
-      <div class="text-center">
+      <div class="text-center" *ngIf="!(viewOnly$ | async)">
         <button
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
