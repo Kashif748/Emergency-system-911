@@ -1,5 +1,5 @@
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit,} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit,} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ILangFacade} from '@core/facades/lang.facade';
 import {TranslateService} from '@ngx-translate/core';
@@ -8,7 +8,7 @@ import {MenuItem} from 'primeng/api';
 import {Observable, Subject} from 'rxjs';
 import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {TABS} from '../tabs.const';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Store} from "@ngxs/store";
 import {BrowseBusinessContinuityAction} from "../states/browse-business-continuity.action";
 import {FormUtils} from "@core/utils/form.utils";
@@ -38,25 +38,6 @@ export class BusinessContinuityComponent
 
   public versions: BcVersions[];
 
-  /*@Input()
-  set versionId(v: number) {
-    // this._rtoId = v;
-    this.createForm();
-    this.store
-      .dispatch(new BCAction.GetBc({ id: v }))
-      .pipe(
-        switchMap(() => this.store.select(BusinessContinuityState.bc)),
-        takeUntil(this.destroy$),
-        take(1),
-        tap((bc) => {
-          this.form.patchValue({
-            ...bc,
-          });
-        })
-      )
-      .subscribe();
-  }*/
-
   selectedVersion;
   constructor(
     private langFacade: ILangFacade,
@@ -66,6 +47,7 @@ export class BusinessContinuityComponent
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private store: Store,
+    private router: Router
   ) {
     this.route.queryParams
       .pipe(
@@ -75,7 +57,6 @@ export class BusinessContinuityComponent
       .subscribe((id) => {
         // this.versionId = id;
       });
-    // this.selectedVersion = this.versions[0];
   }
 
   ngOnDestroy(): void {
@@ -95,7 +76,6 @@ export class BusinessContinuityComponent
         takeUntil(this.destroy$),
         take(1),
         tap((bc) => {
-          // this.versions = {...bc}
           this.versions = bc;
         })
       )
@@ -143,8 +123,11 @@ export class BusinessContinuityComponent
     // Perform additional actions as needed
   }
 
-  setValueGlobally(value: any) {
-    this.store.dispatch(new BrowseBusinessContinuityAction.SetGlobalVersion(value));
+  setValueGlobally(value: number) {
+    const currentRoute = this.router.url;
+    const parts = currentRoute.split('/');
+    const tab = parts[2];
+    this.store.dispatch(new BrowseBusinessContinuityAction.SetGlobalVersion({id: value, currentTab: tab}));
   }
 
 

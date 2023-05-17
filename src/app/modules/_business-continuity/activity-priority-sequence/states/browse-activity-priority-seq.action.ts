@@ -1,6 +1,5 @@
-import { PageRequestModel } from '@core/models/page-request.model';
+import {PageRequestModel} from '@core/models/page-request.model';
 import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-priorities";
-import {BcLocationTypes} from "../../../../api/models/bc-location-types";
 
 
 export namespace BrowseActivityPrioritySeqAction {

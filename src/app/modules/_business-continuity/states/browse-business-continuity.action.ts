@@ -55,6 +55,6 @@ export namespace BrowseBusinessContinuityAction {
     /**
      *
      */
-    constructor(public payload: { id?: number }) {}
+    constructor(public payload: { id?: number, currentTab: string }) {}
   }
 }

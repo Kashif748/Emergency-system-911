@@ -58,7 +58,7 @@ export class BrowseImpactMatrixState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseImpactMatrixAction.LoadImpactMatrix)
-  LoadImpactMatrix(
+  loadImpactMatrix(
     { setState, dispatch, getState }: StateContext<BrowseImpactMatrixStateModel>,
     { payload }: BrowseImpactMatrixAction.LoadImpactMatrix
   ) {
@@ -82,7 +82,7 @@ export class BrowseImpactMatrixState {
   }
 
   @Action(BrowseImpactMatrixAction.CreateImpactMatrix)
-  CreateImpactMatrix(
+  createImpactMatrix(
     { dispatch }: StateContext<BrowseImpactMatrixStateModel>,
     { payload }: BrowseImpactMatrixAction.CreateImpactMatrix
   ) {
@@ -102,7 +102,7 @@ export class BrowseImpactMatrixState {
   }
 
   @Action(BrowseImpactMatrixAction.UpdateImpactMatrix)
-  UpdateImpactMatrix(
+  updateImpactMatrix(
     { dispatch }: StateContext<BrowseImpactMatrixStateModel>,
     { payload }: BrowseImpactMatrixAction.UpdateImpactMatrix
   ) {

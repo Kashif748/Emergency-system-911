@@ -61,7 +61,7 @@ export class BrowseActivityPrioritySeqState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseActivityPrioritySeqAction.LoadActivityPrioritySeq)
-  LoadActivityPrioritySeq(
+  loadActivityPrioritySeq(
     {setState, dispatch, getState}: StateContext<BrowseActivityPrioritySeqStateModel>,
     {payload}: BrowseActivityPrioritySeqAction.LoadActivityPrioritySeq
   ) {

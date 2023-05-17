@@ -1,14 +1,13 @@
 import {BcWorkImportanceLevels} from "../../../../api/models/bc-work-importance-levels";
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {BcWorkImportanceLevelsControllerService} from "../../../../api/services/bc-work-importance-levels-controller.service";
 import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
 import {ImpLevelWorkingAction} from "@core/states/bc/imp-level-working/imp-level-working.action";
-import {RtoStateModel} from "@core/states/bc/rto/rto.state";
 import {PageBcWorkImportanceLevels} from "../../../../api/models/page-bc-work-importance-levels";
-import {RtoAction} from "@core/states";
+import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
 
 
 export interface ImpLevelWorkingStateModel {
@@ -29,7 +28,8 @@ export class ImpLevelWorkingState {
    *
    */
   constructor(
-    private impLevelWorking: BcWorkImportanceLevelsControllerService
+    private impLevelWorking: BcWorkImportanceLevelsControllerService,
+    private store: Store,
   ) {
   }
 
@@ -70,10 +70,11 @@ export class ImpLevelWorkingState {
         loading: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.impLevelWorking
       .getAll15({
         isActive: true,
-        versionId: 1,
+        versionId: versionID,
          pageable: {
            page: payload.page,
            size: payload.size,
@@ -159,7 +160,7 @@ export class ImpLevelWorkingState {
   }
 
   @Action(ImpLevelWorkingAction.GetImpLevelWorking, { cancelUncompleted: true })
-  getRto(
+  getImpLevelWorking(
     { setState }: StateContext<ImpLevelWorkingStateModel>,
     { payload }: ImpLevelWorkingAction.GetImpLevelWorking
   ) {
@@ -172,7 +173,7 @@ export class ImpLevelWorkingState {
       return;
     }
     setState(
-      patch<RtoStateModel>({
+      patch<ImpLevelWorkingStateModel>({
         blocking: true,
       })
     );

@@ -1,5 +1,5 @@
 import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequencies";
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {BcActivityFrequenciesControllerService} from "../../../../api/services/bc-activity-frequencies-controller.service";
 import {EMPTY} from "rxjs";
@@ -7,8 +7,7 @@ import {catchError, finalize, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {ActivityFrquencyAction} from "@core/states/bc/activity-frquency/activity-frquency.action";
 import {PageBcActivityFrequencies} from "../../../../api/models/page-bc-activity-frequencies";
-import {RtoStateModel} from "@core/states/bc/rto/rto.state";
-import {RtoAction} from "@core/states";
+import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
 
 
 export interface ActivityFrquencyStateModel {
@@ -29,7 +28,8 @@ export class ActivityFrquencyState {
    *
    */
   constructor(
-    private activityFrquency: BcActivityFrequenciesControllerService
+    private activityFrquency: BcActivityFrequenciesControllerService,
+    private store: Store,
   ) {
   }
 
@@ -70,10 +70,11 @@ export class ActivityFrquencyState {
         loading: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.activityFrquency
       .getAll19({
         isActive: true,
-        versionId: 1,
+        versionId: versionID,
         pageable: {
            page: payload.page,
            size: payload.size,

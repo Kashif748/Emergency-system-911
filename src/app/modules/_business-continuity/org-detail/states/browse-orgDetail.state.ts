@@ -1,7 +1,6 @@
 import {PageRequestModel} from "@core/models/page-request.model";
 import {iif, patch} from "@ngxs/store/operators";
 import {EMPTY} from "rxjs";
-import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {ApiHelper} from "@core/helpers/api.helper";
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
@@ -61,7 +60,7 @@ export class BrowseOrgDetailState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseOrgDetailAction.LoadOrgDetail)
-  LoadRto(
+  orgDetail(
     { setState, dispatch, getState }: StateContext<BrowseOrgDetailModel>,
     { payload }: BrowseOrgDetailAction.LoadOrgDetail
   ) {
@@ -84,7 +83,7 @@ export class BrowseOrgDetailState {
     );
   }
 
-  @Action(BrowseOrgDetailAction.CreateOrgDetail)
+ /* @Action(BrowseOrgDetailAction.CreateOrgDetail)
   createRto(
     { dispatch }: StateContext<BrowseOrgDetailModel>,
     { payload }: BrowseOrgDetailAction.CreateOrgDetail
@@ -102,10 +101,10 @@ export class BrowseOrgDetailState {
         return EMPTY;
       })
     );
-  }
+  }*/
 
   @Action(BrowseOrgDetailAction.UpdateOrgDetail)
-  UpdateOrgDetail(
+  updateOrgDetail(
     { dispatch }: StateContext<BrowseOrgDetailModel>,
     { payload }: BrowseOrgDetailAction.UpdateOrgDetail
   ) {
@@ -114,6 +113,22 @@ export class BrowseOrgDetailState {
         this.messageHelper.success();
         dispatch(new BrowseOrgDetailAction.LoadOrgDetail());
       }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        // dispatch(new BrowseRtoAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowseOrgDetailAction.GetOrgDetail)
+  getOrgDetail(
+    { dispatch }: StateContext<BrowseOrgDetailModel>,
+    { payload }: BrowseOrgDetailAction.GetOrgDetail
+  ) {
+    return dispatch(new OrgDetailAction.GetOrgDetail(payload)).pipe(
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;

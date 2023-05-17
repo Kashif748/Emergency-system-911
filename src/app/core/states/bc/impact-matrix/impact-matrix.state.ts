@@ -1,5 +1,5 @@
 import {EMPTY} from "rxjs";
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {Injectable} from "@angular/core";
@@ -7,6 +7,7 @@ import {BcImpactTypesMatrixControllerService} from "../../../../api/services/bc-
 import {PageBcImpactTypesMatrix} from "../../../../api/models/page-bc-impact-types-matrix";
 import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
 import {ImpactMatrixAction} from "@core/states/bc/impact-matrix/impact-matrix.action";
+import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
 
 
 export interface ImpactMatrixStateModel {
@@ -27,7 +28,8 @@ export class ImpactMatrixState {
    *
    */
   constructor(
-    private impactMatrix: BcImpactTypesMatrixControllerService
+    private impactMatrix: BcImpactTypesMatrixControllerService,
+    private store: Store,
   ) {
   }
 
@@ -68,10 +70,11 @@ export class ImpactMatrixState {
         loading: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.impactMatrix
       .getAll16({
         isActive: true,
-        versionId: 1,
+        versionId: versionID,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -157,7 +160,7 @@ export class ImpactMatrixState {
   }
 
   @Action(ImpactMatrixAction.GetImpactMatrix, {cancelUncompleted: true})
-  GetImpactMatrix(
+  getImpactMatrix(
     {setState}: StateContext<ImpactMatrixStateModel>,
     {payload}: ImpactMatrixAction.GetImpactMatrix
   ) {

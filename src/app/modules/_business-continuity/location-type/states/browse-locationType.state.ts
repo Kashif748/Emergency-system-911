@@ -59,7 +59,7 @@ export class BrowseLocationTypeState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseLocationTypeAction.LoadLocationType)
-  LoadLocationType(
+  loadLocationType(
     { setState, dispatch, getState }: StateContext<BrowseLocationTypeStateModel>,
     { payload }: BrowseLocationTypeAction.LoadLocationType
   ) {
@@ -83,7 +83,7 @@ export class BrowseLocationTypeState {
   }
 
   @Action(BrowseLocationTypeAction.CreateLocationType)
-  CreateLocationType(
+  createLocationType(
     { dispatch }: StateContext<BrowseLocationTypeStateModel>,
     { payload }: BrowseLocationTypeAction.CreateLocationType
   ) {

@@ -7,6 +7,8 @@ import {Bcrto} from "../../../../api/models/bcrto";
 import {BcrtoControllerService} from "../../../../api/services/bcrto-controller.service";
 import {PageBcrto} from "../../../../api/models/page-bcrto";
 import {RtoAction} from "@core/states";
+import {SituationsState} from "@core/states/situations/situations.state";
+import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
 
 
 export interface RtoStateModel {
@@ -26,7 +28,8 @@ export class RtoState {
    *
    */
   constructor(
-    private rto: BcrtoControllerService
+    private rto: BcrtoControllerService,
+    private store: Store,
   ) {
   }
 
@@ -67,10 +70,11 @@ export class RtoState {
         loading: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.rto
       .getAll10({
         isActive: true,
-        versionId: 1,
+        versionId: versionID,
         pageable: {
           page: payload.page,
           size: payload.size,

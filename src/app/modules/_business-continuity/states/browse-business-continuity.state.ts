@@ -9,10 +9,24 @@ import {catchError, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
 import {BCAction} from "@core/states/bc/business-continuity/business-continuity.action";
 import {patch} from "@ngxs/store/operators";
+import {BrowseRtoAction} from "../rto/states/browse-rto.action";
+import {BrowseLocationTypeAction} from "../location-type/states/browse-locationType.action";
+import {
+  BrowseImpLevelWorkingAction
+} from "../importance-level-working/browse-imp-level-working/states/browse-imp-level-working.action";
+import {BrowseActivityFrquencyAction} from "../activity-frquency/states/browse-activity-frquency.action";
+import {BrowseImpactMatrixAction} from "../impact-matrix/states/browse-impact-matrix.action";
+import {BrowseOrgDetailAction} from "../org-detail/states/browse-orgDetail.action";
+import {BrowseImpactLevelAction} from "../impact-level/states/browse-impact-level.action";
+import {
+  BrowseActivityPrioritySeqAction
+} from "../activity-priority-sequence/states/browse-activity-priority-seq.action";
+import {IAuthService} from "@core/services/auth.service";
 
 export interface BrowseBusinessContinuityStateModel {
   pageRequest: PageRequestModel;
   versionId: number;
+  currentTab: string;
   columns: string[];
   view: 'TABLE' | 'CARDS';
 }
@@ -23,6 +37,7 @@ export const BROWSE_BUSINESS_CONTINUITY_UI_STATE_TOKEN =
 @State<BrowseBusinessContinuityStateModel>({
   name: BROWSE_BUSINESS_CONTINUITY_UI_STATE_TOKEN,
   defaults: {
+    currentTab: '',
     versionId: null,
     pageRequest: {
       filters: {},
@@ -47,7 +62,8 @@ export class BrowseBusinessContinuityState {
     private messageHelper: MessageHelper,
     private router: Router,
     private apiHelper: ApiHelper,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: IAuthService
   ) {
   }
 
@@ -58,8 +74,8 @@ export class BrowseBusinessContinuityState {
   }
 
   @Selector([BrowseBusinessContinuityState])
-  static versionId(versionId: BrowseBusinessContinuityStateModel): BrowseBusinessContinuityStateModel {
-    return versionId;
+  static versionId(state: BrowseBusinessContinuityStateModel): number {
+    return state.versionId;
   }
 
   /* ********************** ACTIONS ************************* */
@@ -164,8 +180,8 @@ export class BrowseBusinessContinuityState {
   }
 
   @Action(BrowseBusinessContinuityAction.SetGlobalVersion, { cancelUncompleted: true })
-  SetGlobalVersion(
-    { setState }: StateContext<BrowseBusinessContinuityStateModel>,
+  setGlobalVersion(
+    { setState, getState, dispatch }: StateContext<BrowseBusinessContinuityStateModel>,
     { payload }: BrowseBusinessContinuityAction.SetGlobalVersion
   ) {
     if (payload.id === undefined || payload.id === null) {
@@ -181,5 +197,62 @@ export class BrowseBusinessContinuityState {
         versionId: payload.id,
       })
     );
+    if (payload.currentTab === undefined || payload.currentTab === '') {
+      setState(
+        patch<BrowseBusinessContinuityStateModel>({
+          versionId: undefined,
+        })
+      );
+      return;
+    }
+    setState(
+      patch<BrowseBusinessContinuityStateModel>({
+        currentTab: payload.currentTab,
+      })
+    );
+
+    const activeTab = getState().currentTab;
+    const pageRequest = getState().pageRequest;
+    if (activeTab === 'rto-list') {
+      return dispatch(
+        new BrowseRtoAction.LoadRto()
+      );
+    }
+    if (activeTab === 'loc-types') {
+      return dispatch(
+        new BrowseLocationTypeAction.LoadLocationType()
+      );
+    }
+    if (activeTab === 'imp-level-working') {
+      return dispatch(
+        new BrowseImpLevelWorkingAction.LoadImpLevelWorking()
+      );
+    }
+    if (activeTab === 'activey-frquency') {
+      return dispatch(
+        new BrowseActivityFrquencyAction.LoadActivityFrquency()
+      );
+    }
+    if (activeTab === 'impact-analysis') {
+      return dispatch(
+        new BrowseImpactMatrixAction.LoadImpactMatrix()
+      );
+    }
+    if (activeTab === 'org-details') {
+        const loggedinUserId = this.auth.getClaim('orgId');
+        return dispatch(
+        new BrowseOrgDetailAction.GetOrgDetail({id: loggedinUserId})
+      );
+    }
+    if (activeTab === 'impact-level') {
+      return dispatch(
+        new BrowseImpactLevelAction.LoadImpactLevel()
+      );
+    }
+    if (activeTab === 'activey-priority') {
+      return dispatch(
+        new BrowseActivityPrioritySeqAction.LoadActivityPrioritySeq()
+      );
+    }
   }
 }

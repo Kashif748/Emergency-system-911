@@ -59,7 +59,7 @@ export class BrowseImpLevelWorkingState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseImpLevelWorkingAction.LoadImpLevelWorking)
-  LoadImpLevelWorking(
+  loadImpLevelWorking(
     { setState, dispatch, getState }: StateContext<BrowseImpLevelWorkingStateModel>,
     { payload }: BrowseImpLevelWorkingAction.LoadImpLevelWorking
   ) {
@@ -83,7 +83,7 @@ export class BrowseImpLevelWorkingState {
   }
 
   @Action(BrowseImpLevelWorkingAction.CreateImpLevelWorking)
-  CreateImpLevelWorking(
+  createImpLevelWorking(
     { dispatch }: StateContext<BrowseImpLevelWorkingStateModel>,
     { payload }: BrowseImpLevelWorkingAction.CreateImpLevelWorking
   ) {

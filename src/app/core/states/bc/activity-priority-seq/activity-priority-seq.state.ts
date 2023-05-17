@@ -1,4 +1,4 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {EMPTY} from "rxjs";
 import {catchError, finalize, tap} from "rxjs/operators";
@@ -7,6 +7,7 @@ import {BcRecoveryPrioritiesControllerService} from "../../../../api/services/bc
 import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-priorities";
 import {ActivityPrioritySeqAction} from "@core/states/bc/activity-priority-seq/activity-priority-seq.action";
 import {PageBcRecoveryPriorities} from "../../../../api/models/page-bc-recovery-priorities";
+import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
 
 
 export interface ActivityPrioritySeqStateModel {
@@ -27,7 +28,8 @@ export class ActivityPrioritySeqState {
    *
    */
   constructor(
-    private activityPrioritySeq: BcRecoveryPrioritiesControllerService
+    private activityPrioritySeq: BcRecoveryPrioritiesControllerService,
+    private store: Store,
   ) {
   }
 
@@ -68,10 +70,11 @@ export class ActivityPrioritySeqState {
         loading: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.activityPrioritySeq
       .getAll13({
         isActive: true,
-        versionId: 1,
+        versionId: versionID,
         pageable: {
            page: payload.page,
            size: payload.size,
