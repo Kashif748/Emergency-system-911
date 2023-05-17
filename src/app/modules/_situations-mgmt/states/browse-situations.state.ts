@@ -4,6 +4,7 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { SituationsAction } from '@core/states/situations/situations.action';
+import { SituationsState } from '@core/states/situations/situations.state';
 import {
   Action,
   Selector,
@@ -103,6 +104,8 @@ export class BrowseSituationsState {
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
           filters: iif(!!payload?.pageRequest, payload?.pageRequest?.filters),
+          sortField: 'id',
+          sortOrder: 'asc',
         }),
       })
     );
@@ -115,6 +118,15 @@ export class BrowseSituationsState {
         filters: {
           ...pageRequest.filters,
         },
+      })
+    );
+  }
+  @Action(BrowseSituationsAction.GetActiveSituation)
+  GetActiveSituation({ dispatch }: StateContext<BrowseSituationsStateModel>) {
+    return dispatch(new SituationsAction.GetActiveSituation()).pipe(
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
       })
     );
   }
@@ -150,6 +162,22 @@ export class BrowseSituationsState {
           new BrowseSituationsAction.LoadSituations(),
           new BrowseSituationsAction.ToggleDialog({}),
         ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+  @Action(BrowseSituationsAction.DeleteSituations)
+  DeleteSituations(
+    { dispatch }: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.DeleteSituations
+  ) {
+    return dispatch(new SituationsAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseSituationsAction.LoadSituations());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

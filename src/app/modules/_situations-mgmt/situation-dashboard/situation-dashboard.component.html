@@ -205,7 +205,7 @@
               class="max-w-250px"
               *ngFor="let rate of statistics.recoveryRate"
             >
-              {{ rate | number | percent }}
+              {{ rate | number : "1.0-1" }}%
             </td>
           </tr>
         </ng-template>
@@ -272,7 +272,7 @@
       [totalRecords]="totalRecords$ | async"
       [pageRequest]="state.pageRequest"
       (onPageChange)="loadPage($event)"
-      (onRowSelect)="redirectToDashboard( $event._id )"
+      (onRowSelect)="redirectToDashboard($event._id)"
     ></app-content-situations>
   </ng-template>
 </p-dialog>
