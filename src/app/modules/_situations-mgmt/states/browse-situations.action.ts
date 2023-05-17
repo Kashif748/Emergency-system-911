@@ -39,6 +39,14 @@ export namespace BrowseSituationsAction {
     ) {}
   }
 
+  export class GetActiveSituation {
+    static readonly type = '[BrowseSituations] Get Active Situations';
+    /**
+     *
+     */
+    constructor() {}
+  }
+
   export class CreateSituations {
     static readonly type = '[BrowseSituations] Create Situations';
     /**
@@ -55,6 +63,17 @@ export namespace BrowseSituationsAction {
     constructor(public payload: Situation) {}
   }
 
+  export class DeleteSituations {
+    static readonly type = '[Situations] Delete';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
   export class ToggleDialog {
     static readonly type = '[BrowseSituations] Toggle Dialog';
     /**
@@ -97,3 +116,4 @@ export namespace BrowseSituationsAction {
     ) {}
   }
 }
+

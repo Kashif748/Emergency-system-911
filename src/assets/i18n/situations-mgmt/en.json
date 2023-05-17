@@ -18,6 +18,7 @@
     "ALL": "All",
     "RECOVERY_RATE": "Recovery Rate",
     "INCIDENT_MAIN_CATEGORY": "Incident main category",
-    "CHART_TITLE": "Incidents Statistics by Importance"
+    "CHART_TITLE": "Incidents Statistics by Importance",
+    "ACTIVE_NOW" :"Active Now"
   }
 }

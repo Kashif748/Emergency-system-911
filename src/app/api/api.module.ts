@@ -99,7 +99,8 @@ import { CircularStatusControllerService } from './services/circular-status-cont
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
 import { BcVersionsControllerService } from './services/bc-versions-controller.service';
 import { BcrtoControllerService } from './services/bcrto-controller.service';
-import { BcResponsibleOrganizationControllerService } from './services/bc-responsible-organization-controller.service';
+import { BcOrgHirControllerService } from './services/bc-org-hir-controller.service';
+import { BcOrgHirTypeControllerService } from './services/bc-org-hir-type-controller.service';
 import { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
 import { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
 import { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
@@ -248,7 +249,8 @@ import { MigrationControllerService } from './services/migration-controller.serv
     ConfidentialtyControllerService,
     BcVersionsControllerService,
     BcrtoControllerService,
-    BcResponsibleOrganizationControllerService,
+    BcOrgHirControllerService,
+    BcOrgHirTypeControllerService,
     BcRecoveryPrioritiesControllerService,
     BcLocationTypeControllerService,
     BcWorkImportanceLevelsControllerService,

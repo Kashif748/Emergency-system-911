@@ -25,6 +25,7 @@ import { ILangFacade } from '@core/facades/lang.facade';
 export interface SituationsStateModel {
   page: PageSituationProjection;
   situation: SituationProjection;
+  activeSituation: SituationProjection;
   statistics: SituationStatisticsResponse;
   chartReport: SituationChartReportResponse;
   loading: boolean;
@@ -49,6 +50,10 @@ export class SituationsState {
   @Selector([SituationsState])
   static situation(state: SituationsStateModel) {
     return state?.situation;
+  }
+  @Selector([SituationsState])
+  static activeSituation(state: SituationsStateModel) {
+    return state?.activeSituation;
   }
   @Selector([SituationsState])
   static page(state: SituationsStateModel) {
@@ -166,6 +171,19 @@ export class SituationsState {
     );
   }
 
+  @Action(SituationsAction.GetActiveSituation, { cancelUncompleted: true })
+  getActiveSituation({ setState }: StateContext<SituationsStateModel>) {
+    return this.situationsService.getActiveSituation().pipe(
+      tap((res) => {
+        setState(
+          patch<SituationsStateModel>({
+            activeSituation: res.result,
+          })
+        );
+      })
+    );
+  }
+
   @Action(SituationsAction.Create)
   create(
     { setState }: StateContext<SituationsStateModel>,
@@ -204,6 +222,44 @@ export class SituationsState {
     return this.situationsService
       .update8({
         body: { ...payload },
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<SituationsStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+  @Action(SituationsAction.Delete)
+  delete(
+    { setState, getState }: StateContext<SituationsStateModel>,
+    { payload }: SituationsAction.Delete
+  ) {
+    setState(
+      patch<SituationsStateModel>({
+        blocking: true,
+      })
+    );
+    const situation = getState().page.content.find(
+      (item) => item.id === payload.id
+    );
+
+    let situationParam = {
+      id: situation.id,
+      type: situation.newsType?.id,
+      theme: situation.themeType?.id,
+      endDate: DateTimeUtil.getDateInUTCFormat(situation.endDate),
+      startDate: DateTimeUtil.getDateInUTCFormat(situation.startDate),
+      nameAr: situation.nameAr,
+      nameEn: situation.nameEn,
+      isActive: false,
+    };
+    return this.situationsService
+      .update8({
+        body: { ...situationParam },
       })
       .pipe(
         finalize(() => {

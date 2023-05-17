@@ -323,52 +323,9 @@ export class SituationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getActiveSituation
-   */
-  static readonly GetActiveSituationPath = '/v1/active/situation';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getActiveSituation()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getActiveSituation$Response(params?: {
-  }): Observable<StrictHttpResponse<RestApiResponseSituationProjection>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SituationControllerService.GetActiveSituationPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseSituationProjection>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getActiveSituation$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getActiveSituation(params?: {
-  }): Observable<RestApiResponseSituationProjection> {
-
-    return this.getActiveSituation$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseSituationProjection>) => r.body as RestApiResponseSituationProjection)
-    );
-  }
-
-  /**
    * Path part for operation chartReport
    */
-  static readonly ChartReportPath = '/ v1/situations/chart-report';
+  static readonly ChartReportPath = '/v1/situations/chart-report';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -408,6 +365,49 @@ export class SituationControllerService extends BaseService {
 
     return this.chartReport$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseSituationChartReportResponse>) => r.body as RestApiResponseSituationChartReportResponse)
+    );
+  }
+
+  /**
+   * Path part for operation getActiveSituation
+   */
+  static readonly GetActiveSituationPath = '/v1/active/situation';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getActiveSituation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getActiveSituation$Response(params?: {
+  }): Observable<StrictHttpResponse<RestApiResponseSituationProjection>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SituationControllerService.GetActiveSituationPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseSituationProjection>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getActiveSituation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getActiveSituation(params?: {
+  }): Observable<RestApiResponseSituationProjection> {
+
+    return this.getActiveSituation$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseSituationProjection>) => r.body as RestApiResponseSituationProjection)
     );
   }
 

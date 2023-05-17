@@ -1,4 +1,7 @@
 {
+  "SHARED":{
+    "PAGE_REPORT": "{first} - {last} من {totalRecords}"
+  },
   "VERSIONS_SETTINGS": "إعدادات الاصدارات",
   "ADD_VERSION": "انشاء إصدار جديد",
   "VERSION": "الإصدار",
@@ -19,6 +22,8 @@
   "ACTION": "الإجراء",
   "ADD": "إضافة",
   "IMPACT_ANALYSIS": {
+    "VIEW_NEW":"عرض نوع التأثير",
+    "EDIT_NEW":"تحرير نوع التأثير",
     "HEADER": "مصفوفة تحليل الأثر على الأعمال",
     "ADD_NEW": " اضافة نوع تأثير جديد",
     "TAB_LABEL": "مصفوفة تحليل الأثر",
@@ -42,10 +47,11 @@
   "RTO_ENG": "زمن التعافي",
 
   "RTO_LIST": {
+    "TITLE_RTO":"مشاهدة ملف",
     "CRITICALITY": "الحيوية",
     "RTO_DESC": "الوصف",
     "ADD_NEW_RTO": " اضافة زمن تعافي جديد",
-
+    "EDIT_RTO":"زمن التعافي",
     "RTO_ENG": "زمن التعافي (انجليزي)",
     "RTO_AR": "زمن التعافي (عربي)",
 
@@ -55,23 +61,30 @@
     "DESC_EN": " الوصف (انجليزي)"
   },
   "ACTIVITY_FEQ": {
+    "TITLE_ACQ_FEQ":"تردد النشاط",
     "ADD_NEW_ACQ_FEQ": "اضافة دورية نشاط جديدة",
+    "EDIT_ACQ_FEQ":"تعديل تكرار النشاط",
     "FRQUENCY_AR": "الدورية (عربي)",
     "FRQUENCY_EN": "الدورية (عربي)"
   },
   "LOC_TYPE": {
     "TYPE_AR": "النوع (عربي)",
+    "TITLE_LOC_TYPE":"نوع الموقع",
+    "EDIT_LOC_TYPE":"تحرير نوع الموقع",
     "TYPE_EN": "النوع (انجليزي)",
     "ADD_NEW_LOC_TYPE": "    اضافة نوع موقع جديد "
   },
   "ACTIVITY_PRIORITY_SEQ": {
+    "TITLE_PRI_SEQ":"تسلسل الأولوية",
     "ADD_NEW_PRI_SEQ": "  اضافة اولوية استرجاع جديدة ",
-
+    "EDIT_PRI_SEQ":"تحرير تسلسل الأولوية",
     "PRI_AR": "الاولوية (عربي)",
     "PRI_EN": "الاولوية (انجليزي)"
   },
 
   "IMP_LEVEL_WORKING": {
+    "TITLE_IMP_LEVEL":"مستوى الأهمية",
+    "EDIT_IMP_LEVEL":"تحرير مستوى الأهمية",
     "ADD_NEW_IMP_LEVEL": " اضافة مستوى توافر جديد ",
     "COLOR": "اللون",
     "IMP_LEVEL": "المستوى (انجليزي) ",

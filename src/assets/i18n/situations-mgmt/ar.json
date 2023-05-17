@@ -18,6 +18,7 @@
     "ALL": "الكل",
     "RECOVERY_RATE": "نسبة التعافي",
     "INCIDENT_MAIN_CATEGORY": "تصنيف البلاغ الرئيسي",
-    "CHART_TITLE": "توزع البلاغات حسب الأهمية"
+    "CHART_TITLE": "توزع البلاغات حسب الأهمية",
+    "ACTIVE_NOW" :"نشط الان"
   }
 }
