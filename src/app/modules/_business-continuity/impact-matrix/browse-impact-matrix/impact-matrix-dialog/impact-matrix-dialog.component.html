@@ -1,0 +1,354 @@
+<div class="p-toolbar-group-right">
+  <button
+    pButton
+    label="{{ 'ACTIONS.ADD' | translate }}"
+    icon="pi pi-plus"
+    (click)="openDialog()"
+  ></button>
+</div>
+
+<p-dialog
+  [visible]="opened$ | async" (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <h3>
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+        {{'IMPACT_ANALYSIS.EDIT_NEW' | translate}}
+
+      </ng-container>
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+        {{'IMPACT_ANALYSIS.ADD_NEW' | translate}}
+      </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'IMPACT_ANALYSIS.VIEW_NEW' | translate}}
+      </ng-container>
+    </h3>
+  </ng-template>
+
+  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="typeAr" pInputText />
+        <label>
+          {{ "LOC_TYPE.TYPE_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['typeAr'].touched &&
+          !form.controls['typeAr'].valid &&
+          form.controls['typeAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['typeAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['typeAr'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="typeEn" pInputText />
+        <label>
+          {{ "LOC_TYPE.TYPE_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['typeEn'].touched &&
+          !form.controls['typeEn'].valid &&
+          form.controls['typeEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['typeEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['typeEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="d-flex p-flex-column w-100">
+      <div class="p-d-flex border-bottom pt-4">
+        <h4 class="p-md-2 font-weight-bold">
+          {{ "IMPACT_LEVELS.LEVEL" | translate }}
+        </h4>
+        <h4 class="p-md-5 font-weight-bold">
+          {{ "RTO_LIST.DESC_AR" | translate }}
+        </h4>
+        <h4 class="p-md-5 font-weight-bold">
+          {{ "RTO_LIST.DESC_EN" | translate }}
+        </h4>
+      </div>
+      <div class="p-d-flex border-bottom pt-4">
+        <p class="p-md-2">{{ "IMPACT_ANALYSIS.LOW" | translate }}</p>
+        <div class="p-field p-col-12 p-md-5">
+          <span class="p-float-label">
+            <textarea
+              pInputText
+              type="text"
+              formControlName="lowDescAr"
+              rows="3"
+            ></textarea>
+            <label>
+              {{ "LOC_TYPE.TYPE_AR" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container
+            *ngIf="
+              form.controls['lowDescAr'].touched &&
+              !form.controls['lowDescAr'].valid &&
+              form.controls['lowDescAr'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['lowDescAr'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['lowDescAr'].hasError('arabic')"
+            >
+              {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+            </p>
+          </ng-container>
+        </div>
+
+        <div class="p-field p-col-12 p-md-5">
+          <span class="p-float-label">
+            <textarea
+              pInputText
+              type="text"
+              formControlName="lowDescEn"
+              rows="3"
+            ></textarea>
+            <label>
+              {{ "LOC_TYPE.TYPE_EN" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container
+            *ngIf="
+              form.controls['lowDescEn'].touched &&
+              !form.controls['lowDescEn'].valid &&
+              form.controls['lowDescEn'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['lowDescEn'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['lowDescEn'].hasError('english')"
+            >
+              {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <div class="p-d-flex border-bottom pt-4">
+        <p class="p-md-2">{{ "IMPACT_ANALYSIS.MEDIUM" | translate }}</p>
+        <div class="p-field p-col-12 p-md-5">
+          <span class="p-float-label">
+            <textarea
+              pInputText
+              type="text"
+              formControlName="mediumDescAr"
+              rows="3"
+            ></textarea>
+            <label>
+              {{ "LOC_TYPE.TYPE_AR" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container
+            *ngIf="
+              form.controls['mediumDescAr'].touched &&
+              !form.controls['mediumDescAr'].valid &&
+              form.controls['mediumDescAr'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['mediumDescAr'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['mediumDescAr'].hasError('arabic')"
+            >
+              {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+            </p>
+          </ng-container>
+        </div>
+
+        <div class="p-field p-col-12 p-md-5">
+          <span class="p-float-label">
+            <textarea
+              pInputText
+              type="text"
+              formControlName="mediumDescEn"
+              rows="3"
+            ></textarea>
+            <label>
+              {{ "LOC_TYPE.TYPE_EN" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container
+            *ngIf="
+              form.controls['mediumDescEn'].touched &&
+              !form.controls['mediumDescEn'].valid &&
+              form.controls['mediumDescEn'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['mediumDescEn'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['mediumDescEn'].hasError('english')"
+            >
+              {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <div class="p-d-flex border-bottom pt-4">
+        <p class="p-md-2">{{ "IMPACT_ANALYSIS.HIGH" | translate }}</p>
+        <div class="p-field p-col-12 p-md-5">
+          <span class="p-float-label">
+            <textarea
+              pInputText
+              type="text"
+              formControlName="highDescAr"
+              rows="3"
+            ></textarea>
+            <label>
+              {{ "LOC_TYPE.TYPE_AR" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container
+            *ngIf="
+              form.controls['highDescAr'].touched &&
+              !form.controls['highDescAr'].valid &&
+              form.controls['highDescAr'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['highDescAr'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['highDescAr'].hasError('arabic')"
+            >
+              {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+            </p>
+          </ng-container>
+        </div>
+
+        <div class="p-field p-col-12 p-md-5">
+          <span class="p-float-label">
+            <textarea
+              pInputText
+              type="text"
+              formControlName="highDescEn"
+              rows="3"
+            ></textarea>
+            <label>
+              {{ "LOC_TYPE.TYPE_EN" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container
+            *ngIf="
+              form.controls['highDescEn'].touched &&
+              !form.controls['highDescEn'].valid &&
+              form.controls['highDescEn'].dirty
+            "
+          >
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['highDescEn'].hasError('required')"
+            >
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p
+              class="p-error mb-0"
+              *ngIf="form.controls['highDescEn'].hasError('english')"
+            >
+              {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+            </p>
+          </ng-container>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="p-col-12">
+      <p-divider align="center">
+        <div class="p-d-inline-flex p-ai-center">
+          <div class="p-field p-col-12 p-md-12">
+            <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                            offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                            iconPos="right"></p-toggleButton>
+          </div>
+        </div>
+      </p-divider>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="p-col text-center">
+      <div class="text-center" *ngIf="!(viewOnly$ | async)">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [disabled]="form.invalid"
+          (click)="submit()"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
