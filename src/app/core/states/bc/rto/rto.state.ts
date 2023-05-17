@@ -1,14 +1,12 @@
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
-import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
-import {EMPTY, of} from "rxjs";
+import {catchError, finalize, tap} from "rxjs/operators";
+import {EMPTY} from "rxjs";
 import {Bcrto} from "../../../../api/models/bcrto";
 import {BcrtoControllerService} from "../../../../api/services/bcrto-controller.service";
 import {PageBcrto} from "../../../../api/models/page-bcrto";
 import {RtoAction} from "@core/states";
-import {GroupAction} from "@core/states/group/group.action";
-import {GroupStateModel} from "@core/states/group/group.state";
 
 
 export interface RtoStateModel {

@@ -9,6 +9,8 @@ import {RtoAction} from "@core/states/bc/rto/rto.action";
 import {ApiHelper} from "@core/helpers/api.helper";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
+import {Store} from "@ngrx/store";
+import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
 
 
 export interface BrowseRtoStateModel {
@@ -46,7 +48,8 @@ export class BrowseRtoState {
     private messageHelper: MessageHelper,
     private router: Router,
     private apiHelper: ApiHelper,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store
   ) {
   }
 
@@ -83,9 +86,10 @@ export class BrowseRtoState {
 
   @Action(BrowseRtoAction.CreateRto)
   createRto(
-    { dispatch }: StateContext<BrowseRtoStateModel>,
+    { dispatch, getState }: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.CreateRto
   ) {
+    // const versionId = this.store.selectSnapshot(BrowseBusinessContinuityState.getState).versionId;
     return dispatch(new RtoAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
@@ -123,7 +127,7 @@ export class BrowseRtoState {
 
   @Action(BrowseRtoAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
-    {}: StateContext<BrowseRtoStateModel>,
+    {dispatch}: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.ToggleDialog
   ) {
     this.router.navigate([], {

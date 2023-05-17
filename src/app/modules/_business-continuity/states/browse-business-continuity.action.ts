@@ -49,4 +49,12 @@ export namespace BrowseBusinessContinuityAction {
      */
     constructor(public payload: { Id: number }) {}
   }
+
+  export class SetGlobalVersion {
+    static readonly type = '[BrowseBusinessContinuity] Set Version';
+    /**
+     *
+     */
+    constructor(public payload: { id?: number }) {}
+  }
 }

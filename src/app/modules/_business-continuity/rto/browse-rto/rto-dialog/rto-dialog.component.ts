@@ -3,13 +3,14 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GenericValidators} from "../../../../../shared/validators/generic-validators";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {FormUtils} from "@core/utils/form.utils";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {BrowseRtoAction} from "../../states/browse-rto.action";
 import {Observable, Subject} from "rxjs";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
 import {IAuthService} from "@core/services/auth.service";
 import {RtoAction, RtoState} from "@core/states";
+import {BrowseBusinessContinuityState} from "../../../states/browse-business-continuity.state";
 
 @Component({
   selector: 'app-rto-dialog',
@@ -20,6 +21,9 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
 
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+
+  @Select(BrowseBusinessContinuityState.versionId)
+  versionID$: Observable<number>
 
   public display = false;
   form: FormGroup;
@@ -128,7 +132,11 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       ...this.form.getRawValue(),
     };
 
-    rto.versionId = 1;
+    rto.versionId = this.versionID$.pipe(
+      tap((v) => {
+        return v;
+      })
+    ).subscribe();
     // rto.isActive = true;
     // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
 

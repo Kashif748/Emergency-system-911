@@ -37,6 +37,9 @@ import {OrgHierarchyComponent} from "./org-hierarchy/org-hierarchy.component";
 import {AddSectorComponent} from "./org-hierarchy/add-sector/add-sector.component";
 import {AddSectionComponent} from "./org-hierarchy/add-section/add-section.component";
 import {AddDepartmentComponent} from "./org-hierarchy/add-department/add-department.component";
+import {BrowseRtoState} from "./rto/states/browse-rto.state";
+import {NgxsModule} from "@ngxs/store";
+import {BrowseBusinessContinuityState} from "./states/browse-business-continuity.state";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -60,6 +63,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   imports: [
     CommonModule,
     BusinessContinuityRoutingModule,
+    NgxsModule.forFeature([BrowseBusinessContinuityState]),
     TranslateModule.forChild({
       extend: true,
       loader: {

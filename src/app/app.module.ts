@@ -75,6 +75,7 @@ import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-
 import {LocationTypeState} from "@core/states/bc/location-type/locationType.state";
 import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
 import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
+import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -147,7 +148,8 @@ export function getHighlightLanguages() {
         LocationTypeState,
         ImpactLevelState,
         ImpactMatrixState,
-        OrgDetailState
+        OrgDetailState,
+        BusinessContinuityState
       ],
       {
         developmentMode: !environment.production,
