@@ -15,6 +15,7 @@ import {FormUtils} from "@core/utils/form.utils";
 import {BCAction} from "@core/states";
 import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
 import {BcVersions} from "../../../api/models/bc-versions";
+import {IAuthService} from "@core/services/auth.service";
 
 @Component({
   selector: 'app-business-continuity',
@@ -38,6 +39,10 @@ export class BusinessContinuityComponent
 
   public versions: BcVersions[];
 
+  get loggedinUserId() {
+    return this.auth.getClaim('orgId');
+  }
+
   selectedVersion;
   constructor(
     private langFacade: ILangFacade,
@@ -47,7 +52,8 @@ export class BusinessContinuityComponent
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private store: Store,
-    private router: Router
+    private router: Router,
+    private auth: IAuthService
   ) {
     this.route.queryParams
       .pipe(
@@ -144,8 +150,7 @@ export class BusinessContinuityComponent
       ...this.form.getRawValue(),
     };
     businessCon.orgStructure = {
-      id: 4,
-      label: 'OrgStructure'
+      id: this.loggedinUserId,
     };
     businessCon.isActive = true;
     this.store.dispatch(new BrowseBusinessContinuityAction.CreateBusinessContinuity(businessCon)).pipe(
