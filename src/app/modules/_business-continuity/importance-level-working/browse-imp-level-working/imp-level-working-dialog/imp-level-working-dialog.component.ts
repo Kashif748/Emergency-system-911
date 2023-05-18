@@ -24,7 +24,7 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
 
   public display = false;
   form: FormGroup;
-  public color;
+  public color = '#ffffff';
 
   _id: number;
   get loggedinUserId() {
