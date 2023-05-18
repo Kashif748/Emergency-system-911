@@ -6,7 +6,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {iif, patch} from "@ngxs/store/operators";
 import {EMPTY} from "rxjs";
-import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
 import {catchError, tap} from "rxjs/operators";
 import {BrowseImpactLevelAction} from "./browse-impact-level.action";
 import {ImpactLevelAction} from "@core/states";
@@ -60,7 +59,7 @@ export class BrowseImpactLevelState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseImpactLevelAction.LoadImpactLevel)
-  LoadRto(
+  loadImpactLevel(
     { setState, dispatch, getState }: StateContext<BrowseImpactLevelStateModel>,
     { payload }: BrowseImpactLevelAction.LoadImpactLevel
   ) {
@@ -84,7 +83,7 @@ export class BrowseImpactLevelState {
   }
 
   @Action(BrowseImpactLevelAction.CreateImpactLevel)
-  CreateLocationType(
+  createLocationType(
     { dispatch }: StateContext<BrowseImpactLevelStateModel>,
     { payload }: BrowseImpactLevelAction.CreateImpactLevel
   ) {

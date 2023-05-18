@@ -59,7 +59,7 @@ export class BrowseActivityFrquencyState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseActivityFrquencyAction.LoadActivityFrquency)
-  LoadActivityFrquency(
+  loadActivityFrquency(
     { setState, dispatch, getState }: StateContext<BrowseActivityFrquencyStateModel>,
     { payload }: BrowseActivityFrquencyAction.LoadActivityFrquency
   ) {

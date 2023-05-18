@@ -10,7 +10,6 @@ import {ApiHelper} from "@core/helpers/api.helper";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
 import {Store} from "@ngrx/store";
-import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
 
 
 export interface BrowseRtoStateModel {
@@ -61,7 +60,7 @@ export class BrowseRtoState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseRtoAction.LoadRto)
-  LoadRto(
+  loadRto(
     { setState, dispatch, getState }: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.LoadRto
   ) {

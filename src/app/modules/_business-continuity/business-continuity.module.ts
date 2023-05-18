@@ -16,7 +16,6 @@ import {PanelMenuModule} from 'primeng/panelmenu';
 import {ButtonModule} from 'primeng/button';
 import {TagModule} from 'primeng/tag';
 import {TreeModule} from 'primeng/tree';
-import {OrgDetailsComponent} from './org-details/org-details.component';
 import {InputTextModule} from 'primeng/inputtext';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {TableModule} from 'primeng/table';
@@ -52,7 +51,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     BusinessContinuityComponent,
-    OrgDetailsComponent,
     OrgStrucureComponent,
     OrgHierarchyComponent,
     AddSectorComponent,

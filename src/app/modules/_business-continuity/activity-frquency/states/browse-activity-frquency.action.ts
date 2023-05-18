@@ -9,7 +9,7 @@ export namespace BrowseActivityFrquencyAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {
+    constructor(public payload?: { pageRequest?: PageRequestModel }) {
     }
   }
 

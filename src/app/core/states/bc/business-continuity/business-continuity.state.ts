@@ -70,7 +70,6 @@ export class BusinessContinuityState {
     return this.bC
       .getAll9({
         isActive: true,
-        versionId: 1,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -133,7 +132,7 @@ export class BusinessContinuityState {
 
 
   @Action(BCAction.GetBc, { cancelUncompleted: true })
-  GetBc(
+  getBc(
     { setState }: StateContext<BusinessContinuityStateModel>,
     { payload }: BCAction.GetBc
   ) {

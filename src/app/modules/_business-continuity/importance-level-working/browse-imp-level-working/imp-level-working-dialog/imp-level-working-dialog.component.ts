@@ -120,7 +120,11 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   openDialog(Id?: number) {
     this.store.dispatch(new BrowseImpLevelWorkingAction.ToggleDialog({ id: Id }));
   }
-
+  onValueChange(value: string): void {
+    this.form.patchValue({
+      colorCode: value
+    });
+  }
 
   submit() {
     if (!this.form.valid) {
