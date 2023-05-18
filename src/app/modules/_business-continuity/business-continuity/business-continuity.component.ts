@@ -132,7 +132,10 @@ export class BusinessContinuityComponent
   setValueGlobally(value: number) {
     const currentRoute = this.router.url;
     const parts = currentRoute.split('/');
-    const tab = parts[2];
+    let tab = parts[2];
+    if (tab.includes('?')) {
+      tab =   tab.split('?')[0];
+    }
     this.store.dispatch(new BrowseBusinessContinuityAction.SetGlobalVersion({id: value, currentTab: tab}));
   }
 

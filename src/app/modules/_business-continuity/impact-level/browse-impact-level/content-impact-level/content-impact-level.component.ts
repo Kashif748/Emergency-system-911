@@ -60,7 +60,7 @@ export class ContentImpactLevelComponent implements OnInit {
     this.form = this.formBuilder.group({
       nameEn: [null],
       nameAr: [null],
-      colorCode: [null],
+      colorCode: ['#ffffff'],
       isActive: [false]
     });
   }
@@ -84,7 +84,7 @@ export class ContentImpactLevelComponent implements OnInit {
       ...this.form.getRawValue(),
     };
 
-    impactLevel.versionId = 1;
+    // impactLevel.versionId = 1;
     // impactLevel.isActive = true;
     this.store.dispatch(new BrowseImpactLevelAction.CreateImpactLevel(impactLevel));
 

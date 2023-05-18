@@ -56,7 +56,7 @@ export class BrowseImpactLevelComponent implements OnInit {
         page?.map((u) => {
           return {
             ...u,
-            actions: [
+            /*actions: [
               {
                 ...userActions[0],
                 command: () => {
@@ -71,7 +71,7 @@ export class BrowseImpactLevelComponent implements OnInit {
                 },
                 disabled: u.isActive,
               },
-            ],
+            ],*/
           };
         })
       )
