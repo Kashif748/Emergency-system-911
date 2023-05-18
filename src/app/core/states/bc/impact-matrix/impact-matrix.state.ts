@@ -109,7 +109,7 @@ export class ImpactMatrixState {
       );
   }
 
-  /*@Action(ImpactMatrixAction.Create)
+  @Action(ImpactMatrixAction.Create)
   create(
     {setState}: StateContext<ImpactMatrixStateModel>,
     {payload}: ImpactMatrixAction.Create
@@ -119,6 +119,8 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.impactMatrix
       .insertOne1({
         body: payload,
@@ -132,7 +134,7 @@ export class ImpactMatrixState {
           );
         })
       );
-  }*/
+  }
 
   @Action(ImpactMatrixAction.Update)
   update(

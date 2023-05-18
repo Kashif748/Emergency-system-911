@@ -7,6 +7,8 @@ import {BcLocationTypes} from "../../../../../api/models/bc-location-types";
 import {BrowseLocationTypeAction} from "../../../location-type/states/browse-locationType.action";
 import {Store} from "@ngxs/store";
 import {ILangFacade} from "../../../../../core/facades/lang.facade";
+import {BcImpactTypes} from "../../../../../api/models/bc-impact-types";
+import {BcImpactLevel} from "../../../../../api/models/bc-impact-level";
 
 @Component({
   selector: 'app-content-impact-matrix',
@@ -19,6 +21,8 @@ export class ContentImpactMatrixComponent implements OnInit {
   @Input()
   page: BcLocationTypes[];
   @Input()
+  impactTypePage: BcImpactLevel[];
+  @Input()
   columns: string[];
   @Input()
   totalRecords: number;
@@ -27,6 +31,9 @@ export class ContentImpactMatrixComponent implements OnInit {
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
+
+  @Output()
+  onImpactTypePageChange = new EventEmitter<LazyLoadEvent>();
   //public loading = false;
   //public columns: string[] = ['impactType', 'low', 'medium', 'hight', 'action'];
   //public page = [];
@@ -39,6 +46,10 @@ export class ContentImpactMatrixComponent implements OnInit {
 
   ngOnInit(): void {
     this.onPageChange.emit({
+      first: this.pageRequest?.first,
+      rows: this.pageRequest?.rows,
+    });
+    this.onImpactTypePageChange.emit({
       first: this.pageRequest?.first,
       rows: this.pageRequest?.rows,
     });

@@ -29,9 +29,11 @@
     "HEADER": "Business Impact Analysis Matrix",
     "TAB_LABEL": "Impacts Analysis Matrix",
     "IMPACT_TYPES": "Impact Types",
+    "VERY_LOW": "Very Low",
     "LOW": "Low",
     "MEDIUM": "Medium",
-    "HIGH": "High"
+    "HIGH": "High",
+    "VERY_HIGH": "Very High"
   },
   "RTO_LIST_LABEL": "RTO List",
   "AV_LEVELS": "Importance Levels for Working",

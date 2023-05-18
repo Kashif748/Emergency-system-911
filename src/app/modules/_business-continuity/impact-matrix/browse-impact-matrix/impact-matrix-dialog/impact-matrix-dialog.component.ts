@@ -134,7 +134,7 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
       ...this.form.getRawValue(),
     };
 
-    impactMartix.versionId = 1;
+    // impactMartix.versionId = 1;
     // rto.isActive = true;
     // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
 

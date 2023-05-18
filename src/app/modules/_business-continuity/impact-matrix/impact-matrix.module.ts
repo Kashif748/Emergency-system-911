@@ -34,6 +34,7 @@ import {SidebarModule} from "primeng/sidebar";
 import {MenuModule} from "primeng/menu";
 import {OrganizationChartModule} from "primeng/organizationchart";
 import {BrowseImpactMatrixState} from "./states/browse-impact-matrix.state";
+import {BrowseImpactLevelState} from "./states/browse-impact-level.state";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -48,7 +49,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   imports: [
     CommonModule,
     ImpactMatrixRoutingModule,
-    NgxsModule.forFeature([BrowseImpactMatrixState]),
+    NgxsModule.forFeature([BrowseImpactMatrixState, BrowseImpactLevelState]),
     TranslateModule.forChild({
       extend: true,
       loader: {

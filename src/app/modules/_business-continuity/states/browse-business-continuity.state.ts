@@ -234,9 +234,10 @@ export class BrowseBusinessContinuityState {
       );
     }
     if (activeTab === 'impact-analysis') {
-      return dispatch(
-        new BrowseImpactMatrixAction.LoadImpactMatrix()
+      return dispatch([new BrowseImpactMatrixAction.LoadImpactMatrix(), new BrowseImpactLevelAction.LoadImpactLevel()]
+
       );
+
     }
     if (activeTab === 'org-details') {
         const loggedinUserId = this.auth.getClaim('orgId');

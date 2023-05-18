@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {BrowseRtoState, BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
-import {RtoState} from "../../../../core/states/bc/rto/rto.state";
-import {Bcrto} from "../../../../api/models/bcrto";
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {TranslateService} from "@ngx-translate/core";
@@ -9,11 +6,13 @@ import {MessageHelper} from "../../../../core/helpers/message.helper";
 import {ILangFacade} from "../../../../core/facades/lang.facade";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {filter, map} from "rxjs/operators";
-import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
 import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
 import {BrowseImpactMatrixState, BrowseImpactMatrixStateModel} from "../states/browse-impact-matrix.state";
 import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 import {BrowseImpactMatrixAction} from "../states/browse-impact-matrix.action";
+import {BcImpactLevel} from "../../../../api/models/bc-impact-level";
+import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
+import {BrowseImpactLevelAction} from "../../impact-level/states/browse-impact-level.action";
 
 @Component({
   selector: 'app-browse-impact-matrix',
@@ -22,6 +21,7 @@ import {BrowseImpactMatrixAction} from "../states/browse-impact-matrix.action";
 })
 export class BrowseImpactMatrixComponent implements OnInit {
   public page$: Observable<BcImpactTypesMatrix[]>;
+  public impactTypePage$: Observable<BcImpactLevel[]>;
 
   @Select(ImpactMatrixState.totalRecords)
   public totalRecords$: Observable<number>;
@@ -49,7 +49,7 @@ export class BrowseImpactMatrixComponent implements OnInit {
         icon: 'pi pi-check-square',
       },
     ] as MenuItem[];
-
+    this.impactTypePage$ = this.store.select(ImpactLevelState.page);
     this.page$ = this.store.select(ImpactMatrixState.page).pipe(
       filter((p) => !!p),
       map((page) =>
@@ -98,6 +98,17 @@ export class BrowseImpactMatrixComponent implements OnInit {
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseImpactMatrixAction.LoadImpactMatrix({
+        pageRequest: {
+          first: event.first,
+          rows: event.rows,
+        },
+      })
+    );
+  }
+
+  public loadImpactTypePage(event: LazyLoadEvent) {
+    this.store.dispatch(
+      new BrowseImpactLevelAction.LoadImpactLevel({
         pageRequest: {
           first: event.first,
           rows: event.rows,
