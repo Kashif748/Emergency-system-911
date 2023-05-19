@@ -50,7 +50,8 @@ export class BrowseImpactMatrixComponent implements OnInit {
       },
     ] as MenuItem[];
     this.impactTypePage$ = this.store.select(ImpactLevelState.page);
-    this.page$ = this.store.select(ImpactMatrixState.page).pipe(
+    /*this.page$ = this.store.select(ImpactMatrixState.page)
+      .pipe(
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
@@ -75,7 +76,7 @@ export class BrowseImpactMatrixComponent implements OnInit {
           };
         })
       )
-    );
+    );*/
   }
 
   openDialog(Id?: number) {

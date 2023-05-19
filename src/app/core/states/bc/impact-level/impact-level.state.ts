@@ -82,7 +82,7 @@ export class ImpactLevelState {
       BrowseBusinessContinuityState.versionId
     );
     return this.impactLevel
-      .getAll18({
+      .getAll17({
         // isActive: true,
         versionId: versionID,
         pageable: {
@@ -134,7 +134,7 @@ export class ImpactLevelState {
     );
     payload.versionId = versionID;
     return this.impactLevel
-      .insertOne9({
+      .insertOne8({
         body: payload,
       })
       .pipe(

@@ -7,7 +7,7 @@ import {BcImpactTypesMatrixControllerService} from "../../../../api/services/bc-
 import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
 import {ImpactMatrixAction} from "@core/states/bc/impact-matrix/impact-matrix.action";
 import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
-import { BcImpactMatrixDto } from "src/app/api/models";
+import {BcImpactMatrixDto} from "../../../../api/models/bc-impact-matrix-dto";
 
 
 export interface ImpactMatrixStateModel {
