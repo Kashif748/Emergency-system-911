@@ -39,7 +39,7 @@ export namespace BrowseBusinessContinuityAction {
     /**
      *
      */
-    constructor(public payload: { Id?: number }) {}
+    constructor() {}
   }
 
   export class OpenView {
@@ -55,6 +55,6 @@ export namespace BrowseBusinessContinuityAction {
     /**
      *
      */
-    constructor(public payload: { id?: number, currentTab: string }) {}
+    constructor(public payload: { id?: number  }) {}
   }
 }

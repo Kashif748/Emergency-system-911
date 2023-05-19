@@ -9,6 +9,7 @@ import { KpiV2ControllerService } from './services/kpi-v-2-controller.service';
 import { VersionControllerService } from './services/version-controller.service';
 import { UserProfileControllerService } from './services/user-profile-controller.service';
 import { UserPreferencesControllerService } from './services/user-preferences-controller.service';
+import { OrgStructureControllerService } from './services/org-structure-controller.service';
 import { TaskControllerService } from './services/task-controller.service';
 import { TaskWorkLogControllerService } from './services/task-work-log-controller.service';
 import { SystemEventControllerService } from './services/system-event-controller.service';
@@ -28,7 +29,6 @@ import { PushNotificationBodyControllerService } from './services/push-notificat
 import { PushNotificationActionControllerService } from './services/push-notification-action-controller.service';
 import { PriorityControllerService } from './services/priority-controller.service';
 import { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
-import { OrgStructureControllerService } from './services/org-structure-controller.service';
 import { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
 import { OperationalReportControllerService } from './services/operational-report-controller.service';
 import { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
@@ -159,6 +159,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     VersionControllerService,
     UserProfileControllerService,
     UserPreferencesControllerService,
+    OrgStructureControllerService,
     TaskControllerService,
     TaskWorkLogControllerService,
     SystemEventControllerService,
@@ -178,7 +179,6 @@ import { MigrationControllerService } from './services/migration-controller.serv
     PushNotificationActionControllerService,
     PriorityControllerService,
     ExternalPhonebookControllerService,
-    OrgStructureControllerService,
     OrgQuickLinkControllerService,
     OperationalReportControllerService,
     OperationalReportStatusControllerService,

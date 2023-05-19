@@ -1,23 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable, of} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {TranslateService} from "@ngx-translate/core";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {filter, isEmpty, map} from "rxjs/operators";
-import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {BrowseImpactLevelAction,} from "../states/browse-impact-level.action";
-import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
-import {BcImpactLevel} from "../../../../api/models/bc-impact-level";
-import {BrowseImpactLevelState, BrowseImpactLevelStateModel} from "../states/browse-impact-level.state";
-import {DATA} from "../../tabs.const";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { LazyLoadEvent } from 'primeng/api';
+import { BrowseImpactLevelAction } from '../states/browse-impact-level.action';
+import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.state';
+import { BcImpactLevel } from '../../../../api/models/bc-impact-level';
+import {
+  BrowseImpactLevelState,
+  BrowseImpactLevelStateModel,
+} from '../states/browse-impact-level.state';
+import { DATA } from '../../tabs.const';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { BrowseBusinessContinuityState } from '../../states/browse-business-continuity.state';
 
 @Component({
   selector: 'app-browse-impact-level',
   templateUrl: './browse-impact-level.component.html',
-  styleUrls: ['./browse-impact-level.component.scss']
+  styleUrls: ['./browse-impact-level.component.scss'],
 })
-export class BrowseImpactLevelComponent implements OnInit {
+export class BrowseImpactLevelComponent implements OnInit, OnDestroy {
   public page$: Observable<BcImpactLevel[]>;
 
   @Select(ImpactLevelState.totalRecords)
@@ -28,91 +30,41 @@ export class BrowseImpactLevelComponent implements OnInit {
 
   @Select(BrowseImpactLevelState.state)
   public state$: Observable<BrowseImpactLevelStateModel>;
-  constructor(
-    private translate: TranslateService,
-    private lang: ILangFacade,
-    private store: Store,
-    private messageHelper: MessageHelper,
-  ) { }
+
+  private destroy$ = new Subject();
+  constructor(private store: Store, private lang: ILangFacade) {}
 
   ngOnInit(): void {
-    const userActions = [
-      {
-        label: this.translate.instant('ACTIONS.EDIT'),
-        icon: 'pi pi-pencil',
-      },
-      {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
-      },
-    ] as MenuItem[];
-
-    const impactLevels: BcImpactLevel[] = DATA.impactLevels;
-
-    this.page$ = this.store.select(ImpactLevelState.page)
+    this.store
+      .select(BrowseBusinessContinuityState.versionId)
       .pipe(
-      filter((p) => !!p),
-      map((page) =>
-        page?.map((u) => {
-          return {
-            ...u,
-            /*actions: [
-              {
-                ...userActions[0],
-                command: () => {
-                  this.openDialog(u.id);
-                },
-                disabled: !u.isActive,
-              },
-              {
-                ...userActions[1],
-                command: () => {
-                  this.activate(u.id);
-                },
-                disabled: u.isActive,
-              },
-            ],*/
-          };
-        })
+        takeUntil(this.destroy$),
+        debounceTime(200),
+        tap((v) => this.loadPage())
       )
-    );
+      .subscribe();
 
-    this.page$.pipe(
-      map(items => items.length)
-    ).subscribe(length => {
-      if (length === 0) {
-        this.page$ = of(impactLevels);
-      }
-    });
-  }
-
-  openDialog(Id?: number) {
-    this.store.dispatch(new BrowseImpactLevelAction.ToggleDialog({ id: Id }));
-  }
-
-  activate(id: number) {
-    this.messageHelper.confirm({
-      summary: 'SHARED.DIALOG.ARE_YOU_SURE',
-      detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE',
-      yesCommand: () => {
-        // this.store.dispatch(new UserAction.Activate({ id }));
-        this.messageHelper.closeConfirm();
-      },
-      noCommand: () => {
-        this.messageHelper.closeConfirm();
-      },
-    });
-  }
-
-  public loadPage(event: LazyLoadEvent) {
-    this.store.dispatch(
-      new BrowseImpactLevelAction.LoadImpactLevel({
-        pageRequest: {
-          first: event.first,
-          rows: event.rows,
-        },
+    this.page$ = this.store.select(ImpactLevelState.page).pipe(
+      filter((p) => !!p),
+      map((data) => {
+        if (!data || data?.length === 0) return DATA.impactLevels;
+        return data;
       })
     );
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  public loadPage(event?: LazyLoadEvent) {
+    this.store.dispatch(
+      new BrowseImpactLevelAction.LoadImpactLevel({
+        pageRequest: {
+          first: event?.first,
+          rows: event?.rows,
+        },
+      })
+    );
+  }
 }

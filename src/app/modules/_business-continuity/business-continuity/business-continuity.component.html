@@ -17,11 +17,10 @@
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
     <app-breadcrumb></app-breadcrumb>
-
     <p-dropdown
-      [options]="versions"
+      [options]="versions$ | async"
       [(ngModel)]="selectedVersion"
-      placeholder="Select a version"
+      placeholder="{{ 'VERSION' | translate }}"
       dataKey="id"
       (onChange)="onChange($event.value)"
     >
@@ -43,7 +42,7 @@
     label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
     icon="pi pi-cog"
     class="p-button-warning"
-    (click)="openDialog()"
+    (click)="toggleDialog()"
   ></button>
 </header>
 
@@ -76,18 +75,39 @@
 </section>
 
 <p-dialog
-  [visible]="visible" (visibleChange)="close()"
+  [visible]="versionsDialogOpend$ | async"
+  (visibleChange)="toggleDialog()"
   [modal]="true"
   [style]="{ width: '30vw' }"
+  styleClass="min-h-300px"
   [breakpoints]="{ '960px': '40vw', '640px': '100vw' }"
-  [maximizable]="true"
   [baseZIndex]="10000"
 >
   <ng-template pTemplate="header">
     <h3>
-      <span>{{ "ADD_VERSION" | translate }}</span>
+      <span>{{ "VERSIONS_SETTINGS" | translate }}</span>
     </h3>
   </ng-template>
+  <p-dropdown
+    [options]="versions$ | async"
+    [(ngModel)]="selectedVersion"
+    placeholder="{{ 'VERSION' | translate }}"
+    styleClass="w-100 mt-3"
+    dataKey="id"
+    (onChange)="onChange($event.value)"
+  >
+    <ng-template pTemplate="selectedItem">
+      <div *ngIf="selectedVersion">
+        {{ selectedVersion | translateObj }}
+      </div>
+    </ng-template>
+    <ng-template let-version pTemplate="item">
+      <div>{{ version | translateObj }}</div>
+    </ng-template>
+  </p-dropdown>
+  <p-divider align="center" styleClass="mt-10">
+    <span class="font-weight-bold">{{ "ADD_VERSION" | translate }}</span>
+  </p-divider>
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
     <!-- version AR -->
     <div class="p-field p-col-12 p-md-12">

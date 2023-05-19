@@ -3,6 +3,7 @@ export { KpiV2ControllerService } from './services/kpi-v-2-controller.service';
 export { VersionControllerService } from './services/version-controller.service';
 export { UserProfileControllerService } from './services/user-profile-controller.service';
 export { UserPreferencesControllerService } from './services/user-preferences-controller.service';
+export { OrgStructureControllerService } from './services/org-structure-controller.service';
 export { TaskControllerService } from './services/task-controller.service';
 export { TaskWorkLogControllerService } from './services/task-work-log-controller.service';
 export { SystemEventControllerService } from './services/system-event-controller.service';
@@ -22,7 +23,6 @@ export { PushNotificationBodyControllerService } from './services/push-notificat
 export { PushNotificationActionControllerService } from './services/push-notification-action-controller.service';
 export { PriorityControllerService } from './services/priority-controller.service';
 export { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
-export { OrgStructureControllerService } from './services/org-structure-controller.service';
 export { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
 export { OperationalReportControllerService } from './services/operational-report-controller.service';
 export { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
