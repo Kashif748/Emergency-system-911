@@ -5,6 +5,7 @@
   "VERSIONS_SETTINGS": "إعدادات الاصدارات",
   "ADD_VERSION": "إنشاء إصدار جديد",
   "VERSION": "الإصدار",
+  "UPDATE": "حفظ التعديلات؟",
   "VERSION_EN": "اسم الاصدار (انجليزي)",
   "VERSION_AR": "اسم الاصدار (عربي)",
   "RES_ORG": "الجهة المسؤولة",
@@ -96,5 +97,33 @@
     "LEVEL_AR": " المستوى (عربي)",
     "DESC_AR": "الوصف (عربي)",
     "DESC_EN": " الوصف (انجليزي)"
+  },
+  "ORG_HIE": {
+    "ADD_SECTOR": "إضافة قطاع جديد",
+    "ADD_DEPARTMENT": "إضافة إدارة جديد",
+    "ADD_SECTION": "إضافة قسم جديد",
+    "SECTOR_DETAILS": "بيانات القسم",
+    "DELETE": "حذف",
+    "SECTOR": {
+      "DEPT_NAME_EN": "إسم القسم (انجليزي)",
+      "DEPT_NAME_AR": "إسم القسم (عربي)"
+    },
+    "DEPT_DETAILS": "بيانات الإدارة",
+    "USER_MGMT": "بيانات الإدارة",
+    "DEPARTMENT": {
+      "MANA_DATA": "بيانات الإدارة",
+      "DEPT_NAME_EN": "إسم الإدارة (انجليزي)",
+      "DEPT_NAME_AR": "إسم الإدارة (عربي)",
+      "DEPT_MGMT": "مدير الإدارة ",
+      "FIRST_BUSI_COORDINATOR": "منسق استمرارية أعمال أول ",
+      "SECOND_BUSI_COORDINATOR": "منسق استمرارية أعمال ثاني "
+    },
+    "SECTION": {
+      "DEPT_DETAILS": "بيانات القسم",
+      "DEPT_NAME_EN": "إسم القسم (انجليزي)",
+      "DEPT_NAME_AR": "إسم القسم (عربي)",
+      "USER_DATA": "بيانات المستخدمين",
+      "SECTION_HEAD": "رئيس القسم "
+    }
   }
 }

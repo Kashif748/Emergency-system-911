@@ -42,7 +42,7 @@ export class BusinessContinuityComponent
   public smallScreen: boolean;
 
   @Select(BrowseBusinessContinuityState.versionsDialogOpend)
-  public versionsDialogOpend$: Observable<boolean[]>;
+  public versionsDialogOpend$: Observable<boolean>;
 
   @Select(BusinessContinuityState.versions)
   public versions$: Observable<BcVersions[]>;
@@ -130,8 +130,6 @@ export class BusinessContinuityComponent
   }
 
   setValueGlobally(value: number) {
-    console.log(value);
-
     this.store.dispatch(
       new BrowseBusinessContinuityAction.SetGlobalVersion({
         id: value,

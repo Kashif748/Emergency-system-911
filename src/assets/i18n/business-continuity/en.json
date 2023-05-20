@@ -7,7 +7,7 @@
   "VERSION" : "Version" ,
   "VERSION_EN" : "Version name (English)",
   "VERSION_AR" :"Version name (Arabic)",
-
+  "UPDATE": "Save Changes ?",
   "RES_ORG": "Responsible Organization",
   "ORG_DETAILS": "Organization Details",
   "ORG_ARTCH": "Organization Hierarchy",

@@ -132,10 +132,9 @@ export class ImpactLevelState {
     const versionID = this.store.selectSnapshot(
       BrowseBusinessContinuityState.versionId
     );
-    payload.versionId = versionID;
     return this.impactLevel
       .insertOne8({
-        body: payload,
+        body: { ...payload, versionId: versionID },
       })
       .pipe(
         finalize(() => {
@@ -161,10 +160,9 @@ export class ImpactLevelState {
     const versionID = this.store.selectSnapshot(
       BrowseBusinessContinuityState.versionId
     );
-    payload.versionId = versionID;
     return this.impactLevel
       .update88({
-        body: payload,
+        body: { ...payload, versionId: versionID },
       })
       .pipe(
         finalize(() => {

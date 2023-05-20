@@ -187,11 +187,7 @@ export class BrowseBusinessContinuityState {
     cancelUncompleted: true,
   })
   setGlobalVersion(
-    {
-      setState,
-      getState,
-      dispatch,
-    }: StateContext<BrowseBusinessContinuityStateModel>,
+    { setState }: StateContext<BrowseBusinessContinuityStateModel>,
     { payload }: BrowseBusinessContinuityAction.SetGlobalVersion
   ) {
     if (payload.id === undefined || payload.id === null) {
@@ -205,6 +201,7 @@ export class BrowseBusinessContinuityState {
     setState(
       patch<BrowseBusinessContinuityStateModel>({
         versionId: payload.id,
+        versionsDialogOpend: false
       })
     );
 
@@ -214,49 +211,5 @@ export class BrowseBusinessContinuityState {
       },
       queryParamsHandling: 'merge',
     });
-    const activeTab = getState().currentTab;
-    const pageRequest = getState().pageRequest;
-    // if (activeTab === 'rto-list') {
-    //   return dispatch(
-    //     new BrowseRtoAction.LoadRto()
-    //   );
-    // }
-    // if (activeTab === 'loc-types') {
-    //   return dispatch(
-    //     new BrowseLocationTypeAction.LoadLocationType()
-    //   );
-    // }
-    // if (activeTab === 'imp-level-working') {
-    //   return dispatch(
-    //     new BrowseImpLevelWorkingAction.LoadImpLevelWorking()
-    //   );
-    // }
-    // if (activeTab === 'activey-frquency') {
-    //   return dispatch(
-    //     new BrowseActivityFrquencyAction.LoadActivityFrquency()
-    //   );
-    // }
-    // if (activeTab === 'impact-analysis') {
-    //   return dispatch([new BrowseImpactMatrixAction.LoadImpactMatrix(), new BrowseImpactLevelAction.LoadImpactLevel()]
-
-    //   );
-
-    // }
-    // if (activeTab === 'org-details') {
-    //     const loggedinUserId = this.auth.getClaim('orgId');
-    //     return dispatch(
-    //     new BrowseOrgDetailAction.GetOrgDetail({id: loggedinUserId})
-    //   );
-    // }
-    // if (activeTab === 'impact-level') {
-    //   return dispatch(
-    //     new BrowseImpactLevelAction.LoadImpactLevel()
-    //   );
-    // }
-    // if (activeTab === 'activey-priority') {
-    //   return dispatch(
-    //     new BrowseActivityPrioritySeqAction.LoadActivityPrioritySeq()
-    //   );
-    // }
   }
 }

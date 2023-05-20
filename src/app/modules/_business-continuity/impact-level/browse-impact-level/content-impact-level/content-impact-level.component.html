@@ -27,6 +27,9 @@
             </th>
 
             <th style="width: 92px">{{ "ACTIONS.ACTIVE" | translate }}</th>
+            <th style="width: 92px">
+              {{ "ACTIONS.ACTIONS" | translate }}
+            </th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>
@@ -44,15 +47,11 @@
             <td>
               <p-skeleton></p-skeleton>
             </td>
-
             <td>
-              <button
-                pButton
-                pRipple
-                type="button"
-                icon="pi pi-ellipsis-v"
-                class="p-button-rounded p-button-text my-auto p-button-plain"
-              ></button>
+              <p-skeleton></p-skeleton>
+            </td>
+            <td>
+              <p-skeleton></p-skeleton>
             </td>
           </tr>
         </ng-template>
@@ -94,7 +93,9 @@
             </th>
 
             <th style="width: 92px">{{ "ACTIONS.ACTIVE" | translate }}</th>
-            <th></th>
+            <th style="width: 92px">
+              {{ "ACTIONS.ACTIONS" | translate }}
+            </th>
           </tr>
         </ng-template>
         <ng-template
@@ -127,7 +128,7 @@
                   <input
                     pInputText
                     type="text"
-                    [(ngModel)]="item.nameEn"
+                    [(ngModel)]="clonedLevels[item.id].nameEn"
                     class="p-inputtext w-100"
                   />
                 </ng-template>
@@ -141,15 +142,15 @@
               <p-cellEditor>
                 <ng-template pTemplate="input">
                   <p-colorPicker
-                    [(ngModel)]="item.colorCode"
+                    [(ngModel)]="clonedLevels[item.id].colorCode"
                     [inputId]="'colorInput'"
                   ></p-colorPicker>
-                  <input hidden id="colorInput" type="hidden" pInputText />
                 </ng-template>
                 <ng-template pTemplate="output">
                   <p-colorPicker
-                    [disabled]="true"
                     [(ngModel)]="item.colorCode"
+                    [inputId]="'colorInput'"
+                    [disabled]="true"
                   ></p-colorPicker>
                 </ng-template>
               </p-cellEditor>
@@ -158,11 +159,13 @@
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-inputSwitch [(ngModel)]="item.isActive"></p-inputSwitch>
+                  <p-inputSwitch
+                    [(ngModel)]="clonedLevels[item.id].isActive"
+                  ></p-inputSwitch>
                 </ng-template>
                 <ng-template pTemplate="output">
                   <p-inputSwitch
-                    [readonly]="true"
+                    [disabled]="true"
                     [(ngModel)]="item.isActive"
                   ></p-inputSwitch>
                 </ng-template>
@@ -176,6 +179,7 @@
                   pRipple
                   type="button"
                   pInitEditableRow
+                  (click)="onRowEditInit(item)"
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-text"
                 ></button>
@@ -184,9 +188,8 @@
                   pButton
                   pRipple
                   type="button"
-                  pSaveEditableRow
                   icon="pi pi-check"
-                  (click)="onRowEditSave(item)"
+                  (click)="onRowEditSave(item, $event)"
                   [disabled]="!item.nameAr || !item.nameEn"
                   class="p-button-rounded p-button-text p-button-success mb-1"
                 ></button>
@@ -196,6 +199,7 @@
                   pRipple
                   type="button"
                   pCancelEditableRow
+                  (click)="onRowEditCancel(item, ri)"
                   icon="pi pi-times"
                   class="p-button-rounded p-button-text p-button-danger"
                 ></button>
@@ -223,3 +227,4 @@
     </div>
   </div>
 </section>
+<p-confirmPopup styleClass="w-250px"></p-confirmPopup>

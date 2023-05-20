@@ -20,6 +20,7 @@ import { BrowseBusinessContinuityState } from '../../states/browse-business-cont
   styleUrls: ['./browse-impact-level.component.scss'],
 })
 export class BrowseImpactLevelComponent implements OnInit, OnDestroy {
+  @Select(ImpactLevelState.page)
   public page$: Observable<BcImpactLevel[]>;
 
   @Select(ImpactLevelState.totalRecords)
@@ -43,14 +44,6 @@ export class BrowseImpactLevelComponent implements OnInit, OnDestroy {
         tap((v) => this.loadPage())
       )
       .subscribe();
-
-    this.page$ = this.store.select(ImpactLevelState.page).pipe(
-      filter((p) => !!p),
-      map((data) => {
-        if (!data || data?.length === 0) return DATA.impactLevels;
-        return data;
-      })
-    );
   }
 
   ngOnDestroy(): void {
