@@ -44,6 +44,9 @@ export class BusinessContinuityComponent
   @Select(BrowseBusinessContinuityState.versionsDialogOpend)
   public versionsDialogOpend$: Observable<boolean>;
 
+  @Select(BusinessContinuityState.loading)
+  public loading$: Observable<boolean>;
+
   @Select(BusinessContinuityState.versions)
   public versions$: Observable<BcVersions[]>;
 
@@ -86,7 +89,6 @@ export class BusinessContinuityComponent
   ngOnInit() {
     this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 20 }));
 
-    this.createForm();
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
@@ -98,6 +100,7 @@ export class BusinessContinuityComponent
         })
       )
       .subscribe();
+      this.createForm()
   }
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -120,13 +123,6 @@ export class BusinessContinuityComponent
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
     });
-  }
-
-  onChange(selectedValue: any) {
-    // Handle the change event here
-    console.log('Selected value:', selectedValue);
-    this.setValueGlobally(selectedValue.id);
-    // Perform additional actions as needed
   }
 
   setValueGlobally(value: number) {

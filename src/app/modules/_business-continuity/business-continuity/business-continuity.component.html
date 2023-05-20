@@ -22,7 +22,11 @@
       [(ngModel)]="selectedVersion"
       placeholder="{{ 'VERSION' | translate }}"
       dataKey="id"
-      (onChange)="onChange($event.value)"
+      styleClass="w-180px"
+      (onChange)="setValueGlobally($event.value?.id)"
+      [dropdownIcon]="
+        (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
+      "
     >
       <ng-template pTemplate="selectedItem">
         <div *ngIf="selectedVersion">
@@ -31,6 +35,14 @@
       </ng-template>
       <ng-template let-version pTemplate="item">
         <div>{{ version | translateObj }}</div>
+      </ng-template>
+      <ng-template pTemplate="empty">
+        <p *ngIf="loading$ | async; else elseTemplate">
+          {{ "ACTIONS.LOADING" | translate }}
+        </p>
+        <template #elseTemplate>
+          {{ "NO_DATA" | translate }}
+        </template>
       </ng-template>
     </p-dropdown>
   </div>
@@ -95,7 +107,10 @@
     placeholder="{{ 'VERSION' | translate }}"
     styleClass="w-100 mt-3"
     dataKey="id"
-    (onChange)="onChange($event.value)"
+    (onChange)="setValueGlobally($event.value?.id)"
+    [dropdownIcon]="
+      (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
+    "
   >
     <ng-template pTemplate="selectedItem">
       <div *ngIf="selectedVersion">
@@ -104,6 +119,14 @@
     </ng-template>
     <ng-template let-version pTemplate="item">
       <div>{{ version | translateObj }}</div>
+    </ng-template>
+    <ng-template pTemplate="empty">
+      <p *ngIf="loading$ | async; else elseTemplate">
+        {{ "ACTIONS.LOADING" | translate }}
+      </p>
+      <template #elseTemplate>
+        {{ "NO_DATA" | translate }}
+      </template>
     </ng-template>
   </p-dropdown>
   <p-divider align="center" styleClass="mt-10">
