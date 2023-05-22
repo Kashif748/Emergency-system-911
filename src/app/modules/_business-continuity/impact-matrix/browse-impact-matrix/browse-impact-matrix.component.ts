@@ -133,12 +133,6 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
     );
   }
 
-  public findLevelBasedOncol(id) {
-    this.impactTypePage$ = this.impactTypePage$.pipe(
-      filter(impactTypes => impactTypes.some(impactType => impactType.id === id))
-    );
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

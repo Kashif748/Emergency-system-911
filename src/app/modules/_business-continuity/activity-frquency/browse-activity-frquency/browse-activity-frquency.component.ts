@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {TranslateService} from "@ngx-translate/core";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {ILangFacade} from "@core/facades/lang.facade";
-import {filter, map} from "rxjs/operators";
+import {debounceTime, filter, map, takeUntil, tap} from "rxjs/operators";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequencies";
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
 import {BrowseActivityFrquencyState, BrowseActivityFrquencyStateModel} from "../states/browse-activity-frquency.state";
 import {BrowseActivityFrquencyAction} from "../states/browse-activity-frquency.action";
-import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
+import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
 
 @Component({
   selector: 'app-browse-activity-frquency',
   templateUrl: './browse-activity-frquency.component.html',
   styleUrls: ['./browse-activity-frquency.component.scss']
 })
-export class BrowseActivityFrquencyComponent implements OnInit {
+export class BrowseActivityFrquencyComponent implements OnInit, OnDestroy {
   public page$: Observable<BcActivityFrequencies[]>;
 
   @Select(ActivityFrquencyState.totalRecords)
@@ -28,6 +28,8 @@ export class BrowseActivityFrquencyComponent implements OnInit {
 
   @Select(BrowseActivityFrquencyState.state)
   public state$: Observable<BrowseActivityFrquencyStateModel>;
+
+  private destroy$ = new Subject();
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
@@ -36,6 +38,17 @@ export class BrowseActivityFrquencyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.store
+      .select(BrowseBusinessContinuityState.versionId)
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(200),
+        tap((v) => {
+            this.loadPage();
+          }
+        )
+      )
+      .subscribe();
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -93,15 +106,18 @@ export class BrowseActivityFrquencyComponent implements OnInit {
     });
   }
 
-  public loadPage(event: LazyLoadEvent) {
+  public loadPage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseActivityFrquencyAction.LoadActivityFrquency({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );
   }
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

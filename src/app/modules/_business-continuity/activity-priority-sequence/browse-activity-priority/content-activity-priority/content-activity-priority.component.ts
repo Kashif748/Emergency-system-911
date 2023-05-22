@@ -37,24 +37,6 @@ export class ContentActivityPriorityComponent implements OnInit {
     private store: Store) {}
 
   ngOnInit(): void {
-    this.onPageChange.emit({
-      first: this.pageRequest?.first,
-      rows: this.pageRequest?.rows,
-    });
-    /*this.page = DATA.activityPrioritySeq.map((item) => {
-      return {
-        ...item,
-        actions: [
-          {
-            label: this.translate.instant('ACTIONS.EDIT'),
-            icon: 'pi pi-pencil',
-            command: () => {
-              // this.openDialog(item.id);
-            },
-          },
-        ],
-      };
-    });*/
   }
 
   openView(Id?: number) {
