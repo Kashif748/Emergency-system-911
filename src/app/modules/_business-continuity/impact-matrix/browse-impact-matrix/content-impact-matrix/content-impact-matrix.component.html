@@ -109,32 +109,11 @@
               </div>
             </th>
 
-            <!--<th>
-              <div class="p-d-flex p-jc-between p-ai-center">
-                {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
-              </div>
-            </th>
-            <th>
-              <div class="p-d-flex p-jc-between p-ai-center">
-                {{ "IMPACT_ANALYSIS.LOW" | translate }}
-              </div>
-            </th>
-            <th>
-              <div class="p-d-flex p-jc-between p-ai-center">
-                {{ "IMPACT_ANALYSIS.MEDIUM" | translate }}
-              </div>
-            </th>
-            <th>
-              <div class="p-d-flex p-jc-between p-ai-center">
-                {{ "IMPACT_ANALYSIS.HIGH" | translate }}
-              </div>
-            </th>-->
-
             <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-item>
-          <tr class="cursor-pointer hoverable">
+        <ng-template pTemplate="body" let-item let-columns="columns">
+          <tr class="cursor-pointer hoverable" >
             <td class="flag-td">
               <div
                 [ngClass]="{
@@ -144,12 +123,13 @@
               ></div>
             </td>
 
-            <td>{{ item.impactType }}</td>
+            <td>{{ item.bcImpactTypes | translateObj: 'name' }}</td>
 
-            <td>{{ item.low }}</td>
-
-            <td>{{ item.medium }}</td>
-            <td>{{ item.high }}</td>
+            <ng-container *ngFor="let col of columns; let i = index">
+              <td *ngIf="item.bcImpactLevelMatrixDtoList && item.bcImpactLevelMatrixDtoList[i]?.id === col.id">
+                {{ item.bcImpactLevelMatrixDtoList[i] | translateObj : 'desc' }}
+              </td>
+            </ng-container>
 
             <td>
               <button
@@ -179,14 +159,6 @@
           </tr>
         </ng-template>
       </p-table>
-      <p-paginator></p-paginator>
     </ng-template>
-    <div class="p-d-flex p-3 p-jc-center mt-10">
-      <p-button
-        label="{{ 'SHARED.SAVE' | translate }}"
-        icon="pi pi-save"
-        styleClass="p-button  "
-      ></p-button>
-    </div>
   </div>
 </section>

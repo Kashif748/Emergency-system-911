@@ -73,8 +73,8 @@ export class ImpactMatrixState {
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.impactMatrix
       .findAll1({
-        isActive: true,
-        versionId: versionID,
+        // isActive: true,
+        // versionId: versionID,
         pageable: {
           page: payload.page,
           size: payload.size,

@@ -1,5 +1,6 @@
 import {PageRequestModel} from '@core/models/page-request.model';
 import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
+import {BcImpactMatrixDto} from "../../../../api/models";
 
 
 export namespace BrowseImpactMatrixAction {
@@ -19,7 +20,7 @@ export namespace BrowseImpactMatrixAction {
      *
      */
     constructor(
-      public payload: BcImpactTypesMatrix
+      public payload: BcImpactMatrixDto
     ) {}
   }
 

@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {GenericValidators} from "@shared/validators/generic-validators";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Observable, Subject} from "rxjs";
 import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ImpactMatrixAction} from "@core/states";
@@ -13,6 +13,8 @@ import {BrowseImpactMatrixAction} from "../../states/browse-impact-matrix.action
 import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
 import {BcImpactLevel} from "../../../../../api/models/bc-impact-level";
+import {BcImpactMatrixDto} from "../../../../../api/models/bc-impact-matrix-dto";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-impact-matrix-dialog',
@@ -22,7 +24,7 @@ import {BcImpactLevel} from "../../../../../api/models/bc-impact-level";
 export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
-
+  public dynamicFields$: Observable<BcImpactLevel[]>;
   // @Select(ImpactLevelState.page) pageColumns$: Observable<any[]>;
 
   public display = false;
@@ -41,7 +43,7 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
   @Input()
   set Id(v: number) {
     this._Id = v;
-    // this.buildForm();
+    this.buildForm();
     if (v === undefined || v === null) {
       return;
     }
@@ -65,7 +67,8 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private store: Store,
     private route: ActivatedRoute,
-    private auth: IAuthService
+    private auth: IAuthService,
+    private translate: TranslateService,
   ) {
     this.route.queryParams
       .pipe(
@@ -96,31 +99,43 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
+    this.buildForm();
+    const levelsArray = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
     this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
       tap((page) => {
-        this.buildForm(page);
+        levelsArray.clear();
+        page.forEach((v) => {
+          levelsArray.push(this.createLevelFormGroup(v));
+        });
+
       })
-    );
-    // this.buildForm();
+    ).subscribe();
+  }
+
+  createLevelFormGroup(levels): FormGroup {
+    return this.formBuilder.group({
+      id: levels.id,
+      label: this.translate.currentLang === 'en' ? levels.nameEn : levels.nameAr,
+      descAr: ['', [Validators.required, GenericValidators.arabic]], // Add validation as needed
+      descEn: ['', [Validators.required, GenericValidators.english]] // Add validation as needed
+    });
   }
 
   openDialog(Id?: number) {
     this.store.dispatch(new BrowseImpactMatrixAction.ToggleDialog({ id: Id }));
   }
 
-  buildForm(impactLevels: BcImpactLevel[]) {
-    const levels = impactLevels.map((v) =>
-       this.formBuilder.group({
-        descAr: '',
-        descEn: '',
-      })
-    );
+  buildForm() {
     this.form = this.formBuilder.group({
-      typeEn: [null, [Validators.required, GenericValidators.english]],
-      typeAr: [null, [Validators.required, GenericValidators.arabic]],
-      // levels:  this.formBuilder.array(levels) ,
+       typeEn: [null, [Validators.required, GenericValidators.english]],
+       typeAr: [null, [Validators.required, GenericValidators.arabic]],
+      bcImpactLevelMatrixDtoList:  this.formBuilder.array( []) ,
       isActive: [true]
     });
+  }
+
+  getLevelsControls(): AbstractControl[] {
+    return (this.form.get('bcImpactLevelMatrixDtoList') as FormArray).controls;
   }
 
   close() {
@@ -136,19 +151,25 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const impactMartix = {
+    const impactMartixForm = {
       ...this.form.getRawValue(),
     };
 
-    // impactMartix.versionId = 1;
-    // rto.isActive = true;
-    // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
+    const impactMatrix: BcImpactMatrixDto = {
+      bcImpactLevelMatrixDtoList: [],
+      bcImpactTypes: {}
+    }
+
+    impactMatrix.bcImpactLevelMatrixDtoList = impactMartixForm.bcImpactLevelMatrixDtoList;
+    impactMatrix.bcImpactTypes.isActive = impactMartixForm.isActive;
+    impactMatrix.bcImpactTypes.nameAr = impactMartixForm.typeAr;
+    impactMatrix.bcImpactTypes.nameEn = impactMartixForm.typeEn;
 
     if (this.editMode) {
-      impactMartix.id = this._Id;
-      this.store.dispatch(new BrowseImpactMatrixAction.UpdateImpactMatrix(impactMartix));
+      impactMatrix.bcImpactTypes.id = this._Id;
+      // this.store.dispatch(new BrowseImpactMatrixAction.UpdateImpactMatrix(impactMatrix));
     } else {
-      this.store.dispatch(new BrowseImpactMatrixAction.CreateImpactMatrix(impactMartix));
+      this.store.dispatch(new BrowseImpactMatrixAction.CreateImpactMatrix(impactMatrix));
     }
   }
 

@@ -1,26 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {TranslateService} from "@ngx-translate/core";
 import {MessageHelper} from "../../../../core/helpers/message.helper";
 import {ILangFacade} from "../../../../core/facades/lang.facade";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {filter, map} from "rxjs/operators";
-import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
+import {debounceTime, filter, map, takeUntil, tap} from "rxjs/operators";
 import {BrowseImpactMatrixState, BrowseImpactMatrixStateModel} from "../states/browse-impact-matrix.state";
 import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 import {BrowseImpactMatrixAction} from "../states/browse-impact-matrix.action";
 import {BcImpactLevel} from "../../../../api/models/bc-impact-level";
 import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
 import {BrowseImpactLevelAction} from "../../impact-level/states/browse-impact-level.action";
+import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
+import {BcImpactMatrixDto} from "../../../../api/models/bc-impact-matrix-dto";
 
 @Component({
   selector: 'app-browse-impact-matrix',
   templateUrl: './browse-impact-matrix.component.html',
   styleUrls: ['./browse-impact-matrix.component.scss']
 })
-export class BrowseImpactMatrixComponent implements OnInit {
-  public page$: Observable<BcImpactTypesMatrix[]>;
+export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
+  public page$: Observable<BcImpactMatrixDto[]>;
   public impactTypePage$: Observable<BcImpactLevel[]>;
 
   @Select(ImpactMatrixState.totalRecords)
@@ -28,6 +29,8 @@ export class BrowseImpactMatrixComponent implements OnInit {
 
   @Select(ImpactMatrixState.loading)
   public loading$: Observable<boolean>;
+
+  private destroy$ = new Subject();
 
   @Select(BrowseImpactMatrixState.state)
   public state$: Observable<BrowseImpactMatrixStateModel>;
@@ -39,6 +42,18 @@ export class BrowseImpactMatrixComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.store
+      .select(BrowseBusinessContinuityState.versionId)
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(200),
+        tap((v) => {
+            this.loadPage();
+            this.loadImpactTypePage();
+        }
+        )
+      )
+      .subscribe();
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -50,7 +65,7 @@ export class BrowseImpactMatrixComponent implements OnInit {
       },
     ] as MenuItem[];
     this.impactTypePage$ = this.store.select(ImpactLevelState.page);
-    /*this.page$ = this.store.select(ImpactMatrixState.page)
+    this.page$ = this.store.select(ImpactMatrixState.page)
       .pipe(
       filter((p) => !!p),
       map((page) =>
@@ -61,22 +76,22 @@ export class BrowseImpactMatrixComponent implements OnInit {
               {
                 ...userActions[0],
                 command: () => {
-                  this.openDialog(u.id);
+                   this.openDialog(u.bcImpactTypes.id);
                 },
-                disabled: !u.isActive,
+                // disabled: !u.isActive,
               },
               {
                 ...userActions[1],
                 command: () => {
-                  this.activate(u.id);
+                   this.activate(u.bcImpactTypes.id);
                 },
-                disabled: u.isActive,
+                // disabled: u.isActive,
               },
             ],
           };
         })
       )
-    );*/
+    );
   }
 
   openDialog(Id?: number) {
@@ -96,25 +111,36 @@ export class BrowseImpactMatrixComponent implements OnInit {
       },
     });
   }
-  public loadPage(event: LazyLoadEvent) {
+  public loadPage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseImpactMatrixAction.LoadImpactMatrix({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );
   }
 
-  public loadImpactTypePage(event: LazyLoadEvent) {
+  public loadImpactTypePage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseImpactLevelAction.LoadImpactLevel({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );
+  }
+
+  public findLevelBasedOncol(id) {
+    this.impactTypePage$ = this.impactTypePage$.pipe(
+      filter(impactTypes => impactTypes.some(impactType => impactType.id === id))
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

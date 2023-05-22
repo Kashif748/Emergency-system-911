@@ -107,48 +107,52 @@
         </h4>
       </div>
       <div class="p-d-flex border-bottom pt-4">
-        <p class="p-md-2">{{ "IMPACT_ANALYSIS.LOW" | translate }}</p>
-        <!--<div class="p-field p-col-12 p-md-5">
-          <span class="p-float-label">
-            <textarea
-              pInputText
-              type="text"
-              formControlName="lowDescAr"
-              rows="3"
-            ></textarea>
-            <label>
-              {{ "LOC_TYPE.TYPE_AR" | translate }}
-              <strong class="required-asterisk"> * </strong>
-            </label>
-          </span>
-          <ng-container
-            *ngIf="
-              form.controls['lowDescAr'].touched &&
-              !form.controls['lowDescAr'].valid &&
-              form.controls['lowDescAr'].dirty
+        <div formArrayName="bcImpactLevelMatrixDtoList" class="p-col-12 p-md-5">
+          <div *ngFor="let level of getLevelsControls(); let i = index">
+            <div [formGroupName]="i" class="d-flex">
+              <div class="p-md-4">
+                <p >{{ level.get('label').value }}</p>
+              </div>
+              <div class="p-field p-col-12">
+                <span class="p-float-label">
+                  <textarea
+                    pInputText
+                    type="text"
+                    formControlName="descAr"
+                    rows="3"
+                  ></textarea>
+                  <label>
+                    {{ "LOC_TYPE.TYPE_AR" | translate }}
+                    <strong class="required-asterisk"> * </strong>
+                  </label>
+              </span>
+                <ng-container
+                  *ngIf="
+              form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).touched &&
+              !form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).valid &&
+              form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).dirty
             "
-          >
-            <p
-              class="p-error mb-0"
-              *ngIf="form.controls['lowDescAr'].hasError('required')"
-            >
-              {{ "VALIDATION_MSG.REQUIRED" | translate }}
-            </p>
-            <p
-              class="p-error mb-0"
-              *ngIf="form.controls['lowDescAr'].hasError('arabic')"
-            >
-              {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
-            </p>
-          </ng-container>
-        </div>-->
-
-        <!--<div class="p-field p-col-12 p-md-5">
+                >
+                  <p
+                    class="p-error mb-0"
+                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).hasError('required')"
+                  >
+                    {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                  </p>
+                  <p
+                    class="p-error mb-0"
+                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).hasError('arabic')"
+                  >
+                    {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+                  </p>
+                </ng-container>
+              </div>
+              <div class="p-field p-col-12">
           <span class="p-float-label">
             <textarea
               pInputText
               type="text"
-              formControlName="lowDescEn"
+              formControlName="descEn"
               rows="3"
             ></textarea>
             <label>
@@ -156,27 +160,36 @@
               <strong class="required-asterisk"> * </strong>
             </label>
           </span>
-          <ng-container
-            *ngIf="
-              form.controls['lowDescEn'].touched &&
-              !form.controls['lowDescEn'].valid &&
-              form.controls['lowDescEn'].dirty
+                <ng-container
+                  *ngIf="
+              form.get(['bcImpactLevelMatrixDtoList', i , 'descEn']).touched &&
+              !form.get(['bcImpactLevelMatrixDtoList', i , 'descEn']).valid &&
+              form.get(['bcImpactLevelMatrixDtoList', i , 'descEn']).dirty
             "
-          >
-            <p
-              class="p-error mb-0"
-              *ngIf="form.controls['lowDescEn'].hasError('required')"
-            >
-              {{ "VALIDATION_MSG.REQUIRED" | translate }}
-            </p>
-            <p
-              class="p-error mb-0"
-              *ngIf="form.controls['lowDescEn'].hasError('english')"
-            >
-              {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-            </p>
-          </ng-container>
-        </div>-->
+                >
+                  <p
+                    class="p-error mb-0"
+                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descEn']).hasError('required')"
+                  >
+                    {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                  </p>
+                  <p
+                    class="p-error mb-0"
+                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descEn']).hasError('english')"
+                  >
+                    {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <!---->
       </div>
     </div>
 
