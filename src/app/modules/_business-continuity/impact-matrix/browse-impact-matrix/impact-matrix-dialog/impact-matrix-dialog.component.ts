@@ -47,6 +47,16 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     if (v === undefined || v === null) {
       return;
     }
+    const levelsArray = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
+    this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
+      tap((page) => {
+        levelsArray.clear();
+        page.forEach((v) => {
+          levelsArray.push(this.createLevelFormGroup(v));
+        });
+
+      })
+    ).subscribe();
     this.store
       .dispatch(new ImpactMatrixAction.GetImpactMatrix({ id: v }))
       .pipe(
