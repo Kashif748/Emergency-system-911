@@ -49,9 +49,10 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     }
     const levelsArray = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
     this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
-      tap((page) => {
+      map((page) => [...page].sort((a, b) => a.id - b.id)),
+      tap((sortedArray) => {
         levelsArray.clear();
-        page.forEach((v) => {
+        sortedArray.forEach((v) => {
           levelsArray.push(this.createLevelFormGroup(v));
         });
 
@@ -112,9 +113,10 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     this.buildForm();
     const levelsArray = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
     this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
-      tap((page) => {
+      map((page) => [...page].sort((a, b) => a.id - b.id)),
+      tap((sortedArray) => {
         levelsArray.clear();
-        page.forEach((v) => {
+        sortedArray.forEach((v) => {
           levelsArray.push(this.createLevelFormGroup(v));
         });
 

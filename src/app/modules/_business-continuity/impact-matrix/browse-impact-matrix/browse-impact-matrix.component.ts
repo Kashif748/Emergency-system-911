@@ -64,7 +64,8 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
         icon: 'pi pi-check-square',
       },
     ] as MenuItem[];
-    this.impactTypePage$ = this.store.select(ImpactLevelState.page);
+    this.impactTypePage$ = this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => a.id - b.id)));
     this.page$ = this.store.select(ImpactMatrixState.page)
       .pipe(
       filter((p) => !!p),
