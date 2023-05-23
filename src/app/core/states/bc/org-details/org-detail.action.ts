@@ -1,6 +1,4 @@
-import {Bcrto} from "../../../../api/models/bcrto";
 import {OrgStructure} from "../../../../api/models/org-structure";
-import {OrgStructureDetails} from "../../../../api/models/org-structure-details";
 
 export namespace OrgDetailAction {
 /*  export class LoadPage {

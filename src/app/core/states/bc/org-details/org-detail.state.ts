@@ -3,9 +3,8 @@ import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
 import {finalize, tap} from "rxjs/operators";
 import {OrgStructure} from "../../../../api/models/org-structure";
-import { OrgDetailAction} from "@core/states/bc/org-details/org-detail.action";
+import {OrgDetailAction} from "@core/states/bc/org-details/org-detail.action";
 import {OrgStructureControllerService} from "../../../../api/services/org-structure-controller.service";
-import {OrgStructureDetails} from "../../../../api/models/org-structure-details";
 
 
 export interface OrgDetailStateModel {
@@ -25,7 +24,7 @@ export class OrgDetailState {
    *
    */
   constructor(
-    private org: OrgStructureControllerService
+    private org: OrgStructureControllerService,
   ) {
   }
 
@@ -139,7 +138,7 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    let orgBody = getState().org;
+    const orgBody = getState().org;
     // orgBody.description = payload.description
     return this.org
       .active1({
@@ -157,7 +156,7 @@ export class OrgDetailState {
   }
 
   @Action(OrgDetailAction.GetOrgDetail, { cancelUncompleted: true })
-  GetOrgDetail(
+  getOrgDetail(
     { setState }: StateContext<OrgDetailStateModel>,
     { payload }: OrgDetailAction.GetOrgDetail
   ) {

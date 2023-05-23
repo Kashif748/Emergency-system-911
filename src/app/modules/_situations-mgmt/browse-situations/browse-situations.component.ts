@@ -46,9 +46,7 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
     private store: Store,
     private translate: TranslateService,
     private messageHelper: MessageHelper,
-    private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private lang: ILangFacade,
     private privilegesService: PrivilegesService
   ) {}
 
@@ -60,7 +58,6 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.page$ = this.store.select(SituationsState.page).pipe(
       filter((p) => !!p),
-      tap(console.log),
       map((page) =>
         page?.map((u) => {
           return {
@@ -113,14 +110,15 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
         })
       )
     );
-    this.store.dispatch(new BrowseSituationsAction.GetActiveSituation());
   }
   activate(id: number) {
     this.messageHelper.confirm({
       summary: 'SHARED.DIALOG.ARE_YOU_SURE',
       detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE',
       yesCommand: () => {
-        this.store.dispatch(new BrowseSituationsAction.DeleteSituations({ id }));
+        this.store.dispatch(
+          new BrowseSituationsAction.DeleteSituations({ id })
+        );
         this.messageHelper.closeConfirm();
       },
       noCommand: () => {
@@ -189,29 +187,11 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
         this.search();
       });
   }
-  // changeColumns(event) {
-  //   this.store.dispatch(
-  //     new BrowseSituationsAction.ChangeColumns({ columns: event.value })
-  //   );
-  // }
 
   changeView(view: 'TABLE' | 'CARDS') {
     this.store.dispatch(new BrowseSituationsAction.ChangeView({ view }));
   }
 
-  sort(event) {
-    this.store.dispatch(
-      new BrowseSituationsAction.SortSituations({ field: event.value })
-    );
-  }
-
-  order(event) {
-    this.store.dispatch(
-      new BrowseSituationsAction.SortSituations({
-        order: event.checked ? 'desc' : 'asc',
-      })
-    );
-  }
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseSituationsAction.LoadSituations({

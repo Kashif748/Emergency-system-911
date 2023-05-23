@@ -15,14 +15,12 @@ export namespace BrowseOrgDetailAction {
     }
   }
 
-  export class CreateOrgDetail {
-    static readonly type = '[BrowseOrgDetail] Create OrgDetail';
+  export class GetOrgDetail {
+    static readonly type = '[BrowseOrgDetail] Get OrgDetail';
     /**
      *
      */
-    constructor(
-      public payload: OrgStructure
-    ) {}
+    constructor(public payload: { id: number }) {}
   }
 
   export class UpdateOrgDetail {

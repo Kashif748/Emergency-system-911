@@ -1,14 +1,14 @@
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
-import {catchError, finalize, map, switchMap, tap} from "rxjs/operators";
-import {EMPTY, of} from "rxjs";
+import {catchError, finalize, tap} from "rxjs/operators";
+import {EMPTY} from "rxjs";
 import {BcLocationTypes} from "../../../../api/models/bc-location-types";
 import {BcLocationTypeControllerService} from "../../../../api/services/bc-location-type-controller.service";
 import {PageBcLocationTypes} from "../../../../api/models/page-bc-location-types";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
-import {RtoStateModel} from "@core/states/bc/rto/rto.state";
 import {RtoAction} from "@core/states";
+import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
 
 
 export interface LocationTypeStateModel {
@@ -28,7 +28,8 @@ export class LocationTypeState {
    *
    */
   constructor(
-    private locationType: BcLocationTypeControllerService
+    private locationType: BcLocationTypeControllerService,
+    private store: Store,
   ) {
   }
 
@@ -69,10 +70,11 @@ export class LocationTypeState {
         loading: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.locationType
       .getAll14({
         isActive: true,
-        versionId: 1,
+        versionId: versionID,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -158,7 +160,7 @@ export class LocationTypeState {
   }
 
   @Action(LocationTypeAction.GetLocationType, { cancelUncompleted: true })
-  GetLocationType(
+  getLocationType(
     { setState }: StateContext<LocationTypeStateModel>,
     { payload }: LocationTypeAction.GetLocationType
   ) {

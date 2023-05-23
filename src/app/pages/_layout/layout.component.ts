@@ -101,26 +101,19 @@ export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
     this.notificationsService.requestPermission();
     this.store.dispatch(new SituationsAction.GetActiveSituation());
     this.store
-      .select(SituationsState.page)
+      .select(SituationsState.activeSituation)
       .pipe(
         filter((p) => !!p),
         takeUntil(this.destroy$),
-        tap(console.log)
+        tap((situation) => {
+          const cssClasses = ['golden', 'silver', 'bronze'];
+          const activeClass = cssClasses[situation.themeType.id];
+          this.headerMobileCss = `header-mobile align-items-center border-bottom-${activeClass}`;
+          this.headerCss = `header border-bottom-${activeClass}`;
+          this.wrapperCss = `d-flex flex-column flex-row-fluid wrapper h-100 bg-grd-${activeClass}`;
+        })
       )
       .subscribe();
-
-    this.sysStatusService.vm$
-      .pipe(
-        map((s) => s.status),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((s) => {
-        this.headerMobileCss = `header-mobile align-items-center border-bottom-${s}`;
-        this.headerCss = `header border-bottom-${s}`;
-        this.wrapperCss = `d-flex flex-column flex-row-fluid wrapper h-100 bg-grd-${s}`;
-        this.cdr.detectChanges();
-      });
 
     this.breakpointObserver
       .observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall])
