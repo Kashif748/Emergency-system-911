@@ -93,7 +93,7 @@
       <!-- Users Details -->
       <div class="p-d-flex p-flex-column p-md-12">
         <header class="border-bottom py-4">
-          <h4 class=" p-text-bold mb-0">
+          <h4 class="p-text-bold mb-0">
             {{ "ORG_HIE.USER_MGMT" | translate }}
           </h4>
         </header>
@@ -105,7 +105,6 @@
           [options]="users$ | async"
           [autoDisplayFirst]="false"
           [showClear]="true"
-          dataKey="id"
           appendTo="body"
           formControlName="managerId"
           [filter]="true"
@@ -148,7 +147,6 @@
           [options]="users$ | async"
           [autoDisplayFirst]="false"
           [showClear]="true"
-          dataKey="id"
           appendTo="body"
           formControlName="coordinatorId"
           [filter]="true"

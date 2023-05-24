@@ -100,7 +100,7 @@ export class BusinessContinuityComponent
         })
       )
       .subscribe();
-      this.createForm()
+    this.createForm();
   }
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -111,6 +111,7 @@ export class BusinessContinuityComponent
   translateMenu(items: MenuItem[]): MenuItem[] {
     return items.map((tab) => {
       tab.label = this.translate.instant(tab.label);
+      tab.queryParamsHandling = 'merge';
       if (tab.items && tab.items.length > 0) {
         tab.items = this.translateMenu(tab.items);
       }
