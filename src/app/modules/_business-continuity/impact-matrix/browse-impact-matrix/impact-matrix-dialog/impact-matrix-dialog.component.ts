@@ -44,7 +44,6 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
   set Id(v: number) {
     this._Id = v;
     this.buildForm();
-    // this.dynamicForm();
     if (v === undefined || v === null) {
       return;
     }
@@ -59,20 +58,14 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
           const sortedImpactMatrix = impactMatrix.bcImpactLevelMatrixDtoList?.slice().sort((a, b) => {
             return a.id - b.id;
           });
+          const levelsControl = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
           const levelFormGroups = sortedImpactMatrix?.map((level, index) => {
-            const formGroup = this.createLevelFormGroup(level);
-            formGroup.patchValue({
+            const control = levelsControl.at(index);
+            control.patchValue({
               descAr: level.descAr,
               descEn: level.descEn
             });
-            return formGroup;
           });
-          this.form.setControl('bcImpactLevelMatrixDtoList', this.formBuilder.array(levelFormGroups || []));
-          /*this.form.patchValue({
-            typeEn: impactMatrix.bcImpactTypes.nameEn,
-            typeAr: impactMatrix.bcImpactTypes.nameAr,
-            isActive: impactMatrix.bcImpactTypes.isActive
-          });*/
         })
       )
       .subscribe(() => {
@@ -127,17 +120,6 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
       map((params) => params['_dialog'] === 'opened')
     );
     this.buildForm();
-    const levelsArray = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
-    this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
-      map((page) => [...page].sort((a, b) => a.id - b.id)),
-      tap((sortedArray) => {
-        levelsArray.clear();
-        sortedArray.forEach((v) => {
-          levelsArray.push(this.createLevelFormGroup(v));
-        });
-
-      })
-    ).subscribe();
   }
 
   dynamicForm() {

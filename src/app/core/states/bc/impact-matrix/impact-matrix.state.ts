@@ -1,6 +1,6 @@
 import {EMPTY} from "rxjs";
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
-import {catchError, finalize, map, tap} from "rxjs/operators";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {Injectable} from "@angular/core";
 import {BcImpactTypesMatrixControllerService} from "../../../../api/services/bc-impact-types-matrix-controller.service";
@@ -73,8 +73,8 @@ export class ImpactMatrixState {
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.impactMatrix
       .findAll1({
-        // isActive: true,
-        // versionId: versionID,
+        isActive: true,
+        versionId: versionID,
         pageable: {
           page: payload.page,
           size: payload.size,
