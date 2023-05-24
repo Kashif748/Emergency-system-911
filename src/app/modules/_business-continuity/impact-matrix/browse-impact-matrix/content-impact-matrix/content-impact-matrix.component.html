@@ -123,11 +123,16 @@
               ></div>
             </td>
 
-            <td>{{ item.bcImpactTypes | translateObj: 'name' }}</td>
-
+            <td>
+              <div>
+                {{ item.bcImpactTypes | translateObj: 'name' }}
+              </div>
+            </td>
             <ng-container *ngFor="let col of columns; let i = index">
               <td *ngIf="item.bcImpactLevelMatrixDtoList && item.bcImpactLevelMatrixDtoList[i]?.id === col.id">
-                {{ item.bcImpactLevelMatrixDtoList[i] | translateObj : 'desc' }}
+                <div>
+                  {{ item.bcImpactLevelMatrixDtoList[i] | translateObj : 'desc' }}
+                </div>
               </td>
             </ng-container>
 

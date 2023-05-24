@@ -193,7 +193,7 @@ export class ImpactLevelState {
         blocking: true,
       })
     );
-    return this.impactLevel.getOne9({ id: payload.id }).pipe(
+    return this.impactLevel.getOne8({ id: payload.id }).pipe(
       tap((impactLevel) => {
         setState(
           patch<ImpactLevelStateModel>({

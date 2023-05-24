@@ -44,20 +44,11 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
   set Id(v: number) {
     this._Id = v;
     this.buildForm();
+    // this.dynamicForm();
     if (v === undefined || v === null) {
       return;
     }
-    const levelsArray = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
-    this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
-      map((page) => [...page].sort((a, b) => a.id - b.id)),
-      tap((sortedArray) => {
-        levelsArray.clear();
-        sortedArray.forEach((v) => {
-          levelsArray.push(this.createLevelFormGroup(v));
-        });
 
-      })
-    ).subscribe();
     this.store
       .dispatch(new ImpactMatrixAction.GetImpactMatrix({ id: v }))
       .pipe(
@@ -65,12 +56,37 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         take(1),
         tap((impactMatrix) => {
-          this.form.patchValue({
-            ...impactMatrix,
+          const sortedImpactMatrix = impactMatrix.bcImpactLevelMatrixDtoList?.slice().sort((a, b) => {
+            return a.id - b.id;
           });
+          const levelFormGroups = sortedImpactMatrix?.map((level, index) => {
+            const formGroup = this.createLevelFormGroup(level);
+            formGroup.patchValue({
+              descAr: level.descAr,
+              descEn: level.descEn
+            });
+            return formGroup;
+          });
+          this.form.setControl('bcImpactLevelMatrixDtoList', this.formBuilder.array(levelFormGroups || []));
+          /*this.form.patchValue({
+            typeEn: impactMatrix.bcImpactTypes.nameEn,
+            typeAr: impactMatrix.bcImpactTypes.nameAr,
+            isActive: impactMatrix.bcImpactTypes.isActive
+          });*/
         })
       )
-      .subscribe();
+      .subscribe(() => {
+        this.store
+          .select(ImpactMatrixState.impactMatrix)
+          .pipe(take(1))
+          .subscribe((impactMatrix) => {
+            this.form.patchValue({
+              typeEn: impactMatrix.bcImpactTypes.nameEn,
+              typeAr: impactMatrix.bcImpactTypes.nameAr,
+              isActive: impactMatrix.bcImpactTypes.isActive
+            });
+          });
+      });
   }
 
   constructor(
@@ -124,6 +140,20 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
+  dynamicForm() {
+    const levelsArray = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
+    this.store.select(ImpactLevelState.page).pipe(filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => a.id - b.id)),
+      tap((sortedArray) => {
+        levelsArray.clear();
+        sortedArray.forEach((v) => {
+          levelsArray.push(this.createLevelFormGroup(v));
+        });
+
+      })
+    ).subscribe();
+  }
+
   createLevelFormGroup(levels): FormGroup {
     return this.formBuilder.group({
       id: levels.id,
@@ -144,6 +174,7 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
       bcImpactLevelMatrixDtoList:  this.formBuilder.array( []) ,
       isActive: [true]
     });
+    this.dynamicForm();
   }
 
   getLevelsControls(): AbstractControl[] {
@@ -179,7 +210,7 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
 
     if (this.editMode) {
       impactMatrix.bcImpactTypes.id = this._Id;
-      // this.store.dispatch(new BrowseImpactMatrixAction.UpdateImpactMatrix(impactMatrix));
+       // this.store.dispatch(new BrowseImpactMatrixAction.UpdateImpactMatrix(impactMatrix));
     } else {
       this.store.dispatch(new BrowseImpactMatrixAction.CreateImpactMatrix(impactMatrix));
     }

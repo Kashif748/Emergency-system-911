@@ -71,8 +71,10 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
+          const sortedBcImpactLevelMatrixDtoList = u.bcImpactLevelMatrixDtoList?.slice().sort((a, b) => a.id - b.id);
           return {
             ...u,
+            bcImpactLevelMatrixDtoList: sortedBcImpactLevelMatrixDtoList,
             actions: [
               {
                 ...userActions[0],
@@ -90,9 +92,13 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
               },
             ],
           };
-        })
-      )
-    );
+        }),
+    )
+      /*  map((data) => {
+          const sortedData = data?.sort((a, b) => a.bcImpactLevelMatrixDtoList.id - b.bcImpactLevelMatrixDtoList.id);
+          return sortedData;
+        })*/
+      );
   }
 
   openDialog(Id?: number) {

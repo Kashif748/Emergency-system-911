@@ -214,21 +214,21 @@ export class BcImpactLevelControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getOne9
+   * Path part for operation getOne8
    */
-  static readonly GetOne9Path = '/v1/bc/impactLevel/{id}';
+  static readonly GetOne8Path = '/v1/bc/impactLevel/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne9()` instead.
+   * To access only the response body, use `getOne8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne9$Response(params: {
+  getOne8$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.GetOne9Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactLevelControllerService.GetOne8Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcImpactLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne9$Response()` instead.
+   * To access the full response (for headers, for example), `getOne8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne9(params: {
+  getOne8(params: {
     id: number;
   }): Observable<RestApiResponseBcImpactLevel> {
 
-    return this.getOne9$Response(params).pipe(
+    return this.getOne8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactLevel>) => r.body as RestApiResponseBcImpactLevel)
     );
   }

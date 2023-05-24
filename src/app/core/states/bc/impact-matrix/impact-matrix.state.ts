@@ -1,6 +1,6 @@
 import {EMPTY} from "rxjs";
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
-import {catchError, finalize, tap} from "rxjs/operators";
+import {catchError, finalize, map, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {Injectable} from "@angular/core";
 import {BcImpactTypesMatrixControllerService} from "../../../../api/services/bc-impact-types-matrix-controller.service";
@@ -12,7 +12,7 @@ import {BcImpactMatrixDto} from "../../../../api/models/bc-impact-matrix-dto";
 
 export interface ImpactMatrixStateModel {
   page: BcImpactMatrixDto[] ;
-  impactMatrix: BcImpactTypesMatrix;
+  impactMatrix: BcImpactMatrixDto;
   loading: boolean;
   blocking: boolean;
 }
@@ -179,7 +179,7 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    return this.impactMatrix.getOne7({id: payload.id}).pipe(
+    return this.impactMatrix.getOneByImpactTypeId({id: payload.id}).pipe(
       tap((impactMatrix) => {
         setState(
           patch<ImpactMatrixStateModel>({

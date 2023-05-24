@@ -214,21 +214,21 @@ export class BcActivityFrequenciesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getOne10
+   * Path part for operation getOne9
    */
-  static readonly GetOne10Path = '/v1/bc/activityFrequency/{id}';
+  static readonly GetOne9Path = '/v1/bc/activityFrequency/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne10()` instead.
+   * To access only the response body, use `getOne9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne10$Response(params: {
+  getOne9$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityFrequencies>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetOne10Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetOne9Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne10$Response()` instead.
+   * To access the full response (for headers, for example), `getOne9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne10(params: {
+  getOne9(params: {
     id: number;
   }): Observable<RestApiResponseBcActivityFrequencies> {
 
-    return this.getOne10$Response(params).pipe(
+    return this.getOne9$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityFrequencies>) => r.body as RestApiResponseBcActivityFrequencies)
     );
   }

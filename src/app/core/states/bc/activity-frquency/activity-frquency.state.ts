@@ -178,7 +178,7 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
-    return this.activityFrquency.getOne10({ id: payload.id }).pipe(
+    return this.activityFrquency.getOne9({ id: payload.id }).pipe(
       tap((activityFrq) => {
         setState(
           patch<ActivityFrquencyStateModel>({
