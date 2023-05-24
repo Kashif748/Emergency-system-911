@@ -37,12 +37,12 @@
         <div>{{ version | translateObj }}</div>
       </ng-template>
       <ng-template pTemplate="empty">
-        <p *ngIf="loading$ | async; else elseTemplate">
+        <ng-container *ngIf="loading$ | async; else elseTemplate">
           {{ "ACTIONS.LOADING" | translate }}
-        </p>
-        <template #elseTemplate>
+        </ng-container>
+        <ng-template #elseTemplate>
           {{ "NO_DATA" | translate }}
-        </template>
+        </ng-template>
       </ng-template>
     </p-dropdown>
   </div>
@@ -121,12 +121,12 @@
       <div>{{ version | translateObj }}</div>
     </ng-template>
     <ng-template pTemplate="empty">
-      <p *ngIf="loading$ | async; else elseTemplate">
+      <ng-container *ngIf="loading$ | async; else elseTemplate">
         {{ "ACTIONS.LOADING" | translate }}
-      </p>
-      <template #elseTemplate>
+      </ng-container>
+      <ng-template #elseTemplate>
         {{ "NO_DATA" | translate }}
-      </template>
+      </ng-template>
     </ng-template>
   </p-dropdown>
   <p-divider align="center" styleClass="mt-10">

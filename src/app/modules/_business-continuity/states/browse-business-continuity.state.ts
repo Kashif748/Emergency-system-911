@@ -8,23 +8,13 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MessageHelper } from '@core/helpers/message.helper';
-import { ApiHelper } from '@core/helpers/api.helper';
 import { BrowseBusinessContinuityAction } from './browse-business-continuity.action';
 import { catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { BCAction } from '@core/states/bc/business-continuity/business-continuity.action';
 import { patch } from '@ngxs/store/operators';
-import { BrowseRtoAction } from '../rto/states/browse-rto.action';
-import { BrowseLocationTypeAction } from '../location-type/states/browse-locationType.action';
-import { BrowseImpLevelWorkingAction } from '../importance-level-working/browse-imp-level-working/states/browse-imp-level-working.action';
-import { BrowseActivityFrquencyAction } from '../activity-frquency/states/browse-activity-frquency.action';
-import { BrowseImpactMatrixAction } from '../impact-matrix/states/browse-impact-matrix.action';
-import { BrowseOrgDetailAction } from '../org-detail/states/browse-orgDetail.action';
-import { BrowseImpactLevelAction } from '../impact-level/states/browse-impact-level.action';
-import { BrowseActivityPrioritySeqAction } from '../activity-priority-sequence/states/browse-activity-priority-seq.action';
-import { IAuthService } from '@core/services/auth.service';
 
 export interface BrowseBusinessContinuityStateModel {
   pageRequest: PageRequestModel;
@@ -61,12 +51,7 @@ export class BrowseBusinessContinuityState {
   /**
    *
    */
-  constructor(
-    private messageHelper: MessageHelper,
-    private router: Router,
-    private route: ActivatedRoute,
-    private auth: IAuthService
-  ) {}
+  constructor(private messageHelper: MessageHelper, private router: Router) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseBusinessContinuityState])
@@ -89,29 +74,6 @@ export class BrowseBusinessContinuityState {
   }
 
   /* ********************** ACTIONS ************************* */
-  /*@Action(BrowseRtoAction.LoadRto)
-  LoadRto(
-    { setState, dispatch, getState }: StateContext<BrowseBusinessContinuityStateModel>,
-    { payload }: BrowseRtoAction.LoadRto
-  ) {
-    setState(
-      patch<BrowseBusinessContinuityStateModel>({
-        pageRequest: patch<PageRequestModel>({
-          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
-          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
-        }),
-      })
-    );
-    const pageRequest = getState().pageRequest;
-    return dispatch(
-      new RtoAction.LoadPage({
-        page: this.apiHelper.page(pageRequest),
-        size: pageRequest.rows,
-        sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
-      })
-    );
-  }*/
 
   @Action(BrowseBusinessContinuityAction.CreateBusinessContinuity)
   CreateBusinessContinuity(
@@ -130,26 +92,6 @@ export class BrowseBusinessContinuityState {
     );
   }
 
-  /*@Action(BrowseRtoAction.UpdateRto)
-  updateRto(
-    { dispatch }: StateContext<BrowseBusinessContinuityStateModel>,
-    { payload }: BrowseRtoAction.UpdateRto
-  ) {
-    return dispatch(new RtoAction.Update(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch(new BrowseRtoAction.LoadRto());
-      }),
-      catchError((err) => {
-        this.messageHelper.error({ error: err });
-        return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseRtoAction.ToggleDialog({}));
-      })
-    );
-  }*/
-
   @Action(BrowseBusinessContinuityAction.ToggleDialog, {
     cancelUncompleted: true,
   })
@@ -163,24 +105,6 @@ export class BrowseBusinessContinuityState {
         versionsDialogOpend: !currentStatus,
       })
     );
-  }
-
-  @Action(BrowseBusinessContinuityAction.OpenView, { cancelUncompleted: true })
-  openView(
-    {}: StateContext<BrowseBusinessContinuityStateModel>,
-    { payload }: BrowseBusinessContinuityAction.OpenView
-  ) {
-    this.router.navigate([], {
-      queryParams: {
-        _dialog:
-          this.route.snapshot.queryParams['_dialog'] == 'opened'
-            ? undefined
-            : 'opened',
-        _id: payload.Id,
-        _mode: 'viewonly',
-      },
-      queryParamsHandling: 'merge',
-    });
   }
 
   @Action(BrowseBusinessContinuityAction.SetGlobalVersion, {
@@ -201,7 +125,7 @@ export class BrowseBusinessContinuityState {
     setState(
       patch<BrowseBusinessContinuityStateModel>({
         versionId: payload.id,
-        versionsDialogOpend: false
+        versionsDialogOpend: false,
       })
     );
 

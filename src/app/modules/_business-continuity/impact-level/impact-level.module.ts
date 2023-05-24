@@ -34,6 +34,7 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
 import { BrowseImpactLevelState } from './states/browse-impact-level.state';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { ImpactAnalysisComponent } from '../impact-analysis/impact-analysis.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -44,7 +45,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [BrowseImpactLevelComponent, ContentImpactLevelComponent],
+  declarations: [BrowseImpactLevelComponent, ContentImpactLevelComponent,ImpactAnalysisComponent] ,
   imports: [
     CommonModule,
     ImpactLevelRoutingModule,

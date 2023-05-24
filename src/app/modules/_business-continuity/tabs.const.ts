@@ -8,11 +8,11 @@ export const TABS: MenuItem[] = [
     items: [
       {
         label: 'ORG_DETAILS',
-        routerLink: 'org-details',
+        routerLink: 'org/org-details',
       },
       {
         label: 'ORG_ARTCH',
-        routerLink: 'org-strucure',
+        routerLink: 'org/org-strucure',
         routerLinkActiveOptions: 'active-tab',
       },
     ],
