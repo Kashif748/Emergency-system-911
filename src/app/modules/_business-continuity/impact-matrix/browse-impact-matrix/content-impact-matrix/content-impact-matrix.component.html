@@ -50,22 +50,22 @@
             <td class="flag-td">
               <div class="bg-secondary"></div>
             </td>
-            <td>   <!--*ngIf="columns?.includes('userName')"-->
+            <td class="max-w-250px">   <!--*ngIf="columns?.includes('userName')"-->
               <p-skeleton></p-skeleton>
             </td>
-            <td>
+            <td class="max-w-250px">
               <p-skeleton></p-skeleton>
             </td>
-            <td>
+            <td class="max-w-250px">
               <p-skeleton></p-skeleton>
             </td>
-            <td>
+            <td class="max-w-250px">
               <p-skeleton></p-skeleton>
             </td>
-            <td>
+            <td class="max-w-250px">
               <p-skeleton></p-skeleton>
             </td>
-            <td>
+            <td class="max-w-250px">
               <p-skeleton></p-skeleton>
             </td>
 
@@ -123,13 +123,13 @@
               ></div>
             </td>
 
-            <td>
+            <td class="max-w-250px" (click)="openView(item.bcImpactTypes.id)">
               <div>
                 {{ item.bcImpactTypes | translateObj: 'name' }}
               </div>
             </td>
             <ng-container *ngFor="let col of columns; let i = index">
-              <td *ngIf="item.bcImpactLevelMatrixDtoList && item.bcImpactLevelMatrixDtoList[i]?.id === col.id">
+              <td class="max-w-250px" *ngIf="item.bcImpactLevelMatrixDtoList && item.bcImpactLevelMatrixDtoList[i]?.id === col.id" (click)="openView(item.bcImpactTypes.id)">
                 <div>
                   {{ item.bcImpactLevelMatrixDtoList[i] | translateObj : 'desc' }}
                 </div>

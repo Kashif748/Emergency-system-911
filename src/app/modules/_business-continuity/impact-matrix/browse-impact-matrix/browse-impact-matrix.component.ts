@@ -81,23 +81,19 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
                 command: () => {
                    this.openDialog(u.bcImpactTypes.id);
                 },
-                // disabled: !u.isActive,
+                 disabled: !u.bcImpactTypes.isActive,
               },
-              {
+              /*{
                 ...userActions[1],
                 command: () => {
                    this.activate(u.bcImpactTypes.id);
                 },
-                // disabled: u.isActive,
-              },
+                 disabled: u.bcImpactTypes.isActive,
+              },*/
             ],
           };
         }),
     )
-      /*  map((data) => {
-          const sortedData = data?.sort((a, b) => a.bcImpactLevelMatrixDtoList.id - b.bcImpactLevelMatrixDtoList.id);
-          return sortedData;
-        })*/
       );
   }
 
