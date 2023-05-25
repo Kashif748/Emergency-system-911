@@ -1,106 +1,93 @@
-import { Component, OnInit } from '@angular/core';
-import {BrowseRtoState, BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
-import {RtoState} from "@core/states/bc/rto/rto.state";
-import {Bcrto} from "../../../../api/models/bcrto";
-import {Observable} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {TranslateService} from "@ngx-translate/core";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {filter, map} from "rxjs/operators";
-import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { Select, Store } from '@ngxs/store';
+import { IAuthService } from '@core/services/auth.service';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { OrgDetailAction } from '@core/states/bc/org-details/org-detail.action';
+import { Observable, Subject } from 'rxjs';
+import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
+import { FormUtils } from '@core/utils/form.utils';
+import { BrowseOrgDetailAction } from '../states/browse-orgDetail.action';
 
 @Component({
   selector: 'app-browse-org-detail',
   templateUrl: './browse-org-detail.component.html',
-  styleUrls: ['./browse-org-detail.component.scss']
+  styleUrls: ['./browse-org-detail.component.scss'],
 })
-export class BrowseOrgDetailComponent implements OnInit {
-/*  public page$: Observable<Bcrto[]>;
-
-  @Select(RtoState.totalRecords)
-  public totalRecords$: Observable<number>;*/
-
-/*  @Select(RtoState.loading)
+export class BrowseOrgDetailComponent implements OnInit, OnDestroy {
+  @Select(OrgDetailState.loading)
   public loading$: Observable<boolean>;
 
-  @Select(BrowseRtoState.state)
-  public state$: Observable<BrowseRtoStateModel>;*/
-  constructor(
-    private translate: TranslateService,
-    private lang: ILangFacade,
-    private store: Store,
-    private messageHelper: MessageHelper,
-  ) { }
+  @Select(OrgDetailState.blocking)
+  public blocking$: Observable<boolean>;
 
-  ngOnInit(): void {
-    /*const userActions = [
-      {
-        label: this.translate.instant('ACTIONS.EDIT'),
-        icon: 'pi pi-pencil',
-      },
-      {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
-      },
-    ] as MenuItem[];
-
-    this.page$ = this.store.select(RtoState.page).pipe(
-      filter((p) => !!p),
-      map((page) =>
-        page?.map((u) => {
-          return {
-            ...u,
-            actions: [
-              {
-                ...userActions[0],
-                command: () => {
-                  this.openDialog(u.id);
-                },
-                disabled: !u.isActive,
-              },
-              {
-                ...userActions[1],
-                command: () => {
-                  this.activate(u.id);
-                },
-                disabled: u.isActive,
-              },
-            ],
-          };
-        })
-      )
-    );*/
+  form: FormGroup;
+  get loggedinUserId() {
+    return this.auth.getClaim('orgId');
   }
 
-/*  openDialog(id?: number) {
-    this.store.dispatch(new BrowseRtoAction.ToggleDialog({ rtoId: id }));
-  }*/
+  destroy$ = new Subject();
+  constructor(
+    private formBuilder: FormBuilder,
+    private lang: ILangFacade,
+    private store: Store,
+    private auth: IAuthService
+  ) {}
 
-/*  activate(id: number) {
-    this.messageHelper.confirm({
-      summary: 'SHARED.DIALOG.ARE_YOU_SURE',
-      detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE',
-      yesCommand: () => {
-        // this.store.dispatch(new UserAction.Activate({ id }));
-        this.messageHelper.closeConfirm();
-      },
-      noCommand: () => {
-        this.messageHelper.closeConfirm();
-      },
+  ngOnInit(): void {
+    this.createForm();
+    this.store
+      .dispatch(new OrgDetailAction.GetOrgDetail({ id: this.loggedinUserId }))
+      .pipe(
+        switchMap(() => this.store.select(OrgDetailState.org)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((org) => {
+          this.form.patchValue({
+            orgId: org.id,
+            ...org,
+          });
+        })
+      )
+      .subscribe();
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  createForm() {
+    this.form = this.formBuilder.group({
+      nameAr: [null],
+      nameEn: [null],
+      description: [null],
+      employeeNumbers: [null],
+      operationNumbers: [null],
+      orgId: 0,
     });
-  }*/
+  }
 
-/*  public loadPage(event: any) {
+  submit() {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      FormUtils.ForEach(this.form, (fc) => {
+        fc.markAsDirty();
+      });
+      return;
+    }
+
     this.store.dispatch(
-      new BrowseRtoAction.LoadRto({
-        pageRequest: {
-          first: event.first,
-          rows: event.rows,
-        },
-      })
+      new BrowseOrgDetailAction.UpdateOrgDetail(this.form.value)
     );
-  }*/
-
+  }
 }

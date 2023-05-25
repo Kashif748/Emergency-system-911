@@ -1,6 +1,5 @@
 import { PageRequestModel } from '@core/models/page-request.model';
-import {BcImpactLevel} from "../../../../api/models/bc-impact-level";
-
+import { BcImpactLevel } from '../../../../api/models/bc-impact-level';
 
 export namespace BrowseImpactLevelAction {
   export class LoadImpactLevel {
@@ -9,8 +8,7 @@ export namespace BrowseImpactLevelAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {
-    }
+    constructor(public payload?: { pageRequest: PageRequestModel }) {}
   }
 
   export class CreateImpactLevel {
@@ -18,9 +16,14 @@ export namespace BrowseImpactLevelAction {
     /**
      *
      */
-    constructor(
-      public payload: BcImpactLevel
-    ) {}
+    constructor(public payload: BcImpactLevel) {}
+  }
+  export class UpdateImpactLevel {
+    static readonly type = '[BrowseImpactLevel] Update ImpactLevel';
+    /**
+     *
+     */
+    constructor(public payload: BcImpactLevel) {}
   }
 
   export class ToggleDialog {
@@ -29,13 +32,5 @@ export namespace BrowseImpactLevelAction {
      *
      */
     constructor(public payload: { id?: number }) {}
-  }
-
-  export class OpenView {
-    static readonly type = '[BrowseImpactLevel] Open View';
-    /**
-     *
-     */
-    constructor(public payload: { id: number }) {}
   }
 }

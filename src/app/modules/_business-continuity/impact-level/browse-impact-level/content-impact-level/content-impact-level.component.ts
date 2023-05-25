@@ -1,27 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {LazyLoadEvent} from "primeng/api";
-import {PageRequestModel} from "@core/models/page-request.model";
-import {Store} from "@ngxs/store";
-import {TranslateService} from "@ngx-translate/core";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {BcImpactLevel} from "../../../../../api/models/bc-impact-level";
-import {BrowseImpactLevelAction} from "../../states/browse-impact-level.action";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {GenericValidators} from "@shared/validators/generic-validators";
-import {FormUtils} from "@core/utils/form.utils";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
+import { PageRequestModel } from '@core/models/page-request.model';
+import { Store } from '@ngxs/store';
+import { BcImpactLevel } from '../../../../../api/models/bc-impact-level';
+import { BrowseImpactLevelAction } from '../../states/browse-impact-level.action';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-content-impact-level',
   templateUrl: './content-impact-level.component.html',
-  styleUrls: ['./content-impact-level.component.scss']
+  styleUrls: ['./content-impact-level.component.scss'],
 })
 export class ContentImpactLevelComponent implements OnInit {
   @Input()
   loading: boolean;
   @Input()
   page: BcImpactLevel[];
-/*  @Input()
-  columns: string[];*/
   @Input()
   totalRecords: number;
   @Input()
@@ -29,70 +23,39 @@ export class ContentImpactLevelComponent implements OnInit {
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
-  form: FormGroup;
-  public display = false;
+
   public columns: string[] = ['levelAr', 'levelEn', 'color', 'active'];
+  clonedLevels: { [s: string]: BcImpactLevel } = {};
 
   constructor(
-    private translate: TranslateService,
-    private lang: ILangFacade,
     private store: Store,
-    private formBuilder: FormBuilder,
-  ) { }
+    private confirmationService: ConfirmationService,
+    private translate: TranslateService
+  ) {}
 
-  ngOnInit(): void {
-    this.buildForm();
-    this.onPageChange.emit({
-      first: this.pageRequest?.first,
-      rows: this.pageRequest?.rows,
+  ngOnInit(): void {}
+  onRowEditInit(level: BcImpactLevel) {
+    this.clonedLevels[level.id] = { ...level };
+  }
+
+  onRowEditSave(level: BcImpactLevel, event: Event) {
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translate.instant('UPDATE'),
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'mx-3 py-1',
+      rejectButtonStyleClass: 'mx-3 py-1',
+      accept: () => {
+        this.store.dispatch(
+          new BrowseImpactLevelAction.UpdateImpactLevel(
+            this.clonedLevels[level.id]
+          )
+        );
+      },
+      reject: () => {},
     });
   }
-
-  openView(Id?: number) {
-    this.store.dispatch(new BrowseImpactLevelAction.OpenView({ id: Id }));
+  onRowEditCancel(level: BcImpactLevel, index: number) {
+    delete this.clonedLevels[level.id];
   }
-
-  openDialog(Id?: number) {
-    this.display = true;
-  }
-
-  buildForm() {
-    this.form = this.formBuilder.group({
-      nameEn: [null],
-      nameAr: [null],
-      colorCode: [null],
-      isActive: [false]
-    });
-  }
-
-  onValueChange(value: string): void {
-    this.form.patchValue({
-      colorCode: value
-    });
-  }
-
-  submit() {
-    /*if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      FormUtils.ForEach(this.form, (fc) => {
-        fc.markAsDirty();
-      });
-      return;
-    }*/
-
-    const impactLevel = {
-      ...this.form.getRawValue(),
-    };
-
-    impactLevel.versionId = 1;
-    // impactLevel.isActive = true;
-    this.store.dispatch(new BrowseImpactLevelAction.CreateImpactLevel(impactLevel));
-
-    /*if (this.editMode) {
-      this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
-    } else {
-      this.store.dispatch(new BrowseUsersAction.CreateUser(user));
-    }*/
-  }
-
 }

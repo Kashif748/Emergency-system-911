@@ -1,22 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {Bcrto} from "../../../../api/models/bcrto";
 import {RtoState} from "@core/states/bc/rto/rto.state";
 import {BrowseRtoState, BrowseRtoStateModel} from "../states/browse-rto.state";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {filter, map, takeUntil} from "rxjs/operators";
+import {debounceTime, filter, map, takeUntil, tap} from "rxjs/operators";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {TranslateService} from "@ngx-translate/core";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {BrowseRtoAction} from "../states/browse-rto.action";
+import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
 
 @Component({
   selector: 'app-browse-rto',
   templateUrl: './browse-rto.component.html',
   styleUrls: ['./browse-rto.component.scss']
 })
-export class BrowseRtoComponent implements OnInit {
+export class BrowseRtoComponent implements OnInit, OnDestroy {
   public page$: Observable<Bcrto[]>;
 
   @Select(RtoState.totalRecords)
@@ -27,6 +28,8 @@ export class BrowseRtoComponent implements OnInit {
 
   @Select(BrowseRtoState.state)
   public state$: Observable<BrowseRtoStateModel>;
+
+  private destroy$ = new Subject();
 
 /*  public exportActions = [
     {
@@ -66,15 +69,17 @@ export class BrowseRtoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    /*this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
+    this.store
+      .select(BrowseBusinessContinuityState.versionId)
       .pipe(
         takeUntil(this.destroy$),
-        filter((c) => c.matches)
+        debounceTime(200),
+        tap((v) => {
+            this.loadPage();
+          }
+        )
       )
-      .subscribe(() => {
-        this.changeView('CARDS');
-      });*/
+      .subscribe();
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -132,15 +137,18 @@ export class BrowseRtoComponent implements OnInit {
     });
   }
 
-  public loadPage(event: LazyLoadEvent) {
+  public loadPage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseRtoAction.LoadRto({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );
   }
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

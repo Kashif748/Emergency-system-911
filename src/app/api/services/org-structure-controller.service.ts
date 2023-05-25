@@ -9,6 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { BcOrganizationDetails } from '../models/bc-organization-details';
 import { InAppOrgDetails } from '../models/in-app-org-details';
 import { LdapOrgDetails } from '../models/ldap-org-details';
 import { OrgStructure } from '../models/org-structure';
@@ -28,6 +29,52 @@ export class OrgStructureControllerService extends BaseService {
     http: HttpClient
   ) {
     super(config, http);
+  }
+
+  /**
+   * Path part for operation updateOrgStructureForBc
+   */
+  static readonly UpdateOrgStructureForBcPath = '/v1/update-org-for-bc';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateOrgStructureForBc()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateOrgStructureForBc$Response(params: {
+    body: BcOrganizationDetails
+  }): Observable<StrictHttpResponse<RestApiResponseOrgStructure>> {
+
+    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.UpdateOrgStructureForBcPath, 'put');
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseOrgStructure>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateOrgStructureForBc$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateOrgStructureForBc(params: {
+    body: BcOrganizationDetails
+  }): Observable<RestApiResponseOrgStructure> {
+
+    return this.updateOrgStructureForBc$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
+    );
   }
 
   /**

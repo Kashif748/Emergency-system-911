@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
-import {DATA} from "../../../tabs.const";
 import {LazyLoadEvent} from "primeng/api";
 import {PageRequestModel} from "../../../../../core/models/page-request.model";
-import {BcLocationTypes} from "../../../../../api/models/bc-location-types";
-import {BrowseLocationTypeAction} from "../../../location-type/states/browse-locationType.action";
 import {Store} from "@ngxs/store";
 import {ILangFacade} from "../../../../../core/facades/lang.facade";
+import {BcImpactLevel} from "../../../../../api/models/bc-impact-level";
+import {BcImpactMatrixDto} from "../../../../../api/models/bc-impact-matrix-dto";
+import {BrowseImpactMatrixAction} from "../../states/browse-impact-matrix.action";
 
 @Component({
   selector: 'app-content-impact-matrix',
@@ -17,7 +17,9 @@ export class ContentImpactMatrixComponent implements OnInit {
   @Input()
   loading: boolean;
   @Input()
-  page: BcLocationTypes[];
+  page: BcImpactMatrixDto[];
+  @Input()
+  impactTypePage: BcImpactLevel[];
   @Input()
   columns: string[];
   @Input()
@@ -27,9 +29,9 @@ export class ContentImpactMatrixComponent implements OnInit {
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
-  //public loading = false;
-  //public columns: string[] = ['impactType', 'low', 'medium', 'hight', 'action'];
-  //public page = [];
+
+  @Output()
+  onImpactTypePageChange = new EventEmitter<LazyLoadEvent>();
 
   constructor(
     private translate: TranslateService,
@@ -38,29 +40,10 @@ export class ContentImpactMatrixComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.onPageChange.emit({
-      first: this.pageRequest?.first,
-      rows: this.pageRequest?.rows,
-    });
-
-    /*this.page = DATA.impactAnalysis.map((item) => {
-      return {
-        ...item,
-        actions: [
-          {
-            label: this.translate.instant('ACTIONS.EDIT'),
-            icon: 'pi pi-pencil',
-            command: () => {
-              // this.openDialog(item.id);
-            },
-          },
-        ],
-      };
-    });*/
   }
 
   openView(Id?: number) {
-    this.store.dispatch(new BrowseLocationTypeAction.OpenView({ id: Id }));
+    this.store.dispatch(new BrowseImpactMatrixAction.OpenView({ id: Id }));
   }
 
   openDialog(Id?: number) {

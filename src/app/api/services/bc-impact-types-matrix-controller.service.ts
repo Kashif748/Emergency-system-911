@@ -9,10 +9,11 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { BcImpactMatrixDto } from '../models/bc-impact-matrix-dto';
 import { BcImpactTypesMatrix } from '../models/bc-impact-types-matrix';
-import { Pageable } from '../models/pageable';
+import { RestApiResponseBcImpactMatrixDto } from '../models/rest-api-response-bc-impact-matrix-dto';
 import { RestApiResponseBcImpactTypesMatrix } from '../models/rest-api-response-bc-impact-types-matrix';
-import { RestApiResponsePageBcImpactTypesMatrix } from '../models/rest-api-response-page-bc-impact-types-matrix';
+import { RestApiResponseListBcImpactMatrixDto } from '../models/rest-api-response-list-bc-impact-matrix-dto';
 
 @Injectable()
 export class BcImpactTypesMatrixControllerService extends BaseService {
@@ -70,27 +71,21 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll16
+   * Path part for operation findAll1
    */
-  static readonly GetAll16Path = '/v1/bc/impactTypeMatrix';
+  static readonly FindAll1Path = '/v1/bc/impactTypeMatrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll16()` instead.
+   * To access only the response body, use `findAll1()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll16$Response(params: {
-    isActive?: boolean;
-    versionId?: number;
-    pageable: Pageable;
-  }): Observable<StrictHttpResponse<RestApiResponsePageBcImpactTypesMatrix>> {
+  findAll1$Response(params?: {
+  }): Observable<StrictHttpResponse<RestApiResponseListBcImpactMatrixDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.GetAll16Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.FindAll1Path, 'get');
     if (params) {
-      rb.query('isActive', params.isActive, {});
-      rb.query('versionId', params.versionId, {});
-      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -99,25 +94,22 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponsePageBcImpactTypesMatrix>;
+        return r as StrictHttpResponse<RestApiResponseListBcImpactMatrixDto>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll16$Response()` instead.
+   * To access the full response (for headers, for example), `findAll1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll16(params: {
-    isActive?: boolean;
-    versionId?: number;
-    pageable: Pageable;
-  }): Observable<RestApiResponsePageBcImpactTypesMatrix> {
+  findAll1(params?: {
+  }): Observable<RestApiResponseListBcImpactMatrixDto> {
 
-    return this.getAll16$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponsePageBcImpactTypesMatrix>) => r.body as RestApiResponsePageBcImpactTypesMatrix)
+    return this.findAll1$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListBcImpactMatrixDto>) => r.body as RestApiResponseListBcImpactMatrixDto)
     );
   }
 
@@ -168,21 +160,21 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation insertOne7
+   * Path part for operation insert
    */
-  static readonly InsertOne7Path = '/v1/bc/impactTypeMatrix';
+  static readonly InsertPath = '/v1/bc/impactTypeMatrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne7()` instead.
+   * To access only the response body, use `insert()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne7$Response(params: {
-    body: BcImpactTypesMatrix
-  }): Observable<StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>> {
+  insert$Response(params: {
+    body: BcImpactMatrixDto
+  }): Observable<StrictHttpResponse<RestApiResponseBcImpactMatrixDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.InsertOne7Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.InsertPath, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -193,42 +185,42 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>;
+        return r as StrictHttpResponse<RestApiResponseBcImpactMatrixDto>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne7$Response()` instead.
+   * To access the full response (for headers, for example), `insert$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne7(params: {
-    body: BcImpactTypesMatrix
-  }): Observable<RestApiResponseBcImpactTypesMatrix> {
+  insert(params: {
+    body: BcImpactMatrixDto
+  }): Observable<RestApiResponseBcImpactMatrixDto> {
 
-    return this.insertOne7$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>) => r.body as RestApiResponseBcImpactTypesMatrix)
+    return this.insert$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcImpactMatrixDto>) => r.body as RestApiResponseBcImpactMatrixDto)
     );
   }
 
   /**
-   * Path part for operation getOne7
+   * Path part for operation getOneByImpactTypeId
    */
-  static readonly GetOne7Path = '/v1/bc/impactTypeMatrix/{id}';
+  static readonly GetOneByImpactTypeIdPath = '/v1/bc/impactTypeMatrix/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne7()` instead.
+   * To access only the response body, use `getOneByImpactTypeId()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne7$Response(params: {
+  getOneByImpactTypeId$Response(params: {
     id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>> {
+  }): Observable<StrictHttpResponse<RestApiResponseBcImpactMatrixDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.GetOne7Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.GetOneByImpactTypeIdPath, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -239,23 +231,23 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>;
+        return r as StrictHttpResponse<RestApiResponseBcImpactMatrixDto>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne7$Response()` instead.
+   * To access the full response (for headers, for example), `getOneByImpactTypeId$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne7(params: {
+  getOneByImpactTypeId(params: {
     id: number;
-  }): Observable<RestApiResponseBcImpactTypesMatrix> {
+  }): Observable<RestApiResponseBcImpactMatrixDto> {
 
-    return this.getOne7$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>) => r.body as RestApiResponseBcImpactTypesMatrix)
+    return this.getOneByImpactTypeId$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcImpactMatrixDto>) => r.body as RestApiResponseBcImpactMatrixDto)
     );
   }
 

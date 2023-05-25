@@ -1,23 +1,30 @@
-import {PageRequestModel} from "@core/models/page-request.model";
-import {iif, patch} from "@ngxs/store/operators";
-import {EMPTY} from "rxjs";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {ApiHelper} from "@core/helpers/api.helper";
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {RtoAction} from "@core/states/bc/rto/rto.action";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Injectable} from "@angular/core";
-import {BrowseOrgDetailAction} from "./browse-orgDetail.action";
-import {OrgDetailAction} from "@core/states";
+import { EMPTY } from 'rxjs';
+import { MessageHelper } from '@core/helpers/message.helper';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { catchError, tap } from 'rxjs/operators';
 
+import { Injectable } from '@angular/core';
+import { BrowseOrgDetailAction } from './browse-orgDetail.action';
+import { OrgDetailAction } from '@core/states';
+import { Router } from '@angular/router';
+import { PageRequestModel } from '@core/models/page-request.model';
+import { iif, patch } from '@ngxs/store/operators';
+import { ApiHelper } from '@core/helpers/api.helper';
+import { BcOrgHir } from 'src/app/api/models';
+import { TreeNode } from 'primeng/api';
 
 export interface BrowseOrgDetailModel {
   pageRequest: PageRequestModel;
-  columns: string[];
-  view: 'TABLE' | 'CARDS';
+  selectedOrgHir: BcOrgHir;
+  selectedOrgHirNode: TreeNode;
 }
-
 
 export const BROWSE_ORG_DETAIL_UI_STATE_TOKEN =
   new StateToken<BrowseOrgDetailModel>('browse_orgDetail');
@@ -30,12 +37,17 @@ export const BROWSE_ORG_DETAIL_UI_STATE_TOKEN =
       first: 0,
       rows: 10,
     },
-    columns: [
-      'criticality',
-      'rtoEn',
-      'description'
-    ],
-    view: 'TABLE',
+    selectedOrgHir: null,
+    selectedOrgHirNode: {
+      leaf: true,
+      expandedIcon: 'pi pi-plus',
+      collapsedIcon: 'pi pi-plus',
+      draggable: false,
+      droppable: false,
+      expanded: false,
+      parent: null,
+      children: [],
+    },
   },
 })
 @Injectable()
@@ -44,64 +56,27 @@ export class BrowseOrgDetailState {
   /**
    *
    */
+
   constructor(
     private messageHelper: MessageHelper,
-    private router: Router,
-    private apiHelper: ApiHelper,
-    private route: ActivatedRoute
-  ) {
-  }
+    private apiHelper: ApiHelper
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseOrgDetailState])
   static state(state: BrowseOrgDetailModel): BrowseOrgDetailModel {
     return state;
   }
-
-  /* ********************** ACTIONS ************************* */
-  @Action(BrowseOrgDetailAction.LoadOrgDetail)
-  orgDetail(
-    { setState, dispatch, getState }: StateContext<BrowseOrgDetailModel>,
-    { payload }: BrowseOrgDetailAction.LoadOrgDetail
-  ) {
-    setState(
-      patch<BrowseOrgDetailModel>({
-        pageRequest: patch<PageRequestModel>({
-          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
-          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
-        }),
-      })
-    );
-    const pageRequest = getState().pageRequest;
-    return dispatch(
-      new RtoAction.LoadPage({
-        page: this.apiHelper.page(pageRequest),
-        size: pageRequest.rows,
-        sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
-      })
-    );
+  @Selector([BrowseOrgDetailState])
+  static selectedOrgHir(state: BrowseOrgDetailModel): BcOrgHir {
+    return state?.selectedOrgHir;
+  }
+  @Selector([BrowseOrgDetailState])
+  static selectedOrgHirNode(state: BrowseOrgDetailModel): TreeNode {
+    return state?.selectedOrgHirNode;
   }
 
- /* @Action(BrowseOrgDetailAction.CreateOrgDetail)
-  createRto(
-    { dispatch }: StateContext<BrowseOrgDetailModel>,
-    { payload }: BrowseOrgDetailAction.CreateOrgDetail
-  ) {
-    return dispatch(new RtoAction.Create(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch([
-          new BrowseRtoAction.LoadRto(),
-          new BrowseRtoAction.ToggleDialog({}),
-        ]);
-      }),
-      catchError((err) => {
-        this.messageHelper.error({ error: err });
-        return EMPTY;
-      })
-    );
-  }*/
+  /* ********************** ACTIONS ************************* */
 
   @Action(BrowseOrgDetailAction.UpdateOrgDetail)
   updateOrgDetail(
@@ -111,14 +86,10 @@ export class BrowseOrgDetailState {
     return dispatch(new OrgDetailAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseOrgDetailAction.LoadOrgDetail());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        // dispatch(new BrowseRtoAction.ToggleDialog({}));
       })
     );
   }
@@ -132,46 +103,127 @@ export class BrowseOrgDetailState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        // dispatch(new BrowseRtoAction.ToggleDialog({}));
+      })
+    );
+  }
+  @Action(BrowseOrgDetailAction.GetOrgHierarchy)
+  getOrgHierarchy(
+    { dispatch, setState, getState }: StateContext<BrowseOrgDetailModel>,
+    { payload }: BrowseOrgDetailAction.GetOrgHierarchy
+  ) {
+    setState(
+      patch<BrowseOrgDetailModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new OrgDetailAction.GetOrgHierarchy({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
       })
     );
   }
 
-  /*@Action(BrowseRtoAction.ToggleDialog, { cancelUncompleted: true })
-  openDialog(
-    {}: StateContext<BrowseOrgDetailModel>,
-    { payload }: BrowseRtoAction.ToggleDialog
+  @Action(BrowseOrgDetailAction.CreateOrgHierarchy)
+  CreateOrgHierarchy(
+    { dispatch, setState, getState }: StateContext<BrowseOrgDetailModel>,
+    { payload }: BrowseOrgDetailAction.CreateOrgHierarchy
   ) {
-    this.router.navigate([], {
-      queryParams: {
-        _dialog:
-          this.route.snapshot.queryParams['_dialog'] == 'opened'
-            ? undefined
-            : 'opened',
-        _id: payload.rtoId,
-        _mode: undefined,
-      },
-      queryParamsHandling: 'merge',
-    });
-  }*/
+    return dispatch(new OrgDetailAction.CreateOrgHierarchy(payload)).pipe(
+      tap((orgHir: any) => {
+        const selectedOrgHirNode = getState().selectedOrgHirNode;
+        setState(
+          patch<BrowseOrgDetailModel>({
+            selectedOrgHir: orgHir.result,
+            selectedOrgHirNode: { ...selectedOrgHirNode, data: orgHir.result },
+          })
+        );
+        this.messageHelper.success();
+        dispatch([new BrowseOrgDetailAction.GetOrgHierarchy()]);
+      }),
 
-  /*@Action(BrowseRtoAction.OpenView, { cancelUncompleted: true })
-  openView(
-    {}: StateContext<BrowseOrgDetailModel>,
-    { payload }: BrowseRtoAction.OpenView
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseOrgDetailAction.UpdateOrgHierarchy)
+  UpdateOrgHierarchy(
+    { dispatch, setState, getState }: StateContext<BrowseOrgDetailModel>,
+    { payload }: BrowseOrgDetailAction.UpdateOrgHierarchy
   ) {
-    this.router.navigate([], {
-      queryParams: {
-        _dialog:
-          this.route.snapshot.queryParams['_dialog'] == 'opened'
-            ? undefined
-            : 'opened',
-        _id: payload.rtoId,
-        _mode: 'viewonly',
-      },
-      queryParamsHandling: 'merge',
-    });
-  }*/
+    return dispatch(new OrgDetailAction.UpdateOrgHierarchy(payload)).pipe(
+      tap((orgHir: any) => {
+        const selectedOrgHirNode = getState().selectedOrgHirNode;
+        setState(
+          patch<BrowseOrgDetailModel>({
+            selectedOrgHir: orgHir.result,
+            selectedOrgHirNode: { ...selectedOrgHirNode, data: orgHir.result },
+          })
+        );
+        this.messageHelper.success();
+        dispatch([new BrowseOrgDetailAction.GetOrgHierarchy()]);
+      }),
+
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseOrgDetailAction.DeleteOrgHierarchy)
+  DeleteOrgHierarchy(
+    { dispatch, setState }: StateContext<BrowseOrgDetailModel>,
+    { payload }: BrowseOrgDetailAction.DeleteOrgHierarchy
+  ) {
+    return dispatch(new OrgDetailAction.DeleteOrgHierarchy(payload)).pipe(
+      tap(() => {
+        setState(
+          patch<BrowseOrgDetailModel>({
+            selectedOrgHir: null,
+            selectedOrgHirNode: null,
+          })
+        );
+        this.messageHelper.success();
+        dispatch([new BrowseOrgDetailAction.GetOrgHierarchy()]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseOrgDetailAction.SelectNode)
+  SelectNode(
+    { setState }: StateContext<BrowseOrgDetailModel>,
+    { payload }: BrowseOrgDetailAction.SelectNode
+  ) {
+    setState(
+      patch<BrowseOrgDetailModel>({
+        selectedOrgHirNode: payload,
+        selectedOrgHir: payload?.data,
+      })
+    );
+  }
+
+  @Action(BrowseOrgDetailAction.GetOrgHierarchyTypes)
+  getOrgHierarchyTypes(
+    { dispatch }: StateContext<BrowseOrgDetailModel>,
+    { payload }: BrowseOrgDetailAction.GetOrgHierarchyTypes
+  ) {
+    return dispatch(new OrgDetailAction.GetOrgHierarchyTypes(payload)).pipe(
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
 }

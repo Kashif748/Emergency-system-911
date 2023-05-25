@@ -72,11 +72,11 @@
     }
   }
 
-  .p-dropdown {
+  header .p-dropdown {
     background-color: var(--blue-500);
     .p-dropdown-label,
     .p-dropdown-trigger-icon {
-      padding:  0 8px;
+      // padding: 0 12px;
       color: white;
     }
   }

@@ -4,15 +4,15 @@ import {catchError, finalize, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {Injectable} from "@angular/core";
 import {BcImpactTypesMatrixControllerService} from "../../../../api/services/bc-impact-types-matrix-controller.service";
-import {PageBcImpactTypesMatrix} from "../../../../api/models/page-bc-impact-types-matrix";
 import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
 import {ImpactMatrixAction} from "@core/states/bc/impact-matrix/impact-matrix.action";
 import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
+import {BcImpactMatrixDto} from "../../../../api/models/bc-impact-matrix-dto";
 
 
 export interface ImpactMatrixStateModel {
-  page: PageBcImpactTypesMatrix;
-  impactMatrix: BcImpactTypesMatrix;
+  page: BcImpactMatrixDto[] ;
+  impactMatrix: BcImpactMatrixDto;
   loading: boolean;
   blocking: boolean;
 }
@@ -36,7 +36,7 @@ export class ImpactMatrixState {
   /* ************************ SELECTORS ******************** */
   @Selector([ImpactMatrixState])
   static page(state: ImpactMatrixStateModel) {
-    return state?.page?.content;
+    return state?.page;
   }
 
   @Selector([ImpactMatrixState])
@@ -46,7 +46,7 @@ export class ImpactMatrixState {
 
   @Selector([ImpactMatrixState])
   static totalRecords(state: ImpactMatrixStateModel) {
-    return state?.page?.totalElements;
+    return state?.page?.length;
   }
 
   @Selector([ImpactMatrixState])
@@ -72,7 +72,7 @@ export class ImpactMatrixState {
     );
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.impactMatrix
-      .getAll16({
+      .findAll1({
         isActive: true,
         versionId: versionID,
         pageable: {
@@ -94,7 +94,7 @@ export class ImpactMatrixState {
         catchError(() => {
           setState(
             patch<ImpactMatrixStateModel>({
-              page: {content: [], totalElements: 0},
+              page:   [],
             })
           );
           return EMPTY;
@@ -109,7 +109,7 @@ export class ImpactMatrixState {
       );
   }
 
-  /*@Action(ImpactMatrixAction.Create)
+  @Action(ImpactMatrixAction.Create)
   create(
     {setState}: StateContext<ImpactMatrixStateModel>,
     {payload}: ImpactMatrixAction.Create
@@ -119,8 +119,10 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.bcImpactTypes.versionId = versionID;
     return this.impactMatrix
-      .insertOne1({
+      .insert({
         body: payload,
       })
       .pipe(
@@ -132,7 +134,7 @@ export class ImpactMatrixState {
           );
         })
       );
-  }*/
+  }
 
   @Action(ImpactMatrixAction.Update)
   update(
@@ -177,7 +179,7 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    return this.impactMatrix.getOne7({id: payload.id}).pipe(
+    return this.impactMatrix.getOneByImpactTypeId({id: payload.id}).pipe(
       tap((impactMatrix) => {
         setState(
           patch<ImpactMatrixStateModel>({

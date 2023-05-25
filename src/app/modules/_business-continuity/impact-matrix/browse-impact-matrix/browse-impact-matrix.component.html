@@ -1,7 +1,9 @@
 <div *ngIf="state$ | async as state">
   <app-content-impact-matrix  [loading]="loading$ | async" [page]="page$ | async"
+                              [impactTypePage]="impactTypePage$ | async"
                     [columns]="state.columns"
                     [pageRequest]="state?.pageRequest"
                     [totalRecords]="totalRecords$ | async"
-                    (onPageChange)="loadPage($event)"></app-content-impact-matrix>
+                    (onPageChange)="loadPage($event)"
+                    (onImpactTypePageChange)="loadImpactTypePage($event)"></app-content-impact-matrix>
 </div>

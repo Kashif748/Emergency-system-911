@@ -1,14 +1,33 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
-import {Injectable} from "@angular/core";
-import {patch} from "@ngxs/store/operators";
-import {finalize, tap} from "rxjs/operators";
-import {OrgStructure} from "../../../../api/models/org-structure";
-import {OrgDetailAction} from "@core/states/bc/org-details/org-detail.action";
-import {OrgStructureControllerService} from "../../../../api/services/org-structure-controller.service";
-
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { patch } from '@ngxs/store/operators';
+import { finalize, tap } from 'rxjs/operators';
+import { OrgStructure } from '../../../../api/models/org-structure';
+import { OrgDetailAction } from '@core/states/bc/org-details/org-detail.action';
+import { OrgStructureControllerService } from '../../../../api/services/org-structure-controller.service';
+import {
+  BcOrgHirControllerService,
+  BcOrgHirTypeControllerService,
+} from 'src/app/api/services';
+import { BrowseBusinessContinuityState } from 'src/app/modules/_business-continuity/states/browse-business-continuity.state';
+import {
+  BcOrgHir,
+  BcOrgHirType,
+  PageBcOrgHir,
+  PageBcOrgHirType,
+} from 'src/app/api/models';
 
 export interface OrgDetailStateModel {
-  // page: PageBcrto;
+  orgHir: PageBcOrgHir;
+  orgHirTypes: PageBcOrgHirType;
   org: OrgStructure;
   loading: boolean;
   blocking: boolean;
@@ -25,24 +44,25 @@ export class OrgDetailState {
    */
   constructor(
     private org: OrgStructureControllerService,
-  ) {
-  }
-
-  /* ************************ SELECTORS ******************** */
-/*  @Selector([OrgDetailState])
-  static page(state: OrgDetailStateModel) {
-    return state?.page?.content;
-  }*/
+    private store: Store,
+    private orgHir: BcOrgHirControllerService,
+    private orgHirTypes: BcOrgHirTypeControllerService
+  ) {}
 
   @Selector([OrgDetailState])
   static org(state: OrgDetailStateModel) {
     return state?.org;
   }
 
-/*  @Selector([OrgDetailState])
-  static totalRecords(state: OrgDetailStateModel) {
-    return state?.page?.totalElements;
-  }*/
+  @Selector([OrgDetailState])
+  static orgHir(state: OrgDetailStateModel): BcOrgHir[] {
+    return state?.orgHir.content;
+  }
+
+  @Selector([OrgDetailState])
+  static orgHirTypes(state: OrgDetailStateModel): BcOrgHirType[] {
+    return state?.orgHirTypes.content;
+  }
 
   @Selector([OrgDetailState])
   static loading(state: OrgDetailStateModel) {
@@ -55,96 +75,160 @@ export class OrgDetailState {
   }
 
   /* ********************** ACTIONS ************************* */
-  /*@Action(OrgDetailAction.LoadPage, { cancelUncompleted: true })
-  loadPage(
+  @Action(OrgDetailAction.GetOrgHierarchy, { cancelUncompleted: true })
+  getOrgHierarchy(
     { setState }: StateContext<OrgDetailStateModel>,
-    { payload }: OrgDetailAction.LoadPage
+    { payload }: OrgDetailAction.GetOrgHierarchy
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        blocking: true,
+        loading: true,
+      })
+    );
+    const versionID = this.store.selectSnapshot(
+      BrowseBusinessContinuityState.versionId
+    );
+
+    return this.orgHir
+      .getAll12({
+        versionId: versionID,
+        isActive: true,
+        pageable: payload,
+      })
+      .pipe(
+        tap((orgHir) => {
+          setState(
+            patch<OrgDetailStateModel>({
+              orgHir: orgHir.result,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<OrgDetailStateModel>({
+              blocking: false,
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(OrgDetailAction.GetOrgHierarchyNode, { cancelUncompleted: true })
+  GetOrgHierarchyNode(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.GetOrgHierarchyNode
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        blocking: true,
+      })
+    );
+    return this.orgHir.getOne2(payload).pipe(
+      finalize(() => {
+        setState(
+          patch<OrgDetailStateModel>({
+            blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(OrgDetailAction.CreateOrgHierarchy, { cancelUncompleted: true })
+  CreateOrgHierarchy(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.CreateOrgHierarchy
   ) {
     setState(
       patch<OrgDetailStateModel>({
         loading: true,
       })
     );
-    return this.rto
-      .getAll10({
+    return this.orgHir.insertOne3({ body: payload }).pipe(
+      finalize(() => {
+        setState(
+          patch<OrgDetailStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(OrgDetailAction.UpdateOrgHierarchy, { cancelUncompleted: true })
+  UpdateOrgHierarchy(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.UpdateOrgHierarchy
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        loading: true,
+      })
+    );
+    return this.orgHir.update82({ body: payload }).pipe(
+      finalize(() => {
+        setState(
+          patch<OrgDetailStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
+  }
+
+  @Action(OrgDetailAction.DeleteOrgHierarchy, { cancelUncompleted: true })
+  DeleteOrgHierarchy(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.DeleteOrgHierarchy
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        loading: true,
+      })
+    );
+    return this.orgHir.deleteById2(payload).pipe(
+      finalize(() => {
+        setState(
+          patch<OrgDetailStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
+  }
+
+  @Action(OrgDetailAction.GetOrgHierarchyTypes, { cancelUncompleted: true })
+  getOrgHierarchyTypes(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.GetOrgHierarchyTypes
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        blocking: true,
+      })
+    );
+    const versionID = this.store.selectSnapshot(
+      BrowseBusinessContinuityState.versionId
+    );
+
+    return this.orgHirTypes
+      .getAll11({
+        versionId: versionID,
         isActive: true,
-        versionId: 1,
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
-        // request: payload.filters,
       })
       .pipe(
-        tap((res) => {
+        tap((orgHir) => {
           setState(
             patch<OrgDetailStateModel>({
-              // page: res.result,
-              loading: false,
+              orgHirTypes: orgHir.result,
             })
           );
         }),
-        catchError(() => {
-          setState(
-            patch<OrgDetailStateModel>({
-              // page: { content: [], totalElements: 0 },
-            })
-          );
-          return EMPTY;
-        }),
-        finalize(() => {
-          setState(
-            patch<OrgDetailStateModel>({
-              loading: false,
-            })
-          );
-        })
-      );
-  }*/
-
-  /*@Action(OrgDetailAction.Create)
-  create(
-    { setState }: StateContext<OrgDetailStateModel>,
-    { payload }: OrgDetailAction.Create
-  ) {
-    setState(
-      patch<OrgDetailStateModel>({
-        blocking: true,
-      })
-    );
-    return this.rto
-      .insertOne1({
-        body: payload,
-      })
-      .pipe(
-        finalize(() => {
-          setState(
-            patch<OrgDetailStateModel>({
-              blocking: false,
-            })
-          );
-        })
-      );
-  }*/
-
-  @Action(OrgDetailAction.Update)
-  update(
-    { setState, getState}: StateContext<OrgDetailStateModel>,
-    { payload }: OrgDetailAction.Update
-  ) {
-    setState(
-      patch<OrgDetailStateModel>({
-        blocking: true,
-      })
-    );
-    const orgBody = getState().org;
-    // orgBody.description = payload.description
-    return this.org
-      .active1({
-        id: {...orgBody, ...payload} as OrgStructure,
-      })
-      .pipe(
         finalize(() => {
           setState(
             patch<OrgDetailStateModel>({
@@ -155,6 +239,27 @@ export class OrgDetailState {
       );
   }
 
+  @Action(OrgDetailAction.Update)
+  update(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.Update
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        loading: true,
+      })
+    );
+    return this.org.updateOrgStructureForBc({ body: payload }).pipe(
+      finalize(() => {
+        setState(
+          patch<OrgDetailStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
+  }
+
   @Action(OrgDetailAction.GetOrgDetail, { cancelUncompleted: true })
   getOrgDetail(
     { setState }: StateContext<OrgDetailStateModel>,
@@ -163,7 +268,7 @@ export class OrgDetailState {
     if (payload.id === undefined || payload.id === null) {
       setState(
         patch<OrgDetailStateModel>({
-          // rto: undefined,
+          org: undefined,
         })
       );
       return;
@@ -177,7 +282,7 @@ export class OrgDetailState {
       tap((orgDetail) => {
         setState(
           patch<OrgDetailStateModel>({
-             org: orgDetail.result,
+            org: orgDetail.result,
           })
         );
       }),

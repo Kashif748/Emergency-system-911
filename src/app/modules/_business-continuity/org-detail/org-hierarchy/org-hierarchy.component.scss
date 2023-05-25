@@ -2,7 +2,7 @@
   display: none;
 }
 :host ::ng-deep {
-  .p-treenode-leaf>.p-treenode-content .p-tree-toggler {
+  .p-treenode-leaf > .p-treenode-content .p-tree-toggler {
     display: none !important;
   }
 }

@@ -1,25 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {RtoState} from "@core/states/bc/rto/rto.state";
-import {filter, map} from "rxjs/operators";
+import {debounceTime, filter, map, takeUntil, tap} from "rxjs/operators";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {TranslateService} from "@ngx-translate/core";
 import {Select, Store} from "@ngxs/store";
 import {ILangFacade} from "@core/facades/lang.facade";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {BcWorkImportanceLevels} from "../../../../api/models/bc-work-importance-levels";
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 import {BrowseImpLevelWorkingState, BrowseImpLevelWorkingStateModel} from "./states/browse-imp-level-working.state";
 import {BrowseImpLevelWorkingAction} from "./states/browse-imp-level-working.action";
-import {BrowseLocationTypeAction} from "../../location-type/states/browse-locationType.action";
+import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
 
 @Component({
   selector: 'app-browse-imp-level-working',
   templateUrl: './browse-imp-level-working.component.html',
   styleUrls: ['./browse-imp-level-working.component.scss']
 })
-export class BrowseImpLevelWorkingComponent implements OnInit {
+export class BrowseImpLevelWorkingComponent implements OnInit, OnDestroy {
 
   public page$: Observable<BcWorkImportanceLevels[]>;
 
@@ -32,6 +30,8 @@ export class BrowseImpLevelWorkingComponent implements OnInit {
   @Select(BrowseImpLevelWorkingState.state)
   public state$: Observable<BrowseImpLevelWorkingStateModel>;
 
+  private destroy$ = new Subject();
+
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
@@ -40,15 +40,17 @@ export class BrowseImpLevelWorkingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    /*this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
+    this.store
+      .select(BrowseBusinessContinuityState.versionId)
       .pipe(
         takeUntil(this.destroy$),
-        filter((c) => c.matches)
+        debounceTime(200),
+        tap((v) => {
+            this.loadPage();
+          }
+        )
       )
-      .subscribe(() => {
-        this.changeView('CARDS');
-      });*/
+      .subscribe();
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -106,14 +108,18 @@ export class BrowseImpLevelWorkingComponent implements OnInit {
     });
   }
 
-  public loadPage(event: LazyLoadEvent) {
+  public loadPage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseImpLevelWorkingAction.LoadImpLevelWorking({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
