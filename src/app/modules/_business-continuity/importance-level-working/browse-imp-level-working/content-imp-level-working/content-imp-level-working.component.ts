@@ -34,10 +34,10 @@ export class ContentImpLevelWorkingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.onPageChange.emit({
+   /* this.onPageChange.emit({
       first: this.pageRequest?.first,
       rows: this.pageRequest?.rows,
-    });
+    });*/
 /*    this.page = DATA.impactLevelsWorking.map((item) => {
       return {
         ...item,

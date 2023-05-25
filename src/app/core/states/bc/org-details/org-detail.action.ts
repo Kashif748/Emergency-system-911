@@ -1,41 +1,70 @@
-import {OrgStructure} from "../../../../api/models/org-structure";
+import { BcOrganizationDetails, BcOrgHir } from 'src/app/api/models';
 
 export namespace OrgDetailAction {
-/*  export class LoadPage {
-    static readonly type = '[OrgDetail] Load Page';
-
-    /!**
+  export class CreateOrgHierarchy {
+    static readonly type = '[OrgDetail] Create Org Hierarchy';
+    /**
      *
-     *!/
+     */
+    constructor(public payload: BcOrgHir) {}
+  }
+  export class UpdateOrgHierarchy {
+    static readonly type = '[OrgDetail] Update Org Hierarchy';
+    /**
+     *
+     */
+    constructor(public payload: BcOrgHir) {}
+  }
+  export class DeleteOrgHierarchy {
+    static readonly type = '[OrgDetail] Delete Org Hierarchy';
+    /**
+     *
+     */
+    constructor(public payload: { id: number }) {}
+  }
+  export class GetOrgHierarchy {
+    static readonly type = '[OrgDetail] Get Org Hierarchy';
+    /**
+     *
+     */
     constructor(
       public payload: {
-        filters?: { [key: string]: any };
         sort?: string[];
         page: number;
         size: number;
       }
-    ) {
-    }
-  }*/
-
-/*  export class Create {
-    static readonly type = '[OrgDetail] Create';
-    /!**
-     *
-     *!/
-    constructor(
-      public payload: OrgStructure
     ) {}
-  }*/
-
+  }
+  export class GetOrgHierarchyNode {
+    static readonly type = '[OrgDetail] Get Org Hierarchy Node';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id: number;
+      }
+    ) {}
+  }
+  export class GetOrgHierarchyTypes {
+    static readonly type = '[OrgDetail] Get Org Hierarchy Types';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
   export class Update {
     static readonly type = '[OrgDetail] Update';
     /**
      *
      */
-    constructor(
-      public payload: OrgStructure
-    ) {}
+    constructor(public payload: BcOrganizationDetails) {}
   }
 
   export class GetOrgDetail {

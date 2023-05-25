@@ -119,6 +119,8 @@ export class RtoState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.rto
       .insertOne1({
         body: payload,

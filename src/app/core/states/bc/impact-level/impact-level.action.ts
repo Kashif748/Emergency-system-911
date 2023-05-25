@@ -27,6 +27,15 @@ export namespace ImpactLevelAction {
       public payload: BcImpactLevel
     ) {}
   }
+  export class Update {
+    static readonly type = '[ImpactLevel] Update';
+    /**
+     *
+     */
+    constructor(
+      public payload: BcImpactLevel
+    ) {}
+  }
 
   export class GetImpactLevel {
     static readonly type = '[ImpactLevel] Get Impact Level';

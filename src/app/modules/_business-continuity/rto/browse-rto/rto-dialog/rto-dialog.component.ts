@@ -132,11 +132,11 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       ...this.form.getRawValue(),
     };
 
-    rto.versionId = this.versionID$.pipe(
+    /*rto.versionId = this.versionID$.pipe(
       tap((v) => {
         return v;
       })
-    ).subscribe();
+    ).subscribe();*/
     // rto.isActive = true;
     // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
 

@@ -10,7 +10,7 @@ import {PageBcVersions} from "../../../../api/models/page-bc-versions";
 
 
 export interface BusinessContinuityStateModel {
-  page: PageBcVersions;
+  versions: PageBcVersions;
   bc: BcVersions;
   loading: boolean;
   blocking: boolean;
@@ -32,8 +32,8 @@ export class BusinessContinuityState {
 
   /* ************************ SELECTORS ******************** */
   @Selector([BusinessContinuityState])
-  static page(state: BusinessContinuityStateModel) {
-     return state?.page?.content;
+  static versions(state: BusinessContinuityStateModel) {
+     return state?.versions?.content;
   }
 
   @Selector([BusinessContinuityState])
@@ -43,7 +43,7 @@ export class BusinessContinuityState {
 
   @Selector([BusinessContinuityState])
   static totalRecords(state: BusinessContinuityStateModel) {
-     return state?.page?.totalElements;
+     return state?.versions?.totalElements;
   }
 
   @Selector([BusinessContinuityState])
@@ -81,7 +81,7 @@ export class BusinessContinuityState {
         tap((res) => {
           setState(
             patch<BusinessContinuityStateModel>({
-               page: res.result,
+              versions: res.result,
               loading: false,
             })
           );
@@ -89,7 +89,7 @@ export class BusinessContinuityState {
         catchError(() => {
           setState(
             patch<BusinessContinuityStateModel>({
-               page: { content: [], totalElements: 0 },
+              versions: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;

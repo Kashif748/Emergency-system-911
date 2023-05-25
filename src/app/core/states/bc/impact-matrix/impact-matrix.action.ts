@@ -1,4 +1,4 @@
-import {BcImpactTypesMatrix} from "../../../../api/models";
+import {BcImpactMatrixDto, BcImpactTypesMatrix} from "../../../../api/models";
 
 export namespace ImpactMatrixAction {
   export class LoadPage {
@@ -24,7 +24,7 @@ export namespace ImpactMatrixAction {
      *
      */
     constructor(
-      public payload: BcImpactTypesMatrix
+      public payload: BcImpactMatrixDto
     ) {}
   }
 

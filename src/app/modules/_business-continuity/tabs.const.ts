@@ -8,11 +8,11 @@ export const TABS: MenuItem[] = [
     items: [
       {
         label: 'ORG_DETAILS',
-        routerLink: 'org-details',
+        routerLink: 'org/org-details',
       },
       {
         label: 'ORG_ARTCH',
-        routerLink: 'org-strucure',
+        routerLink: 'org/org-strucure',
         routerLinkActiveOptions: 'active-tab',
       },
     ],
@@ -98,36 +98,36 @@ export const DATA = {
       id: 1,
       nameAr: 'منخفض جدا',
       nameEn: 'Very Low',
-      isActive: true,
-      colorCode: '#a44f00'
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 2,
       nameAr: 'منخفض',
       nameEn: 'Low',
-      isActive: true,
-      colorCode: '#00ff00'
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 3,
       nameAr: 'متوسط',
       nameEn: 'Medium',
-      isActive: true,
-      colorCode: '#ffff00'
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 4,
       nameAr: 'مرتفع',
       nameEn: 'High',
-      isActive: true,
-      colorCode: '#1976D2'
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 5,
       nameAr: 'مرتفع جدا',
       nameEn: 'Very High',
-      isActive: true,
-      colorCode: '#ff1a1a'
+      isActive: false,
+      colorCode: '#ffffff'
     },
   ],
   impactLevelsWorking: [

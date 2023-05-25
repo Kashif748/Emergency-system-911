@@ -100,7 +100,11 @@
     #b08d57 74%
   ) !important;
 }
-
+.p-component {
+  *:not(.pi) {
+    font-family: "Tajawal" !important;
+  }
+}
 @import "~intl-tel-input/build/css/intlTelInput.css";
 // primeng
 @import "primeng";

@@ -1,7 +1,5 @@
 import { PageRequestModel } from '@core/models/page-request.model';
-import {BcVersions} from "../../../api/models/bc-versions";
-
-
+import { BcVersions } from '../../../api/models/bc-versions';
 
 export namespace BrowseBusinessContinuityAction {
   export class LoadBusinessContinuity {
@@ -10,18 +8,16 @@ export namespace BrowseBusinessContinuityAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {
-    }
+    constructor(public payload?: { pageRequest: PageRequestModel }) {}
   }
 
   export class CreateBusinessContinuity {
-    static readonly type = '[BrowseBusinessContinuity] Create BusinessContinuity';
+    static readonly type =
+      '[BrowseBusinessContinuity] Create BusinessContinuity';
     /**
      *
      */
-    constructor(
-      public payload: BcVersions
-    ) {}
+    constructor(public payload: BcVersions) {}
   }
 
   export class UpdateBusinessContinuity {
@@ -29,9 +25,7 @@ export namespace BrowseBusinessContinuityAction {
     /**
      *
      */
-    constructor(
-      public payload: BcVersions
-    ) {}
+    constructor(public payload: BcVersions) {}
   }
 
   export class ToggleDialog {
@@ -39,15 +33,7 @@ export namespace BrowseBusinessContinuityAction {
     /**
      *
      */
-    constructor(public payload: { Id?: number }) {}
-  }
-
-  export class OpenView {
-    static readonly type = '[BrowseBusinessContinuity] Open View';
-    /**
-     *
-     */
-    constructor(public payload: { Id: number }) {}
+    constructor() {}
   }
 
   export class SetGlobalVersion {
@@ -55,6 +41,6 @@ export namespace BrowseBusinessContinuityAction {
     /**
      *
      */
-    constructor(public payload: { id?: number, currentTab: string }) {}
+    constructor(public payload: { id?: number }) {}
   }
 }

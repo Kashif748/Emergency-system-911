@@ -1,23 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MessageHelper} from "@core/helpers/message.helper";
 import {TranslateService} from "@ngx-translate/core";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {Select, Store} from "@ngxs/store";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {filter, map} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {debounceTime, filter, map, takeUntil, tap} from "rxjs/operators";
+import {Observable, Subject} from "rxjs";
 import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-priorities";
 import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
 import {BrowseActivityPrioritySeqState, BrowseActivityPrioritySeqStateModel} from "../states/browse-activity-priority-seq.state";
 import {BrowseActivityPrioritySeqAction} from "../states/browse-activity-priority-seq.action";
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
+import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
 
 @Component({
   selector: 'app-browse-activity-priority',
   templateUrl: './browse-activity-priority.component.html',
   styleUrls: ['./browse-activity-priority.component.scss']
 })
-export class BrowseActivityPriorityComponent implements OnInit {
+export class BrowseActivityPriorityComponent implements OnInit, OnDestroy {
 
   public page$: Observable<BcRecoveryPriorities[]>;
 
@@ -30,6 +31,7 @@ export class BrowseActivityPriorityComponent implements OnInit {
   @Select(BrowseActivityPrioritySeqState.state)
   public state$: Observable<BrowseActivityPrioritySeqStateModel>;
 
+  private destroy$ = new Subject();
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
@@ -38,6 +40,17 @@ export class BrowseActivityPriorityComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.store
+      .select(BrowseBusinessContinuityState.versionId)
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(200),
+        tap((v) => {
+            this.loadPage();
+          }
+        )
+      )
+      .subscribe();
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -95,15 +108,18 @@ export class BrowseActivityPriorityComponent implements OnInit {
     });
   }
 
-  public loadPage(event: LazyLoadEvent) {
+  public loadPage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseActivityPrioritySeqAction.LoadActivityPrioritySeq({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );
   }
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

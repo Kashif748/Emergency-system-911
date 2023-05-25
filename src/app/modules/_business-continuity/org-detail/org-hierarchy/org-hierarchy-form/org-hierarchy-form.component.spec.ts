@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddSectionComponent } from './add-section.component';
+import { OrgHierarchyFormComponent } from './org-hierarchy-form.component';
 
-describe('AddSectionComponent', () => {
-  let component: AddSectionComponent;
-  let fixture: ComponentFixture<AddSectionComponent>;
+describe('OrgHierarchyFormComponent', () => {
+  let component: OrgHierarchyFormComponent;
+  let fixture: ComponentFixture<OrgHierarchyFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddSectionComponent ]
+      declarations: [ OrgHierarchyFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddSectionComponent);
+    fixture = TestBed.createComponent(OrgHierarchyFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
