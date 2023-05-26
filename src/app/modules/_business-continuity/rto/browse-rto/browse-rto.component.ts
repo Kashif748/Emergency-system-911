@@ -105,13 +105,6 @@ export class BrowseRtoComponent implements OnInit, OnDestroy {
                 },
                  disabled: !u.isActive,
               },
-              {
-                ...userActions[1],
-                command: () => {
-                  this.activate(u.id);
-                },
-                 disabled: u.isActive,
-              },
             ],
           };
         })

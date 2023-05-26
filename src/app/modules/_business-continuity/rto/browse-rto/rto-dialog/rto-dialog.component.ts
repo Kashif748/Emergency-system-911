@@ -10,7 +10,7 @@ import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
 import {IAuthService} from "@core/services/auth.service";
 import {RtoAction, RtoState} from "@core/states";
-import {BrowseBusinessContinuityState} from "../../../states/browse-business-continuity.state";
+import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 
 @Component({
   selector: 'app-rto-dialog',
@@ -22,8 +22,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
-  @Select(BrowseBusinessContinuityState.versionId)
-  versionID$: Observable<number>
+  @Select(RtoState.blocking)
+  blocking$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -131,14 +131,6 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     const rto = {
       ...this.form.getRawValue(),
     };
-
-    /*rto.versionId = this.versionID$.pipe(
-      tap((v) => {
-        return v;
-      })
-    ).subscribe();*/
-    // rto.isActive = true;
-    // this.store.dispatch(new BrowseRtoAction.CreateRto(rto));
 
     if (this.editMode) {
       rto.id = this._rtoId;

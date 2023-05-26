@@ -6,7 +6,7 @@ import {IAuthService} from "@core/services/auth.service";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
 import {RtoAction, RtoState} from "@core/states";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {FormUtils} from "@core/utils/form.utils";
 import {ActivityPrioritySeqAction} from "@core/states/bc/activity-priority-seq/activity-priority-seq.action";
 import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
@@ -20,6 +20,9 @@ import {BrowseActivityPrioritySeqAction} from "../../states/browse-activity-prio
 export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+
+  @Select(ActivityPrioritySeqState.blocking)
+  blocking$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -122,10 +125,6 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
     const activityPriority = {
       ...this.form.getRawValue(),
     };
-
-    activityPriority.versionId = 1;
-    // activityPriority.isActive = true;
-    // this.store.dispatch(new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(activityPriority));
 
     if (this.editMode) {
       activityPriority.id = this._id;

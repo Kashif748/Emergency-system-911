@@ -3,8 +3,8 @@ import {GenericValidators} from "@shared/validators/generic-validators";
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Observable, Subject} from "rxjs";
 import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ImpactMatrixAction} from "@core/states";
-import {Store} from "@ngxs/store";
+import {ImpactMatrixAction, UserState} from "@core/states";
+import {Select, Store} from "@ngxs/store";
 import {IAuthService} from "@core/services/auth.service";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {ActivatedRoute} from "@angular/router";
@@ -25,7 +25,9 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
   public dynamicFields$: Observable<BcImpactLevel[]>;
-  // @Select(ImpactLevelState.page) pageColumns$: Observable<any[]>;
+
+  @Select(ImpactMatrixState.blocking)
+  blocking$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -192,7 +194,7 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
 
     if (this.editMode) {
       impactMatrix.bcImpactTypes.id = this._Id;
-       // this.store.dispatch(new BrowseImpactMatrixAction.UpdateImpactMatrix(impactMatrix));
+      this.store.dispatch(new BrowseImpactMatrixAction.UpdateImpactMatrix(impactMatrix));
     } else {
       this.store.dispatch(new BrowseImpactMatrixAction.CreateImpactMatrix(impactMatrix));
     }

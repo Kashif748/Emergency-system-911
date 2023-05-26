@@ -4,10 +4,10 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {FormUtils} from "@core/utils/form.utils";
 import {Observable, Subject} from "rxjs";
 import {IAuthService} from "@core/services/auth.service";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {ActivatedRoute} from "@angular/router";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ImpLevelWorkingAction} from "@core/states";
+import {ImpLevelWorkingAction, RtoState} from "@core/states";
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 import {BrowseImpLevelWorkingAction} from "../states/browse-imp-level-working.action";
 
@@ -21,6 +21,8 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
+  @Select(ImpLevelWorkingState.blocking)
+  blocking$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -138,10 +140,6 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     const impLevelWorking = {
       ...this.form.getRawValue(),
     };
-
-    impLevelWorking.versionId = 1;
-    // impLevelWorking.isActive = true;
-    // this.store.dispatch(new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking));
 
     if (this.editMode) {
       impLevelWorking.id = this._id;

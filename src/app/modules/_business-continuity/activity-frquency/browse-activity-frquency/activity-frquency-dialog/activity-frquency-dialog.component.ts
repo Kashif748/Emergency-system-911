@@ -4,9 +4,9 @@ import {GenericValidators} from "@shared/validators/generic-validators";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {IAuthService} from "@core/services/auth.service";
 import {ActivatedRoute} from "@angular/router";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {ILangFacade} from "@core/facades/lang.facade";
-import {ActivityFrquencyAction} from "@core/states";
+import {ActivityFrquencyAction, RtoState} from "@core/states";
 import {Observable, Subject} from "rxjs";
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
 import {BrowseActivityFrquencyAction} from "../../states/browse-activity-frquency.action";
@@ -23,6 +23,9 @@ export class ActivityFrquencyDialogComponent implements OnInit, OnDestroy {
 
   public display = false;
   form: FormGroup;
+
+  @Select(ActivityFrquencyState.blocking)
+  blocking$: Observable<boolean>;
 
   _id: number;
   get loggedinUserId() {
@@ -124,10 +127,6 @@ export class ActivityFrquencyDialogComponent implements OnInit, OnDestroy {
     const activityFrquency = {
       ...this.form.getRawValue(),
     };
-
-    activityFrquency.versionId = 1;
-    // activityFrquency.isActive = true;
-
 
     if (this.editMode) {
       activityFrquency.id = this._id;

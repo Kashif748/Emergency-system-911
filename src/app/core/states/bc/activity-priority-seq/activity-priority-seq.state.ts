@@ -119,6 +119,8 @@ export class ActivityPrioritySeqState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.activityPrioritySeq
       .insertOne4({
         body: payload,
@@ -144,6 +146,8 @@ export class ActivityPrioritySeqState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.activityPrioritySeq
       .update83({
         body: payload,

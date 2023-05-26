@@ -119,6 +119,8 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.impLevelWorking
       .insertOne6({
         body: payload,
@@ -144,6 +146,8 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.impLevelWorking
       .update85({
         body: payload,
