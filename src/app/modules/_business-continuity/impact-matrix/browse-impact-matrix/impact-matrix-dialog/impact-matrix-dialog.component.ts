@@ -61,12 +61,16 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
             return a.id - b.id;
           });
           const levelsControl = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
-          const levelFormGroups = sortedImpactMatrix?.map((level, index) => {
-            const control = levelsControl.at(index);
-            control.patchValue({
-              descAr: level.descAr,
-              descEn: level.descEn
-            });
+          let levelsControlIndex = 0;
+          const levelFormGroups = sortedImpactMatrix?.map((level) => {
+            const control = levelsControl.at(levelsControlIndex);
+            if (control?.get('id').value === level.id) {
+              control.patchValue({
+                descAr: level.descAr,
+                descEn: level.descEn
+              });
+              levelsControlIndex++;
+            }
           });
         })
       )
@@ -131,7 +135,9 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
       tap((sortedArray) => {
         levelsArray.clear();
         sortedArray.forEach((v) => {
-          levelsArray.push(this.createLevelFormGroup(v));
+          if (v.isActive) {
+            levelsArray.push(this.createLevelFormGroup(v));
+          }
         });
 
       })

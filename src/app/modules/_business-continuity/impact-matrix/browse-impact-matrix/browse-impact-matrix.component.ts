@@ -83,13 +83,6 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
                 },
                  disabled: !u.bcImpactTypes.isActive,
               },
-              /*{
-                ...userActions[1],
-                command: () => {
-                   this.activate(u.bcImpactTypes.id);
-                },
-                 disabled: u.bcImpactTypes.isActive,
-              },*/
             ],
           };
         }),
