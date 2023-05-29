@@ -119,6 +119,8 @@ export class LocationTypeState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.locationType
       .insertOne5({
         body: payload,
@@ -144,6 +146,8 @@ export class LocationTypeState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.locationType
       .update84({
         body: payload,

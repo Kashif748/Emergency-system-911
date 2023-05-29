@@ -116,6 +116,7 @@
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
           [disabled]="form.invalid"
+          [loading]="blocking$ | async"
           (click)="submit()"
         ></button>
       </div>

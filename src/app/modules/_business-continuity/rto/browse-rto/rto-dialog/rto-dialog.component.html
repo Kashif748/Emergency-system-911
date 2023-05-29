@@ -252,6 +252,7 @@
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
+          [loading]="blocking$ | async"
           [disabled]="form.invalid"
           (click)="submit()"
         ></button>

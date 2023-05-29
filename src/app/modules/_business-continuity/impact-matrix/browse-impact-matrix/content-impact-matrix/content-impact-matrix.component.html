@@ -103,11 +103,13 @@
                 {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
-            <th *ngFor="let col of columns">
-              <div class="p-d-flex p-jc-between p-ai-center" *ngIf="col.isActive">
-                {{  col | translateObj : 'name'}}
-              </div>
-            </th>
+            <ng-container *ngFor="let col of columns">
+              <th *ngIf="col.isActive">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{  col | translateObj : 'name'}}
+                </div>
+              </th>
+            </ng-container>
 
             <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
           </tr>
@@ -128,12 +130,14 @@
                 {{ item.bcImpactTypes | translateObj: 'name' }}
               </div>
             </td>
-            <ng-container *ngFor="let col of columns; let i = index">
-              <td class="max-w-250px" *ngIf="item.bcImpactLevelMatrixDtoList && item.bcImpactLevelMatrixDtoList[i]?.id === col.id" (click)="openView(item.bcImpactTypes.id)">
-                <div>
-                  {{ item.bcImpactLevelMatrixDtoList[i] | translateObj : 'desc' }}
-                </div>
-              </td>
+            <ng-container *ngFor="let col of columns">
+              <ng-container *ngFor="let levels of item.bcImpactLevelMatrixDtoList">
+                <td class="max-w-250px" *ngIf="col.isActive && levels?.id === col.id" (click)="openView(item.bcImpactTypes.id)">
+                  <div>
+                    {{ levels | translateObj : 'desc' }}
+                  </div>
+                </td>
+              </ng-container>
             </ng-container>
 
             <td>
