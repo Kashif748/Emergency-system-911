@@ -35,6 +35,7 @@ import {MenuModule} from "primeng/menu";
 import {OrganizationChartModule} from "primeng/organizationchart";
 import {BrowseImpactMatrixState} from "./states/browse-impact-matrix.state";
 import {BrowseImpactLevelState} from "./states/browse-impact-level.state";
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -83,7 +84,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     SharedBreadcrumbModule,
     DividerModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { LocationTypeRoutingModule } from './location-type-routing.module';
-import { BrowseLocationTypeComponent } from './browse-location-type/browse-location-type.component';
-import { ContentLocationTypeComponent } from './browse-location-type/content-location-type/content-location-type.component';
-import { LocationTypeDialogComponent } from './browse-location-type/location-type-dialog/location-type-dialog.component';
+import {LocationTypeRoutingModule} from './location-type-routing.module';
+import {BrowseLocationTypeComponent} from './browse-location-type/browse-location-type.component';
+import {ContentLocationTypeComponent} from './browse-location-type/content-location-type/content-location-type.component';
+import {LocationTypeDialogComponent} from './browse-location-type/location-type-dialog/location-type-dialog.component';
 import {HttpClient} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {InputNumberModule} from "primeng/inputnumber";
@@ -34,6 +34,7 @@ import {OrganizationChartModule} from "primeng/organizationchart";
 import {BrowseLocationTypeState} from "./states/browse-locationType.state";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {DividerModule} from "primeng/divider";
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -82,7 +83,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     SharedBreadcrumbModule,
     DividerModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

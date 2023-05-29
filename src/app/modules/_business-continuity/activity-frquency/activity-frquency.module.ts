@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { ActivityFrquencyRoutingModule } from './activity-frquency-routing.module';
-import { BrowseActivityFrquencyComponent } from './browse-activity-frquency/browse-activity-frquency.component';
-import { ContentActivityFrquencyComponent } from './browse-activity-frquency/content-activity-frquency/content-activity-frquency.component';
-import { ActivityFrquencyDialogComponent } from './browse-activity-frquency/activity-frquency-dialog/activity-frquency-dialog.component';
+import {ActivityFrquencyRoutingModule} from './activity-frquency-routing.module';
+import {BrowseActivityFrquencyComponent} from './browse-activity-frquency/browse-activity-frquency.component';
+import {ContentActivityFrquencyComponent} from './browse-activity-frquency/content-activity-frquency/content-activity-frquency.component';
+import {ActivityFrquencyDialogComponent} from './browse-activity-frquency/activity-frquency-dialog/activity-frquency-dialog.component';
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TreeModule} from "primeng/tree";
 import {ILangFacade, LangFacade} from "../../../core/facades/lang.facade";
@@ -34,7 +34,7 @@ import {NgxsModule} from "@ngxs/store";
 import {BrowseActivityFrquencyState} from "./states/browse-activity-frquency.state";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {DividerModule} from "primeng/divider";
-
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -83,7 +83,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     SharedBreadcrumbModule,
     DividerModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

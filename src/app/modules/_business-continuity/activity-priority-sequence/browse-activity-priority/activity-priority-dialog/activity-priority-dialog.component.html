@@ -3,6 +3,7 @@
     pButton
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
+    *checkPrivileges="'PRIV_ED_BC_LISTS'"
     (click)="openDialog()"
   ></button>
 </div>

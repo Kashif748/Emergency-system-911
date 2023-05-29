@@ -29,7 +29,7 @@
                   </div>
                 </th>
 
-                <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
@@ -94,7 +94,7 @@
                   </div>
                 </th>
 
-                <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
@@ -128,6 +128,7 @@
                     icon="pi pi-ellipsis-v"
                     class="p-button-rounded p-button-text my-auto p-button-plain"
                     (click)="menu.toggle($event)"
+                    *checkPrivileges="'PRIV_ED_BC_LISTS'"
                   ></button>
                   <p-menu
                     #menu

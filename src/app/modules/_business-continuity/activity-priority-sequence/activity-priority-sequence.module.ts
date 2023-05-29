@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { ActivityPrioritySequenceRoutingModule } from './activity-priority-sequence-routing.module';
-import { ActivityPriorityDialogComponent } from './browse-activity-priority/activity-priority-dialog/activity-priority-dialog.component';
-import { ContentActivityPriorityComponent } from './browse-activity-priority/content-activity-priority/content-activity-priority.component';
+import {ActivityPrioritySequenceRoutingModule} from './activity-priority-sequence-routing.module';
+import {ActivityPriorityDialogComponent} from './browse-activity-priority/activity-priority-dialog/activity-priority-dialog.component';
+import {ContentActivityPriorityComponent} from './browse-activity-priority/content-activity-priority/content-activity-priority.component';
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TreeModule} from "primeng/tree";
 import {ILangFacade, LangFacade} from "@core/facades/lang.facade";
@@ -34,6 +34,7 @@ import {NgxsModule} from "@ngxs/store";
 import {BrowseActivityPrioritySeqState} from "./states/browse-activity-priority-seq.state";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {DividerModule} from "primeng/divider";
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -82,7 +83,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     SharedBreadcrumbModule,
     DividerModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
