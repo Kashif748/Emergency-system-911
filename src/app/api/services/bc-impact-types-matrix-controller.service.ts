@@ -10,9 +10,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { BcImpactMatrixDto } from '../models/bc-impact-matrix-dto';
-import { BcImpactTypesMatrix } from '../models/bc-impact-types-matrix';
 import { RestApiResponseBcImpactMatrixDto } from '../models/rest-api-response-bc-impact-matrix-dto';
-import { RestApiResponseBcImpactTypesMatrix } from '../models/rest-api-response-bc-impact-types-matrix';
 import { RestApiResponseListBcImpactMatrixDto } from '../models/rest-api-response-list-bc-impact-matrix-dto';
 
 @Injectable()
@@ -125,8 +123,8 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   update86$Response(params: {
-    body: BcImpactTypesMatrix
-  }): Observable<StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>> {
+    body: BcImpactMatrixDto
+  }): Observable<StrictHttpResponse<RestApiResponseBcImpactMatrixDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.Update86Path, 'put');
     if (params) {
@@ -139,7 +137,7 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>;
+        return r as StrictHttpResponse<RestApiResponseBcImpactMatrixDto>;
       })
     );
   }
@@ -151,11 +149,11 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   update86(params: {
-    body: BcImpactTypesMatrix
-  }): Observable<RestApiResponseBcImpactTypesMatrix> {
+    body: BcImpactMatrixDto
+  }): Observable<RestApiResponseBcImpactMatrixDto> {
 
     return this.update86$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcImpactTypesMatrix>) => r.body as RestApiResponseBcImpactTypesMatrix)
+      map((r: StrictHttpResponse<RestApiResponseBcImpactMatrixDto>) => r.body as RestApiResponseBcImpactMatrixDto)
     );
   }
 

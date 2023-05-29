@@ -119,6 +119,8 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.activityFrquency
       .insertOne9({
         body: payload,
@@ -144,6 +146,8 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.versionId = versionID;
     return this.activityFrquency
       .update89({
         body: payload,

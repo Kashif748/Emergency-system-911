@@ -4,7 +4,7 @@ import {GenericValidators} from "@shared/validators/generic-validators";
 import {Observable, Subject} from "rxjs";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {LocationTypeAction, RtoState} from "@core/states";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {IAuthService} from "@core/services/auth.service";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {ActivatedRoute} from "@angular/router";
@@ -21,6 +21,9 @@ export class LocationTypeDialogComponent implements OnInit, OnDestroy {
 
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+
+  @Select(LocationTypeState.blocking)
+  blocking$: Observable<boolean>;
 
   public display = false;
   form: FormGroup;
@@ -124,10 +127,6 @@ export class LocationTypeDialogComponent implements OnInit, OnDestroy {
     const locationType = {
       ...this.form.getRawValue(),
     };
-
-    locationType.versionId = 1;
-    // locationType.isActive = true;
-    // this.store.dispatch(new BrowseLocationTypeAction.CreateLocationType(locationType));
 
     if (this.editMode) {
       locationType.id = this._id;

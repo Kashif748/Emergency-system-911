@@ -4,7 +4,6 @@ import {catchError, finalize, tap} from "rxjs/operators";
 import {patch} from "@ngxs/store/operators";
 import {Injectable} from "@angular/core";
 import {BcImpactTypesMatrixControllerService} from "../../../../api/services/bc-impact-types-matrix-controller.service";
-import {BcImpactTypesMatrix} from "../../../../api/models/bc-impact-types-matrix";
 import {ImpactMatrixAction} from "@core/states/bc/impact-matrix/impact-matrix.action";
 import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
 import {BcImpactMatrixDto} from "../../../../api/models/bc-impact-matrix-dto";
@@ -146,6 +145,8 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
+    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    payload.bcImpactTypes.versionId = versionID;
     return this.impactMatrix
       .update86({
         body: payload,
