@@ -60,11 +60,11 @@
   },
 
   "ACTIVITY_FEQ": {
-    "TITLE_ACQ_FEQ": "Activity Frquency",
-    "ADD_NEW_ACQ_FEQ": "Add New Activity Frquency",
-    "EDIT_ACQ_FEQ": "Edit Activity Frquency",
-    "FRQUENCY_AR": "Frquency (Arabic)",
-    "FRQUENCY_EN": "Frquency (English)"
+    "TITLE_ACQ_FEQ": "Activity Frequency",
+    "ADD_NEW_ACQ_FEQ": "Add New Activity Frequency",
+    "EDIT_ACQ_FEQ": "Edit Activity Frequency",
+    "FRQUENCY_AR": "Frequency (Arabic)",
+    "FRQUENCY_EN": "Frequency (English)"
   },
   "LOC_TYPE": {
     "EDIT_LOC_TYPE": "Edit Location Type",
