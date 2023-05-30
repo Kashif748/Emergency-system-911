@@ -11,7 +11,7 @@ import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericValidators } from '@shared/validators/generic-validators';
 import { MenuItem } from 'primeng/api';
-import { Observable, Subject } from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { TABS } from '../tabs.const';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -54,6 +54,8 @@ export class BusinessContinuityComponent
     return this.auth.getClaim('orgId');
   }
 
+  private versionsSubscription: Subscription;
+
   selectedVersion: BcVersions;
   private destroy$ = new Subject();
   constructor(
@@ -76,6 +78,15 @@ export class BusinessContinuityComponent
               id: version,
             })
           );
+          this.versionsSubscription = this.versions$.subscribe(versions => {
+            // Assuming you have a condition to select a specific version
+            // Replace the condition with your own logic
+            const selectedVersion = versions?.find(version => version.id === version.id);
+
+            if (selectedVersion) {
+              this.selectedVersion = selectedVersion;
+            }
+          });
         } else {
           this.toggleDialog();
         }

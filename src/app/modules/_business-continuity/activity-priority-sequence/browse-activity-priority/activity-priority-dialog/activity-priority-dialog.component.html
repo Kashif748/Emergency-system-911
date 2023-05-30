@@ -3,6 +3,7 @@
     pButton
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
+    *checkPrivileges="'PRIV_ED_BC_LISTS'"
     (click)="openDialog()"
   ></button>
 </div>
@@ -20,7 +21,7 @@
   <ng-template pTemplate="header">
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'LOC_TYPE.EDIT_LOC_TYPE' | translate}}
+        {{'ACTIVITY_PRIORITY_SEQ.EDIT_PRI_SEQ' | translate}}
 
       </ng-container>
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">

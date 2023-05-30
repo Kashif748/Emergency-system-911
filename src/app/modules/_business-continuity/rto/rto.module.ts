@@ -34,6 +34,7 @@ import {BrowseRtoState} from "./states/browse-rto.state";
 import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
 import {DividerModule} from "primeng/divider";
 import {ToggleButtonModule} from "primeng/togglebutton";
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -82,7 +83,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     SharedBreadcrumbModule,
     DividerModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

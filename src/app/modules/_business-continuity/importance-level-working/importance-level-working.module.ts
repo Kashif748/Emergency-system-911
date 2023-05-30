@@ -34,6 +34,7 @@ import {BrowseImpLevelWorkingState} from "./browse-imp-level-working/states/brow
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {DividerModule} from "primeng/divider";
 import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -82,7 +83,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     DividerModule,
     ToggleButtonModule,
-    TranslateObjModule
+    TranslateObjModule,
+    PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
