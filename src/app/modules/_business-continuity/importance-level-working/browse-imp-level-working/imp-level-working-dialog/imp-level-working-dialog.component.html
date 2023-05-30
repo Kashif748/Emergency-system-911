@@ -3,6 +3,7 @@
     pButton
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
+    *checkPrivileges="'PRIV_ED_BC_LISTS'"
     (click)="openDialog()"
   ></button>
 </div>
@@ -180,7 +181,7 @@
                formControlName="colorCode" pInputText />
         <p-colorPicker (onChange)="onValueChange($event.value)" [(ngModel)]="color" [ngModelOptions]="{standalone: true}" [inputId]="'colorInput'"></p-colorPicker>
         <label>
-          {{ "IMP_LEVEL_WORKING.LEVEL_EN" | translate }}
+          {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
