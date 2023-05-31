@@ -51,6 +51,7 @@
     pButton
     pRipple
     type="button"
+    *checkPrivileges="'PRIV_CR_BC_VER'"
     label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
     icon="pi pi-cog"
     class="p-button-warning"
@@ -134,6 +135,7 @@
   <p-divider align="center" styleClass="mt-10">
     <div class="text-center">
       <button
+        *checkPrivileges="'PRIV_CR_BC_VER'"
         pButton
         label="{{ 'ADD_VERSION' | translate }}"
         icon="pi pi-plus"
