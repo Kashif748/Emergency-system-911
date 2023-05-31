@@ -106,8 +106,9 @@
     [(ngModel)]="selectedVersion"
     placeholder="{{ 'VERSION' | translate }}"
     styleClass="w-100 mt-3"
-    appendTo="'body'"
+    appendTo="body"
     dataKey="id"
+    [disabled]="showVersionForm"
     (onChange)="setValueGlobally($event.value?.id)"
     [dropdownIcon]="
       (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
