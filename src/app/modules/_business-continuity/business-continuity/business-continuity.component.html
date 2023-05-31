@@ -106,6 +106,7 @@
     [(ngModel)]="selectedVersion"
     placeholder="{{ 'VERSION' | translate }}"
     styleClass="w-100 mt-3"
+    appendTo="'body'"
     dataKey="id"
     (onChange)="setValueGlobally($event.value?.id)"
     [dropdownIcon]="
@@ -130,9 +131,17 @@
     </ng-template>
   </p-dropdown>
   <p-divider align="center" styleClass="mt-10">
-    <span class="font-weight-bold">{{ "ADD_VERSION" | translate }}</span>
+    <div class="text-center">
+      <button
+        pButton
+        label="{{ 'ADD_VERSION' | translate }}"
+        icon="pi pi-plus"
+        (click)="showVersionForm = !showVersionForm"
+      ></button>
+    </div>
+    <!--<span class="font-weight-bold">{{ "" | translate }}</span>-->
   </p-divider>
-  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+  <form [formGroup]="form" class="p-fluid p-grid mt-5" *ngIf="showVersionForm">
     <!-- version AR -->
     <div class="p-field p-col-12 p-md-12">
       <span class="p-float-label">
