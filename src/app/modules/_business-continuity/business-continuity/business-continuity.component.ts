@@ -55,7 +55,7 @@ export class BusinessContinuityComponent
   }
 
   private versionsSubscription: Subscription;
-
+  public showVersionForm = false;
   selectedVersion: BcVersions;
   private destroy$ = new Subject();
   constructor(
@@ -81,7 +81,11 @@ export class BusinessContinuityComponent
           this.versionsSubscription = this.versions$.subscribe(versions => {
             // Assuming you have a condition to select a specific version
             // Replace the condition with your own logic
-            const selectedVersion = versions?.find(version => version.id === version.id);
+            const selectedVersion = versions?.find((versions) => {
+              if (versions.id == version) {
+                return versions;
+              }
+            });
 
             if (selectedVersion) {
               this.selectedVersion = selectedVersion;
@@ -98,7 +102,7 @@ export class BusinessContinuityComponent
     this.destroy$.complete();
   }
   ngOnInit() {
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 20 }));
+    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 25 }));
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])

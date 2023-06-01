@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatCalendar } from '@angular/material/datepicker';
 import { DashboardService } from './dashboard.service';
 import { data } from './random-data';
-import { New } from 'src/app/modules/news/models/new.model';
 import { DateAdapter } from '@angular/material/core';
 import { TranslationService } from 'src/app/modules/i18n/translation.service';
 
@@ -17,7 +16,6 @@ export class DashboardComponent implements OnInit {
   widgets = data;
   inProgressIncidnts = [];
   // Variables
-  news: New[] = [];
   statistics: any;
   stompClient: any;
   lang: string;
@@ -37,9 +35,6 @@ export class DashboardComponent implements OnInit {
       this.inProgressIncidnts = data;
     });
 
-    this.dashboardService.getContent().subscribe((data) => {
-      this.news = data;
-    });
     if (this.lang == 'ar') {
       this.dateAdapter.setLocale('ar');
     } else {

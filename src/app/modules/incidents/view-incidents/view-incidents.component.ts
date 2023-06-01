@@ -701,12 +701,13 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
       notes: '',
     };
     const InProgressStatusId = 1;
+    const draftStatusId = 5;
     const dialogRef = this.matDialog.open(ClosureIncidentPopupComponent, {
       minWidth: '600px',
       minHeight: '400px',
       data: {
         incidentStatus: this.commonData?.incidentStatus.filter(
-          (v) => v.id !== InProgressStatusId
+          (v) => v.id !== InProgressStatusId && v.id !== draftStatusId
         ),
       },
     });

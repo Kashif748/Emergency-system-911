@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MatPaginator } from '@angular/material/paginator';
@@ -20,9 +20,12 @@ import { DateTimeUtil } from '@core/utils/DateTimeUtil';
   templateUrl: './user-statistics-report.component.html',
   styleUrls: ['./user-statistics-report.component.scss'],
 })
-export class UserStatisticsReportComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+export class UserStatisticsReportComponent implements OnInit, AfterViewInit {
+  @ViewChild('paginatorCenter') paginatorCenter: MatPaginator;
+  @ViewChild('sortCenter') sortCenter: MatSort;
+
+  @ViewChild('paginatorIncidents') paginatorIncidents: MatPaginator;
+  @ViewChild('sortIncidents') sortIncidents: MatSort
 
   loading = true;
   lang = 'en';
@@ -37,6 +40,7 @@ export class UserStatisticsReportComponent implements OnInit {
   ];
 
   dataSourceCenter = new MatTableDataSource<any>([]);
+  dataSourceIncident = new MatTableDataSource<any>([]);
 
   dataCenters = [];
 
@@ -87,8 +91,10 @@ export class UserStatisticsReportComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSourceCenter.paginator = this.paginator;
-    this.dataSourceCenter.sort = this.sort;
+    this.dataSourceCenter.paginator = this.paginatorCenter;
+    this.dataSourceCenter.sort = this.sortCenter;
+    this.dataSourceIncident.paginator = this.paginatorIncidents;
+    this.dataSourceIncident.sort = this.sortIncidents;
   }
   changeTableType(event: 'incidents' | 'tasks') {
     if (this.tableView === event) return;
@@ -104,7 +110,26 @@ export class UserStatisticsReportComponent implements OnInit {
         console.log(data);
         this.loading = false;
         this.dataCenters = data?.result;
-        this.dataSourceCenter.data = this.dataCenters.map((item) => {
+        if (this.tableView === 'incidents') {
+          this.dataSourceIncident.data = this.dataCenters.map((item) => {
+            return {
+              closed: item.closedIncidents,
+              created: item.createdIncidents,
+              nonAutomated: item.nonAutomatedIncidentLogs,
+              user: item?.user,
+            };
+          });
+        } else {
+          this.dataSourceCenter.data = this.dataCenters.map((item) => {
+            return {
+              closed: item.closedTasks,
+              created: item.createdTasks,
+              nonAutomated: item.nonAutomatedTaskWorkLogs,
+              user: item?.user,
+            };
+          });
+        }
+        /*this.dataSourceCenter.data = this.dataCenters.map((item) => {
           if (this.tableView === 'incidents') {
             return {
               closed: item.closedIncidents,
@@ -120,7 +145,7 @@ export class UserStatisticsReportComponent implements OnInit {
               user: item?.user,
             };
           }
-        });
+        });*/
         this.cdr.detectChanges();
       },
       (err) => (this.loading = false)

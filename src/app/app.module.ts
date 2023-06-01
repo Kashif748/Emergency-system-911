@@ -13,7 +13,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { ClipboardModule } from 'ngx-clipboard';
 import { InlineSVGModule } from 'ng-inline-svg';
-import { NgMarqueeModule } from 'ng-marquee';
 import { HIGHLIGHT_OPTIONS, HighlightModule } from 'ngx-highlightjs';
 import xml from 'highlight.js/lib/languages/xml';
 import json from 'highlight.js/lib/languages/json';
@@ -65,9 +64,10 @@ import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
 import { IncidentState } from '@core/states/incident/incident.state';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
-import {CenterState} from "@core/states/service-center-area/centers/center.state";
-import {IncidentLocInfoState} from "@core/states/incident-location-info/incidentLocInfo.state";
+import { CenterState } from '@core/states/service-center-area/centers/center.state';
+import { IncidentLocInfoState } from '@core/states/incident-location-info/incidentLocInfo.state';
 import { SituationsState } from '@core/states/situations/situations.state';
+import { NewsState } from '@core/states/news/news.state';
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 import {BrowseActivityPrioritySeqState} from "./modules/_business-continuity/activity-priority-sequence/states/browse-activity-priority-seq.state";
 import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
@@ -105,7 +105,6 @@ export function getHighlightLanguages() {
     HttpClientModule,
     HighlightModule,
     ClipboardModule,
-    NgMarqueeModule,
     MatButtonModule,
     MatDialogModule,
     MatSnackBarModule,
@@ -125,7 +124,7 @@ export function getHighlightLanguages() {
     StoreModule.forRoot({ incidentDashboard: reducer }, {}),
     DropdownListModule,
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
-     // ------------------
+    // ------------------
     NgxsModule.forRoot(
       [
         RootState,
@@ -141,6 +140,7 @@ export function getHighlightLanguages() {
         AssetState,
         PhonebookState,
         SituationsState,
+        NewsState,
         RtoState,
         ImpLevelWorkingState,
         ActivityPrioritySeqState,
@@ -158,7 +158,13 @@ export function getHighlightLanguages() {
     NgxsAsyncStoragePluginModule.forRoot(
       HyperStorageEngine,
       {
-        key: ['browse_users', 'browse_roles', 'common_data', 'browse_tasks', 'browse_groups'],
+        key: [
+          'browse_users',
+          'browse_roles',
+          'common_data',
+          'browse_tasks',
+          'browse_groups',
+        ],
       },
       ['common_data']
     ),

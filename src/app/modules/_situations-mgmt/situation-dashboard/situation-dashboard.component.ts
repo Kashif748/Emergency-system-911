@@ -5,13 +5,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { CommonService } from '@core/services/common.service';
 import { SituationsAction } from '@core/states/situations/situations.action';
 import { SituationsState } from '@core/states/situations/situations.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent } from 'primeng/api';
+import {LazyLoadEvent, MenuItem} from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import {
   distinctUntilChanged,
@@ -29,6 +29,7 @@ import {
   BrowseSituationsState,
   BrowseSituationsStateModel,
 } from '../states/browse-situations.state';
+import {BrowseGroupsAction} from "../../_team-mgmt/states/browse-groups.action";
 
 @Component({
   selector: 'app-situation-dashboard',
@@ -78,12 +79,12 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
       );
   }
   destroy$ = new Subject();
-
   constructor(
     private store: Store,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private router: Router
   ) {
     // status chart
     this.chartOptions = {
@@ -313,5 +314,12 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
         situationId: this._situationId,
       })
     );
+  }
+
+  export() {
+    this.store.dispatch(new BrowseSituationsAction.Export({ type: 'PDF', situationId: this._situationId }));
+  }
+  back() {
+      this.router.navigate(['..'], { relativeTo: this.route });
   }
 }
