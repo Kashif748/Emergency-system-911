@@ -79,6 +79,7 @@ export class BusinessContinuityState {
       })
       .pipe(
         tap((res) => {
+          const sortedVersions = res.result.content.sort((a, b) => b.id - a.id);
           setState(
             patch<BusinessContinuityStateModel>({
               versions: res.result,
