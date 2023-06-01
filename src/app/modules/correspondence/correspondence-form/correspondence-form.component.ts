@@ -139,7 +139,7 @@ export class CorrespondenceFormComponent implements OnInit {
 
 
       incident: this.form.value['incident']?.id
-        ? this.form.value['incident']
+        ? this.form.value['incident']?.id
         : null,
       toList: this.getToListArray(),
     };
