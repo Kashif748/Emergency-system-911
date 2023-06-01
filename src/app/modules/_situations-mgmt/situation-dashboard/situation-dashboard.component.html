@@ -22,7 +22,7 @@
         {{ "SITUATIONS.START_DATE" | translate }}
         <p-tag
           dir="ltr"
-          value=" {{ situation.startDate | cdate : 'yyyy-MM-dd HH:mm:ss' }}"
+          value=" {{ situation.startDate | cdate }}"
         ></p-tag>
       </p>
 
@@ -31,7 +31,7 @@
         {{ "SITUATIONS.END_DATE" | translate }}
         <p-tag
           dir="ltr"
-          value="{{ situation.endDate | cdate : 'yyyy-MM-dd HH:mm:ss' }}"
+          value="{{ situation.endDate | cdate}}"
         ></p-tag>
       </p>
       <div class="w-200px"></div>
