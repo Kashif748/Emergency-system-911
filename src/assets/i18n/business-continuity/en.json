@@ -74,7 +74,7 @@
     "TYPE_EN": "Type (English)"
   },
   "ACTIVITY_PRIORITY_SEQ": {
-    "TITLE_PRI_SEQ": "Priority Sequency",
+    "TITLE_PRI_SEQ": "Recovery Priority Sequence",
     "ADD_NEW_PRI_SEQ": "Add New Priority Sequency",
     "EDIT_PRI_SEQ": "Edit Priority Sequency",
     "PRI_AR": "Priority (Arabic)",

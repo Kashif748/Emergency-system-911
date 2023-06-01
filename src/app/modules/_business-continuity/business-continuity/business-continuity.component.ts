@@ -102,7 +102,7 @@ export class BusinessContinuityComponent
     this.destroy$.complete();
   }
   ngOnInit() {
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 20 }));
+    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 25 }));
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
