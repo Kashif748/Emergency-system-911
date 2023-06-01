@@ -1,73 +1,65 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
-import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
+import { RouterModule, Routes } from '@angular/router';
 import { BusinessContinuityComponent } from './business-continuity/business-continuity.component';
-import { ImpactAnalysisComponent } from './impact-analysis/impact-analysis.component';
-import { ImpactLevelsComponent } from './impact-levels/impact-levels.component';
-import { LocTypeComponent } from './loc-type/loc-type.component';
-import { OrgDetailsComponent } from './org-details/org-details.component';
-import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
-import { RtoListContentComponent } from './rto-list-content/rto-list-content.component';
-import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
-import {OrgHierarchyComponent} from "./org-hierarchy/org-hierarchy.component";
-import {AddSectorComponent} from "./org-hierarchy/add-sector/add-sector.component";
-import {AddSectionComponent} from "./org-hierarchy/add-section/add-section.component";
-import {AddDepartmentComponent} from "./org-hierarchy/add-department/add-department.component";
 
 const routes: Routes = [
   {
     path: '',
     component: BusinessContinuityComponent,
-
     children: [
       {
-        path: 'org-details',
-        component: OrgDetailsComponent,
+        path: 'org',
+        loadChildren: () =>
+          import('./org-detail/org-detail.module').then(
+            (m) => m.OrgDetailModule
+          ),
       },
+
       {
-        path: 'org-strucure',
-        component: OrgHierarchyComponent,
-        children: [{
-            path: 'add-sector',
-            component: AddSectorComponent,
-        },
-          {
-            path: 'add-department',
-            component: AddDepartmentComponent,
-          },
-          {
-            path: 'add-section',
-            component: AddSectionComponent,
-          }]
-      },
-      {
-        path: 'impact-levels',
-        component: ImpactLevelsComponent,
+        path: 'impact-level',
+        loadChildren: () =>
+          import('./impact-level/impact-level.module').then(
+            (m) => m.ImpactLevelModule
+          ),
       },
       {
         path: 'impact-analysis',
-        component: ImpactAnalysisComponent,
+        loadChildren: () =>
+          import('./impact-matrix/impact-matrix.module').then(
+            (m) => m.ImpactMatrixModule
+          ),
       },
       {
         path: 'rto-list',
-        component: RtoListContentComponent,
+        loadChildren: () => import('./rto/rto.module').then((m) => m.RtoModule),
       },
       {
         path: 'activey-frquency',
-        component: ActivityFrquencyComponent,
+        loadChildren: () =>
+          import('./activity-frquency/activity-frquency.module').then(
+            (m) => m.ActivityFrquencyModule
+          ),
       },
       {
         path: 'activey-priority',
-        component: ActivityPrioritySeqComponent,
+        loadChildren: () =>
+          import(
+            './activity-priority-sequence/activity-priority-sequence.module'
+          ).then((m) => m.ActivityPrioritySequenceModule),
       },
       {
         path: 'loc-types',
-        component: LocTypeComponent,
+        loadChildren: () =>
+          import('./location-type/location-type.module').then(
+            (m) => m.LocationTypeModule
+          ),
       },
       {
         path: 'imp-level-working',
-        component: ImpLevelWorkingComponent,
+        loadChildren: () =>
+          import(
+            './importance-level-working/importance-level-working.module'
+          ).then((m) => m.ImportanceLevelWorkingModule),
       },
     ],
   },

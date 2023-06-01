@@ -58,7 +58,7 @@ import {
   OrgState,
   RoleState,
   TaskState,
-  UserState,
+  UserState, RtoState, ImpactMatrixState,
 } from '@core/states';
 import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
 import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
@@ -68,6 +68,14 @@ import { CenterState } from '@core/states/service-center-area/centers/center.sta
 import { IncidentLocInfoState } from '@core/states/incident-location-info/incidentLocInfo.state';
 import { SituationsState } from '@core/states/situations/situations.state';
 import { NewsState } from '@core/states/news/news.state';
+import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
+import {BrowseActivityPrioritySeqState} from "./modules/_business-continuity/activity-priority-sequence/states/browse-activity-priority-seq.state";
+import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
+import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
+import {LocationTypeState} from "@core/states/bc/location-type/locationType.state";
+import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
+import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
+import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -133,6 +141,15 @@ export function getHighlightLanguages() {
         PhonebookState,
         SituationsState,
         NewsState,
+        RtoState,
+        ImpLevelWorkingState,
+        ActivityPrioritySeqState,
+        ActivityFrquencyState,
+        LocationTypeState,
+        ImpactLevelState,
+        ImpactMatrixState,
+        OrgDetailState,
+        BusinessContinuityState
       ],
       {
         developmentMode: !environment.production,

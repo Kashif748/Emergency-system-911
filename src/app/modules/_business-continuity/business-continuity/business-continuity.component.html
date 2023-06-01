@@ -17,11 +17,16 @@
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
     <app-breadcrumb></app-breadcrumb>
-
     <p-dropdown
-      [options]="versions"
+      [options]="versions$ | async"
       [(ngModel)]="selectedVersion"
-      placeholder="Select a version"
+      placeholder="{{ 'VERSION' | translate }}"
+      dataKey="id"
+      styleClass="w-180px"
+      (onChange)="setValueGlobally($event.value?.id)"
+      [dropdownIcon]="
+        (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
+      "
     >
       <ng-template pTemplate="selectedItem">
         <div *ngIf="selectedVersion">
@@ -30,6 +35,14 @@
       </ng-template>
       <ng-template let-version pTemplate="item">
         <div>{{ version | translateObj }}</div>
+      </ng-template>
+      <ng-template pTemplate="empty">
+        <ng-container *ngIf="loading$ | async; else elseTemplate">
+          {{ "ACTIONS.LOADING" | translate }}
+        </ng-container>
+        <ng-template #elseTemplate>
+          {{ "NO_DATA" | translate }}
+        </ng-template>
       </ng-template>
     </p-dropdown>
   </div>
@@ -41,6 +54,7 @@
     label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
     icon="pi pi-cog"
     class="p-button-warning"
+    (click)="toggleDialog()"
   ></button>
 </header>
 
@@ -63,7 +77,7 @@
       [baseZIndex]="-1000"
       [position]="position$ | async"
     >
-      <p-panelMenu [model]="items"> </p-panelMenu>
+      <p-panelMenu [model]="items"  > </p-panelMenu>
     </p-sidebar>
 
     <div class="p-shadow-6 rounded px-6 w-100">
@@ -73,23 +87,56 @@
 </section>
 
 <p-dialog
-  [(visible)]="visible"
+  [visible]="versionsDialogOpend$ | async"
+  (visibleChange)="toggleDialog()"
   [modal]="true"
   [style]="{ width: '30vw' }"
+  styleClass="min-h-300px"
   [breakpoints]="{ '960px': '40vw', '640px': '100vw' }"
-  [maximizable]="true"
   [baseZIndex]="10000"
+  [closable]="selectedVersion"
 >
   <ng-template pTemplate="header">
     <h3>
-      <span>{{ "ADD_VERSION" | translate }}</span>
+      <span>{{ "VERSIONS_SETTINGS" | translate }}</span>
     </h3>
   </ng-template>
+  <p-dropdown
+    [options]="versions$ | async"
+    [(ngModel)]="selectedVersion"
+    placeholder="{{ 'VERSION' | translate }}"
+    styleClass="w-100 mt-3"
+    dataKey="id"
+    (onChange)="setValueGlobally($event.value?.id)"
+    [dropdownIcon]="
+      (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
+    "
+  >
+    <ng-template pTemplate="selectedItem">
+      <div *ngIf="selectedVersion">
+        {{ selectedVersion | translateObj }}
+      </div>
+    </ng-template>
+    <ng-template let-version pTemplate="item">
+      <div>{{ version | translateObj }}</div>
+    </ng-template>
+    <ng-template pTemplate="empty">
+      <ng-container *ngIf="loading$ | async; else elseTemplate">
+        {{ "ACTIONS.LOADING" | translate }}
+      </ng-container>
+      <ng-template #elseTemplate>
+        {{ "NO_DATA" | translate }}
+      </ng-template>
+    </ng-template>
+  </p-dropdown>
+  <p-divider align="center" styleClass="mt-10">
+    <span class="font-weight-bold">{{ "ADD_VERSION" | translate }}</span>
+  </p-divider>
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
     <!-- version AR -->
     <div class="p-field p-col-12 p-md-12">
       <span class="p-float-label">
-        <input type="text" formControlName="versionAr" pInputText />
+        <input type="text" formControlName="nameAr" pInputText />
         <label>
           {{ "VERSION_AR" | translate }}
           <strong class="required-asterisk"> * </strong>
@@ -97,20 +144,20 @@
       </span>
       <ng-container
         *ngIf="
-          form.controls['versionAr'].touched &&
-          !form.controls['versionAr'].valid &&
-          form.controls['versionAr'].dirty
+          form.controls['nameAr'].touched &&
+          !form.controls['nameAr'].valid &&
+          form.controls['nameAr'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['versionAr'].hasError('required')"
+          *ngIf="form.controls['nameAr'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['versionAr'].hasError('arabic')"
+          *ngIf="form.controls['nameAr'].hasError('arabic')"
         >
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
@@ -120,7 +167,7 @@
     <!-- version EN -->
     <div class="p-field p-col-12 p-md-12">
       <span class="p-float-label">
-        <input type="text" formControlName="versionEn" pInputText />
+        <input type="text" formControlName="nameEn" pInputText />
         <label>
           {{ "VERSION_EN" | translate }}
           <strong class="required-asterisk"> * </strong>
@@ -128,20 +175,20 @@
       </span>
       <ng-container
         *ngIf="
-          form.controls['versionEn'].touched &&
-          !form.controls['versionEn'].valid &&
-          form.controls['versionEn'].dirty
+          form.controls['nameEn'].touched &&
+          !form.controls['nameEn'].valid &&
+          form.controls['nameEn'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['versionEn'].hasError('required')"
+          *ngIf="form.controls['nameEn'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['versionEn'].hasError('english')"
+          *ngIf="form.controls['nameEn'].hasError('english')"
         >
           {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
         </p>
@@ -155,6 +202,8 @@
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
+          [disabled]="form.invalid"
+          (click)="submit()"
         ></button>
       </div>
     </div>

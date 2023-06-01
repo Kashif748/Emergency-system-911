@@ -1,57 +1,38 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
-import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
-import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient} from '@angular/common/http';
+import {ILangFacade, LangFacade} from '@core/facades/lang.facade';
+import {TranslateObjModule} from '@shared/sh-pipes/translate-obj.pipe';
 
-import { BusinessContinuityComponent } from './business-continuity/business-continuity.component';
-import { BusinessContinuityRoutingModule } from './business-continuity-routing.module';
-import { OrgStrucureComponent } from './org-strucure/org-strucure.component';
-import { RtoListContentComponent } from './rto-list-content/rto-list-content.component';
-import { ActivityFrquencyComponent } from './activity-frquency/activity-frquency.component';
-import { ActivityPrioritySeqComponent } from './activity-priority-seq/activity-priority-seq.component';
-import { LocTypeComponent } from './loc-type/loc-type.component';
-import { ImpactLevelsComponent } from './impact-levels/impact-levels.component';
-import { ImpactAnalysisComponent } from './impact-analysis/impact-analysis.component';
+import {BusinessContinuityComponent} from './business-continuity/business-continuity.component';
+import {BusinessContinuityRoutingModule} from './business-continuity-routing.module';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
-import { TreeModule } from 'primeng/tree';
-import { OrgDetailsComponent } from './org-details/org-details.component';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { TableModule } from 'primeng/table';
-import { NodataTableModule } from '../../shared/components/nodata-table/nodata-table.module';
-import { OrganizationChartModule } from 'primeng/organizationchart';
-import { PaginatorModule } from 'primeng/paginator';
-import { MenuModule } from 'primeng/menu';
-import { SkeletonModule } from 'primeng/skeleton';
-import { ColorPickerModule } from 'primeng/colorpicker';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { DialogModule } from 'primeng/dialog';
-import { ImpLevelWorkingComponent } from './imp-level-working/imp-level-working.component';
-import { ToolbarModule } from 'primeng/toolbar';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {PanelMenuModule} from 'primeng/panelmenu';
+import {ButtonModule} from 'primeng/button';
+import {TagModule} from 'primeng/tag';
+import {TreeModule} from 'primeng/tree';
+import {InputTextModule} from 'primeng/inputtext';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {TableModule} from 'primeng/table';
+import {NodataTableModule} from '../../shared/components/nodata-table/nodata-table.module';
+import {OrganizationChartModule} from 'primeng/organizationchart';
+import {PaginatorModule} from 'primeng/paginator';
+import {MenuModule} from 'primeng/menu';
+import {SkeletonModule} from 'primeng/skeleton';
+import {ColorPickerModule} from 'primeng/colorpicker';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {DialogModule} from 'primeng/dialog';
+import {ToolbarModule} from 'primeng/toolbar';
 import {SidebarModule} from 'primeng/sidebar';
 import {InputNumberModule} from 'primeng/inputnumber';
-
-import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
-
-import { AddRtoDialogComponent } from './dialog/add-rto-dialog/add-rto-dialog.component';
-import { AddImpLevelComponent } from './dialog/add-imp-level/add-imp-level.component';
-import { AddPrioritySeqComponent } from './dialog/add-priority-seq/add-priority-seq.component';
-import { AddLocTypeComponent } from './dialog/add-loc-type/add-loc-type.component';
-import { AddActivityFrqComponent } from './dialog/add-activity-frq/add-activity-frq.component';
-import { OrgHierarchyComponent } from './org-hierarchy/org-hierarchy.component';
-import {DividerModule} from "primeng/divider";
-import { AddSectorComponent } from './org-hierarchy/add-sector/add-sector.component';
-import { AddDepartmentComponent } from './org-hierarchy/add-department/add-department.component';
-import { AddSectionComponent } from './org-hierarchy/add-section/add-section.component';
-import { AddImpactTypeComponent } from './dialog/add-impact-type/add-impact-type.component';
+import {SharedBreadcrumbModule} from '@shared/sh-components/breadcrumbs/breadcrumb.component';
+import {DividerModule} from 'primeng/divider';
+import {NgxsModule} from '@ngxs/store';
+import {BrowseBusinessContinuityState} from './states/browse-business-continuity.state';
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -62,31 +43,11 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    BusinessContinuityComponent,
-    OrgDetailsComponent,
-    OrgStrucureComponent,
-    RtoListContentComponent,
-    ActivityFrquencyComponent,
-    ActivityPrioritySeqComponent,
-    LocTypeComponent,
-    ImpLevelWorkingComponent,
-    AddRtoDialogComponent,
-    AddImpLevelComponent,
-    AddPrioritySeqComponent,
-    AddLocTypeComponent,
-    AddActivityFrqComponent,
-    ImpactLevelsComponent,
-    ImpactAnalysisComponent,
-    OrgHierarchyComponent,
-    AddSectorComponent,
-    AddDepartmentComponent,
-    AddSectionComponent,
-    AddImpactTypeComponent,
-  ],
+  declarations: [BusinessContinuityComponent],
   imports: [
     CommonModule,
     BusinessContinuityRoutingModule,
+    NgxsModule.forFeature([BrowseBusinessContinuityState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
@@ -118,9 +79,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ToolbarModule,
     DialogModule,
     SidebarModule,
-    TranslateObjModule,
     DividerModule,
-    SharedBreadcrumbModule
+    SharedBreadcrumbModule,
+    PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

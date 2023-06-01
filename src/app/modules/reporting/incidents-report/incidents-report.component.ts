@@ -496,7 +496,7 @@ export class IncidentsReportComponent implements OnInit {
         ...params,
         fromDate: params['startDate'],
         toDate: params['endDate'],
-        responsibleOrg: params['orgId'],
+        organization: params['orgId'],
         category: params['mainCategoryId'],
         categoryId: params['mainCategoryId'],
       };

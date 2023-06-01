@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { catchError, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { SituationProjection } from 'src/app/api/models/situation-projection';
 import { BrowseSituationsAction } from '../states/browse-situations.action';
 import {
@@ -26,6 +26,8 @@ import {
 })
 export class BrowseSituationsComponent implements OnInit, OnDestroy {
   public page$: Observable<SituationProjection[]>;
+  @Select(SituationsState.activeSituation)
+  public activeSituation$: Observable<SituationProjection>;
   @Select(SituationsState.loading)
   public loading$: Observable<boolean>;
   @Select(SituationsState.totalRecords)
@@ -44,9 +46,7 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
     private store: Store,
     private translate: TranslateService,
     private messageHelper: MessageHelper,
-    private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private lang: ILangFacade,
     private privilegesService: PrivilegesService
   ) {}
 
@@ -58,7 +58,6 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.page$ = this.store.select(SituationsState.page).pipe(
       filter((p) => !!p),
-      tap(console.log),
       map((page) =>
         page?.map((u) => {
           return {
@@ -81,9 +80,7 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
                 label: this.translate.instant('SITUATIONS.VIEW_DASHBOARD'),
                 icon: 'pi pi-chart-bar',
                 command: () => {
-                  this.router.navigate(['/situations-management/dashboard'], {
-                    queryParams: { _id: u.id },
-                  });
+                  this.redirectToDashboard(u.id);
                 },
                 disabled: !u.isActive,
               },
@@ -119,7 +116,9 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
       summary: 'SHARED.DIALOG.ARE_YOU_SURE',
       detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE',
       yesCommand: () => {
-        this.store.dispatch(new SituationsAction.Activate({ id }));
+        this.store.dispatch(
+          new BrowseSituationsAction.DeleteSituations({ id })
+        );
         this.messageHelper.closeConfirm();
       },
       noCommand: () => {
@@ -127,7 +126,11 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
       },
     });
   }
-
+  redirectToDashboard(_id) {
+    this.router.navigate(['/situations-management/dashboard'], {
+      queryParams: { _id },
+    });
+  }
   openDialog(id?: number) {
     this.store.dispatch(
       new BrowseSituationsAction.ToggleDialog({
@@ -184,35 +187,18 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
         this.search();
       });
   }
-  // changeColumns(event) {
-  //   this.store.dispatch(
-  //     new BrowseSituationsAction.ChangeColumns({ columns: event.value })
-  //   );
-  // }
 
   changeView(view: 'TABLE' | 'CARDS') {
     this.store.dispatch(new BrowseSituationsAction.ChangeView({ view }));
   }
 
-  sort(event) {
-    this.store.dispatch(
-      new BrowseSituationsAction.SortSituations({ field: event.value })
-    );
-  }
-
-  order(event) {
-    this.store.dispatch(
-      new BrowseSituationsAction.SortSituations({
-        order: event.checked ? 'desc' : 'asc',
-      })
-    );
-  }
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseSituationsAction.LoadSituations({
         pageRequest: {
           first: event.first,
           rows: event.rows,
+          filters: { active: true },
         },
       })
     );

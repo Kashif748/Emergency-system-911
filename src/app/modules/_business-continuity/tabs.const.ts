@@ -8,11 +8,11 @@ export const TABS: MenuItem[] = [
     items: [
       {
         label: 'ORG_DETAILS',
-        routerLink: 'org-details',
+        routerLink: 'org/org-details',
       },
       {
         label: 'ORG_ARTCH',
-        routerLink: 'org-strucure',
+        routerLink: 'org/org-strucure',
         routerLinkActiveOptions: 'active-tab',
       },
     ],
@@ -23,7 +23,7 @@ export const TABS: MenuItem[] = [
     items: [
       {
         label: 'IMPACT_LEVELS.TAB_LABEL',
-        routerLink: 'impact-levels',
+        routerLink: 'impact-level',
       },
       { label: 'IMPACT_ANALYSIS.TAB_LABEL', routerLink: 'impact-analysis' },
     ],
@@ -96,53 +96,38 @@ export const DATA = {
   impactLevels: [
     {
       id: 1,
-      levelAr: 'منخفض جدا',
-      levelEn: 'Very Low',
-      color: {
-        r: 100,
-        g: 200,
-        b: 100,
-      },
+      nameAr: 'منخفض جدا',
+      nameEn: 'Very Low',
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 2,
-      levelAr: 'منخفض',
-      levelEn: 'Low',
-      color: {
-        r: 100,
-        g: 256,
-        b: 30,
-      },
+      nameAr: 'منخفض',
+      nameEn: 'Low',
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 3,
-      levelAr: 'متوسط',
-      levelEn: 'Medium',
-      color: {
-        r: 100,
-        g: 100,
-        b: 150,
-      },
+      nameAr: 'متوسط',
+      nameEn: 'Medium',
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 4,
-      levelAr: 'مرتفع',
-      levelEn: 'High',
-      color: {
-        r: 100,
-        g: 100,
-        b: 100,
-      },
+      nameAr: 'مرتفع',
+      nameEn: 'High',
+      isActive: false,
+      colorCode: '#ffffff'
     },
     {
       id: 5,
-      levelAr: 'مرتفع جدا',
-      levelEn: 'Very High',
-      color: {
-        r: 100,
-        g: 130,
-        b: 0,
-      },
+      nameAr: 'مرتفع جدا',
+      nameEn: 'Very High',
+      isActive: false,
+      colorCode: '#ffffff'
     },
   ],
   impactLevelsWorking: [

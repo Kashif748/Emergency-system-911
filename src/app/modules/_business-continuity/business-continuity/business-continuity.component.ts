@@ -11,9 +11,18 @@ import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericValidators } from '@shared/validators/generic-validators';
 import { MenuItem } from 'primeng/api';
-import { Observable, Subject } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import {Observable, Subject, Subscription} from 'rxjs';
+import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { TABS } from '../tabs.const';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { BrowseBusinessContinuityAction } from '../states/browse-business-continuity.action';
+import { FormUtils } from '@core/utils/form.utils';
+import { BCAction } from '@core/states';
+import { BusinessContinuityState } from '@core/states/bc/business-continuity/business-continuity.state';
+import { BcVersions } from '../../../api/models/bc-versions';
+import { IAuthService } from '@core/services/auth.service';
+import { BrowseBusinessContinuityState } from '../states/browse-business-continuity.state';
 
 @Component({
   selector: 'app-business-continuity',
@@ -24,7 +33,6 @@ export class BusinessContinuityComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   items: MenuItem[] = [];
-  visible = false;
   sidebar = false;
 
   form: FormGroup;
@@ -32,22 +40,57 @@ export class BusinessContinuityComponent
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
   );
   public smallScreen: boolean;
-  private destroy$ = new Subject();
 
-  versions = [
-    { nameAr: 'اصدار 2022/6', nameEn: 'version 6/2022' },
-    { nameAr: 'اصدار 2023/1', nameEn: 'version 1/2023' },
-    { nameAr: 'اصدار 2023/6', nameEn: 'version 6/2023' },
-  ];
-  selectedVersion;
+  @Select(BrowseBusinessContinuityState.versionsDialogOpend)
+  public versionsDialogOpend$: Observable<boolean>;
+
+  @Select(BusinessContinuityState.loading)
+  public loading$: Observable<boolean>;
+
+  @Select(BusinessContinuityState.versions)
+  public versions$: Observable<BcVersions[]>;
+
+  get loggedinUserId() {
+    return this.auth.getClaim('orgId');
+  }
+
+  private versionsSubscription: Subscription;
+
+  selectedVersion: BcVersions;
+  private destroy$ = new Subject();
   constructor(
     private langFacade: ILangFacade,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
     private breakpointObserver: BreakpointObserver,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private store: Store,
+    private auth: IAuthService
   ) {
-    this.selectedVersion = this.versions[0];
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        const version = params['_version'];
+        if (version) {
+          this.store.dispatch(
+            new BrowseBusinessContinuityAction.SetGlobalVersion({
+              id: version,
+            })
+          );
+          this.versionsSubscription = this.versions$.subscribe(versions => {
+            // Assuming you have a condition to select a specific version
+            // Replace the condition with your own logic
+            const selectedVersion = versions?.find(version => version.id === version.id);
+
+            if (selectedVersion) {
+              this.selectedVersion = selectedVersion;
+            }
+          });
+        } else {
+          this.toggleDialog();
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -55,7 +98,8 @@ export class BusinessContinuityComponent
     this.destroy$.complete();
   }
   ngOnInit() {
-    this.createForm();
+    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 20 }));
+
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
@@ -67,17 +111,18 @@ export class BusinessContinuityComponent
         })
       )
       .subscribe();
+    this.createForm();
   }
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.items = this.translateMenu(TABS);
-      this.visible = true;
       this.cdr.detectChanges();
     }, 1000);
   }
   translateMenu(items: MenuItem[]): MenuItem[] {
     return items.map((tab) => {
       tab.label = this.translate.instant(tab.label);
+      tab.queryParamsHandling = 'merge';
       if (tab.items && tab.items.length > 0) {
         tab.items = this.translateMenu(tab.items);
       }
@@ -87,8 +132,44 @@ export class BusinessContinuityComponent
 
   createForm() {
     this.form = this.formBuilder.group({
-      versionAr: [null, [Validators.required, GenericValidators.arabic]],
-      versionEn: [null, [Validators.required, GenericValidators.english]],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
     });
+  }
+
+  setValueGlobally(value: number) {
+    this.store.dispatch(
+      new BrowseBusinessContinuityAction.SetGlobalVersion({
+        id: value,
+      })
+    );
+  }
+
+  submit() {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      FormUtils.ForEach(this.form, (fc) => {
+        fc.markAsDirty();
+      });
+      return;
+    }
+
+    const businessCon = {
+      ...this.form.getRawValue(),
+    };
+    businessCon.orgStructure = {
+      id: this.loggedinUserId,
+    };
+    businessCon.isActive = true;
+    this.store
+      .dispatch(
+        new BrowseBusinessContinuityAction.CreateBusinessContinuity(businessCon)
+      )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
+  }
+
+  toggleDialog() {
+    this.store.dispatch(new BrowseBusinessContinuityAction.ToggleDialog());
   }
 }
