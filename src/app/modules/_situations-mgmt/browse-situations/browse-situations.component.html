@@ -52,10 +52,7 @@
                   <p-tag
                     dir="ltr"
                     value=" {{
-                      activeSituation.startDate
-                        | cdate
-                        | date : 'yyyy-MM-dd h:mm'
-                    }}"
+                      activeSituation.startDate | cdate}}"
                   ></p-tag>
                 </p>
 
@@ -65,7 +62,7 @@
                   <p-tag
                     dir="ltr"
                     value="{{
-                      activeSituation.endDate | cdate | date : 'yyyy-MM-dd h:mm'
+                      activeSituation.endDate | cdate
                     }}"
                   ></p-tag>
                 </p>
