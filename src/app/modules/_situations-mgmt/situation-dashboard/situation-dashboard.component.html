@@ -1,6 +1,6 @@
 <section class="d-flex flex-column px-6">
   <div class="p-col p-d-flex">
-  <button pButton icon="pi pi-sign-out" (click)="back()" label="{{'ACTIONS.BACK' | translate }}"></button>
+  <button pButton icon="pi pi-sign-out" (click)="back()" label="{{'SHARED.BACK' | translate }}"></button>
   </div>
   <p-toolbar *ngIf="situation$ | async as situation">
     <div class="p-toolbar-group-left">
@@ -22,7 +22,7 @@
         {{ "SITUATIONS.START_DATE" | translate }}
         <p-tag
           dir="ltr"
-          value=" {{ situation.startDate | cdate | date : 'yyyy-MM-dd h:mm' }}"
+          value=" {{ situation.startDate | cdate : 'yyyy-MM-dd HH:mm:ss' }}"
         ></p-tag>
       </p>
 
@@ -31,7 +31,7 @@
         {{ "SITUATIONS.END_DATE" | translate }}
         <p-tag
           dir="ltr"
-          value="{{ situation.endDate | cdate | date : 'yyyy-MM-dd h:mm' }}"
+          value="{{ situation.endDate | cdate : 'yyyy-MM-dd HH:mm:ss' }}"
         ></p-tag>
       </p>
       <div class="w-200px"></div>

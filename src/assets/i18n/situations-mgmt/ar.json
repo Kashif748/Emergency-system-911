@@ -1,7 +1,4 @@
 {
-  "ACTIONS": {
-    "BACK": "عودة للخلف"
-  },
   "SITUATIONS": {
     "SITUATIONS_LIST": "اختيار حالة",
     "VIEW_DASHBOARD": "عرض لوحة التحكم",

@@ -1,7 +1,4 @@
 {
-  "ACTIONS": {
-    "BACK": "Back"
-  },
   "SITUATIONS": {
     "SITUATIONS_LIST": "Select Situation",
     "VIEW_DASHBOARD": "View Dashboard",
