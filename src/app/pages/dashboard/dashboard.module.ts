@@ -6,7 +6,6 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { TranslationModule } from 'src/app/modules/i18n/translation.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgMarqueeModule } from 'ng-marquee';
 import { MapModule } from 'src/app/shared/components/map/map.component';
 import { DashboardComponent } from './dashboard.component';
 import { CovidDahsboardComponent } from './covid-dahsboard/covid-dahsboard.component';
@@ -17,6 +16,12 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { CustomDatePipe } from '@shared/pipes/custom-date.pipe';
 import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from 'src/app/_metronic/core';
+import { NewsBarComponent } from './news-bar/news-bar.component';
+import { NgxsModule } from '@ngxs/store';
+import { NewsBarState } from './news-bar/states/news-bar.state';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   declarations: [
@@ -25,6 +30,7 @@ import { CoreModule } from 'src/app/_metronic/core';
     Widget2Component,
     CovidDahsboardComponent,
     LogsComponent,
+    NewsBarComponent,
   ],
   imports: [
     CommonModule,
@@ -46,8 +52,11 @@ import { CoreModule } from 'src/app/_metronic/core';
     NgApexchartsModule,
     SharedModule,
     CoreModule,
-    NgMarqueeModule,
     MapModule,
+    NgxsModule.forFeature([NewsBarState]),
+    TranslateObjModule,
+    DialogModule,
+    ButtonModule,
   ],
   providers: [DatePipe, CustomDatePipe],
 })
