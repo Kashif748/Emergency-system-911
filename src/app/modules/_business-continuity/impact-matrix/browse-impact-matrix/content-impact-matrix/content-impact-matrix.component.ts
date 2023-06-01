@@ -49,4 +49,8 @@ export class ContentImpactMatrixComponent implements OnInit {
   openDialog(Id?: number) {
     // this.display = true;
   }
+
+  hasMatchingId(id: any, matrixDtoList: any[]): boolean {
+    return matrixDtoList.some((levels) => levels.id === id);
+  }
 }

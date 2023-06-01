@@ -1,9 +1,9 @@
 import { PageRequestModel } from '@core/models/page-request.model';
 
 
-export namespace BrowseImpactLevelAction {
+export namespace BrowseImpactLevelMatrixAction {
   export class LoadImpactLevel {
-    static readonly type = '[BrowseImpactLevel] Load ImpactLevel';
+    static readonly type = '[BrowseImpactLevel] Load ImpactLevel Matrix';
 
     /**
      *

@@ -131,6 +131,11 @@
               </div>
             </td>
             <ng-container *ngFor="let col of columns">
+              <ng-container *ngIf="col.isActive && !hasMatchingId(col.id, item.bcImpactLevelMatrixDtoList)">
+                <td class="max-w-250px">
+                  <div></div>
+                </td>
+              </ng-container>
               <ng-container *ngFor="let levels of item.bcImpactLevelMatrixDtoList">
                 <td class="max-w-250px" *ngIf="col.isActive && levels?.id === col.id" (click)="openView(item.bcImpactTypes.id)">
                   <div>

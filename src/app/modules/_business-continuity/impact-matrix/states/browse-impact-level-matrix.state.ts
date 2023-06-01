@@ -5,7 +5,7 @@ import {ApiHelper} from "@core/helpers/api.helper";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {iif, patch} from "@ngxs/store/operators";
-import {BrowseImpactLevelAction} from "./browse-impact-level.action";
+import {BrowseImpactLevelMatrixAction} from "./browse-impact-level-matrix.action";
 import {ImpactLevelAction} from "@core/states";
 
 
@@ -37,7 +37,7 @@ export const BROWSE_IMPACT_LEVEL_UI_STATE_TOKEN =
 
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-export class BrowseImpactLevelState {
+export class BrowseImpactLevelMatrixState {
   /**
    *
    */
@@ -50,16 +50,16 @@ export class BrowseImpactLevelState {
   }
 
   /* ************************ SELECTORS ******************** */
-  @Selector([BrowseImpactLevelState])
+  @Selector([BrowseImpactLevelMatrixState])
   static state(state: BrowseImpactLevelStateModel): BrowseImpactLevelStateModel {
     return state;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(BrowseImpactLevelAction.LoadImpactLevel)
+  @Action(BrowseImpactLevelMatrixAction.LoadImpactLevel)
   loadImpactLevel(
     {setState, dispatch, getState}: StateContext<BrowseImpactLevelStateModel>,
-    {payload}: BrowseImpactLevelAction.LoadImpactLevel
+    {payload}: BrowseImpactLevelMatrixAction.LoadImpactLevel
   ) {
     setState(
       patch<BrowseImpactLevelStateModel>({
