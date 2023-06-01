@@ -37,7 +37,7 @@
   },
   "RTO_LIST_LABEL": "RTO List",
   "AV_LEVELS": "Importance Levels for Working",
-  "RECVOVER_PRIORITIES": "Activity Priority Sequence",
+  "RECVOVER_PRIORITIES": "Recovery Priority Sequence",
   "LOC_TYPE_LABEL": "Location Type",
   "ACTIVETY_FREQUENCY": "Activity Frequency",
   "ORG_NAME_AR": "Organization Name (Arabic)",
@@ -75,8 +75,8 @@
   },
   "ACTIVITY_PRIORITY_SEQ": {
     "TITLE_PRI_SEQ": "Recovery Priority Sequence",
-    "ADD_NEW_PRI_SEQ": "Add New Priority Sequency",
-    "EDIT_PRI_SEQ": "Edit Priority Sequency",
+    "ADD_NEW_PRI_SEQ": "Add New Recovery Priority Sequency",
+    "EDIT_PRI_SEQ": "Edit Recovery Priority Sequency",
     "PRI_AR": "Priority (Arabic)",
     "PRI_EN": "Priority (English)"
   },

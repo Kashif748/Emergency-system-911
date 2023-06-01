@@ -39,7 +39,7 @@
   },
   "RTO_LIST_LABEL": "قائمة زمن التعافي",
   "AV_LEVELS": "مستويات التوافر للعمل",
-  "RECVOVER_PRIORITIES": "أولوية الاسترجاع",
+  "RECVOVER_PRIORITIES": "تسلسلات أولوية الاسترجاع",
   "LOC_TYPE_LABEL": "نوع الموقع",
   "ACTIVETY_FREQUENCY": "دورية النشاط",
   "ORG_NAME_AR": "إسم الجهة (عربي)",
