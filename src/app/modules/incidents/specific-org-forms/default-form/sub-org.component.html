@@ -53,7 +53,7 @@
         <div class="row justify-content-center">
           <div class="col-sm-12">
             <!-- only responsible org can change status -->
-            <ng-container *appPrivileges="'PRIV_CL_INC'">
+            <!--<ng-container *appPrivileges="'PRIV_CL_INC'">
               <div
                 class="row section border rounded"
                 *ngIf="!isAddMode && canEdit"
@@ -123,7 +123,7 @@
                   </mat-form-field>
                 </div>
               </div>
-            </ng-container>
+            </ng-container>-->
 
             <div class="row section border rounded">
               <div class="col-sm-12 title">
@@ -652,7 +652,7 @@
               <mat-spinner class="m-auto" diameter="50"></mat-spinner>
             </div>
 
-            <div class="row section border rounded justify-content-end p-4">
+            <div class="row section border rounded p-4" [ngClass]="{'justify-content-between': isAddMode, 'justify-content-end': (!isAddMode)}">
               <button
                 [disabled]="disableSubmitButton()"
                 mat-raised-button
@@ -668,7 +668,8 @@
                   {{ "INCIDENTS.UPDATE" | translate }}
                 </span>
               </button>
-              <!--<button
+              <button
+                *ngIf="isAddMode"
                 [disabled]="disableSubmitButton()"
                 mat-raised-button
                 color="accent"
@@ -677,7 +678,7 @@
                 (click)="saveAsDraft()"
               >
                 {{ "INCIDENTS.saveAsDraft" | translate }}
-              </button>-->
+              </button>
             </div>
           </div>
         </div>
