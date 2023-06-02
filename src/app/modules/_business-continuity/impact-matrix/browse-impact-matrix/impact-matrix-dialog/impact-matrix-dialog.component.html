@@ -36,36 +36,6 @@
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
     <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="typeAr" pInputText />
-        <label>
-          {{ "LOC_TYPE.TYPE_AR" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-      <ng-container
-        *ngIf="
-          form.controls['typeAr'].touched &&
-          !form.controls['typeAr'].valid &&
-          form.controls['typeAr'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['typeAr'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['typeAr'].hasError('english')"
-        >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
-        </p>
-      </ng-container>
-    </div>
-
-    <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
         <input type="text" formControlName="typeEn" pInputText />
         <label>
           {{ "LOC_TYPE.TYPE_EN" | translate }}
@@ -94,17 +64,50 @@
       </ng-container>
     </div>
 
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="typeAr" pInputText />
+        <label>
+          {{ "LOC_TYPE.TYPE_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['typeAr'].touched &&
+          !form.controls['typeAr'].valid &&
+          form.controls['typeAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['typeAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['typeAr'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+
+
     <div class="d-flex p-flex-column w-100">
       <div class="p-d-flex border-bottom pt-4">
         <h4 class="p-md-2 font-weight-bold">
           {{ "IMPACT_LEVELS.LEVEL" | translate }}
         </h4>
         <h4 class="p-md-5 font-weight-bold">
-          {{ "RTO_LIST.DESC_AR" | translate }}
-        </h4>
-        <h4 class="p-md-5 font-weight-bold">
           {{ "RTO_LIST.DESC_EN" | translate }}
         </h4>
+        <h4 class="p-md-5 font-weight-bold">
+          {{ "RTO_LIST.DESC_AR" | translate }}
+        </h4>
+
       </div>
       <div class="p-d-flex border-bottom pt-4">
         <div formArrayName="bcImpactLevelMatrixDtoList" class="p-col-12 p-md-5">
@@ -113,40 +116,7 @@
               <div class="p-md-4">
                 <p >{{ level.get('label').value }}</p>
               </div>
-              <div class="p-field p-col-12">
-                <span class="p-float-label">
-                  <textarea
-                    pInputText
-                    type="text"
-                    formControlName="descAr"
-                    rows="3"
-                  ></textarea>
-                  <label>
-                    {{ "LOC_TYPE.TYPE_AR" | translate }}
-                    <strong class="required-asterisk"> * </strong>
-                  </label>
-              </span>
-                <ng-container
-                  *ngIf="
-              form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).touched &&
-              !form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).valid &&
-              form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).dirty
-            "
-                >
-                  <p
-                    class="p-error mb-0"
-                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).hasError('required')"
-                  >
-                    {{ "VALIDATION_MSG.REQUIRED" | translate }}
-                  </p>
-                  <p
-                    class="p-error mb-0"
-                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).hasError('arabic')"
-                  >
-                    {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
-                  </p>
-                </ng-container>
-              </div>
+
               <div class="p-field p-col-12">
           <span class="p-float-label">
             <textarea
@@ -181,6 +151,42 @@
                   </p>
                 </ng-container>
               </div>
+
+              <div class="p-field p-col-12">
+                <span class="p-float-label">
+                  <textarea
+                    pInputText
+                    type="text"
+                    formControlName="descAr"
+                    rows="3"
+                  ></textarea>
+                  <label>
+                    {{ "LOC_TYPE.TYPE_AR" | translate }}
+                    <strong class="required-asterisk"> * </strong>
+                  </label>
+              </span>
+                <ng-container
+                  *ngIf="
+              form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).touched &&
+              !form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).valid &&
+              form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).dirty
+            "
+                >
+                  <p
+                    class="p-error mb-0"
+                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).hasError('required')"
+                  >
+                    {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                  </p>
+                  <p
+                    class="p-error mb-0"
+                    *ngIf="form.get(['bcImpactLevelMatrixDtoList', i , 'descAr']).hasError('arabic')"
+                  >
+                    {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+                  </p>
+                </ng-container>
+              </div>
+
             </div>
           </div>
         </div>
