@@ -115,7 +115,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-columns="columns">
-          <tr class="cursor-pointer hoverable" >
+          <tr class="cursor-pointer hoverable" *ngIf="item.bcImpactTypes.isActive">
             <td class="flag-td">
               <div
                 [ngClass]="{
