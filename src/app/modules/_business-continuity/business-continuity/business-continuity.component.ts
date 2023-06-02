@@ -62,6 +62,7 @@ export class BusinessContinuityComponent
   selectedVersion: BcVersions;
   private destroy$ = new Subject();
   constructor(
+    private router: Router,
     private langFacade: ILangFacade,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
@@ -176,6 +177,8 @@ export class BusinessContinuityComponent
       tap(() => {
         this.form.reset();
         this.showVersionForm = false;
+        this.router.navigate(['business-continuity/org/org-details']);
+        this.toggleDialog();
       }))
       .subscribe();
   }
