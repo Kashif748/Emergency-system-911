@@ -23,6 +23,7 @@ import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { GroupService } from '@core/api/services/group.service';
 import { Store } from '@ngrx/store';
 import { UpdateFilter } from '../../incidents/new-incidents-view/store/incidents-dashboard.actions';
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-incidents-report',
@@ -31,6 +32,7 @@ import { UpdateFilter } from '../../incidents/new-incidents-view/store/incidents
 })
 export class IncidentsReportComponent implements OnInit {
   constructor(
+    private datePipe: DatePipe,
     private translationService: TranslationService,
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -669,9 +671,7 @@ export class IncidentsReportComponent implements OnInit {
         .pipe(
           map((res) => {
             res.result.content = res.result.content.map((item) => {
-              item['incidentDate'] = new Date(item['incidentDate'])
-                .toISOString()
-                .slice(0, 16);
+               item['incidentDate'] = this.convertDate(item['incidentDate'])
               return item;
             });
             return res;
@@ -682,6 +682,7 @@ export class IncidentsReportComponent implements OnInit {
       this.paginationConfig.currentPage = page + 1;
       if (data) {
         this.incidents = data.result.content;
+        console.log(this.incidents);
         this.paginationConfig.totalItems = data.result.totalElements;
         this.loading = false;
         this.cdr.detectChanges();
@@ -843,5 +844,10 @@ export class IncidentsReportComponent implements OnInit {
       },
       (error) => {}
     );
+  }
+ convertDate(date) {
+    const inputDate = new Date(date);
+    const formattedDate = this.datePipe.transform(inputDate, 'yyyy/MM/dd hh:mm:ss a');
+    return formattedDate;
   }
 }

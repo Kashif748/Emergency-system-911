@@ -11,9 +11,9 @@ import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.sta
 import {BrowseImpactMatrixAction} from "../states/browse-impact-matrix.action";
 import {BcImpactLevel} from "../../../../api/models/bc-impact-level";
 import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
-import {BrowseImpactLevelAction} from "../../impact-level/states/browse-impact-level.action";
 import {BrowseBusinessContinuityState} from "../../states/browse-business-continuity.state";
 import {BcImpactMatrixDto} from "../../../../api/models/bc-impact-matrix-dto";
+import {BrowseImpactLevelMatrixAction} from "../states/browse-impact-level-matrix.action";
 
 @Component({
   selector: 'app-browse-impact-matrix',
@@ -120,7 +120,7 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
 
   public loadImpactTypePage(event?: LazyLoadEvent) {
     this.store.dispatch(
-      new BrowseImpactLevelAction.LoadImpactLevel({
+      new BrowseImpactLevelMatrixAction.LoadImpactLevel({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
