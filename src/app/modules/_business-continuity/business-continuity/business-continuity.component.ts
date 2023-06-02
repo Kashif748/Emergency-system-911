@@ -18,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { BrowseBusinessContinuityAction } from '../states/browse-business-continuity.action';
 import { FormUtils } from '@core/utils/form.utils';
-import { BCAction } from '@core/states';
+import {BCAction, RtoState} from '@core/states';
 import { BusinessContinuityState } from '@core/states/bc/business-continuity/business-continuity.state';
 import { BcVersions } from '../../../api/models/bc-versions';
 import { IAuthService } from '@core/services/auth.service';
@@ -46,6 +46,9 @@ export class BusinessContinuityComponent
 
   @Select(BusinessContinuityState.loading)
   public loading$: Observable<boolean>;
+
+  @Select(BusinessContinuityState.blocking)
+  blocking$: Observable<boolean>;
 
   @Select(BusinessContinuityState.versions)
   public versions$: Observable<BcVersions[]>;
@@ -169,7 +172,11 @@ export class BusinessContinuityComponent
       .dispatch(
         new BrowseBusinessContinuityAction.CreateBusinessContinuity(businessCon)
       )
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$),
+      tap(() => {
+        this.form.reset();
+        this.showVersionForm = false;
+      }))
       .subscribe();
   }
 

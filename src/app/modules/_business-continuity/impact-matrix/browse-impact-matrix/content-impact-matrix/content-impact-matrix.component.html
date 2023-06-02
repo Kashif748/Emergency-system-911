@@ -115,7 +115,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-columns="columns">
-          <tr class="cursor-pointer hoverable" >
+          <tr class="cursor-pointer hoverable" *ngIf="item.bcImpactTypes.isActive">
             <td class="flag-td">
               <div
                 [ngClass]="{
@@ -131,6 +131,11 @@
               </div>
             </td>
             <ng-container *ngFor="let col of columns">
+              <ng-container *ngIf="col.isActive && !hasMatchingId(col.id, item.bcImpactLevelMatrixDtoList)">
+                <td class="max-w-250px">
+                  <div></div>
+                </td>
+              </ng-container>
               <ng-container *ngFor="let levels of item.bcImpactLevelMatrixDtoList">
                 <td class="max-w-250px" *ngIf="col.isActive && levels?.id === col.id" (click)="openView(item.bcImpactTypes.id)">
                   <div>

@@ -138,7 +138,7 @@
         *checkPrivileges="'PRIV_CR_BC_VER'"
         pButton
         label="{{ 'ADD_VERSION' | translate }}"
-        icon="pi pi-plus"
+        [icon]="showVersionForm ? 'pi pi-minus' : 'pi pi-plus'"
         (click)="showVersionForm = !showVersionForm"
       ></button>
     </div>
@@ -214,6 +214,7 @@
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
+          [loading]="blocking$ | async"
           [disabled]="form.invalid"
           (click)="submit()"
         ></button>
