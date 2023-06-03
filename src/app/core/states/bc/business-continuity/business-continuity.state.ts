@@ -120,6 +120,13 @@ export class BusinessContinuityState {
         body: payload,
       })
       .pipe(
+        tap((bc) => {
+          setState(
+            patch<BusinessContinuityStateModel>({
+              bc: bc.result,
+            })
+          );
+        }),
         finalize(() => {
           setState(
             patch<BusinessContinuityStateModel>({
@@ -151,10 +158,10 @@ export class BusinessContinuityState {
       })
     );
     return this.bC.getOne({ id: payload.id }).pipe(
-      tap((rto) => {
+      tap((bc) => {
         setState(
           patch<BusinessContinuityStateModel>({
-            bc: rto.result,
+            bc: bc.result,
           })
         );
       }),
