@@ -23,6 +23,7 @@ import { BusinessContinuityState } from '@core/states/bc/business-continuity/bus
 import { BcVersions } from '../../../api/models/bc-versions';
 import { IAuthService } from '@core/services/auth.service';
 import { BrowseBusinessContinuityState } from '../states/browse-business-continuity.state';
+import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 
 @Component({
   selector: 'app-business-continuity',
@@ -106,7 +107,7 @@ export class BusinessContinuityComponent
     this.destroy$.complete();
   }
   ngOnInit() {
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 25 }));
+    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -173,13 +174,21 @@ export class BusinessContinuityComponent
       .dispatch(
         new BrowseBusinessContinuityAction.CreateBusinessContinuity(businessCon)
       )
-      .pipe(takeUntil(this.destroy$),
-      tap(() => {
-        this.form.reset();
-        this.showVersionForm = false;
-        this.router.navigate(['business-continuity/org/org-details']);
-        this.toggleDialog();
-      }))
+      .pipe(
+        switchMap(() => this.store.select(BusinessContinuityState.bc)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((bc) => {
+          this.selectedVersion = bc;
+          this.form.reset();
+          this.showVersionForm = false;
+          this.toggleDialog();
+          this.router.navigate(['business-continuity/org/org-details']);
+          setTimeout(() => {
+            this.setValueGlobally(bc.id);
+          }, 1500);
+        })
+      )
       .subscribe();
   }
 

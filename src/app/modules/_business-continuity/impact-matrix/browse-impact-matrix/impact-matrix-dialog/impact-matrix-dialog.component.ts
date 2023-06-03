@@ -61,16 +61,21 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
             return a.id - b.id;
           });
           const levelsControl = this.form.get('bcImpactLevelMatrixDtoList') as FormArray;
-          let levelsControlIndex = 0;
+          let levelsControlIndex = -1;
           const levelFormGroups = sortedImpactMatrix?.map((level) => {
-            const control = levelsControl.at(levelsControlIndex);
-            if (control?.get('id').value === level.id) {
-              control.patchValue({
-                descAr: level.descAr,
-                descEn: level.descEn
-              });
-              levelsControlIndex++;
+            levelsControlIndex = levelsControl.controls.findIndex(control => control.get('id').value === level.id);
+            if (levelsControlIndex !== -1) {
+              // Level found in levelsControl
+              const control = levelsControl.at(levelsControlIndex);
+              if (control) {
+                control.patchValue({
+                  descAr: level.descAr,
+                  descEn: level.descEn
+                });
+                // levelsControlIndex++;
+              }
             }
+
           });
         })
       )
