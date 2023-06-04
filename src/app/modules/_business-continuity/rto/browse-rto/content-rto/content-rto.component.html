@@ -11,19 +11,21 @@
             <ng-template pTemplate="header">
               <tr>
                 <th style="width: 0"></th>
-
-                <th>
+                <th class="min-w-100px">
+                  <div class="p-d-flex p-jc-between p-ai-center">#</div>
+                </th>
+                <th class="min-w-200px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.CRITICALITY" | translate }}
                   </div>
                 </th>
-                <th>
+                <th class="min-w-200px max-w-300px" >
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_ENG" | translate }}
                   </div>
                 </th>
 
-                <th>
+                <th class="min-w-250px max-w-300px" >
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_DESC" | translate }}
                   </div>
@@ -37,7 +39,9 @@
                 <td class="flag-td">
                   <div class="bg-secondary"></div>
                 </td>
-
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
                 <td>
                   <p-skeleton></p-skeleton>
                 </td>
@@ -77,18 +81,21 @@
             <ng-template pTemplate="header">
               <tr>
                 <th></th>
-                <th>
+                <th class="min-w-100px">
+                  <div class="p-d-flex p-jc-between p-ai-center">#</div>
+                </th>
+                <th class="min-w-200px max-w-300px" >
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.CRITICALITY" | translate }}
                   </div>
                 </th>
-                <th>
+                <th class="min-w-200px max-w-300px" >
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_ENG" | translate }}
                   </div>
                 </th>
 
-                <th>
+                <th class="min-w-250px max-w-300px" >
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_DESC" | translate }}
                   </div>
@@ -107,16 +114,18 @@
                     }"
                   ></div>
                 </td>
-
-                <td (click)="item.isActive && openView(item.id)">
+                <td (click)="item.isActive && openView(item.id)" class="min-w-100px">
+                  {{ item.id }}
+                </td>
+                <td class="min-w-200px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item | translateObj : 'criticality'}}
                 </td>
 
-                <td (click)="item.isActive && openView(item.id)">
+                <td class="min-w-200px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item | translateObj : 'name'}}
                 </td>
 
-                <td (click)="item.isActive && openView(item.id)">
+                <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item | translateObj : 'description'}}
                 </td>
 
