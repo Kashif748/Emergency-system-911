@@ -132,10 +132,10 @@
       </ng-template>
     </ng-template>
   </p-dropdown>
-  <p-divider align="center" styleClass="mt-10">
+  <p-divider align="center" styleClass="mt-10" *checkPrivileges="'PRIV_CR_BC_VER'">
     <div class="text-center">
       <button
-        *checkPrivileges="'PRIV_CR_BC_VER'"
+
         pButton
         label="{{ 'ADD_VERSION' | translate }}"
         [icon]="showVersionForm ? 'pi pi-minus' : 'pi pi-plus'"
