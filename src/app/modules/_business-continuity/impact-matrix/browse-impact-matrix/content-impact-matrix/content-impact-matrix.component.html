@@ -11,32 +11,32 @@
         <ng-template pTemplate="header">
           <tr>
             <th style="width: 0"></th>
-            <th>
+            <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
-            <th>
+            <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.VERY_LOW" | translate }}
               </div>
             </th>
-            <th>
+            <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.LOW" | translate }}
               </div>
             </th>
-            <th>
+            <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.MEDIUM" | translate }}
               </div>
             </th>
-            <th>
+            <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.HIGH" | translate }}
               </div>
             </th>
-            <th>
+            <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.VERY_HIGH" | translate }}
               </div>
@@ -50,22 +50,22 @@
             <td class="flag-td">
               <div class="bg-secondary"></div>
             </td>
-            <td class="max-w-250px">   <!--*ngIf="columns?.includes('userName')"-->
+            <td class="min-w-100px max-w-150px">   <!--*ngIf="columns?.includes('userName')"-->
               <p-skeleton></p-skeleton>
             </td>
-            <td class="max-w-250px">
+            <td class="min-w-100px max-w-150px">
               <p-skeleton></p-skeleton>
             </td>
-            <td class="max-w-250px">
+            <td class="min-w-100px max-w-150px">
               <p-skeleton></p-skeleton>
             </td>
-            <td class="max-w-250px">
+            <td class="min-w-100px max-w-150px">
               <p-skeleton></p-skeleton>
             </td>
-            <td class="max-w-250px">
+            <td class="min-w-100px max-w-150px">
               <p-skeleton></p-skeleton>
             </td>
-            <td class="max-w-250px">
+            <td class="min-w-100px max-w-150px">
               <p-skeleton></p-skeleton>
             </td>
 
@@ -98,13 +98,13 @@
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th></th>
-            <th>
+            <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
             <ng-container *ngFor="let col of columns">
-              <th *ngIf="col.isActive">
+              <th *ngIf="col.isActive" class="max-w-150px min-w-100px">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{  col | translateObj : 'name'}}
                 </div>
@@ -125,19 +125,19 @@
               ></div>
             </td>
 
-            <td class="max-w-250px" (click)="openView(item.bcImpactTypes.id)">
+            <td class="min-w-100px max-w-150px" (click)="openView(item.bcImpactTypes.id)">
               <div>
                 {{ item.bcImpactTypes | translateObj: 'name' }}
               </div>
             </td>
             <ng-container *ngFor="let col of columns">
               <ng-container *ngIf="col.isActive && !hasMatchingId(col.id, item.bcImpactLevelMatrixDtoList)">
-                <td class="max-w-250px">
+                <td class="min-w-100px max-w-150px">
                   <div></div>
                 </td>
               </ng-container>
               <ng-container *ngFor="let levels of item.bcImpactLevelMatrixDtoList">
-                <td class="max-w-250px" *ngIf="col.isActive && levels?.id === col.id" (click)="openView(item.bcImpactTypes.id)">
+                <td class="min-w-100px max-w-150px" *ngIf="col.isActive && levels?.id === col.id" (click)="openView(item.bcImpactTypes.id)">
                   <div>
                     {{ levels | translateObj : 'desc' }}
                   </div>

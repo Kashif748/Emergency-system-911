@@ -62,6 +62,7 @@ export class BrowseActivityFrquencyComponent implements OnInit, OnDestroy {
 
     this.page$ = this.store.select(ActivityFrquencyState.page).pipe(
       filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => a.id - b.id)),
       map((page) =>
         page?.map((u) => {
           return {

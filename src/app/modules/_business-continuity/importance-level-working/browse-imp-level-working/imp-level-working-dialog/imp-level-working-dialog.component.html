@@ -179,7 +179,7 @@
       <span class="p-float-label color-field">
         <input id="colorInput" type="text" [value]="color" (input)="setColor($event.target.value)"
                formControlName="colorCode" pInputText />
-        <p-colorPicker (onChange)="onValueChange($event.value)" [(ngModel)]="color" [ngModelOptions]="{standalone: true}" [inputId]="'colorInput'"></p-colorPicker>
+        <p-colorPicker appendTo="body" (onChange)="onValueChange($event.value)" [(ngModel)]="color" [ngModelOptions]="{standalone: true}" [inputId]="'colorInput'"></p-colorPicker>
         <label>
           {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
           <strong class="required-asterisk"> * </strong>
