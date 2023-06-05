@@ -10,7 +10,7 @@
 </div>
 
 
-<p-dialog [visible]="openView" [modal]="true" [style]="{width: '50vw'}"
+<p-dialog [visible]="openView" [modal]="true" [style]="{width: '50vw'}" (visibleChange)="openView=false"
   [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
 
   <ng-template pTemplate="header">
