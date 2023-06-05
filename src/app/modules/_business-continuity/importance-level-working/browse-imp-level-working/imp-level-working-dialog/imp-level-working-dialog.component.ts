@@ -41,6 +41,7 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   @Input()
   set workingId(v: number) {
     this._id = v;
+    this.color = '#ffffff';
     this.buildForm();
     if (v === undefined || v === null) {
       return;

@@ -61,6 +61,7 @@ export class BrowseLocationTypeComponent implements OnInit, OnDestroy {
 
     this.page$ = this.store.select(LocationTypeState.page).pipe(
       filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => a.id - b.id)),
       map((page) =>
         page?.map((u) => {
           return {
