@@ -4,6 +4,7 @@ import { NewsBarAction } from './states/news-bar.action';
 import { NewsState } from '@core/states/news/news.state';
 import { NewsProjection } from 'src/app/api/models';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-news-bar',
@@ -11,7 +12,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./news-bar.component.scss'],
 })
 export class NewsBarComponent implements OnInit {
-  @Select(NewsState.page)
   page$: Observable<NewsProjection[]>;
 
   openView = false;
@@ -20,7 +20,9 @@ export class NewsBarComponent implements OnInit {
     this.selectedItem = item;
     this.openView = true;
   }
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    this.page$ = this.store.select(NewsState.page).pipe(filter((p) => !!p));
+  }
 
   ngOnInit() {
     this.store.dispatch(
