@@ -11,8 +11,8 @@ import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericValidators } from '@shared/validators/generic-validators';
 import { MenuItem } from 'primeng/api';
-import {Observable, Subject, Subscription} from 'rxjs';
-import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {Observable, of, Subject, Subscription} from 'rxjs';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import { TABS } from '../tabs.const';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
@@ -22,7 +22,7 @@ import {BCAction, RtoState} from '@core/states';
 import { BusinessContinuityState } from '@core/states/bc/business-continuity/business-continuity.state';
 import { BcVersions } from '../../../api/models/bc-versions';
 import { IAuthService } from '@core/services/auth.service';
-import { BrowseBusinessContinuityState } from '../states/browse-business-continuity.state';
+import {BrowseBusinessContinuityState, BrowseBusinessContinuityStateModel} from '../states/browse-business-continuity.state';
 import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 
 @Component({
@@ -42,8 +42,10 @@ export class BusinessContinuityComponent
   );
   public smallScreen: boolean;
 
-  @Select(BrowseBusinessContinuityState.versionsDialogOpend)
-  public versionsDialogOpend$: Observable<boolean>;
+  @Select(BrowseBusinessContinuityState.state)
+  public state$: Observable<BrowseBusinessContinuityStateModel>;
+
+  public versionsDialogOpend: boolean;
 
   @Select(BusinessContinuityState.loading)
   public loading$: Observable<boolean>;
@@ -51,7 +53,7 @@ export class BusinessContinuityComponent
   @Select(BusinessContinuityState.blocking)
   blocking$: Observable<boolean>;
 
-  @Select(BusinessContinuityState.versions)
+
   public versions$: Observable<BcVersions[]>;
 
   get loggedinUserId() {
@@ -73,11 +75,15 @@ export class BusinessContinuityComponent
     private store: Store,
     private auth: IAuthService
   ) {
+    this.versions$ = this.store.select(BusinessContinuityState.versions).pipe(
+      filter((p) => !!p),
+    );
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         const version = params['_version'];
         if (version) {
+          // this.versionsDialogOpend = false;
           this.store.dispatch(
             new BrowseBusinessContinuityAction.SetGlobalVersion({
               id: version,
@@ -97,7 +103,8 @@ export class BusinessContinuityComponent
             }
           });
         } else {
-          this.toggleDialog();
+          this.versionsDialogOpend = true;
+          // this.toggleDialog();
         }
       });
   }
@@ -147,6 +154,7 @@ export class BusinessContinuityComponent
   }
 
   setValueGlobally(value: number) {
+    this.versionsDialogOpend = false;
     this.store.dispatch(
       new BrowseBusinessContinuityAction.SetGlobalVersion({
         id: value,
@@ -182,7 +190,8 @@ export class BusinessContinuityComponent
           this.selectedVersion = bc;
           this.form.reset();
           this.showVersionForm = false;
-          this.toggleDialog();
+          // this.toggleDialog();
+          // this.versionsDialogOpend = false;
           this.router.navigate(['business-continuity/org/org-details']);
           setTimeout(() => {
             this.setValueGlobally(bc.id);
@@ -193,6 +202,11 @@ export class BusinessContinuityComponent
   }
 
   toggleDialog() {
+    this.versionsDialogOpend = false;
     this.store.dispatch(new BrowseBusinessContinuityAction.ToggleDialog());
+  }
+
+  openDialog() {
+    this.versionsDialogOpend = true;
   }
 }
