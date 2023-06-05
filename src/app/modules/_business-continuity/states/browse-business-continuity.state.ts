@@ -99,7 +99,7 @@ export class BrowseBusinessContinuityState {
     setState,
     getState,
   }: StateContext<BrowseBusinessContinuityStateModel>) {
-    const currentStatus = getState().versionsDialogOpend;
+    const currentStatus = getState()?.versionsDialogOpend;
     setState(
       patch<BrowseBusinessContinuityStateModel>({
         versionsDialogOpend: !currentStatus,
@@ -125,7 +125,7 @@ export class BrowseBusinessContinuityState {
     setState(
       patch<BrowseBusinessContinuityStateModel>({
         versionId: payload.id,
-        versionsDialogOpend: false,
+        // versionsDialogOpend: false,
       })
     );
 
