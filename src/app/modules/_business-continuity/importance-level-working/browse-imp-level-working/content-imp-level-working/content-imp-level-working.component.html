@@ -14,22 +14,22 @@
               <tr>
                 <th style="width: 0"></th>
 
-                <th>
+                <th class="min-w-100px">
                   <div class="p-d-flex p-jc-between p-ai-center">#</div>
                 </th>
-                <th>
+                <th class="min-w-150px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
                   </div>
                 </th>
 
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "IMP_LEVEL_WORKING.IMP_LEVEL" | translate }}
                   </div>
                 </th>
 
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "IMP_LEVEL_WORKING.IMP_LEVEL_DESC" | translate }}
                   </div>
@@ -86,21 +86,21 @@
             <ng-template pTemplate="header">
               <tr>
                 <th></th>
-                <th>
+                <th class="min-w-100px">
                   <div class="p-d-flex p-jc-between p-ai-center">#</div>
                 </th>
-                <th>
+                <th class="min-w-150px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
                   </div>
                 </th>
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "IMP_LEVEL_WORKING.IMP_LEVEL" | translate }}
                   </div>
                 </th>
 
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "IMP_LEVEL_WORKING.IMP_LEVEL_DESC" | translate }}
                   </div>
@@ -120,19 +120,19 @@
                   ></div>
                 </td>
 
-                <td (click)="item.isActive && openView(item.id)">
+                <td class="min-w-100px" (click)="item.isActive && openView(item.id)">
                   {{ item.id }}
                 </td>
 
-                <td >
+                <td class="min-w-150px" (click)="item.isActive && openView(item.id)">
                   <p-colorPicker [disabled]="true" [(ngModel)]="item.colorCode"></p-colorPicker>
                 </td>
 
-                <td (click)="item.isActive && openView(item.id)">
+                <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item | translateObj : 'name'}}
                 </td>
 
-                <td (click)="item.isActive && openView(item.id)">
+                <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item | translateObj : 'description'}}
                 </td>
 

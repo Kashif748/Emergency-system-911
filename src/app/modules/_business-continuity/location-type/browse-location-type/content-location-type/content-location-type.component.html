@@ -13,16 +13,16 @@
             <ng-template pTemplate="header">
               <tr>
                 <th style="width: 0"></th>
-                <th>
+                <th class="min-w-100px">
                   <div class="p-d-flex p-jc-between p-ai-center">#</div>
                 </th>
 
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "LOC_TYPE.TYPE_AR" | translate }}
                   </div>
                 </th>
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "LOC_TYPE.TYPE_EN" | translate }}
                   </div>
@@ -76,15 +76,15 @@
             <ng-template pTemplate="header">
               <tr>
                 <th></th>
-                <th>
+                <th class="min-w-100px">
                   <div class="p-d-flex p-jc-between p-ai-center">#</div>
                 </th>
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "LOC_TYPE.TYPE_AR" | translate }}
                   </div>
                 </th>
-                <th>
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "LOC_TYPE.TYPE_EN" | translate }}
                   </div>
@@ -104,11 +104,11 @@
                   ></div>
                 </td>
 
-                <td (click)="item.isActive && openView(item.id)">{{ item.id }}</td>
+                <td class="min-w-100px" (click)="item.isActive && openView(item.id)">{{ item.id }}</td>
 
-                <td (click)="item.isActive && openView(item.id)">{{ item.nameAr }}</td>
+                <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">{{ item.nameAr }}</td>
 
-                <td (click)="item.isActive && openView(item.id)">{{ item.nameEn }}</td>
+                <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">{{ item.nameEn }}</td>
 
                 <td>
                   <button
