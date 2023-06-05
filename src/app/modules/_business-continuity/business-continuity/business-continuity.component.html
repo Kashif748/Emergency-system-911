@@ -55,7 +55,7 @@
     label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
     icon="pi pi-cog"
     class="p-button-warning"
-    (click)="toggleDialog()"
+    (click)="openDialog()"
   ></button>
 </header>
 
@@ -86,9 +86,8 @@
     </div>
   </div>
 </section>
-
 <p-dialog
-  [visible]="versionsDialogOpend$ | async"
+  [visible]="versionsDialogOpend"
   (visibleChange)="toggleDialog()"
   [modal]="true"
   [style]="{ width: '30vw', background: 'white'}"
@@ -102,6 +101,7 @@
       <span>{{ "VERSIONS_SETTINGS" | translate }}</span>
     </h3>
   </ng-template>
+
   <p-dropdown
     [options]="versions$ | async"
     [(ngModel)]="selectedVersion"
@@ -223,3 +223,4 @@
     </div>
   </ng-template>
 </p-dialog>
+
