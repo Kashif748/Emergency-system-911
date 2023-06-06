@@ -23,7 +23,7 @@ export class ContentUsersComponent implements OnInit {
   totalRecords: number;
   @Input()
   pageRequest: PageRequestModel;
-
+  nowDate = new Date();
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
   constructor(private store: Store) {}
@@ -38,4 +38,5 @@ export class ContentUsersComponent implements OnInit {
   openView(id?: number) {
     this.store.dispatch(new BrowseUsersAction.OpenView({ userId: id }));
   }
+
 }

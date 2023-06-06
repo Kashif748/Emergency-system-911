@@ -7,6 +7,8 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { UrlHelperService } from '@core/services/url-helper.service';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TranslationService } from 'src/app/modules/i18n/translation.service';
@@ -34,6 +36,7 @@ export class SurveysManagementService {
     private _httpClient: HttpClient,
     private alertService: AlertsService,
     private _translation: TranslationService,
+    private translateService: TranslateService,
     private urlHelper: UrlHelperService
   ) {
     this._onSurveysList = new BehaviorSubject([]);
@@ -142,6 +145,15 @@ export class SurveysManagementService {
       })
       .pipe(
         tap((res) => {
+          const fileLabel = `${this.translateService.instant(
+            'Survey.SURVEY_REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm'
+          )}`;
+
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               exportAs === 'PDF'
@@ -149,7 +161,7 @@ export class SurveysManagementService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }
@@ -248,6 +260,15 @@ export class SurveysManagementService {
       })
       .pipe(
         tap((res) => {
+          const fileLabel = `${this.translateService.instant(
+            'Survey.SURVEY_REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm'
+          )}`;
+
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               exportAs === 'PDF'
@@ -255,7 +276,7 @@ export class SurveysManagementService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }

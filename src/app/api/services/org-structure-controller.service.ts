@@ -9,6 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { BcOrganizationDetails } from '../models/bc-organization-details';
 import { InAppOrgDetails } from '../models/in-app-org-details';
 import { LdapOrgDetails } from '../models/ldap-org-details';
 import { OrgStructure } from '../models/org-structure';
@@ -18,6 +19,7 @@ import { RestApiResponseObject } from '../models/rest-api-response-object';
 import { RestApiResponseOrgStructure } from '../models/rest-api-response-org-structure';
 import { RestApiResponseOrgStructureLogoProjection } from '../models/rest-api-response-org-structure-logo-projection';
 import { RestApiResponseOrgStructureMinimumProjection } from '../models/rest-api-response-org-structure-minimum-projection';
+import { RestApiResponseSituationProjection } from '../models/rest-api-response-situation-projection';
 import { ThemeDetails } from '../models/theme-details';
 
 @Injectable()
@@ -27,6 +29,52 @@ export class OrgStructureControllerService extends BaseService {
     http: HttpClient
   ) {
     super(config, http);
+  }
+
+  /**
+   * Path part for operation updateOrgStructureForBc
+   */
+  static readonly UpdateOrgStructureForBcPath = '/v1/update-org-for-bc';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateOrgStructureForBc()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateOrgStructureForBc$Response(params: {
+    body: BcOrganizationDetails
+  }): Observable<StrictHttpResponse<RestApiResponseOrgStructure>> {
+
+    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.UpdateOrgStructureForBcPath, 'put');
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseOrgStructure>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateOrgStructureForBc$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateOrgStructureForBc(params: {
+    body: BcOrganizationDetails
+  }): Observable<RestApiResponseOrgStructure> {
+
+    return this.updateOrgStructureForBc$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
+    );
   }
 
   /**
@@ -42,7 +90,7 @@ export class OrgStructureControllerService extends BaseService {
    */
   active$Response(params: {
     body: ThemeDetails
-  }): Observable<StrictHttpResponse<RestApiResponseListOrgStructureProjection>> {
+  }): Observable<StrictHttpResponse<RestApiResponseSituationProjection>> {
 
     const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.ActivePath, 'put');
     if (params) {
@@ -55,7 +103,7 @@ export class OrgStructureControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseListOrgStructureProjection>;
+        return r as StrictHttpResponse<RestApiResponseSituationProjection>;
       })
     );
   }
@@ -68,10 +116,10 @@ export class OrgStructureControllerService extends BaseService {
    */
   active(params: {
     body: ThemeDetails
-  }): Observable<RestApiResponseListOrgStructureProjection> {
+  }): Observable<RestApiResponseSituationProjection> {
 
     return this.active$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseListOrgStructureProjection>) => r.body as RestApiResponseListOrgStructureProjection)
+      map((r: StrictHttpResponse<RestApiResponseSituationProjection>) => r.body as RestApiResponseSituationProjection)
     );
   }
 
@@ -349,21 +397,21 @@ export class OrgStructureControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getById4
+   * Path part for operation getById5
    */
-  static readonly GetById4Path = '/v1/organizations/{id}';
+  static readonly GetById5Path = '/v1/organizations/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById4()` instead.
+   * To access only the response body, use `getById5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById4$Response(params: {
+  getById5$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseOrgStructure>> {
 
-    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.GetById4Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, OrgStructureControllerService.GetById5Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -381,15 +429,15 @@ export class OrgStructureControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById4$Response()` instead.
+   * To access the full response (for headers, for example), `getById5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById4(params: {
+  getById5(params: {
     id: number;
   }): Observable<RestApiResponseOrgStructure> {
 
-    return this.getById4$Response(params).pipe(
+    return this.getById5$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgStructure>) => r.body as RestApiResponseOrgStructure)
     );
   }

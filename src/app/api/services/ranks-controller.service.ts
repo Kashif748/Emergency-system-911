@@ -66,21 +66,21 @@ export class RanksControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update12
+   * Path part for operation update13
    */
-  static readonly Update12Path = '/v1/ranks';
+  static readonly Update13Path = '/v1/ranks';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update12()` instead.
+   * To access only the response body, use `update13()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update12$Response(params: {
+  update13$Response(params: {
     body: Ranks
   }): Observable<StrictHttpResponse<RestApiResponseRanks>> {
 
-    const rb = new RequestBuilder(this.rootUrl, RanksControllerService.Update12Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, RanksControllerService.Update13Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -98,35 +98,35 @@ export class RanksControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update12$Response()` instead.
+   * To access the full response (for headers, for example), `update13$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update12(params: {
+  update13(params: {
     body: Ranks
   }): Observable<RestApiResponseRanks> {
 
-    return this.update12$Response(params).pipe(
+    return this.update13$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseRanks>) => r.body as RestApiResponseRanks)
     );
   }
 
   /**
-   * Path part for operation create12
+   * Path part for operation create13
    */
-  static readonly Create12Path = '/v1/ranks';
+  static readonly Create13Path = '/v1/ranks';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create12()` instead.
+   * To access only the response body, use `create13()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create12$Response(params: {
+  create13$Response(params: {
     body: Ranks
   }): Observable<StrictHttpResponse<RestApiResponseRanks>> {
 
-    const rb = new RequestBuilder(this.rootUrl, RanksControllerService.Create12Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, RanksControllerService.Create13Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -144,15 +144,15 @@ export class RanksControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create12$Response()` instead.
+   * To access the full response (for headers, for example), `create13$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create12(params: {
+  create13(params: {
     body: Ranks
   }): Observable<RestApiResponseRanks> {
 
-    return this.create12$Response(params).pipe(
+    return this.create13$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseRanks>) => r.body as RestApiResponseRanks)
     );
   }

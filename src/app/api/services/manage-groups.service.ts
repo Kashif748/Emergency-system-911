@@ -127,21 +127,21 @@ export class ManageGroupsService extends BaseService {
   }
 
   /**
-   * Path part for operation update49
+   * Path part for operation update50
    */
-  static readonly Update49Path = '/v1/groups';
+  static readonly Update50Path = '/v1/groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update49()` instead.
+   * To access only the response body, use `update50()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update49$Response(params: {
+  update50$Response(params: {
     body: Group
   }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Update49Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Update50Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -159,35 +159,35 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update49$Response()` instead.
+   * To access the full response (for headers, for example), `update50$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update49(params: {
+  update50(params: {
     body: Group
   }): Observable<RestApiResponseGroup> {
 
-    return this.update49$Response(params).pipe(
+    return this.update50$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }
 
   /**
-   * Path part for operation create45
+   * Path part for operation create46
    */
-  static readonly Create45Path = '/v1/groups';
+  static readonly Create46Path = '/v1/groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create45()` instead.
+   * To access only the response body, use `create46()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create45$Response(params: {
+  create46$Response(params: {
     body: Group
   }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Create45Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Create46Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -205,15 +205,15 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create45$Response()` instead.
+   * To access the full response (for headers, for example), `create46$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create45(params: {
+  create46(params: {
     body: Group
   }): Observable<RestApiResponseGroup> {
 
-    return this.create45$Response(params).pipe(
+    return this.create46$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }

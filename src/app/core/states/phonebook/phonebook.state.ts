@@ -83,7 +83,7 @@ export class PhonebookState {
       })
     );
     return this.phonebookService
-      .search1({
+      .search2({
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -132,7 +132,7 @@ export class PhonebookState {
       return;
     }
 
-    return this.phonebookService.getById3({ id: payload.id }).pipe(
+    return this.phonebookService.getById4({ id: payload.id }).pipe(
       tap((res) => {
         setState(
           patch<PhonebookStateModel>({
@@ -154,7 +154,7 @@ export class PhonebookState {
       })
     );
     return this.phonebookService
-      .create16({
+      .create17({
         body: payload,
       })
       .pipe(
@@ -179,7 +179,7 @@ export class PhonebookState {
       })
     );
     return this.phonebookService
-      .update16({
+      .update17({
         body: { ...payload },
       })
       .pipe(
@@ -204,7 +204,7 @@ export class PhonebookState {
       })
     );
     return this.phonebookService
-      .search1({
+      .search2({
         pageable: {
           page: payload.page,
           size: payload.size,

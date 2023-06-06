@@ -14,6 +14,8 @@ export interface OrgStructure {
   contractorContractNo?: string;
   contractorExpDate?: string;
   currentSerial?: number;
+  description?: string;
+  employeeNumbers?: number;
   entityType?: EntityType;
   id?: number;
   initialSerial?: number;
@@ -31,6 +33,7 @@ export interface OrgStructure {
   nameEn: string;
   newsId?: number;
   officialEmail?: string;
+  operationNumbers?: number;
   parentOrg: OrgStructure;
   radioFreq?: string;
   realId?: number;
@@ -39,7 +42,7 @@ export interface OrgStructure {
   smsGateway?: 'ETISALAT' | 'MIDDLEWARE';
   smsMunicipalityCode?: string;
   specialistId?: number;
-  theme?: 'GOLD' | 'SILVER' | 'BRONZE';
+  theme?: 'STRATEGIC_LEVEL_GOLD' | 'OPERATIONAL_LEVEL_SILVER' | 'TACTICAL_LEVEL_BRONZE';
   themeReason?: string;
   tradeLicense?: string;
 }

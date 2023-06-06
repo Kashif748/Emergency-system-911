@@ -34,6 +34,21 @@
   z-index: -1000 !important;
   inset: unset !important;
 }
+.golden {
+  color: black !important;
+  background-color: #fbb034 !important;
+  background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%) !important;
+}
+
+.bronze {
+  background-color: #804a00 !important;
+  background-image: linear-gradient(315deg, #804a00 0%, #b08d57 74%) !important;
+}
+
+.silver {
+  background-color: #5b6467 !important;
+  background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%) !important;
+}
 
 .bg-grd-golden {
   background-image: linear-gradient(
@@ -85,7 +100,11 @@
     #b08d57 74%
   ) !important;
 }
-
+.p-component {
+  *:not(.pi) {
+    font-family: "Tajawal" !important;
+  }
+}
 @import "~intl-tel-input/build/css/intlTelInput.css";
 // primeng
 @import "primeng";

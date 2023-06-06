@@ -1,0 +1,126 @@
+<div class="p-toolbar-group-right">
+  <button
+    pButton
+    *checkPrivileges="'PRIV_ED_BC_LISTS'"
+    label="{{ 'ACTIONS.ADD' | translate }}"
+    icon="pi pi-plus"
+    (click)="openDialog()"
+  ></button>
+</div>
+
+<p-dialog
+  [visible]="opened$ | async" (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <h3>
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+        {{'LOC_TYPE.EDIT_LOC_TYPE' | translate}}
+
+      </ng-container>
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+        {{'LOC_TYPE.ADD_NEW_LOC_TYPE' | translate}}
+      </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'LOC_TYPE.TITLE_LOC_TYPE' | translate}}
+      </ng-container>
+    </h3>
+  </ng-template>
+
+  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameEn" pInputText />
+        <label>
+          {{ "LOC_TYPE.TYPE_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['nameEn'].touched &&
+          !form.controls['nameEn'].valid &&
+          form.controls['nameEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameAr" pInputText />
+        <label>
+          {{ "LOC_TYPE.TYPE_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['nameAr'].touched &&
+          !form.controls['nameAr'].valid &&
+          form.controls['nameAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-col-12" *ngIf="editMode || (viewOnly$ | async)">
+      <p-divider align="center">
+        <div class="p-d-inline-flex p-ai-center">
+          <div class="p-field p-col-12 p-md-12">
+            <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                            offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                            iconPos="right"></p-toggleButton>
+          </div>
+        </div>
+      </p-divider>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="p-col text-center">
+      <div class="text-center" *ngIf="!(viewOnly$ | async)">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [disabled]="form.invalid"
+          [loading]="blocking$ | async"
+          (click)="submit()"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

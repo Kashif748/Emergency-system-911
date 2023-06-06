@@ -102,8 +102,8 @@ export class IncidentState {
       })
     );
     return this.incidentService
-      .search4({
-        filter: { subject: payload.subject },
+      .search5({
+        filter: { subject: payload.subject  ,id : payload.id},
         pageable: { page: 0, size: 15, sort: ['id', 'desc'] },
         status: payload.status as any,
       })
@@ -197,7 +197,7 @@ export class IncidentState {
       })
     );
     return this.incidentService
-      .search4({
+      .search5({
         filter: payload.filters,
         pageable: { page: payload.page, size: payload.size },
         status: [],

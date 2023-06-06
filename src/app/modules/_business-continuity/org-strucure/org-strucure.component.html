@@ -1,0 +1,23 @@
+<section>
+  <header class="d-flex p-jc-between p-ai-center border-bottom py-8 mb-2">
+    <h4 class="text-info p-text-bold mb-0">
+      {{ "ORG_ARTCH" | translate }}
+    </h4>
+  </header>
+  <p-organizationChart
+    [value]="data1"
+    selectionMode="single"
+    styleClass="company"
+    dir="ltr"
+  >
+    <ng-template let-node pTemplate="person">
+      <div class="node-header p-corner-top">{{ node.label }}</div>
+      <div class="node-content">
+        <div>{{ node.data.name }}</div>
+      </div>
+    </ng-template>
+    <ng-template let-node pTemplate="department">
+      {{ node.label }}
+    </ng-template>
+  </p-organizationChart>
+</section>

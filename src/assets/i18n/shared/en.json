@@ -288,6 +288,7 @@
       "ALL_STATS": "All Stats",
       "STATESTICS": "Statistics",
       "IN_PROGRESS_INCIDENTS": "In Progress Incidents",
+      "DRAFTED_INCIDENTS" : "Drafts",
       "REJECTED_INCIDENTS": "Rejected Incidents",
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
@@ -566,6 +567,7 @@
       "SERIAL": "Sequance Number",
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
+      "saveAsDraft" : "Save as Draft",
       "REPORT_INCIDENT": "Incidents",
       "NEW_INCIDENTS": "Add Incident",
       "NEW_INQUIRY": "Add Inquiry",
@@ -694,6 +696,7 @@
       "SELECT_PRIORITY_ERROR": "Please select Priority",
       "GET_KPI_INFO": "Get Kpi Information",
       "SECONDS": "Seconds",
+      "DRAFT" :  "Draft",
       "IsExpired": "Kpi Expiry ?",
       "EXPIRED": "Expired ",
       "NOT_EXPIRED": "Not Expired",
@@ -736,6 +739,8 @@
       "SHARE_LOCATION_GOOGLE_MAPS": "Share location on google maps",
       "URL": "url",
       "CLOSE_INCIDENT": "Close Incident",
+      "DELETE_DRAFT" : "Delete Draft",
+
       "TO": "TO",
       "HAPPINESS_LEVEL": {
         "SAD": "Sad",
@@ -756,6 +761,7 @@
         "REASON_5": "Other"
       },
       "INCIDENT": "Incident",
+      "INCIDENT_REPORT": "Incident {{serial}} Report ",
       "EDIT_INQUIRY": "Edit inquiry",
       "INQUIRY_SUBJECT": "Description",
       "INQUIRY_ANSWER": "Answer",
@@ -829,6 +835,7 @@
       }
     },
     "INQUIRIY": {
+      "REPORT" : "Inquiriy Report",
       "ADVANCED_SEARCH": "Advanced Search",
       "ID": "ID",
       "SUBJECT": "Subject",
@@ -1050,8 +1057,12 @@
       "CONFIDENTIALITY": "The degree of confidentiality",
       "UPDATE": "The Update",
       "MAIL_REPORT": "Mail Reports",
-      "GENERAL_REPORT": "General Reports",
+      "GENERAL_REPORT": "Tasks Report",
+      "INCIDENTS_REPORT" : "Incidents Report",
       "RESOURCES_REPORT": "Resources Reports",
+      "USERS_REPORT_TITLE": "User Statistics Report",
+      "IncidentsStatisticsTitle": "Incident Statistics Report",
+
       "SHIFTS_REPORTS": "Shifts",
       "USER_NAME": "User Name",
       "ORG": "Organization Name",
@@ -1881,14 +1892,14 @@
       "ID": "ID"
     },
     "Survey": {
-      "Satisfaction": "How  satisfied  are you with  our emergency services?  ",
+      "Satisfaction": "What's your level of satisfaction for the Emergency Services?",
       "Reason": "Please  provide us  with  the  reason of  your  evaluation",
-      "otherReason": "Feedback (Thanks/Complaint)",
-      "Submit": "Send",
+      "otherReason": "Notes (Thanks/Complaint)",
+      "Submit": "Submit",
       "PleaseWait": "Please  wait ,processing... ",
       "InvalidUUID": "This  survey  has already been applyed",
       "SuccessMSG": "Your  Survey  has been  saved ....Thank you ",
-      "SurvyReport": "Happiness Reports",
+      "SURVEY_REPORT": "Customer Satisfaction Report",
       "Table": {
         "happiness": "happiness",
         "other": "other",

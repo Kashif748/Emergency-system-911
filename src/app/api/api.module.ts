@@ -9,6 +9,7 @@ import { KpiV2ControllerService } from './services/kpi-v-2-controller.service';
 import { VersionControllerService } from './services/version-controller.service';
 import { UserProfileControllerService } from './services/user-profile-controller.service';
 import { UserPreferencesControllerService } from './services/user-preferences-controller.service';
+import { OrgStructureControllerService } from './services/org-structure-controller.service';
 import { TaskControllerService } from './services/task-controller.service';
 import { TaskWorkLogControllerService } from './services/task-work-log-controller.service';
 import { SystemEventControllerService } from './services/system-event-controller.service';
@@ -16,6 +17,7 @@ import { SuggestionStatusControllerService } from './services/suggestion-status-
 import { SuggestionControllerService } from './services/suggestion-controller.service';
 import { SlaControllerService } from './services/sla-controller.service';
 import { SlaDetailsControllerService } from './services/sla-details-controller.service';
+import { SituationControllerService } from './services/situation-controller.service';
 import { ShiftConfigurationControllerService } from './services/shift-configuration-controller.service';
 import { ShiftControllerService } from './services/shift-controller.service';
 import { RoleControllerService } from './services/role-controller.service';
@@ -27,7 +29,6 @@ import { PushNotificationBodyControllerService } from './services/push-notificat
 import { PushNotificationActionControllerService } from './services/push-notification-action-controller.service';
 import { PriorityControllerService } from './services/priority-controller.service';
 import { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
-import { OrgStructureControllerService } from './services/org-structure-controller.service';
 import { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
 import { OperationalReportControllerService } from './services/operational-report-controller.service';
 import { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
@@ -96,6 +97,17 @@ import { CircularCcControllerService } from './services/circular-cc-controller.s
 import { CircularControllerService } from './services/circular-controller.service';
 import { CircularStatusControllerService } from './services/circular-status-controller.service';
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+import { BcVersionsControllerService } from './services/bc-versions-controller.service';
+import { BcrtoControllerService } from './services/bcrto-controller.service';
+import { BcOrgHirControllerService } from './services/bc-org-hir-controller.service';
+import { BcOrgHirTypeControllerService } from './services/bc-org-hir-type-controller.service';
+import { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
+import { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
+import { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
+import { BcImpactTypesMatrixControllerService } from './services/bc-impact-types-matrix-controller.service';
+import { BcImpactTypeControllerService } from './services/bc-impact-type-controller.service';
+import { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
+import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
 import { AssetControllerService } from './services/asset-controller.service';
 import { AssetsGroupControllerService } from './services/assets-group-controller.service';
 import { AssetsCategoryControllerService } from './services/assets-category-controller.service';
@@ -147,6 +159,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     VersionControllerService,
     UserProfileControllerService,
     UserPreferencesControllerService,
+    OrgStructureControllerService,
     TaskControllerService,
     TaskWorkLogControllerService,
     SystemEventControllerService,
@@ -154,6 +167,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     SuggestionControllerService,
     SlaControllerService,
     SlaDetailsControllerService,
+    SituationControllerService,
     ShiftConfigurationControllerService,
     ShiftControllerService,
     RoleControllerService,
@@ -165,7 +179,6 @@ import { MigrationControllerService } from './services/migration-controller.serv
     PushNotificationActionControllerService,
     PriorityControllerService,
     ExternalPhonebookControllerService,
-    OrgStructureControllerService,
     OrgQuickLinkControllerService,
     OperationalReportControllerService,
     OperationalReportStatusControllerService,
@@ -234,6 +247,17 @@ import { MigrationControllerService } from './services/migration-controller.serv
     CircularControllerService,
     CircularStatusControllerService,
     ConfidentialtyControllerService,
+    BcVersionsControllerService,
+    BcrtoControllerService,
+    BcOrgHirControllerService,
+    BcOrgHirTypeControllerService,
+    BcRecoveryPrioritiesControllerService,
+    BcLocationTypeControllerService,
+    BcWorkImportanceLevelsControllerService,
+    BcImpactTypesMatrixControllerService,
+    BcImpactTypeControllerService,
+    BcImpactLevelControllerService,
+    BcActivityFrequenciesControllerService,
     AssetControllerService,
     AssetsGroupControllerService,
     AssetsCategoryControllerService,

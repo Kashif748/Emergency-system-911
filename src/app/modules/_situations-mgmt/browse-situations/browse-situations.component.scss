@@ -1,0 +1,54 @@
+:host ::ng-deep {
+  .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
+    border-radius: 30px;
+  }
+  .p-fieldset .p-fieldset-legend {
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 30px;
+  }
+  .p-tag ,.p-chip  {
+    font-family: inherit;
+  }
+  .active-pulse {
+    position: relative;
+    background-color: red;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: 0 5px;
+    z-index: 1;
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      background-color: rgba(red, 0.6);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      animation: live 2s ease-in-out infinite;
+      z-index: -1;
+    }
+  }
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  .level-badge {
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+  }
+}
+
+@keyframes live {
+  0% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(3.5, 3.5);
+    background-color: rgba(red, 0);
+  }
+}

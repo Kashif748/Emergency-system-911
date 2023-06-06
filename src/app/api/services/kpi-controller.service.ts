@@ -77,21 +77,21 @@ export class KpiControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update30
+   * Path part for operation update31
    */
-  static readonly Update30Path = '/v1/kpis';
+  static readonly Update31Path = '/v1/kpis';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update30()` instead.
+   * To access only the response body, use `update31()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update30$Response(params: {
+  update31$Response(params: {
     body: Kpi
   }): Observable<StrictHttpResponse<RestApiResponseKpi>> {
 
-    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Update30Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Update31Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -109,35 +109,35 @@ export class KpiControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update30$Response()` instead.
+   * To access the full response (for headers, for example), `update31$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update30(params: {
+  update31(params: {
     body: Kpi
   }): Observable<RestApiResponseKpi> {
 
-    return this.update30$Response(params).pipe(
+    return this.update31$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseKpi>) => r.body as RestApiResponseKpi)
     );
   }
 
   /**
-   * Path part for operation create25
+   * Path part for operation create26
    */
-  static readonly Create25Path = '/v1/kpis';
+  static readonly Create26Path = '/v1/kpis';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create25()` instead.
+   * To access only the response body, use `create26()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create25$Response(params: {
+  create26$Response(params: {
     body: Kpi
   }): Observable<StrictHttpResponse<RestApiResponseKpi>> {
 
-    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Create25Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, KpiControllerService.Create26Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -155,15 +155,15 @@ export class KpiControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create25$Response()` instead.
+   * To access the full response (for headers, for example), `create26$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create25(params: {
+  create26(params: {
     body: Kpi
   }): Observable<RestApiResponseKpi> {
 
-    return this.create25$Response(params).pipe(
+    return this.create26$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseKpi>) => r.body as RestApiResponseKpi)
     );
   }

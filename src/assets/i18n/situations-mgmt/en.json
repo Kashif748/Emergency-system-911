@@ -1,0 +1,24 @@
+{
+  "SITUATIONS": {
+    "SITUATIONS_LIST": "Select Situation",
+    "VIEW_DASHBOARD": "View Dashboard",
+    "PRINT": "Print Report",
+    "DELETE": "Delete",
+    "NAME": "Name",
+    "NAME_AR": "Name Ar",
+    "NAME_EN": "Name En",
+    "ID": "Id",
+    "TYPE": "Type",
+    "ALERTNESS_LEVEL": "Alertness Level",
+    "START_DATE": "Start Date & Time ",
+    "END_DATE": "End Date & Time",
+    "RCV_INCIDENTS": "Received Incidents",
+    "CLS_INCIDENTS": "Closed Incidents",
+    "TOTAL": "Total",
+    "ALL": "All",
+    "RECOVERY_RATE": "Recovery Rate",
+    "INCIDENT_MAIN_CATEGORY": "Incident main category",
+    "CHART_TITLE": "Incidents Statistics by Importance",
+    "ACTIVE_NOW" :"Active Now"
+  }
+}

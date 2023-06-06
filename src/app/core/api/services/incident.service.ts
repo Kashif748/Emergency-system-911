@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { UrlHelperService } from '@core/services/url-helper.service';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import { TranslateService } from '@ngx-translate/core';
 import * as Search from 'esri/webdoc/applicationProperties/Search';
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -71,7 +73,8 @@ export class IncidentsService {
     private urlHelper: UrlHelperService,
     private langFacade: ILangFacade,
     private alertService: AlertsService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private  translateService : TranslateService,
   ) {
     this.responsibleOrgsChange = new BehaviorSubject([]);
     this.onDohDataChange = new BehaviorSubject([]);
@@ -387,6 +390,15 @@ export class IncidentsService {
       })
       .pipe(
         tap((res) => {
+          const fileLabel = `${this.translateService.instant(
+            'REPORTS.INCIDENTS_REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm'
+          )}`;
+
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               as === 'PDF'
@@ -394,7 +406,7 @@ export class IncidentsService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }
@@ -746,6 +758,17 @@ export class IncidentsService {
     );
   }
 
+  updateIncidentStatus(body: {
+    incidentId: number;
+    statusId: number;
+    finalStatement: string;
+  }) {
+    return this.http
+      .put<any>(`${environment.apiUrl}/incidents/closeIncident/`, body)
+      .pipe((incident) => {
+        return incident;
+      });
+  }
   getIncidentHospitalStatistics(incidentId: number) {
     return this.http.get<any>(
       `${environment.apiUrl}/incident-hospitals/${incidentId}`

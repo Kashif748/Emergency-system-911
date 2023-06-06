@@ -117,21 +117,21 @@ export class ExerciseStatusControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update55
+   * Path part for operation update56
    */
-  static readonly Update55Path = '/v1/exercise-statuses';
+  static readonly Update56Path = '/v1/exercise-statuses';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update55()` instead.
+   * To access only the response body, use `update56()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update55$Response(params: {
+  update56$Response(params: {
     body: ExerciseStatus
   }): Observable<StrictHttpResponse<RestApiResponseExerciseStatus>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExerciseStatusControllerService.Update55Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ExerciseStatusControllerService.Update56Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -149,35 +149,35 @@ export class ExerciseStatusControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update55$Response()` instead.
+   * To access the full response (for headers, for example), `update56$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update55(params: {
+  update56(params: {
     body: ExerciseStatus
   }): Observable<RestApiResponseExerciseStatus> {
 
-    return this.update55$Response(params).pipe(
+    return this.update56$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExerciseStatus>) => r.body as RestApiResponseExerciseStatus)
     );
   }
 
   /**
-   * Path part for operation create51
+   * Path part for operation create52
    */
-  static readonly Create51Path = '/v1/exercise-statuses';
+  static readonly Create52Path = '/v1/exercise-statuses';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create51()` instead.
+   * To access only the response body, use `create52()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create51$Response(params: {
+  create52$Response(params: {
     body: ExerciseStatus
   }): Observable<StrictHttpResponse<RestApiResponseExerciseStatus>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ExerciseStatusControllerService.Create51Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ExerciseStatusControllerService.Create52Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -195,15 +195,15 @@ export class ExerciseStatusControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create51$Response()` instead.
+   * To access the full response (for headers, for example), `create52$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create51(params: {
+  create52(params: {
     body: ExerciseStatus
   }): Observable<RestApiResponseExerciseStatus> {
 
-    return this.create51$Response(params).pipe(
+    return this.create52$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseExerciseStatus>) => r.body as RestApiResponseExerciseStatus)
     );
   }

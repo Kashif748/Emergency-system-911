@@ -10,14 +10,9 @@
     <div class="col-lg-10 col-md-12">
       <div class="row">
         <div class="col-12 mb-8">
-          <div
-            class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm"
-          >
+          <div class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm">
             <div class="card-body  p-0 h-100">
-              <app-map
-                [config]="{ viewOnly: true }"
-                [dashboardMode]="true"
-              ></app-map>
+              <app-map [config]="{ viewOnly: true }" [dashboardMode]="true"></app-map>
             </div>
           </div>
         </div>
@@ -32,23 +27,5 @@
   </div>
 </div>
 
-<section class="news-bar border-top row" *ngIf="news">
-  <ng-marquee
-    [stopOnHover]="true"
-    [speed]="'drowsy'"
-    direction="right"
-    class="w-100"
-  >
-    <ng-container *ngTemplateOutlet="marqueeContent"></ng-container>
-  </ng-marquee>
 
-  <ng-template #marqueeContent>
-    <div class="d-inline" *ngFor="let item of news">
-      <p class="d-inline single-news">
-        {{ item.body }}
-      </p>
-
-      <img class="m-4" src="assets/logos/ecms-logo.svg" alt="" />
-    </div>
-  </ng-template>
-</section>
+<app-news-bar></app-news-bar>

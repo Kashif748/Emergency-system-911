@@ -116,21 +116,21 @@ export class NewsTypeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update21
+   * Path part for operation update22
    */
-  static readonly Update21Path = '/v1/news-type';
+  static readonly Update22Path = '/v1/news-type';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update21()` instead.
+   * To access only the response body, use `update22()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update21$Response(params: {
+  update22$Response(params: {
     body: NewsType
   }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Update21Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Update22Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,35 +148,35 @@ export class NewsTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update21$Response()` instead.
+   * To access the full response (for headers, for example), `update22$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update21(params: {
+  update22(params: {
     body: NewsType
   }): Observable<RestApiResponseNewsType> {
 
-    return this.update21$Response(params).pipe(
+    return this.update22$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
     );
   }
 
   /**
-   * Path part for operation create20
+   * Path part for operation create21
    */
-  static readonly Create20Path = '/v1/news-type';
+  static readonly Create21Path = '/v1/news-type';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create20()` instead.
+   * To access only the response body, use `create21()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create20$Response(params: {
+  create21$Response(params: {
     body: NewsType
   }): Observable<StrictHttpResponse<RestApiResponseNewsType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Create20Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, NewsTypeControllerService.Create21Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -194,15 +194,15 @@ export class NewsTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create20$Response()` instead.
+   * To access the full response (for headers, for example), `create21$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create20(params: {
+  create21(params: {
     body: NewsType
   }): Observable<RestApiResponseNewsType> {
 
-    return this.create20$Response(params).pipe(
+    return this.create21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNewsType>) => r.body as RestApiResponseNewsType)
     );
   }

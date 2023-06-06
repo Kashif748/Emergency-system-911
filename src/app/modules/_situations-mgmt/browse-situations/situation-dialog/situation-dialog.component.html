@@ -1,0 +1,224 @@
+<p-dialog
+  [visible]="formDialog$ | async"
+  (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw', 'min-hight': '50vh' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex">
+      <app-breadcrumb></app-breadcrumb>
+      <ng-container *ngIf="editMode; else elseTemplate">
+        <p-tag
+          value=" {{ 'ACTIONS.UPDATE_ITEM' | translate }}"
+          severity="warning"
+        ></p-tag>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <p-tag
+          value=" {{ 'ACTIONS.NEW_ITEM' | translate }}"
+          severity="primary"
+        ></p-tag>
+      </ng-template>
+    </div>
+  </ng-template>
+
+  <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <!--Name Ar -->
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameAr" pInputText />
+        <label>
+          {{ "SITUATIONS.NAME_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['nameAr'].touched &&
+          !form.controls['nameAr'].valid &&
+          form.controls['nameAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+    <!-- Name En -->
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameEn" pInputText />
+        <label>
+          {{ "SITUATIONS.NAME_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['nameEn'].touched &&
+          !form.controls['nameEn'].valid &&
+          form.controls['nameEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+        </p>
+      </ng-container>
+    </div>
+    <!-- Type filter -->
+    <div class="p-field p-col-4 p-md-6">
+      <p-dropdown
+        [options]="newsTypes$ | async"
+        formControlName="type"
+        [autoDisplayFirst]="false"
+        [showClear]="true"
+        dataKey="id"
+        placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
+      >
+        <ng-template let-item pTemplate="selectedItem">
+          {{ item | translateObj }}
+        </ng-template>
+
+        <ng-template let-item pTemplate="item">
+          {{ item | translateObj }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <!-- theme -->
+    <div class="p-field p-col-4 p-md-6">
+      <p-dropdown
+        [options]="themeTypes"
+        formControlName="theme"
+        [autoDisplayFirst]="false"
+        [showClear]="true"
+        dataKey="id"
+
+        placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
+      >
+        <ng-template let-item pTemplate="selectedItem">
+          <div class="status-item">
+            <div class="level-badge" [class]="item.color"></div>
+            {{ item | translateObj }}
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div class="status-item">
+            <div class="level-badge" [class]="item.color"></div>
+            {{ item | translateObj }}
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <!--  From Date  -->
+    <div class="p-field p-md-6">
+      <span class="p-float-label">
+        <p-calendar
+          formControlName="startDate"
+          [maxDate]="form.get('endDate').value"
+          [showIcon]="true"
+          showButtonBar="true"
+          [showTime]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          hourFormat="12"
+        ></p-calendar>
+        <label>
+          {{ "SITUATIONS.START_DATE" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['startDate'].touched &&
+          !form.controls['startDate'].valid &&
+          form.controls['startDate'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['startDate'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+      </ng-container>
+    </div>
+    <!--  To Date  -->
+    <div class="p-field p-md-6">
+      <span class="p-float-label">
+        <p-calendar
+          formControlName="endDate"
+          [minDate]="form.get('startDate').value"
+          [showIcon]="true"
+          showButtonBar="true"
+          [showTime]="true"
+          dateFormat="dd/mm/yy"
+          appendTo="body"
+          hourFormat="12"
+        ></p-calendar>
+        <label>
+          {{ "SITUATIONS.END_DATE" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['endDate'].touched &&
+          !form.controls['endDate'].valid &&
+          form.controls['endDate'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['endDate'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+      </ng-container>
+    </div>
+  </form>
+
+  <!-- Actions -->
+  <ng-template pTemplate="footer">
+    <div class="p-col p-d-flex">
+      <button
+        pButton
+        icon="pi pi-times"
+        (click)="close()"
+        label="{{ 'ACTIONS.CLOSE' | translate }}"
+        class="p-button-outlined"
+      ></button>
+      <div class="mx-1">
+        <button
+          pButton
+          (click)="submit()"
+          [loading]="blocking$ | async"
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

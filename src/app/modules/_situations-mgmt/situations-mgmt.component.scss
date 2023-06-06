@@ -1,0 +1,9 @@
+::ng-deep {
+  .p-inputtext {
+    font-family: "Tajawal";
+  }
+  .p-calendar .p-inputtext,
+  .p-timepicker {
+    direction: ltr;
+  }
+}

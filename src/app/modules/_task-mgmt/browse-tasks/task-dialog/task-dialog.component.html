@@ -544,8 +544,8 @@
     <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" (click)="close()"
       label="{{'ACTIONS.BACK' | translate }}"></button>
     <div class="ml-dir-auto"></div>
-    <ng-container *ngIf="!(viewOnly$ | async)">
-      <div class="mx-1">
+    <ng-container *ngIf="!(viewOnly$ | async) && !closedStatus">
+      <div class="mx-1" *checkPrivileges="'PRIV_UP_TASK'">
         <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
           class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
       </div>
@@ -558,10 +558,11 @@
           queryParamsHandling="merge"></button>
       </div>
     </ng-container>
-
-    <div class="mx-1" *ngIf="!(viewOnly$ | async) || tabv?.activeIndex === 2">
-      <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-        (click)="submit()"></button>
-    </div>
+    <ng-container *checkPrivileges="'PRIV_UP_TASK'">
+      <div class="mx-1" *ngIf="(!(viewOnly$ | async) && !closedStatus) || tabv?.activeIndex === 2">
+        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+          (click)="submit()"></button>
+      </div>
+    </ng-container>
   </div>
 </ng-template>

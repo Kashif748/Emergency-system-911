@@ -1,0 +1,40 @@
+$color-lavander: #EDEDFE;
+$color-medium-slate-blue: #726FEE;
+$color-flax: #EDCE7E;
+.tab-container {
+  padding: 2rem;
+  background-color: white;
+  border-bottom: 2px solid #d6d4ec;
+}
+.tabs {
+  display: flex;
+  flex-direction: row;
+}
+.tabs>a {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  height: 4.5rem;
+  background-color: $color-lavander;
+  color: black;
+  border-color: $color-lavander;
+  position: relative;
+
+  &.active {
+    background-color: $color-medium-slate-blue  !important;
+    color: white !important;
+    border-color: $color-medium-slate-blue  !important;
+  }
+
+  &:hover {
+    background-color: $color-medium-slate-blue  !important;
+    color: white !important;
+    border-color: $color-medium-slate-blue  !important;
+  }
+
+
+}
+.tabs>a.extra {
+  display: none;
+}
+

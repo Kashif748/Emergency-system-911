@@ -5,6 +5,7 @@ export enum IncidentViewsEnum {
   REJECTED_INCIDENTS,
   INQUIRIES,
   ALL_INCIDENTS,
+  DRAFTED_INCIDENTS
 }
 
 export enum RowValueEnum {

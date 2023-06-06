@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { UrlHelperService } from '@core/services/url-helper.service';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -24,7 +25,8 @@ export class TaskService {
     private http: HttpClient,
     private datePipe: DatePipe,
     private langFacade: ILangFacade,
-    private urlHelper: UrlHelperService
+    private urlHelper: UrlHelperService,
+    private translateService: TranslateService
   ) {}
 
   create(task: any) {
@@ -86,7 +88,12 @@ export class TaskService {
       .append('title', search.title ?? '')
       .append(
         'dueDate',
-        search.dueDate ? DateTimeUtil.format(new Date(search.dueDate), DateTimeUtil.DATE_FORMAT) : ''
+        search.dueDate
+          ? DateTimeUtil.format(
+              new Date(search.dueDate),
+              DateTimeUtil.DATE_FORMAT
+            )
+          : ''
       )
       .append('priority', search.priority ?? '')
       .append('status', search.status ?? '')
@@ -113,7 +120,12 @@ export class TaskService {
       .append('title', search.title ?? '')
       .append(
         'dueDate',
-        search.dueDate ? DateTimeUtil.format(new Date(search.dueDate), DateTimeUtil.DATE_FORMAT) : ''
+        search.dueDate
+          ? DateTimeUtil.format(
+              new Date(search.dueDate),
+              DateTimeUtil.DATE_FORMAT
+            )
+          : ''
       )
       .append('priority', search.priority ?? '')
       .append('status', search.status ?? '')
@@ -212,6 +224,15 @@ export class TaskService {
       })
       .pipe(
         tap((res) => {
+          const fileLabel = `${this.translateService.instant(
+            'REPORTS.GENERAL_REPORT'
+          )}`;
+          const fileDate = `${DateTimeUtil.format(
+            new Date(),
+            'YYYY-MM-DD H:mm'
+          )}`;
+
+          const fileName = `${fileLabel} ${fileDate}`;
           const newBlob = new Blob([res], {
             type: `application/${
               as === 'PDF'
@@ -219,7 +240,7 @@ export class TaskService {
                 : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             }`,
           });
-          this.urlHelper.downloadBlob(newBlob);
+          this.urlHelper.downloadBlob(newBlob, fileName);
         })
       );
   }

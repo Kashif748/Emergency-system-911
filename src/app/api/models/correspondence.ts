@@ -12,6 +12,7 @@ export interface Correspondence {
   confidentialty?: Confidentialty;
   createdOn?: string;
   dueDate?: string;
+  emailNtfStatus?: number;
   external?: boolean;
   id?: number;
   incident?: Incident;
