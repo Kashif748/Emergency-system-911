@@ -164,6 +164,7 @@ export function getHighlightLanguages() {
           'common_data',
           'browse_tasks',
           'browse_groups',
+          'browse_business_impact_analysis'
         ],
       },
       ['common_data']

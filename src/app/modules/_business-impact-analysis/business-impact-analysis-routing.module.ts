@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {BusinessImpactAnalysisComponent} from "./business-impact-analysis/business-impact-analysis.component";
+import {BrowseBusinessImpactAnalysisComponent} from "./browse-business-impact-analysis/browse-business-impact-analysis.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: BusinessImpactAnalysisComponent,
-  }
+    component: BrowseBusinessImpactAnalysisComponent,
+  },
 ];
 
 @NgModule({

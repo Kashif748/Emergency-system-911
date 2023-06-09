@@ -3,6 +3,7 @@
   "NEW_ANALYSIS_CYCLIE":"New Analysis Cycle",
   "DEPARTMENT":"Department",
   "SECTOR":"Sector",
+  "SECTION":"Section",
   "ORG_ACTIVITIES":"Organization Activities",
   "NEW_ACTIVITY":"Add Activity",
   "RES_REQ":"Resources Requirements",
@@ -22,7 +23,8 @@
     "ARIC_GUID":"Aris GUID",
     "ACTIVITY_AREA":"Activity Area",
     "INTERNAL":"Internal",
-    "EXTERNAL":"External"
+    "EXTERNAL":"External",
+    "BELONG":"Belongs to"
   },
   "ANALYSIS_DIALOG": {
     "ADD_NEW_ANALYSIS":"Add New Analysis",
