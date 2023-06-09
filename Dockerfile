@@ -9,10 +9,10 @@ COPY package*.json ./
 
 # install project dependencies
 RUN npm install
+RUN npm install -g @angular/cli@10
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
-RUN npm install -g @angular/cli@10
 
 # build app for production | staging | develop with minification
 RUN ng build ${BUILD_ARG}
