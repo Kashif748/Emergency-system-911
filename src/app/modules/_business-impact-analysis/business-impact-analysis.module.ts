@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FieldsetModule} from "primeng/fieldset";
 import { BusinessImpactAnalysisRoutingModule } from './business-impact-analysis-routing.module';
-import { BusinessImpactAnalysisComponent } from './business-impact-analysis/business-impact-analysis.component';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {HttpClient} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
@@ -22,10 +21,18 @@ import {SplitButtonModule} from "primeng/splitbutton";
 import {MultiSelectModule} from "primeng/multiselect";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {TableModule} from "primeng/table";
-import { AddNewActivityComponent } from './dialog/add-new-activity/add-new-activity.component';
-import { AddNewAnalysisCycleComponent } from './dialog/add-new-analysis-cycle/add-new-analysis-cycle.component';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import { CalendarModule } from 'primeng/calendar';
+import {BrowseBusinessImpactAnalysisState} from "./states/browse-business-impact-analysis.state";
+import {NgxsModule} from "@ngxs/store";
+import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcrumb.component";
+import {BlockUIModule} from "primeng/blockui";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {BrowseBusinessImpactAnalysisComponent} from "./browse-business-impact-analysis/browse-business-impact-analysis.component";
+import {BusinessImpactActivityDialogComponent} from "./browse-business-impact-analysis/business-impact-activity-dialog/business-impact-activity-dialog.component";
+import {ContentBusinessImpactAnalysisComponent} from "./browse-business-impact-analysis/content-business-impact-analysis/content-business-impact-analysis.component";
+import {BusinessImpactAnalysisDialogComponent} from "./browse-business-impact-analysis/business-impact-analysis-dialog/business-impact-analysis-dialog.component";
+import {InputSwitchModule} from "primeng/inputswitch";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -37,10 +44,11 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [BusinessImpactAnalysisComponent, AddNewActivityComponent, AddNewAnalysisCycleComponent],
+  declarations: [BrowseBusinessImpactAnalysisComponent, ContentBusinessImpactAnalysisComponent, BusinessImpactAnalysisDialogComponent, BusinessImpactActivityDialogComponent],
   imports: [
     CommonModule,
     BusinessImpactAnalysisRoutingModule,
+    NgxsModule.forFeature([BrowseBusinessImpactAnalysisState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
@@ -68,7 +76,11 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     FieldsetModule,
     TableModule,
     TranslateObjModule,
-    CalendarModule
+    CalendarModule,
+    SharedBreadcrumbModule,
+    ProgressSpinnerModule,
+    BlockUIModule,
+    InputSwitchModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
