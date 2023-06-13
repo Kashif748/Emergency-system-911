@@ -15,6 +15,14 @@ export namespace ReopenAction {
      */
     constructor(public payload?: { incidentId: number }) {}
   }
+
+  export class UpdateIncidentFilter {
+    static readonly type = '[ReopenAction] Update Incident filter';
+    /**
+     *
+     */
+    constructor(public payload: { clear?: boolean; [key: string]: any }) {}
+  }
   export class LoadTasksPage {
     static readonly type = '[ReopenAction] Load Task Page';
     /**
@@ -42,5 +50,33 @@ export namespace ReopenAction {
   export class ChangeTab {
     static readonly type = '[ReopenAction] Change Tab';
     constructor(public payload: { tab: 'INCIDENTS' | 'TASKS' }) {}
+  }
+  export class ChangeColumns {
+    static readonly type = '[ReopenAction] Change Columns';
+    /**
+     *
+     */
+    constructor(public payload: { columns: string[] }) {}
+  }
+  export class SortIncidint {
+    static readonly type = '[ReopenAction] Sort Incidints';
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+  }
+  export class SortTasks {
+    static readonly type = '[ReopenAction] Sort Tasks';
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+  }
+  export class ChangeTasksColumns {
+    static readonly type = '[ReopenAction] Change Tasks Columns';
+    /**
+     *
+     */
+    constructor(public payload: { columns: string[] }) {}
   }
 }
