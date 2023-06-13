@@ -54,11 +54,7 @@
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 0"></th>
-              <th>
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.ID" | translate }}
-                </div>
-              </th>
+
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.SERIAL" | translate }}
@@ -67,12 +63,13 @@
 
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.DESCRIPTION" | translate }}
+                  {{ "INCIDENTS.MAIN_CATEGORY" | translate }}
                 </div>
               </th>
+
               <th>
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.DATE" | translate }}
+                  {{ "INCIDENTS.CREATION_DATE" | translate }}
                 </div>
               </th>
 
@@ -101,14 +98,9 @@
               <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
-
               <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
-              <td class="max-w-250px">
-                <p-skeleton></p-skeleton>
-              </td>
-
               <td class="max-w-250px">
                 <p-skeleton></p-skeleton>
               </td>
@@ -157,42 +149,36 @@
           </ng-template>
           <ng-template pTemplate="header">
             <tr>
-              <th>
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.ID" | translate }}
-                </div>
-              </th>
-              <th>
+              <th *ngIf="columns?.includes('serial')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.SERIAL" | translate }}
                 </div>
               </th>
-
-              <th>
+              <th *ngIf="columns?.includes('category')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.DESCRIPTION" | translate }}
-                </div>
-              </th>
-              <th>
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "INCIDENTS.DATE" | translate }}
+                  {{ "INCIDENTS.MAIN_CATEGORY" | translate }}
                 </div>
               </th>
 
+              <th *ngIf="columns?.includes('incidentDate')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "INCIDENTS.CREATION_DATE" | translate }}
+                </div>
+              </th>
 
-              <th>
+              <th *ngIf="columns?.includes('responsibleOrg')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.RESPONSIBLE_ORG" | translate }}
                 </div>
               </th>
 
-              <th>
+              <th *ngIf="columns?.includes('incidentOrgs')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.SPECIALIZED_CENTER" | translate }}
                 </div>
               </th>
 
-              <th>
+              <th *ngIf="columns?.includes('status')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "INCIDENTS.STATUS" | translate }}
                 </div>
@@ -205,40 +191,42 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
-                <!-- id -->
-                <td class="max-w-250px">
-                  {{ item?.id }}
-                </td>
               <!-- serial -->
-              <td class="max-w-250px">
-                {{ item.serial }}
+              <td dir="ltr" class="max-w-250px" *ngIf="columns?.includes('serial')">
+                {{ item?.year }} / {{ item.serial }}
               </td>
 
-              <!-- description -->
-              <td class="max-w-250px">
-                {{ item.description }}
+              <td class="max-w-250px" *ngIf="columns?.includes('category')">
+                <p-tag styleClass="m-1">
+                  {{ item.incidentParentCategory | translateObj }}
+                </p-tag>
               </td>
 
               <!-- incidentDate -->
-              <td class="max-w-250px">
-                {{ item.incidentDate | customDate | date : "yyyy-MM-dd h:mm" }}
+              <td class="max-w-250px" *ngIf="columns?.includes('incidentDate')">
+                {{ item.incidentDate | customDate | date : "yyyy-MM-dd" }}
               </td>
 
               <!-- responsibleOrg -->
-              <td class="max-w-250px">
+              <td
+                class="max-w-250px"
+                *ngIf="columns?.includes('responsibleOrg')"
+              >
                 {{ item.responsibleOrg | translateObj : "name" }}
               </td>
+
               <!-- center -->
-              <td class="max-w-250px">
+              <td class="max-w-250px" *ngIf="columns?.includes('incidentOrgs')">
                 {{ item?.Porg?.orgStructure | translateObj }}
               </td>
 
-                <!-- status -->
-                <td class="max-w-250px">
-                  <p-tag styleClass="m-1">
-                    {{ item.status | translateObj }}
-                  </p-tag>
-                </td>
+              <!-- status -->
+              <td class="max-w-250px" *ngIf="columns?.includes('status')">
+                <p-tag styleClass="m-1">
+                  {{ item.status | translateObj }}
+                </p-tag>
+              </td>
+
               <!-- actions -->
               <td class="max-w-250px">
                 <button
@@ -279,4 +267,4 @@
   </div>
 </div>
 
-<p-confirmPopup  ></p-confirmPopup>
+<p-confirmPopup></p-confirmPopup>

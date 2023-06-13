@@ -1,14 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GenericValidators} from "@shared/validators/generic-validators";
 import {TranslateService} from "@ngx-translate/core";
+import {TaskDialogComponent} from "../../../_task-mgmt/browse-tasks/task-dialog/task-dialog.component";
+import {ActivatedRoute} from "@angular/router";
+import {Dialog} from "primeng/dialog";
 
 @Component({
-  selector: 'app-add-new-analysis-cycle',
-  templateUrl: './add-new-analysis-cycle.component.html',
-  styleUrls: ['./add-new-analysis-cycle.component.scss']
+  selector: 'app-business-impact-analysis-dialog',
+  templateUrl: './business-impact-analysis-dialog.component.html',
+  styleUrls: ['./business-impact-analysis-dialog.component.scss']
 })
-export class AddNewAnalysisCycleComponent implements OnInit {
+export class BusinessImpactAnalysisDialogComponent implements OnInit {
+  @ViewChild(Dialog) dialog: Dialog;
+  public get asDialog() {
+    return this.route.component !== BusinessImpactAnalysisDialogComponent;
+  }
   public rtoList = [
     {id: 1, nameEn: "test1", nameAr: "test1"},
     {id: 2, nameEn: "test2", nameAr: "test2"},
@@ -22,6 +29,7 @@ export class AddNewAnalysisCycleComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private translate: TranslateService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -39,4 +47,12 @@ export class AddNewAnalysisCycleComponent implements OnInit {
     });
   }
 
+  close() {
+    if (this.asDialog) {
+      this.display = false;
+      // this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+    } else {
+      // this.router.navigate(this.redirect, { relativeTo: this.route });
+    }
+  }
 }

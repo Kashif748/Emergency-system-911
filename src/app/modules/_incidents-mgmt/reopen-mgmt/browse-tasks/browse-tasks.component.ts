@@ -35,12 +35,56 @@ export class BrowseTasksComponent implements OnInit {
   @Select(CommonDataState.priorities)
   public priorities$: Observable<any[]>;
 
+  @Select(ReopenState.hasTaskFilters)
+  public hasFilters$: Observable<boolean>;
+
   @Select(CommonDataState.taskStatuses)
   public statuses$: Observable<any[]>;
 
   private destroy$ = new Subject();
 
   public type$: Observable<string>;
+  public sortableColumns$ = this.langFacade.vm$.pipe(
+    map(({ ActiveLang: { key } }) => {
+      return [
+        {
+          name: 'TASK.TASK_ID',
+          code: 'id',
+        },
+
+        {
+          name: 'INCIDENTS.SERIAL',
+          code: 'serial',
+        },
+
+        { name: 'SHARED.DUE_DATE', code: 'dueDate' },
+        { name: 'SHARED.STATUS', code: 'status' },
+        {
+          name: 'SHARED.ASSIGNEE',
+          code: `assignee`,
+        },
+      ];
+    })
+  );
+
+  public columns = [
+    {
+      name: 'TASK.TASK_ID',
+      code: 'id',
+    },
+
+    {
+      name: 'INCIDENTS.SERIAL',
+      code: 'serial',
+    },
+
+    { name: 'SHARED.DUE_DATE', code: 'dueDate' },
+    { name: 'SHARED.STATUS', code: 'status' },
+    {
+      name: 'SHARED.ASSIGNEE',
+      code: `assignee`,
+    },
+  ];
   /**
    *
    */
@@ -71,24 +115,6 @@ export class BrowseTasksComponent implements OnInit {
       return this.search();
     }
     const keys = Object.keys(filter);
-    if (keys.length > 0) {
-      switch (keys[0]) {
-        case 'orgIds':
-          filter['orgIds'] = filter['orgIds']
-            .map((o) => {
-              return {
-                key: o?.key,
-                labelEn: o.labelEn,
-                labelAr: o.labelAr,
-              };
-            })
-            .filter((id) => ![undefined, null].includes(id));
-          break;
-
-        default:
-          break;
-      }
-    }
 
     this.store
       .dispatch(new ReopenAction.UpdateTasksFilter(filter))
@@ -101,6 +127,27 @@ export class BrowseTasksComponent implements OnInit {
   }
   search() {
     this.store.dispatch(new ReopenAction.LoadTasksPage());
+  }
+  clear() {
+    this.store.dispatch([
+      new ReopenAction.UpdateTasksFilter({ clear: true }),
+      new ReopenAction.LoadTasksPage(),
+    ]);
+  }
+
+  sort(event) {
+    this.store.dispatch(new ReopenAction.SortTasks({ field: event.value }));
+  }
+  changeColumns(event) {
+    this.store.dispatch(
+      new ReopenAction.ChangeColumns({ columns: event.value })
+    );
+  }
+
+  order(event) {
+    this.store.dispatch(
+      new ReopenAction.SortTasks({ order: event.checked ? 'desc' : 'asc' })
+    );
   }
 
   reOpenTask(id: number) {

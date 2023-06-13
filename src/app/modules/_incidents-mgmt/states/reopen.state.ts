@@ -4,6 +4,8 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { IncidentAction, TaskAction } from '@core/states';
+import { TextUtils } from '@core/utils';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import {
   Action,
   Selector,
@@ -22,6 +24,8 @@ export interface ReopenStateModel {
   TasksPageRequest: PageRequestModel;
   view: 'TABLE' | 'CARDS';
   tab: 'INCIDENTS' | 'TASKS';
+  columns: string[];
+  tasksColumns: string[];
 }
 
 export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
@@ -33,7 +37,7 @@ export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
   defaults: {
     IncidentsPageRequest: {
       filters: {
-        status: [{ id: 2 },{ id: 3 }, { id: 4 }],
+        status: [{ id: 2 }, { id: 3 }, { id: 4 }],
       },
       first: 0,
       rows: 10,
@@ -43,7 +47,7 @@ export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
 
     TasksPageRequest: {
       filters: {
-        status: [{ id: 4 },  { id: 7 }],
+        status: [{ id: 4 }, { id: 7 }],
       },
       first: 0,
       rows: 10,
@@ -52,7 +56,18 @@ export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
     },
 
     view: 'TABLE',
-    tab :'INCIDENTS',
+    tab: 'INCIDENTS',
+    columns: [
+      'id',
+      'serial',
+      'category',
+      'incidentDate',
+      'status',
+      'responsibleOrg',
+      'incidentOrgs',
+      'center',
+    ],
+    tasksColumns: ['id', 'serial', 'dueDate', 'assignee', 'status'],
   },
 })
 @Injectable()
@@ -70,7 +85,30 @@ export class ReopenState {
   /* ************************ SELECTORS ******************** */
   @Selector([ReopenState])
   static state(state: ReopenStateModel): ReopenStateModel {
-    return state;
+    return {
+      ...state,
+    };
+  }
+  @Selector([ReopenState])
+  static hasTaskFilters(state: ReopenStateModel): boolean {
+    return (
+      Object.keys(state.TasksPageRequest.filters).filter(
+        (k) =>
+          k !== 'type' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.TasksPageRequest.filters[k])
+      ).length > 0
+    );
+  }
+
+  @Selector([ReopenState])
+  static hasIncidentFilters(state: ReopenStateModel): boolean {
+    return (
+      Object.keys(state.IncidentsPageRequest.filters).filter(
+        (k) =>
+          k !== 'type' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.TasksPageRequest.filters[k])
+      ).length > 0
+    );
   }
 
   /* ********************** ACTIONS ************************* */
@@ -98,6 +136,19 @@ export class ReopenState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
+
+          fromDate: pageRequest.filters?.fromDate
+            ? DateTimeUtil.format(
+                pageRequest.filters?.fromDate,
+                DateTimeUtil.DATE_FORMAT
+              )
+            : undefined,
+          toDate: pageRequest.filters?.toDate
+            ? DateTimeUtil.format(
+                pageRequest.filters?.toDate,
+                DateTimeUtil.DATE_FORMAT
+              )
+            : undefined,
           status: pageRequest.filters.status?.map((o) => o.id),
         },
       })
@@ -106,15 +157,75 @@ export class ReopenState {
 
   @Action(ReopenAction.reOpenIncidint)
   reOpenIncidint(
-    { setState, dispatch, getState }: StateContext<ReopenStateModel>,
+    { dispatch, getState }: StateContext<ReopenStateModel>,
     { payload }: ReopenAction.reOpenIncidint
   ) {
-    const pageRequest = getState().IncidentsPageRequest;
     return dispatch(
       new IncidentAction.reOpenIncident({ incidentId: payload.incidentId })
     );
   }
+  @Action(ReopenAction.SortIncidint)
+  sortIncidint(
+    { setState, dispatch, getState }: StateContext<ReopenStateModel>,
+    { payload }: ReopenAction.SortIncidint
+  ) {
+    setState(
+      patch<ReopenStateModel>({
+        IncidentsPageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+    const pageRequest = getState().IncidentsPageRequest;
+    return dispatch(
+      new IncidentAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+          status: pageRequest.filters.status?.map((o) => o.id),
+        },
+      })
+    );
+  }
 
+  @Action(ReopenAction.UpdateIncidentFilter, { cancelUncompleted: true })
+  UpdateIncidentFilter(
+    { getState, setState }: StateContext<ReopenStateModel>,
+    { payload }: ReopenAction.UpdateIncidentFilter
+  ) {
+    const pageRequest = getState().IncidentsPageRequest;
+
+    setState(
+      patch<ReopenStateModel>({
+        IncidentsPageRequest: patch<PageRequestModel>({
+          first: 0,
+          filters: iif(
+            payload.clear === true,
+            { status: pageRequest.filters?.status },
+            patch({
+              status: pageRequest.filters?.status,
+              ...payload,
+            })
+          ),
+        }),
+      })
+    );
+  }
+
+  @Action(ReopenAction.ChangeColumns)
+  changeColumns(
+    { setState }: StateContext<ReopenStateModel>,
+    { payload }: ReopenAction.ChangeColumns
+  ) {
+    setState(
+      patch<ReopenStateModel>({
+        columns: payload.columns,
+      })
+    );
+  }
   @Action(ReopenAction.LoadTasksPage)
   LoadTasksPage(
     { setState, dispatch, getState }: StateContext<ReopenStateModel>,
@@ -139,6 +250,46 @@ export class ReopenState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
+
+          fromDate: pageRequest.filters?.fromDate
+            ? DateTimeUtil.format(
+                pageRequest.filters?.fromDate,
+                DateTimeUtil.DATE_FORMAT
+              )
+            : undefined,
+          toDate: pageRequest.filters?.toDate
+            ? DateTimeUtil.format(
+                pageRequest.filters?.toDate,
+                DateTimeUtil.DATE_FORMAT
+              )
+            : undefined,
+          status: pageRequest.filters.status?.map((o) => o.id),
+        },
+      })
+    );
+  }
+
+  @Action(ReopenAction.SortTasks)
+  sortTasks(
+    { setState, dispatch, getState }: StateContext<ReopenStateModel>,
+    { payload }: ReopenAction.SortTasks
+  ) {
+    setState(
+      patch<ReopenStateModel>({
+        TasksPageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+    const pageRequest = getState().TasksPageRequest;
+    return dispatch(
+      new TaskAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
           status: pageRequest.filters.status?.map((o) => o.id),
         },
       })
@@ -147,19 +298,22 @@ export class ReopenState {
 
   @Action(ReopenAction.UpdateTasksFilter, { cancelUncompleted: true })
   UpdateTasksFilter(
-    { setState }: StateContext<ReopenStateModel>,
+    { getState, setState }: StateContext<ReopenStateModel>,
     { payload }: ReopenAction.UpdateTasksFilter
   ) {
+    const pageRequest = getState().TasksPageRequest;
+
     setState(
       patch<ReopenStateModel>({
         TasksPageRequest: patch<PageRequestModel>({
           first: 0,
           filters: iif(
             payload.clear === true,
-            {},
+            { status: pageRequest.filters?.status },
+
             patch({
+              status: pageRequest.filters?.status,
               ...payload,
-              type: undefined,
             })
           ),
         }),
@@ -191,6 +345,18 @@ export class ReopenState {
     setState(
       patch<ReopenStateModel>({
         tab: payload.tab,
+      })
+    );
+  }
+
+  @Action(ReopenAction.ChangeTasksColumns)
+  ChangeTasksColumns(
+    { setState }: StateContext<ReopenStateModel>,
+    { payload }: ReopenAction.ChangeTasksColumns
+  ) {
+    setState(
+      patch<ReopenStateModel>({
+        tasksColumns: payload.columns,
       })
     );
   }

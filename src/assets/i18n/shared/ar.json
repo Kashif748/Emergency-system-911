@@ -598,6 +598,7 @@
       "DESCRIPTION": "الوصف",
       "SR_NO": "الرمز",
       "SERIAL": " الرقم التسلسلي",
+      "SERIAL_YEAR": "الرقم التسلسلي  / السنة",
       "ACTIONS": "الاجراء",
       "SUBMIT": "انشاء",
       "saveAsDraft": "حفظ كمسودة",
@@ -1489,6 +1490,7 @@
       "PHOTO_EDITOR": "محرر الصور",
       "PRIVILEGES": "الصلاحيات",
       "NO_IMAGE": "لا يوجد صورة",
+      "YEAR": "السنة",
       "EXPIRE_DATE": "تاريخ الإنتهاء",
       "USERS": {
         "ACCOUNT_INFO": "معلومات الحساب",

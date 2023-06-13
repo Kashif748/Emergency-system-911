@@ -3,6 +3,7 @@
   "NEW_ANALYSIS_CYCLIE":"دورة تحليل جديدة",
   "DEPARTMENT":"إدارة ",
   "SECTOR":"قطاع ",
+  "SECTION":"القسم",
   "ORG_ACTIVITIES":"الأنشطة المؤسسية",
   "NEW_ACTIVITY":"إضافة نشاط",
   "RES_REQ":"متطلبات الموارد",
@@ -22,7 +23,8 @@
     "ARIC_GUID":"الرقم المرجعي في أريس",
     "ACTIVITY_AREA":"نطاق النشاط",
     "INTERNAL":"داخلي",
-    "EXTERNAL":"خارجي"
+    "EXTERNAL":"خارجي",
+    "BELONG":"تابع الى"
   },
   "ANALYSIS_DIALOG": {
     "ADD_NEW_ANALYSIS":"إضافة دورة تحليل جديدة",

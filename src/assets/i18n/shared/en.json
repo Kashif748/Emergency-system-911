@@ -565,6 +565,8 @@
       "DESCRIPTION": "Description",
       "SR_NO": "Id",
       "SERIAL": "Sequance Number",
+      "SERIAL_YEAR": "Sequance Number / Year ",
+
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
       "saveAsDraft" : "Save as Draft",
@@ -1495,6 +1497,7 @@
       "PHOTO_EDITOR": "Photo Editor",
       "PRIVILEGES": "Privileges",
       "NO_IMAGE": "No image",
+      "YEAR" :"Year",
       "EXPIRE_DATE": "Expire Date",
       "USERS": {
         "ACCOUNT_INFO": "Account Info",
