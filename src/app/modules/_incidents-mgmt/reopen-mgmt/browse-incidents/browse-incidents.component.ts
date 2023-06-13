@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { IncidentState } from '@core/states';
-import { TranslateService } from '@ngx-translate/core';
+import { CommonDataState, IncidentState } from '@core/states';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { IncidentProjection } from 'src/app/api/models';
 import { ReopenAction } from '../../states/reopen.action';
 import { ReopenState } from '../../states/reopen.state';
@@ -25,16 +24,43 @@ export class BrowseIncidentsComponent implements OnInit {
   @Select(ReopenState.state)
   public state$: Observable<ReopenState>;
 
+  @Select(ReopenState.hasIncidentFilters)
+  public hasFilters$: Observable<boolean>;
+
+  @Select(CommonDataState.incidentCategories)
+  public categories$: Observable<any[]>;
+
+  @Select(CommonDataState.incidentStatus)
+  public statuses$: Observable<any[]>;
+
   public page$: Observable<IncidentProjection[]>;
 
-  displayedColumns: string[] = [
-    'id',
-    'serial',
-    'description',
-    'incidentDate',
-    'status',
-    'responsibleOrg',
-    'center',
+  public sortableColumns$ = this.lang.vm$.pipe(
+    map(({ ActiveLang: { key } }) => {
+      return [
+        { name: 'INCIDENTS.SERIAL', code: 'serial' },
+        { name: 'INCIDENTS.MAIN_CATEGORY', code: 'category' },
+        { name: 'INCIDENTS.CREATION_DATE', code: 'incidentDate' },
+        { name: 'INCIDENTS.RESPONSIBLE_ORG', code: 'responsibleOrg' },
+        {
+          name: 'INCIDENTS.SPECIALIZED_CENTER',
+          code: `incidentOrgs`,
+        },
+        { name: 'INCIDENTS.STATUS', code: 'status' },
+      ];
+    })
+  );
+
+  public columns = [
+    { name: 'INCIDENTS.SERIAL', code: 'serial' },
+    { name: 'INCIDENTS.MAIN_CATEGORY', code: 'category' },
+    { name: 'INCIDENTS.CREATION_DATE', code: 'incidentDate' },
+    { name: 'INCIDENTS.RESPONSIBLE_ORG', code: 'responsibleOrg' },
+    {
+      name: 'INCIDENTS.SPECIALIZED_CENTER',
+      code: `incidentOrgs`,
+    },
+    { name: 'INCIDENTS.STATUS', code: 'status' },
   ];
   constructor(private lang: ILangFacade, private store: Store) {}
 
@@ -61,7 +87,41 @@ export class BrowseIncidentsComponent implements OnInit {
   changeView(view: 'TABLE' | 'CARDS') {
     // this.store.dispatch(new ReopenAction.ChangeView({ view }));
   }
+  changeColumns(event) {
+    this.store.dispatch(
+      new ReopenAction.ChangeColumns({ columns: event.value })
+    );
+  }
 
+  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
+    if (event?.key === 'Enter') {
+      return this.search();
+    }
+
+    this.store
+      .dispatch(new ReopenAction.UpdateIncidentFilter(filter))
+      .toPromise()
+      .then(() => {
+        if (filter.type) {
+          this.search();
+        }
+      });
+  }
+
+  clear() {
+    this.store.dispatch([
+      new ReopenAction.UpdateIncidentFilter({ clear: true }),
+      new ReopenAction.LoadIncidentsPage(),
+    ]);
+  }
+  sort(event) {
+    this.store.dispatch(new ReopenAction.SortIncidint({ field: event.value }));
+  }
+  order(event) {
+    this.store.dispatch(
+      new ReopenAction.SortIncidint({ order: event.checked ? 'desc' : 'asc' })
+    );
+  }
   reOpenIncidint(id: number) {
     this.store
       .dispatch(new ReopenAction.reOpenIncidint({ incidentId: id }))

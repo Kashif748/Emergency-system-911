@@ -85,6 +85,11 @@ export class CommonDataState {
   }
 
   @Selector([CommonDataState])
+  static incidentCategories(state: CommonDataStateModel) {
+    return state?.data?.incidentCategories;
+  }
+
+  @Selector([CommonDataState])
   static newsTypes(state: CommonDataStateModel) {
     return state?.data?.newsTypes;
   }
