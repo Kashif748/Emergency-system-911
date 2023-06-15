@@ -70,11 +70,9 @@ export class LocationTypeState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.locationType
-      .getAll14({
+      .getAll15({
         isActive: true,
-        versionId: versionID,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -119,10 +117,8 @@ export class LocationTypeState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.locationType
-      .insertOne5({
+      .insertOne6({
         body: payload,
       })
       .pipe(
@@ -146,10 +142,8 @@ export class LocationTypeState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.locationType
-      .update84({
+      .update85({
         body: payload,
       })
       .pipe(
@@ -181,7 +175,7 @@ export class LocationTypeState {
         blocking: true,
       })
     );
-    return this.locationType.getOne5({ id: payload.id }).pipe(
+    return this.locationType.getOne6({ id: payload.id }).pipe(
       tap((locationType) => {
         setState(
           patch<LocationTypeStateModel>({
