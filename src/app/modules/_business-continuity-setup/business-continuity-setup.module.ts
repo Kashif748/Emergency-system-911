@@ -23,14 +23,8 @@ import {SplitButtonModule} from "primeng/splitbutton";
 import {DividerModule} from "primeng/divider";
 import {SelectButtonModule} from "primeng/selectbutton";
 import {FieldsetModule} from "primeng/fieldset";
-import { SystemsContentComponent } from './business-continuity-setup/systems-content/systems-content.component';
-import { LocationsContentComponent } from './business-continuity-setup/locations-content/locations-content.component';
-import { VendersPartnersContentComponent } from './business-continuity-setup/venders-partners-content/venders-partners-content.component';
 import {BadgeModule} from 'primeng/badge';
 import { NodataTableModule } from '@shared/components/nodata-table/nodata-table.module';
-import { AddSystemDialogComponent } from './business-continuity-setup/dialog/add-system-dialog/add-system-dialog.component';
-import { AddLocationDialogComponent } from './business-continuity-setup/dialog/add-location-dialog/add-location-dialog.component';
-import { AddVendersDialogComponent } from './business-continuity-setup/dialog/add-venders-dialog/add-venders-dialog.component';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import {MultiSelectModule} from "primeng/multiselect";
 import {ToggleButtonModule} from "primeng/togglebutton";
@@ -43,10 +37,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [BusinessContinuitySetupComponent, SystemsContentComponent,
-    LocationsContentComponent, VendersPartnersContentComponent,
-    AddSystemDialogComponent, AddLocationDialogComponent,
-    AddVendersDialogComponent],
+  declarations: [BusinessContinuitySetupComponent
+    ],
   imports: [
     CommonModule,
     BusinessContinuitySetupRoutingModule,
