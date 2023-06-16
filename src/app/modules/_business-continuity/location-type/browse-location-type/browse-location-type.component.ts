@@ -37,7 +37,8 @@ export class BrowseLocationTypeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.store
+    this.loadPage();
+    /*this.store
       .select(BrowseBusinessContinuityState.versionId)
       .pipe(
         takeUntil(this.destroy$),
@@ -47,7 +48,7 @@ export class BrowseLocationTypeComponent implements OnInit, OnDestroy {
           }
         )
       )
-      .subscribe();
+      .subscribe();*/
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
