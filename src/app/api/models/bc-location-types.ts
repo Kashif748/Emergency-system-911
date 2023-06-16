@@ -5,6 +5,5 @@ export interface BcLocationTypes {
   isActive?: boolean;
   nameAr?: string;
   nameEn?: string;
-  versionId?: number;
 }
 
