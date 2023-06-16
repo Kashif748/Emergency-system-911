@@ -1,9 +1,6 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {BusinessContinuitySetupComponent} from "./business-continuity-setup/business-continuity-setup.component";
-import {SystemsContentComponent} from "./business-continuity-setup/systems-content/systems-content.component";
-import {LocationsContentComponent} from "./business-continuity-setup/locations-content/locations-content.component";
-import {VendersPartnersContentComponent} from "./business-continuity-setup/venders-partners-content/venders-partners-content.component";
 
 const routes: Routes = [
   {
@@ -13,16 +10,25 @@ const routes: Routes = [
       { path: "", redirectTo: "systems" },
       {
         path: 'systems',
-        component: SystemsContentComponent,
+        loadChildren: () =>
+          import('./system/system.module').then(
+            (m) => m.SystemModule
+          ),
       },
       {
         path: 'locations',
-        component: LocationsContentComponent,
+        loadChildren: () =>
+          import('./location/location.module').then(
+            (m) => m.LocationModule
+          ),
       },
       {
         path: 'venders',
-        component: VendersPartnersContentComponent,
-      }
+        loadChildren: () =>
+          import('./vender/vender.module').then(
+            (m) => m.VenderModule
+          ),
+      },
     ],
   }
 ];

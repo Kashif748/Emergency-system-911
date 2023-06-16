@@ -1,0 +1,172 @@
+<div class="col-12 py-3">
+  <div class="d-flex flex-wrap mx-1 px-6">
+    <div class="text-center col-11 tab-title text-medium-slate-blue">
+      {{ "LOCATION" | translate }}
+    </div>
+
+    <div class="ml-dir-auto d-flex">
+      <app-location-dialog></app-location-dialog>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <ng-container>
+      <ng-container *ngIf="loading ;else tableTemplate">
+        <p-table [value]="[].constructor(10)">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 0;"></th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.NO" | translate }}
+                </div>
+              </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.DEPARTMENT_NAME" | translate }}
+                </div>
+              </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.LOCATION_NAME" | translate }}
+                </div>
+              </th>
+
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.LOCATION_TYPE" | translate }}
+                </div>
+              </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.DISTRICT" | translate }}
+                </div>
+              </th>
+
+              <th style="width: 92px;">{{'ACTIONS.ACTIONS' | translate}}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr class="cursor-pointer hoverable">
+              <td class="flag-td">
+                <div class="bg-secondary">
+                </div>
+              </td>
+
+              <td>
+                <p-skeleton></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton></p-skeleton>
+              </td>
+              <td>
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td>
+                <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                        class="p-button-rounded p-button-text my-auto p-button-plain"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-container>
+      <ng-template #tableTemplate>
+        <p-table [columns]="columns" totalRecords="20" [value]="page" dataKey="id" [autoLayout]="true">
+
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" [style.width]="'col.width'">
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th></th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.NO" | translate }}
+                </div>
+              </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.DEPARTMENT_NAME" | translate }}
+                </div>
+              </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.LOCATION_NAME" | translate }}
+                </div>
+              </th>
+
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.LOCATION_TYPE" | translate }}
+                </div>
+              </th>
+              <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "LOCATIONS.DISTRICT" | translate }}
+                </div>
+              </th>
+
+              <th style="width: 92px;">{{'ACTIONS.ACTIONS' | translate}}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr class="cursor-pointer hoverable">
+              <td class="flag-td">
+                <div [ngClass]="{ 'bg-primary': item.isActive, 'bg-warning': !item.isActive}">
+                </div>
+              </td>
+
+              <td>
+                {{item.id}}/{{item.no}}
+              </td>
+
+              <td>
+                {{item.dept_name}}
+              </td>
+
+              <td>
+                {{item.loc_name}}
+              </td>
+
+              <td>
+                {{item.loc_type}}
+              </td>
+
+              <td>
+                {{item.district}}
+              </td>
+
+              <td>
+                <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                        class="p-button-rounded p-button-text my-auto p-button-plain" (click)="menu.toggle($event)">
+                </button>
+                <p-menu #menu appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="100%">
+                <div class="w-100">
+                  <nodata-table></nodata-table>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-template>
+    </ng-container>
+    <p-paginator></p-paginator>
+  </div>
+</div>
