@@ -433,6 +433,13 @@ const routes: Routes = [
           ).then((m) => m.BusinessImpactAnalysisModule),
       },
       {
+        path: 'business-activity-analysis',
+        loadChildren: () =>
+          import(
+            '../modules/_business_activity_analysis/business-activity-analysis.module'
+          ).then((m) => m.BusinessActivityAnalysisModule),
+      },
+      {
         path: 'business-continuity',
         loadChildren: () =>
           import(
