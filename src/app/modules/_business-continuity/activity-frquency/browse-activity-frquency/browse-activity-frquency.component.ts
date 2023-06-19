@@ -38,17 +38,18 @@ export class BrowseActivityFrquencyComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.store
+    this.loadPage();
+    /*this.store
       .select(BrowseBusinessContinuityState.versionId)
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(200),
         tap((v) => {
-            this.loadPage();
+
           }
         )
       )
-      .subscribe();
+      .subscribe();*/
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),

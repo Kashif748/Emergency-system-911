@@ -233,7 +233,19 @@
       </ng-container>
     </div>
 
-    <div class="p-col-12" *ngIf="editMode || (viewOnly$ | async)">
+    <div class="p-col-12" [ngClass]="{ 'p-md-6': (editMode || (viewOnly$ | async))}">
+      <p-divider align="center">
+        <div class="p-d-inline-flex p-ai-center">
+          <div class="p-field p-col-12 p-md-12">
+            <p-toggleButton formControlName="isCritical" onLabel="{{ 'RTO_LIST.CRITICAL' | translate }}"
+                            offLabel="{{ 'RTO_LIST.NONCRITICAL' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                            iconPos="right"></p-toggleButton>
+          </div>
+        </div>
+      </p-divider>
+    </div>
+
+    <div class="p-col-12" [ngClass]="{ 'p-md-6': (editMode || (viewOnly$ | async))}" *ngIf="editMode || (viewOnly$ | async)">
       <p-divider align="center">
         <div class="p-d-inline-flex p-ai-center">
           <div class="p-field p-col-12 p-md-12">

@@ -72,9 +72,9 @@ export class ActivityFrquencyState {
     );
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.activityFrquency
-      .getAll18({
+      .getAll19({
         isActive: true,
-        versionId: versionID,
+        // versionId: versionID,
         pageable: {
            page: payload.page,
            size: payload.size,
@@ -120,9 +120,8 @@ export class ActivityFrquencyState {
       })
     );
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.activityFrquency
-      .insertOne9({
+      .insertOne10({
         body: payload,
       })
       .pipe(
@@ -146,10 +145,8 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.activityFrquency
-      .update89({
+      .update90({
         body: payload,
       })
       .pipe(
@@ -182,7 +179,7 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
-    return this.activityFrquency.getOne9({ id: payload.id }).pipe(
+    return this.activityFrquency.getOne10({ id: payload.id }).pipe(
       tap((activityFrq) => {
         setState(
           patch<ActivityFrquencyStateModel>({

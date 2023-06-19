@@ -111,7 +111,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
-      isActive: [true]
+      isActive: [true],
+      isCritical: [false]
     });
   }
 
