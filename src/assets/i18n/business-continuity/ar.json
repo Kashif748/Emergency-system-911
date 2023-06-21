@@ -3,6 +3,9 @@
     "PAGE_REPORT": "{first} - {last} من {totalRecords}"
   },
   "VERSIONS_SETTINGS": "إعدادات الاصدارات",
+  "SEND_APPROVAL": "ارسال للإعتماد",
+  "APPROVED": "إعتماد",
+  "RETURN_MOD": "ارجاع للتعديل",
   "ADD_VERSION": "إنشاء إصدار جديد",
   "VERSION": "الإصدار",
   "UPDATE": "حفظ التعديلات؟",
