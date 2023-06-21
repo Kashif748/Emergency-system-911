@@ -1,0 +1,34 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+  .p-toolbar-group-right {
+    h2 {
+      font-weight: bold;
+    }
+  }
+
+  ::ng-deep {
+    .p-tabview-nav-link {
+      background-color: #eee5ff !important;
+      border-top-right-radius: 7px !important;
+      border-top-left-radius: 7px !important;
+      box-shadow: 13px -9px 13px -10px rgba(168, 168, 168, 1);
+      min-width: 150px;
+      justify-content: center;
+      font-weight: 500 !important;
+    }
+    li.p-highlight .p-tabview-nav-link {
+      color: #8950fc !important;
+      border-color: #8950fc !important;
+      font-weight: 600 !important;
+    }
+    .p-card {
+      .p-card-title {
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
+        border-bottom: 1px solid #ebedf3 !important;
+      }
+    }
+  }
+}
