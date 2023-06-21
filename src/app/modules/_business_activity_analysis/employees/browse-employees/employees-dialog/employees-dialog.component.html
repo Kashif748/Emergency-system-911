@@ -1,0 +1,240 @@
+<div class="p-toolbar-group-right">
+  <button pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus" (click)="openDialog()"></button>
+</div>
+
+<!-- as a dialog -->
+<p-dialog *ngIf="asDialog;else page" #dialog [visible]="display" [modal]="true" (visibleChange)="close()"
+          [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
+          [baseZIndex]="10000" [draggable]="true" [resizable]="false">
+  <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
+
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh;">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px">
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
+    <h3>
+      <span>{{ "EMPLOYEES.ADD_NEW" | translate }}</span>
+      <span
+        *ngIf="true"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="false"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </h3>
+  </div>
+
+  <span class="flex-grow-1"></span>
+  <a *ngIf="asDialog" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
+     class="p-button-rounded p-button-text p-button-plain"></a>
+</ng-template>
+
+<!-- templates content -->
+<ng-template #content>
+
+  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')     }">
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+
+    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+
+      <div class="p-field p-col-12 p-md-6">
+            <span class="p-float-label">
+              <input type="text" formControlName="nameAr" pInputText>
+              <label>{{ 'EMPLOYEES.NAME_AR' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
+
+        <ng-container
+          *ngIf="form.controls['nameAr'].touched && !form.controls['nameAr'].valid && form.controls['nameAr'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
+            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+            <span class="p-float-label">
+              <input type="text" formControlName="nameEn" pInputText>
+              <label>{{ 'EMPLOYEES.NAME_EN' | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </label>
+            </span>
+
+        <ng-container
+          *ngIf="form.controls['nameEn'].touched && !form.controls['nameEn'].valid && form.controls['nameEn'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
+            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <p-dropdown [options]="List" [autoDisplayFirst]="false" formControlName="type"
+                            [filter]="true" filterBy="nameAr,nameEn" dataKey="id" [showClear]="true" appendTo="body">
+                  <ng-template let-option pTemplate="selectedItem">
+                    {{ option | translateObj : 'name' }}
+                  </ng-template>
+                  <ng-template let-option pTemplate="item">
+                    {{ option | translateObj : 'name' }}
+                  </ng-template>
+                </p-dropdown>
+                <label>
+                  {{'EMPLOYEES.TYPE' | translate}}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+        <ng-container *ngIf="form.controls['type'].touched &&
+            !form.controls['type'].valid &&
+            form.controls['type'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['type'].hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
+      <span class="p-float-label">
+        <ngx-intl-tel-input
+          cssClass="p-inputtext p-component p-text-left"
+          [onlyCountries]="['ae']"
+          formControlName="landline"
+          [enablePlaceholder]="false"
+          [enableAutoCountrySelect]="true"
+        >
+        </ngx-intl-tel-input>
+        <label class="dir-text">
+          {{ "EMPLOYEES.LANDLINE" | translate }}
+          <span class="required-asterisk">*</span>
+        </label>
+      </span>
+        <ng-container
+          *ngIf="
+          this.form.get('landline').touched &&
+          !this.form.get('landline').valid &&
+          this.form.get('landline').dirty
+        "
+        >
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="this.form.get('landline').hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="this.form.get('landline').hasError('validatePhoneNumber')"
+          >
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
+      <span class="p-float-label">
+        <ngx-intl-tel-input
+          cssClass="p-inputtext p-component p-text-left"
+          [onlyCountries]="['ae']"
+          formControlName="mobile"
+          [enablePlaceholder]="false"
+          [enableAutoCountrySelect]="true"
+        >
+        </ngx-intl-tel-input>
+        <label class="dir-text">
+          {{ "EMPLOYEES.MOBILE" | translate }}
+          <span class="required-asterisk">*</span>
+        </label>
+      </span>
+        <ng-container
+          *ngIf="
+          this.form.get('mobile').touched &&
+          !this.form.get('mobile').valid &&
+          this.form.get('mobile').dirty
+        "
+        >
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="this.form.get('mobile').hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="this.form.get('mobile').hasError('validatePhoneNumber')"
+          >
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+            <span class="p-float-label">
+              <input type="text" formControlName="otherPhone" pInputText>
+              <label>{{ 'EMPLOYEES.OTHER_PHONE' | translate }}
+              </label>
+            </span>
+      </div>
+    </form>
+
+  </div>
+
+</ng-template>
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+
+    <button *ngIf="!asDialog" pButton icon="pi pi-sign-out"
+            label="{{'ACTIONS.BACK' | translate }}"></button>
+    <div class="ml-dir-auto"></div>
+
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+        ></button>
+      </div>
+    </div>
+  </div>
+</ng-template>

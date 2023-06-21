@@ -83,7 +83,7 @@ export class ImpactLevelState {
     );
     return this.impactLevel
       .getAll17({
-        // isActive: true,
+        isActive: true,
         versionId: versionID,
         pageable: {
           page: payload.page,
