@@ -56,7 +56,9 @@
     "CRITICALITY_EN": "Criticality (English)",
     "CRITICALITY_AR": "Criticality (Arabic)",
     "DESC_AR": "Description (Arabic)",
-    "DESC_EN": "Description (English)"
+    "DESC_EN": "Description (English)",
+    "CRITICAL": "Critical",
+    "NONCRITICAL": "Non Critical"
   },
 
   "ACTIVITY_FEQ": {

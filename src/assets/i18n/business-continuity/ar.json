@@ -60,7 +60,10 @@
     "CRITICALITY_EN": "الحيوية(انجليزي)",
     "CRITICALITY_AR": "الحيوية (عربي)",
     "DESC_AR": "الوصف (عربي)",
-    "DESC_EN": " الوصف (انجليزي)"
+    "DESC_EN": " الوصف (انجليزي)",
+    "CRITICAL": "حيوي",
+    "NONCRITICAL": "غير حيوي"
+
   },
   "ACTIVITY_FEQ": {
     "TITLE_ACQ_FEQ": "تردد النشاط",
