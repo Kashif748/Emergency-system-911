@@ -7,7 +7,7 @@ import {IAuthService} from "@core/services/auth.service";
 import {Select, Store} from "@ngxs/store";
 import {ActivatedRoute} from "@angular/router";
 import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ImpLevelWorkingAction, RtoState} from "@core/states";
+import {ImpLevelWorkingAction} from "@core/states";
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 import {BrowseImpLevelWorkingAction} from "../states/browse-imp-level-working.action";
 
@@ -27,6 +27,17 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   public display = false;
   form: FormGroup;
   public color = '#ffffff';
+  public colorOptions = [
+    '#9e0142',
+    '#d53e4f',
+    '#f46d43',
+    '#fdba53',
+    '#f3d639',
+    '#6dc266',
+    '#4c9945',
+    '#359dde',
+    '#0c5dba',
+    '#8b8b8b'];
 
   _id: number;
   get loggedinUserId() {
@@ -104,8 +115,6 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
-      /*levelEn: [null, [Validators.required, GenericValidators.english]],
-      levelAr: [null, [Validators.required, GenericValidators.arabic]],*/
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
       colorCode: [null, [Validators.required]],
@@ -141,7 +150,7 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     const impLevelWorking = {
       ...this.form.getRawValue(),
     };
-
+    // impLevelWorking.colorCode =  impLevelWorking.colorCode.code;
     if (this.editMode) {
       impLevelWorking.id = this._id;
       this.store.dispatch(new BrowseImpLevelWorkingAction.UpdateImpLevelWorking(impLevelWorking));
@@ -153,6 +162,11 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   close() {
     this.store.dispatch(new BrowseImpLevelWorkingAction.ToggleDialog({}));
   }
+
+  isValidColorCode(value: string): boolean {
+    return this.colorOptions.includes(value);
+  }
+
 
   ngOnDestroy(): void {
     this.destroy$.next();

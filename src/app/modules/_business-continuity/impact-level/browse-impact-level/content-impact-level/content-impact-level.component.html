@@ -138,13 +138,43 @@
               </p-cellEditor>
             </td>
 
-            <td>
+            <td >
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-colorPicker
-                    [(ngModel)]="clonedLevels[item.id].colorCode"
-                    [inputId]="'colorInput'"
-                  ></p-colorPicker>
+                  <div class="p-col-8 p-md-8" *ngIf="editing">
+                    <p-dropdown [options]="colorOptions" [autoDisplayFirst]="false"
+                                [(ngModel)]="clonedLevels[item.id].colorCode"
+                                [showClear]="true" appendTo="body">
+                      <ng-template let-option pTemplate="selectedItem">
+                        <div class="d-flex flex-column flex-grow-1 w-100">
+                          <div class="d-flex justify-content-between">
+                      <span class="mb-1 text-size-sm">
+                        {{ option }}
+                      </span>
+                            <span style="height: auto; width: 30px"
+                                  [style.background-color]="option"
+                                  [style.border]="option"
+                                  class="label label-inline label-outline-primary py-0">
+                        </span>
+                          </div>
+                        </div>
+                      </ng-template>
+                      <ng-template let-option pTemplate="item">
+                        <div class="d-flex flex-column flex-grow-1 w-100">
+                          <div class="d-flex justify-content-between">
+                      <span class="mb-1 text-size-sm">
+                        {{ option }}
+                      </span>
+                            <span style="height: auto; width: 30px"
+                                  [style.background-color]="option"
+                                  [style.border]="option"
+                                  class="label label-inline label-outline-primary py-0">
+                        </span>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </p-dropdown>
+                  </div>
                 </ng-template>
                 <ng-template pTemplate="output">
                   <p-colorPicker
