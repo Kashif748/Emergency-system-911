@@ -7,11 +7,13 @@ import {BcVersions} from "../../../../api/models/bc-versions";
 import {BcVersionsControllerService} from "../../../../api/services/bc-versions-controller.service";
 import {BCAction} from "@core/states/bc/business-continuity/business-continuity.action";
 import {PageBcVersions} from "../../../../api/models/page-bc-versions";
+import {BcVersionsStatus} from "../../../../api/models/bc-versions-status";
 
 
 export interface BusinessContinuityStateModel {
   versions: PageBcVersions;
   bc: BcVersions;
+  status: BcVersionsStatus;
   loading: boolean;
   blocking: boolean;
 }
@@ -34,6 +36,11 @@ export class BusinessContinuityState {
   @Selector([BusinessContinuityState])
   static versions(state: BusinessContinuityStateModel) {
      return state?.versions?.content;
+  }
+
+  @Selector([BusinessContinuityState])
+  static status(state: BusinessContinuityStateModel) {
+    return state?.status;
   }
 
   @Selector([BusinessContinuityState])
@@ -68,7 +75,7 @@ export class BusinessContinuityState {
       })
     );
     return this.bC
-      .getAll9({
+      .getAll10({
         isActive: true,
         pageable: {
           page: payload.page,
@@ -116,7 +123,7 @@ export class BusinessContinuityState {
       })
     );
     return this.bC
-      .insertOne({
+      .insertOne1({
         body: payload,
       })
       .pipe(
@@ -162,6 +169,42 @@ export class BusinessContinuityState {
         setState(
           patch<BusinessContinuityStateModel>({
             bc: bc.result,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<BusinessContinuityStateModel>({
+            blocking: false,
+          })
+        );
+      })
+    );
+  }
+
+  @Action(BCAction.Status, { cancelUncompleted: true })
+  getstatus(
+    { setState }: StateContext<BusinessContinuityStateModel>,
+    { payload }: BCAction.Status
+  ) {
+    /*if (payload.id === undefined || payload.id === null) {
+      setState(
+        patch<BusinessContinuityStateModel>({
+          bc: undefined,
+        })
+      );
+      return;
+    }*/
+    setState(
+      patch<BusinessContinuityStateModel>({
+        blocking: true,
+      })
+    );
+    return this.bC.manageVersionStatus({ versionId: payload.versionId, statusId: payload.statusId }).pipe(
+      tap((status) => {
+        setState(
+          patch<BusinessContinuityStateModel>({
+            status: status.result,
           })
         );
       }),

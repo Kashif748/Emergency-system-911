@@ -98,6 +98,7 @@ import { CircularControllerService } from './services/circular-controller.servic
 import { CircularStatusControllerService } from './services/circular-status-controller.service';
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
 import { BcVersionsControllerService } from './services/bc-versions-controller.service';
+import { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
 import { BcrtoControllerService } from './services/bcrto-controller.service';
 import { BcOrgHirControllerService } from './services/bc-org-hir-controller.service';
 import { BcOrgHirTypeControllerService } from './services/bc-org-hir-type-controller.service';
@@ -248,10 +249,11 @@ import { MigrationControllerService } from './services/migration-controller.serv
     CircularStatusControllerService,
     ConfidentialtyControllerService,
     BcVersionsControllerService,
+    BcVersionsStatusControllerService,
     BcrtoControllerService,
     BcOrgHirControllerService,
     BcOrgHirTypeControllerService,
-    BcRecoveryPrioritiesControllerService,
+    BcRecoveryPrioritiesControllerService, ,
     BcLocationTypeControllerService,
     BcWorkImportanceLevelsControllerService,
     BcImpactTypesMatrixControllerService,
@@ -311,7 +313,7 @@ export class ApiModule {
     }
   }
 
-  constructor( 
+  constructor(
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

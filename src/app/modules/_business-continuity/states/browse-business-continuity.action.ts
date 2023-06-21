@@ -11,6 +11,15 @@ export namespace BrowseBusinessContinuityAction {
     constructor(public payload?: { pageRequest: PageRequestModel }) {}
   }
 
+  export class GetStatus {
+    static readonly type = '[BrowseBusinessContinuity] Get Status';
+
+    /**
+     *
+     */
+    constructor(public payload?: { versionId: number, statusId: number }) {}
+  }
+
   export class CreateBusinessContinuity {
     static readonly type =
       '[BrowseBusinessContinuity] Create BusinessContinuity';

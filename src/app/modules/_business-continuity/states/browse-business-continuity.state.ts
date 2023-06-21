@@ -10,10 +10,10 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageHelper } from '@core/helpers/message.helper';
-import { BrowseBusinessContinuityAction } from './browse-business-continuity.action';
+import {BrowseBusinessContinuityAction} from './browse-business-continuity.action';
 import { catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
-import { BCAction } from '@core/states/bc/business-continuity/business-continuity.action';
+import {BCAction} from '@core/states/bc/business-continuity/business-continuity.action';
 import { patch } from '@ngxs/store/operators';
 
 export interface BrowseBusinessContinuityStateModel {
@@ -84,6 +84,22 @@ export class BrowseBusinessContinuityState {
       tap(() => {
         this.messageHelper.success();
         dispatch([new BCAction.LoadPage({ page: 0, size: 20 })]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action (BrowseBusinessContinuityAction.GetStatus)
+  getStatus(
+    { dispatch }: StateContext<BrowseBusinessContinuityStateModel>,
+    { payload }: BrowseBusinessContinuityAction.GetStatus
+  ) {
+    return dispatch(new BCAction.Status({versionId: payload.versionId, statusId: payload.statusId})).pipe(
+      tap(() => {
+        this.messageHelper.success();
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

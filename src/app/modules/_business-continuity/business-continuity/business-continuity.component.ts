@@ -1,29 +1,22 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { TranslateService } from '@ngx-translate/core';
-import { GenericValidators } from '@shared/validators/generic-validators';
-import { MenuItem } from 'primeng/api';
-import {Observable, of, Subject, Subscription} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import { TABS } from '../tabs.const';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { BrowseBusinessContinuityAction } from '../states/browse-business-continuity.action';
-import { FormUtils } from '@core/utils/form.utils';
-import {BCAction, RtoState} from '@core/states';
-import { BusinessContinuityState } from '@core/states/bc/business-continuity/business-continuity.state';
-import { BcVersions } from '../../../api/models/bc-versions';
-import { IAuthService } from '@core/services/auth.service';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit,} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {TranslateService} from '@ngx-translate/core';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {LazyLoadEvent, MenuItem} from 'primeng/api';
+import {Observable, Subject, Subscription} from 'rxjs';
+import {debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {TABS} from '../tabs.const';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Select, Store} from '@ngxs/store';
+import {BrowseBusinessContinuityAction} from '../states/browse-business-continuity.action';
+import {FormUtils} from '@core/utils/form.utils';
+import {BCAction} from '@core/states';
+import {BusinessContinuityState} from '@core/states/bc/business-continuity/business-continuity.state';
+import {BcVersions} from '../../../api/models/bc-versions';
+import {IAuthService} from '@core/services/auth.service';
 import {BrowseBusinessContinuityState, BrowseBusinessContinuityStateModel} from '../states/browse-business-continuity.state';
-import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 
 @Component({
   selector: 'app-business-continuity',
@@ -53,7 +46,7 @@ export class BusinessContinuityComponent
   @Select(BusinessContinuityState.blocking)
   blocking$: Observable<boolean>;
 
-
+  public versionID: number;
   public versions$: Observable<BcVersions[]>;
 
   get loggedinUserId() {
@@ -83,6 +76,7 @@ export class BusinessContinuityComponent
       .subscribe((params) => {
         const version = params['_version'];
         if (version) {
+          this.versionID = version;
           // this.versionsDialogOpend = false;
           this.store.dispatch(
             new BrowseBusinessContinuityAction.SetGlobalVersion({
@@ -208,5 +202,41 @@ export class BusinessContinuityComponent
 
   openDialog() {
     this.versionsDialogOpend = true;
+  }
+
+  sendApprovel(status: number) {
+    this.store.dispatch(new BrowseBusinessContinuityAction.GetStatus(
+      {versionId: this.versionID, statusId: status}
+    )) .pipe(
+      switchMap(() => this.store.select(BusinessContinuityState.status)),
+      takeUntil(this.destroy$),
+      take(1),
+      tap((status) => {
+        this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+      })).subscribe();
+  }
+
+  approved(status: number) {
+    this.store.dispatch(new BrowseBusinessContinuityAction.GetStatus(
+      {versionId: this.versionID, statusId: status}
+    )) .pipe(
+      switchMap(() => this.store.select(BusinessContinuityState.status)),
+      takeUntil(this.destroy$),
+      take(1),
+      tap((status) => {
+        this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+      })).subscribe();
+  }
+
+  returnModification(status: number) {
+    this.store.dispatch(new BrowseBusinessContinuityAction.GetStatus(
+      {versionId: this.versionID, statusId: status}
+    )) .pipe(
+      switchMap(() => this.store.select(BusinessContinuityState.status)),
+      takeUntil(this.destroy$),
+      take(1),
+      tap((status) => {
+        this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+      })).subscribe();
   }
 }
