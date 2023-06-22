@@ -304,6 +304,11 @@ export class UserDialogComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    const control = this.form.get('emiratesId');
+    if (!control.touched && control.value ) {
+      control.clearValidators();
+      control.updateValueAndValidity();
+    }
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -343,7 +348,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
 
     this.signatureImgUpload();
     this.profileImgUpload();
-    
+
     if (this.editMode) {
       this.store.dispatch(new BrowseUsersAction.UpdateUser(user));
     } else {
