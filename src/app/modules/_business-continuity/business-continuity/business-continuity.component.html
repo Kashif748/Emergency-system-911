@@ -45,7 +45,48 @@
         </ng-template>
       </ng-template>
     </p-dropdown>
+
+    <p-tag styleClass="p-mr-2 mx-2" value="{{selectedVersion?.status | translateObj}}"></p-tag>
   </div>
+<div>
+  <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
+    <button
+      pButton
+      *ngIf="selectedVersion?.status.id === 2"
+      pRipple
+      type="button"
+      label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
+      icon="pi pi-replay"
+      (click)="returnModification(4)"
+      class="p-button-danger p-button-text mx-2"
+    ></button>
+  </ng-container>
+
+  <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
+    <button
+      pButton
+      *ngIf="selectedVersion?.status.id === 2"
+      pRipple
+      class="p-button-raised mx-2"
+      type="button"
+      (click)="approved(3)"
+      label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
+      icon="pi pi-check"
+    ></button>
+  </ng-container>
+
+  <ng-container *checkPrivileges="'PRIV_CR_BC_VER'">
+    <button
+      pButton
+      pRipple
+      type="button"
+      *ngIf="selectedVersion?.status.id === 1 || selectedVersion?.status.id === 4"
+      label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
+      icon="pi pi-send"
+      (click)="sendApprovel(2)"
+      class="p-button-outlined mx-2"
+    ></button>
+  </ng-container>
 
   <button
     pButton
@@ -54,9 +95,10 @@
     *checkPrivileges="'PRIV_CR_BC_VER'"
     label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
     icon="pi pi-cog"
-    class="p-button-warning"
+    class="p-button-warning mx-2"
     (click)="openDialog()"
   ></button>
+</div>
 </header>
 
 <section [class]="smallScreen ? 'py-6' : 'p-3'">

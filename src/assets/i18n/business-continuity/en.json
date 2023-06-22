@@ -3,6 +3,9 @@
     "PAGE_REPORT": "{first} - {last} of {totalRecords}"
   },
   "VERSIONS_SETTINGS": "Version Management",
+  "SEND_APPROVAL": "Send for Approval",
+  "APPROVED": "Approve",
+  "RETURN_MOD": "Return for Modification",
   "ADD_VERSION": "Add new version",
   "VERSION": "Version",
   "VERSION_EN": "Version name (English)",
@@ -56,7 +59,9 @@
     "CRITICALITY_EN": "Criticality (English)",
     "CRITICALITY_AR": "Criticality (Arabic)",
     "DESC_AR": "Description (Arabic)",
-    "DESC_EN": "Description (English)"
+    "DESC_EN": "Description (English)",
+    "CRITICAL": "Critical",
+    "NONCRITICAL": "Non Critical"
   },
 
   "ACTIVITY_FEQ": {

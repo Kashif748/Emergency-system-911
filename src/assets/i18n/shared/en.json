@@ -1904,6 +1904,7 @@
       "SuccessMSG": "Your  Survey  has been  saved ....Thank you ",
       "SURVEY_REPORT": "Customer Satisfaction Report",
       "Table": {
+        "SERIAL": "SERIAL",
         "happiness": "happiness",
         "other": "other",
         "reason": "reason",

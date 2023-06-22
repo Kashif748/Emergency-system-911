@@ -1,0 +1,65 @@
+{
+  "NO_DATA": "No Data found",
+  "RECOVERY": {
+    "RECOVERY_DETAILS": "Activity Recovery Details",
+    "CAPACITY": "Capacity",
+    "ACTIVITY_PRIORITY": "Activity Priority",
+    "SPOF": "Single Point of Failure (SPOF)",
+    "SKILLS": "Skills",
+    "REMOTELY": "Can be done remotely"
+  },
+  "SYSTEMS": {
+    "NEW": "Choose a new system",
+    "TITLE": "Technology systems to perform the activity or process",
+    "SYSTEM_NAME": "System name",
+    "COL1": "System name",
+    "SYSTEM": "System",
+    "MANAGEMENT": "Owner management"
+  },
+  "EMPLOYEES": {
+    "ADD_NEW": "Add a new employee",
+    "TITLE": "Vital staff/alternates",
+    "NAME_AR": "Employee Name (Arabic)",
+    "NAME_EN": "Employee Name (English)",
+    "TYPE": "Employee type",
+    "LANDLINE": "Business landline",
+    "MOBILE": "Mobile",
+    "OTHER_PHONE": "Alternative phone",
+    "COL1": "مقرلا",
+    "COL2": "إسم الموظف",
+    "COL3": "نوع الموظف",
+    "COL4": "هاتف العمل الثابت",
+    "COL5": "الهاتف المتحرك",
+    "COL6": "الهاتف البديل"
+  },
+  "DEPENDENCIES": {
+    "ADD_NEW": "Add a new dependency",
+    "LIMIT": "Reliability limits",
+    "SECTION": "Related Section",
+    "ACTIVIE_DEPT": "Activity dependency",
+    "DETAILS": "Accreditation details",
+    "NO_DEPEND": "No Dependcy",
+    "ASSOCIATED_MANG": "Associated management",
+    "TITLE": "Activity reliability",
+    "COL1": "Reliability limits",
+    "COL2": "Associated entity",
+    "COL3": "Activity reliability",
+    "COL4": "Accreditation details"
+  },
+  "LOCATIONS": {
+    "SITE": "Choose a new site",
+    "NAME": "Web site name",
+    "LOCATION": "Location",
+    "REGION": "Region",
+    "TITLE": "Activity sites",
+    "COL1": "Location type",
+    "COL2": "Web site name",
+    "COL3": "Region"
+  },
+  "IMPACT_MATRIX": {
+    "TAB_LABEL": "Impact Matrix",
+    "HEADER": " Impact if the activity is not available",
+    "TABLE_CELL": " Impact Types / Time Period",
+    "DIALOG_HEADER": "Reputation Impact Levels"
+  }
+}

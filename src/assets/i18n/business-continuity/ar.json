@@ -3,6 +3,9 @@
     "PAGE_REPORT": "{first} - {last} من {totalRecords}"
   },
   "VERSIONS_SETTINGS": "إعدادات الاصدارات",
+  "SEND_APPROVAL": "ارسال للإعتماد",
+  "APPROVED": "إعتماد",
+  "RETURN_MOD": "ارجاع للتعديل",
   "ADD_VERSION": "إنشاء إصدار جديد",
   "VERSION": "الإصدار",
   "UPDATE": "حفظ التعديلات؟",
@@ -27,7 +30,7 @@
     "EDIT_NEW": "تحرير نوع التأثير",
     "HEADER": "مصفوفة تحليل الأثر على الأعمال",
     "ADD_NEW": " اضافة نوع تأثير جديد",
-    "TAB_LABEL": "مصفوفة تحليل الأثر",
+    "TAB_LABEL": "مصفوفة تحليل التأثير",
     "IMPACT_TYPES": " نوع التأثير",
     "LOW": "منخفض",
     "MEDIUM": "متوسط",
@@ -60,7 +63,10 @@
     "CRITICALITY_EN": "الحيوية(انجليزي)",
     "CRITICALITY_AR": "الحيوية (عربي)",
     "DESC_AR": "الوصف (عربي)",
-    "DESC_EN": " الوصف (انجليزي)"
+    "DESC_EN": " الوصف (انجليزي)",
+    "CRITICAL": "حيوي",
+    "NONCRITICAL": "غير حيوي"
+
   },
   "ACTIVITY_FEQ": {
     "TITLE_ACQ_FEQ": "تردد النشاط",

@@ -16,6 +16,21 @@ export namespace BCAction {
       }
     ) {
     }
+
+  }
+  export class Status {
+    static readonly type = '[BC] Status';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        versionId: number,
+        statusId: number
+      }
+    ) {
+    }
   }
 
   export class Create {
