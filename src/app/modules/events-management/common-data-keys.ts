@@ -71,7 +71,13 @@ export const commonDataItem = [
     hidden: false,
     endPoint: 'assets-category',
   },
-
+  {
+    key: 'alertnessLevel',
+    icon: 'Media/Equalizer',
+    type: 'commonPublic',
+    hidden: false,
+    endPoint: 'alertness-level',
+  },
   {
     key: 'assetsGroup',
     icon: 'Shopping/Box3',
