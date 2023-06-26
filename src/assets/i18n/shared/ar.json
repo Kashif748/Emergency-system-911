@@ -1376,7 +1376,8 @@
       "COPY_CLIPBOARD": "حفظ",
       "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
       "PUSH_NOTIFICATION": "تنبيهات البرنامج",
-      "WORKLOG": "نموذج سجل المهمة/البلاغ"
+      "WORKLOG": "نموذج سجل المهمة/البلاغ",
+      "alertnessLevels": "مستويات الاستعداد"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",
