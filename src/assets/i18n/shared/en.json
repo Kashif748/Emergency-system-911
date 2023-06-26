@@ -1347,7 +1347,8 @@
       "SMS_NOTIFICATION": "SMS Notification",
       "PUSH_NOTIFICATION": "Push Notification",
       "WORKLOG": "Worklog Templates",
-      "COPY_CLIPBOARD": "Copy to clipboard"
+      "COPY_CLIPBOARD": "Copy to clipboard",
+      "alertnessLevel": "Alertness Levels"
     },
     "NEWS": {
       "NEWS": "News",
