@@ -120,7 +120,7 @@ export class InquiryComponent implements OnInit, OnChanges {
   createForm() {
     this.formGroup = this.formBuilder.group({
       id: [0],
-      reportingVia: [null, [Validators.required]],
+      reportingVia: [4 , [Validators.required]],
       reporterName: [null, Validators.required],
       reportedByMobile: [''],
       reporterEmail: ['', [Validators.email]],
@@ -149,6 +149,17 @@ export class InquiryComponent implements OnInit, OnChanges {
   }
 
   checkReportingViewValidation() {
+    this.formGroup
+      .get('reportedByMobile')
+      .setValidators([
+        Validators.required,
+        Validators.pattern(RegxConst.PHONE_REGEX),
+      ]);
+    this.formGroup
+      .get('reporterEmail')
+      .setValidators(
+        Validators.compose([Validators.pattern(RegxConst.EMAIL_REGEX)])
+      );
     this.formGroup.get('reportingVia').valueChanges.subscribe((data) => {
       const item = this.reportingVia.find((item) => item.id === data);
       if (!item) {
