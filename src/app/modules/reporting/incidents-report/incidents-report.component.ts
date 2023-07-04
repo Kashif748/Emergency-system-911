@@ -79,6 +79,7 @@ export class IncidentsReportComponent implements OnInit {
   public advancedSearchDataList: DataOptions[] = [];
   public formFields: FormFieldName[] = [
     { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
+    { formControlName: AdvancedSearchFieldsEnum.SUB_CATEGORY },
     { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
     { formControlName: AdvancedSearchFieldsEnum.SR_NO },
     { formControlName: AdvancedSearchFieldsEnum.SERIAL },
@@ -524,6 +525,10 @@ export class IncidentsReportComponent implements OnInit {
         (cat: ICategory) => cat.parent === null
       ),
     };
+    const subCategories: DataOptions = {
+      formControlName: AdvancedSearchFieldsEnum.SUB_CATEGORY,
+      children: []
+    };
     const reportingVias: DataOptions = {
       formControlName: AdvancedSearchFieldsEnum.REPORTING_VIA,
       children: this.commonData?.reportingVias,
@@ -536,6 +541,7 @@ export class IncidentsReportComponent implements OnInit {
       priorities,
       cities,
       mainCategories,
+      subCategories,
       reportingVias,
       statuses,
       group,
