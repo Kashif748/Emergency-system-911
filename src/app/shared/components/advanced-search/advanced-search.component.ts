@@ -24,6 +24,9 @@ import {
   AdvancedSearchFieldsEnum,
   isExpiredFilterOption,
 } from './advancedSearch.model';
+import {environment} from "../../../../environments/environment";
+import {IncidentsService} from "../../../_metronic/core/services/incidents.service";
+import {tap} from "rxjs/operators";
 
 export interface DataOptions {
   formControlName: string;
@@ -45,7 +48,9 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
     new EventEmitter<IncidentFilter>();
   @Input() dataLists: DataOptions[] = [];
   @Input() formFields: FormFieldName[] = [];
+  @Input() incidentReport: boolean;
   mainCategories: any[];
+  incSubCategories: any[];
   commonData: any;
   lang: any;
   minDate: any;
@@ -64,7 +69,8 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
     public data: { formFields: FormFieldName[]; dataLists: DataOptions[] },
     private store: Store,
     private translationService: TranslationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    protected incidentService: IncidentsService,
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +88,11 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
         this.createForm(data);
         // this.advncedFilterForm.reset();
       });
+    const date = new Date().setDate(1);
+    if (this.incidentReport) {
+      this.advncedFilterForm.get('fromDate').setValue(new Date(date));
+      this.advncedFilterForm.get('toDate').setValue(new Date());
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -149,6 +160,28 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
       .get(AdvancedSearchFieldsEnum.END_DATE)
       .patchValue(toDate ? DateTimeUtil.format(new Date(toDate), DateTimeUtil.DATE_FORMAT) : null);
   }
+
+  public onCategoryChange(event): void {
+    let found = false;
+
+    for (const obj of this.formFields) {
+      if (obj.formControlName === this.advancedSearchFields.SUB_CATEGORY) {
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      const categoryId = event.source.value;
+      this.incSubCategories = [];
+      this.incidentService
+        .getIncidentSubCategories(categoryId)
+        .pipe(
+          tap((data) => {
+            this.incSubCategories = data.result;
+          })).subscribe();
+    }
+  }
+
 
   // fillAdvancedSearchFormFieldsData() {
   //   const newAdvancedSearchFormFields = this.data.formFields;

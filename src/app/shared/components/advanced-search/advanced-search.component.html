@@ -219,28 +219,58 @@
 
     <!-- category -->
     <div
+    class="form-group col-lg-6 pl-4 pr-4"
+    *ngIf="formFields | showFormControl : advancedSearchFields.CATEGORY"
+  >
+    <mat-form-field
+      [dir]="directionality.value"
+      appearance="fill"
+      class="w-100"
+    >
+      <mat-label>{{ "INCIDENTS.CATEGORY" | translate }}</mat-label>
+      <mat-select
+        placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
+        [id]="advancedSearchFields.CATEGORY"
+        [formControlName]="advancedSearchFields.CATEGORY"
+        (selectionChange)="onCategoryChange($event)"
+      >
+        <mat-option
+          *ngFor="
+              let category of dataLists
+                | extractDataList : advancedSearchFields.CATEGORY
+            "
+          [value]="category.id"
+        >
+          {{ category | propTranslator : "name" }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+    <!--Sub category -->
+    <div
       class="form-group col-lg-6 pl-4 pr-4"
-      *ngIf="formFields | showFormControl : advancedSearchFields.CATEGORY"
+      *ngIf="formFields | showFormControl : advancedSearchFields.SUB_CATEGORY"
     >
       <mat-form-field
         [dir]="directionality.value"
         appearance="fill"
         class="w-100"
       >
-        <mat-label>{{ "INCIDENTS.CATEGORY" | translate }}</mat-label>
+        <mat-label>{{ "INCIDENTS.SUBCATEGORY" | translate }}</mat-label>
         <mat-select
-          placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
-          [id]="advancedSearchFields.CATEGORY"
-          [formControlName]="advancedSearchFields.CATEGORY"
+          placeholder="{{ 'INCIDENTS.SUBCATEGORY' | translate }}"
+          [id]="advancedSearchFields.SUB_CATEGORY"
+          [formControlName]="advancedSearchFields.SUB_CATEGORY"
+
         >
           <mat-option
             *ngFor="
-              let category of dataLists
-                | extractDataList : advancedSearchFields.CATEGORY
+              let subCategories of incSubCategories
             "
-            [value]="category.id"
+            [value]="subCategories.id"
           >
-            {{ category | propTranslator : "name" }}
+            {{ subCategories | propTranslator : "name" }}
           </mat-option>
         </mat-select>
       </mat-form-field>

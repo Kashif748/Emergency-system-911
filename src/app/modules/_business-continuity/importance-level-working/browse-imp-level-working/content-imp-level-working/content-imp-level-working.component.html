@@ -109,7 +109,7 @@
                 <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-item>
+            <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
               <tr class="cursor-pointer hoverable">
                 <td class="flag-td">
                   <div
@@ -121,7 +121,7 @@
                 </td>
 
                 <td class="min-w-100px" (click)="item.isActive && openView(item.id)">
-                  {{ item.id }}
+                  {{ rowIndex + 1 }}
                 </td>
 
                 <td class="min-w-150px" (click)="item.isActive && openView(item.id)">

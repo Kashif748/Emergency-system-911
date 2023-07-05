@@ -79,6 +79,7 @@
               </mat-expansion-panel-header>
               <!-- filters -->
               <app-advanced-search
+                [incidentReport] = "true"
                 [dataLists]="advancedSearchDataList"
                 [formFields]="formFields"
                 (filterChanged$)="onFilterChanged($event)"
