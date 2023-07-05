@@ -89,7 +89,7 @@ export namespace BrowseSituationsAction {
     /**
      *
      */
-    constructor(public payload: { situationId: number }) {}
+    constructor(public payload: { dialogName: string; situationId: number }) {}
   }
 
   export class GetStatistics {

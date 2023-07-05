@@ -1,23 +1,14 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { SituationsAction } from '@core/states/situations/situations.action';
-import { SituationsState } from '@core/states/situations/situations.state';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { iif, patch } from '@ngxs/store/operators';
-import { EMPTY } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { Theme } from 'src/app/api/models';
-import { BrowseSituationsAction } from './browse-situations.action';
+import {Injectable} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {SituationsAction} from '@core/states/situations/situations.action';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {iif, patch} from '@ngxs/store/operators';
+import {EMPTY} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {BrowseSituationsAction} from './browse-situations.action';
 
 export interface BrowseSituationsStateModel {
   pageRequest: PageRequestModel;
@@ -272,5 +263,22 @@ export class BrowseSituationsState {
         return EMPTY;
       })
     );
+  }
+
+  @Action(BrowseSituationsAction.OpenView, { cancelUncompleted: true })
+  openView(
+    {}: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.OpenView
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog: this.route.snapshot.queryParams['_dialog']
+          ? undefined
+          : payload.dialogName,
+        _id: payload.situationId,
+        _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

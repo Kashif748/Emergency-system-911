@@ -1,7 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, ComponentFactoryResolver, Injector, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { CommonDataState } from '@core/states';
+import {CommonDataState, TaskState} from '@core/states';
 import { SituationsAction } from '@core/states/situations/situations.action';
 import { SituationsState } from '@core/states/situations/situations.state';
 import { FormUtils } from '@core/utils';
@@ -20,6 +20,11 @@ import {
 } from 'rxjs/operators';
 import { SituationProjection } from 'src/app/api/models';
 import { BrowseSituationsAction } from '../../states/browse-situations.action';
+import {TaskDialogComponent} from "../../../_task-mgmt/browse-tasks/task-dialog/task-dialog.component";
+import {Dialog} from "primeng/dialog";
+import {TabView} from "primeng/tabview";
+import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
+import {FilesListComponent} from "@shared/attachments-list/files-list/files-list.component";
 
 @Component({
   selector: 'app-situation-dialog',
@@ -28,12 +33,29 @@ import { BrowseSituationsAction } from '../../states/browse-situations.action';
 })
 export class SituationDialogComponent implements OnInit, OnDestroy {
   formDialog$: Observable<boolean>;
+  viewOnly$: Observable<boolean>;
+  @ViewChild(Dialog) dialog: Dialog;
+  @ViewChild(TabView) tabv: TabView;
+
+  @ViewChild('attachContainer', { read: ViewContainerRef })
+  attachContainer: ViewContainerRef;
+  attachComponent: FilesListComponent;
+
+  public get asDialog() {
+    return this.route.component !== SituationDialogComponent;
+  }
 
   @Select(CommonDataState.newsTypes)
   public newsTypes$: Observable<any[]>;
 
   @Select(SituationsState.blocking)
   blocking$: Observable<boolean>;
+
+  @Input()
+  loading: boolean;
+
+  @Input()
+  activeTab: number = 0;
 
   form: FormGroup;
 
@@ -42,6 +64,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy {
   }
 
   _situationId: number;
+  _mode: string;
   @Input()
   set situationId(v: number) {
     this._situationId = v;
@@ -93,14 +116,10 @@ export class SituationDialogComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private store: Store
-  ) {}
-
-  ngOnInit(): void {
-    this.formDialog$ = this.route.queryParams.pipe(
-      map((params) => params['_dialog'] === '_form_dialog')
-    );
-    this.buildForm();
+    private store: Store,
+    private cfr: ComponentFactoryResolver,
+    private injector: Injector,
+  ) {
     this.route.queryParams
       .pipe(
         map((params) => params['_id']),
@@ -109,6 +128,35 @@ export class SituationDialogComponent implements OnInit, OnDestroy {
       .subscribe((id) => {
         this.situationId = id;
       });
+    this.route.queryParams.pipe(
+      map((params) => params['_mode']),
+      takeUntil(this.destroy$)
+    )
+      .subscribe((mode) => {
+        this._mode = mode;
+      });
+    this.viewOnly$ = this.route.queryParams.pipe(
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {
+          }
+        }
+      })
+    );
+  }
+
+  ngOnInit(): void {
+    this.buildForm();
+    this.formDialog$ = this.route.queryParams.pipe(
+      map((params) => params['_dialog'] === '_form_dialog')
+    );
   }
 
   ngOnDestroy(): void {
@@ -165,5 +213,33 @@ export class SituationDialogComponent implements OnInit, OnDestroy {
   }
   close() {
     this.store.dispatch(new BrowseSituationsAction.ToggleDialog({}));
+  }
+  clear() {
+    const situationId = this._situationId;
+    this.situationId = null;
+    this.situationId = situationId;
+  }
+  tab(index: number) {
+  }
+
+  async loadAttachComponent() {
+    if (this.attachComponent) return;
+
+    this.attachContainer?.clear();
+    const { FilesListComponent } = await import(
+      '@shared/attachments-list/files-list/files-list.component'
+      );
+    const factory = this.cfr.resolveComponentFactory(FilesListComponent);
+
+    const { instance, changeDetectorRef: cdr } =
+      this.attachContainer.createComponent(factory, null, this.injector);
+    const situation = this.store.selectSnapshot(SituationsState.situation);
+
+    instance.recordId = this._situationId;
+    instance.foreignHelperId = (situation?.id as any)?.id;
+    instance.tagId = UploadTagIdConst.TASKS;
+    instance.inline = true;
+    this.attachComponent = instance;
+    cdr.detectChanges();
   }
 }

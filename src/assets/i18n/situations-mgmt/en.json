@@ -19,6 +19,11 @@
     "RECOVERY_RATE": "Recovery Rate",
     "INCIDENT_MAIN_CATEGORY": "Incident main category",
     "CHART_TITLE": "Incidents Statistics by Importance",
-    "ACTIVE_NOW" :"Active Now"
+    "ACTIVE_NOW" :"Active Now",
+    "ATTACHMENT_NAMR" :"Attachment Name",
+    "ORG_NAME" :"Org Name",
+    "ATTACHMENT_TYPE" :"Attachment Type (Plan/Shift)",
+    "SITUATION_INFO" :"Situation Info",
+    "SITUATION_ATTACHMENT" :"Situation Attachment"
   }
 }
