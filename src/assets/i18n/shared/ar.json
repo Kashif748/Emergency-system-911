@@ -1377,7 +1377,7 @@
       "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
       "PUSH_NOTIFICATION": "تنبيهات البرنامج",
       "WORKLOG": "نموذج سجل المهمة/البلاغ",
-      "alertnessLevels": "مستويات الاستعداد"
+      "alertnessLevel": "مستويات الاستعداد"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",
