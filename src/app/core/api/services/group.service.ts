@@ -43,7 +43,7 @@ export class GroupService {
     return this.http.get<any>(`${this.baseUrl}/${id}`, {});
   }
 
-  getNonGlobalGroupsByOrgId(id, org?, name = '', page = 0, size = 10) {
+  getNonGlobalGroupsByOrgId(id, name = '', page = 0, size = 10, org?) {
     const params = new HttpParams()
       .append('name', name ?? '')
       .append('sort', org ?? '')
