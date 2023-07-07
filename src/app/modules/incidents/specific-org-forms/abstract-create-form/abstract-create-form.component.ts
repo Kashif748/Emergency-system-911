@@ -1437,7 +1437,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   }
 
   loadNonGlobalGroups(id, page, size) {
-    this.groupService.getNonGlobalGroupsByOrgId(id, '', page, size).subscribe(
+    this.groupService.getNonGlobalGroupsByOrgId(id, 'orgStructure,asc', '', page, size).subscribe(
       (data) => {
         if (data) {
           this.groups.push(...data.result?.content);

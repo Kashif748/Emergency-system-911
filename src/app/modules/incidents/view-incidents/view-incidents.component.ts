@@ -52,6 +52,7 @@ import { AddressSearchResultModel } from '@shared/components/map/utils/map.model
 import { IncidentReminderComponent } from './incident-reminder/incident-reminder.component';
 import { MapService } from '@shared/components/map/services/map.service';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import {ConfirmDialogComponent} from "../../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-view-incidents',
@@ -220,7 +221,8 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private readonly commonService: CommonService,
     private shareLocationService: ShareLocationService,
-    protected mapService: MapService
+    protected mapService: MapService,
+    private dialog: MatDialog,
   ) {
     super();
     this.incidentId = this.route.snapshot.params['id'];
@@ -318,21 +320,28 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
   }
 
   deleteIncident() {
-    this.incidentsService
-      .updateIncidentStatus({
-        incidentId: this.incidentDetails?.id,
-        statusId: 4,
-        finalStatement: '',
-      })
-      .subscribe(
-        (response) => {
-          this.alertService.openSuccessSnackBar();
-          this.back();
-        },
-        (err) => {
-          this.alertService.openFailureSnackBar();
+    this.dialog
+      .open(ConfirmDialogComponent)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.incidentsService
+            .updateIncidentStatus({
+              incidentId: this.incidentDetails?.id,
+              statusId: 4,
+              finalStatement: '',
+            })
+            .subscribe(
+              (response) => {
+                this.alertService.openSuccessSnackBar();
+                this.back();
+              },
+              (err) => {
+                this.alertService.openFailureSnackBar();
+              }
+            );
         }
-      );
+      });
   }
   back() {
     this.location.back();
