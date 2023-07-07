@@ -835,7 +835,7 @@ export class IncidentsReportComponent implements OnInit {
   }
 
   async openIncident(incident: any) {
-    await this.router.navigate(['/incidents/view', incident.id]);
+    window.open('/incidents/view/' + incident.id, '_blank');
   }
   loadNonGlobalGroups(id, page, size) {
     this.groupService.getNonGlobalGroupsByOrgId(id, '', page, size).subscribe(
