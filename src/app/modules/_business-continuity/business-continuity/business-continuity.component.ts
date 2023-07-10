@@ -1,22 +1,39 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit,} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ILangFacade} from '@core/facades/lang.facade';
-import {TranslateService} from '@ngx-translate/core';
-import {GenericValidators} from '@shared/validators/generic-validators';
-import {LazyLoadEvent, MenuItem} from 'primeng/api';
-import {Observable, Subject, Subscription} from 'rxjs';
-import {debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {TABS} from '../tabs.const';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Select, Store} from '@ngxs/store';
-import {BrowseBusinessContinuityAction} from '../states/browse-business-continuity.action';
-import {FormUtils} from '@core/utils/form.utils';
-import {BCAction} from '@core/states';
-import {BusinessContinuityState} from '@core/states/bc/business-continuity/business-continuity.state';
-import {BcVersions} from '../../../api/models/bc-versions';
-import {IAuthService} from '@core/services/auth.service';
-import {BrowseBusinessContinuityState, BrowseBusinessContinuityStateModel} from '../states/browse-business-continuity.state';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { TranslateService } from '@ngx-translate/core';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { Observable, Subject, Subscription } from 'rxjs';
+import {
+  debounceTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { TABS } from '../tabs.const';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { BrowseBusinessContinuityAction } from '../states/browse-business-continuity.action';
+import { FormUtils } from '@core/utils/form.utils';
+import { BCAction } from '@core/states';
+import { BusinessContinuityState } from '@core/states/bc/business-continuity/business-continuity.state';
+import { BcVersions } from '../../../api/models/bc-versions';
+import { IAuthService } from '@core/services/auth.service';
+import {
+  BrowseBusinessContinuityState,
+  BrowseBusinessContinuityStateModel,
+} from '../states/browse-business-continuity.state';
 
 @Component({
   selector: 'app-business-continuity',
@@ -68,37 +85,40 @@ export class BusinessContinuityComponent
     private store: Store,
     private auth: IAuthService
   ) {
-    this.versions$ = this.store.select(BusinessContinuityState.versions).pipe(
-      filter((p) => !!p),
-    );
+    this.versions$ = this.store
+      .select(BusinessContinuityState.versions)
+      .pipe(filter((p) => !!p));
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         const version = params['_version'];
-        if (version) {
-          this.versionID = version;
-          // this.versionsDialogOpend = false;
-          this.store.dispatch(
-            new BrowseBusinessContinuityAction.SetGlobalVersion({
-              id: version,
-            })
-          );
-          this.versionsSubscription = this.versions$.subscribe(versions => {
-            // Assuming you have a condition to select a specific version
-            // Replace the condition with your own logic
-            const selectedVersion = versions?.find((versions) => {
-              if (versions.id == version) {
-                return versions;
+        const currentTab = this.checkCurrentTab();
+        if (currentTab?.state?.requiredVersion) {
+          if (version) {
+            this.versionID = version;
+            // this.versionsDialogOpend = false;
+            this.store.dispatch(
+              new BrowseBusinessContinuityAction.SetGlobalVersion({
+                id: version,
+              })
+            );
+            this.versionsSubscription = this.versions$.subscribe((versions) => {
+              // Assuming you have a condition to select a specific version
+              // Replace the condition with your own logic
+              const selectedVersion = versions?.find((versions) => {
+                if (versions.id == version) {
+                  return versions;
+                }
+              });
+
+              if (selectedVersion) {
+                this.selectedVersion = selectedVersion;
               }
             });
-
-            if (selectedVersion) {
-              this.selectedVersion = selectedVersion;
-            }
-          });
-        } else {
-          this.versionsDialogOpend = true;
-          // this.toggleDialog();
+          } else {
+            this.versionsDialogOpend = true;
+            // this.toggleDialog();
+          }
         }
       });
   }
@@ -125,19 +145,40 @@ export class BusinessContinuityComponent
   }
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.items = this.translateMenu(TABS);
+      this.items = this.prepareMenu(TABS);
       this.cdr.detectChanges();
     }, 1000);
   }
-  translateMenu(items: MenuItem[]): MenuItem[] {
+  prepareMenu(items: MenuItem[]): MenuItem[] {
     return items.map((tab) => {
+      tab.command = (e) => this.navigate(e?.item);
       tab.label = this.translate.instant(tab.label);
-      tab.queryParamsHandling = 'merge';
       if (tab.items && tab.items.length > 0) {
-        tab.items = this.translateMenu(tab.items);
+        tab.items = this.prepareMenu(tab.items);
       }
       return tab;
     });
+  }
+
+  checkCurrentTab(): MenuItem {
+    const router = this.router.url;
+    const tab = TABS.find(
+      (item) =>
+        item?.state?.routerLink && router.includes(item?.state?.routerLink)
+    );
+    console.log(tab, router);
+    return tab;
+  }
+  navigate(item: MenuItem) {
+    console.log(item);
+    if (item.state) {
+      if (item.state?.requiredVersion && !this.versionID) {
+        this.openDialog();
+      }
+      this.router.navigate(['business-continuity/' + item.state?.routerLink], {
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 
   createForm() {
@@ -205,38 +246,59 @@ export class BusinessContinuityComponent
   }
 
   sendApprovel(status: number) {
-    this.store.dispatch(new BrowseBusinessContinuityAction.GetStatus(
-      {versionId: this.versionID, statusId: status}
-    )) .pipe(
-      switchMap(() => this.store.select(BusinessContinuityState.status)),
-      takeUntil(this.destroy$),
-      take(1),
-      tap((status) => {
-        this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-      })).subscribe();
+    this.store
+      .dispatch(
+        new BrowseBusinessContinuityAction.GetStatus({
+          versionId: this.versionID,
+          statusId: status,
+        })
+      )
+      .pipe(
+        switchMap(() => this.store.select(BusinessContinuityState.status)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((status) => {
+          this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+        })
+      )
+      .subscribe();
   }
 
   approved(status: number) {
-    this.store.dispatch(new BrowseBusinessContinuityAction.GetStatus(
-      {versionId: this.versionID, statusId: status}
-    )) .pipe(
-      switchMap(() => this.store.select(BusinessContinuityState.status)),
-      takeUntil(this.destroy$),
-      take(1),
-      tap((status) => {
-        this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-      })).subscribe();
+    this.store
+      .dispatch(
+        new BrowseBusinessContinuityAction.GetStatus({
+          versionId: this.versionID,
+          statusId: status,
+        })
+      )
+      .pipe(
+        switchMap(() => this.store.select(BusinessContinuityState.status)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((status) => {
+          this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+        })
+      )
+      .subscribe();
   }
 
   returnModification(status: number) {
-    this.store.dispatch(new BrowseBusinessContinuityAction.GetStatus(
-      {versionId: this.versionID, statusId: status}
-    )) .pipe(
-      switchMap(() => this.store.select(BusinessContinuityState.status)),
-      takeUntil(this.destroy$),
-      take(1),
-      tap((status) => {
-        this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-      })).subscribe();
+    this.store
+      .dispatch(
+        new BrowseBusinessContinuityAction.GetStatus({
+          versionId: this.versionID,
+          statusId: status,
+        })
+      )
+      .pipe(
+        switchMap(() => this.store.select(BusinessContinuityState.status)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((status) => {
+          this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+        })
+      )
+      .subscribe();
   }
 }
