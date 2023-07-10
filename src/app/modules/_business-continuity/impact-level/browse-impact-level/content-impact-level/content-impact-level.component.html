@@ -103,9 +103,10 @@
           let-item
           let-editing="editing"
           let-ri="rowIndex"
+          let-rowIndex="rowIndex"
         >
           <tr [pEditableRow]="item" class="cursor-pointer hoverable">
-            <td>{{ item.id }}</td>
+            <td>{{ rowIndex + 1 }}</td>
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
