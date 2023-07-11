@@ -92,6 +92,12 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
     if (this.incidentReport) {
       this.advncedFilterForm.get('fromDate').setValue(new Date(date));
       this.advncedFilterForm.get('toDate').setValue(new Date());
+      this.flattenValues();
+      this.store.dispatch(
+        UpdateFilter({ filter: this.advncedFilterForm.value })
+      );
+      this.filterChanged$.emit(this.advncedFilterForm.value);
+      // this.search();
     }
   }
 
@@ -130,7 +136,6 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
       this.store.dispatch(
         UpdateFilter({ filter: this.advncedFilterForm.value })
       );
-      this.dialogRef.close(this.advncedFilterForm.value);
     }
   }
 
