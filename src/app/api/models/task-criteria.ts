@@ -4,9 +4,10 @@ export interface TaskCriteria {
   body?: string;
   dueDate?: string;
   fromDate?: string;
+  id?: number;
   incidentId?: number;
   priority?: number;
-  serial?: number;
+  serial?: string;
   status?: Array<number>;
   title?: string;
   toDate?: string;

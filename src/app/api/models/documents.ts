@@ -17,6 +17,7 @@ export interface Documents {
   mimeType: string;
   recordId?: number;
   size: number;
+  updatedBy?: (User | UserInappAuthentication | UserMiddlewareAuth);
   uuid?: string;
 }
 

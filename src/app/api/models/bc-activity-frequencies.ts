@@ -2,14 +2,10 @@
 /* eslint-disable */
 import { OrgStructure } from './org-structure';
 export interface BcActivityFrequencies {
-  createdBy?: number;
-  createdOn?: string;
   id?: number;
   isActive?: boolean;
   nameAr?: string;
   nameEn?: string;
   orgStructure?: OrgStructure;
-  updatedBy?: number;
-  updatedOn?: string;
 }
 
