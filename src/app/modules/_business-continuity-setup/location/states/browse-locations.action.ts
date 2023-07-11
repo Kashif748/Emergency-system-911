@@ -38,6 +38,14 @@ export namespace BrowseLocationsAction {
     constructor(public payload: BcLocations) {}
   }
 
+
+  export class UpdateFilter {
+    static readonly type = '[BrowseLocations] Update Filter';
+    /**
+     *
+     */
+    constructor(public payload: { clear?: boolean; [key: string]: any }) {}
+  }
   export class ToggleDialog {
     static readonly type = '[BrowseLocations] Toggle Dialog';
     /**

@@ -74,19 +74,18 @@ export class LocationsState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
+
     return this.locationService
-      .getAll14({
+      .search8({
         isActive: true,
-        versionId: versionID,
+        name: payload.filters?.name ?? '',
+        locationTypeId: payload.filters?.locationTypeId ?? '',
+
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
-        // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -126,7 +125,7 @@ export class LocationsState {
       })
     );
     return this.locationService
-      .insertOne5({
+      .insertOne9({
         body: payload,
       })
       .pipe(
@@ -152,7 +151,7 @@ export class LocationsState {
     );
 
     return this.locationService
-      .update84({
+      .update88({
         body: payload,
       })
       .pipe(
@@ -184,7 +183,7 @@ export class LocationsState {
         blocking: true,
       })
     );
-    return this.locationService.getOne5({ id: payload.id }).pipe(
+    return this.locationService.getOne9({ id: payload.id }).pipe(
       tap((location) => {
         setState(
           patch<LocationsStateModel>({

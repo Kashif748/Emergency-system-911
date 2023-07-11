@@ -132,6 +132,28 @@ export class BrowseLocationsState {
   ) {
     return dispatch(new LocationsAction.GetLocation(payload));
   }
+
+
+  @Action(BrowseLocationsAction.UpdateFilter, { cancelUncompleted: true })
+  updateFilter(
+    { setState }: StateContext<BrowseLocationsStateModel>,
+    { payload }: BrowseLocationsAction.UpdateFilter
+  ) {
+    setState(
+      patch<BrowseLocationsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: 0,
+          filters: iif(
+            payload.clear === true,
+            {},
+            patch({
+              ...payload,
+            })
+          ),
+        }),
+      })
+    );
+  }
   @Action(BrowseLocationsAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
     { dispatch }: StateContext<BrowseLocationsStateModel>,

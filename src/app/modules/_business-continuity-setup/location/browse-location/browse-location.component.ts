@@ -129,24 +129,12 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
   }
 
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
-    /*  if (event?.key === 'Enter') {
-        return this.search();
-      }
-      const keys = Object.keys(filter);
-      if (keys.length > 0) {
-        switch (keys[0]) {
-          case 'orgId':
-            filter['orgId'] = {
-              key: filter['orgId']?.key,
-              labelEn: filter['orgId'].labelEn,
-              labelAr: filter['orgId'].labelAr,
-            };
-            break;
-          default:
-            break;
-        }
-      }
-      this.store.dispatch(new BrowseGroupsAction.UpdateFilter(filter));*/
+    if (event?.key === 'Enter') {
+      return this.search();
+    }
+    const keys = Object.keys(filter);
+
+    this.store.dispatch(new BrowseLocationsAction.UpdateFilter(filter));
   }
 
   public loadPage(event: LazyLoadEvent) {
@@ -155,6 +143,7 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
         pageRequest: {
           first: event.first,
           rows: event.rows,
+
         },
       })
     );

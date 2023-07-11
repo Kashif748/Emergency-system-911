@@ -13,15 +13,6 @@
             type="text"
             pInputText
             [ngModel]=""
-            placeholder="{{ 'LOCATIONS.DEPARTMENT_NAME' | translate }}"
-            (keyup)="updateFilter({ name: $event.target.value }, $event)"
-          />
-        </div>
-        <div class="p-field p-col-4 p-md-2">
-          <input
-            type="text"
-            pInputText
-            [ngModel]=""
             placeholder="{{ 'LOCATIONS.LOCATION_NAME' | translate }}"
             (keyup)="updateFilter({ name: $event.target.value }, $event)"
           />
@@ -32,18 +23,12 @@
             pInputText
             [ngModel]=""
             placeholder="{{ 'LOCATIONS.LOCATION_TYPE' | translate }}"
-            (keyup)="updateFilter({ name: $event.target.value }, $event)"
+            (keyup)="
+              updateFilter({ locationTypeId: $event.target.value }, $event)
+            "
           />
         </div>
-        <div class="p-field p-col-4 p-md-2">
-          <input
-            type="text"
-            pInputText
-            [ngModel]=""
-            placeholder="{{ 'LOCATIONS.DISTRICT' | translate }}"
-            (keyup)="updateFilter({ name: $event.target.value }, $event)"
-          />
-        </div>
+
         <div class="p-col p-d-flex">
           <div class="ml-dir-auto"></div>
           <div class="mx-1">
