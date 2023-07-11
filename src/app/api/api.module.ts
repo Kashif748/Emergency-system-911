@@ -146,6 +146,7 @@ import { CommonControllerService } from './services/common-controller.service';
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
+import { BcLocationsControllerService } from './services/bc-locations-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -255,6 +256,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     BcOrgHirTypeControllerService,
     BcRecoveryPrioritiesControllerService, ,
     BcLocationTypeControllerService,
+    BcLocationsControllerService,
     BcWorkImportanceLevelsControllerService,
     BcImpactTypesMatrixControllerService,
     BcImpactTypeControllerService,

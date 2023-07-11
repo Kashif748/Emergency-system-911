@@ -97,6 +97,7 @@ export { BcOrgHirControllerService } from './services/bc-org-hir-controller.serv
 export { BcOrgHirTypeControllerService } from './services/bc-org-hir-type-controller.service';
 export { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
 export { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
+export { BcLocationsControllerService } from './services/bc-locations-controller.service';
 export { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
 export { BcImpactTypesMatrixControllerService } from './services/bc-impact-types-matrix-controller.service';
 export { BcImpactTypeControllerService } from './services/bc-impact-type-controller.service';

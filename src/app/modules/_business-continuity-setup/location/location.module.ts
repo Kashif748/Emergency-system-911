@@ -34,6 +34,8 @@ import {ButtonModule} from "primeng/button";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {BlockUIModule} from "primeng/blockui";
+import { BrowseLocationsState } from './states/browse-locations.state';
+import { NgxsModule } from '@ngxs/store';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/business-continuity-setup/', '.json');
@@ -70,6 +72,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     ProgressSpinnerModule,
     BlockUIModule,
+    NgxsModule.forFeature([BrowseLocationsState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
