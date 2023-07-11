@@ -8,50 +8,85 @@ export const TABS: MenuItem[] = [
     items: [
       {
         label: 'ORG_DETAILS',
-        routerLink: 'org/org-details',
+        state: {
+          routerLink: 'org/org-details',
+          requiredVersion: false,
+        },
       },
+
       {
         label: 'ORG_ARTCH',
-        routerLink: 'org/org-strucure',
         routerLinkActiveOptions: 'active-tab',
+        state: {
+          routerLink: 'org/org-strucure',
+          requiredVersion: false,
+        },
       },
     ],
   },
   {
+    label: 'LOC_TYPE_LABEL',
+    icon: 'pi pi-map-marker',
+    state: {
+      routerLink: 'loc-types',
+      requiredVersion: false,
+    },
+  },
+  {
+    label: 'ACTIVETY_FREQUENCY',
+    icon: 'flaticon2-refresh',
+    state: {
+      routerLink: 'activey-frquency',
+      requiredVersion: false,
+    },
+  },
+
+  { id: 'separator', separator: true },
+
+  {
     label: 'IMPACTS',
     icon: 'flaticon-warning',
+
     items: [
       {
         label: 'IMPACT_LEVELS.TAB_LABEL',
-        routerLink: 'impact-level',
+        state: {
+          routerLink: 'impact-level',
+          requiredVersion: true,
+        },
       },
-      { label: 'IMPACT_ANALYSIS.TAB_LABEL', routerLink: 'impact-analysis' },
+      {
+        label: 'IMPACT_ANALYSIS.TAB_LABEL',
+        state: {
+          routerLink: 'impact-analysis',
+          requiredVersion: true,
+        },
+      },
     ],
   },
   {
     label: 'RTO_LIST_LABEL',
     icon: 'pi pi-clock',
-    routerLink: 'rto-list',
+    state: {
+      routerLink: 'rto-list',
+      requiredVersion: true,
+    },
   },
   {
     label: 'AV_LEVELS',
     icon: 'pi pi-chart-bar',
-    routerLink: 'imp-level-working',
+    state: {
+      routerLink: 'imp-level-working',
+      requiredVersion: true,
+    },
   },
   {
     label: 'RECVOVER_PRIORITIES',
     icon: 'pi pi-sort-amount-up',
-    routerLink: 'activey-priority',
-  },
-  {
-    label: 'LOC_TYPE_LABEL',
-    icon: 'pi pi-map-marker',
-    routerLink: 'loc-types',
-  },
-  {
-    label: 'ACTIVETY_FREQUENCY',
-    icon: 'flaticon2-refresh',
-    routerLink: 'activey-frquency',
+    state: {
+      routerLink: 'activey-priority',
+      requiredVersion: true,
+    },
   },
 ];
 
@@ -99,35 +134,35 @@ export const DATA = {
       nameAr: 'منخفض جدا',
       nameEn: 'Very Low',
       isActive: false,
-      colorCode: '#ffffff'
+      colorCode: '#ffffff',
     },
     {
       id: 2,
       nameAr: 'منخفض',
       nameEn: 'Low',
       isActive: false,
-      colorCode: '#ffffff'
+      colorCode: '#ffffff',
     },
     {
       id: 3,
       nameAr: 'متوسط',
       nameEn: 'Medium',
       isActive: false,
-      colorCode: '#ffffff'
+      colorCode: '#ffffff',
     },
     {
       id: 4,
       nameAr: 'مرتفع',
       nameEn: 'High',
       isActive: false,
-      colorCode: '#ffffff'
+      colorCode: '#ffffff',
     },
     {
       id: 5,
       nameAr: 'مرتفع جدا',
       nameEn: 'Very High',
       isActive: false,
-      colorCode: '#ffffff'
+      colorCode: '#ffffff',
     },
   ],
   impactLevelsWorking: [
@@ -158,11 +193,11 @@ export const DATA = {
     { id: 4, priority_ar: 'test1', priority_en: 'phaseOne' },
     { id: 5, priority_ar: 'peri', priority_en: 'phaseOne' },
   ],
-  activityFrquency:[
-    {id: 1, frq_ar: 'test1', feq_en: 'phaseOne'},
-    {id: 2, frq_ar: 'test1', feq_en: 'phaseOne'},
-    {id: 3, frq_ar: 'test1', feq_en: 'phaseOne'},
-    {id: 4, frq_ar: 'test1', feq_en: 'phaseOne'},
-    {id: 5, frq_ar: 'test1', feq_en: 'phaseOne'},
-  ]
+  activityFrquency: [
+    { id: 1, frq_ar: 'test1', feq_en: 'phaseOne' },
+    { id: 2, frq_ar: 'test1', feq_en: 'phaseOne' },
+    { id: 3, frq_ar: 'test1', feq_en: 'phaseOne' },
+    { id: 4, frq_ar: 'test1', feq_en: 'phaseOne' },
+    { id: 5, frq_ar: 'test1', feq_en: 'phaseOne' },
+  ],
 };

@@ -17,12 +17,12 @@ import { Router } from '@angular/router';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { iif, patch } from '@ngxs/store/operators';
 import { ApiHelper } from '@core/helpers/api.helper';
-import { BcOrgHir } from 'src/app/api/models';
+import { BcOrgHierarchy } from 'src/app/api/models';
 import { TreeNode } from 'primeng/api';
 
 export interface BrowseOrgDetailModel {
   pageRequest: PageRequestModel;
-  selectedOrgHir: BcOrgHir;
+  selectedOrgHir: BcOrgHierarchy;
   selectedOrgHirNode: TreeNode;
 }
 
@@ -68,7 +68,7 @@ export class BrowseOrgDetailState {
     return state;
   }
   @Selector([BrowseOrgDetailState])
-  static selectedOrgHir(state: BrowseOrgDetailModel): BcOrgHir {
+  static selectedOrgHir(state: BrowseOrgDetailModel): BcOrgHierarchy {
     return state?.selectedOrgHir;
   }
   @Selector([BrowseOrgDetailState])

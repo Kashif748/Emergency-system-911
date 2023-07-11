@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+import { AlertnessLevel } from './alertness-level';
 import { AssetsCategoryProjection } from './assets-category-projection';
 import { AssetsGroup } from './assets-group';
 import { CircularStatus } from './circular-status';
@@ -34,6 +35,7 @@ import { TaskStatus } from './task-status';
 import { TaskType } from './task-type';
 import { UserMinimunProjection } from './user-minimun-projection';
 export interface CommonDataProjection {
+  alertnessLevel?: Array<AlertnessLevel>;
   assetsCategory?: Array<AssetsCategoryProjection>;
   assetsGroup?: Array<AssetsGroup>;
   circularStatus?: Array<CircularStatus>;

@@ -148,7 +148,7 @@ export class ImpactMatrixState {
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     payload.bcImpactTypes.versionId = versionID;
     return this.impactMatrix
-      .update86({
+      .update91({
         body: payload,
       })
       .pipe(

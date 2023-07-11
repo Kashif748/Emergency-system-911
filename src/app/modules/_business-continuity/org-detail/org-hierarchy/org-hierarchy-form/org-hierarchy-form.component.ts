@@ -7,7 +7,7 @@ import { GenericValidators } from '@shared/validators/generic-validators';
 import { TreeNode } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { auditTime, takeUntil, tap } from 'rxjs/operators';
-import { BcOrgHir, BcOrgHirType, IdNameProjection } from 'src/app/api/models';
+import { BcOrgHierarchy, BcOrgHierarchyType, IdNameProjection } from 'src/app/api/models';
 import { BrowseOrgDetailAction } from '../../states/browse-orgDetail.action';
 import { BrowseOrgDetailState } from '../../states/browse-orgDetail.state';
 
@@ -21,7 +21,7 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
   public loading$: Observable<boolean>;
 
   @Select(OrgDetailState.orgHirTypes)
-  public orgHirTypes$: Observable<BcOrgHirType[]>;
+  public orgHirTypes$: Observable<BcOrgHierarchyType[]>;
 
   @Select(UserState.users)
   users$: Observable<IdNameProjection[]>;

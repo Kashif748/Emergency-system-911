@@ -10,6 +10,7 @@ export interface IncidentExportFilters {
   fromDate?: string;
   groupId?: Array<number>;
   id?: number;
+  incidentSubCategory?: number;
   organization?: number;
   reporterContact?: string;
   reportingVia?: number;

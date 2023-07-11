@@ -9,6 +9,7 @@ export interface IncidentStatisticsFilter {
   fromDate?: string;
   groupId?: Array<number>;
   id?: number;
+  incidentSubCategory?: number;
   organization?: number;
   priority?: number;
   reportingVia?: number;
