@@ -72,7 +72,7 @@ export class ActivityPrioritySeqState {
     );
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.activityPrioritySeq
-      .getAll13({
+      .getAll17({
         isActive: true,
         versionId: versionID,
         pageable: {
@@ -120,7 +120,7 @@ export class ActivityPrioritySeqState {
       })
     );
     return this.activityPrioritySeq
-      .insertOne4({
+      .insertOne8({
         body: payload,
       })
       .pipe(
@@ -145,7 +145,7 @@ export class ActivityPrioritySeqState {
       })
     );
     return this.activityPrioritySeq
-      .update83({
+      .update87({
         body: payload,
       })
       .pipe(
@@ -177,7 +177,7 @@ export class ActivityPrioritySeqState {
         blocking: true,
       })
     );
-    return this.activityPrioritySeq.getOne4({ id: payload.id }).pipe(
+    return this.activityPrioritySeq.getOne8({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<ActivityPrioritySeqStateModel>({

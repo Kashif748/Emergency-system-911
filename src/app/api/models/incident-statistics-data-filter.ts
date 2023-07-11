@@ -12,12 +12,13 @@ export interface IncidentStatisticsDataFilter {
   groupId?: Array<number>;
   id?: number;
   incidentId?: number;
+  incidentSubCategory?: number;
   orgId?: number;
   organization?: number;
   reporterContact?: number;
   reportingVia?: number;
   responsibleOrg?: number;
-  serial?: number;
+  serial?: string;
   status?: number;
   subject?: string;
   toDate?: string;

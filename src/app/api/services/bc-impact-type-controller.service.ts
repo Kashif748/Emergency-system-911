@@ -24,21 +24,21 @@ export class BcImpactTypeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById8
+   * Path part for operation deleteById12
    */
-  static readonly DeleteById8Path = '/v1/bc/impactType/delete/{id}';
+  static readonly DeleteById12Path = '/v1/bc/impactType/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById8()` instead.
+   * To access only the response body, use `deleteById12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById8$Response(params: {
+  deleteById12$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.DeleteById8Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.DeleteById12Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,37 +56,37 @@ export class BcImpactTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById8$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById8(params: {
+  deleteById12(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById8$Response(params).pipe(
+    return this.deleteById12$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll16
+   * Path part for operation getAll21
    */
-  static readonly GetAll16Path = '/v1/bc/impactType';
+  static readonly GetAll21Path = '/v1/bc/impactType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll16()` instead.
+   * To access only the response body, use `getAll21()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll16$Response(params: {
+  getAll21$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcImpactTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.GetAll16Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.GetAll21Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcImpactTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll16$Response()` instead.
+   * To access the full response (for headers, for example), `getAll21$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll16(params: {
+  getAll21(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcImpactTypes> {
 
-    return this.getAll16$Response(params).pipe(
+    return this.getAll21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcImpactTypes>) => r.body as RestApiResponsePageBcImpactTypes)
     );
   }
 
   /**
-   * Path part for operation update87
+   * Path part for operation update92
    */
-  static readonly Update87Path = '/v1/bc/impactType';
+  static readonly Update92Path = '/v1/bc/impactType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update87()` instead.
+   * To access only the response body, use `update92()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update87$Response(params: {
+  update92$Response(params: {
     body: BcImpactTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.Update87Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.Update92Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class BcImpactTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update87$Response()` instead.
+   * To access the full response (for headers, for example), `update92$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update87(params: {
+  update92(params: {
     body: BcImpactTypes
   }): Observable<RestApiResponseBcImpactTypes> {
 
-    return this.update87$Response(params).pipe(
+    return this.update92$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactTypes>) => r.body as RestApiResponseBcImpactTypes)
     );
   }
 
   /**
-   * Path part for operation insertOne7
+   * Path part for operation insertOne12
    */
-  static readonly InsertOne7Path = '/v1/bc/impactType';
+  static readonly InsertOne12Path = '/v1/bc/impactType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne7()` instead.
+   * To access only the response body, use `insertOne12()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne7$Response(params: {
+  insertOne12$Response(params: {
     body: BcImpactTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.InsertOne7Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.InsertOne12Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,35 +200,35 @@ export class BcImpactTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne7$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne12$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne7(params: {
+  insertOne12(params: {
     body: BcImpactTypes
   }): Observable<RestApiResponseBcImpactTypes> {
 
-    return this.insertOne7$Response(params).pipe(
+    return this.insertOne12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactTypes>) => r.body as RestApiResponseBcImpactTypes)
     );
   }
 
   /**
-   * Path part for operation getOne7
+   * Path part for operation getOne12
    */
-  static readonly GetOne7Path = '/v1/bc/impactType/{id}';
+  static readonly GetOne12Path = '/v1/bc/impactType/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne7()` instead.
+   * To access only the response body, use `getOne12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne7$Response(params: {
+  getOne12$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.GetOne7Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.GetOne12Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcImpactTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne7$Response()` instead.
+   * To access the full response (for headers, for example), `getOne12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne7(params: {
+  getOne12(params: {
     id: number;
   }): Observable<RestApiResponseBcImpactTypes> {
 
-    return this.getOne7$Response(params).pipe(
+    return this.getOne12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactTypes>) => r.body as RestApiResponseBcImpactTypes)
     );
   }

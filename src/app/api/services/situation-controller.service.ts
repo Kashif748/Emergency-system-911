@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { Pageable } from '../models/pageable';
+import { RestApiResponsePageAttachmentPerSituationResponse } from '../models/rest-api-response-page-attachment-per-situation-response';
 import { RestApiResponsePageSituationProjection } from '../models/rest-api-response-page-situation-projection';
 import { RestApiResponseSituationChartReportResponse } from '../models/rest-api-response-situation-chart-report-response';
 import { RestApiResponseSituationProjection } from '../models/rest-api-response-situation-projection';
@@ -365,6 +366,52 @@ export class SituationControllerService extends BaseService {
 
     return this.chartReport$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseSituationChartReportResponse>) => r.body as RestApiResponseSituationChartReportResponse)
+    );
+  }
+
+  /**
+   * Path part for operation attachments
+   */
+  static readonly AttachmentsPath = '/v1/situations/attachment';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachments$Response(params: {
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageAttachmentPerSituationResponse>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SituationControllerService.AttachmentsPath, 'get');
+    if (params) {
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageAttachmentPerSituationResponse>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `attachments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachments(params: {
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageAttachmentPerSituationResponse> {
+
+    return this.attachments$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageAttachmentPerSituationResponse>) => r.body as RestApiResponsePageAttachmentPerSituationResponse)
     );
   }
 

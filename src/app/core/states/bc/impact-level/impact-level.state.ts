@@ -82,7 +82,7 @@ export class ImpactLevelState {
       BrowseBusinessContinuityState.versionId
     );
     return this.impactLevel
-      .getAll17({
+      .getAll22({
         isActive: true,
         versionId: versionID,
         pageable: {
@@ -133,7 +133,7 @@ export class ImpactLevelState {
       BrowseBusinessContinuityState.versionId
     );
     return this.impactLevel
-      .insertOne8({
+      .insertOne13({
         body: { ...payload, versionId: versionID },
       })
       .pipe(
@@ -161,7 +161,7 @@ export class ImpactLevelState {
       BrowseBusinessContinuityState.versionId
     );
     return this.impactLevel
-      .update88({
+      .update93({
         body: { ...payload, versionId: versionID },
       })
       .pipe(
@@ -193,7 +193,7 @@ export class ImpactLevelState {
         blocking: true,
       })
     );
-    return this.impactLevel.getOne8({ id: payload.id }).pipe(
+    return this.impactLevel.getOne13({ id: payload.id }).pipe(
       tap((impactLevel) => {
         setState(
           patch<ImpactLevelStateModel>({

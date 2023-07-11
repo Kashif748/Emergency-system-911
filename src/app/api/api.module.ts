@@ -99,19 +99,32 @@ import { CircularStatusControllerService } from './services/circular-status-cont
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
 import { BcVersionsControllerService } from './services/bc-versions-controller.service';
 import { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
+import { BcSystemsControllerService } from './services/bc-systems-controller.service';
+import { BcSystemBiaControllerService } from './services/bc-system-bia-controller.service';
 import { BcrtoControllerService } from './services/bcrto-controller.service';
-import { BcOrgHirControllerService } from './services/bc-org-hir-controller.service';
-import { BcOrgHirTypeControllerService } from './services/bc-org-hir-type-controller.service';
+import { BcPartnersControllerService } from './services/bc-partners-controller.service';
+import { BcOrgHierarchyControllerService } from './services/bc-org-hierarchy-controller.service';
+import { BcOrgHierarchyTypeControllerService } from './services/bc-org-hierarchy-type-controller.service';
 import { BcRecoveryPrioritiesControllerService } from './services/bc-recovery-priorities-controller.service';
+import { BcLocationsControllerService } from './services/bc-locations-controller.service';
 import { BcLocationTypeControllerService } from './services/bc-location-type-controller.service';
 import { BcWorkImportanceLevelsControllerService } from './services/bc-work-importance-levels-controller.service';
 import { BcImpactTypesMatrixControllerService } from './services/bc-impact-types-matrix-controller.service';
 import { BcImpactTypeControllerService } from './services/bc-impact-type-controller.service';
 import { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
+import { BcCyclesControllerService } from './services/bc-cycles-controller.service';
+import { BcCycleStatusControllerService } from './services/bc-cycle-status-controller.service';
 import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
+import { BcActivitySystemsControllerService } from './services/bc-activity-systems-controller.service';
+import { BcActivityLocationsControllerService } from './services/bc-activity-locations-controller.service';
+import { BcActivityImpactMatrixControllerService } from './services/bc-activity-impact-matrix-controller.service';
+import { BcActivityEmployeesControllerService } from './services/bc-activity-employees-controller.service';
+import { BcActivityAnalysisControllerService } from './services/bc-activity-analysis-controller.service';
+import { BcActivitiesControllerService } from './services/bc-activities-controller.service';
 import { AssetControllerService } from './services/asset-controller.service';
 import { AssetsGroupControllerService } from './services/assets-group-controller.service';
 import { AssetsCategoryControllerService } from './services/assets-category-controller.service';
+import { AlertnessLevelControllerService } from './services/alertness-level-controller.service';
 import { AdcdaAvailabilityReportControllerService } from './services/adcda-availability-report-controller.service';
 import { AdcdaSectorControllerService } from './services/adcda-sector-controller.service';
 import { AdcdaDailyReportControllerService } from './services/adcda-daily-report-controller.service';
@@ -131,6 +144,7 @@ import { UserLogInAttemptsControllerService } from './services/user-log-in-attem
 import { TaskStatusControllerService } from './services/task-status-controller.service';
 import { ServiceCenterAreaServiceControllerService } from './services/service-center-area-service-controller.service';
 import { ScadKoiControllerService } from './services/scad-koi-controller.service';
+import { ResendSmsControllerService } from './services/resend-sms-controller.service';
 import { ReportsControllerService } from './services/reports-controller.service';
 import { PrivilegeControllerService } from './services/privilege-controller.service';
 import { OrganizationTypesService } from './services/organization-types.service';
@@ -146,7 +160,6 @@ import { CommonControllerService } from './services/common-controller.service';
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
-import { BcLocationsControllerService } from './services/bc-locations-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -251,20 +264,32 @@ import { BcLocationsControllerService } from './services/bc-locations-controller
     ConfidentialtyControllerService,
     BcVersionsControllerService,
     BcVersionsStatusControllerService,
+    BcSystemsControllerService,
+    BcSystemBiaControllerService,
     BcrtoControllerService,
-    BcOrgHirControllerService,
-    BcOrgHirTypeControllerService,
-    BcRecoveryPrioritiesControllerService, ,
-    BcLocationTypeControllerService,
+    BcPartnersControllerService,
+    BcOrgHierarchyControllerService,
+    BcOrgHierarchyTypeControllerService,
+    BcRecoveryPrioritiesControllerService,
     BcLocationsControllerService,
+    BcLocationTypeControllerService,
     BcWorkImportanceLevelsControllerService,
     BcImpactTypesMatrixControllerService,
     BcImpactTypeControllerService,
     BcImpactLevelControllerService,
+    BcCyclesControllerService,
+    BcCycleStatusControllerService,
     BcActivityFrequenciesControllerService,
+    BcActivitySystemsControllerService,
+    BcActivityLocationsControllerService,
+    BcActivityImpactMatrixControllerService,
+    BcActivityEmployeesControllerService,
+    BcActivityAnalysisControllerService,
+    BcActivitiesControllerService,
     AssetControllerService,
     AssetsGroupControllerService,
     AssetsCategoryControllerService,
+    AlertnessLevelControllerService,
     AdcdaAvailabilityReportControllerService,
     AdcdaSectorControllerService,
     AdcdaDailyReportControllerService,
@@ -284,6 +309,7 @@ import { BcLocationsControllerService } from './services/bc-locations-controller
     TaskStatusControllerService,
     ServiceCenterAreaServiceControllerService,
     ScadKoiControllerService,
+    ResendSmsControllerService,
     ReportsControllerService,
     PrivilegeControllerService,
     OrganizationTypesService,
@@ -315,7 +341,7 @@ export class ApiModule {
     }
   }
 
-  constructor(
+  constructor( 
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

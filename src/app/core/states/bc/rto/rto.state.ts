@@ -72,7 +72,7 @@ export class RtoState {
     );
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.rto
-      .getAll10({
+      .getAll13({
         isActive: true,
         versionId: versionID,
         pageable: {
@@ -122,7 +122,7 @@ export class RtoState {
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     payload.versionId = versionID;
     return this.rto
-      .insertOne1({
+      .insertOne4({
         body: payload,
       })
       .pipe(
@@ -149,7 +149,7 @@ export class RtoState {
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     payload.versionId = versionID;
     return this.rto
-      .update80({
+      .update83({
         body: payload,
       })
       .pipe(
@@ -181,7 +181,7 @@ export class RtoState {
         blocking: true,
       })
     );
-    return this.rto.getOne1({ id: payload.id }).pipe(
+    return this.rto.getOne4({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<RtoStateModel>({
