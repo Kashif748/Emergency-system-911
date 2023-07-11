@@ -41,7 +41,7 @@ export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
       },
       first: 0,
       rows: 10,
-      sortField: 'createdDate',
+      sortField: 'serial',
       sortOrder: 'desc',
     },
 
@@ -51,7 +51,7 @@ export const BROWSE_INCIDENTS_UI_STATE_TOKEN = new StateToken<ReopenStateModel>(
       },
       first: 0,
       rows: 10,
-      sortField: 'createdOn',
+      sortField: 'id',
       sortOrder: 'desc',
     },
 

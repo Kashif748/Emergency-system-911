@@ -115,7 +115,7 @@
                 [options]="sortableColumns$ | async"
                 [autoDisplayFirst]="false"
                 [showClear]="true"
-                [ngModel]="state.TasksPageRequest.sortField"
+                [ngModel]="state?.TasksPageRequest?.sortField"
                 placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate }}"
                 optionLabel="name"
                 optionValue="code"
