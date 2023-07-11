@@ -72,6 +72,13 @@
           border-width: 0 1px 0 0 !important;
         }
       }
+
+      #separator_header {
+        all: unset;
+        margin: 24px 0;
+        width: 100%;
+        display: block;
+      }
     }
   }
 

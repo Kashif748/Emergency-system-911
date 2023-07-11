@@ -13,6 +13,7 @@ export const TABS: MenuItem[] = [
           requiredVersion: false,
         },
       },
+
       {
         label: 'ORG_ARTCH',
         routerLinkActiveOptions: 'active-tab',
@@ -23,6 +24,25 @@ export const TABS: MenuItem[] = [
       },
     ],
   },
+  {
+    label: 'LOC_TYPE_LABEL',
+    icon: 'pi pi-map-marker',
+    state: {
+      routerLink: 'loc-types',
+      requiredVersion: false,
+    },
+  },
+  {
+    label: 'ACTIVETY_FREQUENCY',
+    icon: 'flaticon2-refresh',
+    state: {
+      routerLink: 'activey-frquency',
+      requiredVersion: false,
+    },
+  },
+
+  { id: 'separator', separator: true },
+
   {
     label: 'IMPACTS',
     icon: 'flaticon-warning',
@@ -49,6 +69,7 @@ export const TABS: MenuItem[] = [
     icon: 'pi pi-clock',
     state: {
       routerLink: 'rto-list',
+      requiredVersion: true,
     },
   },
   {
@@ -56,6 +77,7 @@ export const TABS: MenuItem[] = [
     icon: 'pi pi-chart-bar',
     state: {
       routerLink: 'imp-level-working',
+      requiredVersion: true,
     },
   },
   {
@@ -63,20 +85,7 @@ export const TABS: MenuItem[] = [
     icon: 'pi pi-sort-amount-up',
     state: {
       routerLink: 'activey-priority',
-    },
-  },
-  {
-    label: 'LOC_TYPE_LABEL',
-    icon: 'pi pi-map-marker',
-    state: {
-      routerLink: 'loc-types',
-    },
-  },
-  {
-    label: 'ACTIVETY_FREQUENCY',
-    icon: 'flaticon2-refresh',
-    state: {
-      routerLink: 'activey-frquency',
+      requiredVersion: true,
     },
   },
 ];

@@ -10,17 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericValidators } from '@shared/validators/generic-validators';
-import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import { Observable, Subject, Subscription } from 'rxjs';
-import {
-  debounceTime,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { TABS } from '../tabs.const';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
@@ -44,6 +36,7 @@ export class BusinessContinuityComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   items: MenuItem[] = [];
+  activeItem: MenuItem;
   sidebar = false;
 
   form: FormGroup;
@@ -52,10 +45,11 @@ export class BusinessContinuityComponent
   );
   public smallScreen: boolean;
 
+  @Select(BrowseBusinessContinuityState.versionsDialogOpend)
+  public dialogOpened$: Observable<boolean>;
+
   @Select(BrowseBusinessContinuityState.state)
   public state$: Observable<BrowseBusinessContinuityStateModel>;
-
-  public versionsDialogOpend: boolean;
 
   @Select(BusinessContinuityState.loading)
   public loading$: Observable<boolean>;
@@ -92,16 +86,12 @@ export class BusinessContinuityComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         const version = params['_version'];
-        const currentTab = this.checkCurrentTab();
-        if (currentTab?.state?.requiredVersion) {
+        const item = this.checkCurrentTab();
+
+        if (item?.state?.requiredVersion) {
           if (version) {
-            this.versionID = version;
-            // this.versionsDialogOpend = false;
-            this.store.dispatch(
-              new BrowseBusinessContinuityAction.SetGlobalVersion({
-                id: version,
-              })
-            );
+            this.setValueGlobally(version);
+
             this.versionsSubscription = this.versions$.subscribe((versions) => {
               // Assuming you have a condition to select a specific version
               // Replace the condition with your own logic
@@ -116,8 +106,7 @@ export class BusinessContinuityComponent
               }
             });
           } else {
-            this.versionsDialogOpend = true;
-            // this.toggleDialog();
+            this.toggleDialog();
           }
         }
       });
@@ -129,7 +118,6 @@ export class BusinessContinuityComponent
   }
   ngOnInit() {
     this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
@@ -151,7 +139,8 @@ export class BusinessContinuityComponent
   }
   prepareMenu(items: MenuItem[]): MenuItem[] {
     return items.map((tab) => {
-      tab.command = (e) => this.navigate(e?.item);
+      if (tab?.separator) return tab;
+      tab.command = (e) => this.setCurrentTab(e?.item);
       tab.label = this.translate.instant(tab.label);
       if (tab.items && tab.items.length > 0) {
         tab.items = this.prepareMenu(tab.items);
@@ -162,22 +151,38 @@ export class BusinessContinuityComponent
 
   checkCurrentTab(): MenuItem {
     const router = this.router.url;
-    const tab = TABS.find(
+    let flattenedArray = [];
+    const flatArr = (object) => {
+      flattenedArray.push(object);
+      if (object.items && object.items.length > 0) {
+        object.items.forEach((child) => flatArr(child));
+      }
+    };
+    TABS.forEach((object) => flatArr(object));
+    const tab = flattenedArray.find(
       (item) =>
         item?.state?.routerLink && router.includes(item?.state?.routerLink)
     );
-    console.log(tab, router);
+
     return tab;
   }
-  navigate(item: MenuItem) {
-    console.log(item);
+  setCurrentTab(item: MenuItem) {
+    this.activeItem = item;
     if (item.state) {
-      if (item.state?.requiredVersion && !this.versionID) {
-        this.openDialog();
+      if (!item.state?.requiredVersion) {
+        this.router.navigate(['business-continuity/' + item.state?.routerLink]);
+        return;
       }
-      this.router.navigate(['business-continuity/' + item.state?.routerLink], {
-        queryParamsHandling: 'merge',
-      });
+      if (item.state?.requiredVersion && !this.versionID) {
+        this.toggleDialog();
+      } else {
+        this.router.navigate(
+          ['business-continuity/' + item.state?.routerLink],
+          {
+            queryParamsHandling: 'merge',
+          }
+        );
+      }
     }
   }
 
@@ -189,12 +194,22 @@ export class BusinessContinuityComponent
   }
 
   setValueGlobally(value: number) {
-    this.versionsDialogOpend = false;
-    this.store.dispatch(
-      new BrowseBusinessContinuityAction.SetGlobalVersion({
-        id: value,
-      })
-    );
+    this.store
+      .dispatch(
+        new BrowseBusinessContinuityAction.SetGlobalVersion({
+          id: value,
+        })
+      )
+      .toPromise()
+      .then((res) => {
+        this.versionID = value;
+        this.router.navigate(
+          ['business-continuity/' + this.activeItem?.state?.routerLink],
+          {
+            queryParamsHandling: 'merge',
+          }
+        );
+      });
   }
 
   submit() {
@@ -225,8 +240,6 @@ export class BusinessContinuityComponent
           this.selectedVersion = bc;
           this.form.reset();
           this.showVersionForm = false;
-          // this.toggleDialog();
-          // this.versionsDialogOpend = false;
           this.router.navigate(['business-continuity/org/org-details']);
           setTimeout(() => {
             this.setValueGlobally(bc.id);
@@ -237,12 +250,9 @@ export class BusinessContinuityComponent
   }
 
   toggleDialog() {
-    this.versionsDialogOpend = false;
-    this.store.dispatch(new BrowseBusinessContinuityAction.ToggleDialog());
-  }
-
-  openDialog() {
-    this.versionsDialogOpend = true;
+    return this.store.dispatch(
+      new BrowseBusinessContinuityAction.ToggleDialog()
+    );
   }
 
   sendApprovel(status: number) {
