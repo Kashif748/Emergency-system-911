@@ -79,6 +79,7 @@ export class IncidentsReportComponent implements OnInit {
   public advancedSearchDataList: DataOptions[] = [];
   public formFields: FormFieldName[] = [
     { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
+    { formControlName: AdvancedSearchFieldsEnum.SUB_CATEGORY },
     { formControlName: AdvancedSearchFieldsEnum.PRIORITY },
     { formControlName: AdvancedSearchFieldsEnum.SR_NO },
     { formControlName: AdvancedSearchFieldsEnum.SERIAL },
@@ -503,8 +504,8 @@ export class IncidentsReportComponent implements OnInit {
         categoryId: params['mainCategoryId'],
       };
       this.store.dispatch(UpdateFilter({ filter: this.filter }));
-      this.search();
-      await this.initCharts();
+      // this.search();
+      // await this.initCharts();
     });
     const statuses: DataOptions = {
       formControlName: AdvancedSearchFieldsEnum.STATUS,
@@ -524,6 +525,10 @@ export class IncidentsReportComponent implements OnInit {
         (cat: ICategory) => cat.parent === null
       ),
     };
+    const subCategories: DataOptions = {
+      formControlName: AdvancedSearchFieldsEnum.SUB_CATEGORY,
+      children: []
+    };
     const reportingVias: DataOptions = {
       formControlName: AdvancedSearchFieldsEnum.REPORTING_VIA,
       children: this.commonData?.reportingVias,
@@ -536,6 +541,7 @@ export class IncidentsReportComponent implements OnInit {
       priorities,
       cities,
       mainCategories,
+      subCategories,
       reportingVias,
       statuses,
       group,
@@ -829,7 +835,7 @@ export class IncidentsReportComponent implements OnInit {
   }
 
   async openIncident(incident: any) {
-    await this.router.navigate(['/incidents/view', incident.id]);
+    window.open('/incidents/view/' + incident.id, '_blank');
   }
   loadNonGlobalGroups(id, page, size) {
     this.groupService.getNonGlobalGroupsByOrgId(id, '', page, size).subscribe(

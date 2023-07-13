@@ -14,20 +14,20 @@ import { OrgStructure } from '../../../../api/models/org-structure';
 import { OrgDetailAction } from '@core/states/bc/org-details/org-detail.action';
 import { OrgStructureControllerService } from '../../../../api/services/org-structure-controller.service';
 import {
-  BcOrgHirControllerService,
-  BcOrgHirTypeControllerService,
+  BcOrgHierarchyControllerService,
+  BcOrgHierarchyTypeControllerService,
 } from 'src/app/api/services';
 import { BrowseBusinessContinuityState } from 'src/app/modules/_business-continuity/states/browse-business-continuity.state';
 import {
-  BcOrgHir,
-  BcOrgHirType,
-  PageBcOrgHir,
-  PageBcOrgHirType,
+  BcOrgHierarchy,
+  BcOrgHierarchyType,
+  PageBcOrgHierarchy,
+  PageBcOrgHierarchyType,
 } from 'src/app/api/models';
 
 export interface OrgDetailStateModel {
-  orgHir: PageBcOrgHir;
-  orgHirTypes: PageBcOrgHirType;
+  orgHir: PageBcOrgHierarchy;
+  orgHirTypes: PageBcOrgHierarchyType;
   org: OrgStructure;
   loading: boolean;
   blocking: boolean;
@@ -45,8 +45,8 @@ export class OrgDetailState {
   constructor(
     private org: OrgStructureControllerService,
     private store: Store,
-    private orgHir: BcOrgHirControllerService,
-    private orgHirTypes: BcOrgHirTypeControllerService
+    private orgHir: BcOrgHierarchyControllerService,
+    private orgHirTypes: BcOrgHierarchyTypeControllerService
   ) {}
 
   @Selector([OrgDetailState])
@@ -55,12 +55,12 @@ export class OrgDetailState {
   }
 
   @Selector([OrgDetailState])
-  static orgHir(state: OrgDetailStateModel): BcOrgHir[] {
+  static orgHir(state: OrgDetailStateModel): BcOrgHierarchy[] {
     return state?.orgHir.content;
   }
 
   @Selector([OrgDetailState])
-  static orgHirTypes(state: OrgDetailStateModel): BcOrgHirType[] {
+  static orgHirTypes(state: OrgDetailStateModel): BcOrgHierarchyType[] {
     return state?.orgHirTypes.content;
   }
 
@@ -91,7 +91,7 @@ export class OrgDetailState {
     );
 
     return this.orgHir
-      .getAll12({
+      .getAll16({
         versionId: versionID,
         isActive: true,
         pageable: payload,
@@ -125,7 +125,7 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    return this.orgHir.getOne2(payload).pipe(
+    return this.orgHir.getOne6(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -145,7 +145,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.insertOne3({ body: payload }).pipe(
+    return this.orgHir.insertOne7({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -165,7 +165,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.update82({ body: payload }).pipe(
+    return this.orgHir.update86({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -186,7 +186,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.deleteById2(payload).pipe(
+    return this.orgHir.deleteById5(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -212,7 +212,7 @@ export class OrgDetailState {
     );
 
     return this.orgHirTypes
-      .getAll11({
+      .getAll15({
         versionId: versionID,
         isActive: true,
         pageable: {

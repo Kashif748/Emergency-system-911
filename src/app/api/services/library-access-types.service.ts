@@ -158,21 +158,21 @@ export class LibraryAccessTypesService extends BaseService {
   }
 
   /**
-   * Path part for operation delete37
+   * Path part for operation delete38
    */
-  static readonly Delete37Path = '/v1/library/accesstypes/{id}';
+  static readonly Delete38Path = '/v1/library/accesstypes/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete37()` instead.
+   * To access only the response body, use `delete38()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete37$Response(params: {
+  delete38$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseLibraryAccessType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LibraryAccessTypesService.Delete37Path, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, LibraryAccessTypesService.Delete38Path, 'delete');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -190,15 +190,15 @@ export class LibraryAccessTypesService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete37$Response()` instead.
+   * To access the full response (for headers, for example), `delete38$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete37(params: {
+  delete38(params: {
     id: number;
   }): Observable<RestApiResponseLibraryAccessType> {
 
-    return this.delete37$Response(params).pipe(
+    return this.delete38$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLibraryAccessType>) => r.body as RestApiResponseLibraryAccessType)
     );
   }

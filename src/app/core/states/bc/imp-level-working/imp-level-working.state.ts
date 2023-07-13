@@ -72,7 +72,7 @@ export class ImpLevelWorkingState {
     );
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.impLevelWorking
-      .getAll15({
+      .getAll20({
         isActive: true,
         versionId: versionID,
          pageable: {
@@ -122,7 +122,7 @@ export class ImpLevelWorkingState {
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     payload.versionId = versionID;
     return this.impLevelWorking
-      .insertOne6({
+      .insertOne11({
         body: payload,
       })
       .pipe(
@@ -149,7 +149,7 @@ export class ImpLevelWorkingState {
     const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     payload.versionId = versionID;
     return this.impLevelWorking
-      .update85({
+      .update90({
         body: payload,
       })
       .pipe(
@@ -181,7 +181,7 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
-    return this.impLevelWorking.getOne6({ id: payload.id }).pipe(
+    return this.impLevelWorking.getOne11({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<ImpLevelWorkingStateModel>({

@@ -1,6 +1,6 @@
 import { PageRequestModel } from '@core/models/page-request.model';
 import { TreeNode } from 'primeng/api';
-import { BcOrganizationDetails, BcOrgHir } from 'src/app/api/models';
+import { BcOrganizationDetails, BcOrgHierarchy } from 'src/app/api/models';
 
 export namespace BrowseOrgDetailAction {
   export class GetOrgDetail {
@@ -30,14 +30,14 @@ export namespace BrowseOrgDetailAction {
     /**
      *
      */
-    constructor(public payload: BcOrgHir) {}
+    constructor(public payload: BcOrgHierarchy) {}
   }
   export class UpdateOrgHierarchy {
     static readonly type = '[BrowseOrgDetail] Update Org Hierarchy';
     /**
      *
      */
-    constructor(public payload: BcOrgHir) {}
+    constructor(public payload: BcOrgHierarchy) {}
   }
   export class DeleteOrgHierarchy {
     static readonly type = '[BrowseOrgDetail] Delete Org Hierarchy';

@@ -34,6 +34,7 @@ import { RestApiResponseListIncidentIdSubjectProjection } from '../models/rest-a
 import { RestApiResponseListIncidentMainOrgStatistics } from '../models/rest-api-response-list-incident-main-org-statistics';
 import { RestApiResponseListIncidentStatistics } from '../models/rest-api-response-list-incident-statistics';
 import { RestApiResponseListLong } from '../models/rest-api-response-list-long';
+import { RestApiResponseListMapStringObject } from '../models/rest-api-response-list-map-string-object';
 import { RestApiResponseLong } from '../models/rest-api-response-long';
 import { RestApiResponsePageIncidentInfoWithOrgsProjection } from '../models/rest-api-response-page-incident-info-with-orgs-projection';
 import { RestApiResponsePageIncidentProjectionMinimum } from '../models/rest-api-response-page-incident-projection-minimum';
@@ -1050,6 +1051,61 @@ export class IncidentControllerService extends BaseService {
 
     return this.mainOrganizationStatistics$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListIncidentMainOrgStatistics>) => r.body as RestApiResponseListIncidentMainOrgStatistics)
+    );
+  }
+
+  /**
+   * Path part for operation similiarIncident
+   */
+  static readonly SimiliarIncidentPath = '/v1/incidents/location/coordinates-difference';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `similiarIncident()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  similiarIncident$Response(params: {
+    incidentCategory: number;
+    zone: number;
+    sector: number;
+    location?: string;
+  }): Observable<StrictHttpResponse<RestApiResponseListMapStringObject>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.SimiliarIncidentPath, 'get');
+    if (params) {
+      rb.query('incidentCategory', params.incidentCategory, {});
+      rb.query('zone', params.zone, {});
+      rb.query('sector', params.sector, {});
+      rb.query('location', params.location, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListMapStringObject>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `similiarIncident$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  similiarIncident(params: {
+    incidentCategory: number;
+    zone: number;
+    sector: number;
+    location?: string;
+  }): Observable<RestApiResponseListMapStringObject> {
+
+    return this.similiarIncident$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListMapStringObject>) => r.body as RestApiResponseListMapStringObject)
     );
   }
 

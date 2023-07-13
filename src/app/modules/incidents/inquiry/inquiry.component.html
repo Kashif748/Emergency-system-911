@@ -143,13 +143,11 @@
                 formControlName="createdDate"
                 [min]="inquiryId? null : minDate"
                 [max]="maxDate"
-                [disabled]="inquiryId != null"
               />
               <button
                 type="button"
                 mat-icon-button
                 matSuffix
-                [disabled]="inquiryId !=null"
                 (click)="picker.open(); $event.stopPropagation()"
               >
                 <mat-icon>today</mat-icon>

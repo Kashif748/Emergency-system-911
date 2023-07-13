@@ -10,11 +10,12 @@ export interface IncidentSearchFilters {
   fromDate?: string;
   groupId?: Array<number>;
   id?: number;
+  incidentSubCategory?: number;
   organization?: number;
   phoneNumber?: string;
   reportingVia?: number;
   responsibleOrg?: number;
-  serial?: number;
+  serial?: string;
   subject?: string;
   toDate?: string;
 }

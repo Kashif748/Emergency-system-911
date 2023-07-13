@@ -6,7 +6,7 @@ import { BrowseOrgDetailAction } from '../states/browse-orgDetail.action';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { OrgDetailState } from '@core/states';
-import { BcOrgHir } from 'src/app/api/models';
+import { BcOrgHierarchy } from 'src/app/api/models';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { TranslateService } from '@ngx-translate/core';
 import { IAuthService } from '@core/services/auth.service';
@@ -65,7 +65,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
     );
   }
 
-  public setTree(_searchResponses: BcOrgHir[]): TreeNode[] {
+  public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
     let leafObj: TreeNode = {
       leaf: true,
       expandedIcon: 'pi pi-plus',
@@ -77,7 +77,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
     const nest = (items, id = null, link = 'parentId') =>
       items
         .filter((item) => item[link] === id)
-        .map((item: BcOrgHir) => {
+        .map((item: BcOrgHierarchy) => {
           let node: TreeNode;
           node = {
             key: item.id.toString(),
@@ -93,7 +93,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
     return [...nest(_searchResponses), leafObj];
   }
   onDrop(event) {
-    let node: BcOrgHir = {
+    let node: BcOrgHierarchy = {
       ...event.dragNode.data,
     };
     if (!event.dragNode?.parent) {

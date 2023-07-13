@@ -1,17 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
-import {BrowseGroupsAction} from "../../../_team-mgmt/states/browse-groups.action";
-import {Store} from "@ngxs/store";
-import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {LOCATIONS} from "../../tempData.conts";
-import {ILangFacade} from "@core/facades/lang.facade";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { Select, Store } from '@ngxs/store';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { LOCATIONS } from '../../tempData.conts';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { BcLocations } from 'src/app/api/models';
+import { Observable, Subject } from 'rxjs';
+import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
+import {
+  BrowseLocationsState,
+  BrowseLocationsStateModel,
+} from '../states/browse-locations.state';
+import { BrowseLocationsAction } from '../states/browse-locations.action';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-browse-location',
   templateUrl: './browse-location.component.html',
-  styleUrls: ['./browse-location.component.scss']
+  styleUrls: ['./browse-location.component.scss'],
 })
-export class BrowseLocationComponent implements OnInit {
+export class BrowseLocationComponent implements OnInit, OnDestroy {
+  public page$: Observable<BcLocations[]>;
+
+  @Select(LocationsState.totalRecords)
+  public totalRecords$: Observable<number>;
+
+  @Select(LocationsState.loading)
+  public loading$: Observable<boolean>;
+
+  @Select(BrowseLocationsState.state)
+  public state$: Observable<BrowseLocationsStateModel>;
+
+  private destroy$ = new Subject();
+
   public exportActions = [
     {
       label: this.translate.instant('ACTIONS.EXPORT_TO_XLSX'),
@@ -25,41 +46,64 @@ export class BrowseLocationComponent implements OnInit {
     },
   ] as MenuItem[];
 
-
   public display = false;
 
-  public page = LOCATIONS;
   public sortableColumns = [
-    { name: 'LOCATIONS.DEPARTMENT_NAME', code: 'dept'},
+    { name: 'LOCATIONS.DEPARTMENT_NAME', code: 'dept' },
     { name: 'LOCATIONS.LOCATION_NAME', code: 'name' },
     { name: 'LOCATIONS.LOCATION_TYPE', code: 'type' },
-    { name: 'LOCATIONS.DISTRICT', code: 'district' }
+    { name: 'LOCATIONS.DISTRICT', code: 'district' },
   ];
   public selectedColumns = [
-    { name: 'LOCATIONS.DEPARTMENT_NAME', code: 'dept', disabled: true },
-    { name: 'LOCATIONS.LOCATION_NAME', code: 'name'},
-    { name: 'LOCATIONS.LOCATION_TYPE', code: 'type'},
-    { name: 'LOCATIONS.DISTRICT', code: 'district'}
+    { name: 'LOCATIONS.DEPARTMENT_NAME', code: 'dept' },
+    { name: 'LOCATIONS.LOCATION_NAME', code: 'name' },
+    { name: 'LOCATIONS.LOCATION_TYPE', code: 'type' },
+    { name: 'LOCATIONS.DISTRICT', code: 'district' },
   ];
   constructor(
     private store: Store,
     private translate: TranslateService,
-    private lang: ILangFacade,
-  ) { }
+    private lang: ILangFacade
+  ) {}
 
   ngOnInit(): void {
+    this.page$ = this.store.select(LocationsState.page).pipe(
+      filter((p) => !!p),
+      map((page) =>
+        page?.map((u) => {
+          return {
+            ...u,
+            actions: [
+              {
+                label: this.translate.instant('ACTIONS.EDIT'),
+                icon: 'pi pi-pencil',
+                command: () => {
+                  this.openDialog(u.id);
+                },
+                disabled: !u.isActive,
+              },
+            ],
+          };
+        })
+      )
+    );
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   openView(groupId?: number) {
     // this.store.dispatch(new BrowseGroupsAction.OpenView({ id: groupId }));
   }
 
-  openDialog(groupId?: number) {
-    this.display = true;
+  openDialog(id?: number) {
+    this.store.dispatch(
+      new BrowseLocationsAction.ToggleDialog({ locationId: id })
+    );
   }
-
   export(type: 'EXCEL' | 'PDF') {
-    this.store.dispatch(new BrowseGroupsAction.Export({ type }));
+    // this.store.dispatch(new BrowseLocationsAction.Export({ type }));
   }
 
   order(event) {
@@ -73,9 +117,9 @@ export class BrowseLocationComponent implements OnInit {
   }
 
   changeColumns(event) {
-    /* this.store.dispatch(
-       new BrowseGroupsAction.ChangeColumns({ columns: event.value })
-     );*/
+    this.store.dispatch(
+      new BrowseLocationsAction.ChangeColumns({ columns: event.value })
+    );
   }
 
   sort(event) {
@@ -85,35 +129,24 @@ export class BrowseLocationComponent implements OnInit {
   }
 
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
-    /*  if (event?.key === 'Enter') {
-        return this.search();
-      }
-      const keys = Object.keys(filter);
-      if (keys.length > 0) {
-        switch (keys[0]) {
-          case 'orgId':
-            filter['orgId'] = {
-              key: filter['orgId']?.key,
-              labelEn: filter['orgId'].labelEn,
-              labelAr: filter['orgId'].labelAr,
-            };
-            break;
-          default:
-            break;
-        }
-      }
-      this.store.dispatch(new BrowseGroupsAction.UpdateFilter(filter));*/
+    if (event?.key === 'Enter') {
+      return this.search();
+    }
+    const keys = Object.keys(filter);
+
+    this.store.dispatch(new BrowseLocationsAction.UpdateFilter(filter));
   }
 
   public loadPage(event: LazyLoadEvent) {
-    /*   this.store.dispatch(
-         new BrowseGroupsAction.LoadGroups({
-           pageRequest: {
-             first: event.first,
-             rows: event.rows,
-           },
-         })
-       );*/
+    this.store.dispatch(
+      new BrowseLocationsAction.LoadLocations({
+        pageRequest: {
+          first: event.first,
+          rows: event.rows,
+
+        },
+      })
+    );
   }
 
   search() {
@@ -126,5 +159,4 @@ export class BrowseLocationComponent implements OnInit {
        new BrowseGroupsAction.LoadGroups(),
      ]);*/
   }
-
 }

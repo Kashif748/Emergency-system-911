@@ -4,6 +4,7 @@ import { IEntity } from './i-entity';
 import { IdNameProjection } from './id-name-projection';
 import { Theme } from './theme';
 export interface SituationProjection {
+  alertnessLevel?: IEntity;
   createdBy?: IEntity;
   createdDate?: string;
   endDate?: string;
