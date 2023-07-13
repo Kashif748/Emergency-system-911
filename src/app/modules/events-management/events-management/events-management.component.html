@@ -40,7 +40,7 @@
               >
                 <a
                   class="navi-link px-1"
-                  [hidden]="item?.hidden"
+                  *ngIf="!(item?.hidden)"
                   [class]="item.key == currentTab ? 'active' : ''"
                 >
                   <span class="navi-icon mx-2">
