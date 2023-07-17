@@ -24,6 +24,11 @@
     "ORG_NAME" :"Org Name",
     "ATTACHMENT_TYPE" :"Attachment Type (Plan/Shift)",
     "SITUATION_INFO" :"Situation Info",
-    "SITUATION_ATTACHMENT" :"Situation Attachment"
+    "SITUATION_ATTACHMENT" :"Situation Attachment",
+    "SYSTEM_THEME": "System Theme",
+    "PLAN": "Plan",
+    "SHIFT": "Shift",
+    "PLAN_ATTACH": "Plans Attachments",
+    "SHIFT_ATTACH": "Shifts Attachments"
   }
 }

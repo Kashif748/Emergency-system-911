@@ -16,6 +16,37 @@ export namespace SituationsAction {
     ) {}
   }
 
+  export class LoadSituationAttachment {
+    static readonly type = '[Situations] Get Situation Attachment';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number
+        filters?: { [key: string]: any };
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+
+  export class GetAlertnessLevel {
+    static readonly type = '[Situations] Get Alertness Level';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        filters?: { [key: string]: any };
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+
   export class GetSituation {
     static readonly type = '[Situations] Get Situation';
     /**

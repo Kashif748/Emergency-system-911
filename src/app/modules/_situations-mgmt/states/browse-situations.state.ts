@@ -4,7 +4,7 @@ import {ApiHelper} from '@core/helpers/api.helper';
 import {MessageHelper} from '@core/helpers/message.helper';
 import {PageRequestModel} from '@core/models/page-request.model';
 import {SituationsAction} from '@core/states/situations/situations.action';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
 import {iif, patch} from '@ngxs/store/operators';
 import {EMPTY} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
@@ -112,6 +112,35 @@ export class BrowseSituationsState {
       })
     );
   }
+  @Action(BrowseSituationsAction.LoadAttachmentSituations)
+  LoadAttachmentSituations(
+    { setState, dispatch, getState }: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.LoadAttachmentSituations
+  ) {
+    setState(
+      patch<BrowseSituationsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+          filters: iif(!!payload?.pageRequest, payload?.pageRequest?.filters),
+          sortField: 'id',
+          sortOrder: 'asc',
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new SituationsAction.LoadSituationAttachment({
+        id: payload.id,
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+        },
+      })
+    );
+  }
   @Action(BrowseSituationsAction.GetActiveSituation)
   GetActiveSituation({ dispatch }: StateContext<BrowseSituationsStateModel>) {
     return dispatch(new SituationsAction.GetActiveSituation()).pipe(
@@ -131,7 +160,7 @@ export class BrowseSituationsState {
         this.messageHelper.success();
         dispatch([
           new BrowseSituationsAction.LoadSituations(),
-          new BrowseSituationsAction.ToggleDialog({}),
+          // new BrowseSituationsAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {
@@ -280,5 +309,29 @@ export class BrowseSituationsState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  @Action(BrowseSituationsAction.SortAttachments)
+  sortAttachment(
+    { setState, dispatch, getState }: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.SortAttachments
+  ) {
+    setState(
+      patch<BrowseSituationsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new SituationsAction.LoadSituationAttachment({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+      })
+    );
   }
 }

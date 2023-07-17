@@ -3,6 +3,13 @@
     overflow: visible;
     height: 100%;
   }
+  .p-tabview .p-tabview-panels {
+    height: 97%;
+    overflow-y: auto;
+    .p-tabview-panel {
+      height: 97%;
+    }
+  }
 }
 
 

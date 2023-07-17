@@ -31,4 +31,6 @@ export enum UploadTagIdConst {
   INTERIM_INCIDENT = 28,
   ASSETS_IMAGE = 29,
   REPORTER_IMAGE = 31,
+  PLAN_SITUATION = 32,
+  SHIFT_SITUATION = 33,
 }
