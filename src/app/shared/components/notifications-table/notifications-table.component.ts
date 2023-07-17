@@ -21,6 +21,7 @@ import {
   NOTIFICATION_STATUS,
   NOTIFICATION_TABLE_COLUMNS,
 } from './notifications-table.types';
+import {ConfirmDialogComponent} from "../../../modules/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-notifications-table',
@@ -182,4 +183,41 @@ export class NotificationsTableComponent implements OnInit {
       panelClass: 'modal',
     });
   }
+
+  reSend(id: number) {
+    this.loading = true;
+    this.incidentsNotificationsService
+      .resendSMS(id)
+      .subscribe((res) => {
+        this.incidentsNotificationsService.getNotifications(
+          this.activeTable.value
+        );
+        this.loading = false;
+      });
+  }
+
+  /*deleteIncident() {
+    this.dialog
+      .open(ConfirmDialogComponent)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.incidentsService
+            .updateIncidentStatus({
+              incidentId: this.incidentDetails?.id,
+              statusId: 4,
+              finalStatement: '',
+            })
+            .subscribe(
+              (response) => {
+                this.alertService.openSuccessSnackBar();
+                this.back();
+              },
+              (err) => {
+                this.alertService.openFailureSnackBar();
+              }
+            );
+        }
+      });
+  }*/
 }
