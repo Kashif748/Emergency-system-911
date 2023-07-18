@@ -27,6 +27,9 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
   public display = false;
   form: FormGroup;
 
+  @Input()
+  version
+
   _id: number;
   get loggedinUserId() {
     return this.auth.getClaim('sub');

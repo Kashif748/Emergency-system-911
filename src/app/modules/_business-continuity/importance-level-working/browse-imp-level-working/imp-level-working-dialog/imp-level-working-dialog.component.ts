@@ -24,6 +24,9 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   @Select(ImpLevelWorkingState.blocking)
   blocking$: Observable<boolean>;
 
+  @Input()
+  version
+
   public display = false;
   form: FormGroup;
   public color = '#ffffff';

@@ -10,7 +10,6 @@ import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
 import {IAuthService} from "@core/services/auth.service";
 import {RtoAction, RtoState} from "@core/states";
-import {ImpactMatrixState} from "@core/states/bc/impact-matrix/impact-matrix.state";
 
 @Component({
   selector: 'app-rto-dialog',
@@ -27,6 +26,9 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
 
   public display = false;
   form: FormGroup;
+
+  @Input()
+  version
 
   _rtoId: number;
   get loggedinUserId() {

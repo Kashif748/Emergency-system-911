@@ -6,6 +6,10 @@ import {LazyLoadEvent} from "primeng/api";
 import {Store} from "@ngxs/store";
 import {BcLocationTypes} from "../../../../../api/models/bc-location-types";
 import {BrowseRtoAction} from "../../states/browse-rto.action";
+import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
+import {filter, map, tap} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-content-rto',
@@ -30,12 +34,35 @@ export class ContentRtoComponent implements OnInit {
 
   public display = false;
 
+  public disableButton: boolean
+  public version$: Observable<boolean>;
+
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
+    private route: ActivatedRoute,
     private store: Store) {}
 
   ngOnInit(): void {
+    this.version$ = this.route.queryParams.pipe(
+      map((params) => params['_version']),
+      tap((v) => {
+        this.store
+          .select(BusinessContinuityState.versions)
+          .pipe(filter((p) => !!p))
+          .subscribe((res) => {
+            const shouldDisable = res.some((item) => {
+              if (item.id == v) {
+                return item.status.id !== 1;
+              }
+              return false;
+            });
+
+            this.disableButton = shouldDisable;
+          });
+      })
+    );
+    this.version$.subscribe();
   }
 
   openView(Id?: number) {

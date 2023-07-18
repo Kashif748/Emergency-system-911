@@ -3,7 +3,7 @@
     <h4 class="text-info p-text-bold mb-0">
       {{ "RECVOVER_PRIORITIES" | translate }}
     </h4>
-    <app-activity-priority-dialog></app-activity-priority-dialog>
+    <app-activity-priority-dialog [version]="disableButton"></app-activity-priority-dialog>
   </header>
   <div class="row">
     <div class="col-12">
@@ -118,6 +118,7 @@
 
                 <td>
                   <button
+                    [disabled]="disableButton"
                     pButton
                     pRipple
                     type="button"
