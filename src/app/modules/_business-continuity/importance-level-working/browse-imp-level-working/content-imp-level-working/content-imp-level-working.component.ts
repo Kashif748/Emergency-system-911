@@ -6,6 +6,10 @@ import {BcWorkImportanceLevels} from "../../../../../api/models/bc-work-importan
 import {Store} from "@ngxs/store";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {BrowseImpLevelWorkingAction} from "../states/browse-imp-level-working.action";
+import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
+import {filter, map, tap} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-content-imp-level-working',
@@ -27,31 +31,36 @@ export class ContentImpLevelWorkingComponent implements OnInit {
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
 
+  public disableButton: boolean
+  public version$: Observable<boolean>;
+
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
+    private route: ActivatedRoute,
     private store: Store
   ) {}
 
   ngOnInit(): void {
-   /* this.onPageChange.emit({
-      first: this.pageRequest?.first,
-      rows: this.pageRequest?.rows,
-    });*/
-/*    this.page = DATA.impactLevelsWorking.map((item) => {
-      return {
-        ...item,
-        actions: [
-          {
-            label: this.translate.instant('ACTIONS.EDIT'),
-            icon: 'pi pi-pencil',
-            command: () => {
-              // this.openDialog(item.id);
-            },
-          },
-        ],
-      };
-    });*/
+    this.version$ = this.route.queryParams.pipe(
+      map((params) => params['_version']),
+      tap((v) => {
+        this.store
+          .select(BusinessContinuityState.versions)
+          .pipe(filter((p) => !!p))
+          .subscribe((res) => {
+            const shouldDisable = res.some((item) => {
+              if (item.id == v) {
+                return item.status.id !== 1;
+              }
+              return false;
+            });
+
+            this.disableButton = shouldDisable;
+          });
+      })
+    );
+    this.version$.subscribe();
   }
   openView(Id?: number) {
     this.store.dispatch(new BrowseImpLevelWorkingAction.OpenView({ id: Id }));
