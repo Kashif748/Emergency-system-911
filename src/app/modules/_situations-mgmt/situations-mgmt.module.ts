@@ -42,6 +42,7 @@ import { InlineSVGModule } from 'ng-inline-svg';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TagModule } from 'primeng/tag';
 import { ChipModule } from 'primeng/chip';
+import {TabViewModule} from "primeng/tabview";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/situations-mgmt/', '.json');
@@ -99,6 +100,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     OverlayPanelModule,
     TagModule,
     ChipModule,
+    TabViewModule
 
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],

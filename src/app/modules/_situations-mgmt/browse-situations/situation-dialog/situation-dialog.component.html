@@ -1,35 +1,76 @@
-<p-dialog
-  [visible]="formDialog$ | async"
-  (visibleChange)="close()"
-  [modal]="true"
-  [style]="{ width: '55vw', 'min-hight': '50vh' }"
-  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+<!-- as a dialog -->
+<p-dialog *ngIf="asDialog;else page" #dialog [visible]="formDialog$ | async" (visibleChange)="close()" [modal]="true"
+          [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
+          [baseZIndex]="10000" [draggable]="true" [resizable]="false">
   <ng-template pTemplate="header">
-    <div class="d-flex">
-      <app-breadcrumb></app-breadcrumb>
-      <ng-container *ngIf="editMode; else elseTemplate">
-        <p-tag
-          value=" {{ 'ACTIONS.UPDATE_ITEM' | translate }}"
-          severity="warning"
-        ></p-tag>
-      </ng-container>
-      <ng-template #elseTemplate>
-        <p-tag
-          value=" {{ 'ACTIONS.NEW_ITEM' | translate }}"
-          severity="primary"
-        ></p-tag>
-      </ng-template>
-    </div>
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
 
-  <form [formGroup]="form" class="p-fluid p-grid mt-5">
-    <!--Name Ar -->
-    <div class="p-field p-col-12 p-md-6">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh;">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px">
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- templates -->
+<ng-template #header>
+  <div class="d-flex">
+    <app-breadcrumb></app-breadcrumb>
+    <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+      <p-tag
+        value=" {{ 'ACTIONS.UPDATE_ITEM' | translate }}"
+        severity="warning"
+      ></p-tag>
+    </ng-container>
+    <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+      <p-tag
+        value=" {{ 'ACTIONS.NEW_ITEM' | translate }}"
+        severity="primary"
+      ></p-tag>
+    </ng-container>
+    <ng-container *ngIf="viewOnly$ | async">
+      <p-tag
+        value=" {{ 'ACTIONS.VIEW' | translate }}"
+        severity="info"
+      ></p-tag>
+    </ng-container>
+  </div>
+
+  <span class="flex-grow-1"></span>
+  <a *ngIf="asDialog" [routerLink]="['task']" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
+     class="p-button-rounded p-button-text p-button-plain"></a>
+</ng-template>
+
+<ng-template #content>
+
+  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')     }">
+    <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+
+    <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)" styleClass="h-100">
+      <p-tabPanel header="{{'SITUATIONS.SITUATION_INFO' | translate }}">
+
+        <form [formGroup]="form" class="p-fluid p-grid mt-5">
+          <!--Name Ar -->
+          <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
         <input type="text" formControlName="nameAr" pInputText />
         <label>
@@ -37,29 +78,29 @@
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
+            <ng-container
+              *ngIf="
           form.controls['nameAr'].touched &&
           !form.controls['nameAr'].valid &&
           form.controls['nameAr'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('arabic')"
-        >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
-        </p>
-      </ng-container>
-    </div>
-    <!-- Name En -->
-    <div class="p-field p-col-12 p-md-6">
+            >
+              <p
+                class="p-error mb-0"
+                *ngIf="form.controls['nameAr'].hasError('required')"
+              >
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </p>
+              <p
+                class="p-error mb-0"
+                *ngIf="form.controls['nameAr'].hasError('arabic')"
+              >
+                {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+              </p>
+            </ng-container>
+          </div>
+          <!-- Name En -->
+          <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
         <input type="text" formControlName="nameEn" pInputText />
         <label>
@@ -67,73 +108,97 @@
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
+            <ng-container
+              *ngIf="
           form.controls['nameEn'].touched &&
           !form.controls['nameEn'].valid &&
           form.controls['nameEn'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('english')"
-        >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-        </p>
-      </ng-container>
-    </div>
-    <!-- Type filter -->
-    <div class="p-field p-col-4 p-md-6">
-      <p-dropdown
-        [options]="newsTypes$ | async"
-        formControlName="type"
-        [autoDisplayFirst]="false"
-        [showClear]="true"
-        dataKey="id"
-        placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
-      >
-        <ng-template let-item pTemplate="selectedItem">
-          {{ item | translateObj }}
-        </ng-template>
-
-        <ng-template let-item pTemplate="item">
-          {{ item | translateObj }}
-        </ng-template>
-      </p-dropdown>
-    </div>
-    <!-- theme -->
-    <div class="p-field p-col-4 p-md-6">
-      <p-dropdown
-        [options]="themeTypes"
-        formControlName="theme"
-        [autoDisplayFirst]="false"
-        [showClear]="true"
-        dataKey="id"
-
-        placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
-      >
-        <ng-template let-item pTemplate="selectedItem">
-          <div class="status-item">
-            <div class="level-badge" [class]="item.color"></div>
-            {{ item | translateObj }}
+            >
+              <p
+                class="p-error mb-0"
+                *ngIf="form.controls['nameEn'].hasError('required')"
+              >
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </p>
+              <p
+                class="p-error mb-0"
+                *ngIf="form.controls['nameEn'].hasError('english')"
+              >
+                {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+              </p>
+            </ng-container>
           </div>
-        </ng-template>
-        <ng-template let-item pTemplate="item">
-          <div class="status-item">
-            <div class="level-badge" [class]="item.color"></div>
-            {{ item | translateObj }}
+          <!-- Type filter -->
+          <div class="p-field p-col-4 p-md-6">
+            <p-dropdown
+              [options]="newsTypes$ | async"
+              formControlName="type"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              dataKey="id"
+              placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item | translateObj }}
+              </ng-template>
+
+              <ng-template let-item pTemplate="item">
+                {{ item | translateObj }}
+              </ng-template>
+            </p-dropdown>
           </div>
-        </ng-template>
-      </p-dropdown>
-    </div>
-    <!--  From Date  -->
-    <div class="p-field p-md-6">
+          <!-- theme -->
+          <div class="p-field p-col-4 p-md-6">
+            <p-dropdown
+              [options]="alertnessLevel$ | async"
+              formControlName="alertnessLevel"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              dataKey="id"
+              placeholder=" {{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                <div class="status-item">
+                  <div class="level-badge" [class]="item.color"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+              <ng-template let-item pTemplate="item">
+                <div class="status-item">
+                  <div class="level-badge" [class]="item.color"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+          <div class="p-field p-col-4 p-md-6">
+            <p-dropdown
+              [options]="themeTypes"
+              formControlName="theme"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              dataKey="id"
+
+              placeholder=" {{ 'SITUATIONS.SYSTEM_THEME' | translate }}"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                <div class="status-item">
+                  <div class="level-badge"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+              <ng-template let-item pTemplate="item">
+                <div class="status-item">
+                  <div class="level-badge"></div>
+                  {{ item | translateObj }}
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <!--  From Date  -->
+          <div class="p-field p-md-6">
       <span class="p-float-label">
         <p-calendar
           formControlName="startDate"
@@ -150,23 +215,23 @@
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
+            <ng-container
+              *ngIf="
           form.controls['startDate'].touched &&
           !form.controls['startDate'].valid &&
           form.controls['startDate'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['startDate'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
-    <!--  To Date  -->
-    <div class="p-field p-md-6">
+            >
+              <p
+                class="p-error mb-0"
+                *ngIf="form.controls['startDate'].hasError('required')"
+              >
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </p>
+            </ng-container>
+          </div>
+          <!--  To Date  -->
+          <div class="p-field p-md-6">
       <span class="p-float-label">
         <p-calendar
           formControlName="endDate"
@@ -183,42 +248,256 @@
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
+            <ng-container
+              *ngIf="
           form.controls['endDate'].touched &&
           !form.controls['endDate'].valid &&
           form.controls['endDate'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['endDate'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
-  </form>
+            >
+              <p
+                class="p-error mb-0"
+                *ngIf="form.controls['endDate'].hasError('required')"
+              >
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </p>
+            </ng-container>
+          </div>
+        </form>
 
-  <!-- Actions -->
-  <ng-template pTemplate="footer">
-    <div class="p-col p-d-flex">
+        <!--// Table-->
+        <ng-container>
+          <ng-container *ngIf="viewOnly$ | async">
+            <ng-container *ngIf="(loadingAttachment$ | async); else tableTemplate">
+              <p-table [value]="[].constructor(10)">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 0"></th>
+
+                    <th>
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "SITUATIONS.ATTACHMENT_NAMR" | translate }}
+                      </div>
+                    </th>
+                    <th>
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "SITUATIONS.ORG_NAME" | translate }}
+                      </div>
+                    </th>
+                    <th>
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "SITUATIONS.ATTACHMENT_TYPE" | translate }}
+                      </div>
+                    </th>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr class="cursor-pointer hoverable">
+                    <td class="flag-td">
+                      <div class="bg-secondary"></div>
+                    </td>
+
+                    <td class="max-w-250px">
+                      <p-skeleton></p-skeleton>
+                    </td>
+
+                    <td class="max-w-250px" >
+                      <p-skeleton></p-skeleton>
+                    </td>
+
+                    <td class="max-w-250px">
+                      <p-skeleton></p-skeleton>
+                    </td>
+
+                  </tr>
+                </ng-template>
+              </p-table>
+            </ng-container>
+
+            <ng-template #tableTemplate>
+              <p-table
+                #table
+                [columns]=""
+                [totalRecords]=""
+                [value]="attachmentPage$ | async"
+                dataKey="id"
+                [autoLayout]="true"
+                selectionMode="single"
+                (sortFunction)="customSort($event)" [customSort]="true"
+              >
+                <ng-template pTemplate="colgroup" let-columns>
+                  <colgroup>
+                    <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th></th>
+
+                    <th pSortableColumn="document.fileName">
+                      <div class="p-d-flex p-jc-start p-ai-center">
+                        {{ "SITUATIONS.ATTACHMENT_NAMR" | translate }} <p-sortIcon field="document.fileName"></p-sortIcon>
+                      </div>
+
+                    </th>
+                    <th pSortableColumn="orgStructure.nameEn">
+                      <div class="p-d-flex p-jc-start p-ai-center">
+                        {{ "SITUATIONS.ORG_NAME" | translate }}<p-sortIcon field="orgStructure.nameEn"></p-sortIcon>
+                      </div>
+
+                    </th>
+
+                    <th pSortableColumn="document.entityTag.tag">
+                      <div class="p-d-flex p-jc-start p-ai-center">
+                        {{ "SITUATIONS.ATTACHMENT_TYPE" | translate }}<p-sortIcon field="document.entityTag.tag"></p-sortIcon>
+                      </div>
+
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-item let-rowIndex="rowIndex">
+                  <tr [pSelectableRow]="rowData" class="cursor-pointer hoverable">
+                    <td class="flag-td">
+                    </td>
+                    <td class="max-w-250px">
+                      {{ item.fileName }}
+                    </td>
+                    <td class="max-w-250px">
+                      {{ item.orgStructure | translateObj : 'name'}}
+                    </td>
+                    <td class="max-w-250px">
+                      {{ item.tagId == '32' ? ('SITUATIONS.PLAN' | translate) : ('SITUATIONS.SHIFT' | translate) }}
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td class="max-w-250px" colspan="100%">
+                      <div class="w-100">
+                        <nodata-table></nodata-table>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </ng-template>
+          </ng-container>
+
+          <ng-container *ngIf="state$ | async as state">
+            <p-paginator *ngIf="viewOnly$ | async"
+                         #pg
+                         [first]="state.pageRequest.first"
+                         [rows]="state.pageRequest.rows"
+                         [totalRecords]="situationTotalRecords$ | async"
+                         [rowsPerPageOptions]="[10, 20, 50]"
+                         [showCurrentPageReport]="true"
+                         currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
+                         (onPageChange)="loadAttachmentPage($event)"
+            >
+            </p-paginator>
+          </ng-container>
+        </ng-container>
+
+      </p-tabPanel>
+      <!--<p-tabPanel header="{{'TASK_LOCATION' | translate }}">
+        <div class="row h-100">
+          <div class="col-12">
+            <ng-container #mapContainer></ng-container>
+          </div>
+        </div>
+      </p-tabPanel>-->
+      <ng-container *checkPrivileges="'PRIV_ADD_FILE_SITUATION'">
+        <p-tabPanel *ngIf="!(viewOnly$ | async)" header="{{'SITUATIONS.PLAN_ATTACH' | translate }}">
+          <div class="row">
+            <div class="col-12">
+              <ng-container #attachPlanContainer></ng-container>
+            </div>
+          </div>
+        </p-tabPanel>
+
+        <p-tabPanel *ngIf="!(viewOnly$ | async)" header="{{'SITUATIONS.SHIFT_ATTACH' | translate }}">
+          <div class="row">
+            <div class="col-12">
+              <ng-container #attachShiftContainer></ng-container>
+            </div>
+          </div>
+        </p-tabPanel>
+      </ng-container>
+
+        <!--<p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_WORKLOG' | translate }}">
+          <div class="row h-100">
+            <div class="col-12 h-100">
+              <ng-container #workLogContainer></ng-container>
+            </div>
+          </div>
+        </p-tabPanel>-->
+      <!--<ng-container *checkPrivileges="'PRIV_VW_TSK_NOTIF'">
+        <p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_NOTIFICATIONS' | translate }}">
+          <div class="row h-100">
+            <div class="col-12 h-100">
+              <ng-container #notificationsContainer></ng-container>
+            </div>
+          </div>
+        </p-tabPanel>
+      </ng-container>-->
+
+    </p-tabView>
+
+  </div>
+
+</ng-template>
+
+
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()"
+            label="{{'ACTIONS.CLOSE' | translate }}"></button>
+
+    <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" (click)="close()"
+            label="{{'ACTIONS.BACK' | translate }}"></button>
+    <div class="ml-dir-auto"></div>
+    <ng-container *ngIf="!(viewOnly$ | async)">
+      <div class="mx-1">
+        <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
+                class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="(viewOnly$ | async)">
+      <!--<div class="mx-1">
+        <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
+                class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
+                queryParamsHandling="merge"></button>
+      </div>-->
+    </ng-container>
+    <ng-container>
+      <div class="mx-1" *ngIf="(!(viewOnly$ | async)) || tabv?.activeIndex === 2">
+        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+                (click)="submit()"></button>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>
+
+<!--<ng-template #footer>
+  <div class="p-col p-d-flex" *ngIf="!(viewOnly$ | async)">
+    <button
+      pButton
+      icon="pi pi-times"
+      (click)="close()"
+      label="{{ 'ACTIONS.CLOSE' | translate }}"
+      class="p-button-outlined"
+    ></button>
+    <div class="mx-1">
       <button
         pButton
-        icon="pi pi-times"
-        (click)="close()"
-        label="{{ 'ACTIONS.CLOSE' | translate }}"
-        class="p-button-outlined"
+        (click)="submit()"
+        [loading]="blocking$ | async"
+        label="{{ 'ACTIONS.SAVE' | translate }}"
+        icon="pi pi-save"
       ></button>
-      <div class="mx-1">
-        <button
-          pButton
-          (click)="submit()"
-          [loading]="blocking$ | async"
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-        ></button>
-      </div>
     </div>
-  </ng-template>
-</p-dialog>
+  </div>
+</ng-template>-->
+
