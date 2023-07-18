@@ -255,7 +255,9 @@
       "ALLOWED_TYPW": "allowed types are :allowedTypes"
     },
     "GENERAL": {
-      "DELETE_CONFIRM": "Are you sure you want to delete?"
+      "DELETE_CONFIRM": "Are you sure you want to delete?",
+      "RESENT_CONFIRM": "Are you sure you want to resend?",
+      "SEND_CONFIRM": "Send"
     },
     "WORK_LOG_LIST": {
       "DATE": "Date",
