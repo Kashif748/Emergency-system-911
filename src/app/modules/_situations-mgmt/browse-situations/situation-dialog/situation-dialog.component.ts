@@ -401,20 +401,29 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   }
 
   ngAfterViewChecked() {
-    const checkUserPre = this.privilegesService.checkActionPrivilege('PRIV_ADD_FILE_SITUATION');
-    if (checkUserPre) {
-      if (this.form) {
-        try {
-          this.form.disable();
-        } catch {
+    const checkAttachment = this.privilegesService.checkActionPrivilege('PRIV_ADD_FILE_SITUATION');
+    const checkAdd = this.privilegesService.checkActionPrivilege('PRIV_ADD_SITUATION');
+    const checkEdit = this.privilegesService.checkActionPrivilege('PRIV_ED_DEL_SITUATION');
+    if (checkAttachment) {
+      if (checkEdit) {
+
+      } else if (checkAdd) {
+        if (this._situationId) {
+          if (this.form) {
+            try {
+              this.form.disable();
+            } catch {
+            }
+          }
+        }
+      } else {
+        if (this.form) {
+          try {
+            this.form.disable();
+          } catch {
+          }
         }
       }
-    }
-  }
-
-  getTypeName(id) {
-    if (id == 32) {
-      // return
     }
   }
 }

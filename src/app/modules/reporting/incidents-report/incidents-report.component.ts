@@ -525,13 +525,13 @@ export class IncidentsReportComponent implements OnInit {
         (cat: ICategory) => cat.parent === null
       ),
     };
-    const subCategories: DataOptions = {
-      formControlName: AdvancedSearchFieldsEnum.SUB_CATEGORY,
-      children: []
-    };
     const reportingVias: DataOptions = {
       formControlName: AdvancedSearchFieldsEnum.REPORTING_VIA,
       children: this.commonData?.reportingVias,
+    };
+    const subCategories: DataOptions = {
+      formControlName: AdvancedSearchFieldsEnum.SUB_CATEGORY,
+      children: []
     };
     const group: DataOptions = {
       formControlName: AdvancedSearchFieldsEnum.GROUP,
@@ -541,10 +541,10 @@ export class IncidentsReportComponent implements OnInit {
       priorities,
       cities,
       mainCategories,
-      subCategories,
       reportingVias,
       statuses,
       group,
+      subCategories
     ];
     console.log(statuses);
     console.log(group);
