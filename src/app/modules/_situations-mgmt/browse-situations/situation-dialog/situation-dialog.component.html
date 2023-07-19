@@ -400,15 +400,8 @@
         </ng-container>
 
       </p-tabPanel>
-      <!--<p-tabPanel header="{{'TASK_LOCATION' | translate }}">
-        <div class="row h-100">
-          <div class="col-12">
-            <ng-container #mapContainer></ng-container>
-          </div>
-        </div>
-      </p-tabPanel>-->
       <ng-container *checkPrivileges="'PRIV_ADD_FILE_SITUATION'">
-        <p-tabPanel *ngIf="!(viewOnly$ | async)" header="{{'SITUATIONS.PLAN_ATTACH' | translate }}">
+        <p-tabPanel *ngIf="!(viewOnly$ | async) && editMode" header="{{'SITUATIONS.PLAN_ATTACH' | translate }}">
           <div class="row">
             <div class="col-12">
               <ng-container #attachPlanContainer></ng-container>
@@ -416,7 +409,7 @@
           </div>
         </p-tabPanel>
 
-        <p-tabPanel *ngIf="!(viewOnly$ | async)" header="{{'SITUATIONS.SHIFT_ATTACH' | translate }}">
+        <p-tabPanel *ngIf="!(viewOnly$ | async) && editMode" header="{{'SITUATIONS.SHIFT_ATTACH' | translate }}">
           <div class="row">
             <div class="col-12">
               <ng-container #attachShiftContainer></ng-container>
@@ -424,24 +417,6 @@
           </div>
         </p-tabPanel>
       </ng-container>
-
-        <!--<p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_WORKLOG' | translate }}">
-          <div class="row h-100">
-            <div class="col-12 h-100">
-              <ng-container #workLogContainer></ng-container>
-            </div>
-          </div>
-        </p-tabPanel>-->
-      <!--<ng-container *checkPrivileges="'PRIV_VW_TSK_NOTIF'">
-        <p-tabPanel *ngIf="viewOnly$ | async" header="{{'TASK_NOTIFICATIONS' | translate }}">
-          <div class="row h-100">
-            <div class="col-12 h-100">
-              <ng-container #notificationsContainer></ng-container>
-            </div>
-          </div>
-        </p-tabPanel>
-      </ng-container>-->
-
     </p-tabView>
 
   </div>
@@ -465,11 +440,6 @@
     </ng-container>
 
     <ng-container *ngIf="(viewOnly$ | async)">
-      <!--<div class="mx-1">
-        <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
-                class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
-                queryParamsHandling="merge"></button>
-      </div>-->
     </ng-container>
     <ng-container>
       <div class="mx-1" *ngIf="(!(viewOnly$ | async)) || tabv?.activeIndex === 2">
@@ -479,25 +449,3 @@
     </ng-container>
   </div>
 </ng-template>
-
-<!--<ng-template #footer>
-  <div class="p-col p-d-flex" *ngIf="!(viewOnly$ | async)">
-    <button
-      pButton
-      icon="pi pi-times"
-      (click)="close()"
-      label="{{ 'ACTIONS.CLOSE' | translate }}"
-      class="p-button-outlined"
-    ></button>
-    <div class="mx-1">
-      <button
-        pButton
-        (click)="submit()"
-        [loading]="blocking$ | async"
-        label="{{ 'ACTIONS.SAVE' | translate }}"
-        icon="pi pi-save"
-      ></button>
-    </div>
-  </div>
-</ng-template>-->
-
