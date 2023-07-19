@@ -288,7 +288,9 @@
       "ALLOWED_TYPW": "الأنماط المقبولة  :allowedTypes"
     },
     "GENERAL": {
-      "DELETE_CONFIRM": "هل أنت متأكد؟ لن تستطيع استعادة المعلومات "
+      "DELETE_CONFIRM": "هل أنت متأكد؟ لن تستطيع استعادة المعلومات ",
+      "RESENT_CONFIRM": "هل أنت متأكد أنك تريد إعادة الإرسال?",
+      "SEND_CONFIRM": "يرسل"
     },
     "WORK_LOG_LIST": {
       "DATE": "التاريخ",
@@ -1377,7 +1379,7 @@
       "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
       "PUSH_NOTIFICATION": "تنبيهات البرنامج",
       "WORKLOG": "نموذج سجل المهمة/البلاغ",
-      "alertnessLevels": "مستويات الاستعداد"
+      "alertnessLevel": "مستويات الاستعداد"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",

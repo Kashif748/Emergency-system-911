@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -21,6 +21,8 @@ import {
   NOTIFICATION_STATUS,
   NOTIFICATION_TABLE_COLUMNS,
 } from './notifications-table.types';
+import {ConfirmDialogComponent} from "../../../modules/confirm-dialog/confirm-dialog.component";
+import {AlertsService} from "../../../_metronic/core/services/alerts.service";
 
 @Component({
   selector: 'app-notifications-table',
@@ -31,6 +33,8 @@ export class NotificationsTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @Input() recordId: number;
   @Input() moduleId: number;
+
+  public modelRef: MatDialogRef<any>
 
   // Variables
   tableTypes = NOTIFICATION_TABLE_TYPES;
@@ -53,7 +57,9 @@ export class NotificationsTableComponent implements OnInit {
     private incidentsNotificationsService: NotificationsTableService,
     private cdr: ChangeDetectorRef,
     private translationService: TranslationService,
-    private langFacade: ILangFacade
+    private langFacade: ILangFacade,
+    private dialog: MatDialog,
+    private alertService: AlertsService,
   ) {}
 
   ngOnInit(): void {
@@ -182,4 +188,61 @@ export class NotificationsTableComponent implements OnInit {
       panelClass: 'modal',
     });
   }
+
+  reSend(id: number) {
+    const message = 'GENERAL.RESENT_CONFIRM';
+    const actionName = 'GENERAL.SEND_CONFIRM';
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      confirmMessage: message,
+      action: actionName,
+    };
+
+    this.dialog
+      .open(ConfirmDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.incidentsNotificationsService
+            .resendSMS(id)
+            .subscribe(
+              (response) => {
+                this.incidentsNotificationsService.getNotifications(
+                  this.activeTable.value
+                );
+                this.alertService.openSuccessSnackBar();
+              },
+              (err) => {
+                this.alertService.openFailureSnackBar();
+              }
+            );
+        }
+      });
+  }
+
+  /*deleteIncident() {
+    this.dialog
+      .open(ConfirmDialogComponent)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.incidentsService
+            .updateIncidentStatus({
+              incidentId: this.incidentDetails?.id,
+              statusId: 4,
+              finalStatement: '',
+            })
+            .subscribe(
+              (response) => {
+                this.alertService.openSuccessSnackBar();
+                this.back();
+              },
+              (err) => {
+                this.alertService.openFailureSnackBar();
+              }
+            );
+        }
+      });
+  }*/
 }

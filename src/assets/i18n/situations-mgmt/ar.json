@@ -19,6 +19,16 @@
     "RECOVERY_RATE": "نسبة التعافي",
     "INCIDENT_MAIN_CATEGORY": "تصنيف البلاغ الرئيسي",
     "CHART_TITLE": "توزع البلاغات حسب الأهمية",
-    "ACTIVE_NOW" :"نشط الان"
+    "ACTIVE_NOW" :"نشط الان",
+    "ATTACHMENT_NAMR" :"اسم المرفق",
+    "ORG_NAME" :"اسم المؤسسة",
+    "ATTACHMENT_TYPE" :"نوع المرفق (خطة / وردية)",
+    "SITUATION_INFO" :"معلومات الموقف",
+    "SITUATION_ATTACHMENT" :"مرفق الموقف",
+    "SYSTEM_THEME": "وضعية المنصة",
+    "PLAN": "مناوبات",
+    "SHIFT": "خطط",
+    "PLAN_ATTACH": "مرفقات الخطط",
+    "SHIFT_ATTACH": "مرفقات المناوبات"
   }
 }

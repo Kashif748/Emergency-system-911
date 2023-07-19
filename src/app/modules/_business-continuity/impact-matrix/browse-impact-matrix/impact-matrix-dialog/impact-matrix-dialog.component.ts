@@ -32,6 +32,9 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
   public display = false;
   form: FormGroup;
 
+  @Input()
+  version
+
   _Id: number;
   get loggedinUserId() {
     return this.auth.getClaim('sub');

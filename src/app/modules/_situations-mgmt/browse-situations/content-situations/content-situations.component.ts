@@ -38,11 +38,14 @@ export class ContentSituationsComponent implements OnInit {
     });
   }
   openView(id?: number) {
-    this.store.dispatch(
+    /*this.store.dispatch(
       new BrowseSituationsAction.OpenView({ situationId: id })
-    );
+    );*/
   }
-  rowSelect(_id) {
-    this.onRowSelect.emit({ _id });
+  rowSelect(id) {
+    this.store.dispatch(
+      new BrowseSituationsAction.OpenView({ dialogName: '_form_dialog', situationId: id })
+    );
+    // this.onRowSelect.emit({ _id });
   }
 }

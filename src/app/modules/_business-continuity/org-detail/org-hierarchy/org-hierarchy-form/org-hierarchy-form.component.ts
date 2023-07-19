@@ -81,11 +81,11 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
-      managerId: '',
+      managerId: null,
       parentId: '',
       id: '',
-      coordinatorId: '',
-      BcOrgHierarchyType: '',
+      coordinatorId: null,
+      bcOrgHirType: null,
       isActive: true,
     });
   }

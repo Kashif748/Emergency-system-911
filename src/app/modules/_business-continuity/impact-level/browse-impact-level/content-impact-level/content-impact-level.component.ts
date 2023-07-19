@@ -5,6 +5,10 @@ import { Store } from '@ngxs/store';
 import { BcImpactLevel } from '../../../../../api/models/bc-impact-level';
 import { BrowseImpactLevelAction } from '../../states/browse-impact-level.action';
 import { TranslateService } from '@ngx-translate/core';
+import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
+import {filter, map, tap} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-content-impact-level',
@@ -37,13 +41,38 @@ export class ContentImpactLevelComponent implements OnInit {
     '#359dde',
     '#0c5dba',
     '#8b8b8b'];
+
+  public disableButton: boolean
+  public version$: Observable<boolean>;
+
   constructor(
     private store: Store,
+    private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private translate: TranslateService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.version$ = this.route.queryParams.pipe(
+      map((params) => params['_version']),
+      tap((v) => {
+        this.store
+          .select(BusinessContinuityState.versions)
+          .pipe(filter((p) => !!p))
+          .subscribe((res) => {
+            const shouldDisable = res.some((item) => {
+              if (item.id == v) {
+                return item.status.id !== 1;
+              }
+              return false;
+            });
+
+            this.disableButton = shouldDisable;
+          });
+      })
+    );
+    this.version$.subscribe();
+  }
   onRowEditInit(level: BcImpactLevel) {
     this.clonedLevels[level.id] = { ...level };
   }

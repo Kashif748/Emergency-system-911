@@ -387,6 +387,10 @@ export class FilesListComponent implements OnInit, AfterViewInit {
         return this.loadInterimIncidentFiles();
       case UploadTagIdConst.ASSETS_IMAGE:
         return this.loadAsssestImageFiles();
+      case UploadTagIdConst.PLAN_SITUATION:
+        return this.loadSituationsAttachments();
+      case UploadTagIdConst.SHIFT_SITUATION:
+        return this.loadSituationsAttachments();
       default:
         return;
     }
@@ -394,6 +398,18 @@ export class FilesListComponent implements OnInit, AfterViewInit {
 
   private loadAsssestImageFiles() {
     this.attachmentsService.getAssestsFilesList(this.recordId).subscribe(
+      (data) => {
+        this.fillAttachmentsList(null, data);
+        this.groupAttachmentsForUI();
+        this.cd.detectChanges();
+      },
+      (err) => {},
+      () => (this.loading = false)
+    );
+  }
+
+  private loadSituationsAttachments() {
+    this.attachmentsService.getFilesList(this.recordId, this.tagId).subscribe(
       (data) => {
         this.fillAttachmentsList(null, data);
         this.groupAttachmentsForUI();

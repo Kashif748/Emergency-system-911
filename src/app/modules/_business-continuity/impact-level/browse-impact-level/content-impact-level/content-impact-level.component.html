@@ -205,6 +205,7 @@
             <td style="text-align: center">
               <div class="d-flex p-flex-column p-ai-center p-jc-center">
                 <button
+                  [disabled]="disableButton"
                   *ngIf="!editing"
                   pButton
                   pRipple

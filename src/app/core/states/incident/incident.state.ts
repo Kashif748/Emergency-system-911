@@ -199,7 +199,7 @@ export class IncidentState {
     return this.incidentService
       .search5({
         filter: payload.filters,
-        pageable: { page: payload.page, size: payload.size },
+        pageable: { page: payload.page, size: payload.size, sort: payload.sort},
         status: [],
       })
       .pipe(

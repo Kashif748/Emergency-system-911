@@ -504,8 +504,8 @@ export class IncidentsReportComponent implements OnInit {
         categoryId: params['mainCategoryId'],
       };
       this.store.dispatch(UpdateFilter({ filter: this.filter }));
-      this.search();
-      await this.initCharts();
+      // this.search();
+      // await this.initCharts();
     });
     const statuses: DataOptions = {
       formControlName: AdvancedSearchFieldsEnum.STATUS,
