@@ -24,6 +24,18 @@ export namespace TaskAction {
     ) {}
   }
 
+  export class LoadStatistics {
+    static readonly type = '[Task] Load Statistics';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        filters?: { [key: string]: any };
+      }
+    ) {}
+  }
+
   export class GetTask {
     static readonly type = '[Task] Get Task';
     /**
@@ -105,6 +117,19 @@ export namespace TaskAction {
      */
     constructor(
       public payload: { search: string; page?: number; size?: number }
+    ) {}
+  }
+
+  export class Export {
+    static readonly type = '[Task] Export';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        type: 'PDF' | 'EXCEL';
+        filters?: { [key: string]: any };
+      }
     ) {}
   }
 }

@@ -590,3 +590,4 @@ Thumbs.db
 shared/files/*
 shared/nginx/certs/*
 .svn
+temp.txt
