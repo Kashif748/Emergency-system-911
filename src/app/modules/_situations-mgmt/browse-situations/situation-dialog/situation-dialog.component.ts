@@ -294,23 +294,8 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     } else {
       this.store
         .dispatch(new BrowseSituationsAction.CreateSituations(situation))
-        .pipe(
-          takeUntil(this.destroy$),
-          switchMap(() => this.store.select(SituationsState.createdSituation)),
-          filter((t) => !!t),
-          take(1)
-        )
-        .subscribe(async (t) => {
-          await this.attachPlanComponent?.upload(t.id, true);
-          setTimeout(() => {
-            this.close();
-          }, 1200);
-
-          await this.attachShiftComponent?.upload(t.id, true);
-          setTimeout(() => {
-            this.close();
-          }, 1200);
-        });
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(async (t) => {});
     }
   }
 
