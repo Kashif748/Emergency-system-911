@@ -1,68 +1,20 @@
 {
-  "BUSINESS_SETUP": "إعدادات إستمرارية الأعمال",
-  "ACTION": "ءارجإلا",
-  "ADD": "إضافة",
-  "VENDERS_PARTENERS": "الموردين / الشركاء",
-  "LOCATION": "المواقع",
-  "SYSTEM": "الأنظمة",
-  "DISTRICT":"المنطقة",
-  "TABS": {
-    "SYSTEMS":"الأنظمة",
-    "LOCATIONS":"المواقع",
-    "VENDER_PARTNERS":"الموردين / الشركاء"
-  },
-  "SYSTEMS": {
-    "NO": "الرقم",
-    "DEPARTMENT_NAME": "إسم الإدارة",
-    "SYSTEM_NAME": "إسم النظام",
-    "SYSTEM_RTO": "زمن التعافي الأمثل للنظام",
-    "ADD_SYSTEM":"إضافة نظام جديد",
-    "DIALOG" : {
-      "NAME_EN":"الاسم (انجليزي)",
-      "NAME_AR":"الاسم (عربي)",
-      "SYSTEM_LOGO":"صورة/شعار النظام",
-      "OWNER_DEPT":"الادارة المالكة للنظام"
-    }
-  },
-  "LOCATIONS": {
-    "NO": "الرقم",
-    "DEPARTMENT_NAME": "إسم الإدارة",
-    "LOCATION_NAME": "إسم الموقع",
-    "LOCATION_TYPE": "نوع الموقع",
-    "DISTRICT": "المنطقة",
-    "ADD_LOCATION":"إضافة موقع جديد",
-    "DIALOG" : {
-      "LOCATION_INFO": "بيانات الموقع",
-      "GEO_INFO": "تفاصيل الجغرافية",
-      "NAME_EN":"الاسم (انجليزي)",
-      "NAME_AR":"الاسم (عربي)",
-      "LOC_TYPE":"نوع الموقع",
-      "LONGI":"خط الطول",
-      "LATI":"خط العرض",
-      "CHOOSE_LOCATION":"اختر الموقع"
-    }
-  },
-  "VENDERS": {
-    "NO": "الرقم",
-    "DEPARTMENT_NAME": "إسم الإدارة",
-    "COMPANY_NAME": "اسم الشركة",
-    "TYPE": "Type",
-    "SERVICES": "Services",
-    "DIALOG" : {
-      "ADD_VENDER":"إضافة مورد/شريك جديد",
-      "VENDER_INFO": "بيانات المورد/الشريك",
-      "CRITICALITY": "الأهمية ",
-      "NAME_EN":"الاسم (انجليزي)",
-      "NAME_AR":"الاسم (عربي)",
-      "ADDRESS":"العنوان ",
-      "SERVICES_AGREEMENT":"الخدمات و الاتفاقية",
-      "SUP_SERVICE_REND":"الخدمات / المواد التي يتم توريدها",
-      "SERVICE_LEVEL_AGREE":"إتفاقية مستوى الخدمة / مذكرات تفاهم / محاضر تنسيق",
-      "PRI_CONTACT":"جهة الاتصال الأساسية",
-      "LAND_NUMBER":"الهاتف الثابت",
-      "MOBILE":"الهاتف المتحرك",
-      "HOME_NUMBER":"هاتف المنزل / البديل",
-      "SEC_CONTACT":"جهة الاتصال الثانوية"
-    }
+  "ACTIVITY_NAME":"إسم النشاط",
+  "ACTIVITY_FEQ":"دورية النشاط",
+  "ACTIVITY_AREA":"نطاق النشاط",
+  "ARIS": "رقم مرجع",
+  "DEPT_HIERARCHY": "التسلسل الهرمي للإدارة",
+  "ACTIVITY_DIALOG": {
+    "ADD_NEW_ACTIVITY":"إضافة نشاط جديد",
+    "ACTIVITY_DETAILS":"بيانات النشاط",
+    "NAME_AR":"الإسم (عربي)",
+    "NAME_EN":"الإسم (انجليزي)",
+    "ACTIVITY_DESC":"وصف النشاط",
+    "ACTIVITY_FEQ":"دورية النشاط",
+    "ARIC_GUID":"الرقم المرجعي في أريس",
+    "ACTIVITY_AREA":"نطاق النشاط",
+    "INTERNAL":"داخلي",
+    "EXTERNAL":"خارجي",
+    "BELONG":"تابع الى"
   }
 }
