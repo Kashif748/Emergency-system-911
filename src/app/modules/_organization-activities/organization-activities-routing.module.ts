@@ -10,7 +10,7 @@ const routes: Routes = [
     component: OrganizationActivitiesComponent,
     children: [
       {
-        path: 'org',
+        path: '',
         component: BrowseOrganizationsComponent,
         canLoad: [PrivilegeGuard],
       }

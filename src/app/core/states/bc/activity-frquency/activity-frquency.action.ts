@@ -14,6 +14,7 @@ export namespace ActivityFrquencyAction {
         sort?: string[];
         page: number;
         size: number;
+        search?: string;
       }
     ) {
     }

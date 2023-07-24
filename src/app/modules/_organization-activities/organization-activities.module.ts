@@ -42,6 +42,8 @@ import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcru
 import {ILangFacade, LangFacade} from "@core/facades/lang.facade";
 import { ContentOrganizationsComponent } from './browse-organizations/content-organizations/content-organizations.component';
 import { OrganizationDialogComponent } from './browse-organizations/organization-dialog/organization-dialog.component';
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {BrowseOrganizationState} from "./states/browse-organization.state";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/org-activities/', '.json');
@@ -60,7 +62,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     OrganizationActivitiesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxsModule.forFeature([]),
+    NgxsModule.forFeature([BrowseOrganizationState]),
     TableModule,
     ButtonModule,
     MultiSelectModule,
@@ -97,7 +99,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     BlockableDivModule,
     InlineSVGModule,
     TreeSelectModule,
-    SharedBreadcrumbModule
+    SharedBreadcrumbModule,
+    ProgressSpinnerModule,
+    SelectButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

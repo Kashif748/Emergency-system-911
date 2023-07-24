@@ -1,17 +1,21 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CommonDataState, TaskState} from "@core/states";
-import {BrowseTasksState, BrowseTasksStateModel} from "../../_task-mgmt/states/browse-tasks.state";
-import {IncidentTaskProjection} from "../../../api/models";
 import {Observable, Subject} from "rxjs";
-import {filter, map, takeUntil} from "rxjs/operators";
+import {filter, map, take, takeUntil, tap} from "rxjs/operators";
 import {Select, Store} from "@ngxs/store";
 import {TranslateService} from "@ngx-translate/core";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {ActivatedRoute} from "@angular/router";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {MessageHelper} from "@core/helpers/message.helper";
-import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {BrowseTasksAction} from "../../_task-mgmt/states/browse-tasks.action";
+import {LazyLoadEvent, MenuItem, TreeNode} from "primeng/api";
+import {BcActivities} from "../../../api/models/bc-activities";
+import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
+import {BrowseOrgActivityStateModel, BrowseOrganizationState} from "../states/browse-organization.state";
+import {BrowseOrganizationAction} from "../states/browse-organization.action";
+import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
+import {ActivityFrquencyAction, OrgDetailAction} from "@core/states";
+import {BcActivityFrequencies} from "../../../api/models/bc-activity-frequencies";
+import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
 
 @Component({
   selector: 'app-browse-organizations',
@@ -19,47 +23,64 @@ import {BrowseTasksAction} from "../../_task-mgmt/states/browse-tasks.action";
   styleUrls: ['./browse-organizations.component.scss']
 })
 export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
-  public page$: Observable<IncidentTaskProjection[]>;
-  @Select(TaskState.loading)
+  public page$: Observable<BcActivities[]>;
+  @Select(OrgActivityState.loading)
   public loading$: Observable<boolean>;
-  @Select(TaskState.totalRecords)
+  @Select(OrgActivityState.totalRecords)
   public totalRecords$: Observable<number>;
-  @Select(BrowseTasksState.state)
-  public state$: Observable<BrowseTasksStateModel>;
+  @Select(BrowseOrganizationState.state)
+  public state$: Observable<BrowseOrgActivityStateModel>;
 
-  @Select(BrowseTasksState.hasFilters)
+  @Select(BrowseOrganizationState.hasFilters)
   public hasFilters$: Observable<boolean>;
 
-  @Select(CommonDataState.priorities)
-  public priorities$: Observable<any[]>;
+  @Select(ActivityFrquencyState.page)
+  public activityFre$: Observable<BcActivityFrequencies[]>;
 
-  @Select(CommonDataState.taskStatuses)
-  public statuses$: Observable<any[]>;
+  @Select(OrgDetailState.orgHir)
+  public departmentsTree$: Observable<TreeNode[]>;
+
+  nodes: TreeNode[];
+
+  public activityArea = [
+    {
+      id: 0,
+      lable: this.translate.instant('ACTIONS.NO'),
+    },
+    {
+      id: 1,
+      lable: this.translate.instant('ACTIONS.YES'),
+    }
+    ];
 
   private destroy$ = new Subject();
-
-  public sortableColumns$ = this.langFacade.vm$.pipe(
-    map(({ ActiveLang: { key } }) => {
-      return [
-        {
-          name: 'SHARED.TITLE',
-          code: 'title',
-        },
-        { name: 'SHARED.INCIDENT_ID', code: 'incident.id' },
-        { name: 'SHARED.PRIORITY', code: 'priority' },
-        { name: 'SHARED.DUE_DATE', code: 'dueDate' },
-        { name: 'SHARED.STATUS', code: 'status.id' },
-        {
-          name: 'SHARED.CREATED_BY',
-          code: `createdBy.firstName${key[0].toUpperCase()}${
-            key[1]
-            },createdBy.middleName${key[0].toUpperCase()}${
-            key[1]
-            },createdBy.lastName${key[0].toUpperCase()}${key[1]}`,
-        },
-      ];
-    })
-  );
+  public exportActions = [
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_XLSX'),
+      icon: 'pi pi-file-excel',
+      command: () => this.export('EXCEL'),
+    },
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_PDF'),
+      icon: 'pi pi-file-pdf',
+      command: () => this.export('PDF'),
+    },
+  ] as MenuItem[];
+  public sortableColumns = [
+    {
+      name: 'USER_MANAGEMENT.USERS.NAME_AR',
+      code: 'firstNameAr,middleNameAr,lastNameAr',
+    },
+    {
+      name: 'USER_MANAGEMENT.USERS.NAME_EN',
+      code: 'firstNameEn,middleNameEn,lastNameEn',
+    },
+    { name: 'SHARED.ORG', code: 'orgStructure.nameEn' },
+    { name: 'USER_MANAGEMENT.EMIRATES_ID', code: 'emiratesId' },
+    { name: 'SHARED.USERNAME', code: 'userName' },
+    { name: 'SHARED.JOB_TITLE', code: 'title' },
+    { name: 'SHARED.ACTIVE', code: 'isActive' },
+  ];
 
   public columns = [
     {
@@ -88,7 +109,16 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.activityFre$.pipe(
+      filter((orgs) => !!orgs),
+      map((orgs) => {
+        return {
+          data: orgs,
+        } as TreeNode;
+      })
+    );
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -96,6 +126,23 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch([
+      new ActivityFrquencyAction.LoadPage({
+        page: 0,
+        size: 20}),
+      new OrgDetailAction.GetOrgHierarchy({
+        page: 0,
+        size: 20
+      })
+    ]).pipe(
+      tap(() => {
+        this.departmentsTree$.subscribe((data) => {
+          this.nodes = this.buildTree(data);
+        }),
+        takeUntil(this.destroy$);
+        take(1);
+      }),
+    ).subscribe();
     this.type$ = this.route.queryParams.pipe(map((params) => params['_type']));
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -113,7 +160,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
       },
     ] as MenuItem[];
 
-    this.page$ = this.store.select(TaskState.page).pipe(
+    this.page$ = this.store.select(OrgActivityState.page).pipe(
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
@@ -134,18 +181,53 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     );
   }
 
+  private buildTree(data: any[]): TreeNode[] {
+    // Helper function to build the tree structure
+    const treeNodes: TreeNode[] = [];
+    const parentNodes = [
+      { label: 'Department', data: 2 },
+      { label: 'Sector', data: 1 },
+      { label: 'Section', data: 3 },
+    ];
+
+    parentNodes.forEach((parentNode) => {
+      const children = data.filter(
+        (item) => item.bcOrgHirType.id === parentNode.data
+      );
+      const node: TreeNode = {
+        label: parentNode.label,
+        data: parentNode.data,
+        children: this.buildChildNodes(children),
+      };
+      treeNodes.push(node);
+    });
+
+    return treeNodes;
+  }
+  private buildChildNodes(data: any[]): TreeNode[] {
+    // Helper function to build child nodes
+    return data.map((item) => ({
+      label: item.nameEn,
+      data: item.id,
+      children: this.buildChildNodes(
+        data.filter((child) => child.parentId === item.id)
+      ),
+    }));
+  }
+
+
   openDialog(id?: number) {
-    this.store.dispatch(new BrowseTasksAction.ToggleDialog({ taskId: id }));
+    this.store.dispatch(new BrowseOrganizationAction.ToggleDialog({ organizationId: id }));
   }
 
   search() {
-    this.store.dispatch(new BrowseTasksAction.LoadTasks());
+    this.store.dispatch(new BrowseOrganizationAction.LoadOrganization());
   }
 
   clear() {
     this.store.dispatch([
-      new BrowseTasksAction.UpdateFilter({ clear: true }),
-      new BrowseTasksAction.LoadTasks(),
+      new BrowseOrganizationAction.UpdateFilter({ clear: true }),
+      new BrowseOrganizationAction.LoadOrganization(),
     ]);
   }
 
@@ -174,7 +256,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     }
 
     this.store
-      .dispatch(new BrowseTasksAction.UpdateFilter(filter))
+      .dispatch(new BrowseOrganizationAction.UpdateFilter(filter))
       .toPromise()
       .then(() => {
         if (filter.type) {
@@ -185,29 +267,33 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
 
   changeColumns(event) {
     this.store.dispatch(
-      new BrowseTasksAction.ChangeColumns({ columns: event.value })
+      new BrowseOrganizationAction.ChangeColumns({ columns: event.value })
     );
   }
 
   changeView(view: 'TABLE' | 'CARDS') {
-    this.store.dispatch(new BrowseTasksAction.ChangeView({ view }));
+    this.store.dispatch(new BrowseOrganizationAction.ChangeView({ view }));
   }
 
   sort(event) {
     this.store.dispatch(
-      new BrowseTasksAction.SortTasks({ field: event.value })
+      new BrowseOrganizationAction.SortOrganization({ field: event.value })
     );
   }
 
   order(event) {
     this.store.dispatch(
-      new BrowseTasksAction.SortTasks({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseOrganizationAction.SortOrganization({ order: event.checked ? 'desc' : 'asc' })
     );
+  }
+
+  export(type: 'EXCEL' | 'PDF') {
+    // this.store.dispatch(new BrowseUsersAction.Export({ type }));
   }
 
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
-      new BrowseTasksAction.LoadTasks({
+      new BrowseOrganizationAction.LoadOrganization({
         pageRequest: {
           first: event.first,
           rows: event.rows,

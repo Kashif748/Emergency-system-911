@@ -1,4 +1,5 @@
 import {PageRequestModel} from '@core/models/page-request.model';
+import {BcActivities} from "../../../api/models/bc-activities";
 
 export namespace BrowseOrganizationAction {
   export class LoadOrganization {
@@ -51,7 +52,7 @@ export namespace BrowseOrganizationAction {
     /**
      *
      */
-    constructor(public payload: OrganizationDetails) {}
+    constructor(public payload: BcActivities) {}
   }
 
   export class UpdateOrganization {
@@ -59,7 +60,7 @@ export namespace BrowseOrganizationAction {
     /**
      *
      */
-    constructor(public payload: OrganizationDetails) {}
+    constructor(public payload: BcActivities) {}
   }
 
   export class ToggleDialog {
