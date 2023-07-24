@@ -163,7 +163,7 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
-          if (u?..id === 2) {
+          if (u?.bcOrgHirType.id === 2) {
             return {
               ...u
             };
