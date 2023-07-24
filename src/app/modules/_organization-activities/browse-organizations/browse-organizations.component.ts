@@ -24,10 +24,13 @@ import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
 })
 export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   public page$: Observable<BcActivities[]>;
+
   @Select(OrgActivityState.loading)
   public loading$: Observable<boolean>;
+
   @Select(OrgActivityState.totalRecords)
   public totalRecords$: Observable<number>;
+
   @Select(BrowseOrganizationState.state)
   public state$: Observable<BrowseOrgActivityStateModel>;
 
@@ -68,39 +71,33 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   ] as MenuItem[];
   public sortableColumns = [
     {
-      name: 'USER_MANAGEMENT.USERS.NAME_AR',
-      code: 'firstNameAr,middleNameAr,lastNameAr',
+      name: 'ACTIVITY_NAME',
+      code: 'nameEn',
     },
     {
-      name: 'USER_MANAGEMENT.USERS.NAME_EN',
-      code: 'firstNameEn,middleNameEn,lastNameEn',
+      name: 'ACTIVITY_NAME_AR',
+      code: 'nameAr',
     },
-    { name: 'SHARED.ORG', code: 'orgStructure.nameEn' },
-    { name: 'USER_MANAGEMENT.EMIRATES_ID', code: 'emiratesId' },
-    { name: 'SHARED.USERNAME', code: 'userName' },
-    { name: 'SHARED.JOB_TITLE', code: 'title' },
-    { name: 'SHARED.ACTIVE', code: 'isActive' },
+    { name: 'ACTIVITY_FEQ', code: 'activityFrequence' },
+    { name: 'ACTIVITY_AREA', code: 'internal' },
+    { name: 'ARIS', code: 'externalReference' }
   ];
 
   public columns = [
     {
-      name: 'SHARED.TITLE',
-      code: 'title',
+      name: 'ACTIVITY_NAME',
+      code: 'nameEn',
       disabled: true,
     },
     {
-      name: 'SHARED.DESC',
-      code: 'desc',
+      name: 'ACTIVITY_NAME_AR',
+      code: 'nameAr',
       disabled: true,
     },
-    { name: 'SHARED.INCIDENT_ID', code: 'incidentId' },
-    { name: 'SHARED.PRIORITY', code: 'priority' },
-    { name: 'SHARED.DUE_DATE', code: 'dueDate' },
-    { name: 'SHARED.STATUS', code: 'status' },
-    { name: 'SHARED.CREATED_BY', code: 'createdBy' },
-    { name: 'SHARED.ASSIGNEE', code: 'assignee' },
+    { name: 'ACTIVITY_FEQ', code: 'activityFrequence' },
+    { name: 'ACTIVITY_AREA', code: 'internal' },
+    { name: 'ARIS', code: 'externalReference' }
   ];
-  public type$: Observable<string>;
 
   constructor(
     private store: Store,
@@ -137,13 +134,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     ]).pipe(
       tap(() => {
         this.departmentsTree$.subscribe((data) => {
-          this.nodes = this.buildTree(data);
+         this.nodes = this.buildTree(data);
         }),
         takeUntil(this.destroy$);
         take(1);
       }),
     ).subscribe();
-    this.type$ = this.route.queryParams.pipe(map((params) => params['_type']));
+
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
@@ -185,9 +182,9 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     // Helper function to build the tree structure
     const treeNodes: TreeNode[] = [];
     const parentNodes = [
-      { label: 'Department', data: 2 },
-      { label: 'Sector', data: 1 },
-      { label: 'Section', data: 3 },
+      { label: this.translate.instant('DEPT'), data: 2 },
+      { label: this.translate.instant('SECTOR'), data: 1 },
+      { label: this.translate.instant('SECTION'), data: 3 },
     ];
 
     parentNodes.forEach((parentNode) => {
@@ -207,7 +204,8 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   private buildChildNodes(data: any[]): TreeNode[] {
     // Helper function to build child nodes
     return data.map((item) => ({
-      label: item.nameEn,
+      labelAr: item.nameEn,
+      labelEn: item.nameAr,
       data: item.id,
       children: this.buildChildNodes(
         data.filter((child) => child.parentId === item.id)
@@ -249,7 +247,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
             })
             .filter((id) => ![undefined, null].includes(id));
           break;
-
+        case 'hirIds':
+          filter['hirIds'] = {
+            id: filter['hirIds']?.data,
+            labelEn: filter['hirIds'].labelEn ? filter['hirIds'].labelEn : filter['hirIds'].label,
+            labelAr: filter['hirIds'].labelAr ? filter['hirIds'].labelEn : filter['hirIds'].label,
+          }
+          break;
         default:
           break;
       }

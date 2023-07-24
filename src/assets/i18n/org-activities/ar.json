@@ -1,5 +1,9 @@
 {
-  "ACTIVITY_NAME":"إسم النشاط",
+  "ACTIVITY_NAME":"الاسم بالانجليزية",
+  "DEPT":"إدارة",
+  "SECTOR":"قطاع",
+  "SECTION":"قسم",
+  "ACTIVITY_NAME_AR":"الاسم عربي",
   "ACTIVITY_FEQ":"دورية النشاط",
   "ACTIVITY_AREA":"نطاق النشاط",
   "ARIS": "رقم مرجع",

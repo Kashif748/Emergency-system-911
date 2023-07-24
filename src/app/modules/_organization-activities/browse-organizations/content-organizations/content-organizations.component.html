@@ -128,38 +128,32 @@
             <tr>
               <th style="width: 0;"></th>
 
-              <th *ngIf="columns?.includes('activityName')">
+              <th *ngIf="columns?.includes('nameEn')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "ACTIVITY_NAME" | translate }}
                 </div>
               </th>
-              <th *ngIf="columns?.includes('activityFrequency')">
+              <th *ngIf="columns?.includes('nameAr')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "ACTIVITY_NAME" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('activityFrequence')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "ACTIVITY_FEQ" | translate }}
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('analysisCycle')">
+              <th *ngIf="columns?.includes('internal')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "ANALYSIS_CRCLE" | translate }}
+                  {{ "ACTIVITY_AREA" | translate }}
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('rto')">
+              <th *ngIf="columns?.includes('externalReference')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO" | translate }}
-                </div>
-              </th>
-
-              <th *ngIf="columns?.includes('priorityLevel')">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "PRIORITY_LEVEL" | translate }}
-                </div>
-              </th>
-
-              <th *ngIf="columns?.includes('status')">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "STATUS" | translate }}
+                  {{ "ARIS" | translate }}
                 </div>
               </th>
 
@@ -174,24 +168,20 @@
                 </div>
               </td>
 
-              <td *ngIf="columns?.includes('activityName')">
+              <td *ngIf="columns?.includes('nameEn')">
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td *ngIf="columns?.includes('activityFrequency')">
+              <td *ngIf="columns?.includes('nameAr')">
                 <p-skeleton></p-skeleton>
               </td>
-              <td *ngIf="columns?.includes('analysisCycle')">
+              <td *ngIf="columns?.includes('activityFrequence')">
                 <p-skeleton></p-skeleton>
               </td>
-              <td *ngIf="columns?.includes('rto')">
+              <td *ngIf="columns?.includes('internal')">
                 <p-skeleton></p-skeleton>
               </td>
-              <td *ngIf="columns?.includes('priorityLevel')">
-                <p-skeleton></p-skeleton>
-              </td>
-
-              <td *ngIf="columns?.includes('status')">
+              <td *ngIf="columns?.includes('externalReference')">
                 <p-skeleton></p-skeleton>
               </td>
 
@@ -216,39 +206,33 @@
               <th></th>
 
 
-              <th *ngIf="columns?.includes('activityName')">
+              <th *ngIf="columns?.includes('nameEn')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "ACTIVITY_NAME" | translate }}
                 </div>
               </th>
 
 
-              <th *ngIf="columns?.includes('activityFrequency')">
+              <th *ngIf="columns?.includes('nameAr')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "ACTIVITY_NAME_AR" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('activityFrequence')">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "ACTIVITY_FEQ" | translate }}
                 </div>
               </th>
-              <th *ngIf="columns?.includes('analysisCycle')">
+              <th *ngIf="columns?.includes('internal')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "ANALYSIS_CRCLE" | translate }}
+                  {{ "ACTIVITY_AREA" | translate }}
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('rto')">
+              <th *ngIf="columns?.includes('externalReference')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "RTO" | translate }}
-                </div>
-              </th>
-
-              <th *ngIf="columns?.includes('priorityLevel')">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "PRIORITY_LEVEL" | translate }}
-                </div>
-              </th>
-
-              <th *ngIf="columns?.includes('status')">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "STATUS" | translate }}
+                  {{ "ARIS" | translate }}
                 </div>
               </th>
 
@@ -262,25 +246,21 @@
                 </div>
               </td>
 
-              <td *ngIf="columns?.includes('activityName')" (click)="item.isActive && openView(item.id)">
-                {{item.activity}}
+              <td *ngIf="columns?.includes('nameEn')" (click)="item.isActive && openView(item.id)">
+                {{item.nameEn}}
               </td>
 
-              <td *ngIf="columns?.includes('activityFrequency')" (click)="item.isActive && openView(item.id)">
-                {{item.activity_frq}}
+              <td *ngIf="columns?.includes('nameAr')" (click)="item.isActive && openView(item.id)">
+                {{item.nameAr}}
               </td>
-              <td *ngIf="columns?.includes('analysisCycle')" (click)="item.isActive && openView(item.id)">
-                {{item.analysis_cycle}}
+              <td *ngIf="columns?.includes('activityFrequence')" (click)="item.isActive && openView(item.id)">
+                {{item.activityFrequence | translateObj : 'name'}}
               </td>
-              <td *ngIf="columns?.includes('rto')" (click)="item.isActive && openView(item.id)">
-                {{item.rto  }}
+              <td *ngIf="columns?.includes('internal')" (click)="item.isActive && openView(item.id)">
+                {{item.internal  }}
               </td>
-              <td *ngIf="columns?.includes('priorityLevel')" (click)="item.isActive && openView(item.id)">
-                {{item.priority_level}}
-              </td>
-
-              <td *ngIf="columns?.includes('status')" (click)="item.isActive && openView(item.id)">
-                {{item.status}}
+              <td *ngIf="columns?.includes('externalReference')" (click)="item.isActive && openView(item.id)">
+                {{item.externalReference}}
               </td>
 
               <td>

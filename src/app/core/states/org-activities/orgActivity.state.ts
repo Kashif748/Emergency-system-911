@@ -70,13 +70,12 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .getAll33({
+      .search19({
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
-        },
-         // request: payload.filters,
+        }
       })
       .pipe(
         tap((res) => {

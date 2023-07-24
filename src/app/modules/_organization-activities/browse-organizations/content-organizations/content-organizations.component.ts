@@ -33,6 +33,7 @@ export class ContentOrganizationsComponent implements OnInit {
       first: this.pageRequest?.first,
       rows: this.pageRequest?.rows,
     });
+    console.log(this.columns);
   }
   openView(id?: number) {
     this.store.dispatch(new BrowseOrganizationAction.OpenView({ organizationId: id }));

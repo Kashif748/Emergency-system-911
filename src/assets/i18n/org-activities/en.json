@@ -1,5 +1,9 @@
 {
-  "ACTIVITY_NAME":"Activity Name",
+  "ACTIVITY_NAME":"Name English",
+  "DEPT":"Department",
+  "SECTOR":"Sector",
+  "SECTION":"Section",
+  "ACTIVITY_NAME_AR":"Name Arabic",
   "ACTIVITY_FEQ":"Activity Frequency",
   "ACTIVITY_AREA":"Activity Area",
   "ARIS": "ARIS Reference No",

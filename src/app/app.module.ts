@@ -79,6 +79,7 @@ import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state"
 import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
 import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
+import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -153,7 +154,8 @@ export function getHighlightLanguages() {
         ImpactMatrixState,
         OrgDetailState,
         BusinessContinuityState,
-        LocationsState
+        LocationsState,
+        OrgActivityState
       ],
       {
         developmentMode: !environment.production,
@@ -169,6 +171,8 @@ export function getHighlightLanguages() {
           'browse_tasks',
           'browse_groups',
           'browse_business_impact_analysis',
+          'browse-situations',
+          'browse_org_activities'
         ],
       },
       ['common_data']

@@ -7,7 +7,7 @@ import {TextUtils} from '@core/utils';
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
 import {iif, patch} from '@ngxs/store/operators';
 import {throwError} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError, finalize, tap} from 'rxjs/operators';
 import {BrowseOrganizationAction} from "./browse-organization.action";
 import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
 
@@ -27,14 +27,13 @@ export const BROWSE_ORG_ACTIVITY_UI_STATE_TOKEN =
       filters: {},
       first: 0,
       rows: 10,
-      sortField: 'dueDate',
-      sortOrder: 'desc',
     },
     columns: [
-      'activityName',
-      'activityFrequency',
-      'activityArea',
-      'refNo'
+      'nameEn',
+      'nameAr',
+      'activityFrequence',
+      'internal',
+      'externalReference'
     ],
     view: 'TABLE',
   },
@@ -92,9 +91,6 @@ export class BrowseOrganizationState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          priority: pageRequest.filters.priority?.id,
-          status: pageRequest.filters.status?.map((o) => o.id),
-          type: this.route.snapshot.queryParams['_type'],
         },
       })
     );
@@ -168,7 +164,6 @@ export class BrowseOrganizationState {
             {},
             patch({
               ...payload,
-              type: undefined,
             })
           ),
         }),
@@ -193,7 +188,9 @@ export class BrowseOrganizationState {
     return dispatch(new OrgActivityAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseOrganizationAction.LoadOrganization());
+        dispatch(
+          [new BrowseOrganizationAction.LoadOrganization(),
+            new BrowseOrganizationAction.ToggleDialog({})]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -203,7 +200,7 @@ export class BrowseOrganizationState {
   }
 
   @Action(BrowseOrganizationAction.UpdateOrganization)
-  updateTask(
+  updateOrg(
     { dispatch }: StateContext<BrowseOrgActivityStateModel>,
     { payload }: BrowseOrganizationAction.UpdateOrganization
   ) {
@@ -215,6 +212,9 @@ export class BrowseOrganizationState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return throwError(err);
+      }),
+      finalize(() => {
+        dispatch(new BrowseOrganizationAction.ToggleDialog({}));
       })
     );
   }

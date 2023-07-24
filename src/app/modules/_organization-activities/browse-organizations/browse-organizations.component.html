@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown [options]="activityFre$ | async" [ngModel]="state.pageRequest.filters['userName']"
+                  <p-dropdown [options]="activityFre$ | async" [ngModel]="state.pageRequest.filters['fre']"
                               (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
                               [showClear]="true" dataKey="id" placeholder="{{'ACTIVITY_FEQ' | translate}}">
                     <ng-template let-item pTemplate="selectedItem">
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown [options]="activityArea" [ngModel]="state.pageRequest.filters['userName']"
+                  <p-dropdown [options]="activityArea" [ngModel]="state.pageRequest.filters['area']"
                               (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
                               [showClear]="true" dataKey="id" placeholder="{{'ACTIVITY_AREA' | translate}}">
                     <ng-template let-item pTemplate="selectedItem">
@@ -48,17 +48,20 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <input type="text" pInputText [ngModel]="state?.pageRequest?.filters['name']"
+                  <input type="text" pInputText [ngModel]="state?.pageRequest?.filters['aris']"
                          placeholder="{{ 'ARIS' | translate }}"
-                         (keyup)="updateFilter({name: $event.target.value}, $event)">
+                         (keyup)="updateFilter({aris: $event.target.value}, $event)">
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
                   <p-treeSelect [options]="nodes" display="chip" [metaKeySelection]="false" [filter]="true"
-                                [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="checkbox"
-                                [ngModel]="state?.pageRequest?.filters['data']" placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
-                                (ngModelChange)="updateFilter({orgIds: $event}, $event)" [propagateSelectionDown]="false"
+                                [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single"
+                                [ngModel]="state?.pageRequest?.filters['hirIds']" placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
+                                (ngModelChange)="updateFilter({hirIds: $event}, $event)" [propagateSelectionDown]="false"
                                 [propagateSelectionUp]="false">
+                    <ng-template let-option let-placeholder pTemplate="value">
+                      {{ option ? (option | translateObj : 'label') : ('SHARED.ORG' | translate)}}
+                    </ng-template>
                   </p-treeSelect>
                 </div>
 
@@ -173,7 +176,7 @@
           </div>
           <div class="col-12 mt-3">
             <div class="w-100 d-flex flex-wrap mx-1 px-6">
-              <div class="my-auto">
+             <!-- <div class="my-auto">
                 <button pButton type="button"
                         class="p-tag px-2 text-center w-70px py-1 p-button-rounded p-button-sm bg-primary"
                         [ngClass]="{'active': state.pageRequest.filters['active'] === 1}"
@@ -186,7 +189,7 @@
                         (click)="updateFilter({active: 0}, $event); search();">
                   <span class="m-auto"> {{ 'ACTIONS.INACTIVE' | translate }} </span>
                 </button>
-              </div>
+              </div>-->
 
               <div class="ml-dir-auto d-flex">
                 <button pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus" (click)="openDialog()"
@@ -208,12 +211,13 @@
           </div>
         </div>
         <app-content-organizations [view]="state.view"  [loading]="loading$ | async" [page]="page$ | async"
-                                              [columns]="state.columns"  [pageRequest]="state?.pageRequest"
-                                              (onPageChange)="loadPage($event)"></app-content-organizations>
+                                   [columns]="state.columns"  [pageRequest]="state?.pageRequest"
+                                   [totalRecords]="totalRecords$ | async"
+                                   (onPageChange)="loadPage($event)"></app-content-organizations>
 
       </div>
     </div>
   </div>
 </div>
 
-<app-organization-dialog></app-organization-dialog>
+<app-organization-dialog [orgHir]="nodes"></app-organization-dialog>
