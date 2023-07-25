@@ -6,6 +6,7 @@ import {
   State,
   StateContext,
   StateToken,
+  Store,
 } from '@ngxs/store';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { ApiHelper } from '@core/helpers/api.helper';
@@ -16,6 +17,7 @@ import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { BrowseImpactLevelAction } from './browse-impact-level.action';
 import { ImpactLevelAction } from '@core/states';
+import { BrowseBusinessContinuityState } from '../../states/browse-business-continuity.state';
 
 export interface BrowseImpactLevelStateModel {
   pageRequest: PageRequestModel;
@@ -48,7 +50,8 @@ export class BrowseImpactLevelState {
     private messageHelper: MessageHelper,
     private router: Router,
     private apiHelper: ApiHelper,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -74,11 +77,15 @@ export class BrowseImpactLevelState {
       })
     );
     const pageRequest = getState().pageRequest;
+    const versionID = this.store.selectSnapshot(
+      BrowseBusinessContinuityState.versionId
+    );
     return dispatch(
       new ImpactLevelAction.LoadPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId : versionID
       })
     );
   }

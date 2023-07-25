@@ -71,7 +71,7 @@ export class LocationTypeState {
       })
     );
     return this.locationType
-      .getAll19({
+      .getAll18({
         isActive: true,
         pageable: {
           page: payload.page,
@@ -118,7 +118,7 @@ export class LocationTypeState {
       })
     );
     return this.locationType
-      .insertOne10({
+      .insertOne9({
         body: payload,
       })
       .pipe(
@@ -143,7 +143,7 @@ export class LocationTypeState {
       })
     );
     return this.locationType
-      .update89({
+      .update88({
         body: payload,
       })
       .pipe(
@@ -175,7 +175,7 @@ export class LocationTypeState {
         blocking: true,
       })
     );
-    return this.locationType.getOne10({ id: payload.id }).pipe(
+    return this.locationType.getOne9({ id: payload.id }).pipe(
       tap((locationType) => {
         setState(
           patch<LocationTypeStateModel>({

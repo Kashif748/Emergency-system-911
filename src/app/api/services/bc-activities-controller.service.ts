@@ -24,21 +24,21 @@ export class BcActivitiesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById21
+   * Path part for operation deleteById24
    */
-  static readonly DeleteById21Path = '/v1/bc/activities/delete/{id}';
+  static readonly DeleteById24Path = '/v1/bc/activities/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById21()` instead.
+   * To access only the response body, use `deleteById24()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById21$Response(params: {
+  deleteById24$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.DeleteById21Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.DeleteById24Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,37 +56,37 @@ export class BcActivitiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById21$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById24$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById21(params: {
+  deleteById24(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById21$Response(params).pipe(
+    return this.deleteById24$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll31
+   * Path part for operation getAll33
    */
-  static readonly GetAll31Path = '/v1/bc/activities';
+  static readonly GetAll33Path = '/v1/bc/activities';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll31()` instead.
+   * To access only the response body, use `getAll33()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll31$Response(params: {
+  getAll33$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.GetAll31Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.GetAll33Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcActivitiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll31$Response()` instead.
+   * To access the full response (for headers, for example), `getAll33$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll31(params: {
+  getAll33(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivities> {
 
-    return this.getAll31$Response(params).pipe(
+    return this.getAll33$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivities>) => r.body as RestApiResponsePageBcActivities)
     );
   }
 
   /**
-   * Path part for operation update101
+   * Path part for operation update104
    */
-  static readonly Update101Path = '/v1/bc/activities';
+  static readonly Update104Path = '/v1/bc/activities';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update101()` instead.
+   * To access only the response body, use `update104()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update101$Response(params: {
+  update104$Response(params: {
     body: BcActivities
   }): Observable<StrictHttpResponse<RestApiResponseBcActivities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.Update101Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.Update104Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class BcActivitiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update101$Response()` instead.
+   * To access the full response (for headers, for example), `update104$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update101(params: {
+  update104(params: {
     body: BcActivities
   }): Observable<RestApiResponseBcActivities> {
 
-    return this.update101$Response(params).pipe(
+    return this.update104$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivities>) => r.body as RestApiResponseBcActivities)
     );
   }
 
   /**
-   * Path part for operation insertOne21
+   * Path part for operation insertOne24
    */
-  static readonly InsertOne21Path = '/v1/bc/activities';
+  static readonly InsertOne24Path = '/v1/bc/activities';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne21()` instead.
+   * To access only the response body, use `insertOne24()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne21$Response(params: {
+  insertOne24$Response(params: {
     body: BcActivities
   }): Observable<StrictHttpResponse<RestApiResponseBcActivities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.InsertOne21Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.InsertOne24Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,35 +200,35 @@ export class BcActivitiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne21$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne24$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne21(params: {
+  insertOne24(params: {
     body: BcActivities
   }): Observable<RestApiResponseBcActivities> {
 
-    return this.insertOne21$Response(params).pipe(
+    return this.insertOne24$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivities>) => r.body as RestApiResponseBcActivities)
     );
   }
 
   /**
-   * Path part for operation getOne22
+   * Path part for operation getOne26
    */
-  static readonly GetOne22Path = '/v1/bc/activities/{id}';
+  static readonly GetOne26Path = '/v1/bc/activities/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne22()` instead.
+   * To access only the response body, use `getOne26()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne22$Response(params: {
+  getOne26$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcActivities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.GetOne22Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.GetOne26Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,37 +246,37 @@ export class BcActivitiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne22$Response()` instead.
+   * To access the full response (for headers, for example), `getOne26$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne22(params: {
+  getOne26(params: {
     id: number;
   }): Observable<RestApiResponseBcActivities> {
 
-    return this.getOne22$Response(params).pipe(
+    return this.getOne26$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivities>) => r.body as RestApiResponseBcActivities)
     );
   }
 
   /**
-   * Path part for operation search14
+   * Path part for operation search19
    */
-  static readonly Search14Path = '/v1/bc/activities/search';
+  static readonly Search19Path = '/v1/bc/activities/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search14()` instead.
+   * To access only the response body, use `search19()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search14$Response(params: {
+  search19$Response(params: {
     isActive?: boolean;
     orgHierarchyId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivities>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.Search14Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivitiesControllerService.Search19Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('orgHierarchyId', params.orgHierarchyId, {});
@@ -296,17 +296,17 @@ export class BcActivitiesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search14$Response()` instead.
+   * To access the full response (for headers, for example), `search19$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search14(params: {
+  search19(params: {
     isActive?: boolean;
     orgHierarchyId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivities> {
 
-    return this.search14$Response(params).pipe(
+    return this.search19$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivities>) => r.body as RestApiResponsePageBcActivities)
     );
   }

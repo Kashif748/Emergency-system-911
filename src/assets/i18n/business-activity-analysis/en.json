@@ -1,5 +1,8 @@
 {
   "NO_DATA": "No Data found",
+  "MANAGEMENT": "Management",
+  "SECTOR": "Sector",
+  "ACTIVITY": "Activity",
   "RECOVERY": {
     "RECOVERY_DETAILS": "Activity Recovery Details",
     "CAPACITY": "Capacity",
@@ -24,6 +27,8 @@
     "TYPE": "Employee type",
     "LANDLINE": "Business landline",
     "MOBILE": "Mobile",
+    "SECONDARY": "Secondary",
+    "PRIMARY": "Primary",
     "OTHER_PHONE": "Alternative phone",
     "COL1": "مقرلا",
     "COL2": "إسم الموظف",
@@ -37,14 +42,18 @@
     "LIMIT": "Reliability limits",
     "SECTION": "Related Section",
     "ACTIVIE_DEPT": "Activity dependency",
-    "DETAILS": "Accreditation details",
-    "NO_DEPEND": "No Dependcy",
+
+
     "ASSOCIATED_MANG": "Associated management",
     "TITLE": "Activity reliability",
-    "COL1": "Reliability limits",
-    "COL2": "Associated entity",
-    "COL3": "Activity reliability",
-    "COL4": "Accreditation details"
+
+
+    "DETAILS": "Accreditation details",
+    "DEPENDENCY_INTERNAL": "Inside the Organization",
+    "DEPENDENCY_ORG": " Inside the Department",
+    "DEPENDENCY_EXTERNAL": "Outside the Organization",
+    "NO_DEPENDENCY": "No Dependency",
+    "NO_DPEEND_CONFIREM": "Are you sure that you want to proceed?"
   },
   "LOCATIONS": {
     "SITE": "Choose a new site",

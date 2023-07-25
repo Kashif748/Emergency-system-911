@@ -7,6 +7,10 @@ import {ILangFacade} from "../../../../../core/facades/lang.facade";
 import {BcImpactLevel} from "../../../../../api/models/bc-impact-level";
 import {BcImpactMatrixDto} from "../../../../../api/models/bc-impact-matrix-dto";
 import {BrowseImpactMatrixAction} from "../../states/browse-impact-matrix.action";
+import {ActivatedRoute} from "@angular/router";
+import {Observable} from "rxjs";
+import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
+import {filter, map, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-content-impact-matrix',
@@ -33,13 +37,35 @@ export class ContentImpactMatrixComponent implements OnInit {
   @Output()
   onImpactTypePageChange = new EventEmitter<LazyLoadEvent>();
 
+  public disableButton: boolean
+  public version$: Observable<boolean>;
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
-    private store: Store
+    private store: Store,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.version$ = this.route.queryParams.pipe(
+      map((params) => params['_version']),
+      tap((v) => {
+        this.store
+          .select(BusinessContinuityState.versions)
+          .pipe(filter((p) => !!p))
+          .subscribe((res) => {
+            const shouldDisable = res.some((item) => {
+              if (item.id == v) {
+                return item.status.id !== 1;
+              }
+              return false;
+            });
+
+            this.disableButton = shouldDisable;
+          });
+      })
+    );
+    this.version$.subscribe();
   }
 
   openView(Id?: number) {

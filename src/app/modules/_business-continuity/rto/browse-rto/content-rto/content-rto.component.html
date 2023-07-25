@@ -1,7 +1,7 @@
 <section>
   <header class="d-flex p-jc-between p-ai-center border-bottom py-8">
     <h4 class="text-info p-text-bold mb-0">{{ "RTO_LIST_LABEL" | translate }}</h4>
-    <app-rto-dialog></app-rto-dialog>
+    <app-rto-dialog [version]="disableButton"></app-rto-dialog>
   </header>
   <div class="row">
     <div class="col-12">
@@ -131,6 +131,7 @@
 
                 <td>
                   <button
+                    [disabled]="disableButton"
                     pButton
                     pRipple
                     type="button"

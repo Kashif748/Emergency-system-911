@@ -1,171 +1,75 @@
-<div class="p-col-12" style="display: flex; justify-content: space-between;">
-  <h3 class="card-title align-items-start flex-column m-0">
-    <span class="card-label font-weight-bolder">{{ "DEPENDENCIES.TITLE" | translate }}</span>
-  </h3>
-  <div class="ml-dir-auto d-flex">
-    <app-dependencies-dialog></app-dependencies-dialog>
+<p-card styleClass="bg-light-primary">
+  <ng-template pTemplate="header">
+    <div
+      class="d-flex p-ai-center p-jc-between p-4 font-weight-bold font-size-h4"
+    >
+      {{ "DEPENDENCIES." + dependType | translate }}
+      <button
+        [disabled]="noDpeend"
+        pButton
+        label="{{ 'ACTIONS.ADD' | translate }}"
+        icon="pi pi-plus"
+        (click)="toggleDialog()"
+      ></button>
+    </div>
+  </ng-template>
+  <div *ngFor="let item of page" class="w-100 rounded bg-white border p-2 mb-3">
+    <div class="flex-grow-1 p-grid p-fluid">
+      <div class="p-col-12">
+        <div class="mt-1 mx-2 p-grid p-fluid">
+          <div class="d-flex flex-column col-6">
+            <span class="font-weight-bold">
+              {{ "SECTOR" | translate }}
+            </span>
+            <span> {{ item?.orgHierarchy | translateObj }}</span>
+          </div>
+          <div class="d-flex flex-column col-6">
+            <span class="font-weight-bold">
+              {{ "ACTIVITY" | translate }}
+            </span>
+            <span> {{ item?.activityName }}</span>
+          </div>
+
+          <div class="d-flex flex-column col pt-4">
+            <span class="font-weight-bold">
+              {{ "DEPENDENCIES.DETAILS" | translate }}
+            </span>
+            <span> {{ item?.dependencyDetails }}</span>
+          </div>
+          <div
+            class="col-fixed d-flex p-ai-center p-jc-center pt-4"
+            style="width: 50px"
+          >
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-ellipsis-v"
+              class="p-button-rounded p-button-text"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="page?.length == 0" class="w-100">
+      <nodata-table [loading]="loading"></nodata-table>
+    </div>
   </div>
-</div>
-
-<div class="row mt-5">
-  <div class="col-12">
-    <ng-container>
-      <ng-container *ngIf="loading; else tableTemplate">
-        <p-table [value]="[].constructor(10)">
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 0"></th>
-              <th class="min-w-20px">
-                <div class="p-d-flex p-jc-between p-ai-center">#</div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL1" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL2" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL3" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL4" | translate }}
-                </div>
-              </th>
-
-              <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-item>
-            <tr class="cursor-pointer hoverable">
-              <td class="flag-td">
-                <div class="bg-secondary"></div>
-              </td>
-              <td>
-                <p-skeleton></p-skeleton>
-              </td>
-              <td>
-                <p-skeleton></p-skeleton>
-              </td>
-
-              <td>
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-ellipsis-v"
-                  class="p-button-rounded p-button-text my-auto p-button-plain"
-                ></button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </ng-container>
-      <ng-template #tableTemplate>
-        <p-table
-          [columns]="columns"
-          totalRecords="10"
-          [value]="page"
-          dataKey="id"
-          [autoLayout]="true"
+  <ng-template pTemplate="footer">
+    <div class="p-field m-0">
+      <div class="p-field-checkbox m-0 p-4">
+        <p-checkbox
+          [disabled]="page?.length > 0"
+          [(ngModel)]="noDpeend"
+          (click)="confirm($event); $event.stopPropagation()"
+          binary="true"
+        ></p-checkbox>
+        <label class="mx-2 my-0">
+          {{ "DEPENDENCIES.NO_DEPENDENCY" | translate }}</label
         >
-          <ng-template pTemplate="colgroup" let-columns>
-            <colgroup>
-              <col *ngFor="let col of columns" [style.width]="'col.width'" />
-            </colgroup>
-          </ng-template>
-          <ng-template pTemplate="header">
-            <tr>
-              <th></th>
-              <th class="min-w-20px">
-                <div class="p-d-flex p-jc-between p-ai-center">#</div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL1" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL2" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL3" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "DEPENDENCIES.COL4" | translate }}
-                </div>
-              </th>
+      </div>
+    </div>
+  </ng-template>
+</p-card>
 
-              <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-item>
-            <tr class="cursor-pointer hoverable">
-              <td class="flag-td">
-                <div
-                  [ngClass]="{
-                      'bg-primary': item.isActive,
-                      'bg-warning': !item.isActive
-                    }"
-                ></div>
-              </td>
-              <td class="min-w-50px">
-                {{ item.id }}
-              </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item | translateObj : 'activity'}}
-              </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item | translateObj : 'activity_frq'}}
-              </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item | translateObj : 'analysis_cycle'}}
-              </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item | translateObj : 'rto'}}
-              </td>
-
-              <td class="d-flex">
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-text my-auto p-button-plain"
-                ></button>
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-eye"
-                  class="p-button-rounded p-button-text my-auto p-button-plain"
-                ></button>
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="100%">
-                <div class="w-100">
-                  <nodata-table></nodata-table>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </ng-template>
-    </ng-container>
-    <p-paginator></p-paginator>
-  </div>
-</div>
+<p-confirmPopup></p-confirmPopup>

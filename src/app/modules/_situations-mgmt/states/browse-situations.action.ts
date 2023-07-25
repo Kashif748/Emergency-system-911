@@ -6,7 +6,21 @@ export namespace BrowseSituationsAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {}
+    constructor(public payload?: {pageRequest: PageRequestModel }) {}
+  }
+  export class LoadAttachmentSituations {
+    static readonly type = '[BrowseSituations] Load Attachment Situations';
+    /**
+     *
+     */
+    constructor(public payload?: { id: number, pageRequest: PageRequestModel }) {}
+  }
+  export class SortAttachments {
+    static readonly type = '[BrowseSituations] Sort Attachment';
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
   }
   export class SortSituations {
     static readonly type = '[BrowseSituations] Sort Situations';
@@ -89,7 +103,7 @@ export namespace BrowseSituationsAction {
     /**
      *
      */
-    constructor(public payload: { situationId: number }) {}
+    constructor(public payload: { dialogName: string; situationId: number }) {}
   }
 
   export class GetStatistics {

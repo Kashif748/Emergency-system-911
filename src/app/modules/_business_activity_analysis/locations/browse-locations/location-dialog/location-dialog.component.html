@@ -3,17 +3,16 @@
     pButton
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
-    (click)="openDialog()"
+    (click)="toggleDialog()"
   ></button>
 </div>
 
 <!-- as a dialog -->
 <p-dialog
-  *ngIf="asDialog; else page"
   #dialog
-  [visible]="display"
+  [visible]="opened$ | async"
+  (visibleChange)="toggleDialog()"
   [modal]="true"
-  (visibleChange)="close()"
   [style]="{ width: '55vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
   [maximizable]="true"
@@ -29,24 +28,6 @@
     <ng-template [ngTemplateOutlet]="footer"></ng-template>
   </ng-template>
 </p-dialog>
-
-<!-- as a page -->
-<ng-template #page>
-  <div class="container-fluid h-100">
-    <ng-template [ngTemplateOutlet]="header"></ng-template>
-    <div class="row">
-      <div class="col-12" style="height: 76vh">
-        <ng-template [ngTemplateOutlet]="content"></ng-template>
-      </div>
-    </div>
-    <div class="row h-30px"></div>
-    <div class="row">
-      <div class="col-12">
-        <ng-template [ngTemplateOutlet]="footer"></ng-template>
-      </div>
-    </div>
-  </div>
-</ng-template>
 
 <!-- templates header -->
 <ng-template #header>
@@ -70,7 +51,6 @@
 
   <span class="flex-grow-1"></span>
   <a
-    *ngIf="asDialog"
     queryParamsHandling="merge"
     pRipple
     pButton
@@ -81,34 +61,27 @@
 
 <!-- templates content -->
 <ng-template #content>
-  <div
-    class="w-100 pt-2"
-    [ngStyle]="{
-      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '65vh'
-    }"
-  >
+  <div class="w-100 pt-2">
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
 
-    <form [formGroup]="form" class="p-fluid p-grid mt-5">
-      <div class="p-field p-col-12 p-md-6">
-        <div class="p-inputgroup">
-          <span class="p-float-label">
-            <input type="text" formControlName="name" pInputText />
-            <label>
-              {{ "LOCATIONS.NAME" | translate }}
-            </label>
-          </span>
-          <button type="button" pButton pRipple icon="pi pi-search"></button>
-        </div>
+    <div class="p-field p-col-12">
+      <div class="p-inputgroup">
+        <span class="p-float-label">
+          <input type="text" pInputText />
+          <label>
+            {{ "LOCATIONS.NAME" | translate }}
+          </label>
+        </span>
+        <button type="button" pButton pRipple icon="pi pi-search"></button>
       </div>
-    </form>
+    </div>
 
     <div class="row">
       <div class="col-12">
         <ng-container>
-          <ng-container *ngIf="loading; else tableTemplate">
+          <ng-container *ngIf="loading$ | async; else tableTemplate">
             <p-table [value]="[].constructor(10)">
               <ng-template pTemplate="header">
                 <tr>
@@ -148,11 +121,12 @@
           </ng-container>
           <ng-template #tableTemplate>
             <p-table
-              [columns]="columns"
               totalRecords="10"
-              [value]="page"
+              [value]="page$ | async"
               dataKey="id"
               [autoLayout]="true"
+              selectionMode="single"
+              [(selection)]="selectedBCLocations"
             >
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
@@ -164,7 +138,6 @@
               </ng-template>
               <ng-template pTemplate="header">
                 <tr>
-                  <th></th>
                   <th class="min-w-100px">
                     <div class="p-d-flex p-jc-between p-ai-center">#</div>
                   </th>
@@ -175,18 +148,21 @@
                   </th>
                   <th class="min-w-200px max-w-300px">
                     <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "LOCATIONS.REGION" | translate }}
+                      {{ "LOCATIONS.COL1" | translate }}
                     </div>
                   </th>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-item>
-                <tr class="cursor-pointer hoverable">
+              <ng-template pTemplate="body" let-item let-rowData>
+                <tr [pSelectableRow]="rowData" class="cursor-pointer hoverable">
                   <td class="min-w-100px">
                     {{ item.id }}
                   </td>
                   <td class="min-w-200px max-w-300px">
-                    {{ item | translateObj : "activity" }}
+                    {{ item | translateObj }}
+                  </td>
+                  <td class="min-w-200px max-w-300px">
+                    {{ item?.locationType | translateObj }}
                   </td>
                 </tr>
               </ng-template>
@@ -212,17 +188,14 @@
 <!--footer-->
 <ng-template #footer>
   <div class="p-col p-d-flex">
-    <button
-      *ngIf="!asDialog"
-      pButton
-      icon="pi pi-sign-out"
-      label="{{ 'ACTIONS.BACK' | translate }}"
-    ></button>
     <div class="ml-dir-auto"></div>
 
     <div class="p-col text-center">
       <div class="text-center">
         <button
+          [disabled]="!selectedBCLocations"
+          [loading]="blocking$ | async"
+          (click)="submit()"
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"

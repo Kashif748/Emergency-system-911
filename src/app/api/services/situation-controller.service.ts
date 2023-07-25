@@ -381,11 +381,13 @@ export class SituationControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   attachments$Response(params: {
+    situationId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageAttachmentPerSituationResponse>> {
 
     const rb = new RequestBuilder(this.rootUrl, SituationControllerService.AttachmentsPath, 'get');
     if (params) {
+      rb.query('situationId', params.situationId, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -407,6 +409,7 @@ export class SituationControllerService extends BaseService {
    * This method doesn't expect any request body.
    */
   attachments(params: {
+    situationId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageAttachmentPerSituationResponse> {
 

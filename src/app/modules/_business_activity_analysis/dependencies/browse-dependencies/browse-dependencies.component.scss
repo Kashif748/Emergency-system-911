@@ -1,0 +1,6 @@
+:host ::ng-deep {
+  .p-card .p-card-content {
+    max-height: 600px;
+    overflow: scroll;
+  }
+}

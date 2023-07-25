@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { BcActivities } from './bc-activities';
 import { BcCycles } from './bc-cycles';
-export interface BcActivityEmployees {
+export interface  BcActivityEmployees {
   activity: BcActivities;
   cycle: BcCycles;
   employeeNameAr?: string;

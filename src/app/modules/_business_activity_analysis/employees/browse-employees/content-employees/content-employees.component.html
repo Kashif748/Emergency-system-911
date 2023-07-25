@@ -1,6 +1,8 @@
-<div class="p-col-12" style="display: flex; justify-content: space-between;">
+<div class="p-col-12" style="display: flex; justify-content: space-between">
   <h3 class="card-title align-items-start flex-column m-0">
-    <span class="card-label font-weight-bolder">{{ "EMPLOYEES.TITLE" | translate }}</span>
+    <span class="card-label font-weight-bolder">{{
+      "EMPLOYEES.TITLE" | translate
+    }}</span>
   </h3>
   <div class="ml-dir-auto d-flex">
     <app-employees-dialog></app-employees-dialog>
@@ -20,27 +22,27 @@
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL2" | translate }}
+                  {{ "EMPLOYEES.COL2" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL3" | translate }}
+                  {{ "EMPLOYEES.COL3" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL4" | translate }}
+                  {{ "EMPLOYEES.COL4" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL5" | translate }}
+                  {{ "EMPLOYEES.COL5" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL6" | translate }}
+                  {{ "EMPLOYEES.COL6" | translate }}
                 </div>
               </th>
 
@@ -52,10 +54,7 @@
               <td class="flag-td">
                 <div class="bg-secondary"></div>
               </td>
-              <td>
-                <p-skeleton></p-skeleton>
-              </td>
-              <td>
+              <td *ngFor="let _ of [].constructor(6)">
                 <p-skeleton></p-skeleton>
               </td>
 
@@ -93,27 +92,27 @@
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL2" | translate }}
+                  {{ "EMPLOYEES.COL2" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL3" | translate }}
+                  {{ "EMPLOYEES.COL3" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL4" | translate }}
+                  {{ "EMPLOYEES.COL4" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL5" | translate }}
+                  {{ "EMPLOYEES.COL5" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL6" | translate }}
+                  {{ "EMPLOYEES.COL6" | translate }}
                 </div>
               </th>
 
@@ -125,28 +124,28 @@
               <td class="flag-td">
                 <div
                   [ngClass]="{
-                      'bg-primary': item.isActive,
-                      'bg-warning': !item.isActive
-                    }"
+                    'bg-primary': item.isActive,
+                    'bg-warning': !item.isActive
+                  }"
                 ></div>
               </td>
               <td class="min-w-50px">
                 {{ item.id }}
               </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item.activity}}
+              <td class="min-w-200px max-w-300px">
+                {{ item | translateObj : "employeeName" }}
               </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item.activity_frq}}
+              <td class="min-w-200px max-w-300px">
+                {{ item.isPrimary }}
               </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item.analysis_cycle}}
+              <td class="min-w-200px max-w-300px">
+                {{ item.phoneNumber }}
               </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item.rto}}
+              <td class="min-w-200px max-w-300px">
+                {{ item.mobileNumber }}
               </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item.priority_level}}
+              <td class="min-w-200px max-w-300px">
+                {{ item.secondNumber }}
               </td>
 
               <td class="d-flex">
@@ -154,9 +153,16 @@
                   pButton
                   pRipple
                   type="button"
-                  icon="pi pi-trash"
+                  icon="pi pi-ellipsis-v"
                   class="p-button-rounded p-button-text my-auto p-button-plain"
+                  (click)="menu.toggle($event)"
                 ></button>
+                <p-menu
+                  #menu
+                  appendTo="body"
+                  [popup]="true"
+                  [model]="item.actions"
+                ></p-menu>
               </td>
             </tr>
           </ng-template>
