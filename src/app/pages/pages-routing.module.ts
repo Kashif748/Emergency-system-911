@@ -8,6 +8,7 @@ import { DashboardService } from './dashboard/dashboard.service';
 import { GroupsManagementModule } from '../modules/_team-mgmt/team-mgmt.module';
 import { BusinessImpactAnalysisModule } from '../modules/_business-impact-analysis/business-impact-analysis.module';
 import { BusinessContinuityModule } from '../modules/_business-continuity/business-continuity.module';
+import {OrganizationActivitiesModule} from "../modules/_organization-activities/organization-activities.module";
 
 const routes: Routes = [
   {
@@ -323,6 +324,14 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'reports/tasks',
+        canLoad: [PrivilegeGuard],
+        loadChildren: () =>
+          import('../modules/_task-report/task-report.module').then(
+            (m) => m.TaskReportModule
+          ),
+      },
+      {
         path: 'availability-report',
         canLoad: [PrivilegeGuard],
         // data: { permission: "PRIV_VW_INC" },
@@ -445,6 +454,13 @@ const routes: Routes = [
           import(
             '../modules/_business-continuity/business-continuity.module'
           ).then((m) => m.BusinessContinuityModule),
+      },
+      {
+        path: 'organization-activities',
+        loadChildren: () =>
+          import(
+            '../modules/_organization-activities/organization-activities.module'
+            ).then((m) => m.OrganizationActivitiesModule),
       },
       {
         path: 'under-build',

@@ -170,14 +170,16 @@ export class BusinessContinuityComponent
     this.activeItem = item;
     if (item.state) {
       if (!item.state?.requiredVersion) {
-        this.router.navigate(['business-continuity/' + item.state?.routerLink]);
+        this.router.navigate(
+          ['business-continuity', ...item.state?.routerLink?.split('/')].filter((v) => !!v)
+        );
         return;
       }
       if (item.state?.requiredVersion && !this.versionID) {
         this.toggleDialog();
       } else {
         this.router.navigate(
-          ['business-continuity/' + item.state?.routerLink],
+          ['business-continuity', ...item.state?.routerLink?.split('/')].filter((v) => !!v),
           {
             queryParamsHandling: 'merge',
           }
@@ -204,9 +206,11 @@ export class BusinessContinuityComponent
       .then((res) => {
         this.versionID = value;
         this.router.navigate(
-          ['business-continuity/' + this.activeItem?.state?.routerLink],
+          ['business-continuity', ...this.activeItem?.state?.routerLink?.split('/')].filter(
+            (v) => !!v
+          ),
           {
-            queryParamsHandling: 'merge',
+            queryParamsHandling: 'preserve',
           }
         );
       });

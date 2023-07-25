@@ -1,5 +1,6 @@
 import {GroupState} from "@core/states/group/group.state";
 import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
+import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 
 export { UserAction } from './user/user.action';
 export { RoleAction } from './role/role.action';
@@ -18,6 +19,7 @@ export { ImpactLevelAction } from './bc/impact-level/impact-level.action';
 export { ImpactMatrixAction } from './bc/impact-matrix/impact-matrix.action';
 export { OrgDetailAction } from './bc/org-details/org-detail.action';
 export { BCAction } from './bc/business-continuity/business-continuity.action';
+export { OrgActivityAction } from './org-activities/orgActivity.action';
 
 
 export { UserState } from './user/user.state';
@@ -37,3 +39,4 @@ export { ImpactLevelState } from './bc/impact-level/impact-level.state';
 export { ImpactMatrixState } from './bc/impact-matrix/impact-matrix.state';
 export { OrgDetailState } from './bc/org-details/org-detail.state';
 export { BusinessContinuityState } from './bc/business-continuity/business-continuity.state';
+export { OrgActivityState } from './org-activities/orgActivity.state';

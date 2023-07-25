@@ -79,12 +79,14 @@ import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.stat
 import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
 import { BusinessContinuityState } from '@core/states/bc/business-continuity/business-continuity.state';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
+import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
 import { ActivityEmployeesState } from '@core/states/activity-analysis/employees/employees.state';
 import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
+
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -160,12 +162,12 @@ export function getHighlightLanguages() {
         OrgDetailState,
         BusinessContinuityState,
         LocationsState,
+        OrgActivityState,
         ActivityAnalysisState,
         ActivitySystemsState,
         ActivityEmployeesState,
         ActivityLocationsState,
         ActivityDependenciesState,
-
         ActivityImpactMatrixState,
       ],
       {
@@ -182,6 +184,8 @@ export function getHighlightLanguages() {
           'browse_tasks',
           'browse_groups',
           'browse_business_impact_analysis',
+          'browse-situations',
+          'browse_org_activities'
         ],
       },
       ['common_data']
