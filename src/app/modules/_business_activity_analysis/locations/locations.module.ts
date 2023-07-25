@@ -25,11 +25,13 @@ import {MenuModule} from "primeng/menu";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {SkeletonModule} from "primeng/skeleton";
 import {DialogModule} from "primeng/dialog";
+import { NgxsModule } from '@ngxs/store';
+import { BrowseActivityLocationsState } from './states/browse-locations.state';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
-    'assets/i18n/new-activity/',
+    'assets/i18n/business-activity-analysis/',
     '.json'
   );
 }
@@ -49,6 +51,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
       },
       isolate: true,
     }),
+    NgxsModule.forFeature([BrowseActivityLocationsState]),
+
     ReactiveFormsModule,
     FormsModule,
     InputTextModule,

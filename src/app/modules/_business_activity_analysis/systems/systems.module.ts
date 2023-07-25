@@ -25,11 +25,13 @@ import {NodataTableModule} from "@shared/components/nodata-table/nodata-table.mo
 import {BlockUIModule} from "primeng/blockui";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {DialogModule} from "primeng/dialog";
+import { BrowseActivitySystemsState } from './states/browse-systems.state';
+import { NgxsModule } from '@ngxs/store';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
-    'assets/i18n/new-activity/',
+    'assets/i18n/business-activity-analysis/',
     '.json'
   );
 }
@@ -49,6 +51,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
       },
       isolate: true,
     }),
+    NgxsModule.forFeature([BrowseActivitySystemsState]),
     ReactiveFormsModule,
     FormsModule,
     InputTextModule,
