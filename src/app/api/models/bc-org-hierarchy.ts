@@ -3,7 +3,7 @@
 import { BcOrgHierarchyType } from './bc-org-hierarchy-type';
 import { OrgStructure } from './org-structure';
 export interface BcOrgHierarchy {
-  BcOrgHierarchyType?: BcOrgHierarchyType;
+  bcOrgHirType?: BcOrgHierarchyType;
   coordinatorId?: number;
   id?: number;
   isActive?: boolean;

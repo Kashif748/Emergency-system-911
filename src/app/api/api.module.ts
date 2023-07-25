@@ -100,7 +100,6 @@ import { ConfidentialtyControllerService } from './services/confidentialty-contr
 import { BcVersionsControllerService } from './services/bc-versions-controller.service';
 import { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
 import { BcSystemsControllerService } from './services/bc-systems-controller.service';
-import { BcSystemBiaControllerService } from './services/bc-system-bia-controller.service';
 import { BcrtoControllerService } from './services/bcrto-controller.service';
 import { BcPartnersControllerService } from './services/bc-partners-controller.service';
 import { BcOrgHierarchyControllerService } from './services/bc-org-hierarchy-controller.service';
@@ -115,10 +114,14 @@ import { BcImpactLevelControllerService } from './services/bc-impact-level-contr
 import { BcCyclesControllerService } from './services/bc-cycles-controller.service';
 import { BcCycleStatusControllerService } from './services/bc-cycle-status-controller.service';
 import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
+import { BcActivityDependencyOrgControllerService } from './services/bc-activity-dependency-org-controller.service';
+import { BcActivityDependencyInternalControllerService } from './services/bc-activity-dependency-internal-controller.service';
+import { BcActivityDependencyExternalControllerService } from './services/bc-activity-dependency-external-controller.service';
 import { BcActivitySystemsControllerService } from './services/bc-activity-systems-controller.service';
 import { BcActivityLocationsControllerService } from './services/bc-activity-locations-controller.service';
 import { BcActivityImpactMatrixControllerService } from './services/bc-activity-impact-matrix-controller.service';
 import { BcActivityEmployeesControllerService } from './services/bc-activity-employees-controller.service';
+import { BcActivityAnalysisWorkLogControllerService } from './services/bc-activity-analysis-work-log-controller.service';
 import { BcActivityAnalysisControllerService } from './services/bc-activity-analysis-controller.service';
 import { BcActivitiesControllerService } from './services/bc-activities-controller.service';
 import { AssetControllerService } from './services/asset-controller.service';
@@ -157,6 +160,7 @@ import { DohControllerService } from './services/doh-controller.service';
 import { DashboardControllerService } from './services/dashboard-controller.service';
 import { TradeLicenseControllerService } from './services/trade-license-controller.service';
 import { CommonControllerService } from './services/common-controller.service';
+import { BcActivityAnalysisWorkflowControllerService } from './services/bc-activity-analysis-workflow-controller.service';
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
@@ -268,7 +272,6 @@ import { BcActivityDependencyOrgControllerService } from 'src/app/api/services/b
     BcVersionsControllerService,
     BcVersionsStatusControllerService,
     BcSystemsControllerService,
-    BcSystemBiaControllerService,
     BcrtoControllerService,
     BcPartnersControllerService,
     BcOrgHierarchyControllerService,
@@ -283,10 +286,14 @@ import { BcActivityDependencyOrgControllerService } from 'src/app/api/services/b
     BcCyclesControllerService,
     BcCycleStatusControllerService,
     BcActivityFrequenciesControllerService,
+    BcActivityDependencyOrgControllerService,
+    BcActivityDependencyInternalControllerService,
+    BcActivityDependencyExternalControllerService,
     BcActivitySystemsControllerService,
     BcActivityLocationsControllerService,
     BcActivityImpactMatrixControllerService,
     BcActivityEmployeesControllerService,
+    BcActivityAnalysisWorkLogControllerService,
     BcActivityAnalysisControllerService,
     BcActivitiesControllerService,
     BcActivityDependencyInternalControllerService,
@@ -328,6 +335,7 @@ import { BcActivityDependencyOrgControllerService } from 'src/app/api/services/b
     DashboardControllerService,
     TradeLicenseControllerService,
     CommonControllerService,
+    BcActivityAnalysisWorkflowControllerService,
     AdcmcCategoryControllerService,
     TagControllerService,
     MigrationControllerService,

@@ -1,0 +1,24 @@
+{
+  "ACTIVITY_NAME":"Name English",
+  "DEPT":"Department",
+  "SECTOR":"Sector",
+  "SECTION":"Section",
+  "ACTIVITY_NAME_AR":"Name Arabic",
+  "ACTIVITY_FEQ":"Activity Frequency",
+  "ACTIVITY_AREA":"Activity Area",
+  "ARIS": "ARIS Reference No",
+  "DEPT_HIERARCHY": "Department Hierarchy",
+  "ACTIVITY_DIALOG": {
+    "ADD_NEW_ACTIVITY":"Add New Activity",
+    "ACTIVITY_DETAILS":"Activity Details",
+    "NAME_AR":"Name (Arabic)",
+    "NAME_EN":"Name (English)",
+    "ACTIVITY_DESC":"Activity Description",
+    "ACTIVITY_FEQ":"Activity Frequency",
+    "ARIC_GUID":"Aris GUID",
+    "ACTIVITY_AREA":"Activity Area",
+    "INTERNAL":"Internal",
+    "EXTERNAL":"External",
+    "BELONG":"Belongs to"
+  }
+}
