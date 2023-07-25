@@ -164,6 +164,9 @@ import { BcActivityAnalysisWorkflowControllerService } from './services/bc-activ
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
+import { BcActivityDependencyInternalControllerService } from 'src/app/api/services/bc-activity-dependency-internal-controller.service';
+import { BcActivityDependencyExternalControllerService } from 'src/app/api/services/bc-activity-dependency-external-controller.service';
+import { BcActivityDependencyOrgControllerService } from 'src/app/api/services/bc-activity-dependency-org-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -293,6 +296,9 @@ import { MigrationControllerService } from './services/migration-controller.serv
     BcActivityAnalysisWorkLogControllerService,
     BcActivityAnalysisControllerService,
     BcActivitiesControllerService,
+    BcActivityDependencyInternalControllerService,
+    BcActivityDependencyExternalControllerService,
+    BcActivityDependencyOrgControllerService,
     AssetControllerService,
     AssetsGroupControllerService,
     AssetsCategoryControllerService,
@@ -349,7 +355,7 @@ export class ApiModule {
     }
   }
 
-  constructor( 
+  constructor(
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

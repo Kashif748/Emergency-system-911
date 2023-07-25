@@ -4,46 +4,37 @@
       "IMPACT_MATRIX.HEADER" | translate
     }}</span>
   </h3>
+  <p-button
+    [disabled]="selectedCells.length == 0"
+    [loading]="blocking$ | async"
+    label="حفظ"
+    (click)="save()"
+    icon="pi pi-save"
+  ></p-button>
 </div>
+<!-- <div *ngIf="tableValue$ | async"></div> -->
 
 <div *ngIf="state$ | async as state" class="row mt-5">
   <div class="col-12">
     <ng-container>
-      <ng-container *ngIf="loading; else tableTemplate">
-        <p-table [value]="[].constructor(10)">
+      <ng-container *ngIf="loading$ | async; else tableTemplate">
+        <p-table [value]="[].constructor(6)">
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 0"></th>
               <th class="min-w-20px">
-                <div class="p-d-flex p-jc-between p-ai-center">#</div>
-              </th>
-              <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL2" | translate }}
+                  {{ "IMPACT_MATRIX.TABLE_CELL" | translate }}
                 </div>
               </th>
-              <th class="min-w-200px max-w-300px">
+              <th
+                class="min-w-200px max-w-300px"
+                *ngFor="let _ of [].constructor(4)"
+              >
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL3" | translate }}
+                  <p-skeleton></p-skeleton>
                 </div>
               </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL4" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL5" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SYSTEMS.COL6" | translate }}
-                </div>
-              </th>
-
-              <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
@@ -51,21 +42,8 @@
               <td class="flag-td">
                 <div class="bg-secondary"></div>
               </td>
-              <td>
+              <td *ngFor="let _ of [].constructor(5)">
                 <p-skeleton></p-skeleton>
-              </td>
-              <td>
-                <p-skeleton></p-skeleton>
-              </td>
-
-              <td>
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-ellipsis-v"
-                  class="p-button-rounded p-button-text my-auto p-button-plain"
-                ></button>
               </td>
             </tr>
           </ng-template>
@@ -73,10 +51,9 @@
       </ng-container>
       <ng-template #tableTemplate>
         <p-table
-          [columns]="columns$ | async"
+          [columns]="rtosPage$ | async"
           totalRecords="10"
-          [value]="page$ | async"
-          *ngIf="impactTypePage$ | async as impactTypePage"
+          [value]="tableValue$ | async"
           dataKey="id"
           [autoLayout]="true"
         >
@@ -92,15 +69,19 @@
                   {{ "IMPACT_MATRIX.TABLE_CELL" | translate }}
                 </div>
               </th>
-              <th class="min-w-200px" *ngFor="let item of columns?.slice(0, 4)">
+              <th class="min-w-200px" *ngFor="let item of columns">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ item | translateObj }}
                 </div>
               </th>
             </tr></ng-template
           >
-
-          <ng-template pTemplate="body" let-item>
+          <ng-template
+            pTemplate="body"
+            let-item
+            let-rowData
+            let-columns="columns"
+          >
             <tr class="cursor-pointer hoverable">
               <td class="min-w-150px">
                 <button
@@ -112,17 +93,16 @@
                   (click)="display = true"
                 ></button>
                 <span class="px-3">
-                  {{ item?.bcImpactTypes | translateObj }}
+                  {{ rowData?.impactType | translateObj }}
                 </span>
               </td>
               <td
                 class="min-w-200px"
-                *ngFor="
-                  let item of item?.bcImpactLevelMatrixDtoList?.slice(0, 4)
-                "
+                *ngFor="let cell of rowData?.bcRto; let i = index"
               >
                 <app-color-selector
-                  [impactTypes]="impactTypePage"
+                  [selectedImpactType]="cell"
+                  (onChange)="setImpactType($event, rowData, cell)"
                 ></app-color-selector>
               </td>
             </tr>
@@ -153,7 +133,7 @@
   [appendTo]="'body'"
 >
   <p-accordion>
-    <p-accordionTab *ngFor="let item of columns$ | async">
+    <p-accordionTab *ngFor="let item of rtosPage$ | async">
       <ng-template pTemplate="header">
         <div class="d-flex p-jc-between w-100">
           <span class="text-info">{{

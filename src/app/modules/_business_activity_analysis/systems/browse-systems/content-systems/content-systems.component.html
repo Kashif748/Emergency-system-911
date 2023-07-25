@@ -1,6 +1,8 @@
-<div class="p-col-12" style="display: flex; justify-content: space-between;">
+<div class="p-col-12" style="display: flex; justify-content: space-between">
   <h3 class="card-title align-items-start flex-column m-0">
-    <span class="card-label font-weight-bolder">{{ "SYSTEMS.TITLE" | translate }}</span>
+    <span class="card-label font-weight-bolder">{{
+      "SYSTEMS.TITLE" | translate
+    }}</span>
   </h3>
   <div class="ml-dir-auto d-flex">
     <app-systems-dialog></app-systems-dialog>
@@ -71,7 +73,7 @@
               <th class="min-w-20px">
                 <div class="p-d-flex p-jc-between p-ai-center">#</div>
               </th>
-              <th class="min-w-200px max-w-300px" >
+              <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "SYSTEMS.COL1" | translate }}
                 </div>
@@ -85,16 +87,16 @@
               <td class="flag-td">
                 <div
                   [ngClass]="{
-                      'bg-primary': item.isActive,
-                      'bg-warning': !item.isActive
-                    }"
+                    'bg-primary': item.isActive,
+                    'bg-warning': !item.isActive
+                  }"
                 ></div>
               </td>
               <td class="min-w-50px">
                 {{ item.id }}
               </td>
-              <td class="min-w-200px max-w-300px" >
-                {{ item | translateObj : 'activity'}}
+              <td class="min-w-200px max-w-300px">
+                {{ item.system | translateObj }}
               </td>
 
               <td class="d-flex">

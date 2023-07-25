@@ -324,6 +324,14 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'reports/tasks',
+        canLoad: [PrivilegeGuard],
+        loadChildren: () =>
+          import('../modules/_task-report/task-report.module').then(
+            (m) => m.TaskReportModule
+          ),
+      },
+      {
         path: 'availability-report',
         canLoad: [PrivilegeGuard],
         // data: { permission: "PRIV_VW_INC" },

@@ -33,6 +33,7 @@ import {DividerModule} from 'primeng/divider';
 import {NgxsModule} from '@ngxs/store';
 import {BrowseBusinessContinuityState} from './states/browse-business-continuity.state';
 import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
+import { BadgeModule } from 'primeng/badge';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -81,7 +82,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SidebarModule,
     DividerModule,
     SharedBreadcrumbModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    BadgeModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

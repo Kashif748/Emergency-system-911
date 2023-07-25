@@ -1,5 +1,16 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { BcImpactLevel } from 'src/app/api/models';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { ImpactLevelState } from '@core/states';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { BcImpactLevel, BCRtoDetails } from 'src/app/api/models';
 
 @Component({
   selector: 'app-color-selector',
@@ -8,22 +19,25 @@ import { BcImpactLevel } from 'src/app/api/models';
 })
 export class ColorSelectorComponent implements OnInit {
   @ViewChild('colorBar') colorBar: ElementRef<HTMLDivElement>;
+
+  @Select(ImpactLevelState.page)
+  public impactLevels$: Observable<BcImpactLevel[]>;
+
   @Input()
-  impactTypes: BcImpactLevel[];
-  obj = ['#FFBFB7', '#320D6D', '#FFD447', '#700353', '#4C1C00'];
+  selectedImpactType: BCRtoDetails;
+
+  @Output() onChange = new EventEmitter<BcImpactLevel>();
   activeIndex = -1;
-  hoverIndex
+  hoverIndex;
   constructor() {}
 
   ngOnInit(): void {}
   checkPartColor(i, item) {
     console.log(item);
-
-
   }
-  selectColor(i, item) {
-    this.hoverIndex = i
-      // const bar = this.colorBar.nativeElement.children.item(i) as HTMLSpanElement;
-      // bar.style.backgroundColor = item;
+  selectColor(i, item: BcImpactLevel) {
+    this.selectedImpactType.bcImpactLevelId = item?.id;
+    this.activeIndex = i;
+    this.onChange.emit(item);
   }
 }

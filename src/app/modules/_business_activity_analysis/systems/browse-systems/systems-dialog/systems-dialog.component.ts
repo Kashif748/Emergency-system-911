@@ -1,15 +1,17 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {TranslateService} from "@ngx-translate/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Dialog} from "primeng/dialog";
-import {GenericValidators} from "@shared/validators/generic-validators";
-import {SYSTEMS} from "../../../tempData.conts";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Dialog } from 'primeng/dialog';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { SYSTEMS } from '../../../tempData.conts';
+import { Store } from '@ngxs/store';
+import { BrowseActivitySystemsAction } from '../../states/browse-systems.action';
 
 @Component({
   selector: 'app-systems-dialog',
   templateUrl: './systems-dialog.component.html',
-  styleUrls: ['./systems-dialog.component.scss']
+  styleUrls: ['./systems-dialog.component.scss'],
 })
 export class SystemsDialogComponent implements OnInit {
   public page = SYSTEMS;
@@ -26,7 +28,7 @@ export class SystemsDialogComponent implements OnInit {
     {
       name: 'ACTIVITY_FEQ',
       code: 'nameAr',
-    }
+    },
   ];
 
   form: FormGroup;
@@ -34,7 +36,8 @@ export class SystemsDialogComponent implements OnInit {
     private formBuilder: FormBuilder,
     private translate: TranslateService,
     private route: ActivatedRoute,
-  ) { }
+    private store  : Store
+  ) {}
 
   ngOnInit(): void {
     this.buildForm();
@@ -44,13 +47,17 @@ export class SystemsDialogComponent implements OnInit {
   }
   buildForm() {
     this.form = this.formBuilder.group({
-      name: [null, [Validators.required, GenericValidators.english]],
+      activity: [null], //BcActivities ID
+      cycle: [null],
+      id: [null],
+      isActive: [true],
+      system: [null],
     });
   }
   close() {
     if (this.asDialog) {
       this.display = false;
-      // this.store.dispatch(new BrowseTasksAction.ToggleDialog({}));
+      this.store.dispatch(new BrowseActivitySystemsAction.ToggleDialog({}));
     } else {
       // this.router.navigate(this.redirect, { relativeTo: this.route });
     }

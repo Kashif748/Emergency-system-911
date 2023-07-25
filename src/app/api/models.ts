@@ -1322,3 +1322,6 @@ export { PageAdcdaArea } from './models/page-adcda-area';
 export { RestApiResponsePageAdcdaArea } from './models/rest-api-response-page-adcda-area';
 export { ApiErrorListEntityTag } from './models/api-error-list-entity-tag';
 export { RestApiResponseListEntityTag } from './models/rest-api-response-list-entity-tag';
+export { BcActivityDependencyInternalControllerService } from 'src/app/api/services/bc-activity-dependency-internal-controller.service';
+export { BcActivityDependencyExternalControllerService } from 'src/app/api/services/bc-activity-dependency-external-controller.service';
+export { BcActivityDependencyOrgControllerService } from 'src/app/api/services/bc-activity-dependency-org-controller.service';

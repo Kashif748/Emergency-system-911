@@ -70,16 +70,23 @@ import { CenterState } from '@core/states/service-center-area/centers/center.sta
 import { IncidentLocInfoState } from '@core/states/incident-location-info/incidentLocInfo.state';
 import { SituationsState } from '@core/states/situations/situations.state';
 import { NewsState } from '@core/states/news/news.state';
-import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
-import {BrowseActivityPrioritySeqState} from "./modules/_business-continuity/activity-priority-sequence/states/browse-activity-priority-seq.state";
-import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
-import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
-import {LocationTypeState} from "@core/states/bc/location-type/locationType.state";
-import {ImpactLevelState} from "@core/states/bc/impact-level/impact-level.state";
-import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
-import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
+import { ImpLevelWorkingState } from '@core/states/bc/imp-level-working/imp-level-working.state';
+import { BrowseActivityPrioritySeqState } from './modules/_business-continuity/activity-priority-sequence/states/browse-activity-priority-seq.state';
+import { ActivityPrioritySeqState } from '@core/states/bc/activity-priority-seq/activity-priority-seq.state';
+import { ActivityFrquencyState } from '@core/states/bc/activity-frquency/activity-frquency.state';
+import { LocationTypeState } from '@core/states/bc/location-type/locationType.state';
+import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.state';
+import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
+import { BusinessContinuityState } from '@core/states/bc/business-continuity/business-continuity.state';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
 import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
+import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
+import { ActivityEmployeesState } from '@core/states/activity-analysis/employees/employees.state';
+import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
+import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
+
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -155,7 +162,13 @@ export function getHighlightLanguages() {
         OrgDetailState,
         BusinessContinuityState,
         LocationsState,
-        OrgActivityState
+        OrgActivityState,
+        ActivityAnalysisState,
+        ActivitySystemsState,
+        ActivityEmployeesState,
+        ActivityLocationsState,
+        ActivityDependenciesState,
+        ActivityImpactMatrixState,
       ],
       {
         developmentMode: !environment.production,

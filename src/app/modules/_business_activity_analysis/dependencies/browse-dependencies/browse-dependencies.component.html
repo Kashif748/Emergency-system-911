@@ -1,1 +1,38 @@
-<app-content-dependencies></app-content-dependencies>
+<!-- <app-content-dependencies></app-content-dependencies> -->
+<div class="p-col-12" style="display: flex; justify-content: space-between">
+  <h3 class="card-title align-items-start flex-column m-0">
+    <span class="card-label font-weight-bolder">{{
+      "DEPENDENCIES.TITLE" | translate
+    }}</span>
+  </h3>
+</div>
+<app-dependencies-dialog></app-dependencies-dialog>
+<div class="row" *ngIf="state$ | async as state">
+  <div class="col-4">
+    <app-content-dependencies
+      [dependType]="'DEPENDENCY_ORG'"
+      [loading]="loading$ | async"
+      [page]="activityDependencyOrg$ | async"
+      [pageRequest]="state?.pageRequest"
+      (onPageChange)="loadOrgPage($event)"
+    ></app-content-dependencies>
+  </div>
+  <div class="col-4">
+    <app-content-dependencies
+      [dependType]="'DEPENDENCY_INTERNAL'"
+      [loading]="loading$ | async"
+      [page]="activityDependencyInternal$ | async"
+      [pageRequest]="state?.pageRequest"
+      (onPageChange)="loadInternalPage($event)"
+    ></app-content-dependencies>
+  </div>
+  <div class="col-4">
+    <app-content-dependencies
+      [dependType]="'DEPENDENCY_EXTERNAL'"
+      [loading]="loading$ | async"
+      [page]="activityDependencyExternal$ | async"
+      [pageRequest]="state?.pageRequest"
+      (onPageChange)="loadExternalPage($event)"
+    ></app-content-dependencies>
+  </div>
+</div>

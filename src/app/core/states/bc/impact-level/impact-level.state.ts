@@ -78,13 +78,11 @@ export class ImpactLevelState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
+
     return this.impactLevel
-      .getAll22({
+      .getAll21({
         isActive: true,
-        versionId: versionID,
+        versionId: payload?.versionId,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -133,7 +131,7 @@ export class ImpactLevelState {
       BrowseBusinessContinuityState.versionId
     );
     return this.impactLevel
-      .insertOne13({
+      .insertOne12({
         body: { ...payload, versionId: versionID },
       })
       .pipe(
@@ -161,7 +159,7 @@ export class ImpactLevelState {
       BrowseBusinessContinuityState.versionId
     );
     return this.impactLevel
-      .update93({
+      .update92({
         body: { ...payload, versionId: versionID },
       })
       .pipe(
@@ -193,7 +191,7 @@ export class ImpactLevelState {
         blocking: true,
       })
     );
-    return this.impactLevel.getOne13({ id: payload.id }).pipe(
+    return this.impactLevel.getOne12({ id: payload.id }).pipe(
       tap((impactLevel) => {
         setState(
           patch<ImpactLevelStateModel>({

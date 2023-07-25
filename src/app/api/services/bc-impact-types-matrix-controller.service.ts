@@ -23,21 +23,21 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById11
+   * Path part for operation deleteById10
    */
-  static readonly DeleteById11Path = '/v1/bc/impactTypeMatrix/delete/{id}';
+  static readonly DeleteById10Path = '/v1/bc/impactTypeMatrix/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById11()` instead.
+   * To access only the response body, use `deleteById10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById11$Response(params: {
+  deleteById10$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.DeleteById11Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.DeleteById10Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -55,15 +55,15 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById11$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById11(params: {
+  deleteById10(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById11$Response(params).pipe(
+    return this.deleteById10$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
@@ -79,11 +79,15 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAll1$Response(params?: {
+  findAll1$Response(params: {
+    isActive: boolean;
+    versionId: number;
   }): Observable<StrictHttpResponse<RestApiResponseListBcImpactMatrixDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.FindAll1Path, 'get');
     if (params) {
+      rb.query('isActive', params.isActive, {});
+      rb.query('versionId', params.versionId, {});
     }
 
     return this.http.request(rb.build({
@@ -103,7 +107,9 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAll1(params?: {
+  findAll1(params: {
+    isActive: boolean;
+    versionId: number;
   }): Observable<RestApiResponseListBcImpactMatrixDto> {
 
     return this.findAll1$Response(params).pipe(
@@ -112,21 +118,21 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update91
+   * Path part for operation update90
    */
-  static readonly Update91Path = '/v1/bc/impactTypeMatrix';
+  static readonly Update90Path = '/v1/bc/impactTypeMatrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update91()` instead.
+   * To access only the response body, use `update90()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update91$Response(params: {
+  update90$Response(params: {
     body: BcImpactMatrixDto
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactMatrixDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.Update91Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.Update90Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -144,15 +150,15 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update91$Response()` instead.
+   * To access the full response (for headers, for example), `update90$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update91(params: {
+  update90(params: {
     body: BcImpactMatrixDto
   }): Observable<RestApiResponseBcImpactMatrixDto> {
 
-    return this.update91$Response(params).pipe(
+    return this.update90$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactMatrixDto>) => r.body as RestApiResponseBcImpactMatrixDto)
     );
   }
