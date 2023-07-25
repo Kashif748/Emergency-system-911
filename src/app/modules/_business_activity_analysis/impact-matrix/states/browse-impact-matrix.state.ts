@@ -6,27 +6,30 @@ import {
   State,
   StateContext,
   StateToken,
+  Store,
 } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { iif, patch } from '@ngxs/store/operators';
 import { ApiHelper } from '@core/helpers/api.helper';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { BrowseImpactMatrixAction } from './browse-impact-matrix.action';
+import { BrowseActivityImpactMatrixAction } from './browse-impact-matrix.action';
 import { ImpactLevelAction, ImpactMatrixAction, RtoAction } from '@core/states';
+import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
+import { ActivityImapctMatrixAction } from '@core/states/activity-analysis/impact-matrix/impact-matrix.action';
+import { catchError, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
-export interface BrowseImpactMatrixStateModel {
+export interface BrowseActivityImpactMatrixStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
   view: 'TABLE' | 'CARDS';
 }
 
 export const BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN =
-  new StateToken<BrowseImpactMatrixStateModel>('browse_impactMatrix');
+  new StateToken<BrowseActivityImpactMatrixStateModel>('browse_impactMatrix');
 
-@State<BrowseImpactMatrixStateModel>({
+@State<BrowseActivityImpactMatrixStateModel>({
   name: BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN,
   defaults: {
     pageRequest: {
@@ -40,7 +43,7 @@ export const BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN =
 })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-export class BrowseImpactMatrixState {
+export class BrowseActivityImpactMatrixState {
   /**
    *
    */
@@ -48,29 +51,66 @@ export class BrowseImpactMatrixState {
     private messageHelper: MessageHelper,
     private router: Router,
     private apiHelper: ApiHelper,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store
   ) {}
 
   /* ************************ SELECTORS ******************** */
-  @Selector([BrowseImpactMatrixState])
+  @Selector([BrowseActivityImpactMatrixState])
   static state(
-    state: BrowseImpactMatrixStateModel
-  ): BrowseImpactMatrixStateModel {
+    state: BrowseActivityImpactMatrixStateModel
+  ): BrowseActivityImpactMatrixStateModel {
     return state;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(BrowseImpactMatrixAction.LoadImpactLevel)
+  @Action(BrowseActivityImpactMatrixAction.LoadPage)
+  LoadPage(
+    {
+      setState,
+      dispatch,
+      getState,
+    }: StateContext<BrowseActivityImpactMatrixStateModel>,
+    { payload }: BrowseActivityImpactMatrixAction.LoadPage
+  ) {
+    setState(
+      patch<BrowseActivityImpactMatrixStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+    const cycleId = this.store.selectSnapshot(
+      BrowseActivityAnalysisState.cycleId
+    );
+    const activityId = this.store.selectSnapshot(
+      BrowseActivityAnalysisState.activityId
+    );
+
+    return dispatch(
+      new ActivityImapctMatrixAction.LoadPage({
+        cycleId: cycleId,
+        activityId: activityId,
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        // filters: this.filters(pageRequest),
+      })
+    );
+  }
+  @Action(BrowseActivityImpactMatrixAction.LoadImpactLevel)
   loadImpactLevel(
     {
       setState,
       dispatch,
       getState,
-    }: StateContext<BrowseImpactMatrixStateModel>,
-    { payload }: BrowseImpactMatrixAction.LoadImpactLevel
+    }: StateContext<BrowseActivityImpactMatrixStateModel>,
+    { payload }: BrowseActivityImpactMatrixAction.LoadImpactLevel
   ) {
     setState(
-      patch<BrowseImpactMatrixStateModel>({
+      patch<BrowseActivityImpactMatrixStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
@@ -83,21 +123,22 @@ export class BrowseImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
         filters: { isActive: true },
       })
     );
   }
-  @Action(BrowseImpactMatrixAction.LoadImpactMatrix)
+  @Action(BrowseActivityImpactMatrixAction.LoadImpactMatrix)
   loadImpactMatrix(
     {
       setState,
       dispatch,
       getState,
-    }: StateContext<BrowseImpactMatrixStateModel>,
-    { payload }: BrowseImpactMatrixAction.LoadImpactMatrix
+    }: StateContext<BrowseActivityImpactMatrixStateModel>,
+    { payload }: BrowseActivityImpactMatrixAction.LoadImpactMatrix
   ) {
     setState(
-      patch<BrowseImpactMatrixStateModel>({
+      patch<BrowseActivityImpactMatrixStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
@@ -105,27 +146,28 @@ export class BrowseImpactMatrixState {
       })
     );
     const pageRequest = getState().pageRequest;
+
     return dispatch(
       new ImpactMatrixAction.LoadPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
+        versionId: payload.versionId,
       })
     );
   }
 
-  @Action(BrowseImpactMatrixAction.LoadRto)
+  @Action(BrowseActivityImpactMatrixAction.LoadRto)
   loadRto(
     {
       setState,
       dispatch,
       getState,
-    }: StateContext<BrowseImpactMatrixStateModel>,
-    { payload }: BrowseImpactMatrixAction.LoadRto
+    }: StateContext<BrowseActivityImpactMatrixStateModel>,
+    { payload }: BrowseActivityImpactMatrixAction.LoadRto
   ) {
     setState(
-      patch<BrowseImpactMatrixStateModel>({
+      patch<BrowseActivityImpactMatrixStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
@@ -138,26 +180,38 @@ export class BrowseImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
         // filters: this.filters(pageRequest),
       })
     );
   }
 
-  @Action(BrowseImpactMatrixAction.ToggleDialog, { cancelUncompleted: true })
-  openDialog(
-    {}: StateContext<BrowseImpactMatrixStateModel>,
-    { payload }: BrowseImpactMatrixAction.ToggleDialog
+  @Action(BrowseActivityImpactMatrixAction.UpdateImpactMatrix)
+  UpdateImpactMatrix(
+    { dispatch }: StateContext<BrowseActivityImpactMatrixStateModel>,
+    { payload }: BrowseActivityImpactMatrixAction.UpdateImpactMatrix
   ) {
-    this.router.navigate([], {
-      queryParams: {
-        _dialog:
-          this.route.snapshot.queryParams['_dialog'] == 'opened'
-            ? undefined
-            : 'opened',
-        _id: payload.id,
-        _mode: undefined,
-      },
-      queryParamsHandling: 'merge',
-    });
+    const cycleId = this.store.selectSnapshot(
+      BrowseActivityAnalysisState.cycleId
+    );
+    const activityId = this.store.selectSnapshot(
+      BrowseActivityAnalysisState.activityId
+    );
+
+    return dispatch(
+      new ActivityImapctMatrixAction.Update({
+        cycleId: cycleId,
+        activityId: activityId,
+        bcImpactTypes: payload,
+      })
+    ).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

@@ -13,6 +13,7 @@ export namespace ImpactLevelAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId?:number
       }
     ) {
     }

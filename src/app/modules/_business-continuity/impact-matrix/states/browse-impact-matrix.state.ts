@@ -1,15 +1,23 @@
-import {PageRequestModel} from '@core/models/page-request.model';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
-import {Injectable} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {iif, patch} from "@ngxs/store/operators";
-import {ApiHelper} from "@core/helpers/api.helper";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {EMPTY} from "rxjs";
-import {BrowseImpactMatrixAction} from "./browse-impact-matrix.action";
-import {ImpactMatrixAction} from "@core/states";
-
+import { PageRequestModel } from '@core/models/page-request.model';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { iif, patch } from '@ngxs/store/operators';
+import { ApiHelper } from '@core/helpers/api.helper';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { BrowseImpactMatrixAction } from './browse-impact-matrix.action';
+import { ImpactMatrixAction } from '@core/states';
+import { BrowseBusinessContinuityState } from '../../states/browse-business-continuity.state';
 
 export interface BrowseImpactMatrixStateModel {
   pageRequest: PageRequestModel;
@@ -28,11 +36,7 @@ export const BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN =
       first: 0,
       rows: 10,
     },
-    columns: [
-      'criticality',
-      'rtoEn',
-      'description'
-    ],
+    columns: ['criticality', 'rtoEn', 'description'],
     view: 'TABLE',
   },
 })
@@ -46,20 +50,26 @@ export class BrowseImpactMatrixState {
     private messageHelper: MessageHelper,
     private router: Router,
     private apiHelper: ApiHelper,
-    private route: ActivatedRoute
-  ) {
-  }
+    private route: ActivatedRoute,
+    private store: Store
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseImpactMatrixState])
-  static state(state: BrowseImpactMatrixStateModel): BrowseImpactMatrixStateModel {
+  static state(
+    state: BrowseImpactMatrixStateModel
+  ): BrowseImpactMatrixStateModel {
     return state;
   }
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseImpactMatrixAction.LoadImpactMatrix)
   loadImpactMatrix(
-    { setState, dispatch, getState }: StateContext<BrowseImpactMatrixStateModel>,
+    {
+      setState,
+      dispatch,
+      getState,
+    }: StateContext<BrowseImpactMatrixStateModel>,
     { payload }: BrowseImpactMatrixAction.LoadImpactMatrix
   ) {
     setState(
@@ -71,12 +81,15 @@ export class BrowseImpactMatrixState {
       })
     );
     const pageRequest = getState().pageRequest;
+    const versionID = this.store.selectSnapshot(
+      BrowseBusinessContinuityState.versionId
+    );
     return dispatch(
       new ImpactMatrixAction.LoadPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
+        versionId: versionID,
       })
     );
   }

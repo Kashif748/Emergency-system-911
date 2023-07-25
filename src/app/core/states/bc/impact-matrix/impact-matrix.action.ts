@@ -13,6 +13,7 @@ export namespace ImpactMatrixAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId? :number
       }
     ) {
     }

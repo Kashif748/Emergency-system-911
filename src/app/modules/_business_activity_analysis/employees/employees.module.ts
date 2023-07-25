@@ -25,10 +25,13 @@ import {MenuModule} from "primeng/menu";
 import {DropdownModule} from "primeng/dropdown";
 import {TableModule} from "primeng/table";
 import {NgxIntlTelInputModule} from "@shared/sh-components/ngx-intl-tel-input/ngx-intl-tel-input.module";
+import { NgxsModule } from '@ngxs/store';
+import { BrowseActivityEmployeesState } from './states/browse-employees.state';
+import { SelectButtonModule } from 'primeng/selectbutton';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
-    'assets/i18n/new-activity/',
+    'assets/i18n/business-activity-analysis/',
     '.json'
   );
 }
@@ -39,6 +42,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     CommonModule,
     EmployeesRoutingModule,
     DividerModule,
+    NgxsModule.forFeature([BrowseActivityEmployeesState]),
+
     TranslateModule.forChild({
       extend: true,
       loader: {
@@ -54,6 +59,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     InputTextareaModule,
     ButtonModule,
     TranslateObjModule,
+    SelectButtonModule,
     DropdownModule,
     TableModule,
     PaginatorModule,

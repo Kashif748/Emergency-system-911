@@ -1,16 +1,27 @@
-import {PageRequestModel} from '@core/models/page-request.model';
-import {BcImpactMatrixDto} from "../../../../api/models";
+import { PageRequestModel } from '@core/models/page-request.model';
+import {
+  BcImpactMatrixDto,
+  BcImpactTypesDetails,
+} from '../../../../api/models';
 
+export namespace BrowseActivityImpactMatrixAction {
+  export class LoadPage {
+    static readonly type = '[BrowseImpactMatrix] Load Page';
 
-export namespace BrowseImpactMatrixAction {
+    /**
+     *
+     */
+    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+  }
   export class LoadImpactLevel {
     static readonly type = '[BrowseImpactMatrix] Load ImpactLevel Matrix';
 
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {
-    }
+    constructor(
+      public payload?: { pageRequest: PageRequestModel; versionId: number }
+    ) {}
   }
   export class LoadImpactMatrix {
     static readonly type = '[BrowseImpactMatrix] Load ImpactMatrix';
@@ -18,8 +29,9 @@ export namespace BrowseImpactMatrixAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {
-    }
+    constructor(
+      public payload?: { pageRequest?: PageRequestModel; versionId: number }
+    ) {}
   }
 
   export class CreateImpactMatrix {
@@ -27,9 +39,7 @@ export namespace BrowseImpactMatrixAction {
     /**
      *
      */
-    constructor(
-      public payload: BcImpactMatrixDto
-    ) {}
+    constructor(public payload: BcImpactMatrixDto) {}
   }
 
   export class UpdateImpactMatrix {
@@ -37,9 +47,7 @@ export namespace BrowseImpactMatrixAction {
     /**
      *
      */
-    constructor(
-      public payload: BcImpactMatrixDto
-    ) {}
+    constructor(public payload: BcImpactTypesDetails[]) {}
   }
 
   export class ToggleDialog {
@@ -63,7 +71,8 @@ export namespace BrowseImpactMatrixAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {
-    }
+    constructor(
+      public payload?: { pageRequest?: PageRequestModel; versionId: number }
+    ) {}
   }
 }

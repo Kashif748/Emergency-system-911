@@ -1,1 +1,77 @@
-<app-content-recovery></app-content-recovery>
+<div class="p-col-6" style="display: flex; justify-content: space-between">
+  <h3 class="card-title align-items-start flex-column m-0">
+    <span class="card-label font-weight-bolder">{{
+      "RECOVERY.RECOVERY_DETAILS" | translate
+    }}</span>
+  </h3>
+  <p-button
+    [disabled]="form?.invalid"
+    [loading]="blocking$ | async"
+    label="حفظ"
+    (click)="submit()"
+    icon="pi pi-save"
+  ></p-button>
+</div>
+
+<form [formGroup]="form" class="p-fluid p-grid mt-5 p-col-6">
+  <div class="p-field p-col-12 p-md-6">
+    <p-dropdown
+      formControlName="name"
+      [autoDisplayFirst]="false"
+      [showClear]="true"
+      dataKey="id"
+      placeholder="{{ 'RECOVERY.ACTIVITY_PRIORITY' | translate }}"
+    >
+      <ng-template let-item pTemplate="selectedItem">
+        {{ item | translateObj }}
+      </ng-template>
+
+      <ng-template let-item pTemplate="item">
+        {{ item | translateObj }}
+      </ng-template>
+      <ng-template pTemplate="empty">
+        {{ "NO_DATA" | translate }}
+      </ng-template>
+    </p-dropdown>
+  </div>
+
+  <div class="p-field p-col-12 p-md-6">
+    <span class="p-float-label">
+      <input type="text" formControlName="capacity" pInputText />
+      <label>
+        {{ "RECOVERY.CAPACITY" | translate }}
+      </label>
+    </span>
+  </div>
+
+  <div class="p-field p-col-12 p-md-6">
+    <span class="p-float-label">
+      <input type="text" formControlName="spof" pInputText />
+      <label>
+        {{ "RECOVERY.SPOF" | translate }}
+      </label>
+    </span>
+  </div>
+  <div class="p-field p-col-12 p-md-6"></div>
+
+  <div class="p-field p-col-12 p-md-6">
+    <span class="p-float-label">
+      <textarea
+        pInputText
+        type="text"
+        formControlName="skills"
+        rows="5"
+      ></textarea>
+      <label>{{ "RECOVERY.SKILLS" | translate }}</label>
+    </span>
+  </div>
+
+  <div class="p-field p-col-12 p-md-6"></div>
+
+  <div class="p-field p-col-12 p-md-6">
+    <div class="p-field-checkbox">
+      <p-checkbox formControlName="remote" binary="true"></p-checkbox>
+      <label>{{ "RECOVERY.REMOTELY" | translate }}</label>
+    </div>
+  </div>
+</form>

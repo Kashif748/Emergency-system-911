@@ -1,16 +1,23 @@
-import {PageRequestModel} from '@core/models/page-request.model';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from "@ngxs/store";
-import {Injectable} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {iif, patch} from "@ngxs/store/operators";
-import {BrowseRtoAction} from "./browse-rto.action";
-import {RtoAction} from "@core/states/bc/rto/rto.action";
-import {ApiHelper} from "@core/helpers/api.helper";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {EMPTY} from "rxjs";
-import {Store} from "@ngrx/store";
-
+import { PageRequestModel } from '@core/models/page-request.model';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { iif, patch } from '@ngxs/store/operators';
+import { BrowseRtoAction } from './browse-rto.action';
+import { RtoAction } from '@core/states/bc/rto/rto.action';
+import { ApiHelper } from '@core/helpers/api.helper';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { BrowseBusinessContinuityState } from '../../states/browse-business-continuity.state';
 
 export interface BrowseRtoStateModel {
   pageRequest: PageRequestModel;
@@ -18,8 +25,9 @@ export interface BrowseRtoStateModel {
   view: 'TABLE' | 'CARDS';
 }
 
-export const BROWSE_RTO_UI_STATE_TOKEN =
-  new StateToken<BrowseRtoStateModel>('browse_rto');
+export const BROWSE_RTO_UI_STATE_TOKEN = new StateToken<BrowseRtoStateModel>(
+  'browse_rto'
+);
 
 @State<BrowseRtoStateModel>({
   name: BROWSE_RTO_UI_STATE_TOKEN,
@@ -29,11 +37,7 @@ export const BROWSE_RTO_UI_STATE_TOKEN =
       first: 0,
       rows: 10,
     },
-    columns: [
-      'criticality',
-      'rtoEn',
-      'description'
-    ],
+    columns: ['criticality', 'rtoEn', 'description'],
     view: 'TABLE',
   },
 })
@@ -49,8 +53,7 @@ export class BrowseRtoState {
     private apiHelper: ApiHelper,
     private route: ActivatedRoute,
     private store: Store
-  ) {
-  }
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseRtoState])
@@ -73,11 +76,16 @@ export class BrowseRtoState {
       })
     );
     const pageRequest = getState().pageRequest;
+    const versionID = this.store.selectSnapshot(
+      BrowseBusinessContinuityState.versionId
+    );
+
     return dispatch(
       new RtoAction.LoadPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: versionID,
         // filters: this.filters(pageRequest),
       })
     );
@@ -119,14 +127,14 @@ export class BrowseRtoState {
         return EMPTY;
       }),
       finalize(() => {
-         dispatch(new BrowseRtoAction.ToggleDialog({}));
+        dispatch(new BrowseRtoAction.ToggleDialog({}));
       })
     );
   }
 
   @Action(BrowseRtoAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
-    {dispatch}: StateContext<BrowseRtoStateModel>,
+    { dispatch }: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.ToggleDialog
   ) {
     this.router.navigate([], {

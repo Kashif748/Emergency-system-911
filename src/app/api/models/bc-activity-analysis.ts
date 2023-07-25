@@ -16,6 +16,6 @@ export interface BcActivityAnalysis {
   rto?: Bcrto;
   skills?: string;
   spof?: string;
-  status?: BcAnalysisStatus;
+  status: BcAnalysisStatus;
 }
 
