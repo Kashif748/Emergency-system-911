@@ -1,4 +1,11 @@
 :host ::ng-deep {
+  .version-badge {
+    color: var(--primary-color);
+    background-color: #ffffff;
+    height: 1rem;
+    line-height: 1rem;
+    vertical-align: text-top;
+  }
   .p-tag {
     font-size: 1.1rem !important;
   }

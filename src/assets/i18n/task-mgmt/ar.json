@@ -28,5 +28,14 @@
   "DELAYED_DELIVER": "مهمة متأخرة عن يوم التسليم  {{day}}",
   "REMAIN_DELIVER_HOURS": "متبقى {{hours}} ساعات",
   "REMAIN_DELIVER_MINUTES": "متبقى {{minutes}} دقيقة",
-  "REMAIN_DELIVER_DAYS": "متبقى {{days}} أيام"
+  "REMAIN_DELIVER_DAYS": "متبقى {{days}} أيام",
+  "CHARTS": {
+    "TOTAL": "مجموع المهام",
+    "AVERAGE_CLOSE_TIME": "متوسط زمن الاغلاق",
+    "RATE_CLOSE_WITHIN_TIME": "نسبة الاغلاق ضمن الوقت المحدد",
+    "PER_ZONE": "توزيع المهام حسب النطاقات",
+    "PER_PRIORITY": "توزيع المهام حسب الأهمية",
+    "PER_STATUS": "توزيع المهام حسب الحالة",
+    "PER_CATEGORY": "توزيع المهام حسب التصنيف"
+  }
 }

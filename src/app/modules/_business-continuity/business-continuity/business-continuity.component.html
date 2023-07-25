@@ -1,37 +1,29 @@
 <header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
   <ng-container *ngIf="position$ | async as position">
-    <button
-      *ngIf="smallScreen"
-      pButton
-      type="button"
-      icon="pi pi-bars"
-      class="p-button-outlined"
-      (click)="
+    <button *ngIf="smallScreen" pButton type="button" icon="pi pi-bars" class="p-button-outlined" (click)="
         sidebar = !sidebar;
         sideBar.transformOptions =
           position === 'left'
             ? 'translate3d(-100%, 0px, 0px)'
             : 'translate3d(100%, 0px, 0px)'
-      "
-    ></button>
+      "></button>
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
     <app-breadcrumb></app-breadcrumb>
-    <p-dropdown
-      [options]="versions$ | async"
-      [(ngModel)]="selectedVersion"
-      placeholder="{{ 'VERSION' | translate }}"
-      dataKey="id"
-      styleClass="w-180px"
-      (onChange)="setValueGlobally($event.value?.id)"
-      [dropdownIcon]="
+    <p-dropdown [options]="versions$ | async" [(ngModel)]="selectedVersion" placeholder="{{ 'VERSION' | translate }}"
+      dataKey="id" styleClass="min-w-180px" (onChange)="setValueGlobally($event.value?.id)" [dropdownIcon]="
         (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
-      "
-    >
+      ">
       <ng-template pTemplate="selectedItem">
-        <div *ngIf="selectedVersion">
-          {{ selectedVersion | translateObj }}
-        </div>
+        <ng-container *ngIf="selectedVersion">
+          <span>
+            {{ selectedVersion | translateObj }}
+          </span>
+          <span>
+            <p-badge value="{{ selectedVersion?.status | translateObj }}" styleClass="version-badge">
+            </p-badge>
+          </span>
+        </ng-container>
       </ng-template>
       <ng-template let-version pTemplate="item">
         <div>{{ version | translateObj }}</div>
@@ -45,86 +37,39 @@
         </ng-template>
       </ng-template>
     </p-dropdown>
-
-    <p-tag
-      styleClass="p-mr-2 mx-2"
-      value="{{ selectedVersion?.status | translateObj }}"
-    ></p-tag>
   </div>
   <div>
     <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
-      <button
-        pButton
-        *ngIf="selectedVersion?.status.id === 2"
-        pRipple
-        type="button"
-        label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
-        icon="pi pi-replay"
-        (click)="returnModification(4)"
-        class="p-button-danger p-button-text mx-2"
-      ></button>
+      <button pButton *ngIf="selectedVersion?.status.id === 2" pRipple type="button"
+        label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}" icon="pi pi-replay" (click)="returnModification(4)"
+        class="p-button-danger p-button-text mx-2"></button>
     </ng-container>
 
     <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
-      <button
-        pButton
-        *ngIf="selectedVersion?.status.id === 2"
-        pRipple
-        class="p-button-raised mx-2"
-        type="button"
-        (click)="approved(3)"
-        label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
-        icon="pi pi-check"
-      ></button>
+      <button pButton *ngIf="selectedVersion?.status.id === 2" pRipple class="p-button-raised mx-2" type="button"
+        (click)="approved(3)" label="{{ smallScreen ? '' : ('APPROVED' | translate) }}" icon="pi pi-check"></button>
     </ng-container>
 
     <ng-container *checkPrivileges="'PRIV_CR_BC_VER'">
-      <button
-        pButton
-        pRipple
-        type="button"
-        *ngIf="
+      <button pButton pRipple type="button" *ngIf="
           selectedVersion?.status.id === 1 || selectedVersion?.status.id === 4
-        "
-        label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
-        icon="pi pi-send"
-        (click)="sendApprovel(2)"
-        class="p-button-outlined mx-2"
-      ></button>
+        " label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}" icon="pi pi-send" (click)="sendApprovel(2)"
+        class="p-button-outlined mx-2"></button>
     </ng-container>
 
-    <button
-      pButton
-      pRipple
-      type="button"
-      *checkPrivileges="'PRIV_CR_BC_VER'"
-      label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
-      icon="pi pi-cog"
-      class="p-button-warning mx-2"
-      (click)="toggleDialog()"
-    ></button>
+    <button pButton pRipple type="button" *checkPrivileges="'PRIV_CR_BC_VER'"
+      label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}" icon="pi pi-cog" class="p-button-warning mx-2"
+      (click)="toggleDialog()"></button>
   </div>
 </header>
 
 <section [class]="smallScreen ? 'py-6' : 'p-3'">
-  <div
-    #wrapper
-    class="p-d-flex position-relative justify-content-between"
-    style="min-height: 700px; gap: 20px"
-  >
-    <p-sidebar
-      #sideBar
-      [(visible)]="sidebar"
-      [modal]="false"
-      [style]="{
+  <div #wrapper class="p-d-flex position-relative justify-content-between" style="min-height: 700px; gap: 20px">
+    <p-sidebar #sideBar [(visible)]="sidebar" [modal]="false" [style]="{
         width: '350px',
         position: smallScreen ? 'absolute' : 'initial'
-      }"
-      styleClass="rounded p-shadow-6 py-5"
-      [showCloseIcon]="false"
-      [baseZIndex]="-1000"
-      [position]="position$ | async"
-    >
+      }" styleClass="rounded p-shadow-6 py-5" [showCloseIcon]="false" [baseZIndex]="-1000"
+      [position]="position$ | async">
       <p-panelMenu [model]="items"> </p-panelMenu>
     </p-sidebar>
 
@@ -133,35 +78,20 @@
     </div>
   </div>
 </section>
-<p-dialog
-  [visible]="dialogOpened$ | async"
-  (visibleChange)="toggleDialog()"
-  [modal]="true"
-  [style]="{ width: '30vw', background: 'white' }"
-  styleClass="min-h-300px"
-  [breakpoints]="{ '960px': '40vw', '640px': '100vw' }"
-  [baseZIndex]="10000"
-  [closable]="selectedVersion"
->
+<p-dialog [visible]="dialogOpened$ | async" (visibleChange)="toggleDialog()" [modal]="true"
+  [style]="{ width: '30vw', background: 'white' }" styleClass="min-h-300px"
+  [breakpoints]="{ '960px': '40vw', '640px': '100vw' }" [baseZIndex]="10000" [closable]="selectedVersion">
   <ng-template pTemplate="header">
     <h3>
       <span>{{ "VERSIONS_SETTINGS" | translate }}</span>
     </h3>
   </ng-template>
 
-  <p-dropdown
-    [options]="versions$ | async"
-    [(ngModel)]="selectedVersion"
-    placeholder="{{ 'VERSION' | translate }}"
-    styleClass="w-100 mt-3"
-    appendTo="body"
-    dataKey="id"
-    [disabled]="showVersionForm"
-    (onChange)="setValueGlobally($event.value?.id)"
-    [dropdownIcon]="
+  <p-dropdown [options]="versions$ | async" [(ngModel)]="selectedVersion" placeholder="{{ 'VERSION' | translate }}"
+    styleClass="w-100 mt-3" appendTo="body" dataKey="id" [disabled]="showVersionForm"
+    (onChange)="setValueGlobally($event.value?.id); toggleDialog()" [dropdownIcon]="
       (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
-    "
-  >
+    ">
     <ng-template pTemplate="selectedItem">
       <div *ngIf="selectedVersion">
         {{ selectedVersion | translateObj }}
@@ -179,18 +109,10 @@
       </ng-template>
     </ng-template>
   </p-dropdown>
-  <p-divider
-    align="center"
-    styleClass="mt-10"
-    *checkPrivileges="'PRIV_CR_BC_VER'"
-  >
+  <p-divider align="center" styleClass="mt-10" *checkPrivileges="'PRIV_CR_BC_VER'">
     <div class="text-center">
-      <button
-        pButton
-        label="{{ 'ADD_VERSION' | translate }}"
-        [icon]="showVersionForm ? 'pi pi-minus' : 'pi pi-plus'"
-        (click)="showVersionForm = !showVersionForm"
-      ></button>
+      <button pButton label="{{ 'ADD_VERSION' | translate }}" [icon]="showVersionForm ? 'pi pi-minus' : 'pi pi-plus'"
+        (click)="showVersionForm = !showVersionForm"></button>
     </div>
     <!--<span class="font-weight-bold">{{ "" | translate }}</span>-->
   </p-divider>
@@ -204,23 +126,15 @@
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           form.controls['nameAr'].touched &&
           !form.controls['nameAr'].valid &&
           form.controls['nameAr'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('required')"
-        >
+        ">
+        <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('arabic')"
-        >
+        <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
       </ng-container>
@@ -235,23 +149,15 @@
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           form.controls['nameEn'].touched &&
           !form.controls['nameEn'].valid &&
           form.controls['nameEn'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('required')"
-        >
+        ">
+        <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('english')"
-        >
+        <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
           {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
         </p>
       </ng-container>
@@ -260,15 +166,8 @@
   <ng-template pTemplate="footer">
     <div class="p-col p-d-flex p-jc-center">
       <div class="mx-1">
-        <button
-          pButton
-          *checkPrivileges="'PRIV_CR_BC_VER'"
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-          [loading]="blocking$ | async"
-          [disabled]="form.invalid"
-          (click)="submit()"
-        ></button>
+        <button pButton *checkPrivileges="'PRIV_CR_BC_VER'" label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"
+          [loading]="blocking$ | async" [disabled]="form.invalid" (click)="submit()"></button>
       </div>
     </div>
   </ng-template>

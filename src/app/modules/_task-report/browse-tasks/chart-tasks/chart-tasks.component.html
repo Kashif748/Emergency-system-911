@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-md-5 mb-4">
+        <div class="row h-100 min-h-200px">
+          <div class="col-4 ">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.TOTAL" | translate }}
+              </h6>
+              <div class="d-flex h-100 w-100">
+                <div class="m-auto text-center">
+                  <h1 class="text-indicator">
+                    {{total$ | async}}
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100">
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.AVERAGE_CLOSE_TIME" | translate }}
+              </h6>
+              <div class="d-flex h-100 w-100">
+                <div class="m-auto text-center">
+                  <h1 class="text-indicator">
+                    13
+                  </h1>
+                </div>
+              </div>
+              <div class="position-absolute text-center left-0 right-0 unit-idicator">
+                <h1>
+                  (ساعة)
+                </h1>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100">
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.RATE_CLOSE_WITHIN_TIME" | translate }}
+              </h6>
+              <div class="d-flex h-100 w-100">
+                <div class="m-auto text-center">
+                  <h1 class="text-indicator">
+                    90
+                  </h1>
+                </div>
+              </div>
+              <div class="position-absolute text-center left-0 right-0 unit-idicator">
+                <h1>
+                  %
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-7">
+        <div class="row h-100">
+          <div class="col-md-6 mb-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.PER_ZONE" | translate }}
+              </h6>
+
+              <div class="mt-5">
+                <apx-chart [series]="[1144, 55, 13, 43, 22]"
+                  [chart]="{width: '100%', type: 'pie', toolbar: {show: true}}" [legend]="{ width: 85 }"
+                  [labels]="['Team A', 'Team B', 'Team C', 'Team D', 'Team E']"></apx-chart>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.PER_PRIORITY" | translate }}
+              </h6>
+              <div class="mt-5">
+                <apx-chart [series]="(priority$ | async).series"
+                  [chart]="{width: '100%', type: 'pie', toolbar: {show: true}}" [legend]="{ width: 85 }"
+                  [labels]="(priority$ | async).labels"></apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mt-4 mb-5">
+    <div class="row">
+      <div class="col-12 h-160px mb-4">
+        <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+
+          <h6 class="position-absolute header-indicator mt-1 mx-1">
+            {{ "CHARTS.PER_STATUS" | translate }}
+
+          </h6>
+          <div>
+            <apx-chart [series]="status$ | async" [chart]="{type: 'bar', height: 150, stacked: true, stackType: '100%'}"
+              [plotOptions]="{ bar: { horizontal: true} }" [stroke]="{width: 1,colors: ['#fff']}"
+              [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
+              [yaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
+              [fill]="{opacity: 1}" [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
+              [grid]="{show: false}" [tooltip]="{x:{show:false}}"></apx-chart>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="col-12 h-160px mt-4">
+        <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+          <h6 class="position-absolute header-indicator mt-1 mx-1">
+            {{ "CHARTS.PER_CATEGORY" | translate }}
+          </h6>
+          <div>
+            <apx-chart
+              [series]="[{ name: 'Marine Sprite',data: [44]}, {name: 'Striking Calf',data: [53]}, {name: 'Tank Picture',data: [12]}, {name: 'Bucket Slope',data: [9]}, {name: 'Reborn Kid',data: [25]}]"
+              [chart]="{type: 'bar', height: 150, stacked: true, stackType: '100%'}"
+              [plotOptions]="{ bar: { horizontal: true} }" [stroke]="{width: 1,colors: ['#fff']}"
+              [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
+              [yaxis]="{show: false, labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
+              [fill]="{opacity: 1}" [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
+              [grid]="{show: false}" [tooltip]="{x:{show:false}}"></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

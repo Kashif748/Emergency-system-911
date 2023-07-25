@@ -629,7 +629,7 @@ export class TaskControllerService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'text',
+      responseType: 'blob',
       accept: '*/*'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
