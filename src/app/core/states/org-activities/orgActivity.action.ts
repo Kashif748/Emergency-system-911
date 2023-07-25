@@ -8,7 +8,13 @@ export namespace OrgActivityAction {
      */
     constructor(
       public payload: {
-        filters?: { [key: string]: any };
+        filters?: {
+          orgHierarchyId?: number;
+          name?: string;
+          activityFrequencyId?: number;
+          activityArea?: string;
+          refrenceNumber?: string;
+        };
         sort?: string[];
         page: number;
         size: number;

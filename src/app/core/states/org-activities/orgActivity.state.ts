@@ -75,7 +75,12 @@ export class OrgActivityState {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
-        }
+        },
+        orgHierarchyId: payload.filters.orgHierarchyId ? payload.filters.orgHierarchyId['data'] : payload.filters.orgHierarchyId,
+        name: payload.filters.name,
+        activityFrequencyId: payload.filters.activityFrequencyId ? payload.filters.activityFrequencyId['id'] : payload.filters.activityFrequencyId,
+        activityArea: payload.filters.activityArea,
+        refrenceNumber: payload.filters.refrenceNumber
       })
       .pipe(
         tap((res) => {

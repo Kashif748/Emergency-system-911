@@ -79,6 +79,8 @@ export class BcActivitiesControllerService extends BaseService {
    * To access only the response body, use `getAll33()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   getAll33$Response(params: {
     isActive?: boolean;
@@ -109,6 +111,8 @@ export class BcActivitiesControllerService extends BaseService {
    * To access the full response (for headers, for example), `getAll33$Response()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   getAll33(params: {
     isActive?: boolean;
@@ -273,6 +277,10 @@ export class BcActivitiesControllerService extends BaseService {
   search19$Response(params: {
     isActive?: boolean;
     orgHierarchyId?: number;
+    name?: string;
+    activityFrequencyId?: number;
+    activityArea?: string;
+    refrenceNumber?: string;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivities>> {
 
@@ -280,6 +288,10 @@ export class BcActivitiesControllerService extends BaseService {
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('name', params.name, {});
+      rb.query('activityFrequencyId', params.activityFrequencyId, {});
+      rb.query('activityArea', params.activityArea, {});
+      rb.query('refrenceNumber', params.refrenceNumber, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -303,6 +315,10 @@ export class BcActivitiesControllerService extends BaseService {
   search19(params: {
     isActive?: boolean;
     orgHierarchyId?: number;
+    name?: string;
+    activityFrequencyId?: number;
+    activityArea?: string;
+    refrenceNumber?: string;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivities> {
 

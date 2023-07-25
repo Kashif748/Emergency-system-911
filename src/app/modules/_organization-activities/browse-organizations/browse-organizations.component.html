@@ -20,8 +20,8 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown [options]="activityFre$ | async" [ngModel]="state.pageRequest.filters['fre']"
-                              (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
+                  <p-dropdown [options]="activityFre$ | async" [ngModel]="state.pageRequest.filters['activityFrequencyId']"
+                              (ngModelChange)="updateFilter({activityFrequencyId: $event}, $event)" [autoDisplayFirst]="false"
                               [showClear]="true" dataKey="id" placeholder="{{'ACTIVITY_FEQ' | translate}}">
                     <ng-template let-item pTemplate="selectedItem">
                       {{ item | translateObj }}
@@ -34,8 +34,8 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown [options]="activityArea" [ngModel]="state.pageRequest.filters['area']"
-                              (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
+                  <p-dropdown [options]="activityArea" [ngModel]="state.pageRequest.filters['activityArea']"
+                              (ngModelChange)="updateFilter({activityArea: $event}, $event)" [autoDisplayFirst]="false"
                               [showClear]="true" dataKey="id" placeholder="{{'ACTIVITY_AREA' | translate}}">
                     <ng-template let-item pTemplate="selectedItem">
                       {{ item.lable }}
@@ -48,66 +48,22 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <input type="text" pInputText [ngModel]="state?.pageRequest?.filters['aris']"
+                  <input type="text" pInputText [ngModel]="state?.pageRequest?.filters['refrenceNumber']"
                          placeholder="{{ 'ARIS' | translate }}"
-                         (keyup)="updateFilter({aris: $event.target.value}, $event)">
+                         (keyup)="updateFilter({refrenceNumber: $event.target.value}, $event)">
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
                   <p-treeSelect [options]="nodes" display="chip" [metaKeySelection]="false" [filter]="true"
-                                [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single"
-                                [ngModel]="state?.pageRequest?.filters['hirIds']" placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
-                                (ngModelChange)="updateFilter({hirIds: $event}, $event)" [propagateSelectionDown]="false"
+                                [filterBy]="'orgHierarchyId'" selectionMode="single"
+                                [ngModel]="state?.pageRequest?.filters['orgHierarchyId']" placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
+                                (ngModelChange)="updateFilter({orgHierarchyId: $event}, $event)" [propagateSelectionDown]="false"
                                 [propagateSelectionUp]="false">
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{ option ? (option | translateObj : 'label') : ('SHARED.ORG' | translate)}}
                     </ng-template>
                   </p-treeSelect>
                 </div>
-
-
-
-               <!-- <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown [options]="" [ngModel]="state.pageRequest.filters['userName']"
-                              (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
-                              [showClear]="true" dataKey="id" placeholder="{{'SECTOR' | translate}}">
-                    <ng-template let-item pTemplate="selectedItem">
-                      {{ item | translateObj }}
-                    </ng-template>
-
-                    <ng-template let-item pTemplate="item">
-                      {{ item | translateObj }}
-                    </ng-template>
-                  </p-dropdown>
-                </div>-->
-
-                <!--<div class="p-field p-col-4 p-md-2">
-                  <p-dropdown [options]="" [ngModel]="state.pageRequest.filters['userName']"
-                              (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
-                              [showClear]="true" dataKey="id" placeholder="{{'DEPARTMENT' | translate}}">
-                    <ng-template let-item pTemplate="selectedItem">
-                      {{ item | translateObj }}
-                    </ng-template>
-
-                    <ng-template let-item pTemplate="item">
-                      {{ item | translateObj }}
-                    </ng-template>
-                  </p-dropdown>
-                </div>-->
-
-                <!--<div class="p-field p-col-4 p-md-2">
-                  <p-dropdown [options]="" [ngModel]="state.pageRequest.filters['userName']"
-                              (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
-                              [showClear]="true" dataKey="id" placeholder="{{'SECTION' | translate}}">
-                    <ng-template let-item pTemplate="selectedItem">
-                      {{ item | translateObj }}
-                    </ng-template>
-
-                    <ng-template let-item pTemplate="item">
-                      {{ item | translateObj }}
-                    </ng-template>
-                  </p-dropdown>
-                </div>-->
 
                 <div class="p-col p-d-flex">
                   <div class="ml-dir-auto"></div>
