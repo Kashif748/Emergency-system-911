@@ -9,6 +9,9 @@ import { TabViewModule } from 'primeng/tabview';
 import { DividerModule } from 'primeng/divider';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AvatarModule } from 'primeng/avatar';
+import { NgxsModule } from '@ngxs/store';
+import { BrowseActivityAnalysisState } from './states/browse-activity-analysis.state';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 
 const routes: Routes = [
   {
@@ -67,8 +70,10 @@ const routes: Routes = [
     ButtonModule,
     CardModule,
     TabViewModule,
+    NgxsModule.forFeature([BrowseActivityAnalysisState]),
     DividerModule,
     ProgressBarModule,
+    TranslateObjModule,
     AvatarModule,
   ],
 })

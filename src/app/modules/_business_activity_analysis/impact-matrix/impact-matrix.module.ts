@@ -23,7 +23,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { TranslateHttpLoaderFactory } from '../locations/locations.module';
 import { ColorSelectorComponent } from './browse-impact-matrix/color-selector/color-selector.component';
-import { BrowseImpactMatrixState } from './states/browse-impact-matrix.state';
+import { BrowseActivityImpactMatrixState } from './states/browse-impact-matrix.state';
 import { NgxsModule } from '@ngxs/store';
 import { AccordionModule } from 'primeng/accordion';
 import { TooltipModule } from 'primeng/tooltip';
@@ -39,7 +39,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    NgxsModule.forFeature([BrowseImpactMatrixState]),
+    NgxsModule.forFeature([BrowseActivityImpactMatrixState]),
     DividerModule,
     TranslateModule.forChild({
       extend: true,

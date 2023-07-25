@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { RecoveryRoutingModule } from './recovery-routing.module';
 import { BrowseRecoveryComponent } from './browse-recovery/browse-recovery.component';
-import { ContentRecoveryComponent } from './browse-recovery/content-recovery/content-recovery.component';
 import {HttpClient} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {InputTextareaModule} from "primeng/inputtextarea";
@@ -19,13 +18,13 @@ import {DropdownModule} from "primeng/dropdown";
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
-    'assets/i18n/new-activity/',
+    'assets/i18n/business-activity-analysis/',
     '.json'
   );
 }
 
 @NgModule({
-  declarations: [BrowseRecoveryComponent, ContentRecoveryComponent],
+  declarations: [BrowseRecoveryComponent],
   imports: [
     CommonModule,
     RecoveryRoutingModule,

@@ -24,21 +24,21 @@ export class BcActivityFrequenciesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById16
+   * Path part for operation deleteById15
    */
-  static readonly DeleteById16Path = '/v1/bc/activityFrequency/delete/{id}';
+  static readonly DeleteById15Path = '/v1/bc/activityFrequency/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById16()` instead.
+   * To access only the response body, use `deleteById15()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById16$Response(params: {
+  deleteById15$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.DeleteById16Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.DeleteById15Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,37 +56,37 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById16$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById15$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById16(params: {
+  deleteById15(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById16$Response(params).pipe(
+    return this.deleteById15$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll25
+   * Path part for operation getAll24
    */
-  static readonly GetAll25Path = '/v1/bc/activityFrequency';
+  static readonly GetAll24Path = '/v1/bc/activityFrequency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll25()` instead.
+   * To access only the response body, use `getAll24()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll25$Response(params: {
+  getAll24$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetAll25Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetAll24Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll25$Response()` instead.
+   * To access the full response (for headers, for example), `getAll24$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll25(params: {
+  getAll24(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityFrequencies> {
 
-    return this.getAll25$Response(params).pipe(
+    return this.getAll24$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityFrequencies>) => r.body as RestApiResponsePageBcActivityFrequencies)
     );
   }
 
   /**
-   * Path part for operation update96
+   * Path part for operation update95
    */
-  static readonly Update96Path = '/v1/bc/activityFrequency';
+  static readonly Update95Path = '/v1/bc/activityFrequency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update96()` instead.
+   * To access only the response body, use `update95()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update96$Response(params: {
+  update95$Response(params: {
     body: BcActivityFrequencies
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityFrequencies>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.Update96Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.Update95Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update96$Response()` instead.
+   * To access the full response (for headers, for example), `update95$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update96(params: {
+  update95(params: {
     body: BcActivityFrequencies
   }): Observable<RestApiResponseBcActivityFrequencies> {
 
-    return this.update96$Response(params).pipe(
+    return this.update95$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityFrequencies>) => r.body as RestApiResponseBcActivityFrequencies)
     );
   }
 
   /**
-   * Path part for operation insertOne16
+   * Path part for operation insertOne15
    */
-  static readonly InsertOne16Path = '/v1/bc/activityFrequency';
+  static readonly InsertOne15Path = '/v1/bc/activityFrequency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne16()` instead.
+   * To access only the response body, use `insertOne15()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne16$Response(params: {
+  insertOne15$Response(params: {
     body: BcActivityFrequencies
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityFrequencies>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.InsertOne16Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.InsertOne15Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,35 +200,35 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne16$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne15$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne16(params: {
+  insertOne15(params: {
     body: BcActivityFrequencies
   }): Observable<RestApiResponseBcActivityFrequencies> {
 
-    return this.insertOne16$Response(params).pipe(
+    return this.insertOne15$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityFrequencies>) => r.body as RestApiResponseBcActivityFrequencies)
     );
   }
 
   /**
-   * Path part for operation getOne16
+   * Path part for operation getOne15
    */
-  static readonly GetOne16Path = '/v1/bc/activityFrequency/{id}';
+  static readonly GetOne15Path = '/v1/bc/activityFrequency/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne16()` instead.
+   * To access only the response body, use `getOne15()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne16$Response(params: {
+  getOne15$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityFrequencies>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetOne16Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityFrequenciesControllerService.GetOne15Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcActivityFrequenciesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne16$Response()` instead.
+   * To access the full response (for headers, for example), `getOne15$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne16(params: {
+  getOne15(params: {
     id: number;
   }): Observable<RestApiResponseBcActivityFrequencies> {
 
-    return this.getOne16$Response(params).pipe(
+    return this.getOne15$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityFrequencies>) => r.body as RestApiResponseBcActivityFrequencies)
     );
   }

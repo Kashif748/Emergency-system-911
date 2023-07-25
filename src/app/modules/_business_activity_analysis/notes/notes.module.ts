@@ -11,7 +11,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CheckboxModule } from 'primeng/checkbox';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/new-activity/', '.json');
+  return new TranslateHttpLoader(http, 'assets/i18n/business-activity-analysis/', '.json');
 }
 const routes: Routes = [
   {

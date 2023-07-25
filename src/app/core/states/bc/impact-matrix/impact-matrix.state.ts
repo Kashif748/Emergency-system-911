@@ -1,36 +1,43 @@
-import {EMPTY} from "rxjs";
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {patch} from "@ngxs/store/operators";
-import {Injectable} from "@angular/core";
-import {BcImpactTypesMatrixControllerService} from "../../../../api/services/bc-impact-types-matrix-controller.service";
-import {ImpactMatrixAction} from "@core/states/bc/impact-matrix/impact-matrix.action";
-import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
-import {BcImpactMatrixDto} from "../../../../api/models/bc-impact-matrix-dto";
-
+import { EMPTY } from 'rxjs';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { patch } from '@ngxs/store/operators';
+import { Injectable } from '@angular/core';
+import { BcImpactTypesMatrixControllerService } from '../../../../api/services/bc-impact-types-matrix-controller.service';
+import { ImpactMatrixAction } from '@core/states/bc/impact-matrix/impact-matrix.action';
+import { BrowseBusinessContinuityState } from '../../../../modules/_business-continuity/states/browse-business-continuity.state';
+import { BcImpactMatrixDto } from '../../../../api/models/bc-impact-matrix-dto';
 
 export interface ImpactMatrixStateModel {
-  page: BcImpactMatrixDto[] ;
+  page: BcImpactMatrixDto[];
   impactMatrix: BcImpactMatrixDto;
   loading: boolean;
   blocking: boolean;
 }
 
+const IMPACT_MATRIX_STATE_TOKEN = new StateToken<ImpactMatrixStateModel>(
+  'impactMatrix'
+);
 
-const IMPACT_MATRIX_STATE_TOKEN = new StateToken<ImpactMatrixStateModel>('impactMatrix');
-
-@State<ImpactMatrixStateModel>({name: IMPACT_MATRIX_STATE_TOKEN})
+@State<ImpactMatrixStateModel>({ name: IMPACT_MATRIX_STATE_TOKEN })
 @Injectable()
-@SelectorOptions({injectContainerState: false})
+@SelectorOptions({ injectContainerState: false })
 export class ImpactMatrixState {
   /**
    *
    */
   constructor(
     private impactMatrix: BcImpactTypesMatrixControllerService,
-    private store: Store,
-  ) {
-  }
+    private store: Store
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([ImpactMatrixState])
@@ -59,26 +66,21 @@ export class ImpactMatrixState {
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(ImpactMatrixAction.LoadPage, {cancelUncompleted: true})
+  @Action(ImpactMatrixAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    {setState}: StateContext<ImpactMatrixStateModel>,
-    {payload}: ImpactMatrixAction.LoadPage
+    { setState }: StateContext<ImpactMatrixStateModel>,
+    { payload }: ImpactMatrixAction.LoadPage
   ) {
     setState(
       patch<ImpactMatrixStateModel>({
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.impactMatrix
       .findAll1({
         isActive: true,
-        versionId: versionID,
-        pageable: {
-          page: payload.page,
-          size: payload.size,
-          sort: payload.sort,
-        },
+        versionId: payload.versionId,
+
         // request: payload.filters,
       })
       .pipe(
@@ -93,7 +95,7 @@ export class ImpactMatrixState {
         catchError(() => {
           setState(
             patch<ImpactMatrixStateModel>({
-              page:   [],
+              page: [],
             })
           );
           return EMPTY;
@@ -110,15 +112,17 @@ export class ImpactMatrixState {
 
   @Action(ImpactMatrixAction.Create)
   create(
-    {setState}: StateContext<ImpactMatrixStateModel>,
-    {payload}: ImpactMatrixAction.Create
+    { setState }: StateContext<ImpactMatrixStateModel>,
+    { payload }: ImpactMatrixAction.Create
   ) {
     setState(
       patch<ImpactMatrixStateModel>({
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    const versionID = this.store.selectSnapshot(
+      BrowseBusinessContinuityState.versionId
+    );
     payload.bcImpactTypes.versionId = versionID;
     return this.impactMatrix
       .insert({
@@ -137,18 +141,20 @@ export class ImpactMatrixState {
 
   @Action(ImpactMatrixAction.Update)
   update(
-    {setState}: StateContext<ImpactMatrixStateModel>,
-    {payload}: ImpactMatrixAction.Update
+    { setState }: StateContext<ImpactMatrixStateModel>,
+    { payload }: ImpactMatrixAction.Update
   ) {
     setState(
       patch<ImpactMatrixStateModel>({
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    const versionID = this.store.selectSnapshot(
+      BrowseBusinessContinuityState.versionId
+    );
     payload.bcImpactTypes.versionId = versionID;
     return this.impactMatrix
-      .update91({
+      .update90({
         body: payload,
       })
       .pipe(
@@ -162,10 +168,10 @@ export class ImpactMatrixState {
       );
   }
 
-  @Action(ImpactMatrixAction.GetImpactMatrix, {cancelUncompleted: true})
+  @Action(ImpactMatrixAction.GetImpactMatrix, { cancelUncompleted: true })
   getImpactMatrix(
-    {setState}: StateContext<ImpactMatrixStateModel>,
-    {payload}: ImpactMatrixAction.GetImpactMatrix
+    { setState }: StateContext<ImpactMatrixStateModel>,
+    { payload }: ImpactMatrixAction.GetImpactMatrix
   ) {
     if (payload.id === undefined || payload.id === null) {
       setState(
@@ -180,7 +186,7 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    return this.impactMatrix.getOneByImpactTypeId({id: payload.id}).pipe(
+    return this.impactMatrix.getOneByImpactTypeId({ id: payload.id }).pipe(
       tap((impactMatrix) => {
         setState(
           patch<ImpactMatrixStateModel>({
