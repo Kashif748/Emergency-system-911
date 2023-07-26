@@ -45,12 +45,12 @@
             <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
                  [ngClass]="{ 'border-primary': item.isActive, 'border-warning': !item.isActive}">
               <ng-container *ngIf="!item.photo?.length; else profileImg">
-                <!--<p-avatar (click)="item.isActive && openView(item.id)" icon="pi pi-user"
-                          styleClass="p-avatar-xxl"></p-avatar>-->
+                <p-avatar (click)="item.isActive && openView(item.id)" icon="pi pi-user"
+                          styleClass="p-avatar-xxl"></p-avatar>
               </ng-container>
               <ng-template #profileImg>
-                <!--<p-avatar (click)="item.isActive && openView(item.id)" [image]="item.photo | url"
-                          styleClass="p-avatar-xxl"></p-avatar>-->
+                <p-avatar (click)="item.isActive && openView(item.id)"
+                          styleClass="p-avatar-xxl"></p-avatar>
               </ng-template>
 
               <div class="flex-grow-1 p-grid p-fluid" (click)="item.isActive && openView(item.id)">
@@ -59,32 +59,26 @@
                   <div class="mt-1 mx-2 p-grid p-fluid">
                     <div class="p-col-12 pb-0 p-d-flex">
                       <div>
-                        <!--<h4 class="mb-1 px-2 d-inline" pTooltip="{{ 'SHARED.FULL_NAME' | translate }}" appendTo="body"
+                        <h4 class="mb-1 px-2 d-inline" pTooltip="{{ 'SHARED.FULL_NAME' | translate }}" appendTo="body"
                             tooltipPosition="top">
                           {{ item | translateObj : 'name' }}
-                        </h4>-->
+                        </h4>
                       </div>
                       <div class="mt-auto pt-1">
-                        <!--<span class="px-0 d-inline" pTooltip="{{ 'SHARED.USERNAME' | translate }}" appendTo="body"
+                        <span class="px-0 d-inline" pTooltip="{{ 'SHARED.USERNAME' | translate }}" appendTo="body"
                               tooltipPosition="top">
                           {{ item.userName }}
-                        </span>-->
+                        </span>
                       </div>
                     </div>
                     <div class="p-col-12">
-                      <a href="mailto:{{ item.email }}">
-                        <!--<p-chip label="{{ item.email }}" icon="pi pi-envelope"
-                                styleClass="bg-transparent text-muted"></p-chip>-->
-                      </a>
-                      <a href="tel:{{ item.mobile }}">
-                        <!--<p-chip label="{{ item.mobile }}" icon="pi pi-phone"
-                                styleClass="bg-transparent text-muted"></p-chip>-->
-                      </a>
-                      <!--<p-chip pTooltip="{{ 'SHARED.ORG' | translate }}" appendTo="body" tooltipPosition="top"
+
+                      <p-chip pTooltip="{{ 'ACTIVITY_FEQ' | translate }}" label="{{ item.activityFrequence | translateObj : 'name'}}" tooltipPosition="top"
+                              icon="flaticon2-refresh"
+                                styleClass="bg-transparent text-muted"></p-chip>
+                      <p-chip pTooltip="{{ 'SHARED.ORG' | translate }}" appendTo="body" tooltipPosition="top"
                               label="{{item.orgStructure | translateObj : 'name' }}" icon="pi pi-globe"
                               styleClass="bg-transparent text-muted"></p-chip>
-                      <p-chip pTooltip="{{ 'SHARED.JOB_TITLE' | translate }}" appendTo="body" tooltipPosition="top"
-                              label="{{ item.title }}" icon="pi pi-briefcase" styleClass="bg-transparent text-muted"></p-chip>-->
                     </div>
                   </div>
 
@@ -92,8 +86,8 @@
 
                 <div class="p-col-12 p-md-4">
 
-                  <div class="mt-1 mx-4 p-grid p-fluid">
-                    <!--<div class="p-col-12 info-item px-0" pTooltip="{{ 'USER_MANAGEMENT.ROLE' | translate }}"
+                  <!--<div class="mt-1 mx-4 p-grid p-fluid">
+                    <div class="p-col-12 info-item px-0" pTooltip="{{ 'USER_MANAGEMENT.ROLE' | translate }}"
                          appendTo="body" tooltipPosition="top">
                       <div class="d-flex w-100 h-100 align-items-center ">
                         <div class="symbol symbol-40 mx-0">
@@ -103,14 +97,14 @@
                         <div class="d-flex flex-column font-weight-bold">
                           <p class="text-dark-75 font-weight-bolder mb-1 font-size-lg">
                             <ng-container *ngFor="let role of item.roles">
-                              &lt;!&ndash;<p-chip label="{{ role | translateObj : 'name' }}" styleClass="m-1"></p-chip>&ndash;&gt;
+                              <p-chip label="{{ role | translateObj : 'name' }}" styleClass="m-1"></p-chip>
                             </ng-container>
                           </p>
                         </div>
                       </div>
-                    </div>-->
+                    </div>
 
-                  </div>
+                  </div>-->
                 </div>
               </div>
               <button pButton pRipple type="button" icon="pi pi-ellipsis-v"

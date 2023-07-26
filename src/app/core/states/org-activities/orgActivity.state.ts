@@ -76,7 +76,7 @@ export class OrgActivityState {
           size: payload.size,
           sort: payload.sort,
         },
-        orgHierarchyId: payload.filters.orgHierarchyId ? payload.filters.orgHierarchyId['data'] : payload.filters.orgHierarchyId,
+        orgHierarchyId: payload.filters.orgHierarchyId ? payload.filters.orgHierarchyId['id'].id : payload.filters.orgHierarchyId,
         name: payload.filters.name,
         activityFrequencyId: payload.filters.activityFrequencyId ? payload.filters.activityFrequencyId['id'] : payload.filters.activityFrequencyId,
         activityArea: payload.filters.activityArea,
