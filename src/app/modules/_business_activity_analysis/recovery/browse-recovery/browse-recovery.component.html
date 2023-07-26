@@ -1,4 +1,4 @@
-<div class="p-col-6" style="display: flex; justify-content: space-between">
+<div class="d-flex p-col-8 m-auto p-ai-center p-jc-between">
   <h3 class="card-title align-items-start flex-column m-0">
     <span class="card-label font-weight-bolder">{{
       "RECOVERY.RECOVERY_DETAILS" | translate
@@ -13,10 +13,11 @@
   ></p-button>
 </div>
 
-<form [formGroup]="form" class="p-fluid p-grid mt-5 p-col-6">
-  <div class="p-field p-col-12 p-md-6">
+<form [formGroup]="form" class="p-fluid p-grid mt-10 p-col-8 m-auto">
+  <div class="p-field p-col-12 p-md-6 mt-4">
     <p-dropdown
-      formControlName="name"
+      formControlName="recoveryPriority"
+      [options]="prioritySeq$ | async"
       [autoDisplayFirst]="false"
       [showClear]="true"
       dataKey="id"
@@ -35,7 +36,7 @@
     </p-dropdown>
   </div>
 
-  <div class="p-field p-col-12 p-md-6">
+  <div class="p-field p-col-12 p-md-6  mt-4">
     <span class="p-float-label">
       <input type="text" formControlName="capacity" pInputText />
       <label>
@@ -44,17 +45,20 @@
     </span>
   </div>
 
-  <div class="p-field p-col-12 p-md-6">
+  <div class="p-field p-col-12 p-md-6 mt-4">
     <span class="p-float-label">
       <input type="text" formControlName="spof" pInputText />
       <label>
         {{ "RECOVERY.SPOF" | translate }}
       </label>
     </span>
+    <div class="p-field-checkbox mt-10">
+      <p-checkbox formControlName="remote" binary="true"></p-checkbox>
+      <label>{{ "RECOVERY.REMOTELY" | translate }}</label>
+    </div>
   </div>
-  <div class="p-field p-col-12 p-md-6"></div>
 
-  <div class="p-field p-col-12 p-md-6">
+  <div class="p-field p-col-12 p-md-6 mt-4">
     <span class="p-float-label">
       <textarea
         pInputText
@@ -64,14 +68,5 @@
       ></textarea>
       <label>{{ "RECOVERY.SKILLS" | translate }}</label>
     </span>
-  </div>
-
-  <div class="p-field p-col-12 p-md-6"></div>
-
-  <div class="p-field p-col-12 p-md-6">
-    <div class="p-field-checkbox">
-      <p-checkbox formControlName="remote" binary="true"></p-checkbox>
-      <label>{{ "RECOVERY.REMOTELY" | translate }}</label>
-    </div>
   </div>
 </form>

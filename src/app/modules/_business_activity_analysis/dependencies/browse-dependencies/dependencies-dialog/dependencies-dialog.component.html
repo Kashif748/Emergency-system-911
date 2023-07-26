@@ -57,44 +57,6 @@
     </p-blockUI>
 
     <form [formGroup]="form" class="p-fluid p-grid mt-5">
-      <div class="p-field p-col-12 p-md-6">
-        <span class="p-float-label">
-          <p-dropdown
-            [autoDisplayFirst]="false"
-            [options]="dependenciesLimts"
-            formControlName="limit"
-            [showClear]="true"
-            appendTo="body"
-            optionValue="value"
-          >
-            <ng-template let-option pTemplate="selectedItem">
-              {{ "DEPENDENCIES." + option.name | translate }}
-            </ng-template>
-            <ng-template let-option pTemplate="item">
-              {{ "DEPENDENCIES." + option.name | translate }}
-            </ng-template>
-          </p-dropdown>
-          <label>
-            {{ "DEPENDENCIES.LIMIT" | translate }}
-            <strong class="required-asterisk"> * </strong>
-          </label>
-        </span>
-        <ng-container
-          *ngIf="
-            form.controls['limit'].touched &&
-            !form.controls['limit'].valid &&
-            form.controls['limit'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['limit'].hasError('required')"
-          >
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-        </ng-container>
-      </div>
-
       <!-- orgHir -->
       <div class="p-field p-col-4 p-md-6">
         <p-treeSelect
@@ -129,7 +91,7 @@
           </p>
         </ng-container>
       </div>
-
+      <!-- activies -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
           <p-dropdown
@@ -143,10 +105,10 @@
             appendTo="body"
           >
             <ng-template let-option pTemplate="selectedItem">
-              {{ option?.activity | translateObj }}
+              {{ option | translateObj }}
             </ng-template>
             <ng-template let-option pTemplate="item">
-              {{ option?.activity | translateObj }}
+              {{ option | translateObj }}
             </ng-template>
           </p-dropdown>
           <label>
@@ -169,7 +131,7 @@
           </p>
         </ng-container>
       </div>
-
+      <!-- DETAILS -->
       <div class="p-field p-col-12 p-md-12">
         <span class="p-float-label">
           <textarea
@@ -219,6 +181,7 @@
       <div class="text-center">
         <button
           (click)="submit()"
+          [loading]="blocking$ | async"
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"

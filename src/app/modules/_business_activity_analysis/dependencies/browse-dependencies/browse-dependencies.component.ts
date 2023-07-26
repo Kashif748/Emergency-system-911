@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import {
   ActivityDependenciesState,
   ActivityDependenciesStateModel,
+  DEPENDENCIES_TYPES,
 } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
@@ -18,7 +19,9 @@ import { BrowseActivityDependenciesState } from './states/browse-dependencies.st
   templateUrl: './browse-dependencies.component.html',
   styleUrls: ['./browse-dependencies.component.scss'],
 })
-export class BrowseDependenciesComponent implements OnInit {
+export class BrowseDependenciesComponent implements OnInit  ,OnDestroy{
+  DEPENDENCIES_TYPES = DEPENDENCIES_TYPES;
+
   @Select(ActivityDependenciesState.activityDependencyInternal)
   public activityDependencyInternal$: Observable<boolean>;
 
@@ -29,9 +32,6 @@ export class BrowseDependenciesComponent implements OnInit {
   public activityDependencyOrg$: Observable<boolean>;
   // @Select(ActivityDependenciesState.totalRecords)
   // public totalRecords$: Observable<number>;
-
-  @Select(ActivityDependenciesState.loading)
-  public loading$: Observable<boolean>;
 
   @Select(BrowseActivityDependenciesState.state)
   public state$: Observable<ActivityDependenciesStateModel>;
@@ -54,7 +54,7 @@ export class BrowseDependenciesComponent implements OnInit {
         tap(([activity, cycle]) => {
           this.loadInternalPage();
           this.loadExternalPage();
-          this.loadOrgPage()
+          this.loadOrgPage();
         })
       )
       .subscribe();
@@ -91,5 +91,9 @@ export class BrowseDependenciesComponent implements OnInit {
         },
       })
     );
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
