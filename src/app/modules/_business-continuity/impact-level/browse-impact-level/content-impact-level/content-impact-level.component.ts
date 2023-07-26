@@ -31,16 +31,12 @@ export class ContentImpactLevelComponent implements OnInit {
   public columns: string[] = ['levelAr', 'levelEn', 'color', 'active'];
   clonedLevels: { [s: string]: BcImpactLevel } = {};
   public colorOptions = [
-    '#9e0142',
-    '#d53e4f',
-    '#f46d43',
-    '#fdba53',
-    '#f3d639',
-    '#6dc266',
-    '#4c9945',
-    '#359dde',
-    '#0c5dba',
-    '#8b8b8b'];
+    '#FF0017',
+    '#FFBB3A',
+    '#FFFC4C',
+    '#89CF60',
+    '#FFFFFF',
+  ];
 
   public disableButton: boolean
   public version$: Observable<boolean>;
