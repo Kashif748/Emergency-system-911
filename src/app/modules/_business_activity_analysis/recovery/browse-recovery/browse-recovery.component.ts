@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
+import {
+  ActivityPrioritySeqAction,
+  ActivityPrioritySeqState,
+} from '@core/states';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { FormUtils } from '@core/utils';
 import { Select, Store } from '@ngxs/store';
@@ -16,6 +20,9 @@ import { BrowseActivityAnalysisAction } from '../../states/browse-activity-analy
   styleUrls: ['./browse-recovery.component.scss'],
 })
 export class BrowseRecoveryComponent implements OnInit, OnDestroy {
+  @Select(ActivityPrioritySeqState.page)
+  public prioritySeq$: Observable<boolean>;
+
   @Select(ActivityAnalysisState.loading)
   public loading$: Observable<boolean>;
 
@@ -33,6 +40,16 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.buildForm();
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    if (cycle) {
+      this.store.dispatch(
+        new ActivityPrioritySeqAction.LoadPage({
+          page: 0,
+          size: 100,
+          versionId: cycle.versionId,
+        })
+      );
+    }
 
     this.store
       .select(ActivityAnalysisState.activityAnalysis)
@@ -47,10 +64,10 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
   }
   buildForm() {
     this.form = this.formBuilder.group({
-      name: [null, [Validators.required, GenericValidators.english]],
-      capacity: [null, [Validators.required, GenericValidators.arabic]],
-      spof: [null, [Validators.required, GenericValidators.english]],
-      skills: [null, [Validators.required, GenericValidators.arabic]],
+      recoveryPriority: [null, [Validators.required]],
+      capacity: [null, [Validators.required]],
+      spof: [null, [Validators.required]],
+      skills: [null, [Validators.required]],
       remote: [true],
     });
   }
@@ -64,7 +81,12 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const activity = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
+
     const activityAnalysis = {
+      ...activity,
       ...this.form.getRawValue(),
     };
 

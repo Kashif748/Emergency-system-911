@@ -10,8 +10,7 @@
 <div class="row" *ngIf="state$ | async as state">
   <div class="col-4">
     <app-content-dependencies
-      [dependType]="'DEPENDENCY_ORG'"
-      [loading]="loading$ | async"
+      [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_ORG"
       [page]="activityDependencyOrg$ | async"
       [pageRequest]="state?.pageRequest"
       (onPageChange)="loadOrgPage($event)"
@@ -19,8 +18,7 @@
   </div>
   <div class="col-4">
     <app-content-dependencies
-      [dependType]="'DEPENDENCY_INTERNAL'"
-      [loading]="loading$ | async"
+      [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL"
       [page]="activityDependencyInternal$ | async"
       [pageRequest]="state?.pageRequest"
       (onPageChange)="loadInternalPage($event)"
@@ -28,8 +26,7 @@
   </div>
   <div class="col-4">
     <app-content-dependencies
-      [dependType]="'DEPENDENCY_EXTERNAL'"
-      [loading]="loading$ | async"
+      [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL"
       [page]="activityDependencyExternal$ | async"
       [pageRequest]="state?.pageRequest"
       (onPageChange)="loadExternalPage($event)"

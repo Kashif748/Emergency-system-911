@@ -1,10 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import {
+  ActivityAnalysisState,
+  ACTIVITY_STATUSES,
+} from '@core/states/activity-analysis/activity-analysis.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { BcActivities, BcActivityAnalysis, BcCycles } from 'src/app/api/models';
+import { filter, takeUntil, tap } from 'rxjs/operators';
+import { BcActivityAnalysis, BcCycles } from 'src/app/api/models';
+import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 import { BrowseActivityAnalysisAction } from '../states/browse-activity-analysis.action';
 import { BrowseActivityAnalysisState } from '../states/browse-activity-analysis.state';
 import { TABS } from '../tempData.conts';
@@ -15,6 +19,7 @@ import { TABS } from '../tempData.conts';
   styleUrls: ['./business-activity-analysis.component.scss'],
 })
 export class BusinessActivityAnalysisComponent implements OnInit, OnDestroy {
+  ACTIVITY_STATUSES = ACTIVITY_STATUSES;
   @Select(ActivityAnalysisState.activityAnalysis)
   public activityAnalysis$: Observable<BcActivityAnalysis>;
 
@@ -23,6 +28,14 @@ export class BusinessActivityAnalysisComponent implements OnInit, OnDestroy {
 
   @Select(BrowseActivityAnalysisState.tabIndex)
   public tabIndex$: Observable<BcCycles>;
+
+
+  @Select(ActivityAnalysisState.blocking)
+  public blocking$: Observable<boolean>;
+
+
+  @Select(BrowseActivityAnalysisState.impactTotal)
+  public impactTotal$: Observable<number>;
 
   tabs = TABS;
 
@@ -73,6 +86,16 @@ export class BusinessActivityAnalysisComponent implements OnInit, OnDestroy {
           }
         );
       });
+  }
+  changeStatus(id, status: ACTIVITY_STATUSES) {
+    const newStatus: BcActivityAnalysisChangeStatusDto = {
+      activityAnalysisId: id,
+      statusId: status,
+      notes: '',
+    };
+    this.store.dispatch([
+      new BrowseActivityAnalysisAction.ChangeStatus(newStatus),
+    ]);
   }
 
   ngOnDestroy(): void {

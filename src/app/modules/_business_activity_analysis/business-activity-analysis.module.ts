@@ -12,6 +12,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { NgxsModule } from '@ngxs/store';
 import { BrowseActivityAnalysisState } from './states/browse-activity-analysis.state';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import { BlockUIModule } from 'primeng/blockui';
 
 const routes: Routes = [
   {
@@ -75,6 +76,7 @@ const routes: Routes = [
     ProgressBarModule,
     TranslateObjModule,
     AvatarModule,
+    BlockUIModule
   ],
 })
 export class BusinessActivityAnalysisModule {}

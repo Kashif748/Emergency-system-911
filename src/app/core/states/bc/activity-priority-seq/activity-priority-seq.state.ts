@@ -1,14 +1,21 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
-import {Injectable} from "@angular/core";
-import {EMPTY} from "rxjs";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {patch} from "@ngxs/store/operators";
-import {BcRecoveryPrioritiesControllerService} from "../../../../api/services/bc-recovery-priorities-controller.service";
-import {BcRecoveryPriorities} from "../../../../api/models/bc-recovery-priorities";
-import {ActivityPrioritySeqAction} from "@core/states/bc/activity-priority-seq/activity-priority-seq.action";
-import {PageBcRecoveryPriorities} from "../../../../api/models/page-bc-recovery-priorities";
-import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
-
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { patch } from '@ngxs/store/operators';
+import { BcRecoveryPrioritiesControllerService } from '../../../../api/services/bc-recovery-priorities-controller.service';
+import { BcRecoveryPriorities } from '../../../../api/models/bc-recovery-priorities';
+import { ActivityPrioritySeqAction } from '@core/states/bc/activity-priority-seq/activity-priority-seq.action';
+import { PageBcRecoveryPriorities } from '../../../../api/models/page-bc-recovery-priorities';
+import { BrowseBusinessContinuityState } from '../../../../modules/_business-continuity/states/browse-business-continuity.state';
 
 export interface ActivityPrioritySeqStateModel {
   page: PageBcRecoveryPriorities;
@@ -17,21 +24,21 @@ export interface ActivityPrioritySeqStateModel {
   blocking: boolean;
 }
 
-const ACTIVITY_PRIORITY_SEQ_STATE_TOKEN = new StateToken<ActivityPrioritySeqStateModel>('activityPrioritySeq');
+const ACTIVITY_PRIORITY_SEQ_STATE_TOKEN =
+  new StateToken<ActivityPrioritySeqStateModel>('activityPrioritySeq');
 
-@State<ActivityPrioritySeqStateModel>({ name: ACTIVITY_PRIORITY_SEQ_STATE_TOKEN })
+@State<ActivityPrioritySeqStateModel>({
+  name: ACTIVITY_PRIORITY_SEQ_STATE_TOKEN,
+})
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-
 export class ActivityPrioritySeqState {
   /**
    *
    */
   constructor(
     private activityPrioritySeq: BcRecoveryPrioritiesControllerService,
-    private store: Store,
-  ) {
-  }
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([ActivityPrioritySeqState])
@@ -45,9 +52,9 @@ export class ActivityPrioritySeqState {
   }
 
   @Selector([ActivityPrioritySeqState])
-    static totalRecords(state: ActivityPrioritySeqStateModel) {
+  static totalRecords(state: ActivityPrioritySeqStateModel) {
     return state?.page?.totalElements;
-    }
+  }
 
   @Selector([ActivityPrioritySeqState])
   static loading(state: ActivityPrioritySeqStateModel) {
@@ -60,27 +67,26 @@ export class ActivityPrioritySeqState {
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(ActivityPrioritySeqAction.LoadPage, {cancelUncompleted: true})
+  @Action(ActivityPrioritySeqAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    {setState}: StateContext<ActivityPrioritySeqStateModel>,
-    {payload}: ActivityPrioritySeqAction.LoadPage
+    { setState }: StateContext<ActivityPrioritySeqStateModel>,
+    { payload }: ActivityPrioritySeqAction.LoadPage
   ) {
     setState(
       patch<ActivityPrioritySeqStateModel>({
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.activityPrioritySeq
       .getAll17({
         isActive: true,
-        versionId: versionID,
+        versionId: payload.versionId,
         pageable: {
-           page: payload.page,
-           size: payload.size,
-           sort: payload.sort,
-         },
-         // request: payload.filters,
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -94,7 +100,7 @@ export class ActivityPrioritySeqState {
         catchError(() => {
           setState(
             patch<ActivityPrioritySeqStateModel>({
-               page: { content: [], totalElements: 0 },
+              page: { content: [], totalElements: 0 },
             })
           );
           return EMPTY;
@@ -159,7 +165,9 @@ export class ActivityPrioritySeqState {
       );
   }
 
-  @Action(ActivityPrioritySeqAction.GetActivityPrioritySeq, { cancelUncompleted: true })
+  @Action(ActivityPrioritySeqAction.GetActivityPrioritySeq, {
+    cancelUncompleted: true,
+  })
   getActivityPrioritySeq(
     { setState }: StateContext<ActivityPrioritySeqStateModel>,
     { payload }: ActivityPrioritySeqAction.GetActivityPrioritySeq

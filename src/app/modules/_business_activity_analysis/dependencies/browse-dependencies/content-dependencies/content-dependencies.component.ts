@@ -7,6 +7,12 @@ import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { BrowseActivityDependenciesAction } from '../states/browse-dependencies.action';
+import {
+  ActivityDependenciesState,
+  DEPENDENCIES_TYPES,
+} from '@core/states/activity-analysis/dependencies/dependencies.state';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-content-dependencies',
@@ -14,8 +20,8 @@ import { BrowseActivityDependenciesAction } from '../states/browse-dependencies.
   styleUrls: ['./content-dependencies.component.scss'],
 })
 export class ContentDependenciesComponent implements OnInit {
-  @Input()
-  loading: boolean;
+  public loading$: Observable<boolean>;
+
   @Input()
   page: any[];
 
@@ -23,18 +29,28 @@ export class ContentDependenciesComponent implements OnInit {
   pageRequest: PageRequestModel;
 
   @Input()
-  dependType: string;
+  dependType: DEPENDENCIES_TYPES;
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
 
+  DEPENDENCIES_TYPES = DEPENDENCIES_TYPES;
+
   noDpeend = false;
+  private destroy$ = new Subject();
+
   constructor(
     private confirmationService: ConfirmationService,
     private translate: TranslateService,
     private store: Store
   ) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loading$ = this.store.select(ActivityDependenciesState.loading).pipe(
+      takeUntil(this.destroy$),
+      filter((p) => !!p),
+      map((data) => data[this.dependType])
+    );
+  }
 
   confirm(event: Event) {
     this.confirmationService.confirm({
@@ -54,7 +70,14 @@ export class ContentDependenciesComponent implements OnInit {
 
   toggleDialog(id?: number) {
     this.store.dispatch(
-      new BrowseActivityDependenciesAction.ToggleDialog({ id })
+      new BrowseActivityDependenciesAction.ToggleDialog({
+        id,
+        _dependType: this.dependType,
+      })
     );
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
