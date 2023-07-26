@@ -18,6 +18,7 @@ import {BcActivityFrequencies} from "../../../api/models/bc-activity-frequencies
 import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
 import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
 import {BcOrgHierarchy} from "../../../api/models/bc-org-hierarchy";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-browse-organizations',
@@ -114,6 +115,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private translateService: TranslateService,
     private translateObj: TranslateObjPipe,
+    private privilegesService: PrivilegesService
   ) {
     this.activityFre$.pipe(
       filter((orgs) => !!orgs),
@@ -169,7 +171,9 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                // disabled: !u.isActive,
+                 disabled: !this.privilegesService.checkActionPrivileges([
+                   'PRIV_ED_DEL_SITUATION', 'PRIV_ADD_FILE_SITUATION'
+                 ])
               },
             ],
           };
