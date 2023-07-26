@@ -18,7 +18,7 @@ export interface BrowseSituationsStateModel {
 }
 
 export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
-  new StateToken<BrowseSituationsStateModel>('browse-situations');
+  new StateToken<BrowseSituationsStateModel>('browse_situations');
 
 @State<BrowseSituationsStateModel>({
   name: BROWSE_SITUATIONS_UI_STATE_TOKEN,

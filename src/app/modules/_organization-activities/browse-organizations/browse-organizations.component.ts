@@ -48,11 +48,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   public activityArea = [
     {
       id: 0,
-      lable: this.translate.instant('ACTIONS.NO'),
+      lable: this.translate.instant('INTERNAL'),
+      value: 'true'
     },
     {
       id: 1,
-      lable: this.translate.instant('ACTIONS.YES'),
+      lable: this.translate.instant('EXTERNAL'),
+      value: 'false'
     }
     ];
 
