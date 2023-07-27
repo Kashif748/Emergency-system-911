@@ -13,7 +13,17 @@ import { NgxsModule } from '@ngxs/store';
 import { BrowseActivityAnalysisState } from './states/browse-activity-analysis.state';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import { BlockUIModule } from 'primeng/blockui';
-
+import { TranslateModule ,TranslateLoader} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
+export function TranslateHttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(
+    http,
+    'assets/i18n/business-activity-analysis/',
+    '.json'
+  );
+}
 const routes: Routes = [
   {
     path: '',
@@ -71,6 +81,15 @@ const routes: Routes = [
     ButtonModule,
     CardModule,
     TabViewModule,
+    TranslateModule.forChild({
+      extend: true,
+      loader: {
+        provide: TranslateLoader,
+        useFactory: TranslateHttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      isolate: true,
+    }),
     NgxsModule.forFeature([BrowseActivityAnalysisState]),
     DividerModule,
     ProgressBarModule,
@@ -78,5 +97,7 @@ const routes: Routes = [
     AvatarModule,
     BlockUIModule
   ],
+  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+
 })
 export class BusinessActivityAnalysisModule {}

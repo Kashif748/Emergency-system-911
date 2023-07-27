@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ILangFacade } from '@core/facades/lang.facade';
 import {
   ActivityAnalysisState,
   ACTIVITY_STATUSES,
 } from '@core/states/activity-analysis/activity-analysis.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BcActivityAnalysis, BcCycles } from 'src/app/api/models';
 import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 import { BrowseActivityAnalysisAction } from '../states/browse-activity-analysis.action';
@@ -39,11 +40,15 @@ export class BusinessActivityAnalysisComponent implements OnInit, OnDestroy {
 
   tabs = TABS;
 
+  public dir$ = this.lang.vm$.pipe(
+    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
+  );
   private destroy$ = new Subject();
   constructor(
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private store: Store
+    private store: Store,
+    private lang: ILangFacade
   ) {
     activeRoute.url
       .pipe(

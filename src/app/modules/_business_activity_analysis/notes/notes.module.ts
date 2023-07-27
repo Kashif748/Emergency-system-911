@@ -33,6 +33,7 @@ const routes: Routes = [
       },
       isolate: true,
     }),
+
     TranslateObjModule,
     PerfectScrollbarModule,
     CheckboxModule,

@@ -7,7 +7,7 @@
   <p-button
     [disabled]="form?.invalid"
     [loading]="blocking$ | async"
-    label="حفظ"
+    label="{{ 'ACTIONS.SAVE' | translate }}"
     (click)="submit()"
     icon="pi pi-save"
   ></p-button>
@@ -36,7 +36,7 @@
     </p-dropdown>
   </div>
 
-  <div class="p-field p-col-12 p-md-6  mt-4">
+  <div class="p-field p-col-12 p-md-6 mt-4">
     <span class="p-float-label">
       <input type="text" formControlName="capacity" pInputText />
       <label>
