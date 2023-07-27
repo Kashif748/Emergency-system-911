@@ -73,21 +73,21 @@ export class AdcdaAvailabilityReportControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll32
+   * Path part for operation getAll34
    */
-  static readonly GetAll32Path = '/v1/adcda/availability-report';
+  static readonly GetAll34Path = '/v1/adcda/availability-report';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll32()` instead.
+   * To access only the response body, use `getAll34()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll32$Response(params: {
+  getAll34$Response(params: {
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageAdcdaAvailabilityReportProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaAvailabilityReportControllerService.GetAll32Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaAvailabilityReportControllerService.GetAll34Path, 'get');
     if (params) {
       rb.query('pageable', params.pageable, {});
     }
@@ -105,35 +105,35 @@ export class AdcdaAvailabilityReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll32$Response()` instead.
+   * To access the full response (for headers, for example), `getAll34$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll32(params: {
+  getAll34(params: {
     pageable: Pageable;
   }): Observable<RestApiResponsePageAdcdaAvailabilityReportProjection> {
 
-    return this.getAll32$Response(params).pipe(
+    return this.getAll34$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageAdcdaAvailabilityReportProjection>) => r.body as RestApiResponsePageAdcdaAvailabilityReportProjection)
     );
   }
 
   /**
-   * Path part for operation update106
+   * Path part for operation update110
    */
-  static readonly Update106Path = '/v1/adcda/availability-report';
+  static readonly Update110Path = '/v1/adcda/availability-report';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update106()` instead.
+   * To access only the response body, use `update110()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update106$Response(params: {
+  update110$Response(params: {
     body: AdcdaAvailabilityReport
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaAvailabilityReport>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaAvailabilityReportControllerService.Update106Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaAvailabilityReportControllerService.Update110Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -151,15 +151,15 @@ export class AdcdaAvailabilityReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update106$Response()` instead.
+   * To access the full response (for headers, for example), `update110$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update106(params: {
+  update110(params: {
     body: AdcdaAvailabilityReport
   }): Observable<RestApiResponseAdcdaAvailabilityReport> {
 
-    return this.update106$Response(params).pipe(
+    return this.update110$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaAvailabilityReport>) => r.body as RestApiResponseAdcdaAvailabilityReport)
     );
   }

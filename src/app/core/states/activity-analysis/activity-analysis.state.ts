@@ -234,7 +234,7 @@ export class ActivityAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.update103({ body: payload }).pipe(
+    return this.activitiesAnalysisController.update104({ body: payload }).pipe(
       map((response) => response.result),
       tap((activityAnalysis) => {
         setState(

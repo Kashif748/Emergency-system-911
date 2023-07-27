@@ -116,6 +116,7 @@ export { BcActivityLocationsControllerService } from './services/bc-activity-loc
 export { BcActivityImpactMatrixControllerService } from './services/bc-activity-impact-matrix-controller.service';
 export { BcActivityEmployeesControllerService } from './services/bc-activity-employees-controller.service';
 export { BcActivityAnalysisWorkLogControllerService } from './services/bc-activity-analysis-work-log-controller.service';
+export { BcAcitivityAnalysisStatusControllerService } from './services/bc-acitivity-analysis-status-controller.service';
 export { BcActivityAnalysisControllerService } from './services/bc-activity-analysis-controller.service';
 export { BcActivitiesControllerService } from './services/bc-activities-controller.service';
 export { AssetControllerService } from './services/asset-controller.service';
