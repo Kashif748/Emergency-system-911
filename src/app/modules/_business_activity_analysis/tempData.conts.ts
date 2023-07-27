@@ -104,31 +104,31 @@ export const NOTES = [
 
 export const TABS = [
   {
-    label: 'مصفوفة التأثيرات',
+    label: 'IMPACT_MATRIX',
     router: 'impact-matrix',
   },
   {
-    label: 'الاسترجاع',
+    label: 'RECOVERY',
     router: 'recovery',
   },
   {
-    label: 'الأنظمة',
+    label: 'SYSTEMS',
     router: 'systems',
   },
   {
-    label: 'الموظفون',
+    label: 'EMPLOYEES',
     router: 'employees',
   },
   {
-    label: 'الاعتمادية',
+    label: 'DEPENDENCIES',
     router: 'dependencies',
   },
   {
-    label: 'المواقع',
+    label: 'LOCATIONS',
     router: 'locations',
   },
   {
-    label: 'المراحل و الملاحظات',
+    label: 'NOTES',
     router: 'notes',
   },
 ];

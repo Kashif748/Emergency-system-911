@@ -2,19 +2,26 @@
   <section
     *ngIf="activityAnalysis$ | async as activityAnalysis"
     class="d-flex flex-column p-6 position-relative"
+    [dir]="dir$ | async"
   >
-    <p-toolbar dir="ltr">
-      <div class="p-toolbar-group-left" style="gap: 10px">
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        <h2 class="m-0">
+          {{ activityAnalysis?.activity?.activityFrequence | translateObj }} -
+          {{ activityAnalysis?.activity | translateObj }}
+        </h2>
+      </div>
+      <div class="p-toolbar-group-right" style="gap: 10px">
         <p-button icon="pi pi-ellipsis-v"></p-button>
         <p-button
           *ngIf="activityAnalysis?.status?.id != ACTIVITY_STATUSES.DRAFT"
-          label="مسودة"
+          label="{{ 'DRAFT' | translate }}"
           styleClass="p-button-outlined p-button-danger"
           (click)="changeStatus(activityAnalysis?.id, ACTIVITY_STATUSES.DRAFT)"
         ></p-button>
         <p-button
           *ngIf="activityAnalysis?.status?.id != ACTIVITY_STATUSES.UNDER_REVIEW"
-          label="ارسال للمعاينة"
+          label="{{ 'REVIEW' | translate }}"
           styleClass="p-button-outlined"
           (click)="
             changeStatus(activityAnalysis?.id, ACTIVITY_STATUSES.UNDER_REVIEW)
@@ -27,20 +34,13 @@
           (click)="
             changeStatus(activityAnalysis?.id, ACTIVITY_STATUSES.UNDER_APPROVAL)
           "
-          label="ارسال للاعتماد"
+          label="{{ 'APPROVE' | translate }}"
         ></p-button>
-      </div>
-
-      <div class="p-toolbar-group-right">
-        <h2 class="m-0">
-          {{ activityAnalysis?.activity?.activityFrequence | translateObj }} -
-          {{ activityAnalysis?.activity | translateObj }}
-        </h2>
       </div>
     </p-toolbar>
     <div class="d-flex p-5 sub-header p-jc-around">
       <div class="d-flex flex-column">
-        <span class="mb-3">قطاع</span>
+        <span class="mb-3">{{ "ORG_ARTCH" | translate }}</span>
         <span class="font-weight-bold text-primary">
           {{ activityAnalysis?.activity?.orgHierarchy | translateObj }}</span
         >
@@ -54,11 +54,11 @@
         <span class="font-weight-bold text-primary"> الرواتب </span>
       </div> -->
       <div class="d-flex flex-column">
-        <span class="mb-3">انشأ من قبل</span>
+        <span class="mb-3"> {{ "createdBy" | translate }}</span>
         <span class="font-weight-bold text-primary">مصطفى السبول </span>
       </div>
       <div class="d-flex flex-column">
-        <span class="mb-3"> الحالة</span>
+        <span class="mb-3"> {{ "STATUS" | translate }}</span>
         <span class="font-weight-bold text-primary">
           {{ activityAnalysis?.status | translateObj }}
         </span>
@@ -70,18 +70,18 @@
     <div class="row p-4">
       <div class="col-4">
         <p-card
-          header="نتيجة تحليل الأثر"
+          header="{{ 'ANALYSISـRESULT' | translate }}"
           styleClass="shadow-none border h-100"
         >
           <div class="d-flex p-jc-between">
             <div class="d-flex flex-column">
-              <span>مستوى أهمية النشاط</span>
+              <span>{{ "ACTIVITY_CRITICALITY" | translate }}</span>
               <p class="font-weight-bold font-size-h4 mt-4">مرتفع</p>
             </div>
             <p-divider layout="vertical"></p-divider>
 
             <div class="d-flex flex-column">
-              <span>زمن التعافي الأمثل (RTO)</span>
+              <span>{{ "RECOVERY_TIME" | translate }}</span>
               <p class="font-weight-bold font-size-h4 mt-4">1 - 4 ساعات</p>
             </div>
           </div>
@@ -89,7 +89,7 @@
       </div>
       <div class="col-4">
         <p-card
-          header="نسبة انجاز التأثيرات"
+          header="{{ 'IMPACT_COMPLETION' | translate }}"
           styleClass="shadow-none border h-100"
         >
           <div class="d-flex flex-column">
@@ -104,13 +104,13 @@
                   <span
                     class="w-20px h-20px bg-primary d-block mx-3 rounded-sm"
                   ></span>
-                  منجز
+                  {{ "COMPLETED" | translate }}
                 </p>
                 <p class="font-weight-bold d-flex px-4 m-0">
                   <span
                     class="w-20px h-20px bg-secondary d-block mx-3 rounded-sm"
                   ></span>
-                  قيد الاجراء
+                  {{ "IN_PROGRESS" | translate }}
                 </p>
               </div>
             </div>
@@ -119,7 +119,7 @@
       </div>
       <div class="col-4">
         <p-card
-          header="نقطة الفشل الوحيدة للنشاط"
+          header="  {{ 'POINT_FAILURE' | translate }}"
           styleClass="shadow-none border h-100"
         >
           <div class="d-flex">
@@ -143,7 +143,10 @@
         [activeIndex]="tabIndex$ | async"
         (activeIndexChange)="changeTab($event)"
       >
-        <p-tabPanel [header]="item.label" *ngFor="let item of tabs">
+        <p-tabPanel
+          header="{{ item.label + '.TAB_LABEL' | translate }}"
+          *ngFor="let item of tabs"
+        >
         </p-tabPanel>
       </p-tabView>
       <router-outlet></router-outlet>
