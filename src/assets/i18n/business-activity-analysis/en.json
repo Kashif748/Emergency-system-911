@@ -3,7 +3,21 @@
   "MANAGEMENT": "Management",
   "SECTOR": "Sector",
   "ACTIVITY": "Activity",
+  "DRAFT": "Draft",
+  "APPROVE": "Approve",
+  "ORG_ARTCH": "Organization Hierarchy",
+  "createdBy": "Created By",
+  "STATUS": "Status",
+  "REVIEW": "Review",
+  "ANALYSISـRESULT": " Analysis Result",
+  "ACTIVITY_CRITICALITY": "Activity Criticality Level",
+  "RECOVERY_TIME": "Recovery Time Objective (RTO)",
+  "IMPACT_COMPLETION": "Impact Completion",
+  "COMPLETED": "Completed",
+  "IN_PROGRESS": "In Progress",
+  "POINT_FAILURE": "Single Point of Failure",
   "RECOVERY": {
+    "TAB_LABEL": "Recovery",
     "RECOVERY_DETAILS": "Activity Recovery Details",
     "CAPACITY": "Capacity",
     "ACTIVITY_PRIORITY": "Activity Priority",
@@ -12,6 +26,7 @@
     "REMOTELY": "Can be done remotely"
   },
   "SYSTEMS": {
+    "TAB_LABEL": "Systems",
     "NEW": "Choose a new system",
     "TITLE": "Technology systems to perform the activity or process",
     "SYSTEM_NAME": "System name",
@@ -20,6 +35,7 @@
     "MANAGEMENT": "Owner management"
   },
   "EMPLOYEES": {
+    "TAB_LABEL": "Employees",
     "ADD_NEW": "Add a new employee",
     "TITLE": "Vital staff/alternates",
     "NAME_AR": "Employee Name (Arabic)",
@@ -31,22 +47,19 @@
     "PRIMARY": "Primary",
     "OTHER_PHONE": "Alternative phone",
     "COL1": "مقرلا",
-    "COL2": "إسم الموظف",
-    "COL3": "نوع الموظف",
-    "COL4": "هاتف العمل الثابت",
-    "COL5": "الهاتف المتحرك",
-    "COL6": "الهاتف البديل"
+    "NAME": "Name",
+
+    "PHONE": "هاتف العمل الثابت"
   },
   "DEPENDENCIES": {
+    "TAB_LABEL": "Dependencies",
     "ADD_NEW": "Add a new dependency",
     "LIMIT": "Reliability limits",
     "SECTION": "Related Section",
     "ACTIVIE_DEPT": "Activity dependency",
 
-
     "ASSOCIATED_MANG": "Associated management",
     "TITLE": "Activity reliability",
-
 
     "DETAILS": "Accreditation details",
     "DEPENDENCY_INTERNAL": "Inside the Organization",
@@ -56,6 +69,8 @@
     "NO_DPEEND_CONFIREM": "Are you sure that you want to proceed?"
   },
   "LOCATIONS": {
+    "TAB_LABEL": "Locations",
+
     "SITE": "Choose a new site",
     "NAME": "Web site name",
     "LOCATION": "Location",
@@ -70,5 +85,12 @@
     "HEADER": " Impact if the activity is not available",
     "TABLE_CELL": " Impact Types / Time Period",
     "DIALOG_HEADER": "Reputation Impact Levels"
+  },
+  "NOTES": {
+    "TAB_LABEL": "Updates & Notes",
+
+    "HEADER": "Updates and notes for acticity anlysis",
+    "UPDATE_STAGES": "Updates Stages",
+    "NOTES": " Notes"
   }
 }

@@ -16,6 +16,9 @@ import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-
 import {ActivityFrquencyAction, OrgDetailAction} from "@core/states";
 import {BcActivityFrequencies} from "../../../api/models/bc-activity-frequencies";
 import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
+import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
+import {BcOrgHierarchy} from "../../../api/models/bc-org-hierarchy";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-browse-organizations',
@@ -23,6 +26,8 @@ import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
   styleUrls: ['./browse-organizations.component.scss']
 })
 export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
+  public orgHir$: Observable<TreeNode[]>;
+
   public page$: Observable<BcActivities[]>;
 
   @Select(OrgActivityState.loading)
@@ -48,11 +53,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   public activityArea = [
     {
       id: 0,
-      lable: this.translate.instant('ACTIONS.NO'),
+      lable: this.translate.instant('INTERNAL'),
+      value: 'true'
     },
     {
       id: 1,
-      lable: this.translate.instant('ACTIONS.YES'),
+      lable: this.translate.instant('EXTERNAL'),
+      value: 'false'
     }
     ];
 
@@ -105,7 +112,10 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     private messageHelper: MessageHelper,
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translateService: TranslateService,
+    private translateObj: TranslateObjPipe,
+    private privilegesService: PrivilegesService
   ) {
     this.activityFre$.pipe(
       filter((orgs) => !!orgs),
@@ -131,15 +141,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
         page: 0,
         size: 20
       })
-    ]).pipe(
-      tap(() => {
-        this.departmentsTree$.subscribe((data) => {
-         this.nodes = this.buildTree(data);
-        }),
-        takeUntil(this.destroy$);
-        take(1);
-      }),
-    ).subscribe();
+    ])
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -169,50 +171,53 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                // disabled: !u.isActive,
+                 disabled: !this.privilegesService.checkActionPrivileges([
+                   'PRIV_ED_DEL_SITUATION', 'PRIV_ADD_FILE_SITUATION'
+                 ])
               },
             ],
           };
         })
       )
     );
+    this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
+      takeUntil(this.destroy$),
+      filter((p) => !!p),
+      map((data) => this.setTree(data)),
+      tap(console.log)
+    );
   }
 
-  private buildTree(data: any[]): TreeNode[] {
-    // Helper function to build the tree structure
-    const treeNodes: TreeNode[] = [];
-    const parentNodes = [
-      { label: this.translate.instant('DEPT'), data: 2 },
-      { label: this.translate.instant('SECTOR'), data: 1 },
-      { label: this.translate.instant('SECTION'), data: 3 },
-    ];
+  public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
+    let leafObj: TreeNode = {
+      // leaf: true,
+      // expandedIcon: 'pi pi-plus',
+      // collapsedIcon: 'pi pi-plus',
+      // label: this.translateService.instant('ORG_HIE.ADD'),
+      // draggable: false,
+      //  droppable: false,
+    };
+    const nest = (items, id = null, link = 'parentId') =>
+      items
+        .filter((item) => item[link] === id)
+        .map((item: BcOrgHierarchy) => {
+          let node: TreeNode;
+          node = {
+            key: item.id.toString(),
+            data: item,
+            label: this.translateObj.transform(item),
+            // leaf: false,
+            draggable: false,
+            droppable: false,
+            children: [...nest(items, item.id)],
+          };
+          return node;
+        });
+    const treeData = [... nest(_searchResponses), leafObj];
+    const cleanTreeData = treeData.filter(node => !!node.label);
 
-    parentNodes.forEach((parentNode) => {
-      const children = data.filter(
-        (item) => item.bcOrgHirType.id === parentNode.data
-      );
-      const node: TreeNode = {
-        label: parentNode.label,
-        data: parentNode.data,
-        children: this.buildChildNodes(children),
-      };
-      treeNodes.push(node);
-    });
-
-    return treeNodes;
+    return cleanTreeData;
   }
-  private buildChildNodes(data: any[]): TreeNode[] {
-    // Helper function to build child nodes
-    return data.map((item) => ({
-      labelAr: item.nameEn,
-      labelEn: item.nameAr,
-      data: item.id,
-      children: this.buildChildNodes(
-        data.filter((child) => child.parentId === item.id)
-      ),
-    }));
-  }
-
 
   openDialog(id?: number) {
     this.store.dispatch(new BrowseOrganizationAction.ToggleDialog({ organizationId: id }));
@@ -247,11 +252,11 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
             })
             .filter((id) => ![undefined, null].includes(id));
           break;
-        case 'hirIds':
-          filter['hirIds'] = {
-            id: filter['hirIds']?.data,
-            labelEn: filter['hirIds'].labelEn ? filter['hirIds'].labelEn : filter['hirIds'].label,
-            labelAr: filter['hirIds'].labelAr ? filter['hirIds'].labelEn : filter['hirIds'].label,
+        case 'orgHierarchyId':
+          filter['orgHierarchyId'] = {
+            id: filter['orgHierarchyId']?.data,
+            labelEn: filter['orgHierarchyId'].labelEn ? filter['orgHierarchyId'].labelEn : filter['orgHierarchyId'].label,
+            labelAr: filter['orgHierarchyId'].labelAr ? filter['orgHierarchyId'].labelEn : filter['orgHierarchyId'].label,
           }
           break;
         default:

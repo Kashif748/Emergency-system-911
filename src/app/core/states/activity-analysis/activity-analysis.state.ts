@@ -11,9 +11,9 @@ import { finalize, map, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
 import { Injectable } from '@angular/core';
 import {
-  BcActivities,
   BcActivityAnalysis,
   BcCycles,
+  PageBcActivities,
   PageBcActivityAnalysis,
 } from 'src/app/api/models';
 import {
@@ -23,8 +23,18 @@ import {
 } from 'src/app/api/services';
 import { ActivityAnalysisAction } from './activity-analysis.action';
 
+export enum ACTIVITY_STATUSES {
+  DRAFT = 1,
+  UNDER_REVIEW,
+  REVIEWED,
+  UNDER_APPROVAL,
+  APPROVED,
+  ACTIVE,
+  EXPIRED,
+}
 export interface ActivityAnalysisStateModel {
   page: PageBcActivityAnalysis;
+  activities: PageBcActivities;
   activityAnalysis: BcActivityAnalysis;
   cycle: BcCycles;
   loading: boolean;
@@ -54,7 +64,10 @@ export class ActivityAnalysisState {
   static page(state: ActivityAnalysisStateModel) {
     return state?.page.content;
   }
-
+  @Selector([ActivityAnalysisState])
+  static activities(state: ActivityAnalysisStateModel) {
+    return state?.activities.content;
+  }
   @Selector([ActivityAnalysisState])
   static activityAnalysis(state: ActivityAnalysisStateModel) {
     return state?.activityAnalysis;
@@ -100,6 +113,29 @@ export class ActivityAnalysisState {
           setState(
             patch<ActivityAnalysisStateModel>({
               blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(ActivityAnalysisAction.LoadActivities, { cancelUncompleted: true })
+  LoadActivities(
+    { setState }: StateContext<ActivityAnalysisStateModel>,
+    { payload }: ActivityAnalysisAction.LoadActivities
+  ) {
+    return this.activitiesController
+      .search19({
+        pageable: {
+          page: payload?.page,
+          size: payload?.size,
+        },
+      })
+      .pipe(
+        tap((bc) => {
+          setState(
+            patch<ActivityAnalysisStateModel>({
+              activities: bc.result,
             })
           );
         })
@@ -215,5 +251,37 @@ export class ActivityAnalysisState {
         );
       })
     );
+  }
+
+  @Action(ActivityAnalysisAction.ChangeStatus, { cancelUncompleted: true })
+  ChangeStatus(
+    { setState }: StateContext<ActivityAnalysisStateModel>,
+    { payload }: ActivityAnalysisAction.ChangeStatus
+  ) {
+    setState(
+      patch<ActivityAnalysisStateModel>({
+        blocking: true,
+      })
+    );
+    return this.activitiesAnalysisController
+      .changeStatus({ body: payload })
+      .pipe(
+        tap((res) => {
+          console.log(res);
+
+          // setState(
+          //   patch<ActivityAnalysisStateModel>({
+          //     activityAnalysis,
+          //   })
+          // );
+        }),
+        finalize(() => {
+          setState(
+            patch<ActivityAnalysisStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
   }
 }

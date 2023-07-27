@@ -21,6 +21,7 @@ export interface BrowseActivityAnalysisStateModel {
   activityId: number;
   tabIndex: number;
   versionsDialogOpend: boolean;
+  impactTotal: number;
 }
 
 export const BROWSE_ACTIVITY_ANALYSIS_UI_STATE_TOKEN =
@@ -34,6 +35,7 @@ export const BROWSE_ACTIVITY_ANALYSIS_UI_STATE_TOKEN =
     activityId: null,
     cycleId: null,
     versionsDialogOpend: false,
+    impactTotal: 0,
   },
 })
 @Injectable()
@@ -73,6 +75,11 @@ export class BrowseActivityAnalysisState {
   }
 
   @Selector([BrowseActivityAnalysisState])
+  static impactTotal(state: BrowseActivityAnalysisStateModel): number {
+    return state.impactTotal;
+  }
+
+  @Selector([BrowseActivityAnalysisState])
   static versionsDialogOpend(state: BrowseActivityAnalysisStateModel): boolean {
     return state.versionsDialogOpend;
   }
@@ -106,7 +113,9 @@ export class BrowseActivityAnalysisState {
         activityId: payload.id,
       })
     );
-    return dispatch(new ActivityAnalysisAction.GetActivityAnalysis(payload)).pipe(
+    return dispatch(
+      new ActivityAnalysisAction.GetActivityAnalysis(payload)
+    ).pipe(
       tap(() => {}),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -132,6 +141,27 @@ export class BrowseActivityAnalysisState {
     );
   }
 
+  @Action(BrowseActivityAnalysisAction.ChangeStatus)
+  ChangeStatus(
+    { dispatch }: StateContext<BrowseActivityAnalysisStateModel>,
+    { payload }: BrowseActivityAnalysisAction.ChangeStatus
+  ) {
+    return dispatch(new ActivityAnalysisAction.ChangeStatus(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(
+          new BrowseActivityAnalysisAction.GetActivityAnalysis({
+            id: payload.activityAnalysisId,
+          })
+        );
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
   @Action(BrowseActivityAnalysisAction.ChangeTab, { cancelUncompleted: true })
   ChangeTab(
     { setState }: StateContext<BrowseActivityAnalysisStateModel>,
@@ -140,6 +170,20 @@ export class BrowseActivityAnalysisState {
     setState(
       patch<BrowseActivityAnalysisStateModel>({
         tabIndex: payload?.index,
+      })
+    );
+  }
+
+  @Action(BrowseActivityAnalysisAction.setImpactTotal, {
+    cancelUncompleted: true,
+  })
+  setImpactTotal(
+    { setState }: StateContext<BrowseActivityAnalysisStateModel>,
+    { payload }: BrowseActivityAnalysisAction.setImpactTotal
+  ) {
+    setState(
+      patch<BrowseActivityAnalysisStateModel>({
+        impactTotal: payload?.impactTotal,
       })
     );
   }

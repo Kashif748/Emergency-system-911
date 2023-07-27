@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { ImpactLevelState, ImpactMatrixState, RtoState } from '@core/states';
+import { ImpactMatrixState, RtoState } from '@core/states';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
 import { Select, Store } from '@ngxs/store';
@@ -9,15 +9,11 @@ import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
   BcImpactLevel,
-  BcImpactMatrixDto,
-  BcImpactTypes,
   BcImpactTypesDetails,
-  BcImpactTypesResponse,
   Bcrto,
   BCRtoDetails,
 } from 'src/app/api/models';
-import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
-import { SYSTEMS } from '../../tempData.conts';
+import { BrowseActivityAnalysisAction } from '../../states/browse-activity-analysis.action';
 import { BrowseActivityImpactMatrixAction } from '../states/browse-impact-matrix.action';
 import {
   BrowseActivityImpactMatrixState,
@@ -29,7 +25,7 @@ import {
   templateUrl: './browse-impact-matrix.component.html',
   styleUrls: ['./browse-impact-matrix.component.scss'],
 })
-export class BrowseImpactMatrixComponent implements OnInit {
+export class BrowseImpactMatrixComponent implements OnInit , OnDestroy {
   @Select(ImpactMatrixState.loading)
   public loading$: Observable<boolean>;
 
@@ -51,16 +47,16 @@ export class BrowseImpactMatrixComponent implements OnInit {
 
   ngOnInit(): void {
     combineLatest([
-      this.store.select(BrowseActivityAnalysisState.cycleId),
-      this.store.select(BrowseActivityAnalysisState.activityId),
+      this.store.select(ActivityAnalysisState.activityAnalysis),
+      this.store.select(ActivityAnalysisState.cycle),
     ])
       .pipe(
         takeUntil(this.destroy$),
-        tap(([activityId, cycleId]) => {
+        tap(([activity, cycle]) => {
           this.loadPage();
-          this.loadImpactMatrixPage();
-          this.loadImpactTypePage();
-          this.loadRTOPage();
+          this.loadImpactMatrixPage(cycle.versionId);
+          this.loadImpactTypePage(cycle.versionId);
+          this.loadRTOPage(cycle.versionId);
         })
       )
       .subscribe();
@@ -77,6 +73,7 @@ export class BrowseImpactMatrixComponent implements OnInit {
       ),
       map(([activityImpact, impactMatrix, rtos]) => {
         const table = [];
+        let impactTotal = 0;
         impactMatrix.forEach((impact) => {
           const selectdImpact = activityImpact.find(
             (item) => item.id === impact.bcImpactTypes.id
@@ -93,6 +90,7 @@ export class BrowseImpactMatrixComponent implements OnInit {
               );
               if (selectdRto) {
                 bcImpactLevelId = selectdRto.bcImpactLevels.id;
+                impactTotal++;
               }
             }
             row.bcRto.push({
@@ -100,8 +98,15 @@ export class BrowseImpactMatrixComponent implements OnInit {
               bcRtoId: rto?.id,
             });
           });
+
           table.push(row);
         });
+
+        impactTotal =
+          ((rtos?.length * impactMatrix?.length) / impactTotal) * 100;
+        this.store.dispatch(
+          new BrowseActivityAnalysisAction.setImpactTotal({ impactTotal })
+        );
         return table;
       })
     );
@@ -124,43 +129,38 @@ export class BrowseImpactMatrixComponent implements OnInit {
       })
     );
   }
-  public loadImpactMatrixPage(event?: LazyLoadEvent) {
-    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+  public loadImpactMatrixPage(versionId, event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseActivityImpactMatrixAction.LoadImpactMatrix({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        versionId: cycle.versionId,
+        versionId: versionId,
       })
     );
   }
 
-  public loadImpactTypePage(event?: LazyLoadEvent) {
-    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
-
+  public loadImpactTypePage(versionId, event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseActivityImpactMatrixAction.LoadImpactLevel({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        versionId: cycle.versionId,
+        versionId: versionId,
       })
     );
   }
 
-  public loadRTOPage(event?: LazyLoadEvent) {
-    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
-
+  public loadRTOPage(versionId, event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseActivityImpactMatrixAction.LoadRto({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        versionId: cycle.versionId,
+        versionId: versionId,
       })
     );
   }
