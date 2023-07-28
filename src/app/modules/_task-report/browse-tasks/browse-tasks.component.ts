@@ -43,10 +43,10 @@ export class BrowseTasksComponent implements OnInit {
     map(({ ActiveLang: { key } }) => {
       return [
         {
-          name: 'TASK_TITLE',
+          name: 'TASK_NAME',
           code: 'title',
         },
-        { name: 'SHARED.INCIDENT_ID', code: 'incident.id' },
+        { name: 'SHARED.INCIDENT_SERIAL', code: 'incident.id' },
         { name: 'SHARED.PRIORITY', code: 'priority' },
         { name: 'SHARED.CREATION_DATE', code: 'createdOn' },
         { name: 'SHARED.CLOSE_DATE', code: 'closedDate' },
@@ -65,11 +65,11 @@ export class BrowseTasksComponent implements OnInit {
 
   public columns = [
     {
-      name: 'TASK_TITLE',
+      name: 'TASK_NAME',
       code: 'title',
       disabled: true,
     },
-    { name: 'SHARED.INCIDENT_ID', code: 'incidentId' },
+    { name: 'SHARED.INCIDENT_SERIAL', code: 'incidentId' },
     { name: 'SHARED.PRIORITY', code: 'priority' },
     { name: 'SHARED.CREATION_DATE', code: 'createdOn' },
     { name: 'SHARED.CLOSE_DATE', code: 'closedOn' },

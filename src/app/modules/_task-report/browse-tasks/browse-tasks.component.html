@@ -7,7 +7,7 @@
         <div class="row mt-5">
           <div class="col-12 position-relative">
             <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
-              legend="{{'ACTIONS.ADVANCED_SEARCH' | translate}}" [collapsed]="!(hasFilters$ | async)">
+              legend="{{'ACTIONS.ADVANCED_SEARCH' | translate}}" [collapsed]="false">
               <div class="p-fluid p-grid">
                 <div class="p-field p-col-6 p-md-3">
                   <input type="text" pInputText [ngModel]="state.pageRequest.filters['title']"
