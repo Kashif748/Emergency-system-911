@@ -451,6 +451,8 @@ export { BcActivityAnalysisWorkLog } from './models/bc-activity-analysis-work-lo
 export { BcAnalysisStatus } from './models/bc-analysis-status';
 export { ApiErrorBcActivityAnalysisWorkLog } from './models/api-error-bc-activity-analysis-work-log';
 export { RestApiResponseBcActivityAnalysisWorkLog } from './models/rest-api-response-bc-activity-analysis-work-log';
+export { ApiErrorBcAnalysisStatus } from './models/api-error-bc-analysis-status';
+export { RestApiResponseBcAnalysisStatus } from './models/rest-api-response-bc-analysis-status';
 export { BcActivityAnalysisChangeStatusDto } from './models/bc-activity-analysis-change-status-dto';
 export { ApiErrorBcActivityAnalysis } from './models/api-error-bc-activity-analysis';
 export { RestApiResponseBcActivityAnalysis } from './models/rest-api-response-bc-activity-analysis';
@@ -1272,6 +1274,8 @@ export { RestApiResponseListBcActivityAnalysisWorkflow } from './models/rest-api
 export { ApiErrorPageBcActivityAnalysisWorkLog } from './models/api-error-page-bc-activity-analysis-work-log';
 export { PageBcActivityAnalysisWorkLog } from './models/page-bc-activity-analysis-work-log';
 export { RestApiResponsePageBcActivityAnalysisWorkLog } from './models/rest-api-response-page-bc-activity-analysis-work-log';
+export { ApiErrorListBcAnalysisStatus } from './models/api-error-list-bc-analysis-status';
+export { RestApiResponseListBcAnalysisStatus } from './models/rest-api-response-list-bc-analysis-status';
 export { ApiErrorPageBcActivityAnalysis } from './models/api-error-page-bc-activity-analysis';
 export { PageBcActivityAnalysis } from './models/page-bc-activity-analysis';
 export { RestApiResponsePageBcActivityAnalysis } from './models/rest-api-response-page-bc-activity-analysis';

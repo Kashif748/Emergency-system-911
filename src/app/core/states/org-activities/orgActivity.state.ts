@@ -127,7 +127,7 @@ export class OrgActivityState {
         blocking: true,
       })
     );
-    return this.bcActivities.getOne26({ id: payload.id }).pipe(
+    return this.bcActivities.getOne27({ id: payload.id }).pipe(
       tap((res) => {
         setState(
           patch<OrgActivitiesStateModel>({
@@ -156,7 +156,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .insertOne24({
+      .insertOne25({
         body: payload,
       })
       .pipe(
@@ -181,7 +181,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .update104({
+      .update105({
         body: payload,
       })
       .pipe(

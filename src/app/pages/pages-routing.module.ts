@@ -4,11 +4,6 @@ import { UnderBuildComponent } from '../under-build/under-build.component';
 import { PrivilegeGuard } from '@shared/guards/privilege.guard';
 import { IncidentsService } from '../_metronic/core/services/incidents.service';
 import { LayoutComponent } from './_layout/layout.component';
-import { DashboardService } from './dashboard/dashboard.service';
-import { GroupsManagementModule } from '../modules/_team-mgmt/team-mgmt.module';
-import { BusinessImpactAnalysisModule } from '../modules/_business-impact-analysis/business-impact-analysis.module';
-import { BusinessContinuityModule } from '../modules/_business-continuity/business-continuity.module';
-import {OrganizationActivitiesModule} from "../modules/_organization-activities/organization-activities.module";
 
 const routes: Routes = [
   {
@@ -438,7 +433,7 @@ const routes: Routes = [
         path: 'business-impact-analysis',
         loadChildren: () =>
           import(
-            '../modules/_business-impact-analysis/business-impact-analysis.module'
+            '../modules/_business-impact-analysis/impact-analysis.module'
           ).then((m) => m.BusinessImpactAnalysisModule),
       },
       {

@@ -27,21 +27,21 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById23
+   * Path part for operation deleteById24
    */
-  static readonly DeleteById23Path = '/v1/bc/activity-analysis/delete/{id}';
+  static readonly DeleteById24Path = '/v1/bc/activity-analysis/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById23()` instead.
+   * To access only the response body, use `deleteById24()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById23$Response(params: {
+  deleteById24$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.DeleteById23Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.DeleteById24Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -59,15 +59,15 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById23$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById24$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById23(params: {
+  deleteById24(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById23$Response(params).pipe(
+    return this.deleteById24$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
@@ -175,21 +175,21 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update103
+   * Path part for operation update104
    */
-  static readonly Update103Path = '/v1/bc/activity-analysis';
+  static readonly Update104Path = '/v1/bc/activity-analysis';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update103()` instead.
+   * To access only the response body, use `update104()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update103$Response(params: {
+  update104$Response(params: {
     body: BcActivityAnalysis
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityAnalysis>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Update103Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Update104Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -207,15 +207,15 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update103$Response()` instead.
+   * To access the full response (for headers, for example), `update104$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update103(params: {
+  update104(params: {
     body: BcActivityAnalysis
   }): Observable<RestApiResponseBcActivityAnalysis> {
 
-    return this.update103$Response(params).pipe(
+    return this.update104$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysis>) => r.body as RestApiResponseBcActivityAnalysis)
     );
   }
