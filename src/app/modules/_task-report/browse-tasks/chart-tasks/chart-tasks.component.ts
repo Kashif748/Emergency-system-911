@@ -2,8 +2,9 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { TaskState } from '@core/states';
 import { Select, Store } from '@ngxs/store';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { Observable } from 'rxjs';
-import { debounceTime, filter, map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { IncidentCategory, Priority, TaskStatus } from 'src/app/api/models';
 
 @Component({
@@ -34,24 +35,26 @@ export class ChartTasksComponent implements OnInit {
   status$: Observable<ApexAxisChartSeries>;
   category$: Observable<ApexAxisChartSeries>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private translateObj: TranslateObjPipe) {
     this.priority$ = store.select(TaskState.statisticsByPriority).pipe(
       filter((d) => !!d),
       map((data: { count: number; priority: Priority }[]) => {
         const vd = data.filter((r) => !!r.priority);
         return {
           series: vd.map((r) => r.count),
-          labels: vd.map((r) => r.priority?.nameAr),
+          labels: vd.map((r) => this.translateObj.transform(r.priority)),
         };
       })
     );
 
     this.zone$ = store.select(TaskState.statisticsZone).pipe(
       filter((d) => !!d),
-      map((data: { count: number; key: string }[]) => {
+      map((data: { count: number; key: any }[]) => {
         return {
           series: data.map((r) => r.count),
-          labels: data.map((r) => `zone ${r.key}`),
+          labels: data.map(
+            (r) => this.translateObj.transform(r.key) ?? `zone ${r.key}`
+          ),
         };
       })
     );
@@ -60,8 +63,8 @@ export class ChartTasksComponent implements OnInit {
       filter((d) => !!d),
       map((data: { count: number; status: TaskStatus }[]) => {
         return data.map((r) => ({
-          name: r.status?.nameAr ?? '',
-          data: [r.count ?? 0],
+          name: this.translateObj.transform(r.status),
+          data: [r.count | 0],
         }));
       })
     );
@@ -70,8 +73,8 @@ export class ChartTasksComponent implements OnInit {
       filter((d) => !!d),
       map((data: { count: number; category: IncidentCategory }[]) => {
         return data.map((r) => ({
-          name: r.category?.nameAr ?? '',
-          data: [r.count ?? 0],
+          name: this.translateObj.transform(r.category),
+          data: [r.count | 0],
         }));
       })
     );
