@@ -325,12 +325,26 @@ export class BcActivityAnalysisControllerService extends BaseService {
    */
   search18$Response(params: {
     orgHierarchyId?: number;
+    activityId?: number;
+    cycleId?: number;
+    activityName?: string;
+    activityFrequenceId?: number;
+    recoveryPriorityId?: number;
+    rtoId?: number;
+    activityAnalysisStatusId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityAnalysis>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Search18Path, 'get');
     if (params) {
       rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('activityId', params.activityId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('activityName', params.activityName, {});
+      rb.query('activityFrequenceId', params.activityFrequenceId, {});
+      rb.query('recoveryPriorityId', params.recoveryPriorityId, {});
+      rb.query('rtoId', params.rtoId, {});
+      rb.query('activityAnalysisStatusId', params.activityAnalysisStatusId, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -353,6 +367,13 @@ export class BcActivityAnalysisControllerService extends BaseService {
    */
   search18(params: {
     orgHierarchyId?: number;
+    activityId?: number;
+    cycleId?: number;
+    activityName?: string;
+    activityFrequenceId?: number;
+    recoveryPriorityId?: number;
+    rtoId?: number;
+    activityAnalysisStatusId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityAnalysis> {
 
