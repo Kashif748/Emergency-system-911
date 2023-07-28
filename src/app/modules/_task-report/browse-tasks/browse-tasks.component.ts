@@ -23,6 +23,8 @@ export class BrowseTasksComponent implements OnInit {
   public page$: Observable<IncidentTaskProjection[]>;
   @Select(TaskState.loading)
   public loading$: Observable<boolean>;
+  @Select(TaskState.exporting)
+  public exporting$: Observable<boolean>;
   @Select(TaskState.totalRecords)
   public totalRecords$: Observable<number>;
   @Select(BrowseTasksState.state)
