@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {BrowseBusinessImpactAnalysisComponent} from "./browse-business-impact-analysis/browse-business-impact-analysis.component";
+import {BrowseImpactAnalysisComponent} from "./browse-impact-analysis/browse-impact-analysis.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: BrowseBusinessImpactAnalysisComponent,
+    component: BrowseImpactAnalysisComponent,
   },
 ];
 
