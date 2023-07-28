@@ -1477,8 +1477,8 @@
       "NEW_SUGG": "مقترح جديد"
     },
     "SHARED": {
+      "HOUR": "ساعة",
       "INCIDENT_SERIAL": "تسلسل البلاغ",
-
       "REPORTED_BY_INFO": "بيانات صاحب البلاغ",
       "CLOSE_DATE": "تاريخ الاغلاق",
       "PROVISIONAL_QUANTITY": "الكمية المزودة",
