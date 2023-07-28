@@ -352,12 +352,15 @@ export class TaskState {
           )
         )
       ),
-      // switchMap((res) =>
-      //   this.taskService.getTaskMetricsZone(request).pipe(
-      //     map(() => res),
-      //     catchError(() => of(res))
-      //   )
-      // ),
+      switchMap((res) =>
+        this.taskService.getTaskMetricsZone(request).pipe(
+          map(({ result: zoneStats }) => {
+            res.result.totalTaskPerEachZone = zoneStats;
+            return res;
+          }),
+          catchError(() => of(res))
+        )
+      ),
       tap(({ result: stats }) => {
         setState(
           patch<TaskStateModel>({
