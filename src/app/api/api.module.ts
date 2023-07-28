@@ -122,6 +122,7 @@ import { BcActivityLocationsControllerService } from './services/bc-activity-loc
 import { BcActivityImpactMatrixControllerService } from './services/bc-activity-impact-matrix-controller.service';
 import { BcActivityEmployeesControllerService } from './services/bc-activity-employees-controller.service';
 import { BcActivityAnalysisWorkLogControllerService } from './services/bc-activity-analysis-work-log-controller.service';
+import { BcAcitivityAnalysisStatusControllerService } from './services/bc-acitivity-analysis-status-controller.service';
 import { BcActivityAnalysisControllerService } from './services/bc-activity-analysis-controller.service';
 import { BcActivitiesControllerService } from './services/bc-activities-controller.service';
 import { AssetControllerService } from './services/asset-controller.service';
@@ -291,6 +292,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     BcActivityImpactMatrixControllerService,
     BcActivityEmployeesControllerService,
     BcActivityAnalysisWorkLogControllerService,
+    BcAcitivityAnalysisStatusControllerService,
     BcActivityAnalysisControllerService,
     BcActivitiesControllerService,
     AssetControllerService,
