@@ -23,8 +23,6 @@ export class ContentTasksComponent implements OnInit {
   totalRecords: number;
   @Input()
   pageRequest: PageRequestModel;
-  @Input()
-  type: 'BY_MY_ORG' | 'TO_MY_ORG';
 
   assigneeMap = {
     org: { text: 'ORGANIZATION', bg: 'success' },
@@ -35,10 +33,5 @@ export class ContentTasksComponent implements OnInit {
   onPageChange = new EventEmitter<LazyLoadEvent>();
   constructor(private store: Store) {}
 
-  ngOnInit() {
-    this.onPageChange.emit({
-      first: this.pageRequest.first,
-      rows: this.pageRequest.rows,
-    });
-  }
+  ngOnInit() {}
 }

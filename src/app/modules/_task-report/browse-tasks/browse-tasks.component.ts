@@ -23,6 +23,8 @@ export class BrowseTasksComponent implements OnInit {
   public page$: Observable<IncidentTaskProjection[]>;
   @Select(TaskState.loading)
   public loading$: Observable<boolean>;
+  @Select(TaskState.exporting)
+  public exporting$: Observable<boolean>;
   @Select(TaskState.totalRecords)
   public totalRecords$: Observable<number>;
   @Select(BrowseTasksState.state)
@@ -43,12 +45,13 @@ export class BrowseTasksComponent implements OnInit {
     map(({ ActiveLang: { key } }) => {
       return [
         {
-          name: 'SHARED.TITLE',
+          name: 'TASK_NAME',
           code: 'title',
         },
-        { name: 'SHARED.INCIDENT_ID', code: 'incident.id' },
+        { name: 'SHARED.INCIDENT_SERIAL', code: 'incident.id' },
         { name: 'SHARED.PRIORITY', code: 'priority' },
-        { name: 'SHARED.DUE_DATE', code: 'dueDate' },
+        { name: 'SHARED.CREATION_DATE', code: 'createdOn' },
+        { name: 'SHARED.CLOSE_DATE', code: 'closedDate' },
         { name: 'SHARED.STATUS', code: 'status.id' },
         {
           name: 'SHARED.CREATED_BY',
@@ -64,18 +67,14 @@ export class BrowseTasksComponent implements OnInit {
 
   public columns = [
     {
-      name: 'SHARED.TITLE',
+      name: 'TASK_NAME',
       code: 'title',
       disabled: true,
     },
-    {
-      name: 'SHARED.DESC',
-      code: 'desc',
-      disabled: true,
-    },
-    { name: 'SHARED.INCIDENT_ID', code: 'incidentId' },
+    { name: 'SHARED.INCIDENT_SERIAL', code: 'incidentId' },
     { name: 'SHARED.PRIORITY', code: 'priority' },
-    { name: 'SHARED.DUE_DATE', code: 'dueDate' },
+    { name: 'SHARED.CREATION_DATE', code: 'createdOn' },
+    { name: 'SHARED.CLOSE_DATE', code: 'closedOn' },
     { name: 'SHARED.STATUS', code: 'status' },
     { name: 'SHARED.CREATED_BY', code: 'createdBy' },
     { name: 'SHARED.ASSIGNEE', code: 'assignee' },

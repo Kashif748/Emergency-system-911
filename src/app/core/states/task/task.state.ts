@@ -20,7 +20,9 @@ import {
   Pageable,
   PageIncidentTaskProjection,
   PriorityProjection,
+  TaskCriteria,
   TaskDetails,
+  TaskFilter,
   TaskStatus,
   TaskType,
 } from 'src/app/api/models';
@@ -35,7 +37,6 @@ import { CommonDataState } from '../common-data/common-data.state';
 import { TaskAction } from './task.action';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { UrlHelperService } from '@core/services/url-helper.service';
-import { PageRequestModel } from '@core/models/page-request.model';
 
 export interface TaskModel extends TaskDetails {
   attachments: any[];
@@ -45,9 +46,11 @@ export interface StatisticsModel {
   status?: any;
   priority?: any;
   category?: any;
-  avgColseTime?: number;
-  rateCloseAtDate?: number;
+  zone?: any;
+  averageCloseTime?: number;
+  rateCloseWithinTime?: number;
   total?: number;
+  loading?: boolean;
 }
 export interface TaskStateModel {
   statuses?: TaskStatus[];
@@ -60,6 +63,7 @@ export interface TaskStateModel {
   types?: TaskType[];
   groups?: GroupProjection[];
   statistics: StatisticsModel;
+  exporting?: boolean;
 }
 
 const TASK_STATE_TOKEN = new StateToken<TaskStateModel>('task');
@@ -114,6 +118,11 @@ export class TaskState {
   }
 
   @Selector([TaskState])
+  static exporting(state: TaskStateModel) {
+    return state?.exporting;
+  }
+
+  @Selector([TaskState])
   static blocking(state: TaskStateModel) {
     return state?.blocking;
   }
@@ -154,8 +163,33 @@ export class TaskState {
   }
 
   @Selector([TaskState.statistics])
+  static statisticsByCategory(state: StatisticsModel) {
+    return state?.category;
+  }
+
+  @Selector([TaskState.statistics])
   static statisticsTotal(state: StatisticsModel) {
     return state?.total;
+  }
+
+  @Selector([TaskState.statistics])
+  static statisticsAvergageCloseTime(state: StatisticsModel) {
+    return state?.averageCloseTime;
+  }
+
+  @Selector([TaskState.statistics])
+  static statisticsRateCloseWithinTime(state: StatisticsModel) {
+    return state?.rateCloseWithinTime;
+  }
+
+  @Selector([TaskState.statistics])
+  static statisticsZone(state: StatisticsModel) {
+    return state?.zone;
+  }
+
+  @Selector([TaskState.statistics])
+  static statisticsLoading(state: StatisticsModel) {
+    return state?.loading;
   }
 
   /* ********************** ACTIONS ************************* */
@@ -257,7 +291,9 @@ export class TaskState {
   ) {
     setState(
       patch<TaskStateModel>({
-        loading: true,
+        statistics: {
+          loading: true,
+        },
       })
     );
     const request = {
@@ -265,9 +301,9 @@ export class TaskState {
     };
     return this.taskService.getTaskMetrics(request).pipe(
       switchMap((res) =>
-        this.priorityService.findActivePage2({ pageable: { size: 1000 } }).pipe(
+        this.store.select(CommonDataState.priorities).pipe(
           map(
-            ({ result: { content: priorities } }) => {
+            (priorities) => {
               const mp = priorities.reduce((pv, cv) => {
                 pv[`${cv.id}`] = cv;
                 return pv;
@@ -282,9 +318,9 @@ export class TaskState {
         )
       ),
       switchMap((res) =>
-        this.statusService.findActiveList().pipe(
+        this.store.select(CommonDataState.taskStatuses).pipe(
           map(
-            ({ result: statuses }) => {
+            (statuses) => {
               const mp = statuses.reduce((pv, cv) => {
                 pv[`${cv.id}`] = cv;
                 return pv;
@@ -298,15 +334,43 @@ export class TaskState {
           )
         )
       ),
-      tap((res) => {
+
+      switchMap((res) =>
+        this.store.select(CommonDataState.incidentCategories).pipe(
+          map(
+            (categories) => {
+              const mp = categories.reduce((pv, cv) => {
+                pv[`${cv.id}`] = cv;
+                return pv;
+              }, {});
+              res.result['numberOfTasksPerEachCategory'].forEach((t) => {
+                t['category'] = mp[t['key'] as any];
+              });
+              return res;
+            },
+            catchError(() => of(res))
+          )
+        )
+      ),
+      // switchMap((res) =>
+      //   this.taskService.getTaskMetricsZone(request).pipe(
+      //     map(() => res),
+      //     catchError(() => of(res))
+      //   )
+      // ),
+      tap(({ result: stats }) => {
         setState(
           patch<TaskStateModel>({
-            statistics: {
-              priority: res.result.priority,
-              status: res.result.taskStatus,
-              total: res.result.totalTask,
-            },
-            loading: false,
+            statistics: patch<StatisticsModel>({
+              priority: stats.priority,
+              status: stats.taskStatus,
+              total: stats.totalTask,
+              averageCloseTime: stats.averageNumberOfTasksPerHour | 0,
+              rateCloseWithinTime: stats.closeRateWithinTheSpecificTime | 0,
+              category: stats.numberOfTasksPerEachCategory,
+              zone: stats.totalTaskPerEachZone,
+              loading: false,
+            }),
           })
         );
       }),
@@ -321,7 +385,9 @@ export class TaskState {
       finalize(() => {
         setState(
           patch<TaskStateModel>({
-            loading: false,
+            statistics: patch<StatisticsModel>({
+              loading: false,
+            }),
           })
         );
       })
@@ -682,7 +748,15 @@ export class TaskState {
   }
 
   @Action(TaskAction.Export, { cancelUncompleted: true })
-  export({}: StateContext<TaskStateModel>, { payload }: TaskAction.Export) {
+  export(
+    { setState }: StateContext<TaskStateModel>,
+    { payload }: TaskAction.Export
+  ) {
+    setState(
+      patch<TaskStateModel>({
+        exporting: true,
+      })
+    );
     return this.taskService
       .export2({
         as: payload.type,
@@ -702,17 +776,43 @@ export class TaskState {
             newBlob,
             `TaskS - ${new Date().toISOString().split('.')[0]}`
           );
+        }),
+        finalize(() => {
+          setState(
+            patch<TaskStateModel>({
+              exporting: false,
+            })
+          );
         })
       );
   }
 
   private filters(filters: { [key: string]: string }) {
+    const fromDate =
+      filters?.dueDate &&
+      Array.isArray(filters?.dueDate) &&
+      filters?.dueDate?.length &&
+      filters?.dueDate[0]
+        ? DateTimeUtil.format(filters?.dueDate[0], DateTimeUtil.DATE_FORMAT)
+        : undefined;
+    const toDate =
+      filters?.dueDate &&
+      Array.isArray(filters?.dueDate) &&
+      filters?.dueDate?.length &&
+      filters?.dueDate[1]
+        ? DateTimeUtil.format(filters?.dueDate[1], DateTimeUtil.DATE_FORMAT)
+        : undefined;
     return {
       ...filters,
-      dueDate: filters?.dueDate
-        ? DateTimeUtil.format(filters?.dueDate, DateTimeUtil.DATE_FORMAT)
-        : undefined,
+      dueDate:
+        filters?.dueDate && !Array.isArray(filters?.dueDate)
+          ? DateTimeUtil.format(filters?.dueDate, DateTimeUtil.DATE_FORMAT)
+          : undefined,
+      fromDate,
+      toDate,
+      startDate: fromDate,
+      endDate: toDate,
       type: undefined,
-    };
+    } as TaskCriteria | TaskFilter;
   }
 }
