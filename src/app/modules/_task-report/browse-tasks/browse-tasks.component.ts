@@ -115,14 +115,17 @@ export class BrowseTasksComponent implements OnInit {
   }
 
   search() {
-    this.store.dispatch(new BrowseTasksAction.LoadStatistics());
-    this.store.dispatch(new BrowseTasksAction.LoadTasks());
+    this.store.dispatch([
+      new BrowseTasksAction.LoadTasks(),
+      new BrowseTasksAction.LoadStatistics(),
+    ]);
   }
 
   clear() {
     this.store.dispatch([
       new BrowseTasksAction.UpdateFilter({ clear: true }),
       new BrowseTasksAction.LoadTasks(),
+      new BrowseTasksAction.LoadStatistics(),
     ]);
   }
 
@@ -187,14 +190,14 @@ export class BrowseTasksComponent implements OnInit {
   }
 
   public loadPage(event: LazyLoadEvent) {
-    this.store.dispatch(new BrowseTasksAction.LoadStatistics());
-    this.store.dispatch(
+    this.store.dispatch([
       new BrowseTasksAction.LoadTasks({
         pageRequest: {
           first: event.first,
           rows: event.rows,
         },
-      })
-    );
+      }),
+      new BrowseTasksAction.LoadStatistics(),
+    ]);
   }
 }
