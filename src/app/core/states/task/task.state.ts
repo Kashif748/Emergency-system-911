@@ -63,6 +63,7 @@ export interface TaskStateModel {
   types?: TaskType[];
   groups?: GroupProjection[];
   statistics: StatisticsModel;
+  exporting?: boolean;
 }
 
 const TASK_STATE_TOKEN = new StateToken<TaskStateModel>('task');
@@ -114,6 +115,11 @@ export class TaskState {
   @Selector([TaskState])
   static loading(state: TaskStateModel) {
     return state?.loading;
+  }
+
+  @Selector([TaskState])
+  static exporting(state: TaskStateModel) {
+    return state?.exporting;
   }
 
   @Selector([TaskState])
@@ -742,7 +748,15 @@ export class TaskState {
   }
 
   @Action(TaskAction.Export, { cancelUncompleted: true })
-  export({}: StateContext<TaskStateModel>, { payload }: TaskAction.Export) {
+  export(
+    { setState }: StateContext<TaskStateModel>,
+    { payload }: TaskAction.Export
+  ) {
+    setState(
+      patch<TaskStateModel>({
+        exporting: true,
+      })
+    );
     return this.taskService
       .export2({
         as: payload.type,
@@ -761,6 +775,13 @@ export class TaskState {
           this.urlHelper.downloadBlob(
             newBlob,
             `TaskS - ${new Date().toISOString().split('.')[0]}`
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<TaskStateModel>({
+              exporting: false,
+            })
           );
         })
       );
