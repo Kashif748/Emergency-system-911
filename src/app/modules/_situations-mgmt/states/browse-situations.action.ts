@@ -94,7 +94,7 @@ export namespace BrowseSituationsAction {
      *
      */
     constructor(
-      public payload: { dialogName?: string; situationId?: number }
+      public payload: { dialogName?: string; situationId?: number; type?: string }
     ) {}
   }
 

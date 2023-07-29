@@ -930,6 +930,8 @@
       "TASK_TYPE_DETAILS": "نوع المهمة",
       "TASK_ATTACHMENT": "مرفقات المهمة",
       "INCIDENT_ATTACHMENT": "مرفقات البلاغ",
+      "PLAN_ATTACHMENT": "مرفقات الخطط",
+      "SHIFT_ATTACHMENT": "مرفقات المناوبات",
       "CREATION_DATE": "تاريخ الإنشاء"
     },
     "INQUIRIY": {

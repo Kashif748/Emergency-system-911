@@ -359,7 +359,7 @@
                 {{ item.newsType | translateObj }}
               </td>
               <td class="max-w-250px" *ngIf="columns?.includes('themeType')">
-                <p-tag
+                <p-tag *ngIf="item.alertnessLevel"
                   [styleClass]="
                     item.themeType?.id === 0
                       ? 'golden'
@@ -368,7 +368,7 @@
                       : 'bronze'
                   "
                 >
-                  {{ item.themeType | translateObj }}
+                  {{ item.alertnessLevel | translateObj }}
                 </p-tag>
               </td>
 

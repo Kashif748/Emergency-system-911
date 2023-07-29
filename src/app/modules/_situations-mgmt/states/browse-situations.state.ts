@@ -18,7 +18,7 @@ export interface BrowseSituationsStateModel {
 }
 
 export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
-  new StateToken<BrowseSituationsStateModel>('browse-situations');
+  new StateToken<BrowseSituationsStateModel>('browse_situations');
 
 @State<BrowseSituationsStateModel>({
   name: BROWSE_SITUATIONS_UI_STATE_TOKEN,
@@ -160,7 +160,7 @@ export class BrowseSituationsState {
         this.messageHelper.success();
         dispatch([
           new BrowseSituationsAction.LoadSituations(),
-          // new BrowseSituationsAction.ToggleDialog({}),
+          new BrowseSituationsAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {
@@ -219,6 +219,7 @@ export class BrowseSituationsState {
 
         _id: payload.situationId,
         _mode: undefined,
+        _type: payload.type
       },
       queryParamsHandling: 'merge',
     });
