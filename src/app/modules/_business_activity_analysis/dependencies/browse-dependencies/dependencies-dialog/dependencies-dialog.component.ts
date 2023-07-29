@@ -7,15 +7,14 @@ import { Select, Store } from '@ngxs/store';
 import { BrowseActivityDependenciesAction } from '../states/browse-dependencies.action';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { DEPENDENCIES_TYPES } from '../states/browse-dependencies.state';
 import { OrgDetailAction, OrgDetailState } from '@core/states';
 import { TreeNode } from 'primeng/api';
-import { BcActivityAnalysis, BcOrgHierarchy } from 'src/app/api/models';
+import { BcOrgHierarchy, PageBcActivities } from 'src/app/api/models';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { ActivityAnalysisAction } from '@core/states/activity-analysis/activity-analysis.action';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { FormUtils } from '@core/utils';
-import { BcActivityDependencyInternal } from 'src/app/api/models/bc-activity-dependency-internal';
+import { ActivityDependenciesState, DEPENDENCIES_TYPES } from '@core/states/activity-analysis/dependencies/dependencies.state';
 
 @Component({
   selector: 'app-dependencies-dialog',
@@ -25,11 +24,12 @@ import { BcActivityDependencyInternal } from 'src/app/api/models/bc-activity-dep
 export class DependenciesDialogComponent implements OnInit, OnDestroy {
   dependenciesLimts = [];
   opened$: Observable<boolean>;
+  dependType: DEPENDENCIES_TYPES;
 
-  @Select(ActivityAnalysisState.page)
-  activies$: Observable<BcActivityAnalysis[]>;
+  @Select(ActivityAnalysisState.activities)
+  activies$: Observable<PageBcActivities[]>;
 
-  blocking$: Observable<boolean> = of(false);
+  public blocking$: Observable<boolean>;
 
   public orgHir$: Observable<TreeNode[]>;
 
@@ -58,13 +58,24 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.buildForm();
+
     this.opened$ = this.route.queryParams.pipe(
+      takeUntil(this.destroy$),
+      tap((params) => {
+        this.form.reset();
+        this.dependType = params['_dependType'];
+      }),
       map((params) => params['_dialog'] === 'opened')
     );
 
+    this.blocking$ = this.store.select(ActivityDependenciesState.blocking).pipe(
+      takeUntil(this.destroy$),
+      filter((p) => !!p),
+      map((data) => data[this.dependType])
+    );
     this.store.dispatch([
       new OrgDetailAction.GetOrgHierarchy({ page: 0, size: 100 }),
-      new ActivityAnalysisAction.LoadPage({ page: 0, size: 100 }),
+      new ActivityAnalysisAction.LoadActivities({ page: 0, size: 100 }),
     ]);
 
     this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
@@ -97,8 +108,6 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
   }
   buildForm() {
     this.form = this.formBuilder.group({
-      limit: [null, [Validators.required]],
-
       activity: [null, [Validators.required]],
       dependencyDetails: [null, [Validators.required]],
       orgHierarchy: [null, [Validators.required]],
@@ -120,13 +129,13 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
         id: formValue?.orgHierarchy?.key,
       },
       isFound: true,
-      activityName: formValue.activity?.activity?.nameEn,
+      activityName: formValue.activity?.nameEn,
       relatedActivityId: formValue.activity?.id,
       isActive: true,
     };
     console.log(dependency);
 
-    switch (formValue?.limit) {
+    switch (this.dependType) {
       case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
         this.store.dispatch(
           new BrowseActivityDependenciesAction.CreateInternal(dependency)

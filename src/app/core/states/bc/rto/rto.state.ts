@@ -74,7 +74,7 @@ export class RtoState {
       })
     );
     return this.rto
-      .getAll13({
+      .getAll12({
         isActive: true,
         versionId: payload.versionId,
         pageable: {
@@ -126,7 +126,7 @@ export class RtoState {
     );
     payload.versionId = versionID;
     return this.rto
-      .insertOne4({
+      .insertOne3({
         body: payload,
       })
       .pipe(
@@ -155,7 +155,7 @@ export class RtoState {
     );
     payload.versionId = versionID;
     return this.rto
-      .update83({
+      .update82({
         body: payload,
       })
       .pipe(
@@ -187,7 +187,7 @@ export class RtoState {
         blocking: true,
       })
     );
-    return this.rto.getOne4({ id: payload.id }).pipe(
+    return this.rto.getOne3({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<RtoStateModel>({

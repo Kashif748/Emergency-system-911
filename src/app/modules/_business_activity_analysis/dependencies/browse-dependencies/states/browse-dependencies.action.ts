@@ -1,4 +1,5 @@
 import { PageRequestModel } from '@core/models/page-request.model';
+import { DEPENDENCIES_TYPES } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { BcActivityDependencyExternal } from 'src/app/api/models/bc-activity-dependency-external';
 import { BcActivityDependencyInternal } from 'src/app/api/models/bc-activity-dependency-internal';
 import { BcActivityDependencyOrg } from 'src/app/api/models/bc-activity-dependency-org';
@@ -45,12 +46,12 @@ export namespace BrowseActivityDependenciesAction {
      */
     constructor(public payload?: { pageRequest?: PageRequestModel }) {}
   }
-  export class CreateOrg  {
+  export class CreateOrg {
     static readonly type = '[BrowseActivityDependenciesAction] Create Org ';
     /**
      *
      */
-    constructor(public payload: BcActivityDependencyOrg ) {}
+    constructor(public payload: BcActivityDependencyOrg) {}
   }
 
   export class ToggleDialog {
@@ -58,7 +59,9 @@ export namespace BrowseActivityDependenciesAction {
     /**
      *
      */
-    constructor(public payload: { id?: number }) {}
+    constructor(
+      public payload: { id?: number; _dependType?: DEPENDENCIES_TYPES }
+    ) {}
   }
 
   export class OpenView {

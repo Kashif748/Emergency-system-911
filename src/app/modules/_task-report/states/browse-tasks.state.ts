@@ -36,15 +36,17 @@ export const BROWSE_TASKS_UI_STATE_TOKEN =
       },
       first: 0,
       rows: 10,
-      sortField: 'dueDate',
+      sortField: 'createdOn',
       sortOrder: 'desc',
     },
     columns: [
       'title',
-      'desc',
+      // 'desc',
       'incidentId',
       'priority',
-      'dueDate',
+      // 'dueDate',
+      'createdOn',
+      'closedOn',
       'status',
       'assignee',
       'createdBy',
@@ -72,9 +74,6 @@ export class BrowseTasksState {
         ...state.pageRequest,
         filters: {
           ...state.pageRequest.filters,
-          dueDate: state.pageRequest.filters['dueDate']
-            ? new Date(state.pageRequest.filters['dueDate'])
-            : undefined,
         },
       },
     };

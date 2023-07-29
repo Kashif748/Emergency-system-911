@@ -24,21 +24,21 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById6
+   * Path part for operation deleteById5
    */
-  static readonly DeleteById6Path = '/v1/bc/org-hir-type/delete/{id}';
+  static readonly DeleteById5Path = '/v1/bc/org-hir-type/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById6()` instead.
+   * To access only the response body, use `deleteById5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById6$Response(params: {
+  deleteById5$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.DeleteById6Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.DeleteById5Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,37 +56,37 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById6$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById6(params: {
+  deleteById5(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById6$Response(params).pipe(
+    return this.deleteById5$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll15
+   * Path part for operation getAll14
    */
-  static readonly GetAll15Path = '/v1/bc/org-hir-type';
+  static readonly GetAll14Path = '/v1/bc/org-hir-type';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll15()` instead.
+   * To access only the response body, use `getAll14()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll15$Response(params: {
+  getAll14$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcOrgHierarchyType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.GetAll15Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.GetAll14Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll15$Response()` instead.
+   * To access the full response (for headers, for example), `getAll14$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll15(params: {
+  getAll14(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcOrgHierarchyType> {
 
-    return this.getAll15$Response(params).pipe(
+    return this.getAll14$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcOrgHierarchyType>) => r.body as RestApiResponsePageBcOrgHierarchyType)
     );
   }
 
   /**
-   * Path part for operation update85
+   * Path part for operation update84
    */
-  static readonly Update85Path = '/v1/bc/org-hir-type';
+  static readonly Update84Path = '/v1/bc/org-hir-type';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update85()` instead.
+   * To access only the response body, use `update84()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update85$Response(params: {
+  update84$Response(params: {
     body: BcOrgHierarchyType
   }): Observable<StrictHttpResponse<RestApiResponseBcOrgHierarchyType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.Update85Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.Update84Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update85$Response()` instead.
+   * To access the full response (for headers, for example), `update84$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update85(params: {
+  update84(params: {
     body: BcOrgHierarchyType
   }): Observable<RestApiResponseBcOrgHierarchyType> {
 
-    return this.update85$Response(params).pipe(
+    return this.update84$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcOrgHierarchyType>) => r.body as RestApiResponseBcOrgHierarchyType)
     );
   }
 
   /**
-   * Path part for operation insertOne6
+   * Path part for operation insertOne5
    */
-  static readonly InsertOne6Path = '/v1/bc/org-hir-type';
+  static readonly InsertOne5Path = '/v1/bc/org-hir-type';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne6()` instead.
+   * To access only the response body, use `insertOne5()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne6$Response(params: {
+  insertOne5$Response(params: {
     body: BcOrgHierarchyType
   }): Observable<StrictHttpResponse<RestApiResponseBcOrgHierarchyType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.InsertOne6Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.InsertOne5Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,35 +200,35 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne6$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne5$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne6(params: {
+  insertOne5(params: {
     body: BcOrgHierarchyType
   }): Observable<RestApiResponseBcOrgHierarchyType> {
 
-    return this.insertOne6$Response(params).pipe(
+    return this.insertOne5$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcOrgHierarchyType>) => r.body as RestApiResponseBcOrgHierarchyType)
     );
   }
 
   /**
-   * Path part for operation getOne7
+   * Path part for operation getOne6
    */
-  static readonly GetOne7Path = '/v1/bc/org-hir-type/{id}';
+  static readonly GetOne6Path = '/v1/bc/org-hir-type/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne7()` instead.
+   * To access only the response body, use `getOne6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne7$Response(params: {
+  getOne6$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcOrgHierarchyType>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.GetOne7Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.GetOne6Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne7$Response()` instead.
+   * To access the full response (for headers, for example), `getOne6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne7(params: {
+  getOne6(params: {
     id: number;
   }): Observable<RestApiResponseBcOrgHierarchyType> {
 
-    return this.getOne7$Response(params).pipe(
+    return this.getOne6$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcOrgHierarchyType>) => r.body as RestApiResponseBcOrgHierarchyType)
     );
   }

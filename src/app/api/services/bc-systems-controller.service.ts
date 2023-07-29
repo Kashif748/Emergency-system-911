@@ -259,4 +259,53 @@ export class BcSystemsControllerService extends BaseService {
     );
   }
 
+  /**
+   * Path part for operation searchByCurrentAndParentOrgIds
+   */
+  static readonly SearchByCurrentAndParentOrgIdsPath = '/v1/bc/systems/search';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `searchByCurrentAndParentOrgIds()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  searchByCurrentAndParentOrgIds$Response(params: {
+    isActive: boolean;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcSystems>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcSystemsControllerService.SearchByCurrentAndParentOrgIdsPath, 'get');
+    if (params) {
+      rb.query('isActive', params.isActive, {});
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageBcSystems>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `searchByCurrentAndParentOrgIds$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  searchByCurrentAndParentOrgIds(params: {
+    isActive: boolean;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcSystems> {
+
+    return this.searchByCurrentAndParentOrgIds$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcSystems>) => r.body as RestApiResponsePageBcSystems)
+    );
+  }
+
 }

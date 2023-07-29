@@ -243,7 +243,7 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
     };
 
     const orgHie = {
-      id: orgActivities.dept.data
+      id: orgActivities.dept.data.id
     };
 
     const orgActivity = {

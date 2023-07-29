@@ -126,21 +126,21 @@ export class AssetControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update104
+   * Path part for operation update108
    */
-  static readonly Update104Path = '/v1/assets';
+  static readonly Update108Path = '/v1/assets';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update104()` instead.
+   * To access only the response body, use `update108()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update104$Response(params: {
+  update108$Response(params: {
     body: OrgAsset
   }): Observable<StrictHttpResponse<RestApiResponseOrgAssetsProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Update104Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Update108Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -158,15 +158,15 @@ export class AssetControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update104$Response()` instead.
+   * To access the full response (for headers, for example), `update108$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update104(params: {
+  update108(params: {
     body: OrgAsset
   }): Observable<RestApiResponseOrgAssetsProjection> {
 
-    return this.update104$Response(params).pipe(
+    return this.update108$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOrgAssetsProjection>) => r.body as RestApiResponseOrgAssetsProjection)
     );
   }
@@ -307,24 +307,24 @@ export class AssetControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation search15
+   * Path part for operation search20
    */
-  static readonly Search15Path = '/v1/assets/search';
+  static readonly Search20Path = '/v1/assets/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search15()` instead.
+   * To access only the response body, use `search20()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search15$Response(params: {
+  search20$Response(params: {
     orgId?: number;
     categoryId?: number;
     details?: string;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageOrgAssetsProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Search15Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AssetControllerService.Search20Path, 'get');
     if (params) {
       rb.query('orgId', params.orgId, {});
       rb.query('categoryId', params.categoryId, {});
@@ -345,18 +345,18 @@ export class AssetControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search15$Response()` instead.
+   * To access the full response (for headers, for example), `search20$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search15(params: {
+  search20(params: {
     orgId?: number;
     categoryId?: number;
     details?: string;
     pageable: Pageable;
   }): Observable<RestApiResponsePageOrgAssetsProjection> {
 
-    return this.search15$Response(params).pipe(
+    return this.search20$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageOrgAssetsProjection>) => r.body as RestApiResponsePageOrgAssetsProjection)
     );
   }

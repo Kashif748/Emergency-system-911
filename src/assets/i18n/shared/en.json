@@ -290,7 +290,7 @@
       "ALL_STATS": "All Stats",
       "STATESTICS": "Statistics",
       "IN_PROGRESS_INCIDENTS": "In Progress Incidents",
-      "DRAFTED_INCIDENTS" : "Drafts",
+      "DRAFTED_INCIDENTS": "Drafts",
       "REJECTED_INCIDENTS": "Rejected Incidents",
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
@@ -571,7 +571,7 @@
 
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
-      "saveAsDraft" : "Save as Draft",
+      "saveAsDraft": "Save as Draft",
       "REPORT_INCIDENT": "Incidents",
       "NEW_INCIDENTS": "Add Incident",
       "NEW_INQUIRY": "Add Inquiry",
@@ -700,7 +700,7 @@
       "SELECT_PRIORITY_ERROR": "Please select Priority",
       "GET_KPI_INFO": "Get Kpi Information",
       "SECONDS": "Seconds",
-      "DRAFT" :  "Draft",
+      "DRAFT": "Draft",
       "IsExpired": "Kpi Expiry ?",
       "EXPIRED": "Expired ",
       "NOT_EXPIRED": "Not Expired",
@@ -743,7 +743,7 @@
       "SHARE_LOCATION_GOOGLE_MAPS": "Share location on google maps",
       "URL": "url",
       "CLOSE_INCIDENT": "Close Incident",
-      "DELETE_DRAFT" : "Delete Draft",
+      "DELETE_DRAFT": "Delete Draft",
 
       "TO": "TO",
       "HAPPINESS_LEVEL": {
@@ -839,7 +839,7 @@
       }
     },
     "INQUIRIY": {
-      "REPORT" : "Inquiriy Report",
+      "REPORT": "Inquiriy Report",
       "ADVANCED_SEARCH": "Advanced Search",
       "ID": "ID",
       "SUBJECT": "Subject",
@@ -1064,7 +1064,7 @@
       "UPDATE": "The Update",
       "MAIL_REPORT": "Mail Reports",
       "GENERAL_REPORT": "Tasks Report",
-      "INCIDENTS_REPORT" : "Incidents Report",
+      "INCIDENTS_REPORT": "Incidents Report",
       "RESOURCES_REPORT": "Resources Reports",
       "USERS_REPORT_TITLE": "User Statistics Report",
       "IncidentsStatisticsTitle": "Incident Statistics Report",
@@ -1487,6 +1487,7 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "HOUR": "Hour/s",
       "INCIDENT_SERIAL": "Incident Serial",
       "REPORTED_BY_INFO": "Reported By Info",
       "CLOSE_DATE": "Close Date",
@@ -1502,7 +1503,7 @@
       "PHOTO_EDITOR": "Photo Editor",
       "PRIVILEGES": "Privileges",
       "NO_IMAGE": "No image",
-      "YEAR" :"Year",
+      "YEAR": "Year",
       "EXPIRE_DATE": "Expire Date",
       "USERS": {
         "ACCOUNT_INFO": "Account Info",

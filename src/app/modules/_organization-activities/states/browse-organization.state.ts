@@ -118,9 +118,6 @@ export class BrowseOrganizationState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          priority: pageRequest.filters.priority?.id,
-          status: pageRequest.filters.status?.map((o) => o.id),
-          type: this.route.snapshot.queryParams['_type'],
         },
       })
     );
