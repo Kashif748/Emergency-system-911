@@ -60,13 +60,13 @@
 
 <ng-template #content>
 
-  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')     }">
+  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'35vh')     }">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
 
     <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)" styleClass="h-100">
-      <p-tabPanel header="{{'SITUATIONS.SITUATION_INFO' | translate }}">
+      <p-tabPanel *ngIf="!(plan$ | async)" header="{{'SITUATIONS.SITUATION_INFO' | translate }}">
 
         <form [formGroup]="form" class="p-fluid p-grid mt-5">
           <!--Name Ar -->
@@ -400,19 +400,11 @@
         </ng-container>
 
       </p-tabPanel>
-      <ng-container *checkPrivileges="'PRIV_ADD_FILE_SITUATION'">
-        <p-tabPanel *ngIf="!(viewOnly$ | async) && editMode" header="{{'SITUATIONS.PLAN_ATTACH' | translate }}">
+      <ng-container *ngIf="!(viewOnly$ | async) && (plan$ | async)">
+        <p-tabPanel [header]="(type ? 'SITUATIONS.PLAN_ATTACH' : 'SITUATIONS.SHIFT_ATTACH') | translate">
           <div class="row">
             <div class="col-12">
               <ng-container #attachPlanContainer></ng-container>
-            </div>
-          </div>
-        </p-tabPanel>
-
-        <p-tabPanel *ngIf="!(viewOnly$ | async) && editMode" header="{{'SITUATIONS.SHIFT_ATTACH' | translate }}">
-          <div class="row">
-            <div class="col-12">
-              <ng-container #attachShiftContainer></ng-container>
             </div>
           </div>
         </p-tabPanel>

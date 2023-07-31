@@ -1,14 +1,22 @@
-import {BcWorkImportanceLevels} from "../../../../api/models/bc-work-importance-levels";
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
-import {Injectable} from "@angular/core";
-import {BcWorkImportanceLevelsControllerService} from "../../../../api/services/bc-work-importance-levels-controller.service";
-import {patch} from "@ngxs/store/operators";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {EMPTY} from "rxjs";
-import {ImpLevelWorkingAction} from "@core/states/bc/imp-level-working/imp-level-working.action";
-import {PageBcWorkImportanceLevels} from "../../../../api/models/page-bc-work-importance-levels";
-import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
-
+import { BcWorkImportanceLevels } from '../../../../api/models/bc-work-importance-levels';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { BcWorkImportanceLevelsControllerService } from '../../../../api/services/bc-work-importance-levels-controller.service';
+import { patch } from '@ngxs/store/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { ImpLevelWorkingAction } from '@core/states/bc/imp-level-working/imp-level-working.action';
+import { PageBcWorkImportanceLevels } from '../../../../api/models/page-bc-work-importance-levels';
+import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
+import { BCState } from '../bc/bc.state';
 
 export interface ImpLevelWorkingStateModel {
   page: PageBcWorkImportanceLevels;
@@ -17,21 +25,21 @@ export interface ImpLevelWorkingStateModel {
   blocking: boolean;
 }
 
-const IMP_LEVEL_WORKING_STATE_TOKEN = new StateToken<ImpLevelWorkingStateModel>('impLevelWorking');
+const IMP_LEVEL_WORKING_STATE_TOKEN = new StateToken<ImpLevelWorkingStateModel>(
+  'impLevelWorking'
+);
 
 @State<ImpLevelWorkingStateModel>({ name: IMP_LEVEL_WORKING_STATE_TOKEN })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-
 export class ImpLevelWorkingState {
   /**
    *
    */
   constructor(
     private impLevelWorking: BcWorkImportanceLevelsControllerService,
-    private store: Store,
-  ) {
-  }
+    private store: Store
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([ImpLevelWorkingState])
@@ -70,17 +78,17 @@ export class ImpLevelWorkingState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
     return this.impLevelWorking
       .getAll19({
         isActive: true,
-        versionId: versionID,
-         pageable: {
-           page: payload.page,
-           size: payload.size,
-           sort: payload.sort,
-         },
-         // request: payload.filters,
+        versionId: version?.id,
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -119,8 +127,9 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+    payload.versionId = version?.id;
+
     return this.impLevelWorking
       .insertOne10({
         body: payload,
@@ -146,8 +155,8 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+    payload.versionId = version?.id;
     return this.impLevelWorking
       .update89({
         body: payload,

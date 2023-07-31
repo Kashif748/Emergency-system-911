@@ -67,14 +67,18 @@ export interface TaskStateModel {
 }
 
 const TASK_STATE_TOKEN = new StateToken<TaskStateModel>('task');
+const DEFAULTS = {
+  page: {
+    totalElements: 0,
+  },
+  statistics: {
+    priority: [] as any,
+    status: [] as any,
+  },
+} as TaskStateModel;
 @State<TaskStateModel>({
   name: TASK_STATE_TOKEN,
-  defaults: {
-    statistics: {
-      priority: [],
-      status: [],
-    },
-  },
+  defaults: DEFAULTS,
 })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
@@ -193,6 +197,10 @@ export class TaskState {
   }
 
   /* ********************** ACTIONS ************************* */
+  @Action(TaskAction.RESET)
+  reset({ setState }: StateContext<TaskStateModel>) {
+    setState(DEFAULTS);
+  }
 
   @Action(TaskAction.LoadPage, { cancelUncompleted: true })
   loadPage(
@@ -791,19 +799,34 @@ export class TaskState {
   }
 
   private filters(filters: { [key: string]: string }) {
-    const fromDate =
+    const fromDueDate =
       filters?.dueDate &&
       Array.isArray(filters?.dueDate) &&
       filters?.dueDate?.length &&
       filters?.dueDate[0]
         ? DateTimeUtil.format(filters?.dueDate[0], DateTimeUtil.DATE_FORMAT)
         : undefined;
-    const toDate =
+    const toDueDate =
       filters?.dueDate &&
       Array.isArray(filters?.dueDate) &&
       filters?.dueDate?.length &&
       filters?.dueDate[1]
         ? DateTimeUtil.format(filters?.dueDate[1], DateTimeUtil.DATE_FORMAT)
+        : undefined;
+
+    const fromCreationDate =
+      filters?.createdOn &&
+      Array.isArray(filters?.createdOn) &&
+      filters?.createdOn?.length &&
+      filters?.createdOn[0]
+        ? DateTimeUtil.format(filters?.createdOn[0], DateTimeUtil.DATE_FORMAT)
+        : undefined;
+    const toCreationDate =
+      filters?.createdOn &&
+      Array.isArray(filters?.createdOn) &&
+      filters?.createdOn?.length &&
+      filters?.createdOn[1]
+        ? DateTimeUtil.format(filters?.createdOn[1], DateTimeUtil.DATE_FORMAT)
         : undefined;
     return {
       ...filters,
@@ -811,11 +834,12 @@ export class TaskState {
         filters?.dueDate && !Array.isArray(filters?.dueDate)
           ? DateTimeUtil.format(filters?.dueDate, DateTimeUtil.DATE_FORMAT)
           : undefined,
-      fromDate,
-      toDate,
-      startDate: fromDate,
-      endDate: toDate,
+      createdFrom: fromCreationDate,
+      createdTo: toCreationDate,
+      startDate: fromDueDate,
+      endDate: toDueDate,
       type: undefined,
+      createdOn: undefined,
     } as TaskCriteria | TaskFilter;
   }
 }

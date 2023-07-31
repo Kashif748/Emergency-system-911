@@ -2,6 +2,8 @@
   "BUSINESS_IMPACT_ANALYSIS": "Business Impact Analysis",
   "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle",
   "DEPARTMENT": "Department",
+  "SELECT_CYCLE_MSG": "Please select c  ycle to continue",
+
   "SECTOR": "Sector",
   "SECTION": "Section",
   "ORG_ACTIVITIES": "Organization Activities",
@@ -16,6 +18,7 @@
   "ADD_NEW_ACTIVITY": "Select Cycle Activities",
   "ADD_ACTIVITY_ACTION": "  Add Activities Analysis  ",
   "ORG_ARTCH": "Organization Hierarchy",
+  "START_ANALYSIS": "Analyze Activity ",
 
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY": "Add New Activity",

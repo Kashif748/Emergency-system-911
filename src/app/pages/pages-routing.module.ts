@@ -160,11 +160,9 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'business-continuity',
+        path: 'bc',
         loadChildren: () =>
-          import(
-            '../modules/_business-continuity/business-continuity.module'
-          ).then((m) => m.BusinessContinuityModule),
+          import('../modules/_BC/bc.module').then((m) => m.BCModule),
       },
       {
         path: 'company-profile',
@@ -321,6 +319,7 @@ const routes: Routes = [
       {
         path: 'reports/tasks',
         canLoad: [PrivilegeGuard],
+        data: { permission: 'PRIV_TASK_REPORT' },
         loadChildren: () =>
           import('../modules/_task-report/task-report.module').then(
             (m) => m.TaskReportModule
@@ -429,33 +428,11 @@ const routes: Routes = [
             '../modules/_business-continuity-setup/business-continuity-setup.module'
           ).then((m) => m.BusinessContinuitySetupModule),
       },
+
       {
-        path: 'business-impact-analysis',
+        path: 'bc',
         loadChildren: () =>
-          import(
-            '../modules/_business-impact-analysis/impact-analysis.module'
-          ).then((m) => m.BusinessImpactAnalysisModule),
-      },
-      {
-        path: 'business-activity-analysis',
-        loadChildren: () =>
-          import(
-            '../modules/_business_activity_analysis/business-activity-analysis.module'
-          ).then((m) => m.BusinessActivityAnalysisModule),
-      },
-      {
-        path: 'business-continuity',
-        loadChildren: () =>
-          import(
-            '../modules/_business-continuity/business-continuity.module'
-          ).then((m) => m.BusinessContinuityModule),
-      },
-      {
-        path: 'organization-activities',
-        loadChildren: () =>
-          import(
-            '../modules/_organization-activities/organization-activities.module'
-            ).then((m) => m.OrganizationActivitiesModule),
+          import('../modules/_BC/bc.module').then((m) => m.BCModule),
       },
       {
         path: 'under-build',

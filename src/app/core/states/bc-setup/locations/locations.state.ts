@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 import { patch } from '@ngxs/store/operators';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
-import { BrowseBusinessContinuityState } from '../../../../modules/_business-continuity/states/browse-business-continuity.state';
+import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
 import { BcLocations, PageBcLocations } from 'src/app/api/models';
 import { BcLocationsControllerService } from 'src/app/api/services';
 import { LocationsAction } from './locations.action';

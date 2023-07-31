@@ -17,7 +17,7 @@ import {SituationsState} from '@core/states/situations/situations.state';
 import {FormUtils} from '@core/utils';
 import {Select, Store} from '@ngxs/store';
 import {GenericValidators} from '@shared/validators/generic-validators';
-import {EMPTY, Observable, of, Subject} from 'rxjs';
+import {EMPTY, Observable, Subject} from 'rxjs';
 import {catchError, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {SituationProjection} from 'src/app/api/models';
 import {BrowseSituationsAction} from '../../states/browse-situations.action';
@@ -29,6 +29,7 @@ import {BrowseSituationsState, BrowseSituationsStateModel} from "../../states/br
 import {SituationAttachmentDetails} from "../../../../api/models/situation-attachment-details";
 import {PrivilegesService} from "@core/services/privileges.service";
 import {AlertnessLevel} from "../../../../api/models/alertness-level";
+import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
 
 @Component({
   selector: 'app-situation-dialog',
@@ -42,6 +43,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
 
   formDialog$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+  plan$: Observable<boolean>;
   @ViewChild(Dialog) dialog: Dialog;
   @ViewChild(TabView) tabv: TabView;
   @Select(SituationsState.situationTotalRecords)
@@ -50,10 +52,6 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   @ViewChild('attachPlanContainer', {read: ViewContainerRef})
   attachPlanContainer: ViewContainerRef;
   attachPlanComponent: FilesListComponent;
-
-  @ViewChild('attachShiftContainer', {read: ViewContainerRef})
-  attachShiftContainer: ViewContainerRef;
-  attachShiftComponent: FilesListComponent;
 
 
   public get asDialog() {
@@ -96,12 +94,20 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
 
   _situationId: number;
   _mode: string;
+  type: boolean;
+  editAttachmentType: boolean;
+
 
 
   @Input()
   set situationId(v: number) {
     this._situationId = v;
     this.buildForm();
+    if (v === undefined || v === null) {
+      return;
+    }
+    this.attachPlanContainer?.clear();
+    this.attachPlanComponent = undefined;
 
     this.store
       .dispatch(new SituationsAction.GetSituation({id: v}))
@@ -121,10 +127,11 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
           });
         })
       )
-      .subscribe();
-    if (v === undefined || v === null) {
-      return;
-    }
+      .subscribe(() => {
+        if (this.editAttachmentType) {
+          this.loadAttachComponent();
+        }
+      });
 
     if (this.viewOnly) {
       this.store.dispatch(
@@ -202,6 +209,24 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
               this.form.disable();
             } else {
               this.form.enable();
+            }
+          } catch {
+          }
+        }
+      })
+    );
+    this.plan$ = this.route.queryParams.pipe(
+      map((params) => params['_type']),
+      tap((v) => {
+        this.editAttachmentType = v;
+        if (this.form) {
+          try {
+            if (v == 'plan') {
+              // this.editAttachmentType = true;
+              this.type = true;
+            } else {
+              this.type = false;
+              // this.editAttachmentType = true;
             }
           } catch {
           }
@@ -289,13 +314,18 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
         )
         .subscribe();
       await this.attachPlanComponent?.upload(this._situationId, false);
-      await this.attachShiftComponent?.upload(this._situationId, false);
 
     } else {
       this.store
         .dispatch(new BrowseSituationsAction.CreateSituations(situation))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(async (t) => {});
+        .pipe(
+          takeUntil(this.destroy$),
+          switchMap(() => this.store.select(SituationsState.createdSituation)),
+          filter((t) => !!t),
+          take(1)
+        )
+        .subscribe(async (t) => {
+        });
     }
   }
 
@@ -310,15 +340,6 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   }
 
   tab(index: number) {
-    this.tabIndex = index
-    switch (index) {
-      case 1:
-        this.loadAttachComponent();
-        break;
-      case 2:
-        this.loadAttachComponentShift();
-        break;
-    }
   }
 
   public loadAttachmentPage(event?: LazyLoadEvent) {
@@ -334,9 +355,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   }
 
   async loadAttachComponent() {
-    this.attachShiftContainer?.clear();
-    this.attachShiftComponent = undefined;
-
+    this.attachPlanContainer?.clear();
     if (this.attachPlanComponent) return;
     this.attachPlanContainer?.clear();
     const {FilesListComponent} = await import(
@@ -350,33 +369,9 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
 
     instance.recordId = this._situationId;
     instance.foreignHelperId = (situation?.id as any)?.id;
-    instance.tagId = 32;
+    instance.tagId = this.type ? UploadTagIdConst.PLAN_SITUATION : UploadTagIdConst.SHIFT_SITUATION;
     instance.inline = true;
     this.attachPlanComponent = instance;
-    cdr.detectChanges();
-  }
-
-  async loadAttachComponentShift() {
-    this.attachPlanContainer?.clear();
-    this.attachPlanComponent = undefined;
-
-    if (this.attachShiftComponent) return;
-    this.attachShiftContainer?.clear();
-
-    const {FilesListComponent} = await import(
-      '@shared/attachments-list/files-list/files-list.component'
-      );
-    const factory = this.cfr.resolveComponentFactory(FilesListComponent);
-
-    const {instance, changeDetectorRef: cdr} =
-      this.attachShiftContainer.createComponent(factory, null, this.injector);
-    const situation = this.store.selectSnapshot(SituationsState.situation);
-
-    instance.recordId = this._situationId;
-    instance.foreignHelperId = (situation?.id as any)?.id;
-    instance.tagId = 33;
-    instance.inline = true;
-    this.attachShiftComponent = instance;
     cdr.detectChanges();
   }
   customSort(event: SortEvent) {

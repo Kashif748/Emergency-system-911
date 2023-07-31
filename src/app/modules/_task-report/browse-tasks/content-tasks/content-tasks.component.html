@@ -42,7 +42,8 @@
           <div class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border">
             <div class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px">
 
-              <div class="flex-grow-1 p-grid p-fluid">
+              <a class="flex-grow-1 p-grid p-fluid a-none" [routerLink]="['/task-management', 'task']"
+                [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
                 <div class="p-col-12">
 
                   <div class="mt-1 mx-2 p-grid p-fluid">
@@ -98,7 +99,7 @@
                   </div>
                 </div>
 
-              </div>
+              </a>
             </div>
           </div>
         </ng-container>
@@ -289,51 +290,76 @@
                 <div class="bg-light">
                 </div>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('title')">
-                {{item.title}}
+              <td class="max-w-250px" *ngIf="columns?.includes('title')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  {{item.title}}
+                </a>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('desc')">
-                {{item.body}}
+              <td class="max-w-250px" *ngIf="columns?.includes('desc')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  {{item.body}}
+                </a>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('incidentId')">
-                {{ item.incident?.year }} / {{item.incident?.serial}}
-              </td>
-
-              <td class="max-w-250px" *ngIf="columns?.includes('priority')">
-
-                <p-tag styleClass="m-1 bg-{{item?.priority?.color}}">
-                  {{ item.priority | translateObj }}
-                </p-tag>
-              </td>
-
-              <td class="max-w-250px" *ngIf="columns?.includes('createdOn')">
-                <p-tag styleClass="m-1">
-                  {{ item.createdOn | cdate }}
-                </p-tag>
+              <td class="max-w-250px" *ngIf="columns?.includes('incidentId')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  {{ item.incident?.year }} / {{item.incident?.serial}}
+                </a>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('closedOn')">
-                <p-tag styleClass="m-1" checkDueDate [closedDate]="item.closedDate" [dueDate]="item.dueDate">
-                  {{ item.closedDate | cdate }}
-                </p-tag>
+              <td class="max-w-250px" *ngIf="columns?.includes('priority')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  <p-tag styleClass="m-1 bg-{{item?.priority?.color}}">
+                    {{ item.priority | translateObj }}
+                  </p-tag>
+                </a>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('status')">
-                <p-tag styleClass="m-1">
-                  {{item.status | translateObj }}
-                </p-tag>
+              <td class="max-w-250px" *ngIf="columns?.includes('createdOn')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  <p-tag styleClass="m-1">
+                    {{ item.createdOn | cdate }}
+                  </p-tag>
+                </a>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('createdBy')">
-                {{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} /
-                {{item.createdBy?.orgStructure | translateObj }}
+              <td class="max-w-250px" *ngIf="columns?.includes('closedOn')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  <p-tag styleClass="m-1" checkDueDate [closedDate]="item.closedDate" [dueDate]="item.dueDate">
+                    {{ item.closedDate | cdate }}
+                  </p-tag></a>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('assignee')">
-                {{item.assignTo | translateObj }}
 
-                <p-tag styleClass="m-1 bg-{{ assigneeMap[item.assignTo?.type]?.bg }}">
-                  {{ "SHARED." + assigneeMap[item.assignTo?.type]?.text | translate }}
-                </p-tag>
+              <td class="max-w-250px" *ngIf="columns?.includes('status')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  <p-tag styleClass="m-1">
+                    {{item.status | translateObj }}
+                  </p-tag>
+                </a>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('createdBy')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  {{item.createdBy | translateObj : ['firstName', 'middleName', 'lastName'] }} /
+                  {{item.createdBy?.orgStructure | translateObj }}
+                </a>
+              </td>
+              <td class="max-w-250px" *ngIf="columns?.includes('assignee')" (click)="openView(item.id)">
+                <a class="a-none w-100 h-100 d-block" [routerLink]="['/task-management', 'task']"
+                  [queryParams]="{ _id: item?.id, _mode: 'viewonly', _redirect: router.url }" target="_blank">
+                  {{item.assignTo | translateObj }}
+
+                  <p-tag styleClass="m-1 bg-{{ assigneeMap[item.assignTo?.type]?.bg }}">
+                    {{ "SHARED." + assigneeMap[item.assignTo?.type]?.text | translate }}
+                  </p-tag>
+                </a>
               </td>
 
 

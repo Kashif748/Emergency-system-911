@@ -930,6 +930,8 @@
       "TASK_TYPE_DETAILS": "نوع المهمة",
       "TASK_ATTACHMENT": "مرفقات المهمة",
       "INCIDENT_ATTACHMENT": "مرفقات البلاغ",
+      "PLAN_ATTACHMENT": "مرفقات الخطط",
+      "SHIFT_ATTACHMENT": "مرفقات المناوبات",
       "CREATION_DATE": "تاريخ الإنشاء"
     },
     "INQUIRIY": {
@@ -1477,6 +1479,9 @@
       "NEW_SUGG": "مقترح جديد"
     },
     "SHARED": {
+      "INCIDENT_MAIN_CATEGORY": "التصنيف الرئيسي للبلاغ",
+      "NOT_SPECIFIED": "غير محدد",
+      "UNKNOWN": "غير معروف",
       "HOUR": "ساعة",
       "INCIDENT_SERIAL": "تسلسل البلاغ",
       "REPORTED_BY_INFO": "بيانات صاحب البلاغ",
