@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { TaskState } from '@core/states';
+import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { Observable } from 'rxjs';
@@ -35,7 +36,11 @@ export class ChartTasksComponent implements OnInit {
   status$: Observable<ApexAxisChartSeries>;
   category$: Observable<ApexAxisChartSeries>;
 
-  constructor(private store: Store, private translateObj: TranslateObjPipe) {
+  constructor(
+    private store: Store,
+    private translateObj: TranslateObjPipe,
+    private translate: TranslateService
+  ) {
     this.priority$ = store.select(TaskState.statisticsByPriority).pipe(
       filter((d) => !!d),
       map((data: { count: number; priority: Priority }[]) => {
@@ -52,8 +57,11 @@ export class ChartTasksComponent implements OnInit {
       map((data: { count: number; key: any }[]) => {
         return {
           series: data.map((r) => r.count),
-          labels: data.map(
-            (r) => this.translateObj.transform(r.key) ?? `zone ${r.key}`
+          labels: data.map((r) =>
+            typeof r.key !== 'object'
+              ? this.translate.instant('SHARED.UNKNOWN')
+              : this.translateObj.transform(r.key) ??
+                this.translate.instant('SHARED.UNKNOWN')
           ),
         };
       })

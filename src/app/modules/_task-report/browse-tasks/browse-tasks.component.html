@@ -16,19 +16,6 @@
                 </div>
 
                 <div class="p-field p-col-6 p-md-3">
-                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['body']"
-                    placeholder="{{ 'SHARED.DESC' | translate }}"
-                    (keyup)="updateFilter({body: $event.target.value}, $event)">
-                </div>
-
-
-                <div class="p-field p-col-6 p-md-3">
-                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['incidentId']"
-                    placeholder="{{ 'SHARED.INCIDENT_ID' | translate }}"
-                    (keyup)="updateFilter({incidentId: $event.target.value}, $event)">
-                </div>
-
-                <div class="p-field p-col-6 p-md-3">
 
                   <p-dropdown [options]="priorities$ | async" [ngModel]="state.pageRequest.filters['priority']"
                     (ngModelChange)="updateFilter({priority: $event}, $event)" [autoDisplayFirst]="false"
@@ -65,10 +52,97 @@
                 </div>
 
                 <div class="p-field p-col-6 p-md-3">
-                  <p-calendar selectionMode="range" [readonlyInput]="true" #dueDate
-                    placeholder="{{ 'SHARED.DUE_DATE' | translate }}" [ngModel]="state.pageRequest.filters['dueDate']"
-                    (onClose)="updateFilter({dueDate: dueDate.value}, dueDate.value)" [showIcon]="true"
+                  <p-calendar selectionMode="range" [readonlyInput]="true" #createdOn
+                    placeholder="{{ 'SHARED.CREATION_DATE' | translate }}"
+                    [ngModel]="state.pageRequest.filters['createdOn']"
+                    (onClose)="updateFilter({createdOn: createdOn.value}, createdOn.value)" [showIcon]="true"
                     showButtonBar="true"></p-calendar>
+                </div>
+
+
+                <div class="p-field p-col-6 p-md-3">
+                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['incidentId']"
+                    placeholder="{{ 'SHARED.INCIDENT_ID' | translate }}"
+                    (keyup)="updateFilter({incidentId: $event.target.value}, $event)">
+                </div>
+
+
+                <div class="p-field p-col-6 p-md-3">
+
+                  <p-dropdown [options]="categories$ | async" [ngModel]="state.pageRequest.filters['incidentCategory']"
+                    dataKey="id" (ngModelChange)="updateFilter({incidentCategory: $event}, $event)"
+                    [autoDisplayFirst]="false" [showClear]="true" placeholder="{{'SHARED.INCIDENT_MAIN_CATEGORY' | translate}}">
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj }}
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+
+
+
+
+                <div class="p-field p-col-6 p-md-3">
+                  <span class="p-float-label">
+                    <p-dropdown [(ngModel)]="assigneeType" placeholder="{{ 'ASSIGNEE_TYPE' | translate }}"
+                      [options]="[{label: 'SHARED.USER' | translate , value: 'user'}, {label: 'SHARED.GROUP' | translate , value: 'group'}, {label: 'SHARED.ORG' | translate, value: 'org'}]"
+                      [showClear]="true" [autoDisplayFirst]="false" appendTo="body"></p-dropdown>
+                  </span>
+                </div>
+
+                <div class="p-field p-col-6 p-md-3">
+                  <span class="p-float-label">
+                    <ng-container [ngSwitch]="assigneeType">
+                      <!-- assignee type = user -->
+                      <p-dropdown (onChange)="updateFilter({assignTo: $event?.value?.id + '_user'}, $event)"
+                        placeholder="{{'SHARED.ASSIGNEE' | translate}}" *ngSwitchCase="'user'" #assignToUser
+                        [options]="users$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+                        appendTo="body" [filter]="true" filterBy="nameAr,nameEn" (onFilter)="loadUsers($event?.filter)"
+                        dataKey="id" inputId="assignToUser" (onShow)="loadUsers(assignToUser.filterValue, true)"
+                        [showClear]="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                          {{ item | translateObj }}
+                        </ng-template>
+
+                        <ng-template let-item pTemplate="item">
+                          {{ item | translateObj }}
+                        </ng-template>
+                      </p-dropdown>
+                      <!-- assignee type = group -->
+                      <p-dropdown (onChange)="updateFilter({assignTo: $event?.value?.id + '_group'}, $event)"
+                        placeholder="{{'SHARED.ASSIGNEE' | translate}}" *ngSwitchCase="'group'" #assignToGroup
+                        [options]="groups$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+                        appendTo="body" filterBy="nameAr,nameEn" (onShow)="loadGroups(assignToGroup.filterValue, true)"
+                        (onFilter)="loadGroups($event.filter)" inputId="assignToGroup" [filter]="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                          {{ item | translateObj }}
+                        </ng-template>
+
+                        <ng-template let-item pTemplate="item">
+                          {{ item | translateObj }}
+                        </ng-template>
+                      </p-dropdown>
+                      <!-- assignee type = org -->
+                      <p-dropdown (onChange)="updateFilter({assignTo: $event?.value?.id + '_org'}, $event)"
+                        placeholder="{{'SHARED.ASSIGNEE' | translate}}" *ngSwitchCase="'org'" [options]="orgs$ | async"
+                        [autoDisplayFirst]="false" [showClear]="true" dataKey="id" appendTo="body" [filter]="true"
+                        filterBy="nameAr,nameEn,code" dataKey="id" [showClear]="true" inputId="assignToOrg"
+                        (onShow)="loadOrgs()">
+                        <ng-template let-item pTemplate="selectedItem">
+                          {{ item | translateObj }}
+                        </ng-template>
+
+                        <ng-template let-item pTemplate="item">
+                          {{ item | translateObj }}
+                        </ng-template>
+                      </p-dropdown>
+                      <p-dropdown placeholder="{{'SHARED.ASSIGNEE' | translate}}" *ngSwitchDefault
+                        [autoDisplayFirst]="false" [disabled]="true"></p-dropdown>
+                    </ng-container>
+                  </span>
                 </div>
 
                 <div class="p-col p-d-flex">

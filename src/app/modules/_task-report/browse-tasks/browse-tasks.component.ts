@@ -2,12 +2,22 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { CommonDataState, TaskState } from '@core/states';
+import {
+  CommonDataState,
+  IncidentAction,
+  IncidentState,
+  OrgAction,
+  OrgState,
+  TaskAction,
+  TaskState,
+  UserAction,
+  UserState,
+} from '@core/states';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
-import { IncidentTaskProjection } from 'src/app/api/models';
+import { auditTime, filter, map, takeUntil } from 'rxjs/operators';
+import { IdNameProjection, IncidentTaskProjection } from 'src/app/api/models';
 import { BrowseTasksAction } from '../states/browse-tasks.action';
 import {
   BrowseTasksState,
@@ -38,6 +48,21 @@ export class BrowseTasksComponent implements OnInit {
 
   @Select(CommonDataState.taskStatuses)
   public statuses$: Observable<any[]>;
+
+  public categories$: Observable<any[]>;
+
+  @Select(OrgState.orgs)
+  orgs$: Observable<IdNameProjection[]>;
+
+  @Select(UserState.users)
+  users$: Observable<IdNameProjection[]>;
+
+  @Select(TaskState.groups)
+  groups$: Observable<IdNameProjection[]>;
+
+  assigneeType: string;
+  private auditLoadUsers$ = new Subject<string>();
+  private auditLoadGroups$ = new Subject<string>();
 
   private destroy$ = new Subject();
 
@@ -92,14 +117,50 @@ export class BrowseTasksComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.categories$ = this.store
+      .select(CommonDataState.incidentCategories)
+      .pipe(
+        filter((p) => !!p),
+        map((l) => l.filter((c) => !c.parent))
+      );
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  loadGroups(search?: string, direct = false) {
+    if (direct) {
+      this.store.dispatch(
+        new TaskAction.LoadGroups({
+          search,
+          page: 0,
+          size: 15,
+        })
+      );
+      return;
+    }
+    this.auditLoadGroups$.next(search);
+  }
+
+  loadUsers(search?: string, direct = false) {
+    if (direct) {
+      this.store.dispatch(
+        new UserAction.LoadUsers({
+          search,
+          page: 0,
+          size: 15,
+        })
+      );
+      return;
+    }
+    this.auditLoadUsers$.next(search);
+  }
+
   ngOnInit(): void {
+    this.store.dispatch(new TaskAction.RESET());
     this.type$ = this.route.queryParams.pipe(map((params) => params['_type']));
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -112,8 +173,35 @@ export class BrowseTasksComponent implements OnInit {
       });
 
     this.page$ = this.store.select(TaskState.page).pipe(filter((p) => !!p));
+
+    this.auditLoadUsers$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((search) => {
+        this.store.dispatch(
+          new UserAction.LoadUsers({
+            search,
+            page: 0,
+            size: 15,
+          })
+        );
+      });
+
+    this.auditLoadGroups$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((search) => {
+        this.store.dispatch(
+          new TaskAction.LoadGroups({
+            search,
+            page: 0,
+            size: 15,
+          })
+        );
+      });
   }
 
+  loadOrgs() {
+    this.store.dispatch(new OrgAction.LoadOrgs({}));
+  }
   search() {
     this.store.dispatch([
       new BrowseTasksAction.LoadTasks(),
@@ -197,7 +285,6 @@ export class BrowseTasksComponent implements OnInit {
           rows: event.rows,
         },
       }),
-      new BrowseTasksAction.LoadStatistics(),
     ]);
   }
 }

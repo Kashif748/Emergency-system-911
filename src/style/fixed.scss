@@ -533,3 +533,10 @@ button {
     left: 10px !important;
   }
 }
+
+.a-none {
+  &:hover {
+    all: unset;
+  }
+  all: unset;
+}
