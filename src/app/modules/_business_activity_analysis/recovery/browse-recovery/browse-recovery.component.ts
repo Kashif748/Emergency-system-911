@@ -46,7 +46,6 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
         new ActivityPrioritySeqAction.LoadPage({
           page: 0,
           size: 100,
-          versionId: cycle.versionId,
         })
       );
     }

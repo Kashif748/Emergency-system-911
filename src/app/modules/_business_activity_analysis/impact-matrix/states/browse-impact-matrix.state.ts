@@ -123,7 +123,7 @@ export class BrowseActivityImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        versionId: payload.versionId,
+
         filters: { isActive: true },
       })
     );
@@ -152,7 +152,6 @@ export class BrowseActivityImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        versionId: payload.versionId,
       })
     );
   }
@@ -180,7 +179,7 @@ export class BrowseActivityImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        versionId: payload.versionId,
+
         // filters: this.filters(pageRequest),
       })
     );
