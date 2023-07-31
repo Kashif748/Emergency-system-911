@@ -29,6 +29,7 @@ import {BrowseSituationsState, BrowseSituationsStateModel} from "../../states/br
 import {SituationAttachmentDetails} from "../../../../api/models/situation-attachment-details";
 import {PrivilegesService} from "@core/services/privileges.service";
 import {AlertnessLevel} from "../../../../api/models/alertness-level";
+import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
 
 @Component({
   selector: 'app-situation-dialog',
@@ -368,7 +369,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
 
     instance.recordId = this._situationId;
     instance.foreignHelperId = (situation?.id as any)?.id;
-    instance.tagId = this.type ? 32 : 33;
+    instance.tagId = this.type ? UploadTagIdConst.PLAN_SITUATION : UploadTagIdConst.SHIFT_SITUATION;
     instance.inline = true;
     this.attachPlanComponent = instance;
     cdr.detectChanges();
