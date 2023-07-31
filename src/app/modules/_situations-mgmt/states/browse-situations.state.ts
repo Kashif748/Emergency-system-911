@@ -44,20 +44,20 @@ export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
       {
         id: 0,
         color: 'golden',
-        nameAr: 'المستوى الاستراتيجي',
-        nameEn: 'Strategic Level',
+        nameAr: 'الوضع الذهبي',
+        nameEn: 'Golden Theme',
       },
       {
         id: 1,
         color: 'silver',
-        nameAr: 'المستوى العملياتي',
-        nameEn: 'Operational Level',
+        nameAr: 'الوضع الفضي',
+        nameEn: 'Silver Theme',
       },
       {
         id: 2,
         color: 'bronze',
-        nameAr: 'المستوى التكتيكي',
-        nameEn: 'Tactical Level',
+        nameAr: 'الوضع البرونزي',
+        nameEn: 'Bronze Theme',
       },
     ],
   },
@@ -160,7 +160,7 @@ export class BrowseSituationsState {
         this.messageHelper.success();
         dispatch([
           new BrowseSituationsAction.LoadSituations(),
-          // new BrowseSituationsAction.ToggleDialog({}),
+          new BrowseSituationsAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {
@@ -219,6 +219,7 @@ export class BrowseSituationsState {
 
         _id: payload.situationId,
         _mode: undefined,
+        _type: payload.type
       },
       queryParamsHandling: 'merge',
     });

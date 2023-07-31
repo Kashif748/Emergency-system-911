@@ -185,7 +185,6 @@ export function getHighlightLanguages() {
           'browse_tasks',
           'browse_groups',
           'browse_business_impact_analysis',
-          // 'browse_situations',
           'browse_org_activities'
         ],
       },

@@ -908,6 +908,8 @@
       "ADVANCED_SEARCH": "Advanced Search",
       "TASK_ATTACHMENT": "Task Attachments",
       "INCIDENT_ATTACHMENT": "Incident Attachments",
+      "PLAN_ATTACHMENT": "Plans Attachments",
+      "SHIFT_ATTACHMENT": "Shifts Attachments",
       "CREATION_DATE": "Creation Date"
     },
     "OPERATIONAL_REPORTS": {
