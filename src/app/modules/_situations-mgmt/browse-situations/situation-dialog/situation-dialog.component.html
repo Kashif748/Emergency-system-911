@@ -401,7 +401,7 @@
 
       </p-tabPanel>
       <ng-container *ngIf="!(viewOnly$ | async) && (plan$ | async)">
-        <p-tabPanel [header]="type ? ('SITUATIONS.PLAN_ATTACH' | translate) : ('SITUATIONS.SHIFT_ATTACH' | translate)">
+        <p-tabPanel [header]="(type ? 'SITUATIONS.PLAN_ATTACH' : 'SITUATIONS.SHIFT_ATTACH') | translate">
           <div class="row">
             <div class="col-12">
               <ng-container #attachPlanContainer></ng-container>
