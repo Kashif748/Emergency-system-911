@@ -89,7 +89,7 @@ export class BrowseLocationsState {
     { dispatch, getState }: StateContext<BrowseLocationsStateModel>,
     { payload }: BrowseLocationsAction.CreateLocation
   ) {
-    // const versionId = this.store.selectSnapshot(BrowseBusinessContinuityState.getState).versionId;
+    // const versionId = this.store.selectSnapshot(BrowseBCState.getState).versionId;
     return dispatch(new LocationsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();

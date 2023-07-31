@@ -15,7 +15,8 @@ import { BcRecoveryPrioritiesControllerService } from '../../../../api/services/
 import { BcRecoveryPriorities } from '../../../../api/models/bc-recovery-priorities';
 import { ActivityPrioritySeqAction } from '@core/states/bc/activity-priority-seq/activity-priority-seq.action';
 import { PageBcRecoveryPriorities } from '../../../../api/models/page-bc-recovery-priorities';
-import { BrowseBusinessContinuityState } from '../../../../modules/_business-continuity/states/browse-business-continuity.state';
+import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
+import { BCState } from '../bc/bc.state';
 
 export interface ActivityPrioritySeqStateModel {
   page: PageBcRecoveryPriorities;
@@ -38,6 +39,7 @@ export class ActivityPrioritySeqState {
    */
   constructor(
     private activityPrioritySeq: BcRecoveryPrioritiesControllerService,
+     private store: Store
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -77,10 +79,12 @@ export class ActivityPrioritySeqState {
         loading: true,
       })
     );
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+
     return this.activityPrioritySeq
       .getAll16({
         isActive: true,
-        versionId: payload.versionId,
+        versionId: version?.id,
         pageable: {
           page: payload.page,
           size: payload.size,

@@ -1,9 +1,0 @@
-<div *ngIf="state$ | async as state">
-  <app-content-impact-level
-    [loading]="loading$ | async"
-    [page]="page$ | async"
-    [pageRequest]="state?.pageRequest"
-    [totalRecords]="totalRecords$ | async"
-    (onPageChange)="loadPage($event)"
-  ></app-content-impact-level>
-</div>

@@ -1,5 +1,5 @@
 import {GroupState} from "@core/states/group/group.state";
-import {BusinessContinuityState} from "@core/states/bc/business-continuity/business-continuity.state";
+import {BCState} from "@core/states/bc/bc/bc.state";
 import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 
 export { UserAction } from './user/user.action';
@@ -18,7 +18,7 @@ export { LocationTypeAction } from './bc/location-type/locationType.action';
 export { ImpactLevelAction } from './bc/impact-level/impact-level.action';
 export { ImpactMatrixAction } from './bc/impact-matrix/impact-matrix.action';
 export { OrgDetailAction } from './bc/org-details/org-detail.action';
-export { BCAction } from './bc/business-continuity/business-continuity.action';
+export { BCAction } from './bc/bc/bc.action';
 export { OrgActivityAction } from './org-activities/orgActivity.action';
 
 
@@ -38,5 +38,5 @@ export { LocationTypeState } from './bc/location-type/locationType.state';
 export { ImpactLevelState } from './bc/impact-level/impact-level.state';
 export { ImpactMatrixState } from './bc/impact-matrix/impact-matrix.state';
 export { OrgDetailState } from './bc/org-details/org-detail.state';
-export { BusinessContinuityState } from './bc/business-continuity/business-continuity.state';
+export { BCState } from './bc/bc/bc.state';
 export { OrgActivityState } from './org-activities/orgActivity.state';
