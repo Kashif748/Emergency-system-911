@@ -185,6 +185,19 @@ export class ReopenState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
+
+          fromDate: pageRequest.filters?.fromDate
+            ? DateTimeUtil.format(
+              pageRequest.filters?.fromDate,
+              DateTimeUtil.DATE_FORMAT
+            )
+            : undefined,
+          toDate: pageRequest.filters?.toDate
+            ? DateTimeUtil.format(
+              pageRequest.filters?.toDate,
+              DateTimeUtil.DATE_FORMAT
+            )
+            : undefined,
           status: pageRequest.filters.status?.map((o) => o.id),
         },
       })
@@ -290,6 +303,19 @@ export class ReopenState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
+
+          fromDate: pageRequest.filters?.fromDate
+            ? DateTimeUtil.format(
+              pageRequest.filters?.fromDate,
+              DateTimeUtil.DATE_FORMAT
+            )
+            : undefined,
+          toDate: pageRequest.filters?.toDate
+            ? DateTimeUtil.format(
+              pageRequest.filters?.toDate,
+              DateTimeUtil.DATE_FORMAT
+            )
+            : undefined,
           status: pageRequest.filters.status?.map((o) => o.id),
         },
       })
@@ -348,7 +374,6 @@ export class ReopenState {
       })
     );
   }
-
   @Action(ReopenAction.ChangeTasksColumns)
   ChangeTasksColumns(
     { setState }: StateContext<ReopenStateModel>,

@@ -13,7 +13,6 @@ import {
   BcActivityAnalysis,
   BcAnalysisStatus,
   BcCycles,
-  PageBcActivities,
   PageBcActivityAnalysis,
   PageBcCycles,
 } from 'src/app/api/models';
@@ -28,7 +27,6 @@ import { ImapactAnalysisAction } from './impact-analysis.action';
 export interface ImpactAnalysisStateModel {
   activityAnalysisPage: PageBcActivityAnalysis;
   cyclesPage: PageBcCycles;
-  activities: PageBcActivities;
 
   activityStatuses: BcAnalysisStatus[];
 
@@ -68,11 +66,6 @@ export class ImpactAnalysisState {
     return state?.activityAnalysisPage?.totalElements;
   }
 
-  //
-  @Selector([ImpactAnalysisState])
-  static activities(state: ImpactAnalysisStateModel) {
-    return state?.activities.content;
-  }
   @Selector([ImpactAnalysisState])
   static ImpactAnalysis(state: ImpactAnalysisStateModel) {
     return state?.ImpactAnalysis;
@@ -125,7 +118,7 @@ export class ImpactAnalysisState {
           setState(
             patch<ImpactAnalysisStateModel>({
               activityAnalysisPage: bc.result,
-              loading: false
+              loading: false,
             })
           );
         }),
@@ -163,29 +156,6 @@ export class ImpactAnalysisState {
           setState(
             patch<ImpactAnalysisStateModel>({
               blocking: false,
-            })
-          );
-        })
-      );
-  }
-
-  @Action(ImapactAnalysisAction.LoadActivities, { cancelUncompleted: true })
-  LoadActivities(
-    { setState }: StateContext<ImpactAnalysisStateModel>,
-    { payload }: ImapactAnalysisAction.LoadActivities
-  ) {
-    return this.activitiesController
-      .search19({
-        pageable: {
-          page: payload?.page,
-          size: payload?.size,
-        },
-      })
-      .pipe(
-        tap((bc) => {
-          setState(
-            patch<ImpactAnalysisStateModel>({
-              activities: bc.result,
             })
           );
         })

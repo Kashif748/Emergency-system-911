@@ -14,7 +14,7 @@ export namespace ActivityPrioritySeqAction {
         sort?: string[];
         page: number;
         size: number;
-        versionId :number
+
       }
     ) {
     }

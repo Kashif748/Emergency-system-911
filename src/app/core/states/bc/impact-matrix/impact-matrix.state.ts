@@ -13,8 +13,9 @@ import { patch } from '@ngxs/store/operators';
 import { Injectable } from '@angular/core';
 import { BcImpactTypesMatrixControllerService } from '../../../../api/services/bc-impact-types-matrix-controller.service';
 import { ImpactMatrixAction } from '@core/states/bc/impact-matrix/impact-matrix.action';
-import { BrowseBusinessContinuityState } from '../../../../modules/_business-continuity/states/browse-business-continuity.state';
+import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
 import { BcImpactMatrixDto } from '../../../../api/models/bc-impact-matrix-dto';
+import { BCState } from '../bc/bc.state';
 
 export interface ImpactMatrixStateModel {
   page: BcImpactMatrixDto[];
@@ -76,10 +77,12 @@ export class ImpactMatrixState {
         loading: true,
       })
     );
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+
     return this.impactMatrix
       .findAll1({
         isActive: true,
-        versionId: payload.versionId,
+        versionId: version?.id,
 
         // request: payload.filters,
       })
@@ -120,10 +123,10 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
-    payload.bcImpactTypes.versionId = versionID;
+    const version = this.store.selectSnapshot(
+      BCState.selectedVersion
+     );
+    payload.bcImpactTypes.versionId = version?.id;
     return this.impactMatrix
       .insert({
         body: payload,
@@ -149,10 +152,10 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
+    const version = this.store.selectSnapshot(
+     BCState.selectedVersion
     );
-    payload.bcImpactTypes.versionId = versionID;
+    payload.bcImpactTypes.versionId = version?.id;
     return this.impactMatrix
       .update90({
         body: payload,

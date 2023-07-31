@@ -1,0 +1,252 @@
+<div class="p-toolbar-group-right">
+  <button
+    pButton
+    label="{{ 'ADD_ACTIVITY_ACTION' | translate }}"
+    icon="pi pi-plus"
+    (click)="toggleDialog()"
+  ></button>
+</div>
+
+<!-- as a dialog -->
+<p-dialog
+  #dialog
+  [visible]="opened$ | async"
+  (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
+    <h3>
+      <span>{{ "ADD_NEW_ACTIVITY" | translate }}</span>
+      <span
+        *ngIf="true"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="false"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </h3>
+  </div>
+
+  <span class="flex-grow-1"></span>
+  <a
+    queryParamsHandling="merge"
+    pRipple
+    pButton
+    icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"
+  ></a>
+</ng-template>
+
+<!-- templates content -->
+<ng-template #content>
+  <div class="w-100 pt-2 min-h-400px">
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+
+    <div class="row">
+      <h3
+        *ngIf="!selectedCycle"
+        class="col-12 pt-10 pb-3 font-weight-bold text-center"
+      >
+        {{ "SELECT_CYCLE_MSG" | translate }}
+      </h3>
+      <!-- Cycle -->
+      <div class="p-field p-col-6 mx-auto">
+        <p-dropdown
+          [autoDisplayFirst]="false"
+          [options]="cycles$ | async"
+          [(ngModel)]="selectedCycle"
+          [showClear]="true"
+          dataKey="id"
+          styleClass="w-100"
+          placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
+        >
+          <ng-template let-item pTemplate="selectedItem">
+            {{ item | translateObj }}
+          </ng-template>
+
+          <ng-template let-item pTemplate="item">
+            {{ item | translateObj }}
+          </ng-template>
+        </p-dropdown>
+      </div>
+      <div *ngIf="selectedCycle" class="p-field p-col-6">
+        <div class="p-inputgroup">
+          <span class="p-float-label">
+            <input type="text" pInputText />
+            <label>
+              {{ "ACTIVITY_NAME" | translate }}
+            </label>
+          </span>
+          <button type="button" pButton pRipple icon="pi pi-search"></button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedCycle" class="row">
+      <div class="col-12">
+        <ng-container>
+          <ng-container *ngIf="loading$ | async; else tableTemplate">
+            <p-table [value]="[].constructor(10)">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 0"></th>
+                  <th class="min-w-100px">
+                    <div class="p-d-flex p-jc-between p-ai-center">#</div>
+                  </th>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "ACTIVITY_NAME" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "LOCATIONS.REGION" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td class="flag-td">
+                    <div class="bg-secondary"></div>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              totalRecords="8"
+              [value]="page$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+              selectionMode="multiple"
+              [(selection)]="selectedActivities"
+              [rowHover]="true"
+            >
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 2.25em">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "ACTIVITY_NAME" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "ACTIVITY_FEQ" | translate }}
+                    </div>
+                  </th>
+
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "ORG_ARTCH" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item let-rowData>
+                <tr [pSelectableRow]="rowData" class="cursor-pointer hoverable">
+                  <td>
+                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                  </td>
+                  <td class="min-w-200px max-w-300px">
+                    {{ item | translateObj }}
+                  </td>
+                  <td class="min-w-200px max-w-300px">
+                    {{ item?.activityFrequence | translateObj }}
+                  </td>
+
+                  <td class="min-w-200px max-w-300px">
+                    {{ item?.orgHierarchy | translateObj }}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+
+        <p-paginator
+          #pg
+          [totalRecords]="totalRecords$ | async"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
+        >
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <div class="ml-dir-auto"></div>
+
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          [disabled]="!selectedActivities"
+          pButton
+          [loading]="blocking$ | async"
+          (click)="submit()"
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+        ></button>
+      </div>
+    </div>
+  </div>
+</ng-template>
