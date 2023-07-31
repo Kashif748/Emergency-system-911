@@ -107,15 +107,20 @@
         >
           <tr [pEditableRow]="item" class="cursor-pointer hoverable">
             <td>{{ rowIndex + 1 }}</td>
-            <td>
+            <td class="validationMesg">
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input
-                    pInputText
-                    type="text"
-                    [(ngModel)]="item.nameAr"
-                    class="p-inputtext w-100"
-                  />
+                  <div class="input-container">
+                    <input
+                      pInputText
+                      type="text"
+                      [ngModel]="item.nameAr"
+                      [formControl]="formGroup.controls['nameAr']"
+                      class="p-inputtext w-100"
+                      [pTooltip]="getValidationErrorMessage('nameAr')"
+                      tooltipPosition="top"
+                    />
+                  </div>
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{ item.nameAr }}
@@ -126,12 +131,17 @@
             <td>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input
-                    pInputText
-                    type="text"
-                    [(ngModel)]="clonedLevels[item.id].nameEn"
-                    class="p-inputtext w-100"
-                  />
+                  <div class="input-container">
+                    <input
+                      pInputText
+                      type="text"
+                      [ngModel]="clonedLevels[item.id].nameEn"
+                      [formControl]="formGroup.controls['nameEn']"
+                      class="p-inputtext w-100"
+                      [pTooltip]="getValidationErrorMessage('nameEn')"
+                      tooltipPosition="top"
+                    />
+                  </div>
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{ item.nameEn }}

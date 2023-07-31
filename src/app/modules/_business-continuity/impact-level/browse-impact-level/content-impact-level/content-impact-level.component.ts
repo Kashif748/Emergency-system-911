@@ -9,6 +9,9 @@ import {BusinessContinuityState} from "@core/states/bc/business-continuity/busin
 import {filter, map, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {GenericValidators} from "@shared/validators/generic-validators";
+import {FormUtils} from "@core/utils/form.utils";
 
 @Component({
   selector: 'app-content-impact-level',
@@ -40,12 +43,14 @@ export class ContentImpactLevelComponent implements OnInit {
 
   public disableButton: boolean
   public version$: Observable<boolean>;
+  formGroup: FormGroup;
 
   constructor(
     private store: Store,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
-    private translate: TranslateService
+    private formBuilder: FormBuilder,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -68,12 +73,23 @@ export class ContentImpactLevelComponent implements OnInit {
       })
     );
     this.version$.subscribe();
+    this.formGroup = this.formBuilder.group({
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
+    });
   }
   onRowEditInit(level: BcImpactLevel) {
     this.clonedLevels[level.id] = { ...level };
   }
 
   onRowEditSave(level: BcImpactLevel, event: Event) {
+    if (!this.formGroup.valid) {
+      this.formGroup.markAllAsTouched();
+      FormUtils.ForEach(this.formGroup, (fc) => {
+        fc.markAsDirty();
+      });
+      return;
+    }
     const updatedLevel: BcImpactLevel = {
       id: this.clonedLevels[level.id].id,
       versionId: this.clonedLevels[level.id].versionId,
@@ -101,4 +117,20 @@ export class ContentImpactLevelComponent implements OnInit {
   onRowEditCancel(level: BcImpactLevel, index: number) {
     delete this.clonedLevels[level.id];
   }
+  getValidationErrorMessage(controlName: string): string {
+    const control = this.formGroup.controls[controlName];
+    if (control.touched && control.invalid) {
+      if (control.errors?.required) {
+        return this.translate.instant('VALIDATION_MSG.REQUIRED');
+      }
+      if (control.errors?.arabic) {
+        return this.translate.instant('VALIDATION_MSG.MUST_BE_IN_ARABIC');
+      }
+      if (control.errors?.english) {
+        return this.translate.instant('VALIDATION_MSG.MUST_BE_IN_ENGLISH');
+      }
+    }
+    return '';
+  }
+
 }
