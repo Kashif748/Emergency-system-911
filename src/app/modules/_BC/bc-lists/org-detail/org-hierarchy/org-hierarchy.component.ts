@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { IAuthService } from '@core/services/auth.service';
 import { OrgStructure } from '@core/entities/AppCommonData';
 import { BrowseBCState } from '../../../states/browse-bc.state';
+import { BrowseOrgDetailModel, BrowseOrgDetailState } from '../states/browse-orgDetail.state';
 @Component({
   selector: 'app-org-hierarchy',
   templateUrl: './org-hierarchy.component.html',
@@ -25,6 +26,10 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
 
   @Select(OrgDetailState.org)
   public org$: Observable<OrgStructure>;
+
+
+  @Select(BrowseOrgDetailState.state)
+  public state$: Observable<BrowseOrgDetailModel>;
 
   private destroy$ = new Subject();
   get loggedinUserId() {
