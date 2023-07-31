@@ -125,7 +125,7 @@ export class LocationsState {
       })
     );
     return this.locationService
-      .insertOne9({
+      .insertOne8({
         body: payload,
       })
       .pipe(
@@ -151,7 +151,7 @@ export class LocationsState {
     );
 
     return this.locationService
-      .update88({
+      .update87({
         body: payload,
       })
       .pipe(
@@ -183,7 +183,7 @@ export class LocationsState {
         blocking: true,
       })
     );
-    return this.locationService.getOne9({ id: payload.id }).pipe(
+    return this.locationService.getOne8({ id: payload.id }).pipe(
       tap((location) => {
         setState(
           patch<LocationsStateModel>({

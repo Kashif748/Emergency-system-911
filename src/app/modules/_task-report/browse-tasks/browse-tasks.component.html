@@ -7,11 +7,11 @@
         <div class="row mt-5">
           <div class="col-12 position-relative">
             <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
-              legend="{{'ACTIONS.ADVANCED_SEARCH' | translate}}" [collapsed]="!(hasFilters$ | async)">
+              legend="{{'ACTIONS.ADVANCED_SEARCH' | translate}}" [collapsed]="false">
               <div class="p-fluid p-grid">
                 <div class="p-field p-col-6 p-md-3">
                   <input type="text" pInputText [ngModel]="state.pageRequest.filters['title']"
-                    placeholder="{{ 'SHARED.TITLE' | translate }}"
+                    placeholder="{{ 'TASK_NAME' | translate }}"
                     (keyup)="updateFilter({title: $event.target.value}, $event)">
                 </div>
 
@@ -65,11 +65,10 @@
                 </div>
 
                 <div class="p-field p-col-6 p-md-3">
-                  <p-calendar placeholder="{{ 'SHARED.DUE_DATE' | translate }}"
-                    [ngModel]="state.pageRequest.filters['dueDate']"
-                    (ngModelChange)="updateFilter({dueDate: $event}, $event)" [showIcon]="true"
+                  <p-calendar selectionMode="range" [readonlyInput]="true" #dueDate
+                    placeholder="{{ 'SHARED.DUE_DATE' | translate }}" [ngModel]="state.pageRequest.filters['dueDate']"
+                    (onClose)="updateFilter({dueDate: dueDate.value}, dueDate.value)" [showIcon]="true"
                     showButtonBar="true"></p-calendar>
-
                 </div>
 
                 <div class="p-col p-d-flex">
@@ -133,7 +132,7 @@
               <div class="p-toolbar-group-right">
                 <p-splitButton label="{{'ACTIONS.EXPORT' | translate}}" icon="pi pi-external-link"
                   [model]="[{label: 'ACTIONS.EXPORT_TO_XLSX' | translate ,icon: 'pi pi-file-excel', command: exportExcel},{label: 'ACTIONS.EXPORT_TO_PDF' | translate ,icon: 'pi pi-file-pdf',command: exportPdf}]"
-                  (onClick)="export('EXCEL')"></p-splitButton>
+                  (onClick)="export('EXCEL')" [disabled]="exporting$ | async"></p-splitButton>
               </div>
 
             </p-toolbar>
@@ -157,9 +156,9 @@
             </p-divider>
           </div>
         </div>
-        <app-content-tasks [view]="state.view" [type]="type$ | async" [loading]="loading$ | async"
-          [page]="page$ | async" [columns]="state.columns" [totalRecords]="totalRecords$ | async"
-          [pageRequest]="state.pageRequest" (onPageChange)="loadPage($event)"></app-content-tasks>
+        <app-content-tasks [view]="state.view" [loading]="loading$ | async" [page]="page$ | async"
+          [columns]="state.columns" [totalRecords]="totalRecords$ | async" [pageRequest]="state.pageRequest"
+          (onPageChange)="loadPage($event)"></app-content-tasks>
 
       </div>
     </div>

@@ -75,7 +75,12 @@ export class OrgActivityState {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
-        }
+        },
+        orgHierarchyId: payload.filters.orgHierarchyId ? payload.filters.orgHierarchyId['id'].id : payload.filters.orgHierarchyId,
+        name: payload.filters.name,
+        activityFrequencyId: payload.filters.activityFrequencyId ? payload.filters.activityFrequencyId['id'] : payload.filters.activityFrequencyId,
+        activityArea: payload.filters.activityArea,
+        refrenceNumber: payload.filters.refrenceNumber
       })
       .pipe(
         tap((res) => {
@@ -122,7 +127,7 @@ export class OrgActivityState {
         blocking: true,
       })
     );
-    return this.bcActivities.getOne26({ id: payload.id }).pipe(
+    return this.bcActivities.getOne27({ id: payload.id }).pipe(
       tap((res) => {
         setState(
           patch<OrgActivitiesStateModel>({
@@ -151,7 +156,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .insertOne24({
+      .insertOne25({
         body: payload,
       })
       .pipe(
@@ -176,7 +181,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .update104({
+      .update105({
         body: payload,
       })
       .pipe(

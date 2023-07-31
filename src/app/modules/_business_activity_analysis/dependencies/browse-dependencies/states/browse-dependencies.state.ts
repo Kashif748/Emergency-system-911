@@ -20,16 +20,10 @@ import { EMPTY } from 'rxjs';
 import { BrowseActivityAnalysisState } from '../../../states/browse-activity-analysis.state';
 import { ActivityDependenciesAction } from '@core/states/activity-analysis/dependencies/dependencies.action';
 
-export enum DEPENDENCIES_TYPES {
-  DEPENDENCY_ORG,
-  DEPENDENCY_INTERNAL,
-  DEPENDENCY_EXTERNAL,
-}
 export interface BrowseActivityDependenciesStateModel {
   internalPageRequest: PageRequestModel;
   externalPageRequest: PageRequestModel;
   orgPageRequest: PageRequestModel;
-  dependenciesTypes: any;
 }
 
 export const BROWSE_DEPENDENCIES_UI_STATE_TOKEN =
@@ -53,7 +47,6 @@ export const BROWSE_DEPENDENCIES_UI_STATE_TOKEN =
       first: 0,
       rows: 10,
     },
-    dependenciesTypes: DEPENDENCIES_TYPES,
   },
 })
 @Injectable()
@@ -276,8 +269,8 @@ export class BrowseActivityDependenciesState {
           this.route.snapshot.queryParams['_dialog'] == 'opened'
             ? undefined
             : 'opened',
-        _id: payload.id,
-        _mode: undefined,
+
+        _dependType: payload?._dependType,
       },
       queryParamsHandling: 'merge',
     });

@@ -13,6 +13,7 @@ import { Pageable } from '../models/pageable';
 import { RestApiResponseBoolean } from '../models/rest-api-response-boolean';
 import { RestApiResponseListIncidentTask } from '../models/rest-api-response-list-incident-task';
 import { RestApiResponseListLong } from '../models/rest-api-response-list-long';
+import { RestApiResponseListMapStringObject } from '../models/rest-api-response-list-map-string-object';
 import { RestApiResponseListTaskType } from '../models/rest-api-response-list-task-type';
 import { RestApiResponseLong } from '../models/rest-api-response-long';
 import { RestApiResponsePageIncidentTask } from '../models/rest-api-response-page-incident-task';
@@ -411,6 +412,52 @@ export class TaskControllerService extends BaseService {
 
     return this.getTaskCountByOrgStructureAndStatusIdAndIncidentId$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseLong>) => r.body as RestApiResponseLong)
+    );
+  }
+
+  /**
+   * Path part for operation getTaskMetricsZone
+   */
+  static readonly GetTaskMetricsZonePath = '/v1/tasks/metrics/zone';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTaskMetricsZone()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskMetricsZone$Response(params: {
+    filter: TaskFilter;
+  }): Observable<StrictHttpResponse<RestApiResponseListMapStringObject>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskControllerService.GetTaskMetricsZonePath, 'get');
+    if (params) {
+      rb.query('filter', params.filter, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListMapStringObject>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getTaskMetricsZone$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskMetricsZone(params: {
+    filter: TaskFilter;
+  }): Observable<RestApiResponseListMapStringObject> {
+
+    return this.getTaskMetricsZone$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListMapStringObject>) => r.body as RestApiResponseListMapStringObject)
     );
   }
 

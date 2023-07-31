@@ -20,13 +20,24 @@ import { PageBcActivityDependencyInternal } from 'src/app/api/models/page-bc-act
 import { PageBcActivityDependencyExternal } from 'src/app/api/models/page-bc-activity-dependency-external';
 import { PageBcActivityDependencyOrg } from 'src/app/api/models/page-bc-activity-dependency-org';
 
-export interface ActivityDependenciesStateModel {
-  activityDependencyInternal: PageBcActivityDependencyInternal;
-  activityDependencyExternal: PageBcActivityDependencyExternal;
-  activityDependencyOrg: PageBcActivityDependencyOrg;
+export enum DEPENDENCIES_TYPES {
+  DEPENDENCY_ORG = 'DEPENDENCY_ORG',
+  DEPENDENCY_INTERNAL = 'DEPENDENCY_INTERNAL',
+  DEPENDENCY_EXTERNAL = 'DEPENDENCY_EXTERNAL',
+}
+export interface DependenciesFlags {
+  DEPENDENCY_ORG: boolean;
+  DEPENDENCY_INTERNAL: boolean;
+  DEPENDENCY_EXTERNAL: boolean;
+}
 
-  loading: boolean;
-  blocking: boolean;
+export interface ActivityDependenciesStateModel {
+  activityDependencyInternal?: PageBcActivityDependencyInternal;
+  activityDependencyExternal?: PageBcActivityDependencyExternal;
+  activityDependencyOrg?: PageBcActivityDependencyOrg;
+
+  loading?: DependenciesFlags;
+  blocking: DependenciesFlags;
 }
 
 const ACTIVITY_DEPENDENCIES_STATE_TOKEN =
@@ -34,6 +45,18 @@ const ACTIVITY_DEPENDENCIES_STATE_TOKEN =
 
 @State<ActivityDependenciesStateModel>({
   name: ACTIVITY_DEPENDENCIES_STATE_TOKEN,
+  defaults: {
+    loading: {
+      DEPENDENCY_EXTERNAL: false,
+      DEPENDENCY_ORG: false,
+      DEPENDENCY_INTERNAL: false,
+    },
+    blocking: {
+      DEPENDENCY_EXTERNAL: false,
+      DEPENDENCY_ORG: false,
+      DEPENDENCY_INTERNAL: false,
+    },
+  },
 })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
@@ -88,7 +111,9 @@ export class ActivityDependenciesState {
   ) {
     setState(
       patch<ActivityDependenciesStateModel>({
-        loading: true,
+        loading: patch({
+          DEPENDENCY_INTERNAL: true,
+        }),
       })
     );
     return this.activityDependencyInternal
@@ -107,7 +132,9 @@ export class ActivityDependenciesState {
           setState(
             patch<ActivityDependenciesStateModel>({
               activityDependencyInternal: res.result,
-              loading: false,
+              loading: patch({
+                DEPENDENCY_INTERNAL: false,
+              }),
             })
           );
         }),
@@ -122,7 +149,9 @@ export class ActivityDependenciesState {
         finalize(() => {
           setState(
             patch<ActivityDependenciesStateModel>({
-              loading: false,
+              loading: patch({
+                DEPENDENCY_INTERNAL: false,
+              }),
             })
           );
         })
@@ -135,7 +164,9 @@ export class ActivityDependenciesState {
   ) {
     setState(
       patch<ActivityDependenciesStateModel>({
-        blocking: true,
+        blocking: patch({
+          DEPENDENCY_INTERNAL: true,
+        }),
       })
     );
 
@@ -147,7 +178,9 @@ export class ActivityDependenciesState {
         finalize(() => {
           setState(
             patch<ActivityDependenciesStateModel>({
-              blocking: false,
+              blocking: patch({
+                DEPENDENCY_INTERNAL: false,
+              }),
             })
           );
         })
@@ -163,7 +196,9 @@ export class ActivityDependenciesState {
   ) {
     setState(
       patch<ActivityDependenciesStateModel>({
-        loading: true,
+        loading: patch({
+          DEPENDENCY_ORG: true,
+        }),
       })
     );
     return this.activityDependencyOrg
@@ -182,7 +217,9 @@ export class ActivityDependenciesState {
           setState(
             patch<ActivityDependenciesStateModel>({
               activityDependencyOrg: res.result,
-              loading: false,
+              loading: patch({
+                DEPENDENCY_ORG: false,
+              }),
             })
           );
         }),
@@ -197,7 +234,9 @@ export class ActivityDependenciesState {
         finalize(() => {
           setState(
             patch<ActivityDependenciesStateModel>({
-              loading: false,
+              loading: patch({
+                DEPENDENCY_ORG: false,
+              }),
             })
           );
         })
@@ -210,7 +249,9 @@ export class ActivityDependenciesState {
   ) {
     setState(
       patch<ActivityDependenciesStateModel>({
-        blocking: true,
+        blocking: patch({
+          DEPENDENCY_ORG: true,
+        }),
       })
     );
 
@@ -222,7 +263,9 @@ export class ActivityDependenciesState {
         finalize(() => {
           setState(
             patch<ActivityDependenciesStateModel>({
-              blocking: false,
+              blocking: patch({
+                DEPENDENCY_ORG: false,
+              }),
             })
           );
         })
@@ -238,7 +281,9 @@ export class ActivityDependenciesState {
   ) {
     setState(
       patch<ActivityDependenciesStateModel>({
-        loading: true,
+        loading: patch({
+          DEPENDENCY_EXTERNAL: true,
+        }),
       })
     );
     return this.activityDependencyExternal
@@ -257,7 +302,9 @@ export class ActivityDependenciesState {
           setState(
             patch<ActivityDependenciesStateModel>({
               activityDependencyExternal: res.result,
-              loading: false,
+              loading: patch({
+                DEPENDENCY_EXTERNAL: false,
+              }),
             })
           );
         }),
@@ -272,7 +319,9 @@ export class ActivityDependenciesState {
         finalize(() => {
           setState(
             patch<ActivityDependenciesStateModel>({
-              loading: false,
+              loading: patch({
+                DEPENDENCY_EXTERNAL: false,
+              }),
             })
           );
         })
@@ -285,7 +334,9 @@ export class ActivityDependenciesState {
   ) {
     setState(
       patch<ActivityDependenciesStateModel>({
-        blocking: true,
+        blocking: patch({
+          DEPENDENCY_EXTERNAL: true,
+        }),
       })
     );
 
@@ -297,7 +348,9 @@ export class ActivityDependenciesState {
         finalize(() => {
           setState(
             patch<ActivityDependenciesStateModel>({
-              blocking: false,
+              blocking: patch({
+                DEPENDENCY_EXTERNAL: false,
+              }),
             })
           );
         })

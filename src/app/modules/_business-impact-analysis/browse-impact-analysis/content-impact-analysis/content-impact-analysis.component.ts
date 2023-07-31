@@ -6,11 +6,11 @@ import {Store} from "@ngxs/store";
 import {BrowseUsersAction} from "../../../_user-mgmt/states/browse-users.action";
 
 @Component({
-  selector: 'app-content-business-impact-analysis',
-  templateUrl: './content-business-impact-analysis.component.html',
-  styleUrls: ['./content-business-impact-analysis.component.scss']
+  selector: 'app-content-impact-analysis',
+  templateUrl: './content-impact-analysis.component.html',
+  styleUrls: ['./content-impact-analysis.component.scss']
 })
-export class ContentBusinessImpactAnalysisComponent implements OnInit {
+export class ContentImpactAnalysisComponent implements OnInit {
   @Input()
   view: 'TABLE' | 'CARDS';
   @Input()

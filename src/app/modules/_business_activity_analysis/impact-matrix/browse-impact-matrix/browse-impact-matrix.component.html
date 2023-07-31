@@ -7,7 +7,7 @@
   <p-button
     [disabled]="selectedCells.length == 0"
     [loading]="blocking$ | async"
-    label="حفظ"
+    label="{{ 'ACTIONS.SAVE' | translate }}"
     (click)="save()"
     icon="pi pi-save"
   ></p-button>

@@ -1,4 +1,5 @@
 import { BcActivities, BcActivityAnalysis } from 'src/app/api/models';
+import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 
 export namespace ActivityAnalysisAction {
   export class LoadPage {
@@ -10,6 +11,19 @@ export namespace ActivityAnalysisAction {
     constructor(
       public payload: {
         orgHierarchyId?: number;
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+  export class LoadActivities {
+    static readonly type = '[ActivityAnalysis] Load Activites';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
         page: number;
         size: number;
       }
@@ -46,5 +60,13 @@ export namespace ActivityAnalysisAction {
      *
      */
     constructor(public payload: BcActivityAnalysis) {}
+  }
+
+  export class ChangeStatus {
+    static readonly type = '[ActivityAnalysis]  Change Status';
+    /**
+     *
+     */
+    constructor(public payload: BcActivityAnalysisChangeStatusDto) {}
   }
 }

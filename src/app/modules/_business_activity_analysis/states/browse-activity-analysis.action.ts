@@ -1,4 +1,5 @@
 import { BcActivities, BcActivityAnalysis } from 'src/app/api/models';
+import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 
 export namespace BrowseActivityAnalysisAction {
   export class GetActivityAnalysis {
@@ -43,5 +44,24 @@ export namespace BrowseActivityAnalysisAction {
         index?: number;
       }
     ) {}
+  }
+
+  export class setImpactTotal {
+    static readonly type = '[BrowseActivityAnalysis] Impact Total';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        impactTotal?: number;
+      }
+    ) {}
+  }
+  export class ChangeStatus {
+    static readonly type = '[BrowseActivityAnalysis]  Change Status';
+    /**
+     *
+     */
+    constructor(public payload: BcActivityAnalysisChangeStatusDto) {}
   }
 }

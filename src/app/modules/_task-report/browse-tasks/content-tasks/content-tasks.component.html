@@ -48,7 +48,7 @@
                   <div class="mt-1 mx-2 p-grid p-fluid">
                     <div class="p-col-12 pb-0 p-d-flex">
                       <div>
-                        <h4 class="mb-1 px-2 d-inline" pTooltip="{{ 'SHARED.TITLE' | translate }}" appendTo="body"
+                        <h4 class="mb-1 px-2 d-inline" pTooltip="{{ 'TASK_NAME' | translate }}" appendTo="body"
                           tooltipPosition="top">
                           {{ item.title }}
                         </h4>
@@ -60,18 +60,24 @@
                         icon="pi pi-user" styleClass="bg-transparent text-muted"></p-chip>
 
                       <p-chip pTooltip="{{ 'SHARED.INCIDENT_SERIAL' | translate }}" appendTo="body"
-                        tooltipPosition="top" label="{{ item.incident?.serial }}" icon="pi pi-info"
-                        styleClass="m-1"></p-chip>
+                        tooltipPosition="top" label="{{ item.incident?.year }} / {{ item.incident?.serial }}"
+                        icon="pi pi-info" styleClass="m-1"></p-chip>
 
                       <p-chip pTooltip="{{ 'SHARED.PRIORITY' | translate }}" appendTo="body" tooltipPosition="top"
                         label="{{ item.priority | translateObj }}" icon="pi pi-sort-numeric-up-alt"
                         styleClass="m-1 text-white bg-{{item?.priority['color']}}"></p-chip>
 
-                      <p-chip pTooltip="{{ 'SHARED.DUE_DATE' | translate }}" appendTo="body" tooltipPosition="top"
-                        label="{{ item.dueDate | cdate }}" icon="pi pi-clock" checkDueDate
+
+                      <p-chip pTooltip="{{ 'SHARED.CREATION_DATE' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{ item.createdOn | cdate }}" icon="pi pi-clock" styleClass="m-1">
+                      </p-chip>
+
+                      <p-chip pTooltip="{{ 'SHARED.CLOSE_DATE' | translate }}" appendTo="body" tooltipPosition="top"
+                        label="{{ item.closedDate | cdate }}" icon="pi pi-clock" checkDueDate
                         [closedDate]="item.closedDate" [dueDate]="item.dueDate" dueClass="text-white bg-danger"
                         styleClass="m-1">
                       </p-chip>
+
 
                       <p-chip pTooltip="{{ 'SHARED.STATUS' | translate }}" appendTo="body" tooltipPosition="top"
                         label="{{item.status | translateObj }}" icon="pi pi-question-circle" styleClass="m-1"></p-chip>
@@ -107,7 +113,7 @@
 
               <th *ngIf="columns?.includes('title')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.TITLE" | translate }}
+                  {{ "TASK_NAME" | translate }}
                 </div>
               </th>
               <th *ngIf="columns?.includes('desc')">
@@ -128,9 +134,15 @@
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('dueDate')">
+              <th *ngIf="columns?.includes('createdOn')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.DUE_DATE" | translate }}
+                  {{ "SHARED.CREATION_DATE" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('closedOn')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.CLOSE_DATE" | translate }}
                 </div>
               </th>
 
@@ -178,7 +190,11 @@
                 <p-skeleton></p-skeleton>
               </td>
 
-              <td class="max-w-250px" *ngIf="columns?.includes('dueDate')">
+              <td class="max-w-250px" *ngIf="columns?.includes('createdOn')">
+                <p-skeleton></p-skeleton>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('closedOn')">
                 <p-skeleton></p-skeleton>
               </td>
 
@@ -212,7 +228,7 @@
 
               <th *ngIf="columns?.includes('title')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.TITLE" | translate }}
+                  {{ "TASK_NAME" | translate }}
                 </div>
               </th>
               <th *ngIf="columns?.includes('desc')">
@@ -233,9 +249,15 @@
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('dueDate')">
+              <th *ngIf="columns?.includes('createdOn')">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SHARED.DUE_DATE" | translate }}
+                  {{ "SHARED.CREATION_DATE" | translate }}
+                </div>
+              </th>
+
+              <th *ngIf="columns?.includes('closedOn')">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SHARED.CLOSE_DATE" | translate }}
                 </div>
               </th>
 
@@ -274,7 +296,7 @@
                 {{item.body}}
               </td>
               <td class="max-w-250px" *ngIf="columns?.includes('incidentId')">
-                {{item.incident?.serial}}
+                {{ item.incident?.year }} / {{item.incident?.serial}}
               </td>
 
               <td class="max-w-250px" *ngIf="columns?.includes('priority')">
@@ -283,9 +305,16 @@
                   {{ item.priority | translateObj }}
                 </p-tag>
               </td>
-              <td class="max-w-250px" *ngIf="columns?.includes('dueDate')">
+
+              <td class="max-w-250px" *ngIf="columns?.includes('createdOn')">
+                <p-tag styleClass="m-1">
+                  {{ item.createdOn | cdate }}
+                </p-tag>
+              </td>
+
+              <td class="max-w-250px" *ngIf="columns?.includes('closedOn')">
                 <p-tag styleClass="m-1" checkDueDate [closedDate]="item.closedDate" [dueDate]="item.dueDate">
-                  {{ item.dueDate | cdate }}
+                  {{ item.closedDate | cdate }}
                 </p-tag>
               </td>
 

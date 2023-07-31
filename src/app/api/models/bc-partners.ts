@@ -2,7 +2,6 @@
 /* eslint-disable */
 export interface BcPartners {
   address?: string;
-  cnNumber?: string;
   id?: number;
   isActive?: boolean;
   isCritical?: boolean;
