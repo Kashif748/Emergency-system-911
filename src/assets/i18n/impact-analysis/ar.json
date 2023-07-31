@@ -17,7 +17,7 @@
   "ADD_NEW_ACTIVITY" :"إختيار النشاطات اللازمة للتحليل",
   "ADD_ACTIVITY_ACTION": " اضافة أنشطة للتحليل",
   "ORG_ARTCH": "الهيكل الإداري",
-
+  "START_ANALYSIS" :"تحليل النشاط",
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY":"إضافة نشاط جديد",
     "ACTIVITY_DETAILS":"بيانات النشاط",

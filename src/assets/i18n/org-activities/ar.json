@@ -8,6 +8,7 @@
   "ACTIVITY_AREA":"نطاق النشاط",
   "ARIS": "رقم مرجع",
   "DEPT_HIERARCHY": "التسلسل الهرمي للإدارة",
+  "NAME" : "الاسم",
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY":"إضافة نشاط جديد",
     "ACTIVITY_DETAILS":"بيانات النشاط",

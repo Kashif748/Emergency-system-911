@@ -56,31 +56,13 @@ export class BCComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         const version = params['_version'];
-
         if (version) {
           this.setValueGlobally(version);
-
-          this.versions$
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((versions) => {
-              // Assuming you have a condition to select a specific version
-              // Replace the condition with your own logic
-              const selectedVersion = versions?.find((versions) => {
-                if (versions.id == version) {
-                  return versions;
-                }
-              });
-
-              if (selectedVersion) {
-                this.selectedVersion = selectedVersion;
-              }
-            });
         }
       });
   }
   ngOnInit() {
     this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-
     this.createForm();
   }
   createForm() {

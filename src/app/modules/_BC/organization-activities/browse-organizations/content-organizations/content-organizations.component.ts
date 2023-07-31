@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PageRequestModel} from "@core/models/page-request.model";
 import {Store} from "@ngxs/store";
 import {LazyLoadEvent} from "primeng/api";
-import {BcActivities} from "../../../../api/models/bc-activities";
+import {BcActivities} from "../../../../../api/models/bc-activities";
 import {BrowseOrganizationAction} from "../../states/browse-organization.action";
 
 @Component({

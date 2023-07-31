@@ -16,19 +16,7 @@ export namespace ImapactAnalysisAction {
       }
     ) {}
   }
-  export class LoadActivities {
-    static readonly type = '[ImapactAnalysisAction] Load Activites';
 
-    /**
-     *
-     */
-    constructor(
-      public payload: {
-        page: number;
-        size: number;
-      }
-    ) {}
-  }
   export class LoadActivitiesStatuses {
     static readonly type = '[ImapactAnalysisAction] Load Activities Statuses';
 

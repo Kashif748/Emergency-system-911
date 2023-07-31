@@ -30,6 +30,7 @@ import {
   RtoState,
 } from '@core/states';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -107,12 +108,11 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private breakpointObserver: BreakpointObserver,
     private translateObj: TranslateObjPipe,
-    private lang: ILangFacade
+    private lang: ILangFacade,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    console.log('here');
-
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
@@ -151,19 +151,18 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       .select(ImpactAnalysisState.activityAnalysisPage)
       .pipe(
         filter((p) => !!p),
-        tap(console.log),
+
         map((page) =>
           page?.map((u) => {
             return {
               ...u,
               actions: [
                 {
-                  label: this.translate.instant('ACTIONS.EDIT'),
+                  label: this.translate.instant('START_ANALYSIS'),
                   icon: 'pi pi-pencil',
                   command: () => {
-                    // this.openDialog(u.id);
+                    this.startAnalysis(u);
                   },
-                  // disabled: !u.isActive,
                 },
               ],
             };
@@ -227,6 +226,14 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     );*/
   }
 
+  startAnalysis(activity: BcActivityAnalysis) {
+    this.router.navigate(['bc/activity-analysis'], {
+      queryParams: {
+        _cycle: activity?.cycle?.id,
+        _activity: activity?.id,
+      },
+    });
+  }
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseImpactAnalysisAction.LoadPage({

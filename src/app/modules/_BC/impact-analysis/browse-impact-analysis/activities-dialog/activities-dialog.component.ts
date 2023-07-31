@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { Observable } from 'rxjs';
@@ -14,6 +12,7 @@ import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysi
 import { Store } from '@ngxs/store';
 import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
 import { map, tap } from 'rxjs/operators';
+import { OrgActivityAction, OrgActivityState } from '@core/states';
 
 @Component({
   selector: 'app-activities-dialog',
@@ -21,7 +20,7 @@ import { map, tap } from 'rxjs/operators';
   styleUrls: ['./activities-dialog.component.scss'],
 })
 export class ActivitiesDialogComponent implements OnInit {
-  @Select(ImpactAnalysisState.activities)
+  @Select(OrgActivityState.page)
   page$: Observable<BcActivities[]>;
 
   @Select(ImpactAnalysisState.cycles)
@@ -32,11 +31,11 @@ export class ActivitiesDialogComponent implements OnInit {
   @Select(ImpactAnalysisState.blocking)
   public blocking$: Observable<boolean>;
 
-  // @Select(LocationsState.totalRecords)
-  // public totalRecords$: Observable<number>;
+  @Select(OrgActivityState.totalRecords)
+  public totalRecords$: Observable<number>;
 
-  // @Select(LocationsState.loading)
-  // public loading$: Observable<boolean>;
+  @Select(OrgActivityState.loading)
+  public loading$: Observable<boolean>;
 
   // @Select(ActivityLocationsState.blocking)
   // blocking$: Observable<boolean>;
@@ -61,7 +60,7 @@ export class ActivitiesDialogComponent implements OnInit {
       })
     );
     this.store.dispatch([
-      new BrowseImpactAnalysisAction.LoadActivities({ page: 0, size: 100 }),
+      new OrgActivityAction.LoadPage({ page: 0, size: 100 }),
     ]);
   }
   submit() {

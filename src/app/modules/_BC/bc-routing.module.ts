@@ -21,8 +21,23 @@ const routes: Routes = [
         path: 'impact-analysis',
         loadChildren: () =>
           import('./impact-analysis/impact-analysis.module').then(
-            (m) => m.BusinessImpactAnalysisModule
+            (m) => m.ImpactAnalysisModule
           ),
+      },
+
+      {
+        path: 'activity-analysis',
+        loadChildren: () =>
+          import('./activity-analysis/activity-analysis.module').then(
+            (m) => m.ActivityAnalysisModule
+          ),
+      },
+      {
+        path: 'org-activities',
+        loadChildren: () =>
+          import(
+            './organization-activities/organization-activities.module'
+          ).then((m) => m.OrganizationActivitiesModule),
       },
     ],
   },

@@ -2,19 +2,25 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { BrowseActivityDependenciesAction } from '../states/browse-dependencies.action';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { OrgDetailAction, OrgDetailState } from '@core/states';
+import {
+  OrgActivityAction,
+  OrgActivityState,
+  OrgDetailAction,
+  OrgDetailState,
+} from '@core/states';
 import { TreeNode } from 'primeng/api';
-import { BcOrgHierarchy, PageBcActivities } from 'src/app/api/models';
+import { BcActivities, BcOrgHierarchy } from 'src/app/api/models';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { ActivityAnalysisAction } from '@core/states/activity-analysis/activity-analysis.action';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { FormUtils } from '@core/utils';
-import { ActivityDependenciesState, DEPENDENCIES_TYPES } from '@core/states/activity-analysis/dependencies/dependencies.state';
+import {
+  ActivityDependenciesState,
+  DEPENDENCIES_TYPES,
+} from '@core/states/activity-analysis/dependencies/dependencies.state';
 
 @Component({
   selector: 'app-dependencies-dialog',
@@ -26,8 +32,8 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   dependType: DEPENDENCIES_TYPES;
 
-  @Select(ActivityAnalysisState.activities)
-  activies$: Observable<PageBcActivities[]>;
+  @Select(OrgActivityState.page)
+  activies$: Observable<BcActivities[]>;
 
   public blocking$: Observable<boolean>;
 
@@ -75,7 +81,8 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
     );
     this.store.dispatch([
       new OrgDetailAction.GetOrgHierarchy({ page: 0, size: 100 }),
-      new ActivityAnalysisAction.LoadActivities({ page: 0, size: 100 }),
+
+      new OrgActivityAction.LoadPage({ page: 0, size: 100 }),
     ]);
 
     this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(

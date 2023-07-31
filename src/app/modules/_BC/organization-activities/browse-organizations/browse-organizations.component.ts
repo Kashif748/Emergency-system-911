@@ -1,29 +1,32 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from "rxjs";
-import {filter, map, take, takeUntil, tap} from "rxjs/operators";
-import {Select, Store} from "@ngxs/store";
-import {TranslateService} from "@ngx-translate/core";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {ActivatedRoute} from "@angular/router";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {LazyLoadEvent, MenuItem, TreeNode} from "primeng/api";
-import {BcActivities} from "../../../api/models/bc-activities";
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
-import {BrowseOrgActivityStateModel, BrowseOrganizationState} from "../states/browse-organization.state";
-import {BrowseOrganizationAction} from "../states/browse-organization.action";
-import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
-import {ActivityFrquencyAction, OrgDetailAction} from "@core/states";
-import {BcActivityFrequencies} from "../../../api/models/bc-activity-frequencies";
-import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
-import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
-import {BcOrgHierarchy} from "../../../api/models/bc-org-hierarchy";
-import {PrivilegesService} from "@core/services/privileges.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import { Select, Store } from '@ngxs/store';
+import { TranslateService } from '@ngx-translate/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ActivatedRoute } from '@angular/router';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { LazyLoadEvent, MenuItem, TreeNode } from 'primeng/api';
+import { BcActivities } from '../../../../api/models/bc-activities';
+import { OrgActivityState } from '@core/states/org-activities/orgActivity.state';
+import {
+  BrowseOrgActivityStateModel,
+  BrowseOrganizationState,
+} from '../states/browse-organization.state';
+import { BrowseOrganizationAction } from '../states/browse-organization.action';
+import { ActivityFrquencyState } from '@core/states/bc/activity-frquency/activity-frquency.state';
+import { ActivityFrquencyAction, OrgDetailAction } from '@core/states';
+import { BcActivityFrequencies } from '../../../../api/models/bc-activity-frequencies';
+import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import { BcOrgHierarchy } from '../../../../api/models/bc-org-hierarchy';
+import { PrivilegesService } from '@core/services/privileges.service';
 
 @Component({
   selector: 'app-browse-organizations',
   templateUrl: './browse-organizations.component.html',
-  styleUrls: ['./browse-organizations.component.scss']
+  styleUrls: ['./browse-organizations.component.scss'],
 })
 export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   public orgHir$: Observable<TreeNode[]>;
@@ -54,14 +57,14 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     {
       id: 0,
       lable: this.translate.instant('INTERNAL'),
-      value: 'true'
+      value: 'true',
     },
     {
       id: 1,
       lable: this.translate.instant('EXTERNAL'),
-      value: 'false'
-    }
-    ];
+      value: 'false',
+    },
+  ];
 
   private destroy$ = new Subject();
   public exportActions = [
@@ -87,7 +90,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     },
     { name: 'ACTIVITY_FEQ', code: 'activityFrequence' },
     { name: 'ACTIVITY_AREA', code: 'internal' },
-    { name: 'ARIS', code: 'externalReference' }
+    { name: 'ARIS', code: 'externalReference' },
   ];
 
   public columns = [
@@ -103,7 +106,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     },
     { name: 'ACTIVITY_FEQ', code: 'activityFrequence' },
     { name: 'ACTIVITY_AREA', code: 'internal' },
-    { name: 'ARIS', code: 'externalReference' }
+    { name: 'ARIS', code: 'externalReference' },
   ];
 
   constructor(
@@ -136,12 +139,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new ActivityFrquencyAction.LoadPage({
         page: 0,
-        size: 20}),
+        size: 20,
+      }),
       new OrgDetailAction.GetOrgHierarchy({
         page: 0,
-        size: 20
-      })
-    ])
+        size: 20,
+      }),
+    ]);
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -171,9 +175,10 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                 disabled: !this.privilegesService.checkActionPrivileges([
-                   'PRIV_ED_DEL_SITUATION', 'PRIV_ADD_FILE_SITUATION'
-                 ])
+                disabled: !this.privilegesService.checkActionPrivileges([
+                  'PRIV_ED_DEL_SITUATION',
+                  'PRIV_ADD_FILE_SITUATION',
+                ]),
               },
             ],
           };
@@ -183,20 +188,15 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
       takeUntil(this.destroy$),
       filter((p) => !!p),
+      tap(console.log),
       map((data) => this.setTree(data)),
       tap(console.log)
     );
   }
 
   public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
-    let leafObj: TreeNode = {
-      // leaf: true,
-      // expandedIcon: 'pi pi-plus',
-      // collapsedIcon: 'pi pi-plus',
-      // label: this.translateService.instant('ORG_HIE.ADD'),
-      // draggable: false,
-      //  droppable: false,
-    };
+    console.log(_searchResponses);
+
     const nest = (items, id = null, link = 'parentId') =>
       items
         .filter((item) => item[link] === id)
@@ -205,22 +205,21 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
           node = {
             key: item.id.toString(),
             data: item,
-            label: this.translateObj.transform(item),
-            // leaf: false,
-            draggable: false,
-            droppable: false,
-            children: [...nest(items, item.id)],
+            label: ' m',
+            children: nest(items, item.id),
           };
           return node;
         });
-    const treeData = [... nest(_searchResponses), leafObj];
-    const cleanTreeData = treeData.filter(node => !!node.label);
+    const tree = nest(_searchResponses);
+    console.log(tree);
 
-    return cleanTreeData;
+    return tree;
   }
 
   openDialog(id?: number) {
-    this.store.dispatch(new BrowseOrganizationAction.ToggleDialog({ organizationId: id }));
+    this.store.dispatch(
+      new BrowseOrganizationAction.ToggleDialog({ organizationId: id })
+    );
   }
 
   search() {
@@ -255,9 +254,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
         case 'orgHierarchyId':
           filter['orgHierarchyId'] = {
             id: filter['orgHierarchyId']?.data,
-            labelEn: filter['orgHierarchyId'].labelEn ? filter['orgHierarchyId'].labelEn : filter['orgHierarchyId'].label,
-            labelAr: filter['orgHierarchyId'].labelAr ? filter['orgHierarchyId'].labelEn : filter['orgHierarchyId'].label,
-          }
+            labelEn: filter['orgHierarchyId'].labelEn
+              ? filter['orgHierarchyId'].labelEn
+              : filter['orgHierarchyId'].label,
+            labelAr: filter['orgHierarchyId'].labelAr
+              ? filter['orgHierarchyId'].labelEn
+              : filter['orgHierarchyId'].label,
+          };
           break;
         default:
           break;
@@ -292,7 +295,9 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
 
   order(event) {
     this.store.dispatch(
-      new BrowseOrganizationAction.SortOrganization({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseOrganizationAction.SortOrganization({
+        order: event.checked ? 'desc' : 'asc',
+      })
     );
   }
 

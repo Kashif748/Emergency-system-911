@@ -15,8 +15,8 @@ import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action"
 import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 import {BrowseOrganizationAction} from "../../states/browse-organization.action";
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
-import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequencies";
-import {BcOrgHierarchy} from "../../../../api/models/bc-org-hierarchy";
+import {BcActivityFrequencies} from "../../../../../api/models/bc-activity-frequencies";
+import {BcOrgHierarchy} from "../../../../../api/models/bc-org-hierarchy";
 
 @Component({
   selector: 'app-organization-dialog',

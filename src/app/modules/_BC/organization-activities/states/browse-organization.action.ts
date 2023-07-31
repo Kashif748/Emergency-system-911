@@ -1,5 +1,5 @@
 import {PageRequestModel} from '@core/models/page-request.model';
-import {BcActivities} from "../../../api/models/bc-activities";
+import {BcActivities} from "../../../../api/models/bc-activities";
 
 export namespace BrowseOrganizationAction {
   export class LoadOrganization {

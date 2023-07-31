@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FieldsetModule} from "primeng/fieldset";
-import { BusinessImpactAnalysisRoutingModule } from './impact-analysis-routing.module';
+import { ImpactAnalysisRoutingModule } from './impact-analysis-routing.module';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {HttpClient} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
@@ -49,7 +49,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   declarations: [BrowseImpactAnalysisComponent, ContentImpactAnalysisComponent, CycleDialogComponent, ActivitiesDialogComponent],
   imports: [
     CommonModule,
-    BusinessImpactAnalysisRoutingModule,
+    ImpactAnalysisRoutingModule,
     NgxsModule.forFeature([BrowseImpactAnalysisState]),
     TranslateModule.forChild({
       extend: true,
@@ -88,4 +88,4 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
-export class BusinessImpactAnalysisModule { }
+export class ImpactAnalysisModule { }

@@ -2,7 +2,7 @@ import { PageRequestModel } from '@core/models/page-request.model';
 import {
   BcImpactMatrixDto,
   BcImpactTypesDetails,
-} from '../../../../api/models';
+} from '../../../../../api/models';
 
 export namespace BrowseActivityImpactMatrixAction {
   export class LoadPage {

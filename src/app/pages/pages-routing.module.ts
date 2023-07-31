@@ -429,23 +429,9 @@ const routes: Routes = [
       },
 
       {
-        path: 'business-activity-analysis',
-        loadChildren: () =>
-          import(
-            '../modules/_business_activity_analysis/business-activity-analysis.module'
-          ).then((m) => m.BusinessActivityAnalysisModule),
-      },
-      {
         path: 'bc',
         loadChildren: () =>
           import('../modules/_BC/bc.module').then((m) => m.BCModule),
-      },
-      {
-        path: 'organization-activities',
-        loadChildren: () =>
-          import(
-            '../modules/_organization-activities/organization-activities.module'
-          ).then((m) => m.OrganizationActivitiesModule),
       },
       {
         path: 'under-build',

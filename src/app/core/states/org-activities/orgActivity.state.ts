@@ -1,14 +1,22 @@
-import {Injectable} from '@angular/core';
-import {MessageHelper} from '@core/helpers/message.helper';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from '@ngxs/store';
-import {patch} from '@ngxs/store/operators';
-import {EMPTY} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {PageBcActivities} from "../../../api/models/page-bc-activities";
-import {BcActivities} from "../../../api/models/bc-activities";
-import {BcActivitiesControllerService} from "../../../api/services/bc-activities-controller.service";
-import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
-import {ActivityFrquencyStateModel} from "@core/states/bc/activity-frquency/activity-frquency.state";
+import { Injectable } from '@angular/core';
+import { MessageHelper } from '@core/helpers/message.helper';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { patch } from '@ngxs/store/operators';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { PageBcActivities } from '../../../api/models/page-bc-activities';
+import { BcActivities } from '../../../api/models/bc-activities';
+import { BcActivitiesControllerService } from '../../../api/services/bc-activities-controller.service';
+import { OrgActivityAction } from '@core/states/org-activities/orgActivity.action';
+import { ActivityFrquencyStateModel } from '@core/states/bc/activity-frquency/activity-frquency.state';
 
 export interface OrgActivitiesStateModel {
   page: PageBcActivities;
@@ -17,7 +25,9 @@ export interface OrgActivitiesStateModel {
   blocking: boolean;
 }
 
-const ORG_ACTIVITY_STATE_TOKEN = new StateToken<OrgActivitiesStateModel>('orgActivity');
+const ORG_ACTIVITY_STATE_TOKEN = new StateToken<OrgActivitiesStateModel>(
+  'orgActivity'
+);
 @State<OrgActivitiesStateModel>({
   name: ORG_ACTIVITY_STATE_TOKEN,
 })
@@ -76,11 +86,7 @@ export class OrgActivityState {
           size: payload.size,
           sort: payload.sort,
         },
-        orgHierarchyId: payload.filters.orgHierarchyId ? payload.filters.orgHierarchyId['id'].id : payload.filters.orgHierarchyId,
-        name: payload.filters.name,
-        activityFrequencyId: payload.filters.activityFrequencyId ? payload.filters.activityFrequencyId['id'] : payload.filters.activityFrequencyId,
-        activityArea: payload.filters.activityArea,
-        refrenceNumber: payload.filters.refrenceNumber
+        ...payload.filters
       })
       .pipe(
         tap((res) => {

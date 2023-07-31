@@ -12,22 +12,9 @@ export namespace BrowseImpactAnalysisAction {
     constructor(public payload?: { pageRequest: PageRequestModel }) {}
   }
 
-  export class LoadActivities {
-    static readonly type = '[BrowseImpactAnalysisAction] Load Activites';
-
-    /**
-     *
-     */
-    constructor(
-      public payload: {
-        page: number;
-        size: number;
-      }
-    ) {}
-  }
-
   export class LoadActivitiesStatuses {
-    static readonly type = '[BrowseImpactAnalysisAction] Load Activities Statuses';
+    static readonly type =
+      '[BrowseImpactAnalysisAction] Load Activities Statuses';
 
     /**
      *
@@ -47,7 +34,8 @@ export namespace BrowseImpactAnalysisAction {
         size: number;
       }
     ) {}
-  }  export class CreateCycle {
+  }
+  export class CreateCycle {
     static readonly type = '[BrowseImpactAnalysisAction] Create Cycle';
     /**
      *
@@ -103,7 +91,7 @@ export namespace BrowseImpactAnalysisAction {
     /**
      *
      */
-    constructor(public payload: { dialog?: string , id?: number }) {}
+    constructor(public payload: { dialog?: string; id?: number }) {}
   }
 
   export class OpenView {

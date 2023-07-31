@@ -15,11 +15,11 @@ import { BrowseActivityAnalysisState } from '../states/browse-activity-analysis.
 import { TABS } from '../tempData.conts';
 
 @Component({
-  selector: 'app-business-activity-analysis',
-  templateUrl: './business-activity-analysis.component.html',
-  styleUrls: ['./business-activity-analysis.component.scss'],
+  selector: 'app-activity-analysis',
+  templateUrl: './activity-analysis.component.html',
+  styleUrls: ['./activity-analysis.component.scss'],
 })
-export class BusinessActivityAnalysisComponent implements OnInit, OnDestroy {
+export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   ACTIVITY_STATUSES = ACTIVITY_STATUSES;
   @Select(ActivityAnalysisState.activityAnalysis)
   public activityAnalysis$: Observable<BcActivityAnalysis>;
@@ -85,7 +85,7 @@ export class BusinessActivityAnalysisComponent implements OnInit, OnDestroy {
       .toPromise()
       .then(() => {
         this.router.navigate(
-          ['business-activity-analysis/' + this.tabs[index].router],
+          ['bc/activity-analysis/' + this.tabs[index].router],
           {
             queryParamsHandling: 'merge',
           }

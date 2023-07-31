@@ -106,22 +106,7 @@ export class BrowseImpactAnalysisState {
     );
   }
 
-  @Action(BrowseImpactAnalysisAction.LoadActivities)
-  LoadActivities(
-    {
-      setState,
-      dispatch,
-      getState,
-    }: StateContext<BrowseImpactAnalysisStateModel>,
-    { payload }: BrowseImpactAnalysisAction.LoadActivities
-  ) {
-    return dispatch(
-      new ImapactAnalysisAction.LoadActivities({
-        page: payload?.page,
-        size: payload.size,
-      })
-    );
-  }
+
   @Action(BrowseImpactAnalysisAction.LoadActivitiesStatuses)
   LoadActivitiesStatuses(
     { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,

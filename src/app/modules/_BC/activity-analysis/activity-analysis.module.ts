@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BusinessActivityAnalysisComponent } from './business-activity-analysis/business-activity-analysis.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
@@ -13,10 +12,11 @@ import { NgxsModule } from '@ngxs/store';
 import { BrowseActivityAnalysisState } from './states/browse-activity-analysis.state';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import { BlockUIModule } from 'primeng/blockui';
-import { TranslateModule ,TranslateLoader} from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
+import { ActivityAnalysisComponent } from './activity-analysis/activity-analysis.component';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -27,8 +27,13 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 const routes: Routes = [
   {
     path: '',
-    component: BusinessActivityAnalysisComponent,
+    component: ActivityAnalysisComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'impact-matrix',
+        pathMatch: 'full',
+      },
       {
         path: 'impact-matrix',
         loadChildren: () =>
@@ -73,7 +78,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [BusinessActivityAnalysisComponent],
+  declarations: [ActivityAnalysisComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -95,9 +100,8 @@ const routes: Routes = [
     ProgressBarModule,
     TranslateObjModule,
     AvatarModule,
-    BlockUIModule
+    BlockUIModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
-
 })
-export class BusinessActivityAnalysisModule {}
+export class ActivityAnalysisModule {}

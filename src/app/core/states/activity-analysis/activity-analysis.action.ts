@@ -16,19 +16,7 @@ export namespace ActivityAnalysisAction {
       }
     ) {}
   }
-  export class LoadActivities {
-    static readonly type = '[ActivityAnalysis] Load Activites';
 
-    /**
-     *
-     */
-    constructor(
-      public payload: {
-        page: number;
-        size: number;
-      }
-    ) {}
-  }
   export class GetActivityAnalysis {
     static readonly type = '[ActivityAnalysis] Get Activity';
 

@@ -109,7 +109,7 @@
     <div *ngIf="selectedCycle" class="row">
       <div class="col-12">
         <ng-container>
-          <ng-container *ngIf="false; else tableTemplate">
+          <ng-container *ngIf="loading$ | async; else tableTemplate">
             <p-table [value]="[].constructor(10)">
               <ng-template pTemplate="header">
                 <tr>
@@ -218,7 +218,14 @@
           </ng-template>
         </ng-container>
 
-        <p-paginator></p-paginator>
+        <p-paginator
+          #pg
+          [totalRecords]="totalRecords$ | async"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
+        >
+        </p-paginator>
       </div>
     </div>
   </div>
