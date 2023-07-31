@@ -319,6 +319,7 @@ const routes: Routes = [
       {
         path: 'reports/tasks',
         canLoad: [PrivilegeGuard],
+        data: { permission: 'PRIV_TASK_REPORT' },
         loadChildren: () =>
           import('../modules/_task-report/task-report.module').then(
             (m) => m.TaskReportModule

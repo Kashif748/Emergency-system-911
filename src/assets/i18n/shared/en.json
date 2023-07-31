@@ -1487,6 +1487,9 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "INCIDENT_MAIN_CATEGORY": "Incident Main Category",
+      "NOT_SPECIFIED": "Not Specified",
+      "UNKNOWN": "Unknown",
       "HOUR": "Hour/s",
       "INCIDENT_SERIAL": "Incident Serial",
       "REPORTED_BY_INFO": "Reported By Info",

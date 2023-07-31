@@ -1,6 +1,10 @@
 import { TaskDetails } from 'src/app/api/models';
 
 export namespace TaskAction {
+  export class RESET {
+    static readonly type = '[Task] RESET STATE';
+    constructor() {}
+  }
   export class LoadTasks {
     static readonly type = '[Task] Load Tasks';
     /**
