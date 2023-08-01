@@ -1,9 +1,8 @@
-import {Component, ComponentFactoryResolver, Injector, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subject} from "rxjs";
 import {Dialog} from "primeng/dialog";
-import {IAuthService} from "@core/services/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Select, Store} from "@ngxs/store";
 import {PrivilegesService} from "@core/services/privileges.service";
@@ -17,6 +16,7 @@ import {BrowseOrganizationAction} from "../../states/browse-organization.action"
 import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
 import {BcActivityFrequencies} from "../../../../../api/models/bc-activity-frequencies";
 import {BcOrgHierarchy} from "../../../../../api/models/bc-org-hierarchy";
+import {GenericValidators} from "@shared/validators/generic-validators";
 
 @Component({
   selector: 'app-organization-dialog',
@@ -45,11 +45,6 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   @Select(OrgActivityState.blocking)
   blocking$: Observable<boolean>;
 
-
-  sector$: Observable<BcOrgHierarchy[]>;
-  section$: Observable<BcOrgHierarchy[]>;
-  department$: Observable<BcOrgHierarchy[]>;
-
   public get asDialog() {
     return this.route.component !== OrganizationDialogComponent;
   }
@@ -65,17 +60,6 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
 
   _orgActivityId: number;
-  get loggedinTaskId() {
-    return this.auth.getClaim('sub');
-  }
-
-  get loggedinOrgId() {
-    return this.auth.getClaim('orgId');
-  }
-
-  get loggedinUserId() {
-    return this.auth.getClaim('sub');
-  }
 
   get editMode() {
     return this._orgActivityId !== undefined && this._orgActivityId !== null;
@@ -113,10 +97,7 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
-    private auth: IAuthService,
     private route: ActivatedRoute,
-    private injector: Injector,
-    private cfr: ComponentFactoryResolver,
     private translateObj: TranslateObjPipe,
     private privileges: PrivilegesService,
     private router: Router
@@ -130,20 +111,30 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
         this.orgActivityId = id;
       });
 
-
     this.viewOnly$ = this.route.queryParams.pipe(
-      map((params) => params['_mode'] === 'viewonly')
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {}
+        }
+      })
     );
   }
 
   patchValues(value) {
     if (value?.internal) {
       this.form.patchValue({
-        internal: this.justifyOptions[0]
+        internal: this.justifyOptions[1]
       });
     } else {
       this.form.patchValue({
-        internal: this.justifyOptions[1]
+        internal: this.justifyOptions[0]
       });
     }
     const node = {
@@ -162,49 +153,6 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
       map((params) => params['_dialog'] === 'opened')
     );
     this.buildForm();
-    /*this.department$.pipe(
-      filter((p) => !!p),
-      map((items) => items.filter((item) => item.bcOrgHirType?.id === 2))
-    ).subscribe();*/
-
-/*    this.department$ = this.store.select(OrgDetailState.orgHir).pipe(
-      filter((p) => !!p),
-      map((page) =>
-        page?.map((u) => {
-          if (u?.bcOrgHirType.id === 2) {
-            return {
-              ...u
-            };
-          }
-        }).filter((u) => !!u)
-      )
-    );*/
-
-/*    this.sector$ = this.store.select(OrgDetailState.orgHir).pipe(
-      filter((p) => !!p),
-      map((page) =>
-        page?.map((u) => {
-          if (u?.bcOrgHirType.id === 1) {
-            return {
-              ...u
-            };
-          }
-        }).filter((u) => !!u)
-      )
-    );*/
-
-/*    this.section$ = this.store.select(OrgDetailState.orgHir).pipe(
-      filter((p) => !!p),
-      map((page) =>
-        page?.map((u) => {
-          if (u?.bcOrgHirType.id === 3) {
-            return {
-              ...u
-            };
-          }
-        }).filter((u) => !!u)
-      )
-    );*/
   }
 
 
@@ -217,14 +165,12 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   buildForm() {
     this.activeTab = 0;
     this.form = this.formBuilder.group({
-      // sector: [null, [Validators.required]],
       dept: [null, [Validators.required]],
-      // section: [null],
-      nameAr: [null, [Validators.required]],
-      nameEn: [null, [Validators.required]],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
       description: [null, [Validators.required]],
       activityFrequence: [null, [Validators.required]],
-      externalReference: [null, [Validators.required]],
+      externalReference: [null],
       internal: [null, [Validators.required]]
     });
   }
@@ -243,14 +189,14 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
     };
 
     const orgHie = {
-      id: orgActivities.dept.data.id
+      id: orgActivities.dept.key ? orgActivities.dept.key : orgActivities.dept.data
     };
 
     const orgActivity = {
       activityFrequence: orgActivities.activityFrequence,
     description: orgActivities.description,
     externalReference: orgActivities.externalReference,
-    internal: orgActivities.internal.isActive,
+    internal: orgActivities.internal.isActive ? false : true,
     nameAr: orgActivities.nameAr,
     nameEn: orgActivities.nameEn,
     orgHierarchy: orgHie as BcOrgHierarchy,
