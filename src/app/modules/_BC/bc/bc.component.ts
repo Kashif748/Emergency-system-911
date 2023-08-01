@@ -8,7 +8,7 @@ import { FormUtils } from '@core/utils';
 import { Select, Store } from '@ngxs/store';
 import { GenericValidators } from '@shared/validators/generic-validators';
 import { Observable, Subject } from 'rxjs';
-import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { BcVersions } from 'src/app/api/models';
 import { BrowseBCAction } from '../states/browse-bc.action';
 import { BrowseBCState, BrowseBCStateModel } from '../states/browse-bc.state';
@@ -22,14 +22,13 @@ export class BCComponent implements OnInit, OnDestroy {
   @Select(BrowseBCState.state)
   public state$: Observable<BrowseBCStateModel>;
 
-  @Select(BrowseBCState.versionsDialogOpend)
-  public dialogOpened$: Observable<boolean>;
-
   @Select(BCState.loading)
   public loading$: Observable<boolean>;
 
   @Select(BCState.blocking)
   blocking$: Observable<boolean>;
+
+  public dialogOpened$: Observable<boolean>;
 
   public versions$: Observable<BcVersions[]>;
 
@@ -62,6 +61,9 @@ export class BCComponent implements OnInit, OnDestroy {
       });
   }
   ngOnInit() {
+    this.dialogOpened$ = this.route.queryParams.pipe(
+      map((params) => params['_dialog'] === 'version_dialog')
+    );
     this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
     this.createForm();
   }

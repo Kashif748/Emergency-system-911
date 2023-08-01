@@ -64,11 +64,11 @@
                     placeholder="{{ 'ACTIVITY_AREA' | translate }}"
                   >
                     <ng-template let-item pTemplate="selectedItem">
-                      {{ item.lable }}
+                      {{ item.lable | translate }}
                     </ng-template>
 
                     <ng-template let-item pTemplate="item">
-                      {{ item.lable }}
+                      {{ item.lable | translate }}
                     </ng-template>
                   </p-dropdown>
                 </div>
@@ -88,23 +88,23 @@
                   />
                 </div>
 
-                <div *ngIf="false" class="p-field p-col-4 p-md-2">
+                <div class="p-field p-col-4 p-md-2">
                   <p-treeSelect
                     [options]="orgHir$ | async"
                     [filter]="true"
                     selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"
                     (ngModelChange)="
-                      updateFilter({ orgHierarchyId: $event }, $event)
+                      updateFilter({ orgHierarchyId: $event?.key }, $event)
                     "
-                    placeholder="{{ 'ORG_ARTCH' | translate }}"
+                    placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
                     appendTo="body"
                   >
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{
                         option
                           ? (option | translateObj : "label")
-                          : ("ORG_ARTCH" | translate)
+                          : ("DEPT_HIERARCHY" | translate)
                       }}
                     </ng-template>
                   </p-treeSelect>
@@ -260,4 +260,4 @@
   </div>
 </div>
 
-<!-- <app-organization-dialog [orgHir]="orgHir$ | async"></app-organization-dialog> -->
+<app-organization-dialog [orgHir]="orgHir$ | async"></app-organization-dialog>
