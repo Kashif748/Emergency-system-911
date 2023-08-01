@@ -8,7 +8,7 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { BrowseBCAction } from './browse-bc.action';
 import { catchError, tap } from 'rxjs/operators';
@@ -44,7 +44,11 @@ export class BrowseBCState {
   /**
    *
    */
-  constructor(private messageHelper: MessageHelper, private router: Router) {}
+  constructor(
+    private messageHelper: MessageHelper,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseBCState])
@@ -119,6 +123,15 @@ export class BrowseBCState {
   })
   openDialog({ setState, getState }: StateContext<BrowseBCStateModel>) {
     const currentStatus = getState()?.versionsDialogOpend;
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'version_dialog'
+            ? undefined
+            : 'version_dialog',
+      },
+      queryParamsHandling: 'merge',
+    });
     setState(
       patch<BrowseBCStateModel>({
         versionsDialogOpend: !currentStatus,
