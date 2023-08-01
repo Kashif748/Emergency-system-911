@@ -78,13 +78,10 @@ export class ImpactLevelState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
     return this.impactLevel
       .getAll21({
         isActive: true,
-        versionId: versionID,
+        versionId: payload?.versionId,
         pageable: {
           page: payload.page,
           size: payload.size,
