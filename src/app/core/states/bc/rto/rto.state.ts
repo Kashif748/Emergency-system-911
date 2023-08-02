@@ -14,9 +14,9 @@ import { EMPTY } from 'rxjs';
 import { Bcrto } from '../../../../api/models/bcrto';
 import { BcrtoControllerService } from '../../../../api/services/bcrto-controller.service';
 import { PageBcrto } from '../../../../api/models/page-bcrto';
-import { RtoAction } from '@core/states';
+import { BCState, RtoAction } from '@core/states';
 import { SituationsState } from '@core/states/situations/situations.state';
-import { BrowseBusinessContinuityState } from '../../../../modules/_business-continuity/states/browse-business-continuity.state';
+import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
 
 export interface RtoStateModel {
   page: PageBcrto;
@@ -73,10 +73,12 @@ export class RtoState {
         loading: true,
       })
     );
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+
     return this.rto
       .getAll12({
         isActive: true,
-        versionId: payload.versionId,
+        versionId: version?.id,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -121,10 +123,8 @@ export class RtoState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
-    payload.versionId = versionID;
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+    payload.versionId = version?.id;
     return this.rto
       .insertOne3({
         body: payload,
@@ -150,10 +150,8 @@ export class RtoState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
-    payload.versionId = versionID;
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+    payload.versionId = version?.id;
     return this.rto
       .update82({
         body: payload,

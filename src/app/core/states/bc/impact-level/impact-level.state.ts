@@ -13,10 +13,10 @@ import { Injectable } from '@angular/core';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
-import { RtoAction } from '@core/states';
+import { BCState, RtoAction } from '@core/states';
 import { BcImpactLevelControllerService } from '../../../../api/services/bc-impact-level-controller.service';
 import { ImpactLevelAction } from '@core/states/bc/impact-level/impact-level.action';
-import { BrowseBusinessContinuityState } from '../../../../modules/_business-continuity/states/browse-business-continuity.state';
+import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
 
 export interface ImpactLevelStateModel {
   page: PageBcImpactLevel;
@@ -78,10 +78,12 @@ export class ImpactLevelState {
         loading: true,
       })
     );
+    const version = this.store.selectSnapshot(BCState.selectedVersion);
+
     return this.impactLevel
       .getAll21({
         isActive: true,
-        versionId: payload?.versionId,
+        versionId: version?.id,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -126,12 +128,12 @@ export class ImpactLevelState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
+    const version= this.store.selectSnapshot(
+     BCState.selectedVersion
     );
     return this.impactLevel
       .insertOne12({
-        body: { ...payload, versionId: versionID },
+        body: { ...payload, versionId: version?.id },
       })
       .pipe(
         finalize(() => {
@@ -154,12 +156,12 @@ export class ImpactLevelState {
       })
     );
 
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
+    const version = this.store.selectSnapshot(
+     BCState.selectedVersion
     );
     return this.impactLevel
       .update92({
-        body: { ...payload, versionId: versionID },
+        body: { ...payload, versionId: version?.id },
       })
       .pipe(
         finalize(() => {

@@ -7,9 +7,11 @@
   "ACTIVITY_FEQ":"دورية النشاط",
   "ACTIVITY_AREA":"نطاق النشاط",
   "ARIS": "رقم مرجع",
-  "DEPT_HIERARCHY": "التسلسل الهرمي للإدارة",
+  "DEPT_HIERARCHY": "الهيكل",
+  "NAME" : "الاسم",
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY":"إضافة نشاط جديد",
+    "VIEW_ACTIVITY": "عرض النشاط",
     "ACTIVITY_DETAILS":"بيانات النشاط",
     "NAME_AR":"الإسم (عربي)",
     "NAME_EN":"الإسم (انجليزي)",

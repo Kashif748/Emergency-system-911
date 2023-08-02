@@ -908,6 +908,8 @@
       "ADVANCED_SEARCH": "Advanced Search",
       "TASK_ATTACHMENT": "Task Attachments",
       "INCIDENT_ATTACHMENT": "Incident Attachments",
+      "PLAN_ATTACHMENT": "Plans Attachments",
+      "SHIFT_ATTACHMENT": "Shifts Attachments",
       "CREATION_DATE": "Creation Date"
     },
     "OPERATIONAL_REPORTS": {
@@ -1485,6 +1487,9 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "INCIDENT_MAIN_CATEGORY": "Incident Main Category",
+      "NOT_SPECIFIED": "Not Specified",
+      "UNKNOWN": "Unknown",
       "HOUR": "Hour/s",
       "INCIDENT_SERIAL": "Incident Serial",
       "REPORTED_BY_INFO": "Reported By Info",

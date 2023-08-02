@@ -3,7 +3,7 @@ import { PageRequestModel } from '@core/models/page-request.model';
 import { Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { IncidentTaskProjection } from 'src/app/api/models';
-import { BrowseTasksAction } from '../../states/browse-tasks.action';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-content-tasks',
@@ -31,7 +31,12 @@ export class ContentTasksComponent implements OnInit {
   };
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
-  constructor(private store: Store) {}
+  constructor(private store: Store, public router: Router) {}
 
   ngOnInit() {}
+  openView(id?: number) {
+    // this.router.navigate(['task-management', 'task'], {
+    //   queryParams: { _id: id, _mode: 'viewonly', _redirect: this.router.url },
+    // });
+  }
 }

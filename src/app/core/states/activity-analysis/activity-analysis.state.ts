@@ -13,7 +13,6 @@ import { Injectable } from '@angular/core';
 import {
   BcActivityAnalysis,
   BcCycles,
-  PageBcActivities,
   PageBcActivityAnalysis,
 } from 'src/app/api/models';
 import {
@@ -34,7 +33,6 @@ export enum ACTIVITY_STATUSES {
 }
 export interface ActivityAnalysisStateModel {
   page: PageBcActivityAnalysis;
-  activities: PageBcActivities;
   activityAnalysis: BcActivityAnalysis;
   cycle: BcCycles;
   loading: boolean;
@@ -63,10 +61,6 @@ export class ActivityAnalysisState {
   @Selector([ActivityAnalysisState])
   static page(state: ActivityAnalysisStateModel) {
     return state?.page.content;
-  }
-  @Selector([ActivityAnalysisState])
-  static activities(state: ActivityAnalysisStateModel) {
-    return state?.activities.content;
   }
   @Selector([ActivityAnalysisState])
   static activityAnalysis(state: ActivityAnalysisStateModel) {
@@ -119,28 +113,6 @@ export class ActivityAnalysisState {
       );
   }
 
-  @Action(ActivityAnalysisAction.LoadActivities, { cancelUncompleted: true })
-  LoadActivities(
-    { setState }: StateContext<ActivityAnalysisStateModel>,
-    { payload }: ActivityAnalysisAction.LoadActivities
-  ) {
-    return this.activitiesController
-      .search19({
-        pageable: {
-          page: payload?.page,
-          size: payload?.size,
-        },
-      })
-      .pipe(
-        tap((bc) => {
-          setState(
-            patch<ActivityAnalysisStateModel>({
-              activities: bc.result,
-            })
-          );
-        })
-      );
-  }
   @Action(ActivityAnalysisAction.GetActivityAnalysis, {
     cancelUncompleted: true,
   })

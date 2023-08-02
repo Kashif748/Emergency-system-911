@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiHelper } from '@core/helpers/api.helper';
-import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { TaskAction } from '@core/states';
 import { TextUtils } from '@core/utils';
@@ -14,8 +13,6 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { patch, iif } from '@ngxs/store/operators';
-import { throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
 import { BrowseTasksAction } from './browse-tasks.action';
 
 export interface BrowseTasksStateModel {
@@ -60,11 +57,7 @@ export class BrowseTasksState {
   /**
    *
    */
-  constructor(
-    private apiHelper: ApiHelper,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private apiHelper: ApiHelper, private router: Router) {}
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseTasksState])
   static state(state: BrowseTasksStateModel): BrowseTasksStateModel {
@@ -112,12 +105,7 @@ export class BrowseTasksState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        filters: {
-          ...pageRequest.filters,
-          priority: pageRequest.filters.priority?.id,
-          status: pageRequest.filters.status?.map((o) => o.id),
-          type: 'ALL',
-        },
+        filters: this.filters(pageRequest),
       })
     );
   }
@@ -234,6 +222,7 @@ export class BrowseTasksState {
       ...pageRequest.filters,
       priority: pageRequest.filters.priority?.id,
       status: pageRequest.filters.status?.map((o) => o.id),
+      incidentCategory: pageRequest.filters.incidentCategory?.id,
       type: 'ALL',
     };
   }

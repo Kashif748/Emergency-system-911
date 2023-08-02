@@ -8,7 +8,7 @@ import {BcLocationTypeControllerService} from "../../../../api/services/bc-locat
 import {PageBcLocationTypes} from "../../../../api/models/page-bc-location-types";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
 import {RtoAction} from "@core/states";
-import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
+import {BrowseBCState} from "../../../../modules/_BC/states/browse-bc.state";
 
 
 export interface LocationTypeStateModel {
