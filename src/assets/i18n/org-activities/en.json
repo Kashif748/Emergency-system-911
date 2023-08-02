@@ -8,9 +8,10 @@
   "ACTIVITY_AREA": "Activity Area",
   "ARIS": "ARIS Reference No",
   "NAME": "Name",
-  "DEPT_HIERARCHY": "Department Hierarchy",
+  "DEPT_HIERARCHY": "Hierarchy",
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY": "Add New Activity",
+    "VIEW_ACTIVITY": "View Activity",
     "ACTIVITY_DETAILS": "Activity Details",
     "NAME_AR": "Name (Arabic)",
     "NAME_EN": "Name (English)",

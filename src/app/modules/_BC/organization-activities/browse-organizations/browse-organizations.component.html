@@ -55,12 +55,10 @@
                   <p-dropdown
                     [options]="activityArea"
                     [ngModel]="state.pageRequest.filters['activityArea']"
-                    (ngModelChange)="
-                      updateFilter({ activityArea: $event }, $event)
-                    "
+                    (ngModelChange)="updateFilter({ activityArea: $event }, $event)"
                     [showClear]="true"
+                    [autoDisplayFirst]="false"
                     dataKey="id"
-                    optionValue="id"
                     placeholder="{{ 'ACTIVITY_AREA' | translate }}"
                   >
                     <ng-template let-item pTemplate="selectedItem">
@@ -89,17 +87,12 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <p-treeSelect
-                    [options]="orgHir$ | async"
-                    [filter]="true"
-                    selectionMode="single"
+                  <p-treeSelect [options]="orgHir$ | async" [filter]="true" selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"
-                    (ngModelChange)="
-                      updateFilter({ orgHierarchyId: $event?.key }, $event)
-                    "
+                    (ngModelChange)="updateFilter({ orgHierarchyId: $event }, $event)"
                     placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
-                    appendTo="body"
-                  >
+                    appendTo="body" display="chip" [metaKeySelection]="false" [propagateSelectionDown]="false"
+                    [propagateSelectionUp]="false">
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{
                         option
@@ -202,30 +195,17 @@
                 </div>
               </div>
 
-              <div class="p-toolbar-group-right">
+              <!--<div class="p-toolbar-group-right">
                 <p-splitButton
                   label="{{ 'ACTIONS.EXPORT' | translate }}"
                   icon="pi pi-external-link"
                   [model]="exportActions"
                   (onClick)="export('EXCEL')"
                 ></p-splitButton>
-              </div>
+              </div>-->
             </p-toolbar>
           </div>
-          <div class="col-12 mt-3">
-            <div class="w-100 d-flex flex-wrap mx-1 px-6">
-              <div class="ml-dir-auto d-flex">
-                <button
-                  pButton
-                  label="{{ 'ACTIONS.ADD' | translate }}"
-                  icon="pi pi-plus"
-                  (click)="openDialog()"
-                  *checkPrivileges="'PRIV_CR_ORG_ACTIVITY'"
-                ></button>
-              </div>
-            </div>
-          </div>
-          <div class="col-12">
+          <div class="col-6">
             <div style="display: flex; justify-content: space-between">
               <p-divider [align]="'left'" styleClass="bg-transparent">
                 <p-selectButton
@@ -245,6 +225,20 @@
               </p-divider>
             </div>
           </div>
+          <div class="col-6 mt-3">
+            <div class="w-100 d-flex flex-wrap mx-1 px-6">
+              <div class="ml-dir-auto d-flex">
+                <button
+                  pButton
+                  label="{{ 'ACTIONS.ADD' | translate }}"
+                  icon="pi pi-plus"
+                  (click)="openDialog()"
+                  *checkPrivileges="'PRIV_CR_ORG_ACTIVITY'"
+                ></button>
+              </div>
+            </div>
+          </div>
+
         </div>
         <app-content-organizations
           [view]="state.view"
