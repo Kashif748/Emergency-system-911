@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { Store } from '@ngxs/store';
-import { BrowseImpactLevelAction } from '../../states/browse-impact-level.action';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {Store} from '@ngxs/store';
+import {BrowseImpactLevelAction} from '../../states/browse-impact-level.action';
+import {TranslateService} from '@ngx-translate/core';
 import {BCState} from "@core/states/bc/bc/bc.state";
 import {filter, map, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
@@ -11,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GenericValidators} from "@shared/validators/generic-validators";
 import {FormUtils} from "@core/utils/form.utils";
-import { BcImpactLevel } from 'src/app/api/models';
+import {BcImpactLevel} from 'src/app/api/models';
 
 @Component({
   selector: 'app-content-impact-level',

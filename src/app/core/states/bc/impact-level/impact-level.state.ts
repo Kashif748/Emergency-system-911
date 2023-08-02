@@ -1,22 +1,13 @@
-import { PageBcImpactLevel } from '../../../../api/models/page-bc-impact-level';
-import { BcImpactLevel } from '../../../../api/models/bc-impact-level';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-  Store,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { EMPTY } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { patch } from '@ngxs/store/operators';
-import { BCState, RtoAction } from '@core/states';
-import { BcImpactLevelControllerService } from '../../../../api/services/bc-impact-level-controller.service';
-import { ImpactLevelAction } from '@core/states/bc/impact-level/impact-level.action';
-import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
+import {PageBcImpactLevel} from '../../../../api/models/page-bc-impact-level';
+import {BcImpactLevel} from '../../../../api/models/bc-impact-level';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {EMPTY} from 'rxjs';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {patch} from '@ngxs/store/operators';
+import {BCState} from '@core/states';
+import {BcImpactLevelControllerService} from '../../../../api/services/bc-impact-level-controller.service';
+import {ImpactLevelAction} from '@core/states/bc/impact-level/impact-level.action';
 
 export interface ImpactLevelStateModel {
   page: PageBcImpactLevel;
