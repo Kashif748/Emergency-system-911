@@ -10,6 +10,7 @@ import {throwError} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {BrowseOrganizationAction} from "./browse-organization.action";
 import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
+import {BrowseGroupsStateModel} from "../../../_team-mgmt/states/browse-groups.state";
 
 export interface BrowseOrgActivityStateModel {
   pageRequest: PageRequestModel;
@@ -91,6 +92,7 @@ export class BrowseOrganizationState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
+          orgHierarchyId: pageRequest.filters.orgHierarchyId?.id,
         },
       })
     );
@@ -118,6 +120,7 @@ export class BrowseOrganizationState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
+          orgHierarchyId: pageRequest.filters.orgHierarchyId?.id,
         },
       })
     );
@@ -166,15 +169,6 @@ export class BrowseOrganizationState {
         }),
       })
     );
-
-    if (payload?.type) {
-      return this.router.navigate([], {
-        queryParams: {
-          _type: payload?.type,
-        },
-        queryParamsHandling: 'merge',
-      });
-    }
   }
 
   @Action(BrowseOrganizationAction.CreateOrganization)

@@ -251,7 +251,7 @@
                 {{item.activityFrequence | translateObj : 'name'}}
               </td>
               <td *ngIf="columns?.includes('internal')" (click)="item.isActive && openView(item.id)">
-                {{item.internal  }}
+                {{(item.internal ? 'ACTIVITY_DIALOG.INTERNAL' : 'ACTIVITY_DIALOG.EXTERNAL') | translate  }}
               </td>
               <td *ngIf="columns?.includes('externalReference')" (click)="item.isActive && openView(item.id)">
                 {{item.externalReference}}
