@@ -50,6 +50,8 @@
     "SERVICES": "Services",
     "DIALOG" : {
       "ADD_VENDER":"Add New Vendor/Partner",
+      "EDIT_VENDER":"Vendor/Partner Details",
+      "VIEW_VENDER":"Vendor/Partner",
       "VENDER_INFO": "Vendor/Partner Info",
       "CRITICALITY": "Criticality",
       "NAME_EN":"Name (English)",

@@ -86,6 +86,7 @@ import { ActivityEmployeesState } from '@core/states/activity-analysis/employees
 import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -169,6 +170,7 @@ export function getHighlightLanguages() {
         ActivityDependenciesState,
         ImpactAnalysisState,
         ActivityImpactMatrixState,
+        VenderState
       ],
       {
         developmentMode: !environment.production,
@@ -184,7 +186,8 @@ export function getHighlightLanguages() {
           'browse_tasks',
           'browse_groups',
           'browse_business_impact_analysis',
-          'browse_org_activities'
+          'browse_org_activities',
+          'browse_vender'
         ],
       },
       ['common_data']

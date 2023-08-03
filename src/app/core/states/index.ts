@@ -1,6 +1,7 @@
 import {GroupState} from "@core/states/group/group.state";
 import {BCState} from "@core/states/bc/bc/bc.state";
 import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
+import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 
 export { UserAction } from './user/user.action';
 export { RoleAction } from './role/role.action';
@@ -20,6 +21,7 @@ export { ImpactMatrixAction } from './bc/impact-matrix/impact-matrix.action';
 export { OrgDetailAction } from './bc/org-details/org-detail.action';
 export { BCAction } from './bc/bc/bc.action';
 export { OrgActivityAction } from './org-activities/orgActivity.action';
+export { VenderAction } from './bc-setup/venders/vender.action';
 
 
 export { UserState } from './user/user.state';
@@ -40,3 +42,4 @@ export { ImpactMatrixState } from './bc/impact-matrix/impact-matrix.state';
 export { OrgDetailState } from './bc/org-details/org-detail.state';
 export { BCState } from './bc/bc/bc.state';
 export { OrgActivityState } from './org-activities/orgActivity.state';
+export { VenderState } from './bc-setup/venders/vender.state';
