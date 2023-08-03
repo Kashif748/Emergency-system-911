@@ -14,6 +14,7 @@ import { ILangFacade } from '@core/facades/lang.facade';
 import { BrowseBCState } from '../../../states/browse-bc.state';
 import { BcImpactLevel, BcVersions } from 'src/app/api/models';
 import { BCState } from '@core/states';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-browse-impact-level',
@@ -33,19 +34,24 @@ export class BrowseImpactLevelComponent implements OnInit, OnDestroy {
   @Select(BrowseImpactLevelState.state)
   public state$: Observable<BrowseImpactLevelStateModel>;
 
-  public selectedVersion$: Observable<BcVersions>;
+  public versionId: number;
 
   private destroy$ = new Subject();
-  constructor(private store: Store, private lang: ILangFacade) {}
+  constructor(private store: Store,
+    private route: ActivatedRoute,
+    private lang: ILangFacade) {}
 
   ngOnInit(): void {
-    this.selectedVersion$ = this.store.select(BCState.selectedVersion).pipe(
+    this.route.queryParams
+    .pipe(
       takeUntil(this.destroy$),
-      filter((p) => !!p),
-      tap((v) => {
-        this.loadPage();
-      })
-    );
+      map((params) => params['_version']),
+      filter((p) => !!p)
+    )
+    .subscribe((version) => {
+      this.versionId = version;
+      this.loadPage();
+    });
 
   }
 
@@ -60,6 +66,8 @@ export class BrowseImpactLevelComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
+        versionId: this.versionId,
+
       })
     );
   }

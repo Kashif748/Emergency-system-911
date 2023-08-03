@@ -15,9 +15,8 @@ import { iif, patch } from '@ngxs/store/operators';
 import { ApiHelper } from '@core/helpers/api.helper';
 
 import { BrowseActivityDependenciesAction } from './browse-dependencies.action';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
-import { BrowseActivityAnalysisState } from '../../../states/browse-activity-analysis.state';
 import { ActivityDependenciesAction } from '@core/states/activity-analysis/dependencies/dependencies.action';
 
 export interface BrowseActivityDependenciesStateModel {
@@ -91,17 +90,10 @@ export class BrowseActivityDependenciesState {
       })
     );
     const pageRequest = getState().internalPageRequest;
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
-
     return dispatch(
       new ActivityDependenciesAction.LoadDependencyInternal({
-        cycleId: cycleId,
-        activityId: activityId,
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -127,17 +119,11 @@ export class BrowseActivityDependenciesState {
       })
     );
     const pageRequest = getState().orgPageRequest;
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
 
     return dispatch(
       new ActivityDependenciesAction.LoadDependencyOrg({
-        cycleId: cycleId,
-        activityId: activityId,
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -150,29 +136,16 @@ export class BrowseActivityDependenciesState {
     { dispatch }: StateContext<BrowseActivityDependenciesStateModel>,
     { payload }: BrowseActivityDependenciesAction.CreateInternal
   ) {
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
-    payload = {
-      ...payload,
-      cycle: {
-        id: cycleId,
-      },
-      activity: {
-        internal: true,
-        id: activityId,
-      },
-    };
     return dispatch(
       new ActivityDependenciesAction.CreateInternal(payload)
     ).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseActivityDependenciesAction.LoadDependencyInternal(),
+          new BrowseActivityDependenciesAction.LoadDependencyInternal({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          }),
           new BrowseActivityDependenciesAction.ToggleDialog({}),
         ]);
       }),
@@ -201,17 +174,11 @@ export class BrowseActivityDependenciesState {
       })
     );
     const pageRequest = getState().externalPageRequest;
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
 
     return dispatch(
       new ActivityDependenciesAction.LoadDependencyExternal({
-        cycleId: cycleId,
-        activityId: activityId,
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -223,29 +190,16 @@ export class BrowseActivityDependenciesState {
     { dispatch }: StateContext<BrowseActivityDependenciesStateModel>,
     { payload }: BrowseActivityDependenciesAction.CreateExternal
   ) {
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
-    payload = {
-      ...payload,
-      cycle: {
-        id: cycleId,
-      },
-      activity: {
-        internal: true,
-        id: activityId,
-      },
-    };
     return dispatch(
       new ActivityDependenciesAction.CreateExternal(payload)
     ).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseActivityDependenciesAction.LoadDependencyExternal(),
+          new BrowseActivityDependenciesAction.LoadDependencyExternal({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          }),
           new BrowseActivityDependenciesAction.ToggleDialog({}),
         ]);
       }),
@@ -281,27 +235,14 @@ export class BrowseActivityDependenciesState {
     { dispatch }: StateContext<BrowseActivityDependenciesStateModel>,
     { payload }: BrowseActivityDependenciesAction.CreateOrg
   ) {
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
-    payload = {
-      ...payload,
-      cycle: {
-        id: cycleId,
-      },
-      activity: {
-        internal: true,
-        id: activityId,
-      },
-    };
     return dispatch(new ActivityDependenciesAction.CreateOrg(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseActivityDependenciesAction.LoadDependencyOrg(),
+          new BrowseActivityDependenciesAction.LoadDependencyOrg({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          }),
           new BrowseActivityDependenciesAction.ToggleDialog({}),
         ]);
       }),

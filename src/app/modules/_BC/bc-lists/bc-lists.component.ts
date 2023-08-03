@@ -18,6 +18,7 @@ import { BrowseBCAction } from '../states/browse-bc.action';
 import { BCAction, BCState } from '@core/states';
 import { BcVersions } from '../../../api/models/bc-versions';
 import { BrowseBCState } from '../states/browse-bc.state';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
 
 @Component({
   selector: 'app-bc-lists',
@@ -29,6 +30,7 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
   activeItem: MenuItem;
   sidebar = false;
 
+  VERSION_STATUSES = VERSION_STATUSES;
   public position$ = this.langFacade.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
   );
@@ -57,6 +59,10 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
   ngOnInit() {
+    // this.versions$ = this.store
+    // .select(BCState.versions)
+    // .pipe(filter((p) => !!p));
+
     this.store
       .select(BCState.selectedVersion)
       .pipe(
@@ -108,9 +114,11 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  setValueGlobally(version: BcVersions) {
+  setValueGlobally(value: BcVersions) {
     this.store.dispatch(
-      new BrowseBCAction.GetVersion({ versionId: version?.id })
+      new BrowseBCAction.SetVersionId({
+        versionId: value?.id,
+      })
     );
   }
 
@@ -118,7 +126,7 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.store.dispatch(new BrowseBCAction.ToggleDialog());
   }
 
-  sendApprovel(status: number) {
+  sendApprovel(status: VERSION_STATUSES) {
     this.store
       .dispatch(
         new BrowseBCAction.GetStatus({
@@ -137,7 +145,7 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  approved(status: number) {
+  approved(status: VERSION_STATUSES) {
     this.store
       .dispatch(
         new BrowseBCAction.GetStatus({
@@ -156,7 +164,7 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  returnModification(status: number) {
+  returnModification(status: VERSION_STATUSES) {
     this.store
       .dispatch(
         new BrowseBCAction.GetStatus({

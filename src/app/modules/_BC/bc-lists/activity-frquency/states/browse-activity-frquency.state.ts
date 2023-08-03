@@ -18,7 +18,7 @@ export interface BrowseActivityFrquencyStateModel {
 }
 
 export const BROWSE_ACTIVITY_FRQUENCY_UI_STATE_TOKEN =
-  new StateToken<BrowseActivityFrquencyStateModel>('browse_activityFrquency');
+  new StateToken<BrowseActivityFrquencyStateModel>('browse_bc_activity_frquency');
 
 @State<BrowseActivityFrquencyStateModel>({
   name: BROWSE_ACTIVITY_FRQUENCY_UI_STATE_TOKEN,

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
-import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
@@ -12,9 +12,8 @@ import {
   BrowseImpLevelWorkingStateModel,
 } from './states/browse-imp-level-working.state';
 import { BrowseImpLevelWorkingAction } from './states/browse-imp-level-working.action';
-import { BcVersions, BcWorkImportanceLevels } from 'src/app/api/models';
-import { BrowseBCState } from '../../../states/browse-bc.state';
-import { BCState } from '@core/states';
+import { BcWorkImportanceLevels } from 'src/app/api/models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-browse-imp-level-working',
@@ -33,7 +32,7 @@ export class BrowseImpLevelWorkingComponent implements OnInit, OnDestroy {
   @Select(BrowseImpLevelWorkingState.state)
   public state$: Observable<BrowseImpLevelWorkingStateModel>;
 
-  public selectedVersion$: Observable<BcVersions>;
+  public versionId: number;
 
   private destroy$ = new Subject();
 
@@ -41,18 +40,22 @@ export class BrowseImpLevelWorkingComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private lang: ILangFacade,
     private store: Store,
+    private route: ActivatedRoute,
     private messageHelper: MessageHelper
   ) {}
 
   ngOnInit(): void {
-    this.selectedVersion$ = this.store.select(BCState.selectedVersion).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      tap((v) => {
-        this.loadPage();
-      })
-    );
 
+    this.route.queryParams
+    .pipe(
+      takeUntil(this.destroy$),
+      map((params) => params['_version']),
+      filter((p) => !!p)
+    )
+    .subscribe((version) => {
+      this.versionId = version;
+      this.loadPage();
+    });
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -113,6 +116,8 @@ export class BrowseImpLevelWorkingComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
+        versionId: this.versionId,
+
       })
     );
   }

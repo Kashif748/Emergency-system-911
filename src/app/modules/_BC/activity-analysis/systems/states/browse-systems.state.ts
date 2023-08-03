@@ -80,17 +80,12 @@ export class BrowseActivitySystemsState {
       })
     );
     const pageRequest = getState().pageRequest;
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
+
 
     return dispatch(
       new ActivitySystemsAction.LoadPage({
-        cycleId: cycleId,
-        activityId: activityId,
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),

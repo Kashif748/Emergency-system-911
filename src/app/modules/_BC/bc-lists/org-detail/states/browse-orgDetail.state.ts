@@ -13,7 +13,6 @@ import { catchError, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BrowseOrgDetailAction } from './browse-orgDetail.action';
 import { OrgDetailAction } from '@core/states';
-import { Router } from '@angular/router';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { iif, patch } from '@ngxs/store/operators';
 import { ApiHelper } from '@core/helpers/api.helper';
@@ -27,7 +26,7 @@ export interface BrowseOrgDetailModel {
 }
 
 export const BROWSE_ORG_DETAIL_UI_STATE_TOKEN =
-  new StateToken<BrowseOrgDetailModel>('browse_orgDetail');
+  new StateToken<BrowseOrgDetailModel>('browse_bc_org_detail');
 
 @State<BrowseOrgDetailModel>({
   name: BROWSE_ORG_DETAIL_UI_STATE_TOKEN,

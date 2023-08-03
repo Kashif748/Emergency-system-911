@@ -1,6 +1,4 @@
 import {BcWorkImportanceLevels} from "../../../../api/models/bc-work-importance-levels";
-import {Bcrto} from "../../../../api/models/bcrto";
-
 export namespace ImpLevelWorkingAction {
   export class LoadPage {
     static readonly type = '[ImpLevelWorking] Load Page';
@@ -14,6 +12,8 @@ export namespace ImpLevelWorkingAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId: number
+
       }
     ) {
     }

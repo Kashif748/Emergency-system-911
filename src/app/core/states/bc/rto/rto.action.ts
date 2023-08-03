@@ -13,6 +13,7 @@ export namespace RtoAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId: number
       }
     ) {}
   }

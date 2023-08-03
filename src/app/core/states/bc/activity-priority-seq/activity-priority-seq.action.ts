@@ -1,5 +1,5 @@
-import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequencies";
-import {BcLocationTypes} from "../../../../api/models/bc-location-types";
+import { BcActivityFrequencies } from "src/app/api/models";
+
 
 export namespace ActivityPrioritySeqAction {
   export class LoadPage {
@@ -14,6 +14,7 @@ export namespace ActivityPrioritySeqAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId: number
 
       }
     ) {

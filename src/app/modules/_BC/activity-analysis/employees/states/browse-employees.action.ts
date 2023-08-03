@@ -8,7 +8,13 @@ export namespace BrowseActivityEmployeesAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload: {
+        pageRequest?: PageRequestModel;
+        cycleId: number;
+        activityId: number;
+      }
+    ) {}
   }
 
   export class Create {
@@ -16,14 +22,18 @@ export namespace BrowseActivityEmployeesAction {
     /**
      *
      */
-    constructor(public payload: BcActivityEmployees) {}
+    constructor(
+      public payload: BcActivityEmployees
+    ) {}
   }
   export class Update {
     static readonly type = '[BrowseActivityEmployeesAction] Update';
     /**
      *
      */
-    constructor(public payload: BcActivityEmployees) {}
+    constructor(
+      public payload:  BcActivityEmployees
+    ) {}
   }
 
   export class GetEmployee {

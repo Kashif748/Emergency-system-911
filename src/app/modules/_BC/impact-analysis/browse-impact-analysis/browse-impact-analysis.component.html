@@ -80,7 +80,8 @@
                 </div>
 
                 <!-- RTO -->
-                <div class="p-field p-col-4 p-md-2">
+                <!-- Later we will show this filter -->
+                <div *ngIf="false" class="p-field p-col-4 p-md-2">
                   <p-dropdown
                     [ngModel]="state.pageRequest.filters['rtoId']"
                     (ngModelChange)="updateFilter({ rtoId: $event }, $event)"
@@ -102,7 +103,9 @@
                 </div>
 
                 <!-- Priorty -->
-                <div class="p-field p-col-4 p-md-2">
+                <!-- Later we will show this filter -->
+
+                <div *ngIf="false" class="p-field p-col-4 p-md-2">
                   <p-dropdown
                     [ngModel]="state.pageRequest.filters['recoveryPriorityId']"
                     (ngModelChange)="

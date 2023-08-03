@@ -1,17 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TreeNode } from 'primeng/api';
- import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BrowseOrgDetailAction } from '../states/browse-orgDetail.action';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { BCState, OrgDetailState } from '@core/states';
+import { OrgDetailState } from '@core/states';
 import { BcOrgHierarchy } from 'src/app/api/models';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { TranslateService } from '@ngx-translate/core';
 import { IAuthService } from '@core/services/auth.service';
 import { OrgStructure } from '@core/entities/AppCommonData';
-import { BrowseBCState } from '../../../states/browse-bc.state';
-import { BrowseOrgDetailModel, BrowseOrgDetailState } from '../states/browse-orgDetail.state';
+import {
+  BrowseOrgDetailModel,
+  BrowseOrgDetailState,
+} from '../states/browse-orgDetail.state';
 @Component({
   selector: 'app-org-hierarchy',
   templateUrl: './org-hierarchy.component.html',
@@ -23,10 +25,8 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
   @Select(OrgDetailState.loading)
   public loading$: Observable<boolean>;
 
-
   @Select(OrgDetailState.org)
   public org$: Observable<OrgStructure>;
-
 
   @Select(BrowseOrgDetailState.state)
   public state$: Observable<BrowseOrgDetailModel>;
@@ -44,29 +44,18 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.store
-      .select(BCState.selectedVersion)
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(500),
-        tap((v) =>
-          this.store.dispatch([
-            new BrowseOrgDetailAction.GetOrgHierarchy(),
-            new BrowseOrgDetailAction.GetOrgDetail({ id: this.loggedinUserId }),
-            new BrowseOrgDetailAction.GetOrgHierarchyTypes({
-              page: 0,
-              size: 20,
-            }),
-          ])
-        )
-      )
-      .subscribe();
-
+    this.store.dispatch([
+      new BrowseOrgDetailAction.GetOrgHierarchy(),
+      new BrowseOrgDetailAction.GetOrgDetail({ id: this.loggedinUserId }),
+      new BrowseOrgDetailAction.GetOrgHierarchyTypes({
+        page: 0,
+        size: 20,
+      }),
+    ]);
     this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
       takeUntil(this.destroy$),
       filter((p) => !!p),
-      map((data) => this.setTree(data)),
-      tap(console.log)
+      map((data) => this.setTree(data))
     );
   }
 

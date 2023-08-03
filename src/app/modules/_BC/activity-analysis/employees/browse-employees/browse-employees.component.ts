@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import {
   ActivityEmployeesState,
   ActivityEmployeesStateModel,
@@ -10,7 +11,6 @@ import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BcActivityEmployees } from 'src/app/api/models';
-import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 import { BrowseActivityEmployeesAction } from '../states/browse-employees.action';
 import { BrowseActivityEmployeesState } from '../states/browse-employees.state';
 
@@ -19,7 +19,7 @@ import { BrowseActivityEmployeesState } from '../states/browse-employees.state';
   templateUrl: './browse-employees.component.html',
   styleUrls: ['./browse-employees.component.scss'],
 })
-export class BrowseEmployeesComponent implements OnInit  ,OnDestroy{
+export class BrowseEmployeesComponent implements OnInit, OnDestroy {
   public page$: Observable<BcActivityEmployees[]>;
 
   @Select(ActivityEmployeesState.totalRecords)
@@ -41,8 +41,8 @@ export class BrowseEmployeesComponent implements OnInit  ,OnDestroy{
 
   ngOnInit(): void {
     combineLatest([
-      this.store.select(BrowseActivityAnalysisState.cycleId),
-      this.store.select(BrowseActivityAnalysisState.activityId),
+      this.store.select(ActivityAnalysisState.activityAnalysis),
+      this.store.select(ActivityAnalysisState.cycle),
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -86,12 +86,18 @@ export class BrowseEmployeesComponent implements OnInit  ,OnDestroy{
     this.store.dispatch(new BrowseActivityEmployeesAction.ToggleDialog({ id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
     this.store.dispatch(
       new BrowseActivityEmployeesAction.LoadEmployees({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
+        cycleId: cycle?.id,
+        activityId: activityAnalysis.activity.id,
       })
     );
   }

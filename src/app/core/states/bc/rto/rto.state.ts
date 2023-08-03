@@ -14,9 +14,7 @@ import { EMPTY } from 'rxjs';
 import { Bcrto } from '../../../../api/models/bcrto';
 import { BcrtoControllerService } from '../../../../api/services/bcrto-controller.service';
 import { PageBcrto } from '../../../../api/models/page-bcrto';
-import { BCState, RtoAction } from '@core/states';
-import { SituationsState } from '@core/states/situations/situations.state';
-import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
+import { RtoAction } from '@core/states';
 
 export interface RtoStateModel {
   page: PageBcrto;
@@ -68,23 +66,23 @@ export class RtoState {
     { setState }: StateContext<RtoStateModel>,
     { payload }: RtoAction.LoadPage
   ) {
+    if (payload.versionId === undefined || payload.versionId === null) {
+      return;
+    }
     setState(
       patch<RtoStateModel>({
         loading: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
-
     return this.rto
       .getAll12({
         isActive: true,
-        versionId: version?.id,
+        versionId: payload.versionId,
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
-        // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -123,8 +121,6 @@ export class RtoState {
         blocking: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
-    payload.versionId = version?.id;
     return this.rto
       .insertOne3({
         body: payload,
@@ -150,8 +146,6 @@ export class RtoState {
         blocking: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
-    payload.versionId = version?.id;
     return this.rto
       .update82({
         body: payload,

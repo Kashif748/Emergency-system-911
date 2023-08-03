@@ -59,12 +59,12 @@
     <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
       <button
         pButton
-        *ngIf="selectedVersion?.status?.id === 2"
+        *ngIf="selectedVersion?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
         pRipple
         type="button"
         label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
         icon="pi pi-replay"
-        (click)="returnModification(4)"
+        (click)="returnModification(VERSION_STATUSES?.NEEDS_MODIFICATIONS)"
         class="p-button-danger p-button-text mx-2"
       ></button>
     </ng-container>
@@ -72,11 +72,11 @@
     <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
       <button
         pButton
-        *ngIf="selectedVersion?.status?.id === 2"
+        *ngIf="selectedVersion?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
         pRipple
         class="p-button-raised mx-2"
         type="button"
-        (click)="approved(3)"
+        (click)="approved(VERSION_STATUSES?.APPROVED)"
         label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
         icon="pi pi-check"
       ></button>
@@ -88,11 +88,12 @@
         pRipple
         type="button"
         *ngIf="
-          selectedVersion?.status?.id === 1 || selectedVersion?.status?.id === 4
+          selectedVersion?.status?.id === VERSION_STATUSES?.CREATED ||
+          selectedVersion?.status?.id === VERSION_STATUSES?.NEEDS_MODIFICATIONS
         "
         label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
         icon="pi pi-send"
-        (click)="sendApprovel(2)"
+        (click)="sendApprovel(VERSION_STATUSES?.NEEDS_MODIFICATIONS)"
         class="p-button-outlined mx-2"
       ></button>
     </ng-container>

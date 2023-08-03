@@ -67,7 +67,7 @@ export class ContentImpactLevelComponent implements OnInit {
           });
       })
     );
-    this.version$.subscribe();
+    // this.version$.subscribe();
   }
   onRowEditInit(level: BcImpactLevel) {
     this.clonedLevels[level.id] = { ...level };

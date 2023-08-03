@@ -16,8 +16,7 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { BrowseImpactMatrixAction } from './browse-impact-matrix.action';
-import { BCState, ImpactMatrixAction } from '@core/states';
-import { BrowseBCState } from '../../../states/browse-bc.state';
+import { ImpactLevelAction, ImpactMatrixAction } from '@core/states';
 
 export interface BrowseImpactMatrixStateModel {
   pageRequest: PageRequestModel;
@@ -26,7 +25,7 @@ export interface BrowseImpactMatrixStateModel {
 }
 
 export const BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN =
-  new StateToken<BrowseImpactMatrixStateModel>('browse_impactMatrix');
+  new StateToken<BrowseImpactMatrixStateModel>('browse_bc_impact_matrix');
 
 @State<BrowseImpactMatrixStateModel>({
   name: BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN,
@@ -87,6 +86,7 @@ export class BrowseImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
       })
     );
   }
@@ -165,5 +165,28 @@ export class BrowseImpactMatrixState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseImpactMatrixAction.LoadImpactLevel)
+  loadImpactLevel(
+    {setState, dispatch, getState}: StateContext<BrowseImpactMatrixStateModel>,
+    {payload}: BrowseImpactMatrixAction.LoadImpactLevel
+  ) {
+    setState(
+      patch<BrowseImpactMatrixStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new ImpactLevelAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
+      })
+    );
   }
 }
