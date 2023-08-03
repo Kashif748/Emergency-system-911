@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { IAuthService } from '@core/services/auth.service';
-import { BCAction, BCState } from '@core/states';
+import { BCState } from '@core/states';
 import { FormUtils } from '@core/utils';
 import { Select, Store } from '@ngxs/store';
 import { GenericValidators } from '@shared/validators/generic-validators';
@@ -30,6 +30,7 @@ export class BCComponent implements OnInit, OnDestroy {
 
   public dialogOpened$: Observable<boolean>;
 
+  @Select(BCState.versions)
   public versions$: Observable<BcVersions[]>;
 
   selectedVersion: BcVersions;
@@ -47,16 +48,20 @@ export class BCComponent implements OnInit, OnDestroy {
     private langFacade: ILangFacade,
     private formBuilder: FormBuilder
   ) {
-    this.versions$ = this.store
-      .select(BCState.versions)
-      .pipe(filter((p) => !!p));
+    // this.versions$ = this.store
+    //   .select(BCState.versions)
+    //   .pipe(filter((p) => !!p));
 
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         const version = params['_version'];
         if (version) {
-          this.setValueGlobally(version);
+          this.store.dispatch(
+            new BrowseBCAction.GetVersion({
+              versionId: version,
+            })
+          );
         }
       });
   }
@@ -64,7 +69,7 @@ export class BCComponent implements OnInit, OnDestroy {
     this.dialogOpened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'version_dialog')
     );
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+    this.store.dispatch(new BrowseBCAction.LoadPage());
     this.createForm();
   }
   createForm() {
@@ -109,7 +114,7 @@ export class BCComponent implements OnInit, OnDestroy {
   }
   setValueGlobally(value: number) {
     this.store.dispatch(
-      new BrowseBCAction.GetVersion({
+      new BrowseBCAction.SetVersionId({
         versionId: value,
       })
     );

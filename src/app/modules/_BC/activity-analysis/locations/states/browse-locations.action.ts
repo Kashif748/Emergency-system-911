@@ -8,7 +8,13 @@ export namespace BrowseActivityLocationsAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload: {
+        pageRequest?: PageRequestModel;
+        cycleId: number;
+        activityId: number;
+      }
+    ) {}
   }
   export class LoadBCLocations {
     static readonly type = '[BrowseLocations] Load BC Locations';
@@ -16,7 +22,9 @@ export namespace BrowseActivityLocationsAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload: { pageRequest?: PageRequestModel; name?: string }
+    ) {}
   }
 
   export class Create {

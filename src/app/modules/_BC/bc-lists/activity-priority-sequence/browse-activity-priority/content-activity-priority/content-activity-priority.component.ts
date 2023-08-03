@@ -59,7 +59,7 @@ export class ContentActivityPriorityComponent implements OnInit {
           });
       })
     );
-    this.version$.subscribe();
+    // this.version$.subscribe();
   }
 
   openView(Id?: number) {

@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 import { BrowseActivityLocationsState } from '../states/browse-locations.state';
 import { BcActivityLocations } from 'src/app/api/models';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 
 @Component({
   selector: 'app-browse-locations',
@@ -40,8 +41,8 @@ export class BrowseLocationsComponent implements OnInit {
 
   ngOnInit(): void {
     combineLatest([
-      this.store.select(BrowseActivityAnalysisState.cycleId),
-      this.store.select(BrowseActivityAnalysisState.activityId),
+      this.store.select(ActivityAnalysisState.activityAnalysis),
+      this.store.select(ActivityAnalysisState.cycle),
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -85,12 +86,18 @@ export class BrowseLocationsComponent implements OnInit {
     this.store.dispatch(new BrowseActivityLocationsAction.ToggleDialog({ id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
     this.store.dispatch(
       new BrowseActivityLocationsAction.LoadLocations({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
+        cycleId: cycle?.id,
+        activityId: activityAnalysis.activity.id,
       })
     );
   }

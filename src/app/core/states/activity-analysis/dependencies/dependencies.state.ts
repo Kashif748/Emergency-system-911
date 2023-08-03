@@ -287,7 +287,7 @@ export class ActivityDependenciesState {
       })
     );
     return this.activityDependencyExternal
-      .search11({
+      .search10({
         isActive: true,
         cycleId: payload.cycleId,
         activityId: payload.activityId,
@@ -341,7 +341,7 @@ export class ActivityDependenciesState {
     );
 
     return this.activityDependencyExternal
-      .insertOne18({
+      .insertOne16({
         body: { ...payload },
       })
       .pipe(

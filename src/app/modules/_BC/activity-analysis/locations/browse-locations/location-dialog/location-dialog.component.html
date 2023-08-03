@@ -69,7 +69,7 @@
     <div class="p-field p-col-12">
       <div class="p-inputgroup">
         <span class="p-float-label">
-          <input type="text" pInputText />
+          <input (keyup)="loadPage($event.target.value)" type="text" pInputText />
           <label>
             {{ "LOCATIONS.NAME" | translate }}
           </label>

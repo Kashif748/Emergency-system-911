@@ -28,7 +28,9 @@ export interface BrowseLocationsStateModel {
 }
 
 export const BROWSE_LOCATIONS_UI_STATE_TOKEN =
-  new StateToken<BrowseLocationsStateModel>('browse_locations');
+  new StateToken<BrowseLocationsStateModel>(
+    'browse_activity_analysis_locations'
+  );
 
 @State<BrowseLocationsStateModel>({
   name: BROWSE_LOCATIONS_UI_STATE_TOKEN,
@@ -78,17 +80,11 @@ export class BrowseActivityLocationsState {
       })
     );
     const pageRequest = getState().pageRequest;
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
 
     return dispatch(
       new ActivityLocationsAction.LoadPage({
-        cycleId: cycleId,
-        activityId: activityId,
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -116,7 +112,9 @@ export class BrowseActivityLocationsState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
+        filters: {
+          name: payload?.name,
+        },
       })
     );
   }
@@ -129,7 +127,10 @@ export class BrowseActivityLocationsState {
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseActivityLocationsAction.LoadLocations(),
+          new BrowseActivityLocationsAction.LoadLocations({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          }),
           new BrowseActivityLocationsAction.ToggleDialog({}),
         ]);
       }),
@@ -148,7 +149,12 @@ export class BrowseActivityLocationsState {
     return dispatch(new ActivityLocationsAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseActivityLocationsAction.LoadLocations());
+        dispatch(
+          new BrowseActivityLocationsAction.LoadLocations({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          })
+        );
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

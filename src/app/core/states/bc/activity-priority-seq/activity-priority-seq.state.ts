@@ -11,12 +11,12 @@ import { Injectable } from '@angular/core';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
-import { BcRecoveryPrioritiesControllerService } from '../../../../api/services/bc-recovery-priorities-controller.service';
-import { BcRecoveryPriorities } from '../../../../api/models/bc-recovery-priorities';
-import { ActivityPrioritySeqAction } from '@core/states/bc/activity-priority-seq/activity-priority-seq.action';
-import { PageBcRecoveryPriorities } from '../../../../api/models/page-bc-recovery-priorities';
-import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
-import { BCState } from '../bc/bc.state';
+import {
+  BcRecoveryPriorities,
+  PageBcRecoveryPriorities,
+} from 'src/app/api/models';
+import { BcRecoveryPrioritiesControllerService } from 'src/app/api/services';
+import { ActivityPrioritySeqAction } from './activity-priority-seq.action';
 
 export interface ActivityPrioritySeqStateModel {
   page: PageBcRecoveryPriorities;
@@ -26,7 +26,7 @@ export interface ActivityPrioritySeqStateModel {
 }
 
 const ACTIVITY_PRIORITY_SEQ_STATE_TOKEN =
-  new StateToken<ActivityPrioritySeqStateModel>('activityPrioritySeq');
+  new StateToken<ActivityPrioritySeqStateModel>('activity_priority_seq');
 
 @State<ActivityPrioritySeqStateModel>({
   name: ACTIVITY_PRIORITY_SEQ_STATE_TOKEN,
@@ -39,7 +39,7 @@ export class ActivityPrioritySeqState {
    */
   constructor(
     private activityPrioritySeq: BcRecoveryPrioritiesControllerService,
-     private store: Store
+    private store: Store
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -74,23 +74,24 @@ export class ActivityPrioritySeqState {
     { setState }: StateContext<ActivityPrioritySeqStateModel>,
     { payload }: ActivityPrioritySeqAction.LoadPage
   ) {
+    if (payload.versionId === undefined || payload.versionId === null) {
+      return;
+    }
     setState(
       patch<ActivityPrioritySeqStateModel>({
         loading: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
 
     return this.activityPrioritySeq
       .getAll16({
         isActive: true,
-        versionId: version?.id,
+        versionId: payload.versionId,
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
-        // request: payload.filters,
       })
       .pipe(
         tap((res) => {

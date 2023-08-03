@@ -10,11 +10,14 @@ import {
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
 import { Injectable } from '@angular/core';
-import { BcVersions } from '../../../../api/models/bc-versions';
-import { BcVersionsControllerService } from '../../../../api/services/bc-versions-controller.service';
 import { BCAction } from '@core/states/bc/bc/bc.action';
-import { PageBcVersions } from '../../../../api/models/page-bc-versions';
-import { BcVersionsStatus } from '../../../../api/models/bc-versions-status';
+import {
+  BcVersions,
+  BcVersionsStatus,
+  PageBcVersions,
+} from 'src/app/api/models';
+import { BcVersionsControllerService } from 'src/app/api/services';
+
 export enum VERSION_STATUSES {
   CREATED = 1,
   UNDER_APPROVAL,
@@ -31,9 +34,8 @@ export interface BCStateModel {
   blocking: boolean;
 }
 
-const BC_STATE_TOKEN = new StateToken<BCState>('bc');
-
-@State<BCState>({ name: BC_STATE_TOKEN })
+const BC_STATE_TOKEN = new StateToken<BCStateModel>('bc');
+@State<BCStateModel>({ name: BC_STATE_TOKEN})
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
 export class BCState {
@@ -85,18 +87,18 @@ export class BCState {
       })
     );
     return this.bC
-      .getAll10({
+      .search8({
         isActive: true,
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
+        statusId : payload?.statusId
         // request: payload.filters,
       })
       .pipe(
         tap((res) => {
-          const sortedVersions = res.result.content.sort((a, b) => b.id - a.id);
           setState(
             patch<BCStateModel>({
               versions: res.result,
@@ -155,7 +157,10 @@ export class BCState {
   }
 
   @Action(BCAction.GetVersion, { cancelUncompleted: true })
-  getBc({ setState }: StateContext<BCStateModel>, { payload }: BCAction.GetVersion) {
+  getBc(
+    { setState }: StateContext<BCStateModel>,
+    { payload }: BCAction.GetVersion
+  ) {
     if (payload.id === undefined || payload.id === null) {
       setState(
         patch<BCStateModel>({
@@ -192,14 +197,9 @@ export class BCState {
     { setState }: StateContext<BCStateModel>,
     { payload }: BCAction.Status
   ) {
-    /*if (payload.id === undefined || payload.id === null) {
-      setState(
-        patch<BCStateModel>({
-          bc: undefined,
-        })
-      );
+    if (payload.versionId === undefined || payload.versionId === null) {
       return;
-    }*/
+    }
     setState(
       patch<BCStateModel>({
         blocking: true,

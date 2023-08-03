@@ -1,8 +1,8 @@
 import { PageRequestModel } from '@core/models/page-request.model';
 import {
+  BcActivityImpactMatrixDetailsDto,
   BcImpactMatrixDto,
-  BcImpactTypesDetails,
-} from '../../../../../api/models';
+} from 'src/app/api/models';
 
 export namespace BrowseActivityImpactMatrixAction {
   export class LoadPage {
@@ -11,7 +11,13 @@ export namespace BrowseActivityImpactMatrixAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload: {
+        pageRequest?: PageRequestModel;
+        cycleId: number;
+        activityId: number;
+      }
+    ) {}
   }
   export class LoadImpactLevel {
     static readonly type = '[BrowseImpactMatrix] Load ImpactLevel Matrix';
@@ -20,7 +26,7 @@ export namespace BrowseActivityImpactMatrixAction {
      *
      */
     constructor(
-      public payload?: { pageRequest: PageRequestModel; versionId: number }
+      public payload: { pageRequest: PageRequestModel; versionId: number }
     ) {}
   }
   export class LoadImpactMatrix {
@@ -30,7 +36,7 @@ export namespace BrowseActivityImpactMatrixAction {
      *
      */
     constructor(
-      public payload?: { pageRequest?: PageRequestModel; versionId: number }
+      public payload: { pageRequest?: PageRequestModel; versionId: number }
     ) {}
   }
 
@@ -47,7 +53,7 @@ export namespace BrowseActivityImpactMatrixAction {
     /**
      *
      */
-    constructor(public payload: BcImpactTypesDetails[]) {}
+    constructor(public payload: BcActivityImpactMatrixDetailsDto) {}
   }
 
   export class ToggleDialog {

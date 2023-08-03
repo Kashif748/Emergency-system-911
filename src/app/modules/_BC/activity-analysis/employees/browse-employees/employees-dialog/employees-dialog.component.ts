@@ -10,6 +10,8 @@ import { ActivityEmployeesAction } from '@core/states/activity-analysis/employee
 import { ActivityEmployeesState } from '@core/states/activity-analysis/employees/employees.state';
 import { BrowseActivityEmployeesAction } from '../../states/browse-employees.action';
 import { FormUtils } from '@core/utils';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { BcActivityEmployees } from 'src/app/api/models';
 
 @Component({
   selector: 'app-employees-dialog',
@@ -115,17 +117,28 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const employee = {
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
+    const payload: BcActivityEmployees = {
       ...this.form.getRawValue(),
       mobileNumber: this.form.get('mobileNumber')?.value?.number,
       phoneNumber: this.form.get('phoneNumber')?.value?.number,
+      id: this._employeeId,
+      activity: {
+        id: activityAnalysis?.activity?.id,
+        internal: activityAnalysis?.activity?.internal,
+      },
+      cycle: {
+        id: cycle.id,
+      },
     };
 
     if (this.editMode) {
-      employee.id = this._employeeId;
-      this.store.dispatch(new BrowseActivityEmployeesAction.Update(employee));
+      this.store.dispatch(new BrowseActivityEmployeesAction.Update(payload));
     } else {
-      this.store.dispatch(new BrowseActivityEmployeesAction.Create(employee));
+      this.store.dispatch(new BrowseActivityEmployeesAction.Create(payload));
     }
   }
   ngOnDestroy(): void {

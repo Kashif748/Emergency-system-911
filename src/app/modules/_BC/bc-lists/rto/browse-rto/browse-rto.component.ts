@@ -7,14 +7,13 @@ import {
   BrowseRtoStateModel,
 } from '../states/browse-rto.state';
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
-import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { MessageHelper } from '@core/helpers/message.helper';
 import { TranslateService } from '@ngx-translate/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { BrowseRtoAction } from '../states/browse-rto.action';
-import { Bcrto, BcVersions } from 'src/app/api/models';
-import { BrowseBCState } from '../../../states/browse-bc.state';
-import { BCState } from '@core/states';
+import { Bcrto } from 'src/app/api/models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-browse-rto',
@@ -33,7 +32,7 @@ export class BrowseRtoComponent implements OnInit, OnDestroy {
   @Select(BrowseRtoState.state)
   public state$: Observable<BrowseRtoStateModel>;
 
-  public selectedVersion$: Observable<BcVersions>;
+  public versionId: number;
 
   private destroy$ = new Subject();
 
@@ -41,19 +40,21 @@ export class BrowseRtoComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private lang: ILangFacade,
     private store: Store,
+    private route: ActivatedRoute,
     private messageHelper: MessageHelper
   ) {}
 
   ngOnInit(): void {
-    this.selectedVersion$ = this.store.select(BCState.selectedVersion).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      tap((v) => {
-        console.log(v);
-
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params) => params['_version']),
+        filter((p) => !!p)
+      )
+      .subscribe((version) => {
+        this.versionId = version;
         this.loadPage();
-      })
-    );
+      });
 
     const userActions = [
       {
@@ -113,6 +114,7 @@ export class BrowseRtoComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
+        versionId: this.versionId,
       })
     );
   }

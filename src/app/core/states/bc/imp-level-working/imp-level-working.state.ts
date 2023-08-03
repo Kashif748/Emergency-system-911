@@ -1,4 +1,3 @@
-import { BcWorkImportanceLevels } from '../../../../api/models/bc-work-importance-levels';
 import {
   Action,
   Selector,
@@ -9,15 +8,12 @@ import {
   Store,
 } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { BcWorkImportanceLevelsControllerService } from '../../../../api/services/bc-work-importance-levels-controller.service';
 import { patch } from '@ngxs/store/operators';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
-import { ImpLevelWorkingAction } from '@core/states/bc/imp-level-working/imp-level-working.action';
-import { PageBcWorkImportanceLevels } from '../../../../api/models/page-bc-work-importance-levels';
-import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
-import { BCState } from '../bc/bc.state';
-
+import { BcWorkImportanceLevels, PageBcWorkImportanceLevels } from 'src/app/api/models';
+import { BcWorkImportanceLevelsControllerService } from 'src/app/api/services';
+import { ImpLevelWorkingAction } from './imp-level-working.action';
 export interface ImpLevelWorkingStateModel {
   page: PageBcWorkImportanceLevels;
   ImpLevelWorking: BcWorkImportanceLevels;
@@ -26,7 +22,7 @@ export interface ImpLevelWorkingStateModel {
 }
 
 const IMP_LEVEL_WORKING_STATE_TOKEN = new StateToken<ImpLevelWorkingStateModel>(
-  'impLevelWorking'
+  'impact_level_working'
 );
 
 @State<ImpLevelWorkingStateModel>({ name: IMP_LEVEL_WORKING_STATE_TOKEN })
@@ -73,16 +69,18 @@ export class ImpLevelWorkingState {
     { setState }: StateContext<ImpLevelWorkingStateModel>,
     { payload }: ImpLevelWorkingAction.LoadPage
   ) {
+    if (payload.versionId === undefined || payload.versionId === null) {
+      return;
+    }
     setState(
       patch<ImpLevelWorkingStateModel>({
         loading: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
     return this.impLevelWorking
       .getAll19({
         isActive: true,
-        versionId: version?.id,
+        versionId: payload.versionId,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -127,8 +125,6 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
-    payload.versionId = version?.id;
 
     return this.impLevelWorking
       .insertOne10({
@@ -155,8 +151,7 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
-    payload.versionId = version?.id;
+
     return this.impLevelWorking
       .update89({
         body: payload,

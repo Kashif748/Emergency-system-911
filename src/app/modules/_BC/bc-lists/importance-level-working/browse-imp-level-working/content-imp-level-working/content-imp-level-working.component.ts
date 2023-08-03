@@ -60,7 +60,7 @@ export class ContentImpLevelWorkingComponent implements OnInit {
           });
       })
     );
-    this.version$.subscribe();
+    // this.version$.subscribe();
   }
   openView(Id?: number) {
     this.store.dispatch(new BrowseImpLevelWorkingAction.OpenView({ id: Id }));

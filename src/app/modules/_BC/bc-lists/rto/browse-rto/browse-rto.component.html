@@ -1,5 +1,5 @@
 <div *ngIf="state$ | async as state">
-  <ng-container *ngIf="selectedVersion$ | async; else elseTemplate">
+  <ng-container *ngIf="versionId; else elseTemplate">
     <app-content-rto
       [loading]="loading$ | async"
       [page]="page$ | async"

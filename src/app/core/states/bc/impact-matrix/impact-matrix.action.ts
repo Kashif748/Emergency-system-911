@@ -1,4 +1,4 @@
-import { BcImpactMatrixDto } from '../../../../api/models';
+import { BcImpactMatrixDto } from "src/app/api/models";
 
 export namespace ImpactMatrixAction {
   export class LoadPage {
@@ -13,6 +13,8 @@ export namespace ImpactMatrixAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId : number
+
       }
     ) {}
   }

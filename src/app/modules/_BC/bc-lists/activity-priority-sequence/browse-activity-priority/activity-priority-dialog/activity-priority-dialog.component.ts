@@ -1,21 +1,21 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {GenericValidators} from "@shared/validators/generic-validators";
-import {Observable, Subject} from "rxjs";
-import {IAuthService} from "@core/services/auth.service";
-import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
-import {RtoAction, RtoState} from "@core/states";
-import {Select, Store} from "@ngxs/store";
-import {FormUtils} from "@core/utils/form.utils";
-import {ActivityPrioritySeqAction} from "@core/states/bc/activity-priority-seq/activity-priority-seq.action";
-import {ActivityPrioritySeqState} from "@core/states/bc/activity-priority-seq/activity-priority-seq.state";
-import {BrowseActivityPrioritySeqAction} from "../../states/browse-activity-priority-seq.action";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { Observable, Subject } from 'rxjs';
+import { IAuthService } from '@core/services/auth.service';
+import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { RtoAction, RtoState } from '@core/states';
+import { Select, Store } from '@ngxs/store';
+import { FormUtils } from '@core/utils/form.utils';
+import { ActivityPrioritySeqAction } from '@core/states/bc/activity-priority-seq/activity-priority-seq.action';
+import { ActivityPrioritySeqState } from '@core/states/bc/activity-priority-seq/activity-priority-seq.state';
+import { BrowseActivityPrioritySeqAction } from '../../states/browse-activity-priority-seq.action';
 
 @Component({
   selector: 'app-activity-priority-dialog',
   templateUrl: './activity-priority-dialog.component.html',
-  styleUrls: ['./activity-priority-dialog.component.scss']
+  styleUrls: ['./activity-priority-dialog.component.scss'],
 })
 export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
@@ -28,7 +28,9 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   @Input()
-  version
+  shouldDisable;
+
+  public version: number;
 
   _id: number;
   get loggedinUserId() {
@@ -50,7 +52,9 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
     this.store
       .dispatch(new ActivityPrioritySeqAction.GetActivityPrioritySeq({ id: v }))
       .pipe(
-        switchMap(() => this.store.select(ActivityPrioritySeqState.singleActivity)),
+        switchMap(() =>
+          this.store.select(ActivityPrioritySeqState.singleActivity)
+        ),
         takeUntil(this.destroy$),
         take(1),
         tap((singleActivity) => {
@@ -69,13 +73,12 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
     private store: Store
   ) {
     this.route.queryParams
-      .pipe(
-        map((params) => params['_id']),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((id) => {
-        this._Id = id;
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        this.version = params['_version'];
+        this._Id = params['_id'];
       });
+
     this.viewOnly$ = this.route.queryParams.pipe(
       map((params) => params['_mode'] === 'viewonly'),
       tap((v) => {
@@ -100,15 +103,17 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
   }
 
   openDialog(Id?: number) {
-    this.store.dispatch(new BrowseActivityPrioritySeqAction.ToggleDialog({ id: Id }));
+    this.store.dispatch(
+      new BrowseActivityPrioritySeqAction.ToggleDialog({ id: Id })
+    );
   }
-
 
   buildForm() {
     this.form = this.formBuilder.group({
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
-      isActive: [true]
+      isActive: [true],
+      versionId: this.version,
     });
   }
 
@@ -131,9 +136,17 @@ export class ActivityPriorityDialogComponent implements OnInit, OnDestroy {
 
     if (this.editMode) {
       activityPriority.id = this._id;
-      this.store.dispatch(new BrowseActivityPrioritySeqAction.UpdateActivityPrioritySeq(activityPriority));
+      this.store.dispatch(
+        new BrowseActivityPrioritySeqAction.UpdateActivityPrioritySeq(
+          activityPriority
+        )
+      );
     } else {
-      this.store.dispatch(new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(activityPriority));
+      this.store.dispatch(
+        new BrowseActivityPrioritySeqAction.CreateActivityPrioritySeq(
+          activityPriority
+        )
+      );
     }
   }
 

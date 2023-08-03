@@ -8,6 +8,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
+  BcActivityImpactMatrixDetailsDto,
   BcImpactLevel,
   BcImpactTypesDetails,
   Bcrto,
@@ -25,7 +26,7 @@ import {
   templateUrl: './browse-impact-matrix.component.html',
   styleUrls: ['./browse-impact-matrix.component.scss'],
 })
-export class BrowseImpactMatrixComponent implements OnInit , OnDestroy {
+export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   @Select(ImpactMatrixState.loading)
   public loading$: Observable<boolean>;
 
@@ -71,6 +72,7 @@ export class BrowseImpactMatrixComponent implements OnInit , OnDestroy {
         ([activityImpact, impactMatrix, rtos]) =>
           !!activityImpact && !!impactMatrix && !!rtos
       ),
+      tap(console.log),
       map(([activityImpact, impactMatrix, rtos]) => {
         const table = [];
         let impactTotal = 0;
@@ -88,7 +90,7 @@ export class BrowseImpactMatrixComponent implements OnInit , OnDestroy {
               const selectdRto = selectdImpact.bcRto.find(
                 (item) => item.id === rto.id
               );
-              if (selectdRto) {
+              if (selectdRto?.bcImpactLevels) {
                 bcImpactLevelId = selectdRto.bcImpactLevels.id;
                 impactTotal++;
               }
@@ -120,12 +122,18 @@ export class BrowseImpactMatrixComponent implements OnInit , OnDestroy {
   }
 
   public loadPage(event?: LazyLoadEvent) {
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
     this.store.dispatch(
       new BrowseActivityImpactMatrixAction.LoadPage({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
+        cycleId: cycle?.id,
+        activityId: activityAnalysis.activity.id,
       })
     );
   }
@@ -195,10 +203,20 @@ export class BrowseImpactMatrixComponent implements OnInit , OnDestroy {
   }
 
   save() {
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
+    console.log(this.selectedCells);
+
+    const payload: BcActivityImpactMatrixDetailsDto = {
+      bcImpactTypes: this.selectedCells,
+      cycleId: cycle?.id,
+      activityId: activityAnalysis.activity.id,
+    };
+
     this.store.dispatch(
-      new BrowseActivityImpactMatrixAction.UpdateImpactMatrix(
-        this.selectedCells
-      )
+      new BrowseActivityImpactMatrixAction.UpdateImpactMatrix(payload)
     );
   }
   ngOnDestroy(): void {

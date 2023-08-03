@@ -1,21 +1,23 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {TranslateService} from "@ngx-translate/core";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {debounceTime, filter, map, takeUntil, tap} from "rxjs/operators";
-import {LazyLoadEvent, MenuItem} from "primeng/api";
-import {BcActivityFrequencies} from "../../../../../api/models/bc-activity-frequencies";
-import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
-import {BrowseActivityFrquencyState, BrowseActivityFrquencyStateModel} from "../states/browse-activity-frquency.state";
-import {BrowseActivityFrquencyAction} from "../states/browse-activity-frquency.action";
-import {BrowseBCState} from "../../../states/browse-bc.state";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { TranslateService } from '@ngx-translate/core';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { filter, map } from 'rxjs/operators';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { BcActivityFrequencies } from '../../../../../api/models/bc-activity-frequencies';
+import { ActivityFrquencyState } from '@core/states/bc/activity-frquency/activity-frquency.state';
+import {
+  BrowseActivityFrquencyState,
+  BrowseActivityFrquencyStateModel,
+} from '../states/browse-activity-frquency.state';
+import { BrowseActivityFrquencyAction } from '../states/browse-activity-frquency.action';
 
 @Component({
   selector: 'app-browse-activity-frquency',
   templateUrl: './browse-activity-frquency.component.html',
-  styleUrls: ['./browse-activity-frquency.component.scss']
+  styleUrls: ['./browse-activity-frquency.component.scss'],
 })
 export class BrowseActivityFrquencyComponent implements OnInit, OnDestroy {
   public page$: Observable<BcActivityFrequencies[]>;
@@ -34,8 +36,8 @@ export class BrowseActivityFrquencyComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private lang: ILangFacade,
     private store: Store,
-    private messageHelper: MessageHelper,
-  ) { }
+    private messageHelper: MessageHelper
+  ) {}
 
   ngOnInit(): void {
     this.loadPage();
@@ -84,7 +86,9 @@ export class BrowseActivityFrquencyComponent implements OnInit, OnDestroy {
   }
 
   openDialog(Id?: number) {
-    this.store.dispatch(new BrowseActivityFrquencyAction.ToggleDialog({ id: Id }));
+    this.store.dispatch(
+      new BrowseActivityFrquencyAction.ToggleDialog({ id: Id })
+    );
   }
 
   activate(id: number) {

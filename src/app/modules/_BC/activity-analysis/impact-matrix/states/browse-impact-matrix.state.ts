@@ -82,21 +82,14 @@ export class BrowseActivityImpactMatrixState {
       })
     );
     const pageRequest = getState().pageRequest;
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
 
     return dispatch(
       new ActivityImapctMatrixAction.LoadPage({
-        cycleId: cycleId,
-        activityId: activityId,
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
       })
     );
   }
@@ -123,7 +116,7 @@ export class BrowseActivityImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-
+        versionId: payload.versionId,
         filters: { isActive: true },
       })
     );
@@ -152,6 +145,7 @@ export class BrowseActivityImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
       })
     );
   }
@@ -179,7 +173,7 @@ export class BrowseActivityImpactMatrixState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-
+        versionId: payload.versionId,
         // filters: this.filters(pageRequest),
       })
     );
@@ -190,20 +184,7 @@ export class BrowseActivityImpactMatrixState {
     { dispatch }: StateContext<BrowseActivityImpactMatrixStateModel>,
     { payload }: BrowseActivityImpactMatrixAction.UpdateImpactMatrix
   ) {
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
-
-    return dispatch(
-      new ActivityImapctMatrixAction.Update({
-        cycleId: cycleId,
-        activityId: activityId,
-        bcImpactTypes: payload,
-      })
-    ).pipe(
+    return dispatch(new ActivityImapctMatrixAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
       }),
