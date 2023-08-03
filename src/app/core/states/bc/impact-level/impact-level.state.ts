@@ -1,13 +1,13 @@
-import {PageBcImpactLevel} from '../../../../api/models/page-bc-impact-level';
-import {BcImpactLevel} from '../../../../api/models/bc-impact-level';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {EMPTY} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {patch} from '@ngxs/store/operators';
+import {BcImpactLevelControllerService} from 'src/app/api/services';
+import {ImpactLevelAction} from './impact-level.action';
+import {PageBcImpactLevel} from '../../../../api/models/page-bc-impact-level';
+import {BcImpactLevel} from '../../../../api/models/bc-impact-level';
 import {BCState} from '@core/states';
-import {BcImpactLevelControllerService} from '../../../../api/services/bc-impact-level-controller.service';
-import {ImpactLevelAction} from '@core/states/bc/impact-level/impact-level.action';
 
 export interface ImpactLevelStateModel {
   page: PageBcImpactLevel;
@@ -17,7 +17,7 @@ export interface ImpactLevelStateModel {
 }
 
 const IMPACT_LEVEL_STATE_TOKEN = new StateToken<ImpactLevelStateModel>(
-  'impactLevel'
+  'impact_level'
 );
 
 @State<ImpactLevelStateModel>({ name: IMPACT_LEVEL_STATE_TOKEN })
@@ -27,10 +27,7 @@ export class ImpactLevelState {
   /**
    *
    */
-  constructor(
-    private impactLevel: BcImpactLevelControllerService,
-    private store: Store
-  ) {}
+  constructor(private impactLevel: BcImpactLevelControllerService) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([ImpactLevelState])
@@ -64,17 +61,20 @@ export class ImpactLevelState {
     { setState }: StateContext<ImpactLevelStateModel>,
     { payload }: ImpactLevelAction.LoadPage
   ) {
+    if (payload.versionId === undefined || payload.versionId === null) {
+      return;
+    }
     setState(
       patch<ImpactLevelStateModel>({
         loading: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
 
     return this.impactLevel
       .getAll21({
         isActive: true,
-        versionId: version?.id,
+        versionId: payload.versionId,
+
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -119,12 +119,10 @@ export class ImpactLevelState {
         blocking: true,
       })
     );
-    const version= this.store.selectSnapshot(
-     BCState.selectedVersion
-    );
+
     return this.impactLevel
       .insertOne12({
-        body: { ...payload, versionId: version?.id },
+        body: payload,
       })
       .pipe(
         finalize(() => {
@@ -147,12 +145,9 @@ export class ImpactLevelState {
       })
     );
 
-    const version = this.store.selectSnapshot(
-     BCState.selectedVersion
-    );
     return this.impactLevel
       .update92({
-        body: { ...payload, versionId: version?.id },
+        body: payload,
       })
       .pipe(
         finalize(() => {

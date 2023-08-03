@@ -1,14 +1,15 @@
 import { PageRequestModel } from '@core/models/page-request.model';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
 import { BcVersions } from '../../../api/models/bc-versions';
 
 export namespace BrowseBCAction {
-  export class LoadBusinessContinuity {
-    static readonly type = '[BrowseBusinessContinuity] Load BusinessContinuity';
+  export class LoadPage {
+    static readonly type = '[BrowseBusinessContinuity] Load Page';
 
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {}
+    constructor(public payload?: { pageRequest?: PageRequestModel ,  statusId? : number}) {}
   }
   export class GetVersion {
     static readonly type = '[BrowseBusinessContinuity] Get One';
@@ -25,7 +26,9 @@ export namespace BrowseBCAction {
     /**
      *
      */
-    constructor(public payload?: { versionId: number; statusId: number }) {}
+    constructor(
+      public payload?: { versionId: number; statusId: VERSION_STATUSES }
+    ) {}
   }
 
   export class CreateBusinessContinuity {
@@ -51,5 +54,13 @@ export namespace BrowseBCAction {
      *
      */
     constructor() {}
+  }
+
+  export class SetVersionId {
+    static readonly type = '[BrowseBusinessContinuity] Set Version ID';
+    /**
+     *
+     */
+    constructor(public payload: { versionId: number }) {}
   }
 }

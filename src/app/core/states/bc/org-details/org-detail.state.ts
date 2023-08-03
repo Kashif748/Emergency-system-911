@@ -17,14 +17,12 @@ import {
   BcOrgHierarchyControllerService,
   BcOrgHierarchyTypeControllerService,
 } from 'src/app/api/services';
-import { BrowseBCState } from 'src/app/modules/_BC/states/browse-bc.state';
 import {
   BcOrgHierarchy,
   BcOrgHierarchyType,
   PageBcOrgHierarchy,
   PageBcOrgHierarchyType,
 } from 'src/app/api/models';
-import { BCState } from '../bc/bc.state';
 
 export interface OrgDetailStateModel {
   orgHir: PageBcOrgHierarchy;
@@ -87,13 +85,9 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    const version = this.store.selectSnapshot(
-     BCState.selectedVersion
-    );
 
     return this.orgHir
       .getAll15({
-        versionId: version?.id,
         isActive: true,
         pageable: payload,
       })
@@ -208,13 +202,9 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    const version = this.store.selectSnapshot(
-     BCState.selectedVersion
-    );
 
     return this.orgHirTypes
       .getAll14({
-        versionId: version?.id,
         isActive: true,
         pageable: {
           page: payload.page,

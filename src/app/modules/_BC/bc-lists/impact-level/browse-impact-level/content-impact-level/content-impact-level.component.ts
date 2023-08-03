@@ -72,7 +72,7 @@ export class ContentImpactLevelComponent implements OnInit {
           });
       })
     );
-    this.version$.subscribe();
+    // this.version$.subscribe();
     this.formGroup = this.formBuilder.group({
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],

@@ -17,9 +17,6 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { BrowseBCState } from '../../../states/browse-bc.state';
-import { BCState } from '@core/states';
-
 export interface BrowseRtoStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
@@ -52,8 +49,7 @@ export class BrowseRtoState {
     private messageHelper: MessageHelper,
     private router: Router,
     private apiHelper: ApiHelper,
-    private route: ActivatedRoute,
-    private store: Store
+    private route: ActivatedRoute
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -83,16 +79,16 @@ export class BrowseRtoState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
       })
     );
   }
 
   @Action(BrowseRtoAction.CreateRto)
   createRto(
-    { dispatch, getState }: StateContext<BrowseRtoStateModel>,
+    { dispatch }: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.CreateRto
   ) {
-    // const versionId = this.store.selectSnapshot(BrowseBCState.getState).versionId;
     return dispatch(new RtoAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();

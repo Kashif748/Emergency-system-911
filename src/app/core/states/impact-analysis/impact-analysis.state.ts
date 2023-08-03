@@ -37,7 +37,7 @@ export interface ImpactAnalysisStateModel {
 }
 
 const IMPACT_ANALYSIS_STATE_TOKEN = new StateToken<ImpactAnalysisState>(
-  'ImpactAnalysisState'
+  'impact_analysis'
 );
 
 @State<ImpactAnalysisState>({ name: IMPACT_ANALYSIS_STATE_TOKEN })

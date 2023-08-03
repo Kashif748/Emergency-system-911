@@ -16,8 +16,7 @@ import { iif, patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { BrowseImpactLevelAction } from './browse-impact-level.action';
-import { BCState, ImpactLevelAction } from '@core/states';
-import { BrowseBCState } from '../../../states/browse-bc.state';
+import { ImpactLevelAction } from '@core/states';
 
 export interface BrowseImpactLevelStateModel {
   pageRequest: PageRequestModel;
@@ -26,7 +25,7 @@ export interface BrowseImpactLevelStateModel {
 }
 
 export const BROWSE_IMPACT_LEVEL_UI_STATE_TOKEN =
-  new StateToken<BrowseImpactLevelStateModel>('browse_ImpactLevel');
+  new StateToken<BrowseImpactLevelStateModel>('browse_bc_impact_level');
 
 @State<BrowseImpactLevelStateModel>({
   name: BROWSE_IMPACT_LEVEL_UI_STATE_TOKEN,
@@ -82,6 +81,8 @@ export class BrowseImpactLevelState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
+
       })
     );
   }

@@ -1,7 +1,6 @@
 import { PageRequestModel } from '@core/models/page-request.model';
 import { BcWorkImportanceLevels } from 'src/app/api/models';
 
-
 export namespace BrowseImpLevelWorkingAction {
   export class LoadImpLevelWorking {
     static readonly type = '[BrowseImpLevelWorking] Load ImpLevelWorking';
@@ -9,8 +8,9 @@ export namespace BrowseImpLevelWorkingAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {
-    }
+    constructor(
+      public payload?: { pageRequest?: PageRequestModel; versionId: number }
+    ) {}
   }
 
   export class CreateImpLevelWorking {
@@ -18,9 +18,7 @@ export namespace BrowseImpLevelWorkingAction {
     /**
      *
      */
-    constructor(
-      public payload: BcWorkImportanceLevels
-    ) {}
+    constructor(public payload: BcWorkImportanceLevels) {}
   }
 
   export class UpdateImpLevelWorking {
@@ -28,9 +26,7 @@ export namespace BrowseImpLevelWorkingAction {
     /**
      *
      */
-    constructor(
-      public payload: BcWorkImportanceLevels
-    ) {}
+    constructor(public payload: BcWorkImportanceLevels) {}
   }
 
   export class ToggleDialog {

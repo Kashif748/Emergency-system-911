@@ -4,20 +4,18 @@ import { Select, Store } from '@ngxs/store';
 import { TranslateService } from '@ngx-translate/core';
 
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
-import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import {  filter, map, takeUntil } from 'rxjs/operators';
 import {
   BrowseImpactMatrixState,
   BrowseImpactMatrixStateModel,
 } from '../states/browse-impact-matrix.state';
 import { ImpactMatrixState } from '@core/states/bc/impact-matrix/impact-matrix.state';
-import { BcImpactLevel, BcImpactMatrixDto, BcVersions } from 'src/app/api/models';
+import { BcImpactLevel, BcImpactMatrixDto } from 'src/app/api/models';
 import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.state';
-import { BrowseImpactLevelMatrixAction } from '../states/browse-impact-level-matrix.action';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { MessageHelper } from '@core/helpers/message.helper';
-import { BrowseBCState } from '../../../states/browse-bc.state';
 import { BrowseImpactMatrixAction } from '../states/browse-impact-matrix.action';
-import { BCState } from '@core/states';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-browse-impact-matrix',
@@ -34,7 +32,7 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   @Select(ImpactMatrixState.loading)
   public loading$: Observable<boolean>;
 
-  public selectedVersion$: Observable<BcVersions>;
+  public versionId: number;
 
   private destroy$ = new Subject();
 
@@ -44,18 +42,22 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private lang: ILangFacade,
     private store: Store,
+    private route: ActivatedRoute,
     private messageHelper: MessageHelper
   ) {}
 
   ngOnInit(): void {
-    this.selectedVersion$ = this.store.select(BCState.selectedVersion).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      tap((v) => {
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params) => params['_version']),
+        filter((p) => !!p)
+      )
+      .subscribe((version) => {
+        this.versionId = version;
         this.loadPage();
         this.loadImpactTypePage();
-      })
-    );
+      });
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -119,17 +121,19 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
+        versionId: this.versionId,
       })
     );
   }
 
   public loadImpactTypePage(event?: LazyLoadEvent) {
     this.store.dispatch(
-      new BrowseImpactLevelMatrixAction.LoadImpactLevel({
+      new BrowseImpactMatrixAction.LoadImpactLevel({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
+        versionId: this.versionId,
       })
     );
   }

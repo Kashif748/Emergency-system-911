@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
@@ -6,7 +7,6 @@ import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { BcActivitySystems } from 'src/app/api/models';
-import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 import { BrowseActivitySystemsAction } from '../states/browse-systems.action';
 import {
   BrowseActivitySystemsState,
@@ -36,8 +36,8 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     combineLatest([
-      this.store.select(BrowseActivityAnalysisState.cycleId),
-      this.store.select(BrowseActivityAnalysisState.activityId),
+      this.store.select(ActivityAnalysisState.activityAnalysis),
+      this.store.select(ActivityAnalysisState.cycle),
     ])
       .pipe(
         takeUntil(this.destroy$),
@@ -81,12 +81,18 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseActivitySystemsAction.ToggleDialog({ id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
     this.store.dispatch(
       new BrowseActivitySystemsAction.LoadActivitySystems({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
+        cycleId: cycle?.id,
+        activityId: activityAnalysis.activity.id,
       })
     );
   }

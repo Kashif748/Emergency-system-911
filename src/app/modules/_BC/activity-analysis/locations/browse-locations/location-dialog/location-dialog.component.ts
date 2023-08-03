@@ -7,11 +7,20 @@ import { Observable, Subject } from 'rxjs';
 import { BcActivityLocations, BcLocations } from 'src/app/api/models';
 import { BrowseLocationsState } from 'src/app/modules/_business-continuity-setup/location/states/browse-locations.state';
 import { BrowseLocationsStateModel } from '../../states/browse-locations.state';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  auditTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { LazyLoadEvent } from 'primeng/api';
 import { BrowseActivityLocationsAction } from '../../states/browse-locations.action';
 import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
 import { BrowseActivityAnalysisState } from '../../../states/browse-activity-analysis.state';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 
 @Component({
   selector: 'app-location-dialog',
@@ -37,6 +46,8 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
 
   public selectedBCLocations: BcLocations;
 
+  private auditLoadPage$ = new Subject<string>();
+
   currentLocation: BcActivityLocations;
   _locationId: number;
 
@@ -46,20 +57,18 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   set locationId(v: number) {
     this._locationId = v;
     if (v === undefined || v === null) {
-      const cycleId = this.store.selectSnapshot(
-        BrowseActivityAnalysisState.cycleId
-      );
-      const activityId = this.store.selectSnapshot(
-        BrowseActivityAnalysisState.activityId
+      const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+      const activityAnalysis = this.store.selectSnapshot(
+        ActivityAnalysisState.activityAnalysis
       );
       this.currentLocation = {
         cycle: {
-          id: cycleId,
+          id: cycle.id,
         },
-        isActive:true,
+        isActive: true,
         activity: {
-          internal: true,
-          id: activityId,
+          internal: activityAnalysis.activity?.internal,
+          id: activityAnalysis.activity.id,
         },
       };
       return;
@@ -97,11 +106,20 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       map((params) => params['_dialog'] === 'opened'),
       tap((opened) => {
         if (opened) {
-          this.loadPage({});
+          this.loadPage('', true);
         }
       })
     );
 
+    this.auditLoadPage$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((search: string) => {
+        this.store.dispatch(
+          new BrowseActivityLocationsAction.LoadBCLocations({
+            name: search,
+          })
+        );
+      });
     this.page$ = this.store
       .select(LocationsState.page)
       .pipe(filter((p) => !!p));
@@ -132,15 +150,20 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  public loadPage(event: LazyLoadEvent) {
-    this.store.dispatch(
-      new BrowseActivityLocationsAction.LoadBCLocations({
-        pageRequest: {
-          first: event?.first,
-          rows: event?.rows,
-        },
-      })
-    );
+  public loadPage(search?: string, direct = false) {
+    if (direct) {
+      this.store.dispatch(
+        new BrowseActivityLocationsAction.LoadBCLocations({
+          pageRequest: {
+            first: 0,
+            rows: 50,
+            filters: { name: search },
+          },
+        })
+      );
+      return;
+    }
+    this.auditLoadPage$.next(search);
   }
   ngOnDestroy(): void {
     this.destroy$.next();

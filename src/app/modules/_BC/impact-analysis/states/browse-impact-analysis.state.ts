@@ -101,11 +101,13 @@ export class BrowseImpactAnalysisState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        filters: pageRequest.filters,
+        filters: {
+          ...pageRequest.filters,
+          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+        },
       })
     );
   }
-
 
   @Action(BrowseImpactAnalysisAction.LoadActivitiesStatuses)
   LoadActivitiesStatuses(
