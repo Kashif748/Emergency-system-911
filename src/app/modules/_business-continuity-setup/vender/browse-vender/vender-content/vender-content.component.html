@@ -84,9 +84,14 @@
                     </div>
                     <div class="p-col-12">
 
-                      <p-chip pTooltip="{{ 'ACTIVITY_FEQ' | translate }}" label="{{ item.activityFrequence | translateObj : 'name'}}" tooltipPosition="top"
-                              icon="flaticon2-refresh"
-                              styleClass="bg-transparent text-muted"></p-chip>
+                      <a href="mailto:{{ item.pcontactEmail }}">
+                        <p-chip label="{{ item.pcontactEmail }}" icon="pi pi-envelope"
+                                styleClass="bg-transparent text-muted"></p-chip>
+                      </a>
+                      <a href="tel:{{ item.pcontactMobileNum }}">
+                        <p-chip label="{{ item.pcontactMobileNum }}" icon="pi pi-phone"
+                                styleClass="bg-transparent text-muted"></p-chip>
+                      </a>
                       <p-chip pTooltip="{{ 'SHARED.ORG' | translate }}" appendTo="body" tooltipPosition="top"
                               label="{{item.orgStructure | translateObj : 'name' }}" icon="pi pi-globe"
                               styleClass="bg-transparent text-muted"></p-chip>
