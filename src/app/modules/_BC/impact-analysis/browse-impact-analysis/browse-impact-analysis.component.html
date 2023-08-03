@@ -163,7 +163,7 @@
                     selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"
                     (ngModelChange)="
-                      updateFilter({ orgHierarchyId: $event?.key }, $event)
+                      updateFilter({ orgHierarchyId: $event }, $event)
                     "
                     placeholder="{{ 'ORG_ARTCH' | translate }}"
                     appendTo="body"
