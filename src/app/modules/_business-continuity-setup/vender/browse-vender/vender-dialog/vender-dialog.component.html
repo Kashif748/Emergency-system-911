@@ -1,5 +1,5 @@
 <div class="p-toolbar-group-right">
-  <button pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus" (click)="openDialog()"></button>
+  <button *checkPrivileges="'PRIV_CR_BC_SETUP'" pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus" (click)="openDialog()"></button>
 </div>
 
 

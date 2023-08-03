@@ -10,6 +10,7 @@ import {BrowseVenderState, BrowseVenderStateModel} from "../states/browse-vender
 import {filter, map, takeUntil} from "rxjs/operators";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {BrowseVenderAction} from "../states/browse-vender.action";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-browse-vender',
@@ -64,6 +65,7 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
+    private privilegesService: PrivilegesService
   ) {
     this.langFacade.vm$.pipe(
     ).subscribe((res) => {
@@ -105,10 +107,7 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                /*disabled: !this.privilegesService.checkActionPrivileges([
-                  'PRIV_ED_DEL_SITUATION',
-                  'PRIV_ADD_FILE_SITUATION',
-                ]),*/
+                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_SETUP'),
               },
             ],
           };
