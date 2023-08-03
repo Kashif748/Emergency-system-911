@@ -336,6 +336,7 @@
       *ngIf="asDialog"
       pButton
       icon="pi pi-times"
+      (click)="close()"
       label="{{ 'ACTIONS.CLOSE' | translate }}"
     ></button>
 
@@ -343,6 +344,7 @@
       *ngIf="!asDialog"
       pButton
       icon="pi pi-sign-out"
+      (click)="close()"
       label="{{ 'ACTIONS.BACK' | translate }}"
     ></button>
     <div class="ml-dir-auto"></div>
@@ -354,7 +356,7 @@
           type="button"
           label="{{ 'ACTIONS.CLEAR' | translate }}"
           icon="pi pi-replay"
-          class="p-button-outlined"
+          class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"
         ></button>
       </div>
     </ng-container>
