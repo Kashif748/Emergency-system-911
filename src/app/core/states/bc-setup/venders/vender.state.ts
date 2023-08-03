@@ -69,7 +69,7 @@ export class VenderState {
       })
     );
     return this.vender
-      .getAll13({
+      .getAll12({
         pageable: {
           page: payload.page,
           size: payload.size,
