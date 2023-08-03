@@ -11,11 +11,9 @@ import {
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
 import { Injectable } from '@angular/core';
-import { BcImpactTypesMatrixControllerService } from '../../../../api/services/bc-impact-types-matrix-controller.service';
 import { ImpactMatrixAction } from '@core/states/bc/impact-matrix/impact-matrix.action';
-import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
-import { BcImpactMatrixDto } from '../../../../api/models/bc-impact-matrix-dto';
-import { BCState } from '../bc/bc.state';
+import { BcImpactMatrixDto } from 'src/app/api/models';
+import { BcImpactTypesMatrixControllerService } from 'src/app/api/services';
 
 export interface ImpactMatrixStateModel {
   page: BcImpactMatrixDto[];
@@ -25,7 +23,7 @@ export interface ImpactMatrixStateModel {
 }
 
 const IMPACT_MATRIX_STATE_TOKEN = new StateToken<ImpactMatrixStateModel>(
-  'impactMatrix'
+  'impact_matrix'
 );
 
 @State<ImpactMatrixStateModel>({ name: IMPACT_MATRIX_STATE_TOKEN })
@@ -72,19 +70,19 @@ export class ImpactMatrixState {
     { setState }: StateContext<ImpactMatrixStateModel>,
     { payload }: ImpactMatrixAction.LoadPage
   ) {
+    if (payload.versionId === undefined || payload.versionId === null) {
+      return;
+    }
     setState(
       patch<ImpactMatrixStateModel>({
         loading: true,
       })
     );
-    const version = this.store.selectSnapshot(BCState.selectedVersion);
 
     return this.impactMatrix
       .findAll1({
         isActive: true,
-        versionId: version?.id,
-
-        // request: payload.filters,
+        versionId: payload.versionId,
       })
       .pipe(
         tap((res) => {
@@ -123,10 +121,7 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    const version = this.store.selectSnapshot(
-      BCState.selectedVersion
-     );
-    payload.bcImpactTypes.versionId = version?.id;
+
     return this.impactMatrix
       .insert({
         body: payload,
@@ -152,10 +147,7 @@ export class ImpactMatrixState {
         blocking: true,
       })
     );
-    const version = this.store.selectSnapshot(
-     BCState.selectedVersion
-    );
-    payload.bcImpactTypes.versionId = version?.id;
+
     return this.impactMatrix
       .update90({
         body: payload,

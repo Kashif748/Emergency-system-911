@@ -11,6 +11,7 @@ import { FormUtils } from '@core/utils';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { BcVersions } from 'src/app/api/models';
 import { BCAction, BCState } from '@core/states';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
 
 @Component({
   selector: 'app-cycle-dialog',
@@ -38,7 +39,7 @@ export class CycleDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
+    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 , statusId : VERSION_STATUSES.APPROVED}));
     this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'new_cycle')

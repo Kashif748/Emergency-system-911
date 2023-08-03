@@ -21,6 +21,7 @@ import {
   ActivityDependenciesState,
   DEPENDENCIES_TYPES,
 } from '@core/states/activity-analysis/dependencies/dependencies.state';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 
 @Component({
   selector: 'app-dependencies-dialog',
@@ -130,6 +131,10 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
       return;
     }
     const formValue = this.form.value;
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
     const dependency = {
       ...formValue,
       orgHierarchy: {
@@ -139,6 +144,13 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
       activityName: formValue.activity?.nameEn,
       relatedActivityId: formValue.activity?.id,
       isActive: true,
+      activity: {
+        internal: activityAnalysis?.activity?.internal,
+        id: activityAnalysis.activity.id,
+      },
+      cycle: {
+        id: cycle.id,
+      },
     };
     console.log(dependency);
 

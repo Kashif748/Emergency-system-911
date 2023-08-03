@@ -8,7 +8,13 @@ export namespace BrowseActivitySystemsAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload?: {
+        pageRequest?: PageRequestModel;
+        cycleId: number;
+        activityId: number;
+      }
+    ) {}
   }
 
   export class Create {

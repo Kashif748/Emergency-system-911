@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import {
   BcActivities,
   BcActivityAnalysisDto,
@@ -11,7 +11,7 @@ import { Select } from '@ngxs/store';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { Store } from '@ngxs/store';
 import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
-import { map, tap } from 'rxjs/operators';
+import { auditTime, map, takeUntil, tap } from 'rxjs/operators';
 import { OrgActivityAction, OrgActivityState } from '@core/states';
 
 @Component({
@@ -19,7 +19,7 @@ import { OrgActivityAction, OrgActivityState } from '@core/states';
   templateUrl: './activities-dialog.component.html',
   styleUrls: ['./activities-dialog.component.scss'],
 })
-export class ActivitiesDialogComponent implements OnInit {
+export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   @Select(OrgActivityState.page)
   page$: Observable<BcActivities[]>;
 
@@ -37,6 +37,9 @@ export class ActivitiesDialogComponent implements OnInit {
   @Select(OrgActivityState.loading)
   public loading$: Observable<boolean>;
 
+  public name = '';
+  private auditLoadPage$ = new Subject<string>();
+
   // @Select(ActivityLocationsState.blocking)
   // blocking$: Observable<boolean>;
 
@@ -44,6 +47,8 @@ export class ActivitiesDialogComponent implements OnInit {
   // public state$: Observable<BrowseLocationsStateModel>;
   public selectedCycle: BcCycles;
   public selectedActivities: BcActivities[];
+
+  private destroy$ = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -59,9 +64,18 @@ export class ActivitiesDialogComponent implements OnInit {
         this.selectedCycle = null;
       })
     );
-    this.store.dispatch([
-      new OrgActivityAction.LoadPage({ page: 0, size: 100 }),
-    ]);
+    this.loadPage('', true);
+    this.auditLoadPage$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((search: string) => {
+        this.store.dispatch(
+          new OrgActivityAction.LoadPage({
+            page: 0,
+            size: 100,
+            filters: { name: search },
+          })
+        );
+      });
   }
   submit() {
     if (!this.selectedActivities || !this.selectedCycle) {
@@ -79,6 +93,19 @@ export class ActivitiesDialogComponent implements OnInit {
       new BrowseImpactAnalysisAction.SetCycleActivities(activities)
     );
   }
+  loadPage(search?: string, direct = false) {
+    if (direct) {
+      this.store.dispatch(
+        new OrgActivityAction.LoadPage({
+          page: 0,
+          size: 100,
+          filters: { name: this.name },
+        })
+      );
+      return;
+    }
+    this.auditLoadPage$.next(search);
+  }
   toggleDialog() {
     this.store.dispatch(
       new BrowseImpactAnalysisAction.ToggleDialog({ dialog: 'activities' })
@@ -86,5 +113,10 @@ export class ActivitiesDialogComponent implements OnInit {
   }
   close() {
     this.store.dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

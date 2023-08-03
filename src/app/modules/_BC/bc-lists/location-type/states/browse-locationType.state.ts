@@ -19,7 +19,7 @@ export interface BrowseLocationTypeStateModel {
 }
 
 export const BROWSE_LOCATION_TYPE_UI_STATE_TOKEN =
-  new StateToken<BrowseLocationTypeStateModel>('browse_locationType');
+  new StateToken<BrowseLocationTypeStateModel>('browse_bc_location_type');
 
 @State<BrowseLocationTypeStateModel>({
   name: BROWSE_LOCATION_TYPE_UI_STATE_TOKEN,

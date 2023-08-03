@@ -12,7 +12,13 @@ export namespace BrowseActivityDependenciesAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload: {
+        pageRequest?: PageRequestModel;
+        cycleId: number;
+        activityId: number;
+      }
+    ) {}
   }
   export class CreateInternal {
     static readonly type = '[BrowseActivityDependenciesAction] Create Internal';
@@ -28,7 +34,13 @@ export namespace BrowseActivityDependenciesAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload: {
+        pageRequest?: PageRequestModel;
+        cycleId: number;
+        activityId: number;
+      }
+    ) {}
   }
   export class CreateExternal {
     static readonly type = '[BrowseActivityDependenciesAction] Create External';
@@ -44,7 +56,13 @@ export namespace BrowseActivityDependenciesAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
+    constructor(
+      public payload: {
+        pageRequest?: PageRequestModel;
+        cycleId: number;
+        activityId: number;
+      }
+    ) {}
   }
   export class CreateOrg {
     static readonly type = '[BrowseActivityDependenciesAction] Create Org ';

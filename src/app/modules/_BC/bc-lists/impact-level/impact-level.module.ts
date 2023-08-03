@@ -35,6 +35,7 @@ import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {ConfirmationService} from 'primeng/api';
 import {ImpactAnalysisComponent} from '../impact-analysis/impact-analysis.component';
 import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
+import {TooltipModule} from "primeng/tooltip";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -83,7 +84,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SidebarModule,
     TranslateObjModule,
     SharedBreadcrumbModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    TooltipModule
   ],
   providers: [
     { provide: ILangFacade, useClass: LangFacade },

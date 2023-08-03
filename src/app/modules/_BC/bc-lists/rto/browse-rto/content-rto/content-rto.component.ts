@@ -62,7 +62,7 @@ export class ContentRtoComponent implements OnInit {
           });
       })
     );
-    this.version$.subscribe();
+    // this.version$.subscribe();
   }
 
   openView(Id?: number) {

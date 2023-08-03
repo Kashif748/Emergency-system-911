@@ -64,7 +64,7 @@ export class ContentImpactMatrixComponent implements OnInit {
           });
       })
     );
-    this.version$.subscribe();
+    // this.version$.subscribe();
   }
 
   openView(Id?: number) {

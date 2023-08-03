@@ -16,24 +16,18 @@ import { BrowseActivityAnalysisAction } from './browse-activity-analysis.action'
 import { ActivityAnalysisAction } from '@core/states/activity-analysis/activity-analysis.action';
 
 export interface BrowseActivityAnalysisStateModel {
-  versionId: number;
-  cycleId: number;
-  activityId: number;
   tabIndex: number;
   versionsDialogOpend: boolean;
   impactTotal: number;
 }
 
 export const BROWSE_ACTIVITY_ANALYSIS_UI_STATE_TOKEN =
-  new StateToken<BrowseActivityAnalysisStateModel>('browse_ActivityAnalysis');
+  new StateToken<BrowseActivityAnalysisStateModel>('browse_activity_analysis');
 
 @State<BrowseActivityAnalysisStateModel>({
   name: BROWSE_ACTIVITY_ANALYSIS_UI_STATE_TOKEN,
   defaults: {
     tabIndex: -1,
-    versionId: null,
-    activityId: null,
-    cycleId: null,
     versionsDialogOpend: false,
     impactTotal: 0,
   },
@@ -52,21 +46,6 @@ export class BrowseActivityAnalysisState {
     state: BrowseActivityAnalysisStateModel
   ): BrowseActivityAnalysisStateModel {
     return state;
-  }
-
-  @Selector([BrowseActivityAnalysisState])
-  static versionId(state: BrowseActivityAnalysisStateModel): number {
-    return state.versionId;
-  }
-
-  @Selector([BrowseActivityAnalysisState])
-  static cycleId(state: BrowseActivityAnalysisStateModel): number {
-    return state.cycleId;
-  }
-
-  @Selector([BrowseActivityAnalysisState])
-  static activityId(state: BrowseActivityAnalysisStateModel): number {
-    return state.activityId;
   }
 
   @Selector([BrowseActivityAnalysisState])
@@ -91,11 +70,6 @@ export class BrowseActivityAnalysisState {
     { dispatch, setState }: StateContext<BrowseActivityAnalysisStateModel>,
     { payload }: BrowseActivityAnalysisAction.GetCycle
   ) {
-    setState(
-      patch<BrowseActivityAnalysisStateModel>({
-        cycleId: payload.id,
-      })
-    );
     return dispatch(new ActivityAnalysisAction.GetCycle(payload)).pipe(
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -108,11 +82,6 @@ export class BrowseActivityAnalysisState {
     { dispatch, setState }: StateContext<BrowseActivityAnalysisStateModel>,
     { payload }: BrowseActivityAnalysisAction.GetActivityAnalysis
   ) {
-    setState(
-      patch<BrowseActivityAnalysisStateModel>({
-        activityId: payload.id,
-      })
-    );
     return dispatch(
       new ActivityAnalysisAction.GetActivityAnalysis(payload)
     ).pipe(

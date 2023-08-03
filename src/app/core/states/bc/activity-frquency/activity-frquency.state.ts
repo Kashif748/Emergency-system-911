@@ -1,4 +1,3 @@
-import { BcActivityFrequencies } from '../../../../api/models/bc-activity-frequencies';
 import {
   Action,
   Selector,
@@ -9,14 +8,15 @@ import {
   Store,
 } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { BcActivityFrequenciesControllerService } from '../../../../api/services/bc-activity-frequencies-controller.service';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
 import { ActivityFrquencyAction } from '@core/states/bc/activity-frquency/activity-frquency.action';
-import { PageBcActivityFrequencies } from '../../../../api/models/page-bc-activity-frequencies';
-import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
-import { BCState } from '../bc/bc.state';
+import {
+  BcActivityFrequencies,
+  PageBcActivityFrequencies,
+} from 'src/app/api/models';
+import { BcActivityFrequenciesControllerService } from 'src/app/api/services';
 
 export interface ActivityFrquencyStateModel {
   page: PageBcActivityFrequencies;
@@ -26,7 +26,7 @@ export interface ActivityFrquencyStateModel {
 }
 
 const ACTIVITY_FRQUENCY_STATE_TOKEN =
-  new StateToken<ActivityFrquencyStateModel>('activityFrquency');
+  new StateToken<ActivityFrquencyStateModel>('activity_frquency');
 
 @State<ActivityFrquencyStateModel>({ name: ACTIVITY_FRQUENCY_STATE_TOKEN })
 @Injectable()
@@ -36,8 +36,7 @@ export class ActivityFrquencyState {
    *
    */
   constructor(
-    private activityFrquency: BcActivityFrequenciesControllerService,
-    private store: Store
+    private activityFrquency: BcActivityFrequenciesControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -85,7 +84,6 @@ export class ActivityFrquencyState {
           size: payload.size,
           sort: payload.sort,
         },
-        //         request: payload.filters,
       })
       .pipe(
         tap((res) => {

@@ -1,23 +1,22 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {GenericValidators} from "@shared/validators/generic-validators";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {FormUtils} from "@core/utils/form.utils";
-import {Observable, Subject} from "rxjs";
-import {IAuthService} from "@core/services/auth.service";
-import {Select, Store} from "@ngxs/store";
-import {ActivatedRoute} from "@angular/router";
-import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ImpLevelWorkingAction} from "@core/states";
-import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
-import {BrowseImpLevelWorkingAction} from "../states/browse-imp-level-working.action";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormUtils } from '@core/utils/form.utils';
+import { Observable, Subject } from 'rxjs';
+import { IAuthService } from '@core/services/auth.service';
+import { Select, Store } from '@ngxs/store';
+import { ActivatedRoute } from '@angular/router';
+import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { ImpLevelWorkingAction } from '@core/states';
+import { ImpLevelWorkingState } from '@core/states/bc/imp-level-working/imp-level-working.state';
+import { BrowseImpLevelWorkingAction } from '../states/browse-imp-level-working.action';
 
 @Component({
   selector: 'app-imp-level-working-dialog',
   templateUrl: './imp-level-working-dialog.component.html',
-  styleUrls: ['./imp-level-working-dialog.component.scss']
+  styleUrls: ['./imp-level-working-dialog.component.scss'],
 })
 export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
-
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
@@ -25,18 +24,13 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   blocking$: Observable<boolean>;
 
   @Input()
-  version
+  shouldDisable: boolean;
+  public version: number;
 
   public display = false;
   form: FormGroup;
   public color = '#ffffff';
-  public colorOptions = [
-    '#FF0017',
-    '#FFBB3A',
-    '#FFFC4C',
-    '#89CF60',
-    '#FFFFFF',
-  ];
+  public colorOptions = ['#FF0017', '#FFBB3A', '#FFFC4C', '#89CF60', '#FFFFFF'];
 
   _id: number;
   get loggedinUserId() {
@@ -59,7 +53,9 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     this.store
       .dispatch(new ImpLevelWorkingAction.GetImpLevelWorking({ id: v }))
       .pipe(
-        switchMap(() => this.store.select(ImpLevelWorkingState.ImpLevelWorking)),
+        switchMap(() =>
+          this.store.select(ImpLevelWorkingState.ImpLevelWorking)
+        ),
         takeUntil(this.destroy$),
         take(1),
         tap((ImpLevelWorking) => {
@@ -79,12 +75,10 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     private auth: IAuthService
   ) {
     this.route.queryParams
-      .pipe(
-        map((params) => params['_id']),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((id) => {
-        this.workingId = id;
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        this.version = params['_version'];
+        this.workingId = params['_id'];
       });
 
     this.viewOnly$ = this.route.queryParams.pipe(
@@ -117,23 +111,27 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
       colorCode: [null, [Validators.required]],
-      isActive: [true]
+      isActive: [true],
+      versionId: this.version,
+
     });
   }
 
   setColor(color: string) {
     this.color = color;
     this.form.patchValue({
-      colorCode: color
+      colorCode: color,
     });
   }
 
   openDialog(Id?: number) {
-    this.store.dispatch(new BrowseImpLevelWorkingAction.ToggleDialog({ id: Id }));
+    this.store.dispatch(
+      new BrowseImpLevelWorkingAction.ToggleDialog({ id: Id })
+    );
   }
   onValueChange(value: string): void {
     this.form.patchValue({
-      colorCode: value
+      colorCode: value,
     });
   }
 
@@ -152,9 +150,13 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
     // impLevelWorking.colorCode =  impLevelWorking.colorCode.code;
     if (this.editMode) {
       impLevelWorking.id = this._id;
-      this.store.dispatch(new BrowseImpLevelWorkingAction.UpdateImpLevelWorking(impLevelWorking));
+      this.store.dispatch(
+        new BrowseImpLevelWorkingAction.UpdateImpLevelWorking(impLevelWorking)
+      );
     } else {
-      this.store.dispatch(new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking));
+      this.store.dispatch(
+        new BrowseImpLevelWorkingAction.CreateImpLevelWorking(impLevelWorking)
+      );
     }
   }
 
@@ -165,7 +167,6 @@ export class ImpLevelWorkingDialogComponent implements OnInit, OnDestroy {
   isValidColorCode(value: string): boolean {
     return this.colorOptions.includes(value);
   }
-
 
   ngOnDestroy(): void {
     this.destroy$.next();

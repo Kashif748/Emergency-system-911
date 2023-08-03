@@ -18,7 +18,7 @@ export interface BrowseImpLevelWorkingStateModel {
 }
 
 export const BROWSE_IMP_LEVEL_WORKING_UI_STATE_TOKEN =
-  new StateToken<BrowseImpLevelWorkingStateModel>('browse_imp_level_working');
+  new StateToken<BrowseImpLevelWorkingStateModel>('browse_bc_imp_level_working');
 
 @State<BrowseImpLevelWorkingStateModel>({
   name: BROWSE_IMP_LEVEL_WORKING_UI_STATE_TOKEN,
@@ -77,7 +77,8 @@ export class BrowseImpLevelWorkingState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
+        versionId: payload.versionId,
+
       })
     );
   }

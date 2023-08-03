@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import {
   ActivityDependenciesState,
   ActivityDependenciesStateModel,
@@ -10,7 +11,6 @@ import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
-import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 import { BrowseActivityDependenciesAction } from './states/browse-dependencies.action';
 import { BrowseActivityDependenciesState } from './states/browse-dependencies.state';
 
@@ -19,7 +19,7 @@ import { BrowseActivityDependenciesState } from './states/browse-dependencies.st
   templateUrl: './browse-dependencies.component.html',
   styleUrls: ['./browse-dependencies.component.scss'],
 })
-export class BrowseDependenciesComponent implements OnInit  ,OnDestroy{
+export class BrowseDependenciesComponent implements OnInit, OnDestroy {
   DEPENDENCIES_TYPES = DEPENDENCIES_TYPES;
 
   @Select(ActivityDependenciesState.activityDependencyInternal)
@@ -38,59 +38,57 @@ export class BrowseDependenciesComponent implements OnInit  ,OnDestroy{
 
   private destroy$ = new Subject();
 
-  constructor(
-    private store: Store,
-    private translate: TranslateService,
-    private lang: ILangFacade
-  ) {}
+  constructor(private store: Store, private lang: ILangFacade) {}
 
   ngOnInit(): void {
     combineLatest([
-      this.store.select(BrowseActivityAnalysisState.cycleId),
-      this.store.select(BrowseActivityAnalysisState.activityId),
+      this.store.select(ActivityAnalysisState.activityAnalysis),
+      this.store.select(ActivityAnalysisState.cycle),
     ])
       .pipe(
         takeUntil(this.destroy$),
         tap(([activity, cycle]) => {
-          this.loadInternalPage();
-          this.loadExternalPage();
-          this.loadOrgPage();
+          this.loadPage(DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL);
+          this.loadPage(DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL);
+          this.loadPage(DEPENDENCIES_TYPES.DEPENDENCY_ORG);
         })
       )
       .subscribe();
   }
 
-  public loadInternalPage(event?: LazyLoadEvent) {
-    this.store.dispatch(
-      new BrowseActivityDependenciesAction.LoadDependencyInternal({
-        pageRequest: {
-          first: event?.first,
-          rows: event?.rows,
-        },
-      })
+  loadPage(dependType: DEPENDENCIES_TYPES, event?: LazyLoadEvent) {
+    const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
     );
-  }
+    const payload = {
+      pageRequest: {
+        first: event?.first,
+        rows: event?.rows,
+      },
+      cycleId: cycle?.id,
+      activityId: activityAnalysis.activity.id,
+    };
+    switch (dependType) {
+      case DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL:
+        this.store.dispatch(
+          new BrowseActivityDependenciesAction.LoadDependencyExternal(payload)
+        );
+        break;
+      case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
+        this.store.dispatch(
+          new BrowseActivityDependenciesAction.LoadDependencyInternal(payload)
+        );
+        break;
+      case DEPENDENCIES_TYPES.DEPENDENCY_ORG:
+        this.store.dispatch(
+          new BrowseActivityDependenciesAction.LoadDependencyOrg(payload)
+        );
+        break;
 
-  public loadExternalPage(event?: LazyLoadEvent) {
-    this.store.dispatch(
-      new BrowseActivityDependenciesAction.LoadDependencyExternal({
-        pageRequest: {
-          first: event?.first,
-          rows: event?.rows,
-        },
-      })
-    );
-  }
-
-  public loadOrgPage(event?: LazyLoadEvent) {
-    this.store.dispatch(
-      new BrowseActivityDependenciesAction.LoadDependencyOrg({
-        pageRequest: {
-          first: event?.first,
-          rows: event?.rows,
-        },
-      })
-    );
+      default:
+        break;
+    }
   }
   ngOnDestroy(): void {
     this.destroy$.next();

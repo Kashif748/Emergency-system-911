@@ -3,12 +3,10 @@ import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
-import {BcLocationTypes} from "../../../../api/models/bc-location-types";
-import {BcLocationTypeControllerService} from "../../../../api/services/bc-location-type-controller.service";
-import {PageBcLocationTypes} from "../../../../api/models/page-bc-location-types";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
 import {RtoAction} from "@core/states";
-import {BrowseBCState} from "../../../../modules/_BC/states/browse-bc.state";
+import { BcLocationTypes, PageBcLocationTypes } from "src/app/api/models";
+import { BcLocationTypeControllerService } from "src/app/api/services";
 
 
 export interface LocationTypeStateModel {

@@ -17,11 +17,6 @@ import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { BrowseActivityPrioritySeqAction } from './browse-activity-priority-seq.action';
 import { ActivityPrioritySeqAction } from '@core/states/bc/activity-priority-seq/activity-priority-seq.action';
-import { BrowseRtoStateModel } from '../../rto/states/browse-rto.state';
-import { LocationTypeAction } from '@core/states/bc/location-type/locationType.action';
-import { BrowseLocationTypeAction } from '../../location-type/states/browse-locationType.action';
-import { BrowseBCState } from '../../../states/browse-bc.state';
-import { BCState } from '@core/states';
 
 export interface BrowseActivityPrioritySeqStateModel {
   pageRequest: PageRequestModel;
@@ -31,7 +26,7 @@ export interface BrowseActivityPrioritySeqStateModel {
 
 export const BROWSE_ACTIVITY_PRIORITY_SEQ_UI_STATE_TOKEN =
   new StateToken<BrowseActivityPrioritySeqStateModel>(
-    'browse_ActivityPrioritySeq'
+    'browse_bc_activity_priority'
   );
 
 @State<BrowseActivityPrioritySeqStateModel>({
@@ -92,6 +87,7 @@ export class BrowseActivityPrioritySeqState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        versionId: payload.versionId,
       })
     );
   }
