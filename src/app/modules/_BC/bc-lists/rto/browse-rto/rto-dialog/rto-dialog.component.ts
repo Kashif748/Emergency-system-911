@@ -1,23 +1,22 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {FormUtils} from "@core/utils/form.utils";
-import {Select, Store} from "@ngxs/store";
-import {BrowseRtoAction} from "../../states/browse-rto.action";
-import {Observable, Subject} from "rxjs";
-import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
-import {IAuthService} from "@core/services/auth.service";
-import {RtoAction, RtoState} from "@core/states";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { FormUtils } from '@core/utils/form.utils';
+import { Select, Store } from '@ngxs/store';
+import { BrowseRtoAction } from '../../states/browse-rto.action';
+import { Observable, Subject } from 'rxjs';
+import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { IAuthService } from '@core/services/auth.service';
+import { RtoAction, RtoState } from '@core/states';
 import { GenericValidators } from '@shared/validators/generic-validators';
 
 @Component({
   selector: 'app-rto-dialog',
   templateUrl: './rto-dialog.component.html',
-  styleUrls: ['./rto-dialog.component.scss']
+  styleUrls: ['./rto-dialog.component.scss'],
 })
 export class RtoDialogComponent implements OnInit, OnDestroy {
-
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
@@ -28,7 +27,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   @Input()
-  version
+  shouldDisable :boolean
+  public version: number;
 
   _rtoId: number;
   get loggedinUserId() {
@@ -70,12 +70,10 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     private auth: IAuthService
   ) {
     this.route.queryParams
-      .pipe(
-        map((params) => params['_id']),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((id) => {
-        this.rtoId = id;
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        this.version = params['_version'];
+        this.rtoId = params['_id'];
       });
 
     this.viewOnly$ = this.route.queryParams.pipe(
@@ -98,7 +96,6 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
-    this.buildForm();
   }
 
   openDialog(id?: number) {
@@ -114,7 +111,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
       isActive: [true],
-      isCritical: [false]
+      isCritical: [false],
+      versionId: this.version,
     });
   }
 

@@ -1,4 +1,6 @@
-import {BcVersions} from "../../../../api/models/bc-versions";
+import { BcVersions } from "src/app/api/models";
+import { VERSION_STATUSES } from "./bc.state";
+
 
 export namespace BCAction {
   export class LoadPage {
@@ -13,6 +15,7 @@ export namespace BCAction {
         sort?: string[];
         page: number;
         size: number;
+        statusId? :number
       }
     ) {
     }
@@ -27,7 +30,7 @@ export namespace BCAction {
     constructor(
       public payload: {
         versionId: number,
-        statusId: number
+        statusId: VERSION_STATUSES
       }
     ) {
     }

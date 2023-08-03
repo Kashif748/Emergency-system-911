@@ -9,7 +9,7 @@ export namespace BrowseImpactMatrixAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel }) {
+    constructor(public payload?: { pageRequest?: PageRequestModel , versionId: number}) {
     }
   }
 
@@ -48,4 +48,14 @@ export namespace BrowseImpactMatrixAction {
      */
     constructor(public payload: { id: number }) {}
   }
+  export class LoadImpactLevel {
+    static readonly type = '[BrowseImpactLevel] Load ImpactLevel Matrix';
+
+    /**
+     *
+     */
+    constructor(public payload?: { pageRequest: PageRequestModel  , versionId: number }) {
+    }
+  }
+
 }

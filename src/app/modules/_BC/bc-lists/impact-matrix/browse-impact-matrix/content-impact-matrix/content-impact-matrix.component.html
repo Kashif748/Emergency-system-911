@@ -3,7 +3,7 @@
     <h4 class="text-info p-text-bold mb-0">
       {{ "IMPACT_ANALYSIS.HEADER" | translate }}
     </h4>
-    <app-impact-matrix-dialog [version]="disableButton"></app-impact-matrix-dialog>
+    <app-impact-matrix-dialog [shouldDisable]="disableButton"></app-impact-matrix-dialog>
   </header>
   <div class="p-d-flex p-flex-column">
     <ng-container *ngIf="loading; else tableTemplate">

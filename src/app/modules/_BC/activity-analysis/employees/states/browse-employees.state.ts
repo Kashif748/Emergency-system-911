@@ -83,17 +83,11 @@ export class BrowseActivityEmployeesState {
       })
     );
     const pageRequest = getState().pageRequest;
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
 
     return dispatch(
       new ActivityEmployeesAction.LoadPage({
-        cycleId: cycleId,
-        activityId: activityId,
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -105,28 +99,14 @@ export class BrowseActivityEmployeesState {
     { dispatch, getState }: StateContext<BrowseActivityEmployeesStateModel>,
     { payload }: BrowseActivityEmployeesAction.Create
   ) {
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
-    return dispatch(
-      new ActivityEmployeesAction.Create({
-        ...payload,
-        cycle: {
-          id: cycleId,
-        },
-        activity: {
-          internal: true,
-          id: activityId,
-        },
-      })
-    ).pipe(
+    return dispatch(new ActivityEmployeesAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseActivityEmployeesAction.LoadEmployees(),
+          new BrowseActivityEmployeesAction.LoadEmployees({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          }),
           new BrowseActivityEmployeesAction.ToggleDialog({}),
         ]);
       }),
@@ -142,25 +122,15 @@ export class BrowseActivityEmployeesState {
     { dispatch }: StateContext<BrowseActivityEmployeesStateModel>,
     { payload }: BrowseActivityEmployeesAction.Update
   ) {
-    const cycleId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.cycleId
-    );
-    const activityId = this.store.selectSnapshot(
-      BrowseActivityAnalysisState.activityId
-    );
-    return dispatch(new ActivityEmployeesAction.Update({
-      ...payload,
-      cycle: {
-        id: cycleId,
-      },
-      activity: {
-        internal: true,
-        id: activityId,
-      },
-    })).pipe(
+    return dispatch(new ActivityEmployeesAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseActivityEmployeesAction.LoadEmployees());
+        dispatch(
+          new BrowseActivityEmployeesAction.LoadEmployees({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          })
+        );
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

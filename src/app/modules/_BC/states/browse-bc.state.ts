@@ -14,27 +14,24 @@ import { BrowseBCAction } from './browse-bc.action';
 import { catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { BCAction } from '@core/states/bc/bc/bc.action';
-import { patch } from '@ngxs/store/operators';
-import { BcVersions } from 'src/app/api/models';
-
+import { ApiHelper } from '@core/helpers/api.helper';
+import { iif, patch } from '@ngxs/store/operators';
 export interface BrowseBCStateModel {
   pageRequest: PageRequestModel;
   currentTab: string;
-  versionsDialogOpend: boolean;
 }
 
 export const BROWSE_BUSINESS_CONTINUITY_UI_STATE_TOKEN =
-  new StateToken<BrowseBCStateModel>('browse_businessContinuity');
+  new StateToken<BrowseBCStateModel>('browse_bc');
 
 @State<BrowseBCStateModel>({
   name: BROWSE_BUSINESS_CONTINUITY_UI_STATE_TOKEN,
   defaults: {
     currentTab: '',
-    versionsDialogOpend: false,
     pageRequest: {
       filters: {},
       first: 0,
-      rows: 10,
+      rows: 50,
     },
   },
 })
@@ -47,7 +44,8 @@ export class BrowseBCState {
   constructor(
     private messageHelper: MessageHelper,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private apiHelper: ApiHelper
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -56,13 +54,31 @@ export class BrowseBCState {
     return state;
   }
 
-  @Selector([BrowseBCState])
-  static versionsDialogOpend(state: BrowseBCStateModel): boolean {
-    return state.versionsDialogOpend;
-  }
-
   /* ********************** ACTIONS ************************* */
+  @Action(BrowseBCAction.LoadPage)
+  loadRto(
+    { setState, dispatch, getState }: StateContext<BrowseBCStateModel>,
+    { payload }: BrowseBCAction.LoadPage
+  ) {
+    setState(
+      patch<BrowseBCStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
 
+    return dispatch(
+      new BCAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+
+      })
+    );
+  }
   @Action(BrowseBCAction.CreateBusinessContinuity)
   CreateBusinessContinuity(
     { dispatch }: StateContext<BrowseBCStateModel>,
@@ -118,11 +134,24 @@ export class BrowseBCState {
     );
   }
 
+  @Action(BrowseBCAction.SetVersionId, {
+    cancelUncompleted: true,
+  })
+  setVersionId(
+    {}: StateContext<BrowseBCStateModel>,
+    { payload }: BrowseBCAction.SetVersionId
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _version: payload?.versionId,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
   @Action(BrowseBCAction.ToggleDialog, {
     cancelUncompleted: true,
   })
-  openDialog({ setState, getState }: StateContext<BrowseBCStateModel>) {
-    const currentStatus = getState()?.versionsDialogOpend;
+  openDialog({}: StateContext<BrowseBCStateModel>) {
     this.router.navigate([], {
       queryParams: {
         _dialog:
@@ -132,10 +161,5 @@ export class BrowseBCState {
       },
       queryParamsHandling: 'merge',
     });
-    setState(
-      patch<BrowseBCStateModel>({
-        versionsDialogOpend: !currentStatus,
-      })
-    );
   }
 }

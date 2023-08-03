@@ -11,7 +11,7 @@ import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BcActivityAnalysis, BcCycles } from 'src/app/api/models';
 import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 import { BrowseActivityAnalysisAction } from '../states/browse-activity-analysis.action';
-import { BrowseActivityAnalysisState } from '../states/browse-activity-analysis.state';
+import { BrowseActivityAnalysisState, BrowseActivityAnalysisStateModel } from '../states/browse-activity-analysis.state';
 import { TABS } from '../tempData.conts';
 
 @Component({
@@ -21,6 +21,9 @@ import { TABS } from '../tempData.conts';
 })
 export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   ACTIVITY_STATUSES = ACTIVITY_STATUSES;
+  @Select(BrowseActivityAnalysisState.state)
+  public state$: Observable<BrowseActivityAnalysisStateModel>;
+
   @Select(ActivityAnalysisState.activityAnalysis)
   public activityAnalysis$: Observable<BcActivityAnalysis>;
 

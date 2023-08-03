@@ -15,6 +15,7 @@ import { BrowseActivityPrioritySeqAction } from '../states/browse-activity-prior
 import { BrowseBCState } from '../../../states/browse-bc.state';
 import { BcRecoveryPriorities, BcVersions } from 'src/app/api/models';
 import { BCState } from '@core/states';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-browse-activity-priority',
@@ -33,24 +34,28 @@ export class BrowseActivityPriorityComponent implements OnInit, OnDestroy {
   @Select(BrowseActivityPrioritySeqState.state)
   public state$: Observable<BrowseActivityPrioritySeqStateModel>;
 
-  public selectedVersion$: Observable<BcVersions>;
+  public versionId: number;
 
   private destroy$ = new Subject();
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
     private store: Store,
+    private route: ActivatedRoute,
     private messageHelper: MessageHelper
   ) {}
 
   ngOnInit(): void {
-    this.selectedVersion$ = this.store.select(BCState.selectedVersion).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      tap((v) => {
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params) => params['_version']),
+        filter((p) => !!p)
+      )
+      .subscribe((version) => {
+        this.versionId = version;
         this.loadPage();
-      })
-    );
+      });
 
     const userActions = [
       {
@@ -112,6 +117,7 @@ export class BrowseActivityPriorityComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
+        versionId: this.versionId,
       })
     );
   }

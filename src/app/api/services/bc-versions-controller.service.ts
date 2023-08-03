@@ -70,26 +70,28 @@ export class BcVersionsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll10
+   * Path part for operation search8
    */
-  static readonly GetAll10Path = '/v1/bc/version';
+  static readonly Search8Path = '/v1/bc/version';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll10()` instead.
+   * To access only the response body, use `search8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll10$Response(params: {
+  search8$Response(params: {
     isActive?: boolean;
     versionId?: number;
+    statusId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcVersions>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.GetAll10Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.Search8Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
+      rb.query('statusId', params.statusId, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -106,17 +108,18 @@ export class BcVersionsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll10$Response()` instead.
+   * To access the full response (for headers, for example), `search8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll10(params: {
+  search8(params: {
     isActive?: boolean;
     versionId?: number;
+    statusId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcVersions> {
 
-    return this.getAll10$Response(params).pipe(
+    return this.search8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcVersions>) => r.body as RestApiResponsePageBcVersions)
     );
   }

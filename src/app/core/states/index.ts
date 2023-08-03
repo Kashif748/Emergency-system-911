@@ -1,8 +1,11 @@
+<<<<<<< src/app/core/states/index.ts
 import {GroupState} from "@core/states/group/group.state";
 import {BCState} from "@core/states/bc/bc/bc.state";
 import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 
+=======
+>>>>>>> src/app/core/states/index.ts
 export { UserAction } from './user/user.action';
 export { RoleAction } from './role/role.action';
 export { OrgAction } from './org/org.action';

@@ -86,7 +86,8 @@ export class OrgActivityState {
           size: payload.size,
           sort: payload.sort,
         },
-        ...payload.filters
+        isActive: true,
+        ...payload.filters,
       })
       .pipe(
         tap((res) => {

@@ -132,10 +132,13 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       new ActivityPrioritySeqAction.LoadPage({
         page: 0,
         size: 100,
+        versionId :0,
       }),
       new RtoAction.LoadPage({
         page: 0,
         size: 100,
+        versionId :0,
+
       }),
     ]);
 

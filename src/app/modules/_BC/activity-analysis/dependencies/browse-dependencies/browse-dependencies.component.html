@@ -13,7 +13,7 @@
       [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_ORG"
       [page]="activityDependencyOrg$ | async"
       [pageRequest]="state?.pageRequest"
-      (onPageChange)="loadOrgPage($event)"
+      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_ORG, $event)"
     ></app-content-dependencies>
   </div>
   <div class="col-4">
@@ -21,7 +21,7 @@
       [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL"
       [page]="activityDependencyInternal$ | async"
       [pageRequest]="state?.pageRequest"
-      (onPageChange)="loadInternalPage($event)"
+      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL, $event)"
     ></app-content-dependencies>
   </div>
   <div class="col-4">
@@ -29,7 +29,7 @@
       [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL"
       [page]="activityDependencyExternal$ | async"
       [pageRequest]="state?.pageRequest"
-      (onPageChange)="loadExternalPage($event)"
+      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL, $event)"
     ></app-content-dependencies>
   </div>
 </div>
