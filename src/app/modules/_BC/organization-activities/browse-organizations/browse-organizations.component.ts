@@ -180,10 +180,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                disabled: !this.privilegesService.checkActionPrivileges([
-                  'PRIV_ED_DEL_SITUATION',
-                  'PRIV_ADD_FILE_SITUATION',
-                ]),
+                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_ORG_ACTIVITY'),
               },
             ],
           };
