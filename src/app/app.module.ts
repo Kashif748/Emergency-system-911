@@ -86,6 +86,7 @@ import { ActivityEmployeesState } from '@core/states/activity-analysis/employees
 import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -161,6 +162,7 @@ export function getHighlightLanguages() {
         OrgDetailState,
         BCState,
         LocationsState,
+        SystemsState,
         OrgActivityState,
         ActivityAnalysisState,
         ActivitySystemsState,
