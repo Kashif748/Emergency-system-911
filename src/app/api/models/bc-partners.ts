@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+import { OrgStructure } from './org-structure';
 export interface BcPartners {
   address?: string;
   id?: number;
@@ -7,6 +8,7 @@ export interface BcPartners {
   isCritical?: boolean;
   nameAr?: string;
   nameEn?: string;
+  orgStructure?: OrgStructure;
   pcontactEmail?: string;
   pcontactMobileNum?: string;
   pcontactNameAr?: string;
@@ -17,6 +19,8 @@ export interface BcPartners {
   scontactMobileNum?: string;
   scontactNameAr?: string;
   scontactNameEn?: string;
+  scontactPhoneNum?: string;
+  scontactSecNum?: string;
   services?: string;
   sla?: string;
 }

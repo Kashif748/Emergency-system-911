@@ -5,11 +5,11 @@
   "LOCATION": "Locations",
   "SYSTEM": "Systems",
   "ADD": "Add",
-  "DISTRICT": "District",
+  "DISTRICT":"District",
   "TABS": {
-    "SYSTEMS": "Systems",
-    "LOCATIONS": "Locations",
-    "VENDER_PARTNERS": "Venders/Partners"
+    "SYSTEMS":"Systems",
+    "LOCATIONS":"Locations",
+    "VENDER_PARTNERS":"Venders/Partners"
   },
   "SYSTEMS": {
     "NO": "No",
@@ -46,21 +46,23 @@
     "COMPANY_NAME": "Company Name",
     "TYPE": "Type",
     "SERVICES": "Services",
-    "DIALOG": {
-      "ADD_VENDER": "Add New Vendor/Partner",
+    "DIALOG" : {
+      "ADD_VENDER":"Add New Vendor/Partner",
+      "EDIT_VENDER":"Vendor/Partner Details",
+      "VIEW_VENDER":"Vendor/Partner",
       "VENDER_INFO": "Vendor/Partner Info",
       "CRITICALITY": "Criticality",
-      "NAME_EN": "Name (English)",
-      "NAME_AR": "Name (Arabic)",
-      "ADDRESS": "Address",
-      "SERVICES_AGREEMENT": "Services and Agreement",
-      "SUP_SERVICE_REND": "Supplies / Servcies Rendered",
-      "SERVICE_LEVEL_AGREE": "Service Level Agreement (SLA / MOU)",
-      "PRI_CONTACT": "Primary Contact",
-      "LAND_NUMBER": " Landline Number",
-      "MOBILE": "Mobile Number",
-      "HOME_NUMBER": "Home / Alternative Number",
-      "SEC_CONTACT": "Secondary Contact"
+      "NAME_EN":"Name (English)",
+      "NAME_AR":"Name (Arabic)",
+      "ADDRESS":"Address",
+      "SERVICES_AGREEMENT":"Services and Agreement",
+      "SUP_SERVICE_REND":"Supplies / Servcies Rendered",
+      "SERVICE_LEVEL_AGREE":"Service Level Agreement (SLA / MOU)",
+      "PRI_CONTACT":"Primary Contact",
+      "LAND_NUMBER":" Landline Number",
+      "MOBILE":"Mobile Number",
+      "HOME_NUMBER":"Home / Alternative Number",
+      "SEC_CONTACT":"Secondary Contact"
     }
   }
 }
