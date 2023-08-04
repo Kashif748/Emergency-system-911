@@ -65,9 +65,7 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
                 },
                 disabled:
                   !u.isActive ||
-                  !this.privilegesService.checkActionPrivileges([
-                    'PRIV_ED_DEL_SITUATION', 'PRIV_ADD_FILE_SITUATION'
-                  ]),
+                  !this.privilegesService.checkActionPrivileges('PRIV_ED_DEL_SITUATION'),
               },
               // view dashbaord
               {
