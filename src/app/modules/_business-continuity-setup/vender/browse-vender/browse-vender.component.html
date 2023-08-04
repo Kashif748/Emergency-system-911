@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="state$ | async as state">
   <!--advance search-->
   <div class="col-12 position-relative">
     <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
@@ -6,24 +6,24 @@
       <div class="p-fluid p-grid">
 
         <div class="p-field p-col-4 p-md-2">
-          <input type="text" pInputText [ngModel]=""
-                 placeholder="{{ 'VENDERS.DEPARTMENT_NAME' | translate }}"
-                 (keyup)="updateFilter({name: $event.target.value}, $event)">
-        </div>
-        <div class="p-field p-col-4 p-md-2">
-          <input type="text" pInputText [ngModel]=""
+          <input type="text" pInputText [ngModel]="state.pageRequest.filters['name']"
                  placeholder="{{ 'VENDERS.COMPANY_NAME' | translate }}"
                  (keyup)="updateFilter({name: $event.target.value}, $event)">
         </div>
+
         <div class="p-field p-col-4 p-md-2">
-          <input type="text" pInputText [ngModel]=""
-                 placeholder="{{ 'VENDERS.DIALOG.CRITICALITY' | translate }}"
-                 (keyup)="updateFilter({name: $event.target.value}, $event)">
-        </div>
-        <div class="p-field p-col-4 p-md-2">
-          <input type="text" pInputText [ngModel]=""
-                 placeholder="{{ 'VENDERS.DIALOG.ADDRESS' | translate }}"
-                 (keyup)="updateFilter({name: $event.target.value}, $event)">
+          <p-dropdown [options]="criticalityType" [ngModel]="state.pageRequest.filters['isCritical']"
+                      placeholder="{{'VENDERS.DIALOG.CRITICALITY' | translate}}"[autoDisplayFirst]="false"
+                      [showClear]="true" dataKey="id"
+                      (ngModelChange)="updateFilter({isCritical: $event}, $event)">
+            <ng-template let-item pTemplate="selectedItem">
+              {{ item | translateObj: 'name' }}
+            </ng-template>
+
+            <ng-template let-item pTemplate="item">
+              {{ item | translateObj : 'name'}}
+            </ng-template>
+          </p-dropdown>
         </div>
         <div class="p-col p-d-flex">
           <div class="ml-dir-auto"></div>
@@ -47,7 +47,7 @@
 
         <div class="p-1 w-100 w-md-200px">
           <p-multiSelect [options]="selectedColumns" defaultLabel="Select Columns" optionLabel="name" styleClass="w-100"
-                         [ngModel]="" [optionValue]="'code'" optionDisabled="disabled"
+                         [ngModel]="state.columns" [optionValue]="'code'" optionDisabled="disabled"
                          (onChange)="changeColumns($event)">
             <ng-template let-options pTemplate="selectedItems">
               <ng-container *ngIf="options?.length > 0">
@@ -65,7 +65,7 @@
         <div class="p-1 w-100 w-md-225px">
           <div class="p-inputgroup">
             <p-dropdown [options]="sortableColumns" [autoDisplayFirst]="false" [showClear]="true"
-                        [ngModel]=""
+                        [ngModel]="state?.pageRequest?.sortField"
                         placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate}}" optionLabel="name"
                         optionValue="code"
                         styleClass="w-100 h-100" class="w-100 h-100" (onChange)="sort($event)">
@@ -84,10 +84,10 @@
           </div>
         </div>
       </div>
-      <div class="p-toolbar-group-right">
+      <!--<div class="p-toolbar-group-right">
         <p-splitButton label="{{'ACTIONS.EXPORT' | translate}}" icon="pi pi-external-link"
                        [model]="exportActions" (onClick)="export('EXCEL')"></p-splitButton>
-      </div>
+      </div>-->
     </p-toolbar>
   </div>
 
@@ -105,7 +105,14 @@
         </div>
       </div>
     </p-divider>
+    <app-vender-content
+      [view]="state.view"
+      [loading]="loading$ | async"
+      [page]="page$ | async"
+      [columns]="state.columns"
+      [pageRequest]="state?.pageRequest"
+      [totalRecords]="totalRecords$ | async"
+      (onPageChange)="loadPage($event)">
+    </app-vender-content>
   </div>
 </div>
-
-<app-vender-content></app-vender-content>

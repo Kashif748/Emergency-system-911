@@ -85,6 +85,7 @@ import { ActivityLocationsState } from '@core/states/activity-analysis/locations
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { NgxsStoragePluginModule } from './_async-storage/storage.module';
+import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -170,6 +171,7 @@ export function getHighlightLanguages() {
         ActivityDependenciesState,
         ImpactAnalysisState,
         ActivityImpactMatrixState,
+        VenderState
       ],
       {
         developmentMode: !environment.production,
@@ -187,6 +189,7 @@ export function getHighlightLanguages() {
           'browse_activity_analysis',
           'browse_impact_analysis',
           'browse_org_activities',
+          'browse_vender',
         ],
       },
       ['common_data']

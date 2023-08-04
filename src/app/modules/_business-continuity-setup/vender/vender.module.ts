@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { VenderRoutingModule } from './vender-routing.module';
-import { BrowseVenderComponent } from './browse-vender/browse-vender.component';
-import { VenderDialogComponent } from './browse-vender/vender-dialog/vender-dialog.component';
-import { VenderContentComponent } from './browse-vender/vender-content/vender-content.component';
+import {VenderRoutingModule} from './vender-routing.module';
+import {BrowseVenderComponent} from './browse-vender/browse-vender.component';
+import {VenderDialogComponent} from './browse-vender/vender-dialog/vender-dialog.component';
+import {VenderContentComponent} from './browse-vender/vender-content/vender-content.component';
 import {HttpClient} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {SelectButtonModule} from "primeng/selectbutton";
@@ -34,6 +34,11 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {ButtonModule} from "primeng/button";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {BlockUIModule} from "primeng/blockui";
+import {ChipModule} from "primeng/chip";
+import {AvatarModule} from "primeng/avatar";
+import {NgxsModule} from "@ngxs/store";
+import {BrowseVenderState} from "./states/browse-vender.state";
+import {TooltipModule} from "primeng/tooltip";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/business-continuity-setup/', '.json');
@@ -46,6 +51,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     VenderRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxsModule.forFeature([BrowseVenderState]),
     InputTextModule,
     InputTextareaModule,
     PanelMenuModule,
@@ -70,6 +76,10 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     ProgressSpinnerModule,
     BlockUIModule,
+    ChipModule,
+    AvatarModule,
+    ToolbarModule,
+    TooltipModule,
     TranslateModule.forChild({
       extend: true,
       loader: {

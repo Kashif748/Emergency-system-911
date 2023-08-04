@@ -24,29 +24,27 @@ export class BcPartnersControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll13
+   * Path part for operation getAll12
    */
-  static readonly GetAll13Path = '/v1/bc/partners';
+  static readonly GetAll12Path = '/v1/bc/partners';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll13()` instead.
+   * To access only the response body, use `getAll12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll13$Response(params: {
+  getAll12$Response(params: {
     isActive?: boolean;
-    nameAr?: string;
-    nameEn?: string;
+    name?: string;
     isCritical?: boolean;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcPartners>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcPartnersControllerService.GetAll13Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcPartnersControllerService.GetAll12Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
-      rb.query('nameAr', params.nameAr, {});
-      rb.query('nameEn', params.nameEn, {});
+      rb.query('name', params.name, {});
       rb.query('isCritical', params.isCritical, {});
       rb.query('pageable', params.pageable, {});
     }
@@ -64,19 +62,18 @@ export class BcPartnersControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll13$Response()` instead.
+   * To access the full response (for headers, for example), `getAll12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll13(params: {
+  getAll12(params: {
     isActive?: boolean;
-    nameAr?: string;
-    nameEn?: string;
+    name?: string;
     isCritical?: boolean;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcPartners> {
 
-    return this.getAll13$Response(params).pipe(
+    return this.getAll12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcPartners>) => r.body as RestApiResponsePageBcPartners)
     );
   }

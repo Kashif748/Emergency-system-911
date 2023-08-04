@@ -48,6 +48,8 @@
     "SERVICES": "Services",
     "DIALOG" : {
       "ADD_VENDER":"إضافة مورد/شريك جديد",
+      "EDIT_VENDER":"تفاصيل البائع / الشريك",
+      "VIEW_VENDER":"بائع / شريك",
       "VENDER_INFO": "بيانات المورد/الشريك",
       "CRITICALITY": "الأهمية ",
       "NAME_EN":"الاسم (انجليزي)",
