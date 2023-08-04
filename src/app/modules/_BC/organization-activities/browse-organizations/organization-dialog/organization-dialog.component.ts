@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subject} from "rxjs";
@@ -100,7 +100,9 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private translateObj: TranslateObjPipe,
     private privileges: PrivilegesService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+
   ) {
     this.route.queryParams
       .pipe(
@@ -173,6 +175,9 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
       externalReference: [null],
       internal: [null, [Validators.required]]
     });
+    this.defaultFormValue = {
+      ...this.defaultFormValue,
+    };
   }
 
   async submit() {
@@ -215,9 +220,10 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    const orgActivityId = this._orgActivityId;
-    this.orgActivityId = null;
-    this.orgActivityId = orgActivityId;
+    this.store.dispatch(new OrgActivityAction.GetOrgActivities({}));
+    this.form.reset();
+    this.form.patchValue(this.defaultFormValue);
+    this.cdr.detectChanges();
   }
 
   close() {
