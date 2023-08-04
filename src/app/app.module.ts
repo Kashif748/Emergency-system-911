@@ -186,11 +186,13 @@ export function getHighlightLanguages() {
           'browse_tasks',
           'browse_groups',
           'browse_bc',
-          'browse_rto',
           'browse_activity_analysis',
           'browse_impact_analysis',
+<<<<<<< src/app/app.module.ts
           'browse_vender',
           'browse_activity_impact_matrix',
+=======
+>>>>>>> src/app/app.module.ts
           'browse_org_activities',
           'browse_vender',
         ],

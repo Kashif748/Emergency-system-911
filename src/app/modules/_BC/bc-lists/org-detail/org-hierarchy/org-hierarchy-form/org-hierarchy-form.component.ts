@@ -7,7 +7,11 @@ import { GenericValidators } from '@shared/validators/generic-validators';
 import { TreeNode } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { auditTime, takeUntil, tap } from 'rxjs/operators';
-import { BcOrgHierarchy, BcOrgHierarchyType, IdNameProjection } from 'src/app/api/models';
+import {
+  BcOrgHierarchy,
+  BcOrgHierarchyType,
+  IdNameProjection,
+} from 'src/app/api/models';
 import { BrowseOrgDetailAction } from '../../states/browse-orgDetail.action';
 import { BrowseOrgDetailState } from '../../states/browse-orgDetail.state';
 
@@ -48,7 +52,7 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         tap((node) => {
-          console.log(node);
+          this.loadUsers('', true);
           if (node?.data) {
             this.selectedOrgHirId = node.data?.id;
             this.form.patchValue(node.data);
@@ -81,10 +85,10 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       nameEn: [null, [Validators.required, GenericValidators.english]],
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
-      managerId: null,
+      manager: [null],
       parentId: '',
       id: '',
-      coordinatorId: null,
+      coordinator: [null],
       bcOrgHirType: null,
       isActive: true,
     });
