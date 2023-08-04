@@ -6,7 +6,7 @@ import { UserPreferencesControllerService } from 'src/app/api/services';
 import {
   AsyncStorageEngine,
   IGNORE_SYNC_STATES,
-} from 'src/app/async-storage/symbols';
+} from 'src/app/_async-storage/symbols';
 
 export class HyperStorageEngine implements AsyncStorageEngine {
   private $$queue: { [key: string]: Subject<any> } = {};
@@ -19,8 +19,8 @@ export class HyperStorageEngine implements AsyncStorageEngine {
     @Inject(IGNORE_SYNC_STATES) private ignoreSyncStates: string[]
   ) {}
 
-  length(): Observable<number> {
-    return of(localStorage.length);
+  get length(): number {
+    return localStorage.length;
   }
   getItem(key: any): Observable<any> {
     let item = localStorage.getItem(key);

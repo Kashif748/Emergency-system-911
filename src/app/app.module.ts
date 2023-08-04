@@ -62,8 +62,6 @@ import {
   RtoState,
   ImpactMatrixState,
 } from '@core/states';
-import { HyperStorageEngine } from '@core/storage/hyper-storage.engine';
-import { NgxsAsyncStoragePluginModule } from './async-storage/async-storage.module';
 import { IncidentState } from '@core/states/incident/incident.state';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { CenterState } from '@core/states/service-center-area/centers/center.state';
@@ -78,7 +76,7 @@ import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.stat
 import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
 import { BCState } from '@core/states/bc/bc/bc.state';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
+import { OrgActivityState } from '@core/states/org-activities/orgActivity.state';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
@@ -86,6 +84,7 @@ import { ActivityEmployeesState } from '@core/states/activity-analysis/employees
 import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import { NgxsStoragePluginModule } from './_async-storage/storage.module';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -174,8 +173,7 @@ export function getHighlightLanguages() {
         developmentMode: !environment.production,
       }
     ),
-    NgxsAsyncStoragePluginModule.forRoot(
-      HyperStorageEngine,
+    NgxsStoragePluginModule.forRoot(
       {
         key: [
           'browse_users',
@@ -184,7 +182,7 @@ export function getHighlightLanguages() {
           'browse_tasks',
           'browse_groups',
           'browse_business_impact_analysis',
-          'browse_org_activities'
+          'browse_org_activities',
         ],
       },
       ['common_data']
