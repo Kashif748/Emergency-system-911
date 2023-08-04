@@ -188,11 +188,6 @@ export function getHighlightLanguages() {
           'browse_bc',
           'browse_activity_analysis',
           'browse_impact_analysis',
-<<<<<<< src/app/app.module.ts
-          'browse_vender',
-          'browse_activity_impact_matrix',
-=======
->>>>>>> src/app/app.module.ts
           'browse_org_activities',
           'browse_vender',
         ],
