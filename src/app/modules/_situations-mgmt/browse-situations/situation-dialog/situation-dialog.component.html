@@ -60,7 +60,7 @@
 
 <ng-template #content>
 
-  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'35vh')     }">
+  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')     }">
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
@@ -131,22 +131,27 @@
           </div>
           <!-- Type filter -->
           <div class="p-field p-col-4 p-md-6">
-            <p-dropdown
-              [options]="newsTypes$ | async"
-              formControlName="type"
-              [autoDisplayFirst]="false"
-              [showClear]="true"
-              dataKey="id"
-              placeholder=" {{ 'SITUATIONS.TYPE' | translate }}"
-            >
-              <ng-template let-item pTemplate="selectedItem">
-                {{ item | translateObj }}
-              </ng-template>
-
-              <ng-template let-item pTemplate="item">
-                {{ item | translateObj }}
-              </ng-template>
-            </p-dropdown>
+              <span class="p-float-label">
+                <p-dropdown [options]="newsTypes$ | async" [autoDisplayFirst]="false" formControlName="type"
+                            dataKey="id" [showClear]="true" appendTo="body">
+                  <ng-template let-option pTemplate="selectedItem">
+                    {{ option | translateObj : 'name' }}
+                  </ng-template>
+                  <ng-template let-option pTemplate="item">
+                    {{ option | translateObj : 'name' }}
+                  </ng-template>
+                </p-dropdown>
+               <label>
+                  {{'SITUATIONS.TYPE' | translate}}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+            <ng-container *ngIf="form.controls['type'].touched && !form.controls['type'].valid &&
+          form.controls['type'].dirty">
+              <p class="p-error mb-0" *ngIf="form.controls['type'].hasError('required')">
+                {{ "VALIDATION_MSG.REQUIRED" | translate }}
+              </p>
+            </ng-container>
           </div>
           <!-- theme -->
           <div class="p-field p-col-4 p-md-6">

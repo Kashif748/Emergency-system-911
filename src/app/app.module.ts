@@ -84,7 +84,11 @@ import { ActivityEmployeesState } from '@core/states/activity-analysis/employees
 import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+<<<<<<< HEAD
 import { NgxsStoragePluginModule } from './_async-storage/storage.module';
+=======
+import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
+>>>>>>> dev
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -160,6 +164,7 @@ export function getHighlightLanguages() {
         OrgDetailState,
         BCState,
         LocationsState,
+        SystemsState,
         OrgActivityState,
         ActivityAnalysisState,
         ActivitySystemsState,
@@ -181,7 +186,11 @@ export function getHighlightLanguages() {
           'common_data',
           'browse_tasks',
           'browse_groups',
-          'browse_business_impact_analysis',
+          'browse_bc',
+          'browse_rto',
+          'browse_activity_analysis',
+          'browse_impact_analysis',
+          'browse_activity_impact_matrix',
           'browse_org_activities',
         ],
       },
