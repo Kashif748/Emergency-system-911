@@ -290,7 +290,7 @@
     "GENERAL": {
       "DELETE_CONFIRM": "هل أنت متأكد؟ لن تستطيع استعادة المعلومات ",
       "RESENT_CONFIRM": "هل أنت متأكد أنك تريد إعادة الإرسال?",
-      "SEND_CONFIRM": "يرسل"
+      "SEND_CONFIRM": "نعم، ارسال"
     },
     "WORK_LOG_LIST": {
       "DATE": "التاريخ",

@@ -5,24 +5,22 @@
   "LOCATION": "Locations",
   "SYSTEM": "Systems",
   "ADD": "Add",
-  "DISTRICT":"District",
+  "DISTRICT": "District",
   "TABS": {
-    "SYSTEMS":"Systems",
-    "LOCATIONS":"Locations",
-    "VENDER_PARTNERS":"Venders/Partners"
+    "SYSTEMS": "Systems",
+    "LOCATIONS": "Locations",
+    "VENDER_PARTNERS": "Venders/Partners"
   },
   "SYSTEMS": {
     "NO": "No",
     "DEPARTMENT_NAME": "Department Name",
     "SYSTEM_NAME": "System Name",
     "SYSTEM_RTO": "System RTO",
-    "ADD_SYSTEM":"Add New System",
-    "DIALOG" : {
-      "NAME_EN":"Name (English)",
-      "NAME_AR":"Name (Arabic)",
-      "SYSTEM_LOGO":"System Logo",
-      "OWNER_DEPT":"Owner Department"
-    }
+    "ADD_SYSTEM": "Add New System",
+    "OWNER_DEPT": "Owner Department",
+
+    "NAME_EN": "Name (English)",
+    "NAME_AR": "Name (Arabic)"
   },
   "LOCATIONS": {
     "NO": "No",
@@ -30,16 +28,16 @@
     "LOCATION_NAME": "Location Name",
     "LOCATION_TYPE": "Location Type",
     "DISTRICT": "District",
-    "ADD_LOCATION":"Add New Location",
-    "DIALOG" : {
+    "ADD_LOCATION": "Add New Location",
+    "DIALOG": {
       "LOCATION_INFO": "Location Info",
       "GEO_INFO": "Geographic Details",
-      "NAME_EN":"Name (English)",
-      "NAME_AR":"Name (Arabic)",
-      "LOC_TYPE":"Location Type",
-      "LONGI":"Longitude",
-      "LATI":"Latitude",
-      "CHOOSE_LOCATION":"Choose Location"
+      "NAME_EN": "Name (English)",
+      "NAME_AR": "Name (Arabic)",
+      "LOC_TYPE": "Location Type",
+      "LONGI": "Longitude",
+      "LATI": "Latitude",
+      "CHOOSE_LOCATION": "Choose Location"
     }
   },
   "VENDERS": {
@@ -48,21 +46,21 @@
     "COMPANY_NAME": "Company Name",
     "TYPE": "Type",
     "SERVICES": "Services",
-    "DIALOG" : {
-      "ADD_VENDER":"Add New Vendor/Partner",
+    "DIALOG": {
+      "ADD_VENDER": "Add New Vendor/Partner",
       "VENDER_INFO": "Vendor/Partner Info",
       "CRITICALITY": "Criticality",
-      "NAME_EN":"Name (English)",
-      "NAME_AR":"Name (Arabic)",
-      "ADDRESS":"Address",
-      "SERVICES_AGREEMENT":"Services and Agreement",
-      "SUP_SERVICE_REND":"Supplies / Servcies Rendered",
-      "SERVICE_LEVEL_AGREE":"Service Level Agreement (SLA / MOU)",
-      "PRI_CONTACT":"Primary Contact",
-      "LAND_NUMBER":" Landline Number",
-      "MOBILE":"Mobile Number",
-      "HOME_NUMBER":"Home / Alternative Number",
-      "SEC_CONTACT":"Secondary Contact"
+      "NAME_EN": "Name (English)",
+      "NAME_AR": "Name (Arabic)",
+      "ADDRESS": "Address",
+      "SERVICES_AGREEMENT": "Services and Agreement",
+      "SUP_SERVICE_REND": "Supplies / Servcies Rendered",
+      "SERVICE_LEVEL_AGREE": "Service Level Agreement (SLA / MOU)",
+      "PRI_CONTACT": "Primary Contact",
+      "LAND_NUMBER": " Landline Number",
+      "MOBILE": "Mobile Number",
+      "HOME_NUMBER": "Home / Alternative Number",
+      "SEC_CONTACT": "Secondary Contact"
     }
   }
 }

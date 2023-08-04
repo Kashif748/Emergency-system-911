@@ -1,25 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import {SYSTEMS} from "../../../tempData.conts";
-import {TranslateService} from "@ngx-translate/core";
-import {Store} from "@ngxs/store";
-import {ILangFacade} from "@core/facades/lang.facade";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { PageRequestModel } from '@core/models/page-request.model';
+import { LazyLoadEvent } from 'primeng/api';
+import { BrowseSystemsAction } from '../../states/browse-systems.action';
+import { BcSystems } from 'src/app/api/models';
 
 @Component({
   selector: 'app-system-content',
   templateUrl: './system-content.component.html',
-  styleUrls: ['./system-content.component.scss']
+  styleUrls: ['./system-content.component.scss'],
 })
 export class SystemContentComponent implements OnInit {
-  public columns: string[] = [ 'criticality', 'rto' , 'desc' ];
-  public page = SYSTEMS;
-  public loading = false;
-  constructor(
-    private store: Store,
-    private translate: TranslateService,
-    private lang: ILangFacade,
-  ) { }
+  @Input()
+  view: 'TABLE' | 'CARDS';
+  @Input()
+  loading: boolean;
+  @Input()
+  page: BcSystems[];
+  @Input()
+  columns: string[];
+  @Input()
+  totalRecords: number;
+  @Input()
+  pageRequest: PageRequestModel;
+
+  @Output()
+  onPageChange = new EventEmitter<LazyLoadEvent>();
+
+  public display = false;
+
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
+    this.onPageChange.emit({
+      first: this.pageRequest.first,
+      rows: this.pageRequest.rows,
+    });
   }
 
+  openView(systemId?: number) {
+    this.store.dispatch(new BrowseSystemsAction.OpenView({ systemId }));
+  }
 }
