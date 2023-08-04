@@ -16,13 +16,11 @@
     "DEPARTMENT_NAME": "Department Name",
     "SYSTEM_NAME": "System Name",
     "SYSTEM_RTO": "System RTO",
-    "ADD_SYSTEM":"Add New System",
-    "DIALOG" : {
-      "NAME_EN":"Name (English)",
-      "NAME_AR":"Name (Arabic)",
-      "SYSTEM_LOGO":"System Logo",
-      "OWNER_DEPT":"Owner Department"
-    }
+    "ADD_SYSTEM": "Add New System",
+    "OWNER_DEPT": "Owner Department",
+
+    "NAME_EN": "Name (English)",
+    "NAME_AR": "Name (Arabic)"
   },
   "LOCATIONS": {
     "NO": "No",
@@ -30,16 +28,16 @@
     "LOCATION_NAME": "Location Name",
     "LOCATION_TYPE": "Location Type",
     "DISTRICT": "District",
-    "ADD_LOCATION":"Add New Location",
-    "DIALOG" : {
+    "ADD_LOCATION": "Add New Location",
+    "DIALOG": {
       "LOCATION_INFO": "Location Info",
       "GEO_INFO": "Geographic Details",
-      "NAME_EN":"Name (English)",
-      "NAME_AR":"Name (Arabic)",
-      "LOC_TYPE":"Location Type",
-      "LONGI":"Longitude",
-      "LATI":"Latitude",
-      "CHOOSE_LOCATION":"Choose Location"
+      "NAME_EN": "Name (English)",
+      "NAME_AR": "Name (Arabic)",
+      "LOC_TYPE": "Location Type",
+      "LONGI": "Longitude",
+      "LATI": "Latitude",
+      "CHOOSE_LOCATION": "Choose Location"
     }
   },
   "VENDERS": {

@@ -33,7 +33,6 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   @Select(ImpactMatrixState.blocking)
   public blocking$: Observable<boolean>;
 
-  @Select(BrowseActivityImpactMatrixState.state)
   public state$: Observable<BrowseActivityImpactMatrixStateModel>;
 
   public rtosPage$: Observable<Bcrto[]>;
@@ -47,20 +46,11 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   constructor(private lang: ILangFacade, private store: Store) {}
 
   ngOnInit(): void {
-    combineLatest([
-      this.store.select(ActivityAnalysisState.activityAnalysis),
-      this.store.select(ActivityAnalysisState.cycle),
-    ])
-      .pipe(
-        takeUntil(this.destroy$),
-        tap(([activity, cycle]) => {
-          this.loadPage();
-          this.loadImpactMatrixPage(cycle.versionId);
-          this.loadImpactTypePage(cycle.versionId);
-          this.loadRTOPage(cycle.versionId);
-        })
-      )
-      .subscribe();
+    this.state$ = this.store.select(BrowseActivityImpactMatrixState.state).pipe(
+      takeUntil(this.destroy$),
+      filter((s) => !!s),
+      tap(() => this.loadTableData())
+    );
 
     this.tableValue$ = combineLatest([
       this.store.select(ActivityImpactMatrixState.page),
@@ -72,7 +62,6 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
         ([activityImpact, impactMatrix, rtos]) =>
           !!activityImpact && !!impactMatrix && !!rtos
       ),
-      tap(console.log),
       map(([activityImpact, impactMatrix, rtos]) => {
         const table = [];
         let impactTotal = 0;
@@ -116,11 +105,28 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
     // represent table columns
     this.rtosPage$ = this.store.select(RtoState.page).pipe(
       filter((p) => !!p),
-      tap(console.log),
       map((page) => [...page].sort((a, b) => a.id - b.id))
     );
   }
 
+  loadTableData() {
+    combineLatest([
+      this.store.select(ActivityAnalysisState.activityAnalysis),
+      this.store.select(ActivityAnalysisState.cycle),
+    ])
+      .pipe(
+        filter(([activity, cycle]) => !!activity && !!cycle),
+        takeUntil(this.destroy$),
+        tap(([activity, cycle]) => {
+          this.loadPage();
+          this.loadImpactMatrixPage(cycle.versionId);
+          this.loadImpactTypePage(cycle.versionId);
+          this.loadRTOPage(cycle.versionId);
+        })
+      )
+      .subscribe();
+  }
+  // for currecnt activiy analysis
   public loadPage(event?: LazyLoadEvent) {
     const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
     const activityAnalysis = this.store.selectSnapshot(
@@ -137,6 +143,7 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
       })
     );
   }
+  // impact materix related to version id
   public loadImpactMatrixPage(versionId, event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseActivityImpactMatrixAction.LoadImpactMatrix({
@@ -148,7 +155,6 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
       })
     );
   }
-
   public loadImpactTypePage(versionId, event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseActivityImpactMatrixAction.LoadImpactLevel({
@@ -207,7 +213,6 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
     const activityAnalysis = this.store.selectSnapshot(
       ActivityAnalysisState.activityAnalysis
     );
-    console.log(this.selectedCells);
 
     const payload: BcActivityImpactMatrixDetailsDto = {
       bcImpactTypes: this.selectedCells,

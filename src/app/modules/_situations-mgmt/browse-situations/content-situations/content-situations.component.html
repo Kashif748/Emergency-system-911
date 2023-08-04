@@ -365,7 +365,9 @@
                       ? 'golden'
                       : item.themeType?.id === 1
                       ? 'silver'
-                      : 'bronze'
+                      : item.themeType?.id === 2
+                      ? 'bronze'
+                      : 'white'
                   "
                 >
                   {{ item.alertnessLevel | translateObj }}
@@ -377,7 +379,7 @@
                 class="max-w-250px"
                 *ngIf="columns?.includes('startDate')"
               >
-                {{ item.startDate | cdate | date : "yyyy-MM-dd h:mm" }}
+                {{ item.startDate | cdate }}
               </td>
 
               <td
@@ -385,7 +387,7 @@
                 class="max-w-250px"
                 *ngIf="columns?.includes('endDate')"
               >
-                {{ item.endDate | cdate | date : "yyyy-MM-dd h:mm" }}
+                {{ item.endDate | cdate }}
               </td>
 
               <!-- apply privalges *checkPrivileges="'PRIV_UP_TASK'" -->

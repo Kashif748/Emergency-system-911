@@ -66,7 +66,7 @@ export class NotificationsTableService extends DataSourceService {
   resendSMS(id) {
     const url = `resend-send-sms/${id}`;
 
-    return this.getAll<IpaginationResponce<any[]>>(url).pipe(
+    return this.put<IpaginationResponce<any[]>>(null, null, url).pipe(
       map((items) => {
         if (items) {
           // this.notificationTransaction =  items;

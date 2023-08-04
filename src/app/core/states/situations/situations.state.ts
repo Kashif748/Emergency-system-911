@@ -126,6 +126,7 @@ export class SituationsState {
           sort: payload.sort,
         },
         ...payload.filters,
+        active: true,
         fromDate: payload.filters?.fromDate
           ? DateTimeUtil.format(
               payload.filters?.fromDate,

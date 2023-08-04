@@ -78,7 +78,7 @@ import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.stat
 import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
 import { BCState } from '@core/states/bc/bc/bc.state';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
+import { OrgActivityState } from '@core/states/org-activities/orgActivity.state';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
@@ -87,6 +87,7 @@ import { ActivityLocationsState } from '@core/states/activity-analysis/locations
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import {VenderState} from "@core/states/bc-setup/venders/vender.state";
+import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -162,6 +163,7 @@ export function getHighlightLanguages() {
         OrgDetailState,
         BCState,
         LocationsState,
+        SystemsState,
         OrgActivityState,
         ActivityAnalysisState,
         ActivitySystemsState,
@@ -185,9 +187,15 @@ export function getHighlightLanguages() {
           'common_data',
           'browse_tasks',
           'browse_groups',
-          'browse_business_impact_analysis',
+          'browse_bc',
+          'browse_rto',
+          'bc',
+          'activity_analysis',
+          'browse_activity_analysis',
+          'browse_impact_analysis',
+          'browse_vender',
+          'browse_activity_impact_matrix',
           'browse_org_activities',
-          'browse_vender'
         ],
       },
       ['common_data']

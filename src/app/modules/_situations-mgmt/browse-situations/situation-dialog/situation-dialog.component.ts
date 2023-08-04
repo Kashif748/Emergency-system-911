@@ -30,6 +30,7 @@ import {SituationAttachmentDetails} from "../../../../api/models/situation-attac
 import {PrivilegesService} from "@core/services/privileges.service";
 import {AlertnessLevel} from "../../../../api/models/alertness-level";
 import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
+import {MessageHelper} from "@core/helpers/message.helper";
 
 @Component({
   selector: 'app-situation-dialog',
@@ -46,6 +47,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   plan$: Observable<boolean>;
   @ViewChild(Dialog) dialog: Dialog;
   @ViewChild(TabView) tabv: TabView;
+
   @Select(SituationsState.situationTotalRecords)
   public situationTotalRecords$: Observable<number>;
 
@@ -123,7 +125,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
             endDate: new Date(t.endDate),
             themeType: t?.themeType,
             type: t?.newsType,
-            theme: t?.alertnessLevel
+            theme: t?.themeType
           });
         })
       )
@@ -184,6 +186,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     private cfr: ComponentFactoryResolver,
     private injector: Injector,
     private privilegesService: PrivilegesService,
+    private messageHelper: MessageHelper,
   ) {
     this.route.queryParams
       .pipe(
@@ -283,7 +286,9 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   }
 
   async submit() {
-    if (!this.form.valid) {
+    if (this.editMode && this.editAttachmentType) {
+
+    } else if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
         fc.markAsDirty();
@@ -303,17 +308,23 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     };
 
     if (this.editMode) {
-      this.store
-        .dispatch(new BrowseSituationsAction.UpdateSituations(situation))
-        .pipe(
-          catchError(() => {
-            return EMPTY;
-          }),
-          takeUntil(this.destroy$),
-          take(1)
-        )
-        .subscribe();
-      await this.attachPlanComponent?.upload(this._situationId, false);
+      if (this.editAttachmentType) {
+        await this.attachPlanComponent?.upload(this._situationId, false);
+        this.messageHelper.success();
+        this.store.dispatch( new BrowseSituationsAction.LoadSituations());
+        this.close();
+      } else {
+        this.store
+          .dispatch(new BrowseSituationsAction.UpdateSituations(situation))
+          .pipe(
+            catchError(() => {
+              return EMPTY;
+            }),
+            takeUntil(this.destroy$),
+            take(1)
+          )
+          .subscribe();
+      }
 
     } else {
       this.store
