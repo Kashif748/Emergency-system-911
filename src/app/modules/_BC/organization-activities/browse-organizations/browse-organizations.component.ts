@@ -81,7 +81,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   ] as MenuItem[];
 
   public sortableColumns = [
-    { name: 'ACTIVITY_NAME', code: 'nameEn,nameAr'},
+    { name: 'ACTIVITY_NAME', code: ''},
     { name: 'ACTIVITY_FEQ', code: ',activityFrequence.nameEn' },
     { name: 'ACTIVITY_AREA', code: 'internal' },
     { name: 'ARIS', code: 'externalReference' },
@@ -126,8 +126,10 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
       // map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
     ).subscribe((res) => {
       if (res['key'] == 'ar') {
+        this.sortableColumns[0].code = 'nameAr';
         this.sortableColumns[1].code = 'activityFrequence.nameAr';
       } else {
+        this.sortableColumns[0].code = 'nameEn';
         this.sortableColumns[1].code = 'activityFrequence.nameEn';
       }
     });
@@ -144,7 +146,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
         page: 0,
         size: 20,
       }),
-      new OrgDetailAction.GetOrgHierarchy({
+      new OrgDetailAction.GetOrgHierarchySearch({
         page: 0,
         size: 20,
       }),
@@ -178,17 +180,14 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                disabled: !this.privilegesService.checkActionPrivileges([
-                  'PRIV_ED_DEL_SITUATION',
-                  'PRIV_ADD_FILE_SITUATION',
-                ]),
+                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_ORG_ACTIVITY'),
               },
             ],
           };
         })
       )
     );
-    this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
+    this.orgHir$ = this.store.select(OrgDetailState.orgHirSearch).pipe(
       takeUntil(this.destroy$),
       filter((p) => !!p),
       tap(console.log),

@@ -71,23 +71,23 @@ export class BcOrgHierarchyControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll15
+   * Path part for operation getAll14
    */
-  static readonly GetAll15Path = '/v1/bc/org-hir';
+  static readonly GetAll14Path = '/v1/bc/org-hir';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll15()` instead.
+   * To access only the response body, use `getAll14()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll15$Response(params: {
+  getAll14$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.GetAll15Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.GetAll14Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -107,17 +107,17 @@ export class BcOrgHierarchyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll15$Response()` instead.
+   * To access the full response (for headers, for example), `getAll14$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll15(params: {
+  getAll14(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcOrgHierarchy> {
 
-    return this.getAll15$Response(params).pipe(
+    return this.getAll14$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>) => r.body as RestApiResponsePageBcOrgHierarchy)
     );
   }
@@ -257,6 +257,55 @@ export class BcOrgHierarchyControllerService extends BaseService {
 
     return this.getOne5$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcOrgHierarchy>) => r.body as RestApiResponseBcOrgHierarchy)
+    );
+  }
+
+  /**
+   * Path part for operation orgHierarchyForFilteration
+   */
+  static readonly OrgHierarchyForFilterationPath = '/v1/bc/org-hir/search';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `orgHierarchyForFilteration()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  orgHierarchyForFilteration$Response(params: {
+    isActive: boolean;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.OrgHierarchyForFilterationPath, 'get');
+    if (params) {
+      rb.query('isActive', params.isActive, {});
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `orgHierarchyForFilteration$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  orgHierarchyForFilteration(params: {
+    isActive: boolean;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcOrgHierarchy> {
+
+    return this.orgHierarchyForFilteration$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>) => r.body as RestApiResponsePageBcOrgHierarchy)
     );
   }
 
