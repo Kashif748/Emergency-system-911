@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { OrgDetailAction, OrgDetailState, RtoState } from '@core/states';
@@ -13,6 +13,7 @@ import { FormUtils } from '@core/utils';
 import { BrowseSystemsAction } from '../../states/browse-systems.action';
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 import { SystemsAction } from '@core/states/bc-setup/systems/systems.action';
+import { GenericValidators } from '@shared/validators/generic-validators';
 
 @Component({
   selector: 'app-system-dialog',
@@ -96,8 +97,8 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      nameAr: [null],
-      nameEn: [null],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
       orgHierarchy: [null],
       isActive: true,
       id: null,
