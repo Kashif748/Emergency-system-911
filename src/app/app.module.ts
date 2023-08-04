@@ -78,7 +78,7 @@ import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.stat
 import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
 import { BCState } from '@core/states/bc/bc/bc.state';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
+import { OrgActivityState } from '@core/states/org-activities/orgActivity.state';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
@@ -183,8 +183,15 @@ export function getHighlightLanguages() {
           'common_data',
           'browse_tasks',
           'browse_groups',
-          'browse_business_impact_analysis',
-          'browse_org_activities'
+          'browse_bc',
+          'browse_rto',
+          'bc',
+          'activity_analysis',
+          'browse_activity_analysis',
+          'browse_impact_analysis',
+
+          'browse_activity_impact_matrix',
+          'browse_org_activities',
         ],
       },
       ['common_data']

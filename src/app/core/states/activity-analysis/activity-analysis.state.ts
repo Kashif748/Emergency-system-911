@@ -40,7 +40,7 @@ export interface ActivityAnalysisStateModel {
 }
 
 const ACTIVITY_ANALYSIS_STATE_TOKEN = new StateToken<ActivityAnalysisState>(
-  'ActivityAnalysisState'
+  'activity_analysis'
 );
 
 @State<ActivityAnalysisState>({ name: ACTIVITY_ANALYSIS_STATE_TOKEN })

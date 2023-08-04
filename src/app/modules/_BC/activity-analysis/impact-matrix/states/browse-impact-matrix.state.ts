@@ -22,12 +22,12 @@ import { EMPTY } from 'rxjs';
 
 export interface BrowseActivityImpactMatrixStateModel {
   pageRequest: PageRequestModel;
-  columns: string[];
-  view: 'TABLE' | 'CARDS';
 }
 
 export const BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN =
-  new StateToken<BrowseActivityImpactMatrixStateModel>('browse_impactMatrix');
+  new StateToken<BrowseActivityImpactMatrixStateModel>(
+    'browse_activity_impact_matrix'
+  );
 
 @State<BrowseActivityImpactMatrixStateModel>({
   name: BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN,
@@ -37,8 +37,6 @@ export const BROWSE_IMPACT_MATRIX_UI_STATE_TOKEN =
       first: 0,
       rows: 10,
     },
-    columns: ['criticality', 'rtoEn', 'description'],
-    view: 'TABLE',
   },
 })
 @Injectable()
@@ -49,10 +47,7 @@ export class BrowseActivityImpactMatrixState {
    */
   constructor(
     private messageHelper: MessageHelper,
-    private router: Router,
-    private apiHelper: ApiHelper,
-    private route: ActivatedRoute,
-    private store: Store
+    private apiHelper: ApiHelper
   ) {}
 
   /* ************************ SELECTORS ******************** */
