@@ -146,7 +146,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
         page: 0,
         size: 20,
       }),
-      new OrgDetailAction.GetOrgHierarchy({
+      new OrgDetailAction.GetOrgHierarchySearch({
         page: 0,
         size: 20,
       }),
@@ -190,7 +190,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
         })
       )
     );
-    this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
+    this.orgHir$ = this.store.select(OrgDetailState.orgHirSearch).pipe(
       takeUntil(this.destroy$),
       filter((p) => !!p),
       tap(console.log),

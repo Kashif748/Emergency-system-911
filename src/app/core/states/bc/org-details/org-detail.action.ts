@@ -35,6 +35,21 @@ export namespace OrgDetailAction {
       }
     ) {}
   }
+
+  export class GetOrgHierarchySearch {
+    static readonly type = '[OrgDetail] Get Org Hierarchy Search';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+
   export class GetOrgHierarchyNode {
     static readonly type = '[OrgDetail] Get Org Hierarchy Node';
     /**

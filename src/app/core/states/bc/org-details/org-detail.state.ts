@@ -26,6 +26,7 @@ import {
 
 export interface OrgDetailStateModel {
   orgHir: PageBcOrgHierarchy;
+  orgHirSearch: PageBcOrgHierarchy;
   orgHirTypes: PageBcOrgHierarchyType;
   org: OrgStructure;
   loading: boolean;
@@ -59,6 +60,11 @@ export class OrgDetailState {
   }
 
   @Selector([OrgDetailState])
+  static orgHirSearch(state: OrgDetailStateModel): BcOrgHierarchy[] {
+    return state?.orgHirSearch.content;
+  }
+
+  @Selector([OrgDetailState])
   static orgHirTypes(state: OrgDetailStateModel): BcOrgHierarchyType[] {
     return state?.orgHirTypes.content;
   }
@@ -87,7 +93,7 @@ export class OrgDetailState {
     );
 
     return this.orgHir
-      .getAll15({
+      .getAll14({
         isActive: true,
         pageable: payload,
       })
@@ -96,6 +102,43 @@ export class OrgDetailState {
           setState(
             patch<OrgDetailStateModel>({
               orgHir: orgHir.result,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<OrgDetailStateModel>({
+              blocking: false,
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
+  /* ********************** ACTIONS ************************* */
+  @Action(OrgDetailAction.GetOrgHierarchySearch, { cancelUncompleted: true })
+  getOrgHierarchySearch(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.GetOrgHierarchySearch
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        blocking: true,
+        loading: true,
+      })
+    );
+
+    return this.orgHir
+      .orgHierarchyForFilteration({
+        isActive: true,
+        pageable: payload,
+      })
+      .pipe(
+        tap((orgHirSearch) => {
+          setState(
+            patch<OrgDetailStateModel>({
+              orgHirSearch: orgHirSearch.result,
             })
           );
         }),
