@@ -102,14 +102,18 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
       });
       return;
     }
-
+    const payload: BcOrgHierarchy = {
+      ...this.form.value,
+      coordinatorId: this.form.value?.coordinator?.id,
+      managerId: this.form.value?.manager?.id,
+    };
     if (this.editMode) {
       this.store.dispatch(
-        new BrowseOrgDetailAction.UpdateOrgHierarchy(this.form.value)
+        new BrowseOrgDetailAction.UpdateOrgHierarchy(payload)
       );
     } else {
       this.store.dispatch(
-        new BrowseOrgDetailAction.CreateOrgHierarchy(this.form.value)
+        new BrowseOrgDetailAction.CreateOrgHierarchy(payload)
       );
     }
   }
