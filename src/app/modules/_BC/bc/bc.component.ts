@@ -48,21 +48,14 @@ export class BCComponent implements OnInit, OnDestroy {
     private langFacade: ILangFacade,
     private formBuilder: FormBuilder
   ) {
-    // this.versions$ = this.store
-    //   .select(BCState.versions)
-    //   .pipe(filter((p) => !!p));
-
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
-        const version = params['_version'];
-        if (version) {
-          this.store.dispatch(
-            new BrowseBCAction.GetVersion({
-              versionId: version,
-            })
-          );
-        }
+        this.store.dispatch(
+          new BrowseBCAction.GetVersion({
+            versionId: params['_version'],
+          })
+        );
       });
   }
   ngOnInit() {

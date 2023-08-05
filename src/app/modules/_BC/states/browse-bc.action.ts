@@ -9,7 +9,9 @@ export namespace BrowseBCAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel ,  statusId? : number}) {}
+    constructor(
+      public payload?: { pageRequest?: PageRequestModel; statusId?: number }
+    ) {}
   }
   export class GetVersion {
     static readonly type = '[BrowseBusinessContinuity] Get One';
@@ -17,11 +19,11 @@ export namespace BrowseBCAction {
     /**
      *
      */
-    constructor(public payload?: { versionId: number }) {}
+    constructor(public payload: { versionId: number }) {}
   }
 
-  export class GetStatus {
-    static readonly type = '[BrowseBusinessContinuity] Get Status';
+  export class ChangeStatus {
+    static readonly type = '[BrowseBusinessContinuity] Change Status';
 
     /**
      *

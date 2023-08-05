@@ -56,7 +56,7 @@ export class BrowseBCState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseBCAction.LoadPage)
-  loadRto(
+  LoadPage(
     { setState, dispatch, getState }: StateContext<BrowseBCStateModel>,
     { payload }: BrowseBCAction.LoadPage
   ) {
@@ -75,7 +75,6 @@ export class BrowseBCState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-
       })
     );
   }
@@ -87,7 +86,7 @@ export class BrowseBCState {
     return dispatch(new BCAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([new BCAction.LoadPage({ page: 0, size: 20 })]);
+        dispatch(new BrowseBCAction.LoadPage());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -96,10 +95,10 @@ export class BrowseBCState {
     );
   }
 
-  @Action(BrowseBCAction.GetStatus)
-  getStatus(
+  @Action(BrowseBCAction.ChangeStatus)
+  ChangeStatus(
     { dispatch }: StateContext<BrowseBCStateModel>,
-    { payload }: BrowseBCAction.GetStatus
+    { payload }: BrowseBCAction.ChangeStatus
   ) {
     return dispatch(
       new BCAction.Status({
@@ -108,6 +107,9 @@ export class BrowseBCState {
       })
     ).pipe(
       tap(() => {
+        dispatch(
+          new BrowseBCAction.GetVersion({ versionId: payload.versionId })
+        );
         this.messageHelper.success();
       }),
       catchError((err) => {
