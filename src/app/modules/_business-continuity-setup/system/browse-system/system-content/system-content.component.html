@@ -180,10 +180,10 @@
               <td>
                 {{ item.id }}
               </td>
-              <td *ngIf="columns?.includes('name')">
+              <td *ngIf="columns?.includes('name')" (click)="item.isActive && openView(item.id)">
                 {{ item | translateObj }}
               </td>
-              <td *ngIf="columns?.includes('dept')">
+              <td *ngIf="columns?.includes('dept')" (click)="item.isActive && openView(item.id)">
                 {{ item.orgHierarchy | translateObj }}
               </td>
 

@@ -17,8 +17,9 @@
     "SYSTEM_NAME": "System Name",
     "SYSTEM_RTO": "System RTO",
     "ADD_SYSTEM": "Add New System",
+    "EDIT_SYSTEM": "Edit System",
+    "VIEW_SYSTEM": "View System",
     "OWNER_DEPT": "Owner Department",
-
     "NAME_EN": "Name (English)",
     "NAME_AR": "Name (Arabic)"
   },
@@ -29,6 +30,8 @@
     "LOCATION_TYPE": "Location Type",
     "DISTRICT": "District",
     "ADD_LOCATION": "Add New Location",
+    "EDIT_LOCATION": "Edit Location",
+    "VIEW_LOCATION": "View Location",
     "DIALOG": {
       "LOCATION_INFO": "Location Info",
       "GEO_INFO": "Geographic Details",
@@ -47,6 +50,8 @@
     "TYPE": "Type",
     "SERVICES": "Services",
     "DIALOG" : {
+      "IS_CRITICAL": "Critical",
+      "NON_CRITICAL": "Non-Critical",
       "ADD_VENDER":"Add New Vendor/Partner",
       "EDIT_VENDER":"Vendor/Partner Details",
       "VIEW_VENDER":"Vendor/Partner",

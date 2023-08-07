@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 import {Store} from "@ngxs/store";
-import { BcLocations } from 'src/app/api/models';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { LazyLoadEvent } from 'primeng/api';
+import {BcLocations} from 'src/app/api/models';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {LazyLoadEvent} from 'primeng/api';
+import {BrowseLocationsAction} from "../../states/browse-locations.action";
 
 @Component({
   selector: 'app-location-content',
@@ -26,8 +27,7 @@ export class LocationContentComponent implements OnInit {
   onPageChange = new EventEmitter<LazyLoadEvent>();
 
   public display = false;
-  // public loading = false;
-  // public columns: string[] = [ 'criticality', 'rto' , 'desc' ];
+
   constructor(
     private store: Store,
     private translate: TranslateService,
@@ -40,4 +40,7 @@ export class LocationContentComponent implements OnInit {
     });
   }
 
+  openView(id?: number) {
+    this.store.dispatch(new BrowseLocationsAction.OpenView({ locationId: id }));
+  }
 }

@@ -17,6 +17,9 @@ import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { LocationsAction } from '@core/states/bc-setup/locations/locations.action';
+import {BrowseVenderAction} from "../../vender/states/browse-vender.action";
+import {VenderAction} from "@core/states/bc-setup/venders/vender.action";
+import {BrowseVenderStateModel} from "../../vender/states/browse-vender.state";
 
 export interface BrowseLocationsStateModel {
   pageRequest: PageRequestModel;
@@ -79,7 +82,38 @@ export class BrowseLocationsState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+          locationTypeId: pageRequest.filters.locationTypeId?.id,
+        },
+      })
+    );
+  }
+
+  @Action(BrowseLocationsAction.SortLocation)
+  sortLocation(
+    { setState, dispatch, getState }: StateContext<BrowseLocationsStateModel>,
+    { payload }: BrowseLocationsAction.SortLocation
+  ) {
+    setState(
+      patch<BrowseLocationsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new LocationsAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+          locationTypeId: pageRequest.filters.locationTypeId?.id,
+        },
       })
     );
   }

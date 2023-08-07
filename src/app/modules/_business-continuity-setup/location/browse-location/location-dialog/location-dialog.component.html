@@ -1,5 +1,6 @@
 <div class="p-toolbar-group-right">
   <button
+    *checkPrivileges="'PRIV_CR_BC_RESOURCE'"
     pButton
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
@@ -34,19 +35,21 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <span>{{ "LOCATIONS.ADD_LOCATION" | translate }}</span>
-      <span
-        *ngIf="true"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="false"
-        class="label label-lg label-light-success label-inline"
-      >
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+        {{'LOCATIONS.EDIT_LOCATION' | translate}}
+        <span class="label label-lg label-light-success label-inline">
         {{ "ACTIONS.UPDATE_ITEM" | translate }}
       </span>
+      </ng-container>
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+        {{'LOCATIONS.ADD_LOCATION' | translate}}
+        <span class="label label-lg label-light-primary label-inline">
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      </ng-container>
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'LOCATIONS.VIEW_LOCATION' | translate}}
+      </ng-container>
     </h3>
   </div>
 
@@ -229,25 +232,23 @@
 <!--footer-->
 <ng-template #footer>
   <div class="p-col p-d-flex">
-    <ng-container>
+    <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()"
+            label="{{'ACTIONS.CLOSE' | translate }}"></button>
+
+    <div class="ml-dir-auto"></div>
+
+    <ng-container *ngIf="!(viewOnly$ | async)">
       <div class="mx-1">
-        <button
-          pButton
-          type="button"
-          label="{{ 'ACTIONS.CLEAR' | translate }}"
-          icon="pi pi-replay"
-          class="p-button-outlined"
+        <button pButton type="button" [loading]="blocking$ | async" (click)="clear()" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
+                class="p-button-outlined" ></button>
+      </div>
+      <div class="mx-1">
+        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}"
+                icon="pi pi-save"
+                [loading]="blocking$ | async"
+                (click)="submit()"
         ></button>
       </div>
     </ng-container>
-
-    <div class="mx-1">
-      <button
-        (click)="submit()"
-        pButton
-        label="{{ 'ACTIONS.SAVE' | translate }}"
-        icon="pi pi-save"
-      ></button>
-    </div>
   </div>
 </ng-template>

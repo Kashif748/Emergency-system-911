@@ -38,6 +38,18 @@ export namespace BrowseLocationsAction {
     constructor(public payload: BcLocations) {}
   }
 
+  export class SortLocation {
+    static readonly type = '[BrowseLocations] Sort Location';
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+  }
+
+  export class ChangeView {
+    static readonly type = '[BrowseLocations] Change View';
+    constructor(public payload: { view: 'TABLE' | 'CARDS' }) {}
+  }
 
   export class UpdateFilter {
     static readonly type = '[BrowseLocations] Update Filter';

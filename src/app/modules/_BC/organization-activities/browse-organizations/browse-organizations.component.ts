@@ -81,8 +81,9 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   ] as MenuItem[];
 
   public sortableColumns = [
-    { name: 'ACTIVITY_NAME', code: ''},
-    { name: 'ACTIVITY_FEQ', code: ',activityFrequence.nameEn' },
+    { name: 'ACTIVITY_NAME', code: 'nameEn'},
+    { name: 'ACTIVITY_NAME_AR', code: 'nameAr'},
+    { name: 'ACTIVITY_FEQ', code: '' },
     { name: 'ACTIVITY_AREA', code: 'internal' },
     { name: 'ARIS', code: 'externalReference' },
   ];
@@ -126,11 +127,9 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
       // map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
     ).subscribe((res) => {
       if (res['key'] == 'ar') {
-        this.sortableColumns[0].code = 'nameAr';
-        this.sortableColumns[1].code = 'activityFrequence.nameAr';
+        this.sortableColumns[2].code = 'activityFrequence.nameAr';
       } else {
-        this.sortableColumns[0].code = 'nameEn';
-        this.sortableColumns[1].code = 'activityFrequence.nameEn';
+        this.sortableColumns[2].code = 'activityFrequence.nameEn';
       }
     });
   }

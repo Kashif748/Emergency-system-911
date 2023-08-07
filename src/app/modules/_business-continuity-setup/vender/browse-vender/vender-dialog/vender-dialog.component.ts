@@ -7,13 +7,12 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Dialog} from "primeng/dialog";
 import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {Observable, Subject} from "rxjs";
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
-import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
 import {Select, Store} from "@ngxs/store";
 import {BrowseVenderAction} from "../../states/browse-vender.action";
 import {FormUtils} from "@core/utils/form.utils";
 import {VenderState} from "@core/states/bc-setup/venders/vender.state";
-import {UserAction, VenderAction} from "@core/states";
+import {VenderAction} from "@core/states";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-vender-dialog',
@@ -79,7 +78,8 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
     protected incidentService: IncidentsService,
     private route: ActivatedRoute,
     private store: Store,
-    private router: Router
+    private router: Router,
+    private privilegesService: PrivilegesService
   ) {
     this.route.queryParams
       .pipe(

@@ -1,19 +1,20 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { OrgDetailAction, OrgDetailState, RtoState } from '@core/states';
-import { Observable, of, Subject } from 'rxjs';
-import { BcOrgHierarchy, Bcrto } from 'src/app/api/models';
-import { BcSystems } from 'src/app/api/models/bc-systems';
-import { TreeNode } from 'primeng/api';
-import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { FormUtils } from '@core/utils';
-import { BrowseSystemsAction } from '../../states/browse-systems.action';
-import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
-import { SystemsAction } from '@core/states/bc-setup/systems/systems.action';
-import { GenericValidators } from '@shared/validators/generic-validators';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Select, Store} from '@ngxs/store';
+import {OrgDetailAction, OrgDetailState} from '@core/states';
+import {Observable, Subject} from 'rxjs';
+import {BcOrgHierarchy} from 'src/app/api/models';
+import {BcSystems} from 'src/app/api/models/bc-systems';
+import {TreeNode} from 'primeng/api';
+import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {FormUtils} from '@core/utils';
+import {BrowseSystemsAction} from '../../states/browse-systems.action';
+import {SystemsState} from '@core/states/bc-setup/systems/systems.state';
+import {SystemsAction} from '@core/states/bc-setup/systems/systems.action';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {Dialog} from "primeng/dialog";
 
 @Component({
   selector: 'app-system-dialog',
@@ -21,9 +22,11 @@ import { GenericValidators } from '@shared/validators/generic-validators';
   styleUrls: ['./system-dialog.component.scss'],
 })
 export class SystemDialogComponent implements OnInit, OnDestroy {
+  @ViewChild(Dialog) dialog: Dialog;
   isOpened$: Observable<boolean>;
 
   public orgHir$: Observable<TreeNode[]>;
+  viewOnly$: Observable<boolean>;
 
   @Select(SystemsState.blocking)
   blocking$: Observable<boolean>;
@@ -31,7 +34,11 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   _systemId: number;
+  private defaultFormValue: { [key: string]: any } = {};
 
+  public get asDialog() {
+    return this.route.component !== SystemDialogComponent;
+  }
   get editMode() {
     return this._systemId !== undefined && this._systemId !== null;
   }
@@ -62,7 +69,9 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private store: Store,
-    private translateObj: TranslateObjPipe
+    private translateObj: TranslateObjPipe,
+    private router: Router,
+    protected cdr: ChangeDetectorRef,
   ) {
     this.route.queryParams
       .pipe(
@@ -72,6 +81,20 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
       .subscribe((id) => {
         this.systemId = id;
       });
+    this.viewOnly$ = this.route.queryParams.pipe(
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {}
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -103,6 +126,9 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
       isActive: true,
       id: null,
     });
+    this.defaultFormValue = {
+      ...this.defaultFormValue,
+    };
   }
   submit() {
     if (!this.form.valid) {
@@ -148,5 +174,21 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  get redirect() {
+    return [this.route.snapshot.queryParams['_redirect'] ?? '..'];
+  }
+  close() {
+    if (this.asDialog) {
+      this.store.dispatch(new BrowseSystemsAction.ToggleDialog({}));
+    } else {
+      this.router.navigate(this.redirect, { relativeTo: this.route });
+    }
+  }
+  clear() {
+    this.store.dispatch(new SystemsAction.GetSystem({}));
+    this.form.reset();
+    this.form.patchValue(this.defaultFormValue);
+    this.cdr.detectChanges();
   }
 }
