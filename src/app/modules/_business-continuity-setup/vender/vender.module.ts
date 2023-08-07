@@ -39,6 +39,7 @@ import {AvatarModule} from "primeng/avatar";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseVenderState} from "./states/browse-vender.state";
 import {TooltipModule} from "primeng/tooltip";
+import {PrivilegesDirectiveModule} from "@shared/sh-directives/privileges.directive";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/business-continuity-setup/', '.json');
@@ -80,6 +81,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     AvatarModule,
     ToolbarModule,
     TooltipModule,
+    PrivilegesDirectiveModule,
     TranslateModule.forChild({
       extend: true,
       loader: {

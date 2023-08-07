@@ -12,21 +12,24 @@
           <input
             type="text"
             pInputText
-            [ngModel]=""
+            [ngModel]="state.pageRequest.filters['name']"
             placeholder="{{ 'LOCATIONS.LOCATION_NAME' | translate }}"
             (keyup)="updateFilter({ name: $event.target.value }, $event)"
           />
         </div>
         <div class="p-field p-col-4 p-md-2">
-          <input
-            type="text"
-            pInputText
-            [ngModel]=""
-            placeholder="{{ 'LOCATIONS.LOCATION_TYPE' | translate }}"
-            (keyup)="
-              updateFilter({ locationTypeId: $event.target.value }, $event)
-            "
-          />
+          <p-dropdown [options]="locationTypes$ | async" [ngModel]="state?.pageRequest?.filters['locationTypeId']"
+                      placeholder="{{'LOCATIONS.LOCATION_TYPE' | translate}}"[autoDisplayFirst]="false"
+                      [showClear]="true" dataKey="id"
+                      (ngModelChange)="updateFilter({locationTypeId: $event}, $event)">
+            <ng-template let-item pTemplate="selectedItem">
+              {{ item | translateObj }}
+            </ng-template>
+
+            <ng-template let-item pTemplate="item">
+              {{ item | translateObj }}
+            </ng-template>
+          </p-dropdown>
         </div>
 
         <div class="p-col p-d-flex">

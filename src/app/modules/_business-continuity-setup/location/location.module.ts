@@ -36,6 +36,7 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {BlockUIModule} from "primeng/blockui";
 import { BrowseLocationsState } from './states/browse-locations.state';
 import { NgxsModule } from '@ngxs/store';
+import {PrivilegesDirectiveModule} from "@shared/sh-directives/privileges.directive";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/business-continuity-setup/', '.json');
@@ -72,6 +73,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     ProgressSpinnerModule,
     BlockUIModule,
+    PrivilegesDirectiveModule,
     NgxsModule.forFeature([BrowseLocationsState]),
     TranslateModule.forChild({
       extend: true,

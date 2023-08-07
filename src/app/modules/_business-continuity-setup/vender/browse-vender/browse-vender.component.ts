@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 import {Select, Store} from "@ngxs/store";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
@@ -107,7 +107,7 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_SETUP'),
+                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_RESOURCE'),
               },
             ],
           };
