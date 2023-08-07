@@ -17,6 +17,8 @@
     "SYSTEM_NAME": "إسم النظام",
     "SYSTEM_RTO": "زمن التعافي الأمثل للنظام",
     "ADD_SYSTEM":"إضافة نظام جديد",
+    "EDIT_SYSTEM": "تحرير النظام",
+    "VIEW_SYSTEM": "عرض النظام",
     "NAME_EN": "الاسم (انجليزي)",
     "NAME_AR": "الاسم (عربي)",
     "OWNER_DEPT":"الادارة المالكة للنظام"
@@ -29,6 +31,8 @@
     "LOCATION_TYPE": "نوع الموقع",
     "DISTRICT": "المنطقة",
     "ADD_LOCATION":"إضافة موقع جديد",
+    "EDIT_LOCATION": "تحديد الوجهة",
+    "VIEW_LOCATION": "عرض الموقع",
     "DIALOG" : {
       "LOCATION_INFO": "بيانات الموقع",
       "GEO_INFO": "تفاصيل الجغرافية",
@@ -47,6 +51,8 @@
     "TYPE": "Type",
     "SERVICES": "Services",
     "DIALOG" : {
+      "IS_CRITICAL": "مهم",
+      "NON_CRITICAL": "غير مهم",
       "ADD_VENDER":"إضافة مورد/شريك جديد",
       "EDIT_VENDER":"تفاصيل البائع / الشريك",
       "VIEW_VENDER":"بائع / شريك",

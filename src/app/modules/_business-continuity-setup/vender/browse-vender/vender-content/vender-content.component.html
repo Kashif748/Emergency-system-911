@@ -103,7 +103,7 @@
                 <div class="p-col-12 p-md-4">
                 </div>
               </div>
-              <button *checkPrivileges="''" pButton pRipple type="button" icon="pi pi-ellipsis-v"
+              <button *checkPrivileges="'PRIV_ED_BC_RESOURCE'" pButton pRipple type="button" icon="pi pi-ellipsis-v"
                       class="p-button-rounded p-button-text mt-0 p-button-plain" (click)="menu1.toggle($event)"></button>
               <p-menu #menu1 appendTo="body" [popup]="true" [model]="item.actions"></p-menu>
             </div>
@@ -224,7 +224,7 @@
               </td>
 
               <td *ngIf="columns?.includes('critical')" (click)="item.isActive && openView(item.id)">
-                {{item.isCritical}}
+                {{(item.isCritical ? 'VENDERS.DIALOG.IS_CRITICAL': 'VENDERS.DIALOG.NON_CRITICAL') | translate}}
               </td>
 
               <td *ngIf="columns?.includes('address')" (click)="item.isActive && openView(item.id)">

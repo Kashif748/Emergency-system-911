@@ -30,6 +30,7 @@ import {
   BrowseSituationsStateModel,
 } from '../states/browse-situations.state';
 import {BrowseGroupsAction} from "../../_team-mgmt/states/browse-groups.action";
+import {ILangFacade} from "@core/facades/lang.facade";
 
 @Component({
   selector: 'app-situation-dashboard',
@@ -61,6 +62,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   public statistics$: Observable<any>;
   public dataTable: any;
   public chartReport$: Observable<any>;
+  lang: string;
 
   _situationId: number;
   set situationId(v: number) {
@@ -84,7 +86,8 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private translate: TranslateService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private langFacade: ILangFacade,
   ) {
     // status chart
     this.chartOptions = {
@@ -157,6 +160,14 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
         position: 'bottom',
       },
     };
+    this.langFacade.vm$.pipe(
+    ).subscribe((res) => {
+      if (res.ActiveLang.key == 'ar') {
+        this.lang = 'ar';
+      } else {
+        this.lang = 'en';
+      }
+    });
   }
 
   ngOnInit(): void {

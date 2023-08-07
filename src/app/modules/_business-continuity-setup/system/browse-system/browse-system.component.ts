@@ -15,6 +15,7 @@ import { MessageHelper } from '@core/helpers/message.helper';
 import { BcSystems } from 'src/app/api/models';
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-browse-system',
@@ -56,6 +57,7 @@ export class BrowseSystemComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private messageHelper: MessageHelper,
     private breakpointObserver: BreakpointObserver,
+    private privilegesService: PrivilegesService
 
   ) {}
 
@@ -76,6 +78,7 @@ export class BrowseSystemComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
+                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_RESOURCE'),
               },
               {
                 label: this.translate.instant('ACTIONS.DELETE'),
@@ -83,6 +86,7 @@ export class BrowseSystemComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.activate(u.id);
                 },
+                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_RESOURCE'),
               },
             ],
           };

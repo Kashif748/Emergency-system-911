@@ -144,19 +144,19 @@
                 {{ item.id }}
               </td>
 
-              <td *ngIf="columns?.includes('dept')">
+              <td *ngIf="columns?.includes('dept')" (click)="item.isActive && openView(item.id)">
                 {{ item.orgStructure | translateObj }}
               </td>
 
-              <td *ngIf="columns?.includes('name')">
+              <td *ngIf="columns?.includes('name')" (click)="item.isActive && openView(item.id)">
                 {{ item | translateObj }}
               </td>
 
-              <td *ngIf="columns?.includes('type')">
+              <td *ngIf="columns?.includes('type')" (click)="item.isActive && openView(item.id)">
                 {{ item.locationType | translateObj }}
               </td>
 
-              <td *ngIf="columns?.includes('district')">
+              <td *ngIf="columns?.includes('district')" (click)="item.isActive && openView(item.id)">
                 {{ item.district }}
               </td>
 
@@ -190,6 +190,8 @@
         </p-table>
       </ng-template>
     </ng-container>
-    <p-paginator></p-paginator>
+    <p-paginator #pg [first]="pageRequest?.first" [rows]="pageRequest?.rows" [totalRecords]="totalRecords"
+                 [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
+                 currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)"></p-paginator>
   </div>
 </div>

@@ -97,7 +97,7 @@
       <div class="w-100 d-flex flex-wrap mx-1 px-6">
         <div class="d-flex">
           <p-selectButton [options]="[{icon: 'pi pi-bars', view: 'TABLE'}, {icon: 'pi pi-th-large', view: 'CARDS'}]"
-                          optionLabel="icon" optionValue="view" [ngModel]="" (onChange)="changeView($event.value)">
+                          optionLabel="icon" optionValue="view" [ngModel]="state.view" (onChange)="changeView($event.value)">
             <ng-template let-item>
               <i [class]="item.icon"></i>
             </ng-template>
