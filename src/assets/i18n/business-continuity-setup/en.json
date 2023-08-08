@@ -30,6 +30,7 @@
     "LOCATION_TYPE": "Location Type",
     "DISTRICT": "District",
     "ADD_LOCATION": "Add New Location",
+    "LOCATION_TITLE": "Selected Location",
     "EDIT_LOCATION": "Edit Location",
     "VIEW_LOCATION": "View Location",
     "DIALOG": {

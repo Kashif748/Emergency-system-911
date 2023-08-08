@@ -94,6 +94,7 @@ export class MapComponent
   private readonly minDisplayScale = 10000;
 
   // UI
+  @Input() title: string;
   @Input() dashboardMode = false;
   @Input() showLayers = true;
   @Input() showLocInfo = true;
@@ -874,7 +875,7 @@ export class MapComponent
                 ? this.translationService.translateAWord(
                     'INCIDENTS.TEAM_LOCATION'
                   )
-                : this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
+                : this.title ? this.title :this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
             content: (feature: __esri.Feature) => {
               return `${address.Address}`;
             },
