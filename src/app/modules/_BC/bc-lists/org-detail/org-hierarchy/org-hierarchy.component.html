@@ -1,4 +1,4 @@
-<div *ngIf="state$  |async " class="row">
+<div *ngIf="state$ | async" class="row">
   <div class="p-col-4">
     <header class="py-4 d-flex">
       <h4 class="text-info p-text-bold mb-0 mx-2">
@@ -11,9 +11,11 @@
       ></p-chip>
     </header>
     <p-tree
-      [value]="orgHir$ | async"
+      [value]="orgHir"
       [loading]="loading$ | async"
-      (onNodeSelect)="selectNode($event.node)"
+      (onNodeSelect)="selectNode($event?.node)"
+      (onNodeExpand)="nodeExpand($event?.node)"
+      (onFilter)="loadPage($event?.filter)"
       [selectionMode]="'single'"
       [draggableNodes]="true"
       [droppableNodes]="true"
@@ -26,10 +28,10 @@
       <ng-template let-node pTemplate="default">
         <div>
           <a class="px-2" *ngIf="node.leaf">
-            {{ node.label }}
+            {{ node.label | translate }}
           </a>
           <div class="p-2" *ngIf="!node.leaf">
-            {{ node.label }}
+            {{ node.data | translateObj }}
           </div>
         </div>
       </ng-template>

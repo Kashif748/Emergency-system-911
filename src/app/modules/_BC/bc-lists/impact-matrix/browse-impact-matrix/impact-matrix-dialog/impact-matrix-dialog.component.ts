@@ -222,6 +222,7 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
     impactMatrix.bcImpactTypes.isActive = impactMartixForm.isActive;
     impactMatrix.bcImpactTypes.nameAr = impactMartixForm.typeAr;
     impactMatrix.bcImpactTypes.nameEn = impactMartixForm.typeEn;
+    impactMatrix.bcImpactTypes.versionId = this.version;
 
     if (this.editMode) {
       impactMatrix.bcImpactTypes.id = this._Id;

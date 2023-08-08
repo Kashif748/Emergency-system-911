@@ -41,6 +41,9 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
   @Select(BCState.loading)
   public loading$: Observable<boolean>;
 
+  @Select(BCState.blocking)
+  public blocking$: Observable<boolean>;
+
   @Select(BCState.versions)
   public versions$: Observable<BcVersions[]>;
 
@@ -59,10 +62,6 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
   ngOnInit() {
-    // this.versions$ = this.store
-    // .select(BCState.versions)
-    // .pipe(filter((p) => !!p));
-
     this.store
       .select(BCState.selectedVersion)
       .pipe(
@@ -126,60 +125,12 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.store.dispatch(new BrowseBCAction.ToggleDialog());
   }
 
-  sendApprovel(status: VERSION_STATUSES) {
-    this.store
-      .dispatch(
-        new BrowseBCAction.GetStatus({
-          versionId: this.selectedVersion?.id,
-          statusId: status,
-        })
-      )
-      .pipe(
-        switchMap(() => this.store.select(BCState.status)),
-        takeUntil(this.destroy$),
-        take(1),
-        tap((status) => {
-          this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-        })
-      )
-      .subscribe();
-  }
-
-  approved(status: VERSION_STATUSES) {
-    this.store
-      .dispatch(
-        new BrowseBCAction.GetStatus({
-          versionId: this.selectedVersion?.id,
-          statusId: status,
-        })
-      )
-      .pipe(
-        switchMap(() => this.store.select(BCState.status)),
-        takeUntil(this.destroy$),
-        take(1),
-        tap((status) => {
-          this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-        })
-      )
-      .subscribe();
-  }
-
-  returnModification(status: VERSION_STATUSES) {
-    this.store
-      .dispatch(
-        new BrowseBCAction.GetStatus({
-          versionId: this.selectedVersion?.id,
-          statusId: status,
-        })
-      )
-      .pipe(
-        switchMap(() => this.store.select(BCState.status)),
-        takeUntil(this.destroy$),
-        take(1),
-        tap((status) => {
-          this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 }));
-        })
-      )
-      .subscribe();
+  changeStatues(status: VERSION_STATUSES) {
+    this.store.dispatch(
+      new BrowseBCAction.ChangeStatus({
+        versionId: this.selectedVersion?.id,
+        statusId: status,
+      })
+    );
   }
 }

@@ -93,9 +93,11 @@ export class OrgDetailState {
     );
 
     return this.orgHir
-      .getAll14({
+      .orgHierarchyForFilteration({
         isActive: true,
         pageable: payload,
+        name :payload?.name,
+        parentId: payload?.parentId
       })
       .pipe(
         tap((orgHir) => {
