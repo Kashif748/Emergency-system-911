@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { OrgModel } from '@core/models/org.model';
 import { TreeModel } from '@core/models/tree.model';
-import { OrgStructure, OrgStructureProjection } from 'src/app/api/models';
+import { TreeNode } from 'primeng/api';
+import {
+  BcOrgHierarchy,
+  OrgStructure,
+  OrgStructureProjection,
+} from 'src/app/api/models';
 
 @Injectable()
 export class TreeHelper {
@@ -71,5 +76,31 @@ export class TreeHelper {
       return mappedRoot;
     }
     return root;
+  }
+
+  orgHir2TreeNode(orgHirs: BcOrgHierarchy[]): TreeNode[] {
+    return orgHirs.map((item: BcOrgHierarchy) => {
+      let node: TreeNode;
+      node = {
+        key: item.id.toString(),
+        data: item,
+        label: item.nameAr,
+        leaf: false,
+        draggable: true,
+        droppable: true,
+        children: [],
+      };
+      return node;
+    });
+  }
+
+  findOrgHirById(tree: TreeNode[], targetId): TreeNode {
+    for (let i = 0; i < tree.length; i++) {
+      const node = tree[i];
+      if (node.key == targetId) return node;
+      if (node?.children?.length > 0) {
+        return this.findOrgHirById(node?.children, targetId);
+      }
+    }
   }
 }

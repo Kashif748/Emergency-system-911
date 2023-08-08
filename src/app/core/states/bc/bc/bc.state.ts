@@ -171,7 +171,7 @@ export class BCState {
     }
     setState(
       patch<BCStateModel>({
-        blocking: true,
+        loading: true,
       })
     );
     return this.bC.getOne({ id: payload.id }).pipe(
@@ -185,7 +185,7 @@ export class BCState {
       finalize(() => {
         setState(
           patch<BCStateModel>({
-            blocking: false,
+            loading: false,
           })
         );
       })

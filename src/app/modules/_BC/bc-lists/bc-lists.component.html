@@ -64,7 +64,9 @@
         type="button"
         label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
         icon="pi pi-replay"
-        (click)="returnModification(VERSION_STATUSES?.NEEDS_MODIFICATIONS)"
+        [loading]="blocking$ | async"
+        [disabled]="loading$ | async"
+        (click)="changeStatues(VERSION_STATUSES?.NEEDS_MODIFICATIONS)"
         class="p-button-danger p-button-text mx-2"
       ></button>
     </ng-container>
@@ -76,7 +78,9 @@
         pRipple
         class="p-button-raised mx-2"
         type="button"
-        (click)="approved(VERSION_STATUSES?.APPROVED)"
+        [loading]="blocking$ | async"
+        [disabled]="loading$ | async"
+        (click)="changeStatues(VERSION_STATUSES?.APPROVED)"
         label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
         icon="pi pi-check"
       ></button>
@@ -93,7 +97,9 @@
         "
         label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
         icon="pi pi-send"
-        (click)="sendApprovel(VERSION_STATUSES?.NEEDS_MODIFICATIONS)"
+        [loading]="blocking$ | async"
+        [disabled]="loading$ | async"
+        (click)="changeStatues(VERSION_STATUSES?.UNDER_APPROVAL)"
         class="p-button-outlined mx-2"
       ></button>
     </ng-container>

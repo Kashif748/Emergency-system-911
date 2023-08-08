@@ -1,26 +1,26 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BrowseOrgDetailAction } from '../states/browse-orgDetail.action';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { OrgDetailState } from '@core/states';
 import { BcOrgHierarchy } from 'src/app/api/models';
-import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { TranslateService } from '@ngx-translate/core';
 import { IAuthService } from '@core/services/auth.service';
 import { OrgStructure } from '@core/entities/AppCommonData';
 import {
   BrowseOrgDetailModel,
   BrowseOrgDetailState,
 } from '../states/browse-orgDetail.state';
+import { TreeHelper } from '@core/helpers/tree.helper';
 @Component({
   selector: 'app-org-hierarchy',
   templateUrl: './org-hierarchy.component.html',
   styleUrls: ['./org-hierarchy.component.scss'],
 })
 export class OrgHierarchyComponent implements OnInit, OnDestroy {
-  public orgHir$: Observable<TreeNode[]>;
+  addAction: TreeNode;
+  public orgHir: TreeNode[] = [];
 
   @Select(OrgDetailState.loading)
   public loading$: Observable<boolean>;
@@ -28,8 +28,9 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
   @Select(OrgDetailState.org)
   public org$: Observable<OrgStructure>;
 
-  @Select(BrowseOrgDetailState.state)
   public state$: Observable<BrowseOrgDetailModel>;
+
+  private auditLoadPage$ = new Subject<string>();
 
   private destroy$ = new Subject();
   get loggedinUserId() {
@@ -38,53 +39,65 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private translateObj: TranslateObjPipe,
-    private translateService: TranslateService,
-    private auth: IAuthService
-  ) {}
-
-  ngOnInit(): void {
-    this.store.dispatch([
-      new BrowseOrgDetailAction.GetOrgHierarchy(),
-      new BrowseOrgDetailAction.GetOrgDetail({ id: this.loggedinUserId }),
-      new BrowseOrgDetailAction.GetOrgHierarchyTypes({
-        page: 0,
-        size: 20,
-      }),
-    ]);
-    this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      map((data) => this.setTree(data))
-    );
-  }
-
-  public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
-    let leafObj: TreeNode = {
+    private auth: IAuthService,
+    private treeHelper: TreeHelper
+  ) {
+    this.addAction = {
       leaf: true,
       expandedIcon: 'pi pi-plus',
       collapsedIcon: 'pi pi-plus',
-      label: this.translateService.instant('ORG_HIE.ADD'),
+      label: 'ORG_HIE.ADD',
       draggable: false,
       droppable: false,
     };
-    const nest = (items, id = null, link = 'parentId') =>
-      items
-        .filter((item) => item[link] === id)
-        .map((item: BcOrgHierarchy) => {
-          let node: TreeNode;
-          node = {
-            key: item.id.toString(),
-            data: item,
-            label: this.translateObj.transform(item),
-            leaf: false,
-            draggable: true,
-            droppable: true,
-            children: [...nest(items, item.id), { ...leafObj }],
-          };
-          return node;
-        });
-    return [...nest(_searchResponses), leafObj];
+  }
+
+  ngOnInit(): void {
+    this.state$ = this.store.select(BrowseOrgDetailState.state).pipe(
+      takeUntil(this.destroy$),
+      filter((s) => !!s),
+      tap(() => {
+        this.loadPage(null, true);
+        this.store.dispatch([
+          new BrowseOrgDetailAction.GetOrgDetail({ id: this.loggedinUserId }),
+          new BrowseOrgDetailAction.GetOrgHierarchyTypes({
+            page: 0,
+            size: 20,
+          }),
+        ]);
+      })
+    );
+    this.auditLoadPage$
+      .pipe(takeUntil(this.destroy$), auditTime(2000))
+      .subscribe((search: string) => {
+        this.loadPage(search, true);
+      });
+
+    this.store
+      .select(OrgDetailState.orgHir)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      )
+      .subscribe();
+  }
+
+  public setTree(_searchResponses: BcOrgHierarchy[]) {
+    if (_searchResponses.length == 0) {
+      if (this.orgHir.length == 0) {
+        this.orgHir = [{ ...this.addAction }];
+      }
+      return;
+    }
+    const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    const parentId = _searchResponses[0].parentId;
+    const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
+    if (parentNode) {
+      parentNode.children = [...branch, ...parentNode.children];
+    } else {
+      this.orgHir = [...branch, { ...this.addAction }];
+    }
   }
   onDrop(event) {
     let node: BcOrgHierarchy = {
@@ -104,6 +117,32 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
       children: [],
     };
     this.store.dispatch(new BrowseOrgDetailAction.SelectNode(nodeObj));
+  }
+  nodeExpand(node: TreeNode) {
+    if (node.children.length === 0) {
+      node.children.push({ ...this.addAction });
+      this.store.dispatch(
+        new BrowseOrgDetailAction.GetOrgHierarchy({
+          pageRequest: { first: 0, rows: 100 },
+          parentId: parseInt(node?.key),
+        })
+      );
+    }
+  }
+
+  public loadPage(search?: string, direct = false) {
+    console.log(search);
+
+    if (direct) {
+      this.store.dispatch(
+        new BrowseOrgDetailAction.GetOrgHierarchy({
+          pageRequest: { first: 0, rows: 100 },
+          name: search,
+        })
+      );
+      return;
+    }
+    this.auditLoadPage$.next(search);
   }
 
   ngOnDestroy(): void {
