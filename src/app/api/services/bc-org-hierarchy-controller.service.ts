@@ -14,6 +14,7 @@ import { Pageable } from '../models/pageable';
 import { RestApiResponseBcOrgHierarchy } from '../models/rest-api-response-bc-org-hierarchy';
 import { RestApiResponseListBcOrgHierarchy } from '../models/rest-api-response-list-bc-org-hierarchy';
 import { RestApiResponsePageBcOrgHierarchy } from '../models/rest-api-response-page-bc-org-hierarchy';
+import { RestApiResponsePageBcOrgHierarchyProjection } from '../models/rest-api-response-page-bc-org-hierarchy-projection';
 
 @Injectable()
 export class BcOrgHierarchyControllerService extends BaseService {
@@ -71,26 +72,28 @@ export class BcOrgHierarchyControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll14
+   * Path part for operation search9
    */
-  static readonly GetAll14Path = '/v1/bc/org-hir';
+  static readonly Search9Path = '/v1/bc/org-hir';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll14()` instead.
+   * To access only the response body, use `search9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll14$Response(params: {
-    isActive?: boolean;
-    versionId?: number;
+  search9$Response(params: {
+    isActive: boolean;
+    name?: string;
+    parentId?: number;
     pageable: Pageable;
-  }): Observable<StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>> {
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcOrgHierarchyProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.GetAll14Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.Search9Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
-      rb.query('versionId', params.versionId, {});
+      rb.query('name', params.name, {});
+      rb.query('parentId', params.parentId, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -100,25 +103,26 @@ export class BcOrgHierarchyControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>;
+        return r as StrictHttpResponse<RestApiResponsePageBcOrgHierarchyProjection>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll14$Response()` instead.
+   * To access the full response (for headers, for example), `search9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll14(params: {
-    isActive?: boolean;
-    versionId?: number;
+  search9(params: {
+    isActive: boolean;
+    name?: string;
+    parentId?: number;
     pageable: Pageable;
-  }): Observable<RestApiResponsePageBcOrgHierarchy> {
+  }): Observable<RestApiResponsePageBcOrgHierarchyProjection> {
 
-    return this.getAll14$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>) => r.body as RestApiResponsePageBcOrgHierarchy)
+    return this.search9$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcOrgHierarchyProjection>) => r.body as RestApiResponsePageBcOrgHierarchyProjection)
     );
   }
 
@@ -273,12 +277,16 @@ export class BcOrgHierarchyControllerService extends BaseService {
    */
   orgHierarchyForFilteration$Response(params: {
     isActive: boolean;
+    name?: string;
+    parentId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.OrgHierarchyForFilterationPath, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
+      rb.query('name', params.name, {});
+      rb.query('parentId', params.parentId, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -301,6 +309,8 @@ export class BcOrgHierarchyControllerService extends BaseService {
    */
   orgHierarchyForFilteration(params: {
     isActive: boolean;
+    name?: string;
+    parentId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcOrgHierarchy> {
 

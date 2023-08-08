@@ -123,6 +123,8 @@ export class BrowseOrgDetailState {
       new OrgDetailAction.GetOrgHierarchy({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
+        parentId: payload?.parentId,
+        name: payload?.name,
       })
     );
   }
@@ -134,6 +136,11 @@ export class BrowseOrgDetailState {
   ) {
     return dispatch(new OrgDetailAction.CreateOrgHierarchy(payload)).pipe(
       tap((orgHir: any) => {
+        dispatch(
+          new BrowseOrgDetailAction.GetOrgHierarchy({
+            pageRequest: { first: 0, rows: 100 },
+          })
+        );
         const selectedOrgHirNode = getState().selectedOrgHirNode;
         setState(
           patch<BrowseOrgDetailModel>({
@@ -142,7 +149,6 @@ export class BrowseOrgDetailState {
           })
         );
         this.messageHelper.success();
-        dispatch([new BrowseOrgDetailAction.GetOrgHierarchy()]);
       }),
 
       catchError((err) => {

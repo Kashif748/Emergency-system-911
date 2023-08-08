@@ -23,7 +23,13 @@ export namespace BrowseOrgDetailAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {}
+    constructor(
+      public payload?: {
+        pageRequest: PageRequestModel;
+        name?: string;
+        parentId?: number;
+      }
+    ) {}
   }
   export class CreateOrgHierarchy {
     static readonly type = '[BrowseOrgDetail] Create Org Hierarchy';
