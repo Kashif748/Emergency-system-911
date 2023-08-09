@@ -157,7 +157,7 @@
 
                 <div class="p-field p-col-4 p-md-2">
                   <p-treeSelect
-                    [options]="orgHir$ | async"
+                    [options]="orgHir"
                     [filter]="true"
                     [filterBy]="'data.nameAr,data.nameEn,data.code'"
                     selectionMode="single"
@@ -165,6 +165,9 @@
                     (ngModelChange)="
                       updateFilter({ orgHierarchyId: $event }, $event)
                     "
+                    [loading]="loadingOrgHir$ | async"
+                    (onFilter)="filterOrgHir($event)"
+                    (onNodeExpand)="nodeExpand($event?.node)"
                     placeholder="{{ 'ORG_ARTCH' | translate }}"
                     appendTo="body"
                   >

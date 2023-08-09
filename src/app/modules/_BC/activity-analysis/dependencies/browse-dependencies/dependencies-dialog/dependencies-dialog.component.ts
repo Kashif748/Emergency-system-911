@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { BrowseActivityDependenciesAction } from '../states/browse-dependencies.action';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import {
   OrgActivityAction,
@@ -22,6 +22,8 @@ import {
   DEPENDENCIES_TYPES,
 } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import { TreeHelper } from '@core/helpers/tree.helper';
 
 @Component({
   selector: 'app-dependencies-dialog',
@@ -38,15 +40,18 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
 
   public blocking$: Observable<boolean>;
 
-  public orgHir$: Observable<TreeNode[]>;
+  public orgHir: TreeNode[] = [];
+
+  @Select(OrgDetailState.loading)
+  public loading$: Observable<boolean>;
+  private auditLoadOrgPage$ = new Subject<string>();
 
   form: FormGroup;
   destroy$ = new Subject();
 
   constructor(
     private formBuilder: FormBuilder,
-    private translate: TranslateService,
-    private translateObj: TranslateObjPipe,
+    private treeHelper: TreeHelper,
     private route: ActivatedRoute,
     private store: Store
   ) {
@@ -86,28 +91,44 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
       new OrgActivityAction.LoadPage({ page: 0, size: 100 }),
     ]);
 
-    this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      map((data) => this.setTree(data)),
-      tap(console.log)
-    );
+    this.store
+      .select(OrgDetailState.orgHir)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      )
+      .subscribe();
+    this.auditLoadOrgPage$
+      .pipe(takeUntil(this.destroy$), auditTime(2000))
+      .subscribe((search: string) => {
+        this.store.dispatch(
+          new OrgDetailAction.GetOrgHierarchySearch({
+            page: 0,
+            size: 100,
+            name: search,
+          })
+        );
+      });
   }
-  public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
-    const nest = (items, id = null, link = 'parentId') =>
-      items
-        .filter((item) => item[link] === id)
-        .map((item: BcOrgHierarchy) => {
-          let node: TreeNode;
-          node = {
-            key: item.id.toString(),
-            data: item,
-            label: this.translateObj.transform(item),
-            children: nest(items, item.id),
-          };
-          return node;
-        });
-    return nest(_searchResponses);
+
+  public setTree(_searchResponses: BcOrgHierarchyProjection[]) {
+    if (_searchResponses.length == 0) {
+      if (this.orgHir.length == 0) {
+        this.orgHir = [];
+      }
+      return;
+    }
+    const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    const parentId = _searchResponses[0].parentId;
+    const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
+    // console.log(parentId ,parentNode);
+
+    if (parentNode && parentId) {
+      parentNode.children = [...branch, ...parentNode.children];
+    } else {
+      this.orgHir = branch;
+    }
   }
   toggleDialog(id?: number) {
     this.store.dispatch(
@@ -173,6 +194,21 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
 
       default:
         break;
+    }
+  }
+
+  filterOrgHir(event) {
+    this.auditLoadOrgPage$.next(event.filter);
+  }
+  nodeExpand(node: TreeNode) {
+    if (node.children.length === 0) {
+      this.store.dispatch(
+        new OrgDetailAction.GetOrgHierarchy({
+          page: 0,
+          size: 100,
+          parentId: parseInt(node?.key),
+        })
+      );
     }
   }
   ngOnDestroy(): void {

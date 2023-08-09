@@ -48,6 +48,8 @@ export namespace OrgDetailAction {
         sort?: string[];
         page: number;
         size: number;
+        name?: string;
+        parentId?: number;
       }
     ) {}
   }

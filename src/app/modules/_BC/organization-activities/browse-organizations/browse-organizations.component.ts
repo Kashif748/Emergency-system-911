@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import { auditTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import { Select, Store } from '@ngxs/store';
 import { TranslateService } from '@ngx-translate/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -22,6 +22,8 @@ import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { BcOrgHierarchy } from '../../../../api/models/bc-org-hierarchy';
 import { PrivilegesService } from '@core/services/privileges.service';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import { TreeHelper } from '@core/helpers/tree.helper';
 
 @Component({
   selector: 'app-browse-organizations',
@@ -29,7 +31,11 @@ import { PrivilegesService } from '@core/services/privileges.service';
   styleUrls: ['./browse-organizations.component.scss'],
 })
 export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
-  public orgHir$: Observable<TreeNode[]>;
+  public orgHir: TreeNode[] = [];
+
+  @Select(OrgDetailState.loading)
+  public loadingOrgHir$: Observable<boolean>;
+  private auditLoadOrgPage$ = new Subject<string>();
 
   public page$: Observable<BcActivities[]>;
 
@@ -111,8 +117,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private route: ActivatedRoute,
-    private translateService: TranslateService,
-    private translateObj: TranslateObjPipe,
+    private treeHelper: TreeHelper,
     private privilegesService: PrivilegesService
   ) {
     this.activityFre$.pipe(
@@ -186,35 +191,58 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
         })
       )
     );
-    this.orgHir$ = this.store.select(OrgDetailState.orgHirSearch).pipe(
+    this.store.select(OrgDetailState.orgHir)
+    .pipe(
       takeUntil(this.destroy$),
       filter((p) => !!p),
-      tap(console.log),
-      map((data) => this.setTree(data)),
-      tap(console.log)
-    );
+      map((data) => this.setTree(data))
+    )
+    .subscribe();
+
+  this.auditLoadOrgPage$
+    .pipe(takeUntil(this.destroy$), auditTime(2000))
+    .subscribe((search: string) => {
+      this.store.dispatch(
+        new OrgDetailAction.GetOrgHierarchySearch({
+          page: 0,
+          size: 100,
+          name: search,
+        })
+      );
+    });
   }
 
-  public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
-    console.log(_searchResponses);
+  public setTree(_searchResponses: BcOrgHierarchyProjection[]) {
+    if (_searchResponses.length == 0) {
+      if (this.orgHir.length == 0) {
+        this.orgHir = [];
+      }
+      return;
+    }
+    const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    const parentId = _searchResponses[0].parentId;
+    const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
+    // console.log(parentId ,parentNode);
 
-    const nest = (items, id = null, link = 'parentId') =>
-      items
-        .filter((item) => item[link] === id)
-        .map((item: BcOrgHierarchy) => {
-          let node: TreeNode;
-          node = {
-            key: item.id.toString(),
-            data: item,
-            label: this.translateObj.transform(item),
-            children: nest(items, item.id),
-          };
-          return node;
-        });
-    const tree = nest(_searchResponses);
-    console.log(tree);
-
-    return tree;
+    if (parentNode && parentId) {
+      parentNode.children = [...branch, ...parentNode.children];
+    } else {
+      this.orgHir = branch;
+    }
+  }
+  filterOrgHir(event) {
+    this.auditLoadOrgPage$.next(event.filter);
+  }
+  nodeExpand(node: TreeNode) {
+    if (node.children.length === 0) {
+      this.store.dispatch(
+        new OrgDetailAction.GetOrgHierarchy({
+          page: 0,
+          size: 100,
+          parentId: parseInt(node?.key),
+        })
+      );
+    }
   }
 
   openDialog(id?: number) {
