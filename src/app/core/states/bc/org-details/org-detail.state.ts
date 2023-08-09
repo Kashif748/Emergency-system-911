@@ -23,9 +23,11 @@ import {
   PageBcOrgHierarchy,
   PageBcOrgHierarchyType,
 } from 'src/app/api/models';
+import { PageBcOrgHierarchyProjection } from 'src/app/api/models/page-bc-org-hierarchy-projection';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 
 export interface OrgDetailStateModel {
-  orgHir: PageBcOrgHierarchy;
+  orgHir: PageBcOrgHierarchyProjection;
   orgHirSearch: PageBcOrgHierarchy;
   orgHirTypes: PageBcOrgHierarchyType;
   org: OrgStructure;
@@ -55,7 +57,7 @@ export class OrgDetailState {
   }
 
   @Selector([OrgDetailState])
-  static orgHir(state: OrgDetailStateModel): BcOrgHierarchy[] {
+  static orgHir(state: OrgDetailStateModel): BcOrgHierarchyProjection[] {
     return state?.orgHir.content;
   }
 
@@ -93,11 +95,15 @@ export class OrgDetailState {
     );
 
     return this.orgHir
-      .orgHierarchyForFilteration({
+      .search9({
         isActive: true,
-        pageable: payload,
-        name :payload?.name,
-        parentId: payload?.parentId
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload?.name,
+        parentId: payload?.parentId,
       })
       .pipe(
         tap((orgHir) => {
@@ -134,7 +140,13 @@ export class OrgDetailState {
     return this.orgHir
       .orgHierarchyForFilteration({
         isActive: true,
-        pageable: payload,
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload?.name,
+        parentId: payload?.parentId,
       })
       .pipe(
         tap((orgHirSearch) => {

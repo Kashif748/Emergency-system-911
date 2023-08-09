@@ -12,7 +12,6 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 import { NgxsModule } from '@ngxs/store';
-import { TranslateHttpLoaderFactory } from '../rto/rto.module';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import { TreeModule } from 'primeng/tree';
 import { InputTextModule } from 'primeng/inputtext';
@@ -40,6 +39,14 @@ import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.dire
 
 import { OrgHierarchyComponent } from './org-hierarchy/org-hierarchy.component';
 import { TreeDragDropService } from 'primeng/api';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function TranslateHttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(
+    http,
+    'assets/i18n/bc/',
+    '.json'
+  );
+}
 
 @NgModule({
   declarations: [

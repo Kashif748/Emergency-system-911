@@ -60,13 +60,16 @@
       <!-- orgHir -->
       <div class="p-field p-col-4 p-md-6">
         <p-treeSelect
-          [options]="orgHir$ | async"
+          [options]="orgHir"
           [filter]="true"
           [filterBy]="'data.nameAr,data.nameEn,data.code'"
           selectionMode="single"
           formControlName="orgHierarchy"
           placeholder="{{ 'DEPENDENCIES.ASSOCIATED_MANG' | translate }}"
           appendTo="body"
+          [loading]="loading$ | async"
+          (onFilter)="filterOrgHir($event)"
+          (onNodeExpand)="nodeExpand($event?.node)"
         >
           <ng-template let-option let-placeholder pTemplate="value">
             {{

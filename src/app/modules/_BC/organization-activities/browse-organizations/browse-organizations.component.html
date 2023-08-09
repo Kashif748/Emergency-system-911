@@ -55,7 +55,9 @@
                   <p-dropdown
                     [options]="activityArea"
                     [ngModel]="state.pageRequest.filters['activityArea']"
-                    (ngModelChange)="updateFilter({ activityArea: $event }, $event)"
+                    (ngModelChange)="
+                      updateFilter({ activityArea: $event }, $event)
+                    "
                     [showClear]="true"
                     [autoDisplayFirst]="false"
                     dataKey="id"
@@ -87,12 +89,24 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <p-treeSelect [options]="orgHir$ | async" [filter]="true" selectionMode="single"
+                  <p-treeSelect
+                    [options]="orgHir"
+                    [filter]="true"
+                    selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"
-                    (ngModelChange)="updateFilter({ orgHierarchyId: $event }, $event)"
+                    (ngModelChange)="
+                      updateFilter({ orgHierarchyId: $event }, $event)
+                    "
                     placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
-                    appendTo="body" display="chip" [metaKeySelection]="false" [propagateSelectionDown]="false"
-                    [propagateSelectionUp]="false">
+                    appendTo="body"
+                    display="chip"
+                    [loading]="loadingOrgHir$ | async"
+                    (onFilter)="filterOrgHir($event)"
+                    (onNodeExpand)="nodeExpand($event?.node)"
+                    [metaKeySelection]="false"
+                    [propagateSelectionDown]="false"
+                    [propagateSelectionUp]="false"
+                  >
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{
                         option
@@ -238,7 +252,6 @@
               </div>
             </div>
           </div>
-
         </div>
         <app-content-organizations
           [view]="state.view"
@@ -254,4 +267,4 @@
   </div>
 </div>
 
-<app-organization-dialog [orgHir]="orgHir$ | async"></app-organization-dialog>
+<app-organization-dialog [orgHir]="orgHir"></app-organization-dialog>
