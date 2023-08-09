@@ -224,12 +224,13 @@
               <div *ngIf="status$ | async as status">
                 <apx-chart class="overflow-auto max-w-100" [series]="status"
                   [chart]="{type: 'bar', height: 150, stacked: true, stackType: '100%'}"
-                  [plotOptions]="{ bar: { horizontal: true, borderRadius: 5} }" [stroke]="{width: 1,colors: ['#fff']}"
-                  [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
-                  [yaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
-                  [fill]="{opacity: 1}"
+                  [plotOptions]="{ bar: { horizontal: true, borderRadius: 5, endingShape: 'rounded', startingShape: 'rounded'} }"
+                  [stroke]="{width: 1,colors: ['#fff']}"
+                  [xaxis]="{show: false, labels: {show: false}, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
+                  [yaxis]="{show: false, labels: {show: false}, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
+                  [fill]="{opacity: 1}" [dataLabels]="{formatter: percentageFormatter}"
                   [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
-                  [grid]="{show: false}" [tooltip]="{x:{show:false}}" [stroke]="{width:0}"></apx-chart>
+                  [grid]="{show: false}" [tooltip]="{x: { show:false }}" [stroke]="{width:0}"></apx-chart>
               </div>
 
             </div>
@@ -244,10 +245,11 @@
               <div *ngIf="category$ | async as category">
                 <apx-chart class="overflow-auto max-w-100" [autoUpdateSeries]="true" [series]="category"
                   [chart]="{type: 'bar', height: 150, width: '100%', stacked: true, stackType: '100%'}"
-                  [plotOptions]="{ bar: { horizontal: true, borderRadius: 5} }" [stroke]="{width: 1,colors: ['#fff']}"
+                  [plotOptions]="{ bar: { horizontal: true, borderRadius: 5,endingShape: 'rounded', startingShape: 'rounded'} }"
+                  [stroke]="{width: 1,colors: ['#fff']}"
                   [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
                   [yaxis]="{show: false, labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
-                  [fill]="{opacity: 1}"
+                  [fill]="{opacity: 1}" [dataLabels]="{formatter: percentageFormatter}"
                   [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
                   [grid]="{show: false}" [tooltip]="{x:{show:false}}" [stroke]="{width:0}"></apx-chart>
               </div>

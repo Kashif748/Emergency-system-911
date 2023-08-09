@@ -89,4 +89,8 @@ export class ChartTasksComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  percentageFormatter(value: number, timestamp?: number, opts?: any) {
+    return `${value.toFixed(2)}%`;
+  }
 }
