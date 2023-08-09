@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { LazyLoadEvent, TreeNode } from 'primeng/api';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { TranslateService } from '@ngx-translate/core';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
   BrowseImpactAnalysisState,
   BrowseImpactAnalysisStateModel,
@@ -31,6 +31,8 @@ import {
 } from '@core/states';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { Router } from '@angular/router';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import { TreeHelper } from '@core/helpers/tree.helper';
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -39,7 +41,11 @@ import { Router } from '@angular/router';
 })
 export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   // filters
-  public orgHir$: Observable<TreeNode[]>;
+  public orgHir: TreeNode[] = [];
+
+  @Select(OrgDetailState.loading)
+  public loadingOrgHir$: Observable<boolean>;
+  private auditLoadOrgPage$ = new Subject<string>();
 
   @Select(ActivityPrioritySeqState.page)
   public prioritySeq$: Observable<boolean>;
@@ -109,6 +115,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private translateObj: TranslateObjPipe,
     private lang: ILangFacade,
+    private treeHelper: TreeHelper,
     private router: Router
   ) {}
 
@@ -132,22 +139,34 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       new ActivityPrioritySeqAction.LoadPage({
         page: 0,
         size: 100,
-        versionId :0,
+        versionId: 0,
       }),
       new RtoAction.LoadPage({
         page: 0,
         size: 100,
-        versionId :0,
-
+        versionId: 0,
       }),
     ]);
+    this.store
+      .select(OrgDetailState.orgHir)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      )
+      .subscribe();
 
-    this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      map((data) => this.setTree(data)),
-      tap(console.log)
-    );
+    this.auditLoadOrgPage$
+      .pipe(takeUntil(this.destroy$), auditTime(2000))
+      .subscribe((search: string) => {
+        this.store.dispatch(
+          new OrgDetailAction.GetOrgHierarchySearch({
+            page: 0,
+            size: 100,
+            name: search,
+          })
+        );
+      });
 
     // Table State
     this.page$ = this.store
@@ -173,22 +192,37 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
         )
       );
   }
+  public setTree(_searchResponses: BcOrgHierarchyProjection[]) {
+    if (_searchResponses.length == 0) {
+      if (this.orgHir.length == 0) {
+        this.orgHir = [];
+      }
+      return;
+    }
+    const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    const parentId = _searchResponses[0].parentId;
+    const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
+    // console.log(parentId ,parentNode);
 
-  public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
-    const nest = (items, id = null, link = 'parentId') =>
-      items
-        .filter((item) => item[link] === id)
-        .map((item: BcOrgHierarchy) => {
-          let node: TreeNode;
-          node = {
-            key: item.id.toString(),
-            data: item,
-            label: this.translateObj.transform(item),
-            children: nest(items, item.id),
-          };
-          return node;
-        });
-    return nest(_searchResponses);
+    if (parentNode && parentId) {
+      parentNode.children = [...branch, ...parentNode.children];
+    } else {
+      this.orgHir = branch;
+    }
+  }
+  filterOrgHir(event) {
+    this.auditLoadOrgPage$.next(event.filter);
+  }
+  nodeExpand(node: TreeNode) {
+    if (node.children.length === 0) {
+      this.store.dispatch(
+        new OrgDetailAction.GetOrgHierarchy({
+          page: 0,
+          size: 100,
+          parentId: parseInt(node?.key),
+        })
+      );
+    }
   }
 
   search() {

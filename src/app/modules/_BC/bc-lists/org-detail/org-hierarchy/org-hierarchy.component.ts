@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { auditTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import { BrowseOrgDetailAction } from '../states/browse-orgDetail.action';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
@@ -13,6 +13,8 @@ import {
   BrowseOrgDetailState,
 } from '../states/browse-orgDetail.state';
 import { TreeHelper } from '@core/helpers/tree.helper';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import { ILangFacade } from '@core/facades/lang.facade';
 @Component({
   selector: 'app-org-hierarchy',
   templateUrl: './org-hierarchy.component.html',
@@ -38,6 +40,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private langFacade: ILangFacade,
     private store: Store,
     private auth: IAuthService,
     private treeHelper: TreeHelper
@@ -56,6 +59,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
     this.state$ = this.store.select(BrowseOrgDetailState.state).pipe(
       takeUntil(this.destroy$),
       filter((s) => !!s),
+      take(1),
       tap(() => {
         this.loadPage(null, true);
         this.store.dispatch([
@@ -83,7 +87,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  public setTree(_searchResponses: BcOrgHierarchy[]) {
+  public setTree(_searchResponses: BcOrgHierarchyProjection[]) {
     if (_searchResponses.length == 0) {
       if (this.orgHir.length == 0) {
         this.orgHir = [{ ...this.addAction }];
@@ -93,7 +97,9 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
     const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
-    if (parentNode) {
+    // console.log(parentId ,parentNode);
+
+    if (parentNode && parentId) {
       parentNode.children = [...branch, ...parentNode.children];
     } else {
       this.orgHir = [...branch, { ...this.addAction }];

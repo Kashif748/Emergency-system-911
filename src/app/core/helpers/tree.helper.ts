@@ -7,6 +7,7 @@ import {
   OrgStructure,
   OrgStructureProjection,
 } from 'src/app/api/models';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 
 @Injectable()
 export class TreeHelper {
@@ -78,8 +79,8 @@ export class TreeHelper {
     return root;
   }
 
-  orgHir2TreeNode(orgHirs: BcOrgHierarchy[]): TreeNode[] {
-    return orgHirs.map((item: BcOrgHierarchy) => {
+  orgHir2TreeNode(orgHirs: BcOrgHierarchyProjection[]): TreeNode[] {
+    return orgHirs.map((item: BcOrgHierarchyProjection) => {
       let node: TreeNode;
       node = {
         key: item.id.toString(),
@@ -102,5 +103,6 @@ export class TreeHelper {
         return this.findOrgHirById(node?.children, targetId);
       }
     }
+    return null;
   }
 }

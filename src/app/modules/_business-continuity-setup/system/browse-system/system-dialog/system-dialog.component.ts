@@ -15,6 +15,7 @@ import {SystemsState} from '@core/states/bc-setup/systems/systems.state';
 import {SystemsAction} from '@core/states/bc-setup/systems/systems.action';
 import {GenericValidators} from '@shared/validators/generic-validators';
 import {Dialog} from "primeng/dialog";
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 
 @Component({
   selector: 'app-system-dialog',
@@ -154,11 +155,11 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  public setTree(_searchResponses: BcOrgHierarchy[]): TreeNode[] {
+  public setTree(_searchResponses: BcOrgHierarchyProjection[]): TreeNode[] {
     const nest = (items, id = null, link = 'parentId') =>
       items
         .filter((item) => item[link] === id)
-        .map((item: BcOrgHierarchy) => {
+        .map((item: BcOrgHierarchyProjection) => {
           let node: TreeNode;
           node = {
             key: item.id.toString(),
