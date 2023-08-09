@@ -16,7 +16,6 @@
         <p-table [value]="[].constructor(10)">
           <ng-template pTemplate="header">
             <tr>
-              <th style="width: 0"></th>
               <th class="min-w-20px">
                 <div class="p-d-flex p-jc-between p-ai-center">#</div>
               </th>
@@ -31,9 +30,6 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
-              <td class="flag-td">
-                <div class="bg-secondary"></div>
-              </td>
               <td>
                 <p-skeleton></p-skeleton>
               </td>
@@ -69,7 +65,6 @@
           </ng-template>
           <ng-template pTemplate="header">
             <tr>
-              <th></th>
               <th class="min-w-20px">
                 <div class="p-d-flex p-jc-between p-ai-center">#</div>
               </th>
@@ -84,14 +79,6 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
-              <td class="flag-td">
-                <div
-                  [ngClass]="{
-                    'bg-primary': item.isActive,
-                    'bg-warning': !item.isActive
-                  }"
-                ></div>
-              </td>
               <td class="min-w-50px">
                 {{ item.id }}
               </td>
@@ -101,17 +88,11 @@
 
               <td class="d-flex">
                 <button
+                  (click)="deleteSystem(item.id, $event)"
                   pButton
                   pRipple
                   type="button"
                   icon="pi pi-trash"
-                  class="p-button-rounded p-button-text my-auto p-button-plain"
-                ></button>
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-eye"
                   class="p-button-rounded p-button-text my-auto p-button-plain"
                 ></button>
               </td>
@@ -129,6 +110,17 @@
         </p-table>
       </ng-template>
     </ng-container>
-    <p-paginator></p-paginator>
+    <p-paginator
+      #pg
+      [first]="pageRequest?.first"
+      [rows]="pageRequest?.rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
+      (onPageChange)="onPageChange.emit($event)"
+    >
+    </p-paginator>
   </div>
 </div>
+<p-confirmPopup styleClass="w-250px"></p-confirmPopup>

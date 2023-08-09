@@ -45,4 +45,15 @@ export namespace ActivitySystemsAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[BcActivitySystems] Delete System';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

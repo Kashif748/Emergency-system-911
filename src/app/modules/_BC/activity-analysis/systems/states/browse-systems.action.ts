@@ -43,6 +43,17 @@ export namespace BrowseActivitySystemsAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[BrowseActivitySystemsAction] Delete System';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 
   export class ToggleDialog {
     static readonly type = '[BrowseActivitySystemsAction] Toggle Dialog';
