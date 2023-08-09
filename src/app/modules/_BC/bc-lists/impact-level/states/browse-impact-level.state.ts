@@ -82,6 +82,7 @@ export class BrowseImpactLevelState {
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         versionId: payload.versionId,
+        isActive:null
 
       })
     );

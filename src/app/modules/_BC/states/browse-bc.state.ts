@@ -143,9 +143,11 @@ export class BrowseBCState {
     {}: StateContext<BrowseBCStateModel>,
     { payload }: BrowseBCAction.SetVersionId
   ) {
+    console.log(payload);
+
     this.router.navigate([], {
       queryParams: {
-        _version: payload?.versionId,
+        _version: payload.versionId,
       },
       queryParamsHandling: 'merge',
     });

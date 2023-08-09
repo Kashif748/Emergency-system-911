@@ -66,7 +66,7 @@
         icon="pi pi-replay"
         [loading]="blocking$ | async"
         [disabled]="loading$ | async"
-        (click)="changeStatues(VERSION_STATUSES?.NEEDS_MODIFICATIONS)"
+        (click)="changeStatues(VERSION_STATUSES?.CREATED)"
         class="p-button-danger p-button-text mx-2"
       ></button>
     </ng-container>
