@@ -17,6 +17,8 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 import { BrowseActivitySystemsAction } from './browse-systems.action';
 import { ActivitySystemsAction } from '@core/states/activity-analysis/systems/systems.action';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 export interface BrowseActivitySystemsStateModel {
   pageRequest: PageRequestModel;
@@ -49,7 +51,8 @@ export class BrowseActivitySystemsState {
     private router: Router,
     private apiHelper: ApiHelper,
     private route: ActivatedRoute,
-    private store: Store
+    private store: Store,
+    private messageHelper: MessageHelper
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -81,7 +84,6 @@ export class BrowseActivitySystemsState {
     );
     const pageRequest = getState().pageRequest;
 
-
     return dispatch(
       new ActivitySystemsAction.LoadPage({
         cycleId: payload.cycleId,
@@ -110,5 +112,69 @@ export class BrowseActivitySystemsState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  @Action(BrowseActivitySystemsAction.Create)
+  Create(
+    { dispatch, getState }: StateContext<BrowseActivitySystemsStateModel>,
+    { payload }: BrowseActivitySystemsAction.Create
+  ) {
+    return dispatch(new ActivitySystemsAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([
+          new BrowseActivitySystemsAction.LoadActivitySystems({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          }),
+          new BrowseActivitySystemsAction.ToggleDialog({}),
+        ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseActivitySystemsAction.Update)
+  Update(
+    { dispatch }: StateContext<BrowseActivitySystemsStateModel>,
+    { payload }: BrowseActivitySystemsAction.Update
+  ) {
+    return dispatch(new ActivitySystemsAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(
+          new BrowseActivitySystemsAction.LoadActivitySystems({
+            cycleId: payload.cycle?.id,
+            activityId: payload.activity?.id,
+          })
+        );
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseActivitySystemsAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowseActivitySystemsAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseActivitySystemsStateModel>,
+    { payload }: BrowseActivitySystemsAction.Delete
+  ) {
+    return dispatch(new ActivitySystemsAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

@@ -6,5 +6,6 @@
     [pageRequest]="state?.pageRequest"
     [totalRecords]="totalRecords$ | async"
     (onPageChange)="loadPage($event)"
+    (onDelete)="deleteSystem($event)"
   ></app-content-systems>
 </div>
