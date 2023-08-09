@@ -123,7 +123,7 @@ export class ActivitySystemsState {
 
     return this.activitySystem
       .insertOne19({
-        body: { ...payload },
+        body: payload,
       })
       .pipe(
         finalize(() => {
@@ -191,6 +191,36 @@ export class ActivitySystemsState {
         setState(
           patch<ActivitySystemsStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(ActivitySystemsAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<ActivitySystemsStateModel>,
+    { payload }: ActivitySystemsAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ActivitySystemsStateModel>({
+        loading: true,
+      })
+    );
+    return this.activitySystem.deleteById19({ id: payload.id }).pipe(
+      tap((activitySystem) => {
+        setState(
+          patch<ActivitySystemsStateModel>({
+            loading: false,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<ActivitySystemsStateModel>({
+            loading: false,
           })
         );
       })

@@ -3,9 +3,9 @@ import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-a
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { LazyLoadEvent } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BcActivitySystems } from 'src/app/api/models';
 import { BrowseActivitySystemsAction } from '../states/browse-systems.action';
 import {
@@ -32,7 +32,7 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject();
 
-  constructor(private store: Store, private translate: TranslateService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     combineLatest([
@@ -46,34 +46,10 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
-    const userActions = [
-      {
-        label: this.translate.instant('ACTIONS.EDIT'),
-        icon: 'pi pi-pencil',
-      },
-      {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
-      },
-    ] as MenuItem[];
+
     this.page$ = this.store.select(ActivitySystemsState.page).pipe(
-      tap(console.log),
-      map((page) =>
-        page?.map((u) => {
-          return {
-            ...u,
-            actions: [
-              {
-                ...userActions[0],
-                command: () => {
-                  this.openDialog(u.id);
-                },
-                disabled: !u.isActive,
-              },
-            ],
-          };
-        })
-      )
+      filter((p) => !!p),
+      tap(console.log)
     );
   }
 
@@ -95,6 +71,14 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
         activityId: activityAnalysis.activity.id,
       })
     );
+  }
+  deleteSystem(id) {
+    this.store
+      .dispatch(new BrowseActivitySystemsAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
   ngOnDestroy(): void {
     this.destroy$.next();

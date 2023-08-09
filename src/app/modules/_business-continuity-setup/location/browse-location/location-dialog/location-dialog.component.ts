@@ -28,6 +28,7 @@ import { IAuthService } from '@core/services/auth.service';
 import { AddressSearchResultModel } from '@shared/sh-components/map/utils/map.models';
 import {SystemsState} from "@core/states/bc-setup/systems/systems.state";
 import {LocationsAction} from "@core/states/bc-setup/locations/locations.action";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-location-dialog',
@@ -100,7 +101,8 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     private injector: Injector,
     private store: Store,
     private cfr: ComponentFactoryResolver,
-    private auth: IAuthService
+    private auth: IAuthService,
+    private translate: TranslateService,
   ) {
     this.route.queryParams
       .pipe(
@@ -221,7 +223,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
         Address: '',
       };
     }
-
+    instance.title = this.translate.instant('LOCATIONS.LOCATION_TITLE'),
     instance.config = {
       mapType: MapViewType.REPORTER,
       showSaveButton: false,

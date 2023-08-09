@@ -5,28 +5,28 @@ import { SystemsRoutingModule } from './systems-routing.module';
 import { BrowseSystemsComponent } from './browse-systems/browse-systems.component';
 import { ContentSystemsComponent } from './browse-systems/content-systems/content-systems.component';
 import { SystemsDialogComponent } from './browse-systems/systems-dialog/systems-dialog.component';
-import {HttpClient} from "@angular/common/http";
-import {TranslateHttpLoader} from "@ngx-translate/http-loader";
-import {InputTextareaModule} from "primeng/inputtextarea";
-import {ButtonModule} from "primeng/button";
-import {CheckboxModule} from "primeng/checkbox";
-import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DividerModule} from "primeng/divider";
-import {InputTextModule} from "primeng/inputtext";
-import {ILangFacade, LangFacade} from "@core/facades/lang.facade";
-import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
-import {DropdownModule} from "primeng/dropdown";
-import {SkeletonModule} from "primeng/skeleton";
-import {PaginatorModule} from "primeng/paginator";
-import {MenuModule} from "primeng/menu";
-import {TableModule} from "primeng/table";
-import {NodataTableModule} from "@shared/components/nodata-table/nodata-table.module";
-import {BlockUIModule} from "primeng/blockui";
-import {ProgressSpinnerModule} from "primeng/progressspinner";
-import {DialogModule} from "primeng/dialog";
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ButtonModule } from 'primeng/button';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DividerModule } from 'primeng/divider';
+import { InputTextModule } from 'primeng/inputtext';
+import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { DropdownModule } from 'primeng/dropdown';
+import { SkeletonModule } from 'primeng/skeleton';
+import { PaginatorModule } from 'primeng/paginator';
+import { MenuModule } from 'primeng/menu';
+import { TableModule } from 'primeng/table';
+import { NodataTableModule } from '@shared/components/nodata-table/nodata-table.module';
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
 import { BrowseActivitySystemsState } from './states/browse-systems.state';
 import { NgxsModule } from '@ngxs/store';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -37,7 +37,11 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [BrowseSystemsComponent, ContentSystemsComponent, SystemsDialogComponent],
+  declarations: [
+    BrowseSystemsComponent,
+    ContentSystemsComponent,
+    SystemsDialogComponent,
+  ],
   imports: [
     CommonModule,
     SystemsRoutingModule,
@@ -55,8 +59,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     FormsModule,
     InputTextModule,
-    InputTextareaModule,
     ButtonModule,
+    ConfirmPopupModule,
     TranslateObjModule,
     DropdownModule,
     TableModule,
@@ -66,8 +70,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     BlockUIModule,
     ProgressSpinnerModule,
     NodataTableModule,
-    DialogModule
+    DialogModule,
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  providers: [{ provide: ILangFacade, useClass: LangFacade },ConfirmationService],
 })
-export class SystemsModule { }
+export class SystemsModule {}

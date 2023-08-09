@@ -33,6 +33,7 @@
     "ADD_LOCATION":"إضافة موقع جديد",
     "EDIT_LOCATION": "تحديد الوجهة",
     "VIEW_LOCATION": "عرض الموقع",
+    "LOCATION_TITLE": "الموقع المختار",
     "DIALOG" : {
       "LOCATION_INFO": "بيانات الموقع",
       "GEO_INFO": "تفاصيل الجغرافية",

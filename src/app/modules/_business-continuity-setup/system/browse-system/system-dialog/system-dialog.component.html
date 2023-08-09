@@ -140,8 +140,7 @@
           appendTo="body"
         >
           <ng-template let-option let-placeholder pTemplate="value">
-            {{ option ? (option | translateObj : "label") :
-            (option?.nameAr || option?.nameEn) ? (option |  translateObj : "name" ) : "SYSTEMS.OWNER_DEPT" | translate }}
+            {{ option ? (option | translateObj : "label") : "SYSTEMS.OWNER_DEPT" | translate }}
           </ng-template>
         </p-treeSelect>
         <ng-container
