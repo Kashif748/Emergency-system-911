@@ -4,7 +4,7 @@ import {PageRequestModel} from '@core/models/page-request.model';
 import {Store} from '@ngxs/store';
 import {BrowseImpactLevelAction} from '../../states/browse-impact-level.action';
 import {TranslateService} from '@ngx-translate/core';
-import {BCState} from "@core/states/bc/bc/bc.state";
+import {BCState, VERSION_STATUSES} from "@core/states/bc/bc/bc.state";
 import {filter, map, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
@@ -41,7 +41,7 @@ export class ContentImpactLevelComponent implements OnInit {
     '#FFFFFF',
   ];
 
-  public disableButton: boolean
+  public disableButton$: Observable<boolean>;
   public version$: Observable<boolean>;
   formGroup: FormGroup;
 
@@ -54,25 +54,18 @@ export class ContentImpactLevelComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.version$ = this.route.queryParams.pipe(
-      map((params) => params['_version']),
-      tap((v) => {
-        this.store
-          .select(BCState.versions)
-          .pipe(filter((p) => !!p))
-          .subscribe((res) => {
-            const shouldDisable = res.some((item) => {
-              if (item.id == v) {
-                return item.status.id !== 1;
-              }
-              return false;
-            });
-
-            this.disableButton = shouldDisable;
-          });
+    this.disableButton$ = this.store.select(BCState.versions).pipe(
+      filter((p) => !!p),
+      map((versions) => {
+        const currentV = this.route.snapshot.queryParams['_version'];
+        return versions.some((item) => {
+          if (item.id == currentV) {
+            return item.status.id !== VERSION_STATUSES.CREATED;
+          }
+          return false;
+        });
       })
     );
-    // this.version$.subscribe();
     this.formGroup = this.formBuilder.group({
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
