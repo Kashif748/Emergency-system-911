@@ -5,7 +5,7 @@ import {LazyLoadEvent} from "primeng/api";
  import {BrowseImpactMatrixAction} from "../../states/browse-impact-matrix.action";
 import {ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs";
-import {BCState} from "@core/states/bc/bc/bc.state";
+import {BCState, VERSION_STATUSES} from "@core/states/bc/bc/bc.state";
 import {filter, map, tap} from "rxjs/operators";
 import { ILangFacade } from '@core/facades/lang.facade';
 import { PageRequestModel } from '@core/models/page-request.model';
@@ -36,7 +36,7 @@ export class ContentImpactMatrixComponent implements OnInit {
   @Output()
   onImpactTypePageChange = new EventEmitter<LazyLoadEvent>();
 
-  public disableButton: boolean
+  public disableButton$: Observable<boolean>;
   public version$: Observable<boolean>;
   constructor(
     private translate: TranslateService,
@@ -46,25 +46,18 @@ export class ContentImpactMatrixComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.version$ = this.route.queryParams.pipe(
-      map((params) => params['_version']),
-      tap((v) => {
-        this.store
-          .select(BCState.versions)
-          .pipe(filter((p) => !!p))
-          .subscribe((res) => {
-            const shouldDisable = res.some((item) => {
-              if (item.id == v) {
-                return item.status.id !== 1;
-              }
-              return false;
-            });
-
-            this.disableButton = shouldDisable;
-          });
+    this.disableButton$ = this.store.select(BCState.versions).pipe(
+      filter((p) => !!p),
+      map((versions) => {
+        const currentV = this.route.snapshot.queryParams['_version'];
+        return versions.some((item) => {
+          if (item.id == currentV) {
+            return item.status.id !== VERSION_STATUSES.CREATED;
+          }
+          return false;
+        });
       })
     );
-    // this.version$.subscribe();
   }
 
   openView(Id?: number) {

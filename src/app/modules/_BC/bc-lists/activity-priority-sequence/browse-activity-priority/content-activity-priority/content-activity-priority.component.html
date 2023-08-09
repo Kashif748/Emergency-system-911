@@ -3,7 +3,7 @@
     <h4 class="text-info p-text-bold mb-0">
       {{ "RECVOVER_PRIORITIES" | translate }}
     </h4>
-    <app-activity-priority-dialog [shouldDisable]="disableButton"></app-activity-priority-dialog>
+    <app-activity-priority-dialog [shouldDisable]="disableButton$ |async"></app-activity-priority-dialog>
   </header>
   <div class="row">
     <div class="col-12">
@@ -118,7 +118,7 @@
 
                 <td>
                   <button
-                    [disabled]="disableButton"
+                    [disabled]="disableButton$ |async"
                     pButton
                     pRipple
                     type="button"
