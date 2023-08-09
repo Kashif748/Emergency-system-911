@@ -61,6 +61,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...system,
           });
+          this.patchvalue(system);
         })
       )
       .subscribe();
@@ -96,6 +97,14 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+  patchvalue(system) {
+    this.form.patchValue({
+      orgHierarchy: {
+        id: system.orgHierarchy.id,
+        label: this.translateObj.transform(system.orgHierarchy),
+      }
+    });
   }
 
   ngOnInit(): void {

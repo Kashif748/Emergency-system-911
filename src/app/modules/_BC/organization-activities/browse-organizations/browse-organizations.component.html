@@ -177,6 +177,7 @@
                     <p-dropdown
                       [options]="sortableColumns"
                       [showClear]="true"
+                      [autoDisplayFirst]="false"
                       [ngModel]="state?.pageRequest?.sortField"
                       placeholder="{{
                         'SHARED.SELECT_SORTING_FIELD' | translate

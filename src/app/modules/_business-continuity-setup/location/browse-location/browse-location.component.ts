@@ -52,10 +52,8 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
   public display = false;
 
   public sortableColumns = [
-    { name: 'LOCATIONS.DEPARTMENT_NAME', code: 'dept' },
-    { name: 'LOCATIONS.LOCATION_NAME', code: 'name' },
-    { name: 'LOCATIONS.LOCATION_TYPE', code: 'type' },
-    { name: 'LOCATIONS.DISTRICT', code: 'district' },
+    { name: 'LOCATIONS.LOCATION_NAME', code: '' },
+    { name: 'LOCATIONS.LOCATION_TYPE', code: '' },
   ];
   public selectedColumns = [
     { name: 'LOCATIONS.DEPARTMENT_NAME', code: 'dept' },
@@ -67,8 +65,21 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
     private store: Store,
     private translate: TranslateService,
     private lang: ILangFacade,
-    private privilegesService: PrivilegesService
-  ) {}
+    private privilegesService: PrivilegesService,
+    private langFacade: ILangFacade,
+
+  ) {
+    this.langFacade.vm$.pipe(
+    ).subscribe((res) => {
+      if (res['key'] == 'ar') {
+        this.sortableColumns[0].code = 'nameAr';
+        this.sortableColumns[1].code = 'locationType.nameAr';
+      } else {
+        this.sortableColumns[0].code = 'nameEn';
+        this.sortableColumns[1].code = 'locationType.nameEn';
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.store.dispatch(
@@ -94,7 +105,7 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
               },
             ],
           };
-        })
+        }).sort((a, b) => a.id - b.id)
       )
     );
   }
