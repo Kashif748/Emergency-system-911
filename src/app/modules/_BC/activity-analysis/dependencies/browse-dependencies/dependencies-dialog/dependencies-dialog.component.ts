@@ -53,6 +53,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private treeHelper: TreeHelper,
     private route: ActivatedRoute,
+    private translateObj: TranslateObjPipe,
     private store: Store
   ) {
     this.dependenciesLimts = [
@@ -86,13 +87,13 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
       map((data) => data[this.dependType])
     );
     this.store.dispatch([
-      new OrgDetailAction.GetOrgHierarchy({ page: 0, size: 100 }),
+      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
 
       new OrgActivityAction.LoadPage({ page: 0, size: 100 }),
     ]);
 
     this.store
-      .select(OrgDetailState.orgHir)
+      .select(OrgDetailState.orgHirSearch)
       .pipe(
         takeUntil(this.destroy$),
         filter((p) => !!p),
@@ -120,6 +121,12 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
       return;
     }
     const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    if (branch?.length > 0) {
+      branch.forEach(
+        (item) => (item.label = this.translateObj.transform(item.data))
+      );
+    }
+
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
     // console.log(parentId ,parentNode);
@@ -203,7 +210,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
   nodeExpand(node: TreeNode) {
     if (node.children.length === 0) {
       this.store.dispatch(
-        new OrgDetailAction.GetOrgHierarchy({
+        new OrgDetailAction.GetOrgHierarchySearch({
           page: 0,
           size: 100,
           parentId: parseInt(node?.key),
