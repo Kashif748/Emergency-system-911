@@ -5,6 +5,7 @@
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
     (click)="openDialog()"
+    *checkPrivileges="'PRIV_ED_BC_LISTS'"
   ></button>
 </div>
 

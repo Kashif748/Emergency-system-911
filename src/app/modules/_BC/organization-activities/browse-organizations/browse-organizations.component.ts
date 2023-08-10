@@ -87,8 +87,8 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   ] as MenuItem[];
 
   public sortableColumns = [
-    { name: 'ACTIVITY_NAME', code: 'nameEn'},
-    { name: 'ACTIVITY_NAME_AR', code: 'nameAr'},
+    { name: 'ACTIVITY_NAME', code: 'nameEn' },
+    { name: 'ACTIVITY_NAME_AR', code: 'nameAr' },
     { name: 'ACTIVITY_FEQ', code: '' },
     { name: 'ACTIVITY_AREA', code: 'internal' },
     { name: 'ARIS', code: 'externalReference' },
@@ -113,10 +113,9 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private translate: TranslateService,
-    private messageHelper: MessageHelper,
+    private translateObj: TranslateObjPipe,
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
-    private route: ActivatedRoute,
     private treeHelper: TreeHelper,
     private privilegesService: PrivilegesService
   ) {
@@ -128,15 +127,17 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
         } as TreeNode;
       })
     );
-    this.langFacade.vm$.pipe(
+    this.langFacade.vm$
+      .pipe
       // map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
-    ).subscribe((res) => {
-      if (res['key'] == 'ar') {
-        this.sortableColumns[2].code = 'activityFrequence.nameAr';
-      } else {
-        this.sortableColumns[2].code = 'activityFrequence.nameEn';
-      }
-    });
+      ()
+      .subscribe((res) => {
+        if (res['key'] == 'ar') {
+          this.sortableColumns[2].code = 'activityFrequence.nameAr';
+        } else {
+          this.sortableColumns[2].code = 'activityFrequence.nameEn';
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -184,32 +185,35 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_ORG_ACTIVITY'),
+                disabled: !this.privilegesService.checkActionPrivileges(
+                  'PRIV_ED_ORG_ACTIVITY'
+                ),
               },
             ],
           };
         })
       )
     );
-    this.store.select(OrgDetailState.orgHir)
-    .pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      map((data) => this.setTree(data))
-    )
-    .subscribe();
+    this.store
+      .select(OrgDetailState.orgHirSearch)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      )
+      .subscribe();
 
-  this.auditLoadOrgPage$
-    .pipe(takeUntil(this.destroy$), auditTime(2000))
-    .subscribe((search: string) => {
-      this.store.dispatch(
-        new OrgDetailAction.GetOrgHierarchySearch({
-          page: 0,
-          size: 100,
-          name: search,
-        })
-      );
-    });
+    this.auditLoadOrgPage$
+      .pipe(takeUntil(this.destroy$), auditTime(2000))
+      .subscribe((search: string) => {
+        this.store.dispatch(
+          new OrgDetailAction.GetOrgHierarchySearch({
+            page: 0,
+            size: 100,
+            name: search,
+          })
+        );
+      });
   }
 
   public setTree(_searchResponses: BcOrgHierarchyProjection[]) {
@@ -219,16 +223,22 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
       }
       return;
     }
-    const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    let branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    if (branch?.length > 0) {
+      branch.forEach(
+        (item) => (item.label = this.translateObj.transform(item.data))
+      );
+    }
+
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
-    // console.log(parentId ,parentNode);
 
     if (parentNode && parentId) {
       parentNode.children = [...branch, ...parentNode.children];
     } else {
       this.orgHir = branch;
     }
+    console.log(this.orgHir);
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
@@ -236,7 +246,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   nodeExpand(node: TreeNode) {
     if (node.children.length === 0) {
       this.store.dispatch(
-        new OrgDetailAction.GetOrgHierarchy({
+        new OrgDetailAction.GetOrgHierarchySearch({
           page: 0,
           size: 100,
           parentId: parseInt(node?.key),

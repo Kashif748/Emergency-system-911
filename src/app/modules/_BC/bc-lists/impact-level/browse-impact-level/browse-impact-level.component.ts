@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { LazyLoadEvent } from 'primeng/api';
 import { BrowseImpactLevelAction } from '../states/browse-impact-level.action';
 import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.state';
@@ -9,11 +9,8 @@ import {
   BrowseImpactLevelState,
   BrowseImpactLevelStateModel,
 } from '../states/browse-impact-level.state';
-import { DATA } from '../../tabs.const';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { BrowseBCState } from '../../../states/browse-bc.state';
-import { BcImpactLevel, BcVersions } from 'src/app/api/models';
-import { BCState } from '@core/states';
+import { BcImpactLevel } from 'src/app/api/models';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
