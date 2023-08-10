@@ -14,6 +14,7 @@ export namespace ImpactLevelAction {
         page: number;
         size: number;
         versionId : number
+        isActive?: boolean
 
       }
     ) {

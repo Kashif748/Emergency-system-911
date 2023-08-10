@@ -1,13 +1,20 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
-import {Injectable} from '@angular/core';
-import {EMPTY} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {patch} from '@ngxs/store/operators';
-import {BcImpactLevelControllerService} from 'src/app/api/services';
-import {ImpactLevelAction} from './impact-level.action';
-import {PageBcImpactLevel} from '../../../../api/models/page-bc-impact-level';
-import {BcImpactLevel} from '../../../../api/models/bc-impact-level';
-import {BCState} from '@core/states';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { patch } from '@ngxs/store/operators';
+import { BcImpactLevelControllerService } from 'src/app/api/services';
+import { ImpactLevelAction } from './impact-level.action';
+import { PageBcImpactLevel } from '../../../../api/models/page-bc-impact-level';
+import { BcImpactLevel } from '../../../../api/models/bc-impact-level';
+import { BCState } from '@core/states';
 
 export interface ImpactLevelStateModel {
   page: PageBcImpactLevel;
@@ -72,7 +79,6 @@ export class ImpactLevelState {
 
     return this.impactLevel
       .getAll21({
-        isActive: true,
         versionId: payload.versionId,
 
         pageable: {

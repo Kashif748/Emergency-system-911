@@ -64,6 +64,15 @@ export class BCComponent implements OnInit, OnDestroy {
     );
     this.store.dispatch(new BrowseBCAction.LoadPage());
     this.createForm();
+
+    this.store
+      .select(BCState.selectedVersion)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        tap((version) => (this.selectedVersion = version))
+      )
+      .subscribe();
   }
   createForm() {
     this.form = this.formBuilder.group({
@@ -72,7 +81,7 @@ export class BCComponent implements OnInit, OnDestroy {
     });
   }
   toggleDialog() {
-    return this.store.dispatch(new BrowseBCAction.ToggleDialog());
+    this.store.dispatch(new BrowseBCAction.ToggleDialog());
   }
   submit() {
     if (!this.form.valid) {
@@ -100,17 +109,17 @@ export class BCComponent implements OnInit, OnDestroy {
           this.selectedVersion = bc;
           this.form.reset();
           this.showVersionForm = false;
-          this.setValueGlobally(bc.id);
+          this.setValueGlobally(bc);
         })
       )
       .subscribe();
   }
-  setValueGlobally(value: number) {
+  setValueGlobally(value: BcVersions) {
     this.store.dispatch(
       new BrowseBCAction.SetVersionId({
-        versionId: value,
+        versionId: value.id,
       })
-    );
+    ).toPromise().then(()=>this.toggleDialog());
   }
   ngOnDestroy(): void {
     this.destroy$.next();

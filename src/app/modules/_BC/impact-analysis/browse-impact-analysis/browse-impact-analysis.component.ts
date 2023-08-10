@@ -134,7 +134,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new BrowseImpactAnalysisAction.LoadActivitiesStatuses(),
       new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 }),
-      new OrgDetailAction.GetOrgHierarchy({ page: 0, size: 100 }),
+      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
       new ActivityFrquencyAction.LoadPage({ page: 0, size: 100 }),
       new ActivityPrioritySeqAction.LoadPage({
         page: 0,
@@ -148,7 +148,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       }),
     ]);
     this.store
-      .select(OrgDetailState.orgHir)
+      .select(OrgDetailState.orgHirSearch)
       .pipe(
         takeUntil(this.destroy$),
         filter((p) => !!p),
@@ -199,7 +199,13 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       }
       return;
     }
-    const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    let branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    if (branch?.length > 0) {
+      branch.forEach(
+        (item) => (item.label = this.translateObj.transform(item.data))
+      );
+    }
+
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
     // console.log(parentId ,parentNode);
@@ -216,7 +222,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   nodeExpand(node: TreeNode) {
     if (node.children.length === 0) {
       this.store.dispatch(
-        new OrgDetailAction.GetOrgHierarchy({
+        new OrgDetailAction.GetOrgHierarchySearch({
           page: 0,
           size: 100,
           parentId: parseInt(node?.key),

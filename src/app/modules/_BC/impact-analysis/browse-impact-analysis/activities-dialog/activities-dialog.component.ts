@@ -115,6 +115,10 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
   }
 
+  changeSelect(event){
+    console.log(event);
+
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

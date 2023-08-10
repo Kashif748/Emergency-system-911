@@ -24,7 +24,7 @@
       appendTo="body"
       dataKey="id"
       [disabled]="showVersionForm"
-      (onChange)="setValueGlobally($event.value?.id); toggleDialog()"
+      (onChange)="setValueGlobally($event.value) "
       [dropdownIcon]="
         (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
       "
