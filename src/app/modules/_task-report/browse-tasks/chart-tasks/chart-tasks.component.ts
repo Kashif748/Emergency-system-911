@@ -90,7 +90,14 @@ export class ChartTasksComponent implements OnInit {
 
   ngOnInit() {}
 
-  percentageFormatter(value: number, timestamp?: number, opts?: any) {
+  dataLabelsFormatter(value: number, timestamp?: number, opts?: any) {
     return `${value.toFixed(2)}%`;
+  }
+
+  yaxisFormatter(value: number, opts?: { series: any[][] }) {
+    const percent =
+      (100 * value) /
+      opts?.series?.map((s) => s[0]).reduce((pv, cv) => pv + cv);
+    return `${value} (${percent?.toFixed(2)}%)`;
   }
 }

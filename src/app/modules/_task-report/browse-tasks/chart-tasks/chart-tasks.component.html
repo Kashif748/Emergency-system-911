@@ -227,8 +227,8 @@
                   [plotOptions]="{ bar: { horizontal: true, borderRadius: 5, endingShape: 'rounded', startingShape: 'rounded'} }"
                   [stroke]="{width: 1,colors: ['#fff']}"
                   [xaxis]="{show: false, labels: {show: false}, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
-                  [yaxis]="{show: false, labels: {show: false}, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
-                  [fill]="{opacity: 1}" [dataLabels]="{formatter: percentageFormatter}"
+                  [yaxis]="{show: false, labels: {show: false, formatter: yaxisFormatter}, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
+                  [fill]="{opacity: 1}" [dataLabels]="{formatter: dataLabelsFormatter}"
                   [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
                   [grid]="{show: false}" [tooltip]="{x: { show:false }}" [stroke]="{width:0}"></apx-chart>
               </div>
@@ -248,8 +248,8 @@
                   [plotOptions]="{ bar: { horizontal: true, borderRadius: 5,endingShape: 'rounded', startingShape: 'rounded'} }"
                   [stroke]="{width: 1,colors: ['#fff']}"
                   [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
-                  [yaxis]="{show: false, labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
-                  [fill]="{opacity: 1}" [dataLabels]="{formatter: percentageFormatter}"
+                  [yaxis]="{show: false, labels: {show: false, formatter: yaxisFormatter }, axisBorder: {show: false}, axisTicks: {show: false}}"
+                  [fill]="{opacity: 1}" [dataLabels]="{formatter: dataLabelsFormatter}"
                   [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
                   [grid]="{show: false}" [tooltip]="{x:{show:false}}" [stroke]="{width:0}"></apx-chart>
               </div>
