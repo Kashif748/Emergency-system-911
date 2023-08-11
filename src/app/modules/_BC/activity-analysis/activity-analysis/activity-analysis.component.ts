@@ -46,6 +46,11 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   public dir$ = this.lang.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
   );
+
+  public icon$ = this.lang.vm$.pipe(
+    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'))
+  );
+
   private destroy$ = new Subject();
   constructor(
     private router: Router,

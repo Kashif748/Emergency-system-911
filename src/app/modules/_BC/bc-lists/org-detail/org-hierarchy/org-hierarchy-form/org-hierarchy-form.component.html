@@ -194,6 +194,7 @@
   <div class="p-col p-d-flex">
     <button
       (click)="submit()"
+      *checkPrivileges="'PRIV_ED_BC_LISTS'"
       pButton
       [loading]="loading$ | async"
       icon="pi pi-save"
@@ -203,6 +204,7 @@
     <ng-container>
       <div class="mx-1">
         <button
+          *checkPrivileges="'PRIV_ED_BC_LISTS'"
           (click)="deleteHir()"
           [loading]="loading$ | async"
           pButton
