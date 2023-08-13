@@ -105,8 +105,10 @@
             [filterBy]="'data.nameAr,data.nameEn,data.code'"
             selectionMode="single"
             formControlName="dept"
+            [loading]="loadingOrgHir$ | async"
+            (onFilter)="filterOrgHir($event)"
+            (onNodeExpand)="nodeExpand($event?.node)"
             placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
-            (onNodeSelect)="selectNode($event.node)"
             [propagateSelectionDown]="false"
             [propagateSelectionUp]="false"
           >

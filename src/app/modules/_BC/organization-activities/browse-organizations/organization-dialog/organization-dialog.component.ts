@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subject} from "rxjs";
 import {Dialog} from "primeng/dialog";
@@ -17,6 +17,8 @@ import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-
 import {BcActivityFrequencies} from "../../../../../api/models/bc-activity-frequencies";
 import {BcOrgHierarchy} from "../../../../../api/models/bc-org-hierarchy";
 import {GenericValidators} from "@shared/validators/generic-validators";
+import {OrgDetailAction} from "@core/states";
+import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
 
 @Component({
   selector: 'app-organization-dialog',
@@ -27,7 +29,7 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
 
   @ViewChild(Dialog) dialog: Dialog;
   @ViewChild(TabView) tabv: TabView;
-
+  private auditLoadOrgPage$ = new Subject<string>();
   opened$: Observable<boolean>;
   @Input()
   activeTab: number = 0;
@@ -42,6 +44,8 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   @Select(ActivityFrquencyState.page)
   activityFre$: Observable<BcActivityFrequencies[]>;
 
+  @Select(OrgDetailState.loading)
+  public loadingOrgHir$: Observable<boolean>;
   @Select(OrgActivityState.blocking)
   blocking$: Observable<boolean>;
 
@@ -155,6 +159,29 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
       map((params) => params['_dialog'] === 'opened')
     );
     this.buildForm();
+    this.auditLoadOrgPage$
+      .pipe(takeUntil(this.destroy$), auditTime(2000))
+      .subscribe((search: string) => {
+        this.store.dispatch(
+          new OrgDetailAction.GetOrgHierarchySearch({
+            page: 0,
+            size: 100,
+            name: search,
+          })
+        );
+      });
+  }
+
+  nodeExpand(node: TreeNode) {
+    if (node.children.length === 0) {
+      this.store.dispatch(
+        new OrgDetailAction.GetOrgHierarchySearch({
+          page: 0,
+          size: 100,
+          parentId: parseInt(node?.key),
+        })
+      );
+    }
   }
 
 
@@ -224,6 +251,10 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();
+  }
+
+  filterOrgHir(event) {
+    this.auditLoadOrgPage$.next(event.filter);
   }
 
   close() {
