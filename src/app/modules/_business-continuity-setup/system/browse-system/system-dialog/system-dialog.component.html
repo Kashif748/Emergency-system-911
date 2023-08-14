@@ -130,7 +130,7 @@
 
       <!-- Ownser Dept -->
       <div class="p-field p-col-12">
-        <p-treeSelect
+       <!-- <p-treeSelect
           [options]="orgHir$ | async"
           [filter]="true"
           [filterBy]="'data.nameAr,data.nameEn,data.code'"
@@ -142,7 +142,31 @@
           <ng-template let-option let-placeholder pTemplate="value">
             {{ option ? (option | translateObj : "label") : "SYSTEMS.OWNER_DEPT" | translate }}
           </ng-template>
-        </p-treeSelect>
+        </p-treeSelect>-->
+
+
+        <span class="p-float-label">
+          <p-treeSelect
+            [options]="orgHir"
+            display="chip"
+            [metaKeySelection]="false"
+            [filter]="true"
+            [filterBy]="'data.nameAr,data.nameEn,data.code'"
+            selectionMode="single"
+            formControlName="orgHierarchy"
+            [loading]="loadingOrgHir$ | async"
+            (onFilter)="filterOrgHir($event)"
+            (onNodeExpand)="nodeExpand($event?.node)"
+            placeholder="{{ 'SYSTEMS.OWNER_DEPT' | translate }}"
+            [propagateSelectionDown]="false"
+            [propagateSelectionUp]="false"
+          >
+            <ng-template let-option let-placeholder pTemplate="value">
+              {{ option ? (option | translateObj : "label") : "SYSTEMS.OWNER_DEPT" | translate }}
+            </ng-template>
+          </p-treeSelect>
+        </span>
+
         <ng-container
           *ngIf="
             form.controls['orgHierarchy'].touched &&

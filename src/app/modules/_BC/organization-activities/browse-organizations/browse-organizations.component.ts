@@ -153,7 +153,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
       }),
       new OrgDetailAction.GetOrgHierarchySearch({
         page: 0,
-        size: 20,
+        size: 100,
       }),
     ]);
 

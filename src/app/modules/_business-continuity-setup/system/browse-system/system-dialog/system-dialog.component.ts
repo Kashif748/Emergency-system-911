@@ -4,18 +4,18 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Select, Store} from '@ngxs/store';
 import {OrgDetailAction, OrgDetailState} from '@core/states';
 import {Observable, Subject} from 'rxjs';
-import {BcOrgHierarchy} from 'src/app/api/models';
 import {BcSystems} from 'src/app/api/models/bc-systems';
 import {TreeNode} from 'primeng/api';
 import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {FormUtils} from '@core/utils';
 import {BrowseSystemsAction} from '../../states/browse-systems.action';
 import {SystemsState} from '@core/states/bc-setup/systems/systems.state';
 import {SystemsAction} from '@core/states/bc-setup/systems/systems.action';
 import {GenericValidators} from '@shared/validators/generic-validators';
 import {Dialog} from "primeng/dialog";
-import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import {BcOrgHierarchyProjection} from 'src/app/api/models/bc-org-hierarchy-projection';
+import {TreeHelper} from "@core/helpers/tree.helper";
 
 @Component({
   selector: 'app-system-dialog',
@@ -25,8 +25,10 @@ import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-pr
 export class SystemDialogComponent implements OnInit, OnDestroy {
   @ViewChild(Dialog) dialog: Dialog;
   isOpened$: Observable<boolean>;
-
-  public orgHir$: Observable<TreeNode[]>;
+  public orgHir: TreeNode[] = [];
+  private auditLoadOrgPage$ = new Subject<string>();
+  @Select(OrgDetailState.loading)
+  public loadingOrgHir$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
   @Select(SystemsState.blocking)
@@ -74,6 +76,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     private translateObj: TranslateObjPipe,
     private router: Router,
     protected cdr: ChangeDetectorRef,
+    private treeHelper: TreeHelper,
   ) {
     this.route.queryParams
       .pipe(
@@ -114,15 +117,49 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     );
 
     this.store.dispatch([
-      new OrgDetailAction.GetOrgHierarchy({ page: 0, size: 100 }),
+      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
     ]);
 
-    this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
+    /*this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
       takeUntil(this.destroy$),
       filter((p) => !!p),
       map((data) => this.setTree(data)),
       tap(console.log)
-    );
+    );*/
+    this.store
+      .select(OrgDetailState.orgHirSearch)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      )
+      .subscribe();
+    this.auditLoadOrgPage$
+      .pipe(takeUntil(this.destroy$), auditTime(2000))
+      .subscribe((search: string) => {
+        this.store.dispatch(
+          new OrgDetailAction.GetOrgHierarchySearch({
+            page: 0,
+            size: 100,
+            name: search,
+          })
+        );
+      });
+  }
+
+  filterOrgHir(event) {
+    this.auditLoadOrgPage$.next(event.filter);
+  }
+  nodeExpand(node: TreeNode) {
+    if (node.children.length === 0) {
+      this.store.dispatch(
+        new OrgDetailAction.GetOrgHierarchySearch({
+          page: 0,
+          size: 100,
+          parentId: parseInt(node?.key),
+        })
+      );
+    }
   }
   openDialog(systemId?: number) {
     this.store.dispatch(new BrowseSystemsAction.ToggleDialog({ systemId }));
@@ -164,21 +201,29 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  public setTree(_searchResponses: BcOrgHierarchyProjection[]): TreeNode[] {
-    const nest = (items, id = null, link = 'parentId') =>
-      items
-        .filter((item) => item[link] === id)
-        .map((item: BcOrgHierarchyProjection) => {
-          let node: TreeNode;
-          node = {
-            key: item.id.toString(),
-            data: item,
-            label: this.translateObj.transform(item),
-            children: nest(items, item.id),
-          };
-          return node;
-        });
-    return nest(_searchResponses);
+  public setTree(_searchResponses: BcOrgHierarchyProjection[]) {
+    if (_searchResponses.length == 0) {
+      if (this.orgHir.length == 0) {
+        this.orgHir = [];
+      }
+      return;
+    }
+    let branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
+    if (branch?.length > 0) {
+      branch.forEach(
+        (item) => (item.label = this.translateObj.transform(item.data))
+      );
+    }
+
+    const parentId = _searchResponses[0].parentId;
+    const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
+
+    if (parentNode && parentId) {
+      parentNode.children = [...branch, ...parentNode.children];
+    } else {
+      this.orgHir = branch;
+    }
+    console.log(this.orgHir);
   }
 
   ngOnDestroy(): void {
