@@ -49,6 +49,8 @@ export class BrowseTasksComponent implements OnInit {
   @Select(CommonDataState.taskStatuses)
   public statuses$: Observable<any[]>;
 
+  public filterStatuses$: Observable<any[]>;
+
   public categories$: Observable<any[]>;
 
   @Select(OrgState.orgs)
@@ -171,6 +173,10 @@ export class BrowseTasksComponent implements OnInit {
       .subscribe(() => {
         this.changeView('CARDS');
       });
+
+    this.filterStatuses$ = this.statuses$.pipe(
+      map(statuses => statuses.filter(status => status.id !== 8))
+    );
 
     this.page$ = this.store.select(TaskState.page).pipe(filter((p) => !!p));
 
