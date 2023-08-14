@@ -7,6 +7,10 @@
     >
       <p-toolbar>
         <div class="p-toolbar-group-left">
+          <div class="p-col p-d-flex">
+            <button pButton [icon]="icon$ | async" routerLink="/bc/impact-analysis">
+            </button>
+          </div>
           <h2 class="m-0">
             {{ activityAnalysis?.activity?.activityFrequence | translateObj }} -
             {{ activityAnalysis?.activity | translateObj }}
