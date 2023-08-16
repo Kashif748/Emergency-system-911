@@ -79,7 +79,8 @@
         <p-dropdown
           [autoDisplayFirst]="false"
           [options]="cycles$ | async"
-          [(ngModel)]="selectedCycle"
+          [ngModel]="selectedCycle"
+          (onChange)="selectCycle($event)"
           [showClear]="true"
           dataKey="id"
           styleClass="w-100"
@@ -194,9 +195,18 @@
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-item let-rowData>
-                <tr [pSelectableRow]="rowData" class="cursor-pointer hoverable">
+                <tr
+                  [pSelectableRow]="rowData"
+                  [ngClass]="{
+                    'row-disabled': rowData.selected
+                  }"
+                >
                   <td>
-                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                    <!-- <p-checkbox
+                      [ngModel]="rowData.selected"
+                      [readonly]="rowData.selected"
+                      binary="true"
+                    ></p-checkbox> -->
                   </td>
                   <td class="min-w-200px max-w-300px">
                     {{ item | translateObj }}

@@ -1,4 +1,4 @@
-import {BcActivities} from "../../../api/models/bc-activities";
+import { BcActivities } from '../../../api/models/bc-activities';
 
 export namespace OrgActivityAction {
   export class LoadPage {
@@ -22,6 +22,17 @@ export namespace OrgActivityAction {
     ) {}
   }
 
+  export class loadIdsList {
+    static readonly type = '[OrganizationActivity]  load Ids List';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        cycleId: number;
+      }
+    ) {}
+  }
   export class GetOrgActivities {
     static readonly type = '[OrganizationActivity] Get OrganizationActivity';
     /**

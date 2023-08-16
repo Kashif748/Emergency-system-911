@@ -35,6 +35,7 @@ import {CycleDialogComponent} from "./browse-impact-analysis/cycle-dialog/cycle-
 import {InputSwitchModule} from "primeng/inputswitch";
 import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
 import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
+import { CheckboxModule } from 'primeng/checkbox';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -84,6 +85,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     BlockUIModule,
     InputSwitchModule,
     TreeSelectModule,
+    CheckboxModule,
     PrivilegesDirectiveModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
