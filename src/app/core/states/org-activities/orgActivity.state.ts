@@ -20,6 +20,7 @@ import { ActivityFrquencyStateModel } from '@core/states/bc/activity-frquency/ac
 
 export interface OrgActivitiesStateModel {
   page: PageBcActivities;
+  idsList: number[];
   orgActivity: BcActivities;
   loading: boolean;
   blocking: boolean;
@@ -43,6 +44,11 @@ export class OrgActivityState {
     private store: Store
   ) {}
   /* ************************ SELECTORS ******************** */
+  @Selector([OrgActivityState])
+  static idsList(state: OrgActivitiesStateModel) {
+    return state?.idsList;
+  }
+
   @Selector([OrgActivityState])
   static page(state: OrgActivitiesStateModel) {
     return state?.page?.content;
@@ -80,7 +86,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .search19({
+      .search21({
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -112,6 +118,34 @@ export class OrgActivityState {
               loading: false,
             })
           );
+        })
+      );
+  }
+
+  @Action(OrgActivityAction.loadIdsList, { cancelUncompleted: true })
+  loadIdsList(
+    { setState }: StateContext<OrgActivitiesStateModel>,
+    { payload }: OrgActivityAction.loadIdsList
+  ) {
+    return this.bcActivities
+      .list8({
+        cycleId: payload.cycleId,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<OrgActivitiesStateModel>({
+              idsList: res.result,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<OrgActivitiesStateModel>({
+              idsList: [],
+            })
+          );
+          return EMPTY;
         })
       );
   }
