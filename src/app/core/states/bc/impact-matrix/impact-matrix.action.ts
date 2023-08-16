@@ -1,4 +1,4 @@
-import {BcImpactMatrixDto} from "../../../../api/models";
+import { BcImpactMatrixDto } from "src/app/api/models";
 
 export namespace ImpactMatrixAction {
   export class LoadPage {
@@ -13,9 +13,10 @@ export namespace ImpactMatrixAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId : number
+
       }
-    ) {
-    }
+    ) {}
   }
 
   export class Create {
@@ -23,9 +24,7 @@ export namespace ImpactMatrixAction {
     /**
      *
      */
-    constructor(
-      public payload: BcImpactMatrixDto
-    ) {}
+    constructor(public payload: BcImpactMatrixDto) {}
   }
 
   export class Update {
@@ -33,9 +32,7 @@ export namespace ImpactMatrixAction {
     /**
      *
      */
-    constructor(
-      public payload: BcImpactMatrixDto
-    ) {}
+    constructor(public payload: BcImpactMatrixDto) {}
   }
 
   export class GetImpactMatrix {

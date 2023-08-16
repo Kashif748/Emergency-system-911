@@ -63,6 +63,21 @@ export class NotificationsTableService extends DataSourceService {
     );
   }
 
+  resendSMS(id) {
+    const url = `resend-send-sms/${id}`;
+
+    return this.put<IpaginationResponce<any[]>>(null, null, url).pipe(
+      map((items) => {
+        if (items) {
+          // this.notificationTransaction =  items;
+          this.notificationTransaction$.next(this.notificationTransaction);
+          return this.notificationTransaction;
+        }
+        return [];
+      })
+    );
+  }
+
   getNotifications(
     tableType: NOTIFICATION_TABLE_TYPES = NOTIFICATION_TABLE_TYPES.SMS,
     pageNumber: number = 0,

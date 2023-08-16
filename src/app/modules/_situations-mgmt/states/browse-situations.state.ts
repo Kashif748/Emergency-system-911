@@ -1,23 +1,14 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { SituationsAction } from '@core/states/situations/situations.action';
-import { SituationsState } from '@core/states/situations/situations.state';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { iif, patch } from '@ngxs/store/operators';
-import { EMPTY } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { Theme } from 'src/app/api/models';
-import { BrowseSituationsAction } from './browse-situations.action';
+import {Injectable} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {SituationsAction} from '@core/states/situations/situations.action';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
+import {iif, patch} from '@ngxs/store/operators';
+import {EMPTY} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {BrowseSituationsAction} from './browse-situations.action';
 
 export interface BrowseSituationsStateModel {
   pageRequest: PageRequestModel;
@@ -27,7 +18,7 @@ export interface BrowseSituationsStateModel {
 }
 
 export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
-  new StateToken<BrowseSituationsStateModel>('browse_phonebook');
+  new StateToken<BrowseSituationsStateModel>('browse_situations');
 
 @State<BrowseSituationsStateModel>({
   name: BROWSE_SITUATIONS_UI_STATE_TOKEN,
@@ -53,20 +44,20 @@ export const BROWSE_SITUATIONS_UI_STATE_TOKEN =
       {
         id: 0,
         color: 'golden',
-        nameAr: 'المستوى الاستراتيجي',
-        nameEn: 'Strategic Level',
+        nameAr: 'الوضع الذهبي',
+        nameEn: 'Golden Theme',
       },
       {
         id: 1,
         color: 'silver',
-        nameAr: 'المستوى العملياتي',
-        nameEn: 'Operational Level',
+        nameAr: 'الوضع الفضي',
+        nameEn: 'Silver Theme',
       },
       {
         id: 2,
         color: 'bronze',
-        nameAr: 'المستوى التكتيكي',
-        nameEn: 'Tactical Level',
+        nameAr: 'الوضع البرونزي',
+        nameEn: 'Bronze Theme',
       },
     ],
   },
@@ -112,6 +103,35 @@ export class BrowseSituationsState {
     const pageRequest = getState().pageRequest;
     return dispatch(
       new SituationsAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+        },
+      })
+    );
+  }
+  @Action(BrowseSituationsAction.LoadAttachmentSituations)
+  LoadAttachmentSituations(
+    { setState, dispatch, getState }: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.LoadAttachmentSituations
+  ) {
+    setState(
+      patch<BrowseSituationsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+          filters: iif(!!payload?.pageRequest, payload?.pageRequest?.filters),
+          sortField: 'id',
+          sortOrder: 'asc',
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new SituationsAction.LoadSituationAttachment({
+        id: payload.id,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -199,6 +219,7 @@ export class BrowseSituationsState {
 
         _id: payload.situationId,
         _mode: undefined,
+        _type: payload.type
       },
       queryParamsHandling: 'merge',
     });
@@ -270,6 +291,47 @@ export class BrowseSituationsState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseSituationsAction.OpenView, { cancelUncompleted: true })
+  openView(
+    {}: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.OpenView
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog: this.route.snapshot.queryParams['_dialog']
+          ? undefined
+          : payload.dialogName,
+        _id: payload.situationId,
+        _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  @Action(BrowseSituationsAction.SortAttachments)
+  sortAttachment(
+    { setState, dispatch, getState }: StateContext<BrowseSituationsStateModel>,
+    { payload }: BrowseSituationsAction.SortAttachments
+  ) {
+    setState(
+      patch<BrowseSituationsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new SituationsAction.LoadSituationAttachment({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
       })
     );
   }

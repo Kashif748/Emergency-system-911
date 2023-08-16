@@ -78,6 +78,8 @@ export class TreeselectComponent implements AfterContentInit {
 
   @Input() metaKeySelection: boolean = true;
 
+  @Input() loading: boolean = false;
+
   @Input() display: string = 'comma';
 
   @Input() selectionMode: string = 'single';
@@ -129,6 +131,8 @@ export class TreeselectComponent implements AfterContentInit {
   @Output() onHide: EventEmitter<any> = new EventEmitter();
 
   @Output() onNodeUnselect: EventEmitter<any> = new EventEmitter();
+
+  @Output() onFilter: EventEmitter<any> = new EventEmitter();
 
   @Output() onNodeSelect: EventEmitter<any> = new EventEmitter();
 
@@ -404,6 +408,10 @@ export class TreeselectComponent implements AfterContentInit {
 
   onUnselect(node) {
     this.onNodeUnselect.emit(node);
+  }
+
+  doFilter(node) {
+    this.onFilter.emit(node);
   }
 
   onOverlayEnter() {

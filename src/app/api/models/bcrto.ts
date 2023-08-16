@@ -7,6 +7,7 @@ export interface Bcrto {
   descriptionEn?: string;
   id?: number;
   isActive?: boolean;
+  isCritical?: boolean;
   nameAr?: string;
   nameEn?: string;
   versionId?: number;

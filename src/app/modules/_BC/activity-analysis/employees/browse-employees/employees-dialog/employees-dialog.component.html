@@ -1,0 +1,250 @@
+<div class="p-toolbar-group-right">
+  <button
+    pButton
+    label="{{ 'ACTIONS.ADD' | translate }}"
+    icon="pi pi-plus"
+    (click)="toggleDialog()"
+  ></button>
+</div>
+
+<!-- as a dialog -->
+<p-dialog
+  [visible]="opened$ | async"
+   [modal]="true"
+  (visibleChange)="toggleDialog()"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
+    <h3>
+      <span>{{ "EMPLOYEES.ADD_NEW" | translate }}</span>
+      <span
+        *ngIf="true"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="false"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </h3>
+  </div>
+
+  <span class="flex-grow-1"></span>
+  <a
+    queryParamsHandling="merge"
+    pRipple
+    pButton
+    icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"
+  ></a>
+</ng-template>
+
+<!-- templates content -->
+<ng-template #content>
+  <div class="w-100 pt-2">
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+      <!-- AR Name -->
+
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <input type="text" formControlName="employeeNameAr" pInputText />
+          <label
+            >{{ "EMPLOYEES.NAME_AR" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+
+        <ng-container
+          *ngIf="
+            form.controls['employeeNameAr'].touched &&
+            !form.controls['employeeNameAr'].valid &&
+            form.controls['employeeNameAr'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['employeeNameAr'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+      <!-- En Name -->
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <input type="text" formControlName="employeeNameEn" pInputText />
+          <label
+            >{{ "EMPLOYEES.NAME_EN" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+
+        <ng-container
+          *ngIf="
+            form.controls['employeeNameEn'].touched &&
+            !form.controls['employeeNameEn'].valid &&
+            form.controls['employeeNameEn'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['employeeNameEn'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <!-- Mobile -->
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
+        <span class="p-float-label">
+          <ngx-intl-tel-input
+            cssClass="p-inputtext p-component p-text-left"
+            [onlyCountries]="['ae']"
+            formControlName="phoneNumber"
+            [enablePlaceholder]="false"
+            [enableAutoCountrySelect]="true"
+          >
+          </ngx-intl-tel-input>
+          <label class="dir-text">
+            {{ "EMPLOYEES.LANDLINE" | translate }}
+            <span class="required-asterisk">*</span>
+          </label>
+        </span>
+        <ng-container
+          *ngIf="
+            this.form.get('phoneNumber').touched &&
+            !this.form.get('phoneNumber').valid &&
+            this.form.get('phoneNumber').dirty
+          "
+        >
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="this.form.get('phoneNumber').hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="this.form.get('phoneNumber').hasError('validatePhoneNumber')"
+          >
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
+        <span class="p-float-label">
+          <ngx-intl-tel-input
+            cssClass="p-inputtext p-component p-text-left"
+            [onlyCountries]="['ae']"
+            formControlName="mobileNumber"
+            [enablePlaceholder]="false"
+            [enableAutoCountrySelect]="true"
+          >
+          </ngx-intl-tel-input>
+          <label class="dir-text">
+            {{ "EMPLOYEES.MOBILE" | translate }}
+            <span class="required-asterisk">*</span>
+          </label>
+        </span>
+        <ng-container
+          *ngIf="
+            this.form.get('mobileNumber').touched &&
+            !this.form.get('mobileNumber').valid &&
+            this.form.get('mobileNumber').dirty
+          "
+        >
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="this.form.get('mobileNumber').hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="
+              this.form.get('mobileNumber').hasError('validatePhoneNumber')
+            "
+          >
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <input type="text" formControlName="secondNumber" pInputText />
+          <label>{{ "EMPLOYEES.OTHER_PHONE" | translate }} </label>
+        </span>
+      </div>
+      <!-- IsPrimary -->
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <label>
+            {{ "EMPLOYEES.TYPE" | translate }}
+          </label>
+          <div class="d-flex">
+            <p-selectButton
+              [options]="employeesTypes"
+              optionLabel="name"
+              optionValue="value"
+              formControlName="isPrimary"
+            >
+              <ng-template let-item>
+                <span> {{ item?.name | translate }}</span>
+                <!-- <i [class]="item.icon"></i> -->
+              </ng-template>
+            </p-selectButton>
+          </div>
+        </span>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <div class="ml-dir-auto"></div>
+
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [loading]="blocking$ | async"
+          [disabled]="form.invalid"
+          (click)="submit()"
+        ></button>
+      </div>
+    </div>
+  </div>
+</ng-template>

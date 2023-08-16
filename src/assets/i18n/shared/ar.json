@@ -288,7 +288,9 @@
       "ALLOWED_TYPW": "الأنماط المقبولة  :allowedTypes"
     },
     "GENERAL": {
-      "DELETE_CONFIRM": "هل أنت متأكد؟ لن تستطيع استعادة المعلومات "
+      "DELETE_CONFIRM": "هل أنت متأكد؟ لن تستطيع استعادة المعلومات ",
+      "RESENT_CONFIRM": "هل أنت متأكد أنك تريد إعادة الإرسال?",
+      "SEND_CONFIRM": "نعم، ارسال"
     },
     "WORK_LOG_LIST": {
       "DATE": "التاريخ",
@@ -598,6 +600,7 @@
       "DESCRIPTION": "الوصف",
       "SR_NO": "الرمز",
       "SERIAL": " الرقم التسلسلي",
+      "SERIAL_YEAR": "الرقم التسلسلي  / السنة",
       "ACTIONS": "الاجراء",
       "SUBMIT": "انشاء",
       "saveAsDraft": "حفظ كمسودة",
@@ -927,6 +930,8 @@
       "TASK_TYPE_DETAILS": "نوع المهمة",
       "TASK_ATTACHMENT": "مرفقات المهمة",
       "INCIDENT_ATTACHMENT": "مرفقات البلاغ",
+      "PLAN_ATTACHMENT": "مرفقات الخطط",
+      "SHIFT_ATTACHMENT": "مرفقات المناوبات",
       "CREATION_DATE": "تاريخ الإنشاء"
     },
     "INQUIRIY": {
@@ -1375,7 +1380,8 @@
       "COPY_CLIPBOARD": "حفظ",
       "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
       "PUSH_NOTIFICATION": "تنبيهات البرنامج",
-      "WORKLOG": "نموذج سجل المهمة/البلاغ"
+      "WORKLOG": "نموذج سجل المهمة/البلاغ",
+      "alertnessLevel": "مستويات الاستعداد"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",
@@ -1473,8 +1479,11 @@
       "NEW_SUGG": "مقترح جديد"
     },
     "SHARED": {
+      "INCIDENT_MAIN_CATEGORY": "التصنيف الرئيسي للبلاغ",
+      "NOT_SPECIFIED": "غير محدد",
+      "UNKNOWN": "غير معروف",
+      "HOUR": "ساعة",
       "INCIDENT_SERIAL": "تسلسل البلاغ",
-
       "REPORTED_BY_INFO": "بيانات صاحب البلاغ",
       "CLOSE_DATE": "تاريخ الاغلاق",
       "PROVISIONAL_QUANTITY": "الكمية المزودة",
@@ -1489,6 +1498,7 @@
       "PHOTO_EDITOR": "محرر الصور",
       "PRIVILEGES": "الصلاحيات",
       "NO_IMAGE": "لا يوجد صورة",
+      "YEAR": "السنة",
       "EXPIRE_DATE": "تاريخ الإنتهاء",
       "USERS": {
         "ACCOUNT_INFO": "معلومات الحساب",
@@ -1728,6 +1738,7 @@
       "SuccessMSG": "لقد  تم  الحفظ ...شكرا  لوقتك",
       "SURVEY_REPORT": "تقرير رضا العملاء",
       "Table": {
+        "SERIAL": "تسلسل البلاغ",
         "happiness": "مدى  السعادة",
         "other": "أخرى",
         "reason": "السبب",

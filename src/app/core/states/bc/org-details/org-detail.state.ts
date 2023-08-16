@@ -14,20 +14,22 @@ import { OrgStructure } from '../../../../api/models/org-structure';
 import { OrgDetailAction } from '@core/states/bc/org-details/org-detail.action';
 import { OrgStructureControllerService } from '../../../../api/services/org-structure-controller.service';
 import {
-  BcOrgHirControllerService,
-  BcOrgHirTypeControllerService,
+  BcOrgHierarchyControllerService,
+  BcOrgHierarchyTypeControllerService,
 } from 'src/app/api/services';
-import { BrowseBusinessContinuityState } from 'src/app/modules/_business-continuity/states/browse-business-continuity.state';
 import {
-  BcOrgHir,
-  BcOrgHirType,
-  PageBcOrgHir,
-  PageBcOrgHirType,
+  BcOrgHierarchy,
+  BcOrgHierarchyType,
+  PageBcOrgHierarchy,
+  PageBcOrgHierarchyType,
 } from 'src/app/api/models';
+import { PageBcOrgHierarchyProjection } from 'src/app/api/models/page-bc-org-hierarchy-projection';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 
 export interface OrgDetailStateModel {
-  orgHir: PageBcOrgHir;
-  orgHirTypes: PageBcOrgHirType;
+  orgHir: PageBcOrgHierarchyProjection;
+  orgHirSearch: PageBcOrgHierarchy;
+  orgHirTypes: PageBcOrgHierarchyType;
   org: OrgStructure;
   loading: boolean;
   blocking: boolean;
@@ -45,8 +47,8 @@ export class OrgDetailState {
   constructor(
     private org: OrgStructureControllerService,
     private store: Store,
-    private orgHir: BcOrgHirControllerService,
-    private orgHirTypes: BcOrgHirTypeControllerService
+    private orgHir: BcOrgHierarchyControllerService,
+    private orgHirTypes: BcOrgHierarchyTypeControllerService
   ) {}
 
   @Selector([OrgDetailState])
@@ -55,12 +57,17 @@ export class OrgDetailState {
   }
 
   @Selector([OrgDetailState])
-  static orgHir(state: OrgDetailStateModel): BcOrgHir[] {
+  static orgHir(state: OrgDetailStateModel): BcOrgHierarchyProjection[] {
     return state?.orgHir.content;
   }
 
   @Selector([OrgDetailState])
-  static orgHirTypes(state: OrgDetailStateModel): BcOrgHirType[] {
+  static orgHirSearch(state: OrgDetailStateModel): BcOrgHierarchy[] {
+    return state?.orgHirSearch.content;
+  }
+
+  @Selector([OrgDetailState])
+  static orgHirTypes(state: OrgDetailStateModel): BcOrgHierarchyType[] {
     return state?.orgHirTypes.content;
   }
 
@@ -86,21 +93,66 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
 
     return this.orgHir
-      .getAll12({
-        versionId: versionID,
+      .search9({
         isActive: true,
-        pageable: payload,
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload?.name,
+        parentId: payload?.parentId,
       })
       .pipe(
         tap((orgHir) => {
           setState(
             patch<OrgDetailStateModel>({
               orgHir: orgHir.result,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<OrgDetailStateModel>({
+              blocking: false,
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
+  /* ********************** ACTIONS ************************* */
+  @Action(OrgDetailAction.GetOrgHierarchySearch, { cancelUncompleted: true })
+  getOrgHierarchySearch(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.GetOrgHierarchySearch
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        blocking: true,
+        loading: true,
+      })
+    );
+
+    return this.orgHir
+      .orgHierarchyForFilteration({
+        isActive: true,
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        name: payload?.name,
+        parentId: payload?.parentId,
+      })
+      .pipe(
+        tap((orgHirSearch) => {
+          setState(
+            patch<OrgDetailStateModel>({
+              orgHirSearch: orgHirSearch.result,
             })
           );
         }),
@@ -125,7 +177,7 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    return this.orgHir.getOne2(payload).pipe(
+    return this.orgHir.getOne5(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -145,7 +197,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.insertOne3({ body: payload }).pipe(
+    return this.orgHir.insertOne6({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -165,7 +217,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.update82({ body: payload }).pipe(
+    return this.orgHir.update85({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -186,7 +238,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.deleteById2(payload).pipe(
+    return this.orgHir.deleteById4(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -207,13 +259,9 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(
-      BrowseBusinessContinuityState.versionId
-    );
 
     return this.orgHirTypes
-      .getAll11({
-        versionId: versionID,
+      .getAll14({
         isActive: true,
         pageable: {
           page: payload.page,

@@ -1,5 +1,4 @@
-import {BcLocationTypes} from "../../../../api/models/bc-location-types";
-import {Bcrto} from "../../../../api/models/bcrto";
+import { BcLocationTypes } from "src/app/api/models";
 
 export namespace LocationTypeAction {
   export class LoadPage {

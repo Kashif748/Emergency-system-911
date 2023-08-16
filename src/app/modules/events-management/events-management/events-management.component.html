@@ -33,16 +33,16 @@
               data-wheel-propagation="true"
             >
               <!--begin::Item-->
-              <div
-                *ngFor="let item of filterCommonDataItems; let i = index"
-                (click)="changeCurrentTab(item)"
-                class="navi-item my-2 cursor-pointer"
-              >
-                <a
-                  class="navi-link px-1"
-                  [hidden]="item?.hidden"
-                  [class]="item.key == currentTab ? 'active' : ''"
+              <ng-container *ngFor="let item of filterCommonDataItems; let i = index">
+                <div
+                  *ngIf="!(item?.hidden)"
+                  (click)="changeCurrentTab(item)"
+                  class="navi-item my-2 cursor-pointer"
                 >
+                  <a
+                    class="navi-link px-1"
+                    [class]="item.key == currentTab ? 'active' : ''"
+                  >
                   <span class="navi-icon mx-2">
                     <span class="svg-icon svg-icon-md">
                       <span
@@ -54,18 +54,19 @@
                       ></span>
                     </span>
                   </span>
-                  <span class="navi-text font-weight-bold font-size-md">{{
+                    <span class="navi-text font-weight-bold font-size-md">{{
                     "EVENTSMODULES." + item.key | translate
                   }}</span>
-                  <span class="navi-label">
+                    <span class="navi-label">
                     <span
                       *ngIf="item.type == 'commonPublic'"
                       class="label label-rounded label-light-primary font-weight-bolder"
-                      >{{ commonDataLengths[i] }}</span
+                    >{{ commonDataLengths[i] }}</span
                     >
                   </span>
-                </a>
-              </div>
+                  </a>
+                </div>
+              </ng-container>
             </div>
           </perfect-scrollbar>
 

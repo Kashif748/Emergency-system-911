@@ -3,12 +3,10 @@ import {Injectable} from "@angular/core";
 import {patch} from "@ngxs/store/operators";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {EMPTY} from "rxjs";
-import {BcLocationTypes} from "../../../../api/models/bc-location-types";
-import {BcLocationTypeControllerService} from "../../../../api/services/bc-location-type-controller.service";
-import {PageBcLocationTypes} from "../../../../api/models/page-bc-location-types";
 import {LocationTypeAction} from "@core/states/bc/location-type/locationType.action";
 import {RtoAction} from "@core/states";
-import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
+import { BcLocationTypes, PageBcLocationTypes } from "src/app/api/models";
+import { BcLocationTypeControllerService } from "src/app/api/services";
 
 
 export interface LocationTypeStateModel {
@@ -70,11 +68,9 @@ export class LocationTypeState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.locationType
-      .getAll14({
+      .getAll18({
         isActive: true,
-        versionId: versionID,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -119,10 +115,8 @@ export class LocationTypeState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.locationType
-      .insertOne5({
+      .insertOne9({
         body: payload,
       })
       .pipe(
@@ -146,10 +140,8 @@ export class LocationTypeState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.locationType
-      .update84({
+      .update88({
         body: payload,
       })
       .pipe(
@@ -181,7 +173,7 @@ export class LocationTypeState {
         blocking: true,
       })
     );
-    return this.locationType.getOne5({ id: payload.id }).pipe(
+    return this.locationType.getOne9({ id: payload.id }).pipe(
       tap((locationType) => {
         setState(
           patch<LocationTypeStateModel>({

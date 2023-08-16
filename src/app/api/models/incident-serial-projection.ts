@@ -3,5 +3,6 @@
 export interface IncidentSerialProjection {
   id?: number;
   serial?: number;
+  year?: number;
 }
 

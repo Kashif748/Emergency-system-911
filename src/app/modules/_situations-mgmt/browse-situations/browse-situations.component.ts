@@ -1,23 +1,17 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { PrivilegesService } from '@core/services/privileges.service';
-import { CommonDataState } from '@core/states';
-import { SituationsAction } from '@core/states/situations/situations.action';
-import { SituationsState } from '@core/states/situations/situations.state';
-import { TranslateService } from '@ngx-translate/core';
-import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent, MenuItem } from 'primeng/api';
-import { Observable, Subject } from 'rxjs';
-import { catchError, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { SituationProjection } from 'src/app/api/models/situation-projection';
-import { BrowseSituationsAction } from '../states/browse-situations.action';
-import {
-  BrowseSituationsState,
-  BrowseSituationsStateModel,
-} from '../states/browse-situations.state';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {PrivilegesService} from '@core/services/privileges.service';
+import {CommonDataState} from '@core/states';
+import {SituationsState} from '@core/states/situations/situations.state';
+import {TranslateService} from '@ngx-translate/core';
+import {Select, Store} from '@ngxs/store';
+import {LazyLoadEvent} from 'primeng/api';
+import {Observable, Subject} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
+import {SituationProjection} from 'src/app/api/models/situation-projection';
+import {BrowseSituationsAction} from '../states/browse-situations.action';
+import {BrowseSituationsState, BrowseSituationsStateModel,} from '../states/browse-situations.state';
 
 @Component({
   selector: 'app-browse-situations',
@@ -71,9 +65,7 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
                 },
                 disabled:
                   !u.isActive ||
-                  !this.privilegesService.checkActionPrivileges(
-                    'PRIV_ED_DEL_SITUATION'
-                  ),
+                  !this.privilegesService.checkActionPrivileges('PRIV_ED_DEL_SITUATION'),
               },
               // view dashbaord
               {
@@ -105,6 +97,30 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
                     'PRIV_ED_DEL_SITUATION'
                   ),
               },
+              {
+                label: this.translate.instant('SITUATIONS.PLAN_ATTACH'),
+                icon: 'pi pi-cloud-upload',
+                command: () => {
+                  this.openDialog(u.id, 'plan');
+                },
+                disabled:
+                !u.isActive ||
+                !this.privilegesService.checkActionPrivileges(
+                  'PRIV_ADD_FILE_SITUATION'
+                ),
+              },
+              {
+                label: this.translate.instant('SITUATIONS.SHIFT_ATTACH'),
+                icon: 'pi pi-cloud-upload',
+                command: () => {
+                  this.openDialog(u.id, 'shift');
+                },
+                disabled:
+                !u.isActive ||
+                !this.privilegesService.checkActionPrivileges(
+                  'PRIV_ADD_FILE_SITUATION'
+                ),
+              },
             ],
           };
         })
@@ -131,11 +147,12 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
       queryParams: { _id },
     });
   }
-  openDialog(id?: number) {
+  openDialog(id?: number, situationType?: string) {
     this.store.dispatch(
       new BrowseSituationsAction.ToggleDialog({
         dialogName: '_form_dialog',
         situationId: id,
+        type: situationType
       })
     );
   }

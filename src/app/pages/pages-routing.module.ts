@@ -4,10 +4,6 @@ import { UnderBuildComponent } from '../under-build/under-build.component';
 import { PrivilegeGuard } from '@shared/guards/privilege.guard';
 import { IncidentsService } from '../_metronic/core/services/incidents.service';
 import { LayoutComponent } from './_layout/layout.component';
-import { DashboardService } from './dashboard/dashboard.service';
-import { GroupsManagementModule } from '../modules/_team-mgmt/team-mgmt.module';
-import { BusinessImpactAnalysisModule } from '../modules/_business-impact-analysis/business-impact-analysis.module';
-import { BusinessContinuityModule } from '../modules/_business-continuity/business-continuity.module';
 
 const routes: Routes = [
   {
@@ -164,11 +160,9 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'business-continuity',
+        path: 'bc',
         loadChildren: () =>
-          import(
-            '../modules/_business-continuity/business-continuity.module'
-          ).then((m) => m.BusinessContinuityModule),
+          import('../modules/_BC/bc.module').then((m) => m.BCModule),
       },
       {
         path: 'company-profile',
@@ -323,6 +317,15 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'reports/tasks',
+        canLoad: [PrivilegeGuard],
+        data: { permission: 'PRIV_TASK_REPORT' },
+        loadChildren: () =>
+          import('../modules/_task-report/task-report.module').then(
+            (m) => m.TaskReportModule
+          ),
+      },
+      {
         path: 'availability-report',
         canLoad: [PrivilegeGuard],
         // data: { permission: "PRIV_VW_INC" },
@@ -425,19 +428,11 @@ const routes: Routes = [
             '../modules/_business-continuity-setup/business-continuity-setup.module'
           ).then((m) => m.BusinessContinuitySetupModule),
       },
+
       {
-        path: 'business-impact-analysis',
+        path: 'bc',
         loadChildren: () =>
-          import(
-            '../modules/_business-impact-analysis/business-impact-analysis.module'
-          ).then((m) => m.BusinessImpactAnalysisModule),
-      },
-      {
-        path: 'business-continuity',
-        loadChildren: () =>
-          import(
-            '../modules/_business-continuity/business-continuity.module'
-          ).then((m) => m.BusinessContinuityModule),
+          import('../modules/_BC/bc.module').then((m) => m.BCModule),
       },
       {
         path: 'under-build',

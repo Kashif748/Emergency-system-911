@@ -1,5 +1,151 @@
 <ng-container *ngIf="state$ | async as state">
   <div class="row">
+    <div class="col-12 position-relative">
+      <p-fieldset
+        [toggleable]="true"
+        styleClass="px-3 py-2 search-section"
+        legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+        [collapsed]="!(hasFilters$ | async)"
+      >
+        <div class="p-fluid p-grid">
+          <div class="p-field p-col-6 p-md-3">
+            <input
+              type="text"
+              pInputText
+              [ngModel]="state.TasksPageRequest.filters['taskId']"
+              placeholder="{{ 'TASK.TASK_ID' | translate }}"
+              (keyup)="updateFilter({ taskId: $event.target.value }, $event)"
+            />
+          </div>
+          <div class="p-field p-col-6 p-md-3">
+            <input
+              type="text"
+              pInputText
+              [ngModel]="state.TasksPageRequest.filters['serial']"
+              placeholder="{{ 'INCIDENTS.SERIAL_YEAR' | translate }}"
+              (keyup)="updateFilter({ serial: $event.target.value }, $event)"
+            />
+          </div>
+
+          <!--  incident fromDate -->
+          <div class="p-field p-col-6 p-md-3">
+            <p-calendar
+              placeholder="{{ 'INCIDENTS.START_DATE' | translate }}"
+              [ngModel]="state.TasksPageRequest.filters['fromDate']"
+              (ngModelChange)="updateFilter({ fromDate: $event }, $event)"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy"
+              showButtonBar="true"
+              [inputId]="'fromDate'"
+              [maxDate]="state.TasksPageRequest.filters['endDate']"
+            ></p-calendar>
+          </div>
+          <!--  incident toDate -->
+          <div class="p-field p-col-6 p-md-3">
+            <p-calendar
+              placeholder="{{ 'INCIDENTS.END_DATE' | translate }}"
+              [ngModel]="state.TasksPageRequest.filters['toDate']"
+              (ngModelChange)="updateFilter({ toDate: $event }, $event)"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy"
+              [minDate]="state.TasksPageRequest.filters['fromDate']"
+              showButtonBar="true"
+              [inputId]="'toDate'"
+            ></p-calendar>
+          </div>
+
+          <div class="p-col p-d-flex p-col-12">
+            <div class="ml-dir-auto"></div>
+            <div class="mx-1">
+              <button
+                pButton
+                type="button"
+                label="{{ 'ACTIONS.CLEAR' | translate }}"
+                icon="pi pi-times"
+                class="p-button-outlined"
+                [loading]="loading$ | async"
+                (click)="clear()"
+              ></button>
+            </div>
+            <div class="mx-1">
+              <button
+                pButton
+                label="{{ 'ACTIONS.SEARCH' | translate }}"
+                icon="pi pi-search"
+                [loading]="loading$ | async"
+                (click)="search()"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </p-fieldset>
+    </div>
+    <div class="col-12 mt-3">
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <div class="p-1 w-100 w-md-200px">
+            <p-multiSelect
+              [options]="columns"
+              defaultLabel="Select Columns"
+              optionLabel="name"
+              styleClass="w-100"
+              [ngModel]="state.columns"
+              [optionValue]="'code'"
+              optionDisabled="disabled"
+              (onChange)="changeColumns($event)"
+            >
+              <ng-template let-options pTemplate="selectedItems">
+                <ng-container *ngIf="options?.length > 0">
+                  {{
+                    options?.length + " " + ("SHARED.SELCTED_ITEM" | translate)
+                  }}
+                </ng-container>
+                <ng-container *ngIf="!options || options.length === 0">
+                  {{ "SHARED.SELECT_SHOWING_FIELDS" | translate }}
+                </ng-container>
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.name | translate }}
+              </ng-template>
+            </p-multiSelect>
+          </div>
+          <div class="p-1 w-100 w-md-225px">
+            <div class="p-inputgroup">
+              <p-dropdown
+                [options]="sortableColumns$ | async"
+                [autoDisplayFirst]="false"
+                [showClear]="true"
+                [ngModel]="state?.TasksPageRequest?.sortField"
+                placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate }}"
+                optionLabel="name"
+                optionValue="code"
+                styleClass="w-100 h-100"
+                class="w-100 h-100"
+                (onChange)="sort($event)"
+              >
+                <ng-template let-option pTemplate="selectedItem">
+                  {{ option.name | translate }}
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                  {{ option.name | translate }}
+                </ng-template>
+              </p-dropdown>
+              <div class="p-inputgroup-addon p-0">
+                <p-toggleButton
+                  class="w-100 h-100"
+                  [onIcon]="'pi pi-sort-amount-up'"
+                  [ngModel]="state.TasksPageRequest.sortOrder === 'desc'"
+                  offIcon="pi pi-sort-amount-down-alt"
+                  iconPos="right"
+                  styleClass="w-100 h-100"
+                  (onChange)="order($event)"
+                ></p-toggleButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-toolbar>
+    </div>
     <div class="col-12 my-3">
       <div class="w-100 d-flex flex-wrap mx-1 px-6">
         <div class="my-auto">
@@ -24,8 +170,6 @@
             <span class="m-auto"> {{ "BY_MY_ORG" | translate }} </span>
           </button>
         </div>
-
-
       </div>
     </div>
   </div>
@@ -35,7 +179,7 @@
     [type]="type$ | async"
     [loading]="loading$ | async"
     [page]="page$ | async"
-    [columns]="state.columns"
+    [columns]="state.tasksColumns"
     [totalRecords]="totalRecords$ | async"
     [pageRequest]="state.TasksPageRequest"
     (onPageChange)="loadPage($event)"

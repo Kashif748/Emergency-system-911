@@ -1,0 +1,49 @@
+.header-indicator {
+  font-size: medium;
+  font-weight: bold;
+}
+.text-indicator {
+  font-size: 4rem;
+  font-weight: 900;
+}
+
+.unit-idicator {
+  * {
+    font-size: x-large;
+    font-weight: 700;
+  }
+  bottom: 15%;
+}
+
+:host ::ng-deep {
+  .grid-widget-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .grid-widget {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 0;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .chart-wrapper {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: hidden;
+  }
+  .apexcharts-bar-series.apexcharts-plot-series .apexcharts-series {
+    &:first-child path {
+      clip-path: inset(0 round 5px 0 0 5px);
+    }
+  }
+}

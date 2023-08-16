@@ -387,6 +387,10 @@ export class FilesListComponent implements OnInit, AfterViewInit {
         return this.loadInterimIncidentFiles();
       case UploadTagIdConst.ASSETS_IMAGE:
         return this.loadAsssestImageFiles();
+      case UploadTagIdConst.PLAN_SITUATION:
+        return this.loadSituationsAttachments();
+      case UploadTagIdConst.SHIFT_SITUATION:
+        return this.loadSituationsAttachments();
       default:
         return;
     }
@@ -422,7 +426,8 @@ export class FilesListComponent implements OnInit, AfterViewInit {
     logsAttachmentsRes: any,
     attachmentsRes: any,
     moreAttachmentsRes?: any,
-    reporterAttachment?: any
+    reporterAttachment?: any,
+    situationAttachmentsRes?: any
   ) {
     const tempAttachments = [];
     if (moreAttachmentsRes) {
@@ -468,14 +473,27 @@ export class FilesListComponent implements OnInit, AfterViewInit {
       });
     }
 
-    (attachmentsRes['result'] as any[]).forEach((doc) => {
-      const attachment = doc?.documents ? doc.documents : doc;
-      attachment['groupName'] =
-        this.tagId == UploadTagIdConst.TASK_WORK_LOG
-          ? this.translationService.get('TASK.TASK_ATTACHMENT')
-          : this.translationService.get('TASK.INCIDENT_ATTACHMENT');
-      tempAttachments.push(attachment);
-    });
+    if (attachmentsRes) {
+      (attachmentsRes['result'] as any[]).forEach((doc) => {
+        const attachment = doc?.documents ? doc.documents : doc;
+        attachment['groupName'] =
+          this.tagId == UploadTagIdConst.TASK_WORK_LOG
+            ? this.translationService.get('TASK.TASK_ATTACHMENT')
+            : this.translationService.get('TASK.INCIDENT_ATTACHMENT');
+        tempAttachments.push(attachment);
+      });
+    }
+
+    if (situationAttachmentsRes) {
+      (situationAttachmentsRes['result'] as any[]).forEach((doc) => {
+        const attachment = doc?.documents ? doc.documents : doc;
+        attachment['groupName'] =
+          this.tagId == UploadTagIdConst.PLAN_SITUATION
+            ? this.translationService.get('TASK.PLAN_ATTACHMENT')
+            : this.translationService.get('TASK.SHIFT_ATTACHMENT');
+        tempAttachments.push(attachment);
+      });
+    }
     this.attachments = tempAttachments.sort((a, b) => {
       return a.id - b.id;
     });
@@ -627,6 +645,27 @@ export class FilesListComponent implements OnInit, AfterViewInit {
           tasksAttachmentsRes,
           incidentsAttachmentsRes
         );
+        this.groupAttachmentsForUI();
+        this.cd.detectChanges();
+      },
+      (e) => {
+        console.log(e);
+        this.loading = false;
+        this.cd.detectChanges();
+      }
+    );
+  }
+
+  private loadSituationsAttachments() {
+    forkJoin({
+      situationAttachmentsRes: this.attachmentsService.getFilesList(
+        this.recordId, this.tagId
+      )
+    }).subscribe(
+      ({
+         situationAttachmentsRes,
+       }) => {
+        this.fillAttachmentsList(null, null, null, null, situationAttachmentsRes);
         this.groupAttachmentsForUI();
         this.cd.detectChanges();
       },

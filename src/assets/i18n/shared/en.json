@@ -255,7 +255,9 @@
       "ALLOWED_TYPW": "allowed types are :allowedTypes"
     },
     "GENERAL": {
-      "DELETE_CONFIRM": "Are you sure you want to delete?"
+      "DELETE_CONFIRM": "Are you sure you want to delete?",
+      "RESENT_CONFIRM": "Are you sure you want to resend?",
+      "SEND_CONFIRM": "Send"
     },
     "WORK_LOG_LIST": {
       "DATE": "Date",
@@ -288,7 +290,7 @@
       "ALL_STATS": "All Stats",
       "STATESTICS": "Statistics",
       "IN_PROGRESS_INCIDENTS": "In Progress Incidents",
-      "DRAFTED_INCIDENTS" : "Drafts",
+      "DRAFTED_INCIDENTS": "Drafts",
       "REJECTED_INCIDENTS": "Rejected Incidents",
       "INCOMING_TSKS": "Incoming tasks",
       "OUTCOMING_TASKS": "Outgoing tasks",
@@ -565,9 +567,11 @@
       "DESCRIPTION": "Description",
       "SR_NO": "Id",
       "SERIAL": "Sequance Number",
+      "SERIAL_YEAR": "Sequance Number / Year ",
+
       "ACTIONS": "Actions",
       "SUBMIT": "Submit",
-      "saveAsDraft" : "Save as Draft",
+      "saveAsDraft": "Save as Draft",
       "REPORT_INCIDENT": "Incidents",
       "NEW_INCIDENTS": "Add Incident",
       "NEW_INQUIRY": "Add Inquiry",
@@ -696,7 +700,7 @@
       "SELECT_PRIORITY_ERROR": "Please select Priority",
       "GET_KPI_INFO": "Get Kpi Information",
       "SECONDS": "Seconds",
-      "DRAFT" :  "Draft",
+      "DRAFT": "Draft",
       "IsExpired": "Kpi Expiry ?",
       "EXPIRED": "Expired ",
       "NOT_EXPIRED": "Not Expired",
@@ -739,7 +743,7 @@
       "SHARE_LOCATION_GOOGLE_MAPS": "Share location on google maps",
       "URL": "url",
       "CLOSE_INCIDENT": "Close Incident",
-      "DELETE_DRAFT" : "Delete Draft",
+      "DELETE_DRAFT": "Delete Draft",
 
       "TO": "TO",
       "HAPPINESS_LEVEL": {
@@ -835,7 +839,7 @@
       }
     },
     "INQUIRIY": {
-      "REPORT" : "Inquiriy Report",
+      "REPORT": "Inquiriy Report",
       "ADVANCED_SEARCH": "Advanced Search",
       "ID": "ID",
       "SUBJECT": "Subject",
@@ -904,6 +908,8 @@
       "ADVANCED_SEARCH": "Advanced Search",
       "TASK_ATTACHMENT": "Task Attachments",
       "INCIDENT_ATTACHMENT": "Incident Attachments",
+      "PLAN_ATTACHMENT": "Plans Attachments",
+      "SHIFT_ATTACHMENT": "Shifts Attachments",
       "CREATION_DATE": "Creation Date"
     },
     "OPERATIONAL_REPORTS": {
@@ -1058,7 +1064,7 @@
       "UPDATE": "The Update",
       "MAIL_REPORT": "Mail Reports",
       "GENERAL_REPORT": "Tasks Report",
-      "INCIDENTS_REPORT" : "Incidents Report",
+      "INCIDENTS_REPORT": "Incidents Report",
       "RESOURCES_REPORT": "Resources Reports",
       "USERS_REPORT_TITLE": "User Statistics Report",
       "IncidentsStatisticsTitle": "Incident Statistics Report",
@@ -1345,7 +1351,8 @@
       "SMS_NOTIFICATION": "SMS Notification",
       "PUSH_NOTIFICATION": "Push Notification",
       "WORKLOG": "Worklog Templates",
-      "COPY_CLIPBOARD": "Copy to clipboard"
+      "COPY_CLIPBOARD": "Copy to clipboard",
+      "alertnessLevel": "Alertness Levels"
     },
     "NEWS": {
       "NEWS": "News",
@@ -1480,6 +1487,10 @@
       "NEW_SUGG": "New Suggestion"
     },
     "SHARED": {
+      "INCIDENT_MAIN_CATEGORY": "Incident Main Category",
+      "NOT_SPECIFIED": "Not Specified",
+      "UNKNOWN": "Unknown",
+      "HOUR": "Hour/s",
       "INCIDENT_SERIAL": "Incident Serial",
       "REPORTED_BY_INFO": "Reported By Info",
       "CLOSE_DATE": "Close Date",
@@ -1495,6 +1506,7 @@
       "PHOTO_EDITOR": "Photo Editor",
       "PRIVILEGES": "Privileges",
       "NO_IMAGE": "No image",
+      "YEAR": "Year",
       "EXPIRE_DATE": "Expire Date",
       "USERS": {
         "ACCOUNT_INFO": "Account Info",
@@ -1901,6 +1913,7 @@
       "SuccessMSG": "Your  Survey  has been  saved ....Thank you ",
       "SURVEY_REPORT": "Customer Satisfaction Report",
       "Table": {
+        "SERIAL": "Incident Serial",
         "happiness": "happiness",
         "other": "other",
         "reason": "reason",

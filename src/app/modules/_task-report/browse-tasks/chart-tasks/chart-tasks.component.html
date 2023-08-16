@@ -1,0 +1,262 @@
+<div class="container-fluid" *ngIf="(loading$ | async) !== undefined" [@slideDown]>
+  <ng-container *ngIf="loading$ | async;else chartTemplate">
+    <div class="row" #chartTemplate>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-md-5 mb-4">
+            <div class="row h-100 min-h-200px">
+              <div class="col-4 ">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.TOTAL" | translate }}
+                  </h6>
+                  <div class="d-flex h-100 w-100">
+                    <div class="m-auto text-center">
+                      <p-skeleton height="3rem" width="8rem"></p-skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.AVERAGE_CLOSE_TIME" | translate }}
+                  </h6>
+                  <div class="d-flex h-100 w-100">
+                    <div class="m-auto text-center max-w-100">
+                      <p-skeleton height="3rem" width="8rem"></p-skeleton>
+                    </div>
+                  </div>
+                  <div class="position-absolute text-center left-0 right-0 unit-idicator">
+                    <h1>
+                      ( {{ "SHARED.HOUR" | translate }} )
+                    </h1>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.RATE_CLOSE_WITHIN_TIME" | translate }}
+                  </h6>
+                  <div class="d-flex h-100 w-100">
+                    <div class="m-auto text-center max-w-100">
+                      <p-skeleton height="3rem" width="8rem"></p-skeleton>
+                    </div>
+                  </div>
+                  <div class="position-absolute text-center left-0 right-0 unit-idicator">
+                    <h1>
+                      %
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <div class="row h-100">
+              <div class="col-md-6 mb-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.PER_ZONE" | translate }}
+                  </h6>
+
+                  <div class="mt-5 p-5">
+                    <p-skeleton height="270px"></p-skeleton>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.PER_PRIORITY" | translate }}
+                  </h6>
+                  <div class="mt-5 p-5">
+                    <p-skeleton height="270px"></p-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 mt-4 mb-5">
+        <div class="row">
+          <div class="col-12 h-160px mb-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.PER_STATUS" | translate }}
+
+              </h6>
+              <div class="mt-5 p-5">
+                <p-skeleton height="110px"></p-skeleton>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="col-12 h-160px mt-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.PER_CATEGORY" | translate }}
+              </h6>
+              <div class="mt-5 p-5">
+                <p-skeleton height="110px"></p-skeleton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #chartTemplate>
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-md-5 mb-4">
+            <div class="row h-100 min-h-200px">
+              <div class="col-4 ">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.TOTAL" | translate }}
+                  </h6>
+                  <div class="d-flex h-100 w-100">
+                    <div class="m-auto text-center max-w-100">
+                      <h1 class="text-indicator p-text-truncate" title="{{total$ | async}}">
+                        {{total$ | async}}
+                      </h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.AVERAGE_CLOSE_TIME" | translate }}
+                  </h6>
+                  <div class="d-flex h-100 w-100">
+                    <div class="m-auto text-center max-w-100">
+                      <h1 class="text-indicator p-text-truncate"
+                        title="{{ avergageCloseTime$ | async | number : '1.1-1' }}">
+                        {{ avergageCloseTime$ | async | number : '1.1-1' }}
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="position-absolute text-center left-0 right-0 unit-idicator">
+                    <h1>
+                      ( {{ "SHARED.HOUR" | translate }} )
+                    </h1>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1 ">
+                    {{ "CHARTS.RATE_CLOSE_WITHIN_TIME" | translate }}
+                  </h6>
+                  <div class="d-flex h-100 w-100">
+                    <div class="m-auto text-center max-w-100">
+                      <h1 class="text-indicator p-text-truncate"
+                        title="{{ rateCloseWithinTime$ | async | number : '1.1-1' }}">
+                        {{ rateCloseWithinTime$ | async | number : '1.1-1' }}
+                      </h1>
+                    </div>
+                  </div>
+                  <div class="position-absolute text-center left-0 right-0 unit-idicator">
+                    <h1>
+                      %
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <div class="row h-100">
+              <div class="col-md-6 mb-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.PER_ZONE" | translate }}
+                  </h6>
+
+                  <div class="mt-5" *ngIf="zone$ | async as zone">
+                    <apx-chart class="overflow-auto max-w-100" [series]="zone?.series"
+                      [chart]="{width: '100%', type: 'pie', toolbar: {show: true}}" [legend]="{ width: 85 }"
+                      [labels]="zone?.labels" [stroke]="{width:0}"></apx-chart>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+                  <h6 class="position-absolute header-indicator mt-1 mx-1">
+                    {{ "CHARTS.PER_PRIORITY" | translate }}
+                  </h6>
+                  <div class="mt-5" *ngIf="priority$ | async as priority">
+                    <apx-chart class="overflow-auto max-w-100" [series]="priority?.series"
+                      [chart]="{width: '100%', type: 'pie', toolbar: {show: true}}" [legend]="{ width: 85 }"
+                      [labels]="priority?.labels" [stroke]="{width:0}"></apx-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 mt-4 mb-5">
+        <div class="row">
+          <div class="col-12 h-160px mb-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.PER_STATUS" | translate }}
+
+              </h6>
+              <div *ngIf="status$ | async as status">
+                <apx-chart class="overflow-auto max-w-100" [series]="status"
+                  [chart]="{type: 'bar', height: 150, stacked: true, stackType: '100%'}"
+                  [plotOptions]="{ bar: { horizontal: true, borderRadius: 5, endingShape: 'rounded', startingShape: 'rounded'} }"
+                  [stroke]="{width: 1,colors: ['#fff']}"
+                  [xaxis]="{show: false, labels: {show: false}, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
+                  [yaxis]="{show: false, labels: {show: false, formatter: yaxisFormatter}, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
+                  [fill]="{opacity: 1}" [dataLabels]="{formatter: dataLabelsFormatter}"
+                  [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
+                  [grid]="{show: false}" [tooltip]="{x: { show:false }}" [stroke]="{width:0}"></apx-chart>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="col-12 h-160px mt-4">
+            <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
+              <h6 class="position-absolute header-indicator mt-1 mx-1">
+                {{ "CHARTS.PER_CATEGORY" | translate }}
+              </h6>
+              <div *ngIf="category$ | async as category">
+                <apx-chart class="overflow-auto max-w-100" [autoUpdateSeries]="true" [series]="category"
+                  [chart]="{type: 'bar', height: 150, width: '100%', stacked: true, stackType: '100%'}"
+                  [plotOptions]="{ bar: { horizontal: true, borderRadius: 5,endingShape: 'rounded', startingShape: 'rounded'} }"
+                  [stroke]="{width: 1,colors: ['#fff']}"
+                  [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
+                  [yaxis]="{show: false, labels: {show: false, formatter: yaxisFormatter }, axisBorder: {show: false}, axisTicks: {show: false}}"
+                  [fill]="{opacity: 1}" [dataLabels]="{formatter: dataLabelsFormatter}"
+                  [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
+                  [grid]="{show: false}" [tooltip]="{x:{show:false}}" [stroke]="{width:0}"></apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

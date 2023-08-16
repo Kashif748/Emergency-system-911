@@ -4,7 +4,7 @@ export enum NOTIFICATION_TABLE_TYPES {
   PUSH,
 }
 export const NOTIFICATION_TABLE_COLUMNS = {
-  SMS_TABLE: ['id', 'mobile', 'createdOn', 'sms', 'status'],
+  SMS_TABLE: ['id', 'mobile', 'createdOn', 'sms', 'status', 'actions'],
   EMAILS_TABLE: ['id', 'to', 'cc', 'createdOn', 'subject', 'body', 'status'],
   PUSH_TABLE: ['id', 'user', 'createdOn', 'title', 'sms', 'status'],
 };

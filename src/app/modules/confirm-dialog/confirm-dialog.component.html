@@ -4,16 +4,25 @@
     class="svg-icon svg-icon-lg svg-icon-5x svg-icon-primary"
   ></span>
 </h1>
-<div mat-dialog-content style="text-align: center; font-size: 17px">
+<div *ngIf="data?.confirmMessage" mat-dialog-content style="text-align: center; font-size: 17px">
+    {{ data.confirmMessage | translate }}
+</div>
+<div *ngIf="!data?.confirmMessage" mat-dialog-content style="text-align: center; font-size: 17px">
   {{ confirmMessage | translate }}
 </div>
 <p>{{ confirmSubMessage }}</p>
 <div mat-dialog-actions style="justify-content: center">
-  <button
+  <button *ngIf="!data?.confirmMessage"
     class="btn btn-md btn-primary mr-16 px-5 cursor-pointer"
     (click)="dialogRef.close(true)"
   >
     {{ "ACTIONS.YES" | translate }} {{ actionName | translate }}
+  </button>
+  <button *ngIf="data?.confirmMessage"
+    class="btn btn-md btn-primary mr-16 px-5 cursor-pointer"
+    (click)="dialogRef.close(true)"
+  >
+    {{ "ACTIONS.YES" | translate }} {{ data.action | translate }}
   </button>
   <button
     (click)="dialogRef.close(false)"

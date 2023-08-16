@@ -1,4 +1,4 @@
-import { BcOrganizationDetails, BcOrgHir } from 'src/app/api/models';
+import { BcOrganizationDetails, BcOrgHierarchy } from 'src/app/api/models';
 
 export namespace OrgDetailAction {
   export class CreateOrgHierarchy {
@@ -6,14 +6,14 @@ export namespace OrgDetailAction {
     /**
      *
      */
-    constructor(public payload: BcOrgHir) {}
+    constructor(public payload: BcOrgHierarchy) {}
   }
   export class UpdateOrgHierarchy {
     static readonly type = '[OrgDetail] Update Org Hierarchy';
     /**
      *
      */
-    constructor(public payload: BcOrgHir) {}
+    constructor(public payload: BcOrgHierarchy) {}
   }
   export class DeleteOrgHierarchy {
     static readonly type = '[OrgDetail] Delete Org Hierarchy';
@@ -32,9 +32,28 @@ export namespace OrgDetailAction {
         sort?: string[];
         page: number;
         size: number;
+        name?: string;
+        parentId?: number;
       }
     ) {}
   }
+
+  export class GetOrgHierarchySearch {
+    static readonly type = '[OrgDetail] Get Org Hierarchy Search';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        sort?: string[];
+        page: number;
+        size: number;
+        name?: string;
+        parentId?: number;
+      }
+    ) {}
+  }
+
   export class GetOrgHierarchyNode {
     static readonly type = '[OrgDetail] Get Org Hierarchy Node';
     /**

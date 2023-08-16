@@ -1,14 +1,22 @@
-import {BcActivityFrequencies} from "../../../../api/models/bc-activity-frequencies";
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
-import {Injectable} from "@angular/core";
-import {BcActivityFrequenciesControllerService} from "../../../../api/services/bc-activity-frequencies-controller.service";
-import {EMPTY} from "rxjs";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {patch} from "@ngxs/store/operators";
-import {ActivityFrquencyAction} from "@core/states/bc/activity-frquency/activity-frquency.action";
-import {PageBcActivityFrequencies} from "../../../../api/models/page-bc-activity-frequencies";
-import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
-
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { patch } from '@ngxs/store/operators';
+import { ActivityFrquencyAction } from '@core/states/bc/activity-frquency/activity-frquency.action';
+import {
+  BcActivityFrequencies,
+  PageBcActivityFrequencies,
+} from 'src/app/api/models';
+import { BcActivityFrequenciesControllerService } from 'src/app/api/services';
 
 export interface ActivityFrquencyStateModel {
   page: PageBcActivityFrequencies;
@@ -17,21 +25,19 @@ export interface ActivityFrquencyStateModel {
   blocking: boolean;
 }
 
-const ACTIVITY_FRQUENCY_STATE_TOKEN = new StateToken<ActivityFrquencyStateModel>('activityFrquency');
+const ACTIVITY_FRQUENCY_STATE_TOKEN =
+  new StateToken<ActivityFrquencyStateModel>('activity_frquency');
 
 @State<ActivityFrquencyStateModel>({ name: ACTIVITY_FRQUENCY_STATE_TOKEN })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-
 export class ActivityFrquencyState {
   /**
    *
    */
   constructor(
-    private activityFrquency: BcActivityFrequenciesControllerService,
-    private store: Store,
-  ) {
-  }
+    private activityFrquency: BcActivityFrequenciesControllerService
+  ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([ActivityFrquencyState])
@@ -45,9 +51,9 @@ export class ActivityFrquencyState {
   }
 
   @Selector([ActivityFrquencyState])
-    static totalRecords(state: ActivityFrquencyStateModel) {
+  static totalRecords(state: ActivityFrquencyStateModel) {
     return state?.page?.totalElements;
-    }
+  }
 
   @Selector([ActivityFrquencyState])
   static loading(state: ActivityFrquencyStateModel) {
@@ -70,17 +76,14 @@ export class ActivityFrquencyState {
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.activityFrquency
-      .getAll18({
+      .getAll24({
         isActive: true,
-        versionId: versionID,
         pageable: {
-           page: payload.page,
-           size: payload.size,
-           sort: payload.sort,
-         },
-//         request: payload.filters,
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
       })
       .pipe(
         tap((res) => {
@@ -119,10 +122,8 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.activityFrquency
-      .insertOne9({
+      .insertOne15({
         body: payload,
       })
       .pipe(
@@ -146,10 +147,8 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.activityFrquency
-      .update89({
+      .update95({
         body: payload,
       })
       .pipe(
@@ -162,7 +161,6 @@ export class ActivityFrquencyState {
         })
       );
   }
-
 
   @Action(ActivityFrquencyAction.GetActivityFrq, { cancelUncompleted: true })
   getActivityFrq(
@@ -182,7 +180,7 @@ export class ActivityFrquencyState {
         blocking: true,
       })
     );
-    return this.activityFrquency.getOne9({ id: payload.id }).pipe(
+    return this.activityFrquency.getOne15({ id: payload.id }).pipe(
       tap((activityFrq) => {
         setState(
           patch<ActivityFrquencyStateModel>({
@@ -199,5 +197,4 @@ export class ActivityFrquencyState {
       })
     );
   }
-
 }

@@ -513,7 +513,30 @@ button {
   }
 }
 
-
 .highlight {
   background-color: #f8d6da !important;
+}
+
+[dir="rtl"] {
+  .apexcharts-legend-marker {
+    margin-right: unset !important;
+    margin-left: 3px;
+  }
+  .apexcharts-tooltip-marker {
+    margin-right: unset !important;
+    margin-left: 10px;
+  }
+  .apexcharts-toolbar,
+  .apexcharts-menu {
+    position: absolute;
+    right: auto !important;
+    left: 10px !important;
+  }
+}
+
+.a-none {
+  &:hover {
+    all: unset;
+  }
+  all: unset;
 }

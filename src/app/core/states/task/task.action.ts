@@ -1,6 +1,10 @@
 import { TaskDetails } from 'src/app/api/models';
 
 export namespace TaskAction {
+  export class RESET {
+    static readonly type = '[Task] RESET STATE';
+    constructor() {}
+  }
   export class LoadTasks {
     static readonly type = '[Task] Load Tasks';
     /**
@@ -20,6 +24,18 @@ export namespace TaskAction {
         sort?: string[];
         page: number;
         size: number;
+      }
+    ) {}
+  }
+
+  export class LoadStatistics {
+    static readonly type = '[Task] Load Statistics';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        filters?: { [key: string]: any };
       }
     ) {}
   }
@@ -105,6 +121,19 @@ export namespace TaskAction {
      */
     constructor(
       public payload: { search: string; page?: number; size?: number }
+    ) {}
+  }
+
+  export class Export {
+    static readonly type = '[Task] Export';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        type: 'PDF' | 'EXCEL';
+        filters?: { [key: string]: any };
+      }
     ) {}
   }
 }

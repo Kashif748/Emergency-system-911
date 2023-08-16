@@ -1,4 +1,4 @@
-import {Bcrto} from "../../../../api/models/bcrto";
+import { Bcrto } from '../../../../api/models/bcrto';
 
 export namespace RtoAction {
   export class LoadPage {
@@ -13,9 +13,9 @@ export namespace RtoAction {
         sort?: string[];
         page: number;
         size: number;
+        versionId: number
       }
-    ) {
-    }
+    ) {}
   }
 
   export class Create {
@@ -23,9 +23,7 @@ export namespace RtoAction {
     /**
      *
      */
-    constructor(
-      public payload: Bcrto
-    ) {}
+    constructor(public payload: Bcrto) {}
   }
 
   export class Update {
@@ -33,9 +31,7 @@ export namespace RtoAction {
     /**
      *
      */
-    constructor(
-      public payload: Bcrto
-    ) {}
+    constructor(public payload: Bcrto) {}
   }
 
   export class GetRto {

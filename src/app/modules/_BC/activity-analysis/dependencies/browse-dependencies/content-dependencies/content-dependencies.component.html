@@ -1,0 +1,109 @@
+<p-card styleClass="bg-light-primary">
+  <ng-template pTemplate="header">
+    <div
+      class="d-flex p-ai-center p-jc-between p-4 font-weight-bold font-size-h4"
+    >
+      {{ "DEPENDENCIES." + dependType | translate }}
+      <button
+        [disabled]="noDpeend"
+        pButton
+        label="{{ 'ACTIONS.ADD' | translate }}"
+        icon="pi pi-plus"
+        (click)="toggleDialog()"
+      ></button>
+    </div>
+  </ng-template>
+  <ng-container *ngIf="loading$ | async; else cardsTemplate">
+    <ng-container *ngFor="let _ of [].constructor(4)">
+      <div class="w-100 rounded my-2 py-4 bg-white border">
+        <div class="w-100 mx-auto my-1 d-flex position-relative px-4">
+          <div class="flex-grow-1 p-grid p-fluid">
+            <div class="p-col-12">
+              <div class="mt-1 mx-2 p-grid p-fluid">
+                <div class="p-col-12">
+                  <div class="p-fluid p-grid">
+                    <div class="p-col"><p-skeleton></p-skeleton></div>
+                    <div class="p-col"><p-skeleton></p-skeleton></div>
+                  </div>
+                </div>
+                <div class="p-col-12">
+                  <p-skeleton height="1.5rem"></p-skeleton>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            pButton
+            pRipple
+            type="button"
+            icon="pi pi-ellipsis-v"
+            class="p-button-rounded p-button-text mt-0 p-button-plain"
+          ></button>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #cardsTemplate>
+    <div
+      *ngFor="let item of page"
+      class="w-100 rounded bg-white border p-2 mb-3"
+    >
+      <div class="flex-grow-1 p-grid p-fluid">
+        <div class="p-col-12">
+          <div class="mt-1 mx-2 p-grid p-fluid">
+            <div *ngIf="item?.orgHierarchy" class="d-flex flex-column col-6">
+              <span class="font-weight-bold">
+                {{ "SECTOR" | translate }}
+              </span>
+              <span> {{ item?.orgHierarchy | translateObj }}</span>
+            </div>
+            <div *ngIf="item?.activityName" class="d-flex flex-column col-6">
+              <span class="font-weight-bold">
+                {{ "ACTIVITY" | translate }}
+              </span>
+              <span> {{ item?.activityName }}</span>
+            </div>
+
+            <div class="d-flex flex-column col pt-4">
+              <span class="font-weight-bold">
+                {{ "DEPENDENCIES.DETAILS" | translate }}
+              </span>
+              <span> {{ item?.dependencyDetails }}</span>
+            </div>
+            <div
+              class="col-fixed d-flex p-ai-center p-jc-center pt-4"
+              style="width: 50px"
+            >
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-ellipsis-v"
+                class="p-button-rounded p-button-text"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nodata-table *ngIf="page?.length === 0"></nodata-table>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="p-field m-0">
+      <div class="p-field-checkbox m-0 p-4">
+        <p-checkbox
+          [disabled]="page?.length > 0"
+          [(ngModel)]="noDpeend"
+          (click)="confirm($event); $event.stopPropagation()"
+          binary="true"
+        ></p-checkbox>
+        <label class="mx-2 my-0">
+          {{ "DEPENDENCIES.NO_DEPENDENCY" | translate }}</label
+        >
+      </div>
+    </div>
+  </ng-template>
+</p-card>
+
+<p-confirmPopup></p-confirmPopup>

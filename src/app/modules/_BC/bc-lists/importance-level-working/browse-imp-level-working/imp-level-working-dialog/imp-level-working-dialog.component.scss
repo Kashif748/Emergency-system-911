@@ -1,0 +1,22 @@
+.color-field{
+  display: flex !important;
+}
+
+:host ::ng-deep {
+  .p-dropdown {
+    background-color: white !important;
+    .p-dropdown-label,
+    .p-dropdown-trigger-icon {
+      // padding: 0 12px;
+      color: #6c757d !important;
+    }
+  }
+  .p-colorpicker-preview, .p-fluid .p-colorpicker-preview.p-inputtext {
+    width: 3rem !important;
+    height: 3rem !important;
+  }
+
+
+}
+
+

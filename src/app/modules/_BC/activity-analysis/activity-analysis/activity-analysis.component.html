@@ -1,0 +1,171 @@
+<ng-container *ngIf="state$ | async">
+  <ng-container *ngIf="cycle$ | async as cycle">
+    <section
+      *ngIf="activityAnalysis$ | async as activityAnalysis"
+      class="d-flex flex-column p-6 position-relative"
+      [dir]="dir$ | async"
+    >
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <div class="p-col p-d-flex">
+            <button pButton [icon]="icon$ | async" routerLink="/bc/impact-analysis">
+            </button>
+          </div>
+          <h2 class="m-0">
+            {{ activityAnalysis?.activity?.activityFrequence | translateObj }} -
+            {{ activityAnalysis?.activity | translateObj }}
+          </h2>
+        </div>
+        <div class="p-toolbar-group-right" style="gap: 10px">
+          <p-button
+            *ngIf="activityAnalysis?.status?.id != ACTIVITY_STATUSES.DRAFT"
+            label="{{ 'DRAFT' | translate }}"
+            styleClass="p-button-outlined p-button-danger"
+            (click)="
+              changeStatus(activityAnalysis?.id, ACTIVITY_STATUSES.DRAFT)
+            "
+          ></p-button>
+          <p-button
+            *ngIf="
+              activityAnalysis?.status?.id != ACTIVITY_STATUSES.UNDER_REVIEW
+            "
+            label="{{ 'REVIEW' | translate }}"
+            styleClass="p-button-outlined"
+            (click)="
+              changeStatus(activityAnalysis?.id, ACTIVITY_STATUSES.UNDER_REVIEW)
+            "
+          ></p-button>
+          <p-button
+            *ngIf="
+              activityAnalysis?.status?.id != ACTIVITY_STATUSES.UNDER_APPROVAL
+            "
+            (click)="
+              changeStatus(
+                activityAnalysis?.id,
+                ACTIVITY_STATUSES.UNDER_APPROVAL
+              )
+            "
+            label="{{ 'APPROVE' | translate }}"
+          ></p-button>
+          <p-button icon="pi pi-ellipsis-v"></p-button>
+        </div>
+      </p-toolbar>
+      <div class="d-flex p-5 sub-header p-jc-around">
+        <div class="d-flex flex-column">
+          <span class="mb-3">{{ "ORG_ARTCH" | translate }}</span>
+          <span class="font-weight-bold text-primary">
+            {{ activityAnalysis?.activity?.orgHierarchy | translateObj }}</span
+          >
+        </div>
+        <!-- <div class="d-flex flex-column">
+          <span class="mb-3">إدارة</span>
+          <span class="font-weight-bold text-primary">الموارد البشرية</span>
+        </div> -->
+        <!-- <div class="d-flex flex-column">
+          <span class="mb-3">قسم </span>
+          <span class="font-weight-bold text-primary"> الرواتب </span>
+        </div> -->
+        <div class="d-flex flex-column">
+          <span class="mb-3"> {{ "createdBy" | translate }}</span>
+          <span class="font-weight-bold text-primary">مصطفى السبول </span>
+        </div>
+        <div class="d-flex flex-column">
+          <span class="mb-3"> {{ "STATUS" | translate }}</span>
+          <span class="font-weight-bold text-primary">
+            {{ activityAnalysis?.status | translateObj }}
+          </span>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="row p-4">
+        <div class="col-4">
+          <p-card
+            header="{{ 'ANALYSISـRESULT' | translate }}"
+            styleClass="shadow-none border h-100"
+          >
+            <div class="d-flex p-jc-between">
+              <div class="d-flex flex-column">
+                <span>{{ "ACTIVITY_CRITICALITY" | translate }}</span>
+                <p class="font-weight-bold font-size-h4 mt-4">مرتفع</p>
+              </div>
+              <p-divider layout="vertical"></p-divider>
+
+              <div class="d-flex flex-column">
+                <span>{{ "RECOVERY_TIME" | translate }}</span>
+                <p class="font-weight-bold font-size-h4 mt-4">1 - 4 ساعات</p>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        <div class="col-4">
+          <p-card
+            header="{{ 'IMPACT_COMPLETION' | translate }}"
+            styleClass="shadow-none border h-100"
+          >
+            <div class="d-flex flex-column">
+              <div
+                *ngIf="impactTotal$ | async as impactTotal"
+                class="d-flex flex-column"
+              >
+                <p-progressBar
+                  [value]="impactTotal | number : '1.0-0'"
+                  [showValue]="true"
+                  styleClass="h-20px"
+                ></p-progressBar>
+                <div class="d-flex p-jc-center pt-8">
+                  <p class="font-weight-bold d-flex px-4 m-0">
+                    <span
+                      class="w-20px h-20px bg-primary d-block mx-3 rounded-sm"
+                    ></span>
+                    {{ "COMPLETED" | translate }}
+                  </p>
+                  <p class="font-weight-bold d-flex px-4 m-0">
+                    <span
+                      class="w-20px h-20px bg-secondary d-block mx-3 rounded-sm"
+                    ></span>
+                    {{ "IN_PROGRESS" | translate }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        <div class="col-4">
+          <p-card
+            header="  {{ 'POINT_FAILURE' | translate }}"
+            styleClass="shadow-none border h-100"
+          >
+            <div class="d-flex">
+              <div class="d-flex">
+                <p-avatar
+                  icon="pi pi-user"
+                  styleClass="p-mr-2"
+                  size="xlarge"
+                ></p-avatar>
+
+                <p class="font-weight-bold font-size-h4 px-4">
+                  {{ activityAnalysis?.spof }}
+                </p>
+              </div>
+            </div>
+          </p-card>
+        </div>
+      </div>
+      <section class="mt-12">
+        <p-tabView
+          [activeIndex]="tabIndex$ | async"
+          (activeIndexChange)="changeTab($event)"
+        >
+          <p-tabPanel
+            header="{{ item.label + '.TAB_LABEL' | translate }}"
+            *ngFor="let item of tabs"
+          >
+          </p-tabPanel>
+        </p-tabView>
+        <router-outlet></router-outlet>
+      </section>
+    </section>
+  </ng-container>
+</ng-container>

@@ -1,25 +1,20 @@
 <div class="container">
-  <div class="d-flex">
+  <div class="d-flex p-3">
     <div class="spacer"></div>
     <div>
       <ng-template #popContentLayers> Show/Hide Map Layers </ng-template>
       <ng-template #popTitleLayers><b>Map Layers</b></ng-template>
       <button
-        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 mt-3"
+        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 "
         placement="bottom"
         [ngbPopover]="popContentLayers"
         [popoverTitle]="popTitleLayers"
       >
-        <span
-          inlineSVG="/assets/media/svg/icons/Navigation/Angle-down.svg"
-          cacheSVG="true"
-          class="svg-icon svg-icon-2x svg-icon-primary"
-          title="Map Layers"
-        ></span>
+      <i class="flaticon2-down"></i>
       </button>
     </div>
     <div>
-      <div class="w-400px mt-3">
+      <div class="w-400px ">
         <input
           type="text"
           placeholder="{{ 'MAP.TOP_BAR.ADDRESS_SEARCH' | translate }}"
@@ -188,33 +183,25 @@
         </div>
       </ng-template>
       <button
-        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 mt-3"
+        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 "
         placement="bottom"
         [ngbPopover]="popContentSearch"
         [autoClose]="false"
         [popoverClass]="'w-350px'"
         [container]="map.data.viewOnly ? 'body' : '#map-container'"
       >
-        <span
-          inlineSVG="/assets/media/svg/icons/General/Search.svg"
-          cacheSVG="true"
-          class="svg-icon svg-icon-2x svg-icon-primary"
-          title="Advance Search"
-        ></span>
+      <i class="flaticon2-search-1"></i>
+
       </button>
     </div>
     <div>
       <button
-      class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 mt-3"
+      class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 "
       placement="bottom"
       (click)="clearSearch()"
     >
-      <span
-        inlineSVG="/assets/media/svg/icons/General/Trash.svg"
-        cacheSVG="true"
-        class="svg-icon svg-icon-2x svg-icon-primary"
-        title="Clear"
-      ></span>
+    <i class="flaticon-cancel"></i>
+
     </button>
     </div>
     <div class="spacer"></div>

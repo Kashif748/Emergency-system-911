@@ -1,15 +1,20 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store} from "@ngxs/store";
-import {Injectable} from "@angular/core";
-import {patch} from "@ngxs/store/operators";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {EMPTY} from "rxjs";
-import {Bcrto} from "../../../../api/models/bcrto";
-import {BcrtoControllerService} from "../../../../api/services/bcrto-controller.service";
-import {PageBcrto} from "../../../../api/models/page-bcrto";
-import {RtoAction} from "@core/states";
-import {SituationsState} from "@core/states/situations/situations.state";
-import {BrowseBusinessContinuityState} from "../../../../modules/_business-continuity/states/browse-business-continuity.state";
-
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { patch } from '@ngxs/store/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { Bcrto } from '../../../../api/models/bcrto';
+import { BcrtoControllerService } from '../../../../api/services/bcrto-controller.service';
+import { PageBcrto } from '../../../../api/models/page-bcrto';
+import { RtoAction } from '@core/states';
 
 export interface RtoStateModel {
   page: PageBcrto;
@@ -27,11 +32,7 @@ export class RtoState {
   /**
    *
    */
-  constructor(
-    private rto: BcrtoControllerService,
-    private store: Store,
-  ) {
-  }
+  constructor(private rto: BcrtoControllerService, private store: Store) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([RtoState])
@@ -65,22 +66,23 @@ export class RtoState {
     { setState }: StateContext<RtoStateModel>,
     { payload }: RtoAction.LoadPage
   ) {
+    if (payload.versionId === undefined || payload.versionId === null) {
+      return;
+    }
     setState(
       patch<RtoStateModel>({
         loading: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
     return this.rto
-      .getAll10({
+      .getAll12({
         isActive: true,
-        versionId: versionID,
+        versionId: payload.versionId,
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort,
         },
-         // request: payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -119,10 +121,8 @@ export class RtoState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.rto
-      .insertOne1({
+      .insertOne3({
         body: payload,
       })
       .pipe(
@@ -146,10 +146,8 @@ export class RtoState {
         blocking: true,
       })
     );
-    const versionID = this.store.selectSnapshot(BrowseBusinessContinuityState.versionId);
-    payload.versionId = versionID;
     return this.rto
-      .update80({
+      .update82({
         body: payload,
       })
       .pipe(
@@ -181,7 +179,7 @@ export class RtoState {
         blocking: true,
       })
     );
-    return this.rto.getOne1({ id: payload.id }).pipe(
+    return this.rto.getOne3({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<RtoStateModel>({

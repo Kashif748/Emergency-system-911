@@ -69,7 +69,7 @@
                 class="form-element example-full-width"
               >
                 <mat-label>
-                  {{ "Survey.Table.incident" | translate }}</mat-label
+                  {{ "Survey.Table.SERIAL" | translate }}</mat-label
                 >
                 <input matInput type="text" formControlName="incident" />
               </mat-form-field>
@@ -164,10 +164,12 @@
               *matHeaderCellDef
               style="width: 7%"
             >
-              {{ "Survey.Table.incident" | translate }}
+              {{ "Survey.Table.SERIAL" | translate }}
             </th>
             <td mat-cell *matCellDef="let element" class="setCenter">
-              <span class="font-weight-bolder">{{ element.incident?.id }}</span>
+              <span class="font-weight-bolder" dir="ltr">
+                  2023 / {{ element.incident?.id}}
+                </span>
             </td></ng-container
           >
 

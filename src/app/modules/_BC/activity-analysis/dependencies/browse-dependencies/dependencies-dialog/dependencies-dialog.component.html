@@ -1,0 +1,195 @@
+<!-- as a dialog -->
+<p-dialog
+  [visible]="opened$ | async"
+  (visibleChange)="toggleDialog()"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
+    <h3>
+      <span>{{ "DEPENDENCIES.ADD_NEW" | translate }}</span>
+      <span
+        *ngIf="true"
+        class="label label-lg label-light-primary label-inline"
+      >
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      <span
+        *ngIf="false"
+        class="label label-lg label-light-success label-inline"
+      >
+        {{ "ACTIONS.UPDATE_ITEM" | translate }}
+      </span>
+    </h3>
+  </div>
+
+  <span class="flex-grow-1"></span>
+  <a
+    queryParamsHandling="merge"
+    pRipple
+    pButton
+    icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"
+  ></a>
+</ng-template>
+
+<!-- templates content -->
+<ng-template #content>
+  <div class="w-100 pt-2">
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+
+    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+      <!-- orgHir -->
+      <div class="p-field p-col-4 p-md-6">
+        <p-treeSelect
+          [options]="orgHir"
+          [filter]="true"
+          [filterBy]="'data.nameAr,data.nameEn,data.code'"
+          selectionMode="single"
+          formControlName="orgHierarchy"
+          placeholder="{{ 'DEPENDENCIES.ASSOCIATED_MANG' | translate }}"
+          appendTo="body"
+          [loading]="loading$ | async"
+          (onFilter)="filterOrgHir($event)"
+          (onNodeExpand)="nodeExpand($event?.node)"
+        >
+          <ng-template let-option let-placeholder pTemplate="value">
+            {{
+              option
+                ? (option | translateObj : "label")
+                : ("DEPENDENCIES.ASSOCIATED_MANG" | translate)
+            }}
+          </ng-template>
+        </p-treeSelect>
+        <ng-container
+          *ngIf="
+            form.controls['orgHierarchy'].touched &&
+            !form.controls['orgHierarchy'].valid &&
+            form.controls['orgHierarchy'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['orgHierarchy'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+      <!-- activies -->
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <p-dropdown
+            [autoDisplayFirst]="false"
+            formControlName="activity"
+            [options]="activies$ | async"
+            [filter]="true"
+            filterBy="nameAr,nameEn"
+            dataKey="id"
+            [showClear]="true"
+            appendTo="body"
+          >
+            <ng-template let-option pTemplate="selectedItem">
+              {{ option | translateObj }}
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              {{ option | translateObj }}
+            </ng-template>
+          </p-dropdown>
+          <label>
+            {{ "DEPENDENCIES.ACTIVIE_DEPT" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+        <ng-container
+          *ngIf="
+            form.controls['activity'].touched &&
+            !form.controls['activity'].valid &&
+            form.controls['activity'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['activity'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+      <!-- DETAILS -->
+      <div class="p-field p-col-12 p-md-12">
+        <span class="p-float-label">
+          <textarea
+            pInputText
+            type="text"
+            formControlName="dependencyDetails"
+            rows="5"
+          ></textarea>
+          <label
+            >{{ "DEPENDENCIES.DETAILS" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+
+        <ng-container
+          *ngIf="
+            form.controls['dependencyDetails'].touched &&
+            !form.controls['dependencyDetails'].valid &&
+            form.controls['dependencyDetails'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['dependencyDetails'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['dependencyDetails'].hasError('english')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+          </p>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <div class="ml-dir-auto"></div>
+
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          (click)="submit()"
+          [loading]="blocking$ | async"
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+        ></button>
+      </div>
+    </div>
+  </div>
+</ng-template>

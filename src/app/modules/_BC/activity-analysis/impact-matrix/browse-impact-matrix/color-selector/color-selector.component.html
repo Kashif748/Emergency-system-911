@@ -1,0 +1,24 @@
+<div
+  *ngIf="impactLevels$ | async as impactLevels"
+  #colorBar
+  class="h-15px d-block w-200px d-flex rounded overflow-hidden"
+>
+  <ng-container *ngFor="let item of impactLevels; let i = index">
+    <span
+      class="d-block h-100"
+      pTooltip="{{ item | translateObj }}"
+      tooltipPosition="top"
+      [ngStyle]="{
+        'background-color':
+          selectedImpactType?.bcImpactLevelId == item?.id || hoverIndex == i
+            ? item?.colorCode
+            : '#ccc',
+        width: 100 / impactLevels?.length + '%'
+      }"
+      (mouseenter)="hoverIndex = i"
+      (mouseleave)="hoverIndex = -1"
+      (click)="selectColor(i, item)"
+    >
+    </span>
+  </ng-container>
+</div>

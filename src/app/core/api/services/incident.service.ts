@@ -337,6 +337,7 @@ export class IncidentsService {
       .append('centerId', search?.centerId ?? '')
       .append('priority', search?.priority ?? '')
       .append('categoryId', search?.category ?? '')
+      .append('incidentSubCategory', search?.incidentSubCategory ?? '')
       .append('reportingVia', search?.reportingVia ?? '')
       .append('createdByUser', search?.createdByUser ?? '')
       .append('responsibleOrg', search?.responsibleOrg ?? '')

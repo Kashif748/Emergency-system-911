@@ -10,6 +10,7 @@ export enum AdvancedSearchFieldsEnum {
   CITY = 'city',
   CATEGORY = 'category',
   REPORTING_VIA = 'reportingVia',
+  SUB_CATEGORY = 'incidentSubCategory',
   RESPONSIBLE_ORG = 'responsibleOrg',
   IS_KPI_EXPIRED = 'isKpiExpired',
   FILTER_KPI = 'filterKpi',

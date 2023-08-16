@@ -1,6 +1,7 @@
 <section class="d-flex flex-column px-6">
   <div class="p-col p-d-flex">
-  <button pButton icon="pi pi-sign-out" (click)="back()" label="{{'SHARED.BACK' | translate }}"></button>
+  <button pButton [icon]="lang == 'en' ? 'pi pi-sign-out' : 'pi pi-sign-in'" (click)="back()" label="{{'SHARED.BACK' | translate }}">
+  </button>
   </div>
   <p-toolbar *ngIf="situation$ | async as situation">
     <div class="p-toolbar-group-left">

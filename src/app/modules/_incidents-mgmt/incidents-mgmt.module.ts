@@ -44,7 +44,9 @@ import { ReopenMgmtComponent } from './reopen-mgmt/reopen-mgmt.component';
 import { BrowseTasksComponent } from './reopen-mgmt/browse-tasks/browse-tasks.component';
 import { ContentTasksComponent } from './reopen-mgmt/browse-tasks/content-tasks/content-tasks.component';
 import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
-import {PrivilegesDirectiveModule} from "@shared/sh-directives/privileges.directive";
+import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.directive';
+import { DueDateDirectiveModule } from '@shared/sh-directives/due-date.directive';
+import { CdateModule } from '@shared/sh-pipes/cdate.pipe';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/incident-mgmt/', '.json');
@@ -108,7 +110,9 @@ const routes: Routes = [
     SharedModule,
     ConfirmPopupModule,
     SharedBreadcrumbModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    CdateModule,
+    DueDateDirectiveModule,
   ],
   providers: [
     { provide: ILangFacade, useClass: LangFacade },

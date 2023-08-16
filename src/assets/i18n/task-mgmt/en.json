@@ -14,6 +14,7 @@
     "SUPPLIES_DETAILS": "Supplies Details"
   },
   "TASK_TITLE": "Task Title",
+  "TASK_NAME": "Task Name",
   "TASK_DESCRIPTION": "Task Description",
   "TASK_DETAILS": "Task Details",
   "ASSIGNEE_TYPE": "Assignee Type",
@@ -28,5 +29,14 @@
   "DELAYED_DELIVER": "delayed task on deliver day  {{day}}",
   "REMAIN_DELIVER_HOURS": "remain {{hours}} hours",
   "REMAIN_DELIVER_MINUTES": "remain {{minutes}} minutes",
-  "REMAIN_DELIVER_DAYS": "remain {{days}} days"
+  "REMAIN_DELIVER_DAYS": "remain {{days}} days",
+  "CHARTS": {
+    "TOTAL": "Total Tasks",
+    "AVERAGE_CLOSE_TIME": "Average Close Time",
+    "RATE_CLOSE_WITHIN_TIME": "Close Rate Within the Specified Time",
+    "PER_ZONE": "Distribution of Tasks By Zones",
+    "PER_PRIORITY": "Distribution of Tasks By Priority",
+    "PER_STATUS": "Distribution of Tasks By Status",
+    "PER_CATEGORY": "Distribution of Tasks By Category"
+  }
 }

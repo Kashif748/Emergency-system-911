@@ -1,0 +1,100 @@
+:host ::ng-deep {
+  .version-badge {
+    color: var(--primary-color);
+    background-color: #ffffff;
+    height: 1rem;
+    line-height: 1rem;
+    vertical-align: text-top;
+  }
+  .p-tag {
+    font-size: 1.1rem !important;
+  }
+  .p-sidebar {
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
+    .p-sidebar-header {
+      display: none;
+    }
+  }
+
+  :lang(en) > .p-panelmenu-icon {
+    order: 1;
+    margin-left: auto !important;
+  }
+  :lang(ar) > .p-panelmenu-icon {
+    order: 1;
+    margin-right: auto !important;
+    &.pi-chevron-right {
+      rotate: 180deg;
+    }
+  }
+  .p-menuitem-icon {
+    margin: 5px 10px;
+    font-size: 1.5rem;
+    width: 24px;
+    height: 24px;
+  }
+  .p-panelmenu {
+    padding: 8px;
+    .p-panelmenu-panel {
+      margin-bottom: 10px;
+
+      .p-menuitem-link-active,
+      .p-menuitem-link-active:hover {
+        background-color: var(--blue-500) !important;
+        color: white !important;
+        border: 1px solid #8cabb9;
+        font-weight: bold;
+        transition: all 0.3 ease-in-out;
+        .p-menuitem-text {
+          color: white !important;
+        }
+      }
+
+      .p-panelmenu-header-link {
+        padding: 0.5rem;
+        border-radius: 10px !important;
+        border: 1px solid #dee2e6 !important;
+      }
+
+      .p-toggleable-content {
+        padding-left: 30px;
+        padding-right: 0;
+
+        .p-panelmenu-content {
+          border-width: 0 0 0 1px;
+          padding: 8px;
+          padding-bottom: 0;
+          .p-menuitem-link {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.25rem !important;
+          }
+        }
+      }
+      .p-toggleable-content:lang(ar) {
+        padding-left: 0;
+        padding-right: 30px !important;
+        .p-panelmenu-content {
+          border-width: 0 1px 0 0 !important;
+        }
+      }
+
+      #separator_header {
+        all: unset;
+        margin: 24px 0;
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+
+  header .p-dropdown {
+    background-color: var(--blue-500);
+    .p-dropdown-label,
+    .p-dropdown-trigger-icon {
+      // padding: 0 12px;
+      color: white;
+    }
+  }
+}

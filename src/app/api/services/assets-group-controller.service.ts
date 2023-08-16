@@ -24,21 +24,21 @@ export class AssetsGroupControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation list7
+   * Path part for operation list8
    */
-  static readonly List7Path = '/v1/assets-group';
+  static readonly List8Path = '/v1/assets-group';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `list7()` instead.
+   * To access only the response body, use `list8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  list7$Response(params: {
+  list8$Response(params: {
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageAssetsGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetsGroupControllerService.List7Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AssetsGroupControllerService.List8Path, 'get');
     if (params) {
       rb.query('pageable', params.pageable, {});
     }
@@ -56,35 +56,35 @@ export class AssetsGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `list7$Response()` instead.
+   * To access the full response (for headers, for example), `list8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  list7(params: {
+  list8(params: {
     pageable: Pageable;
   }): Observable<RestApiResponsePageAssetsGroup> {
 
-    return this.list7$Response(params).pipe(
+    return this.list8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageAssetsGroup>) => r.body as RestApiResponsePageAssetsGroup)
     );
   }
 
   /**
-   * Path part for operation update90
+   * Path part for operation update106
    */
-  static readonly Update90Path = '/v1/assets-group';
+  static readonly Update106Path = '/v1/assets-group';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update90()` instead.
+   * To access only the response body, use `update106()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update90$Response(params: {
+  update106$Response(params: {
     body: AssetsGroup
   }): Observable<StrictHttpResponse<RestApiResponseAssetsGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AssetsGroupControllerService.Update90Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AssetsGroupControllerService.Update106Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,15 +102,15 @@ export class AssetsGroupControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update90$Response()` instead.
+   * To access the full response (for headers, for example), `update106$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update90(params: {
+  update106(params: {
     body: AssetsGroup
   }): Observable<RestApiResponseAssetsGroup> {
 
-    return this.update90$Response(params).pipe(
+    return this.update106$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAssetsGroup>) => r.body as RestApiResponseAssetsGroup)
     );
   }
