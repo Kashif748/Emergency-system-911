@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { RemoteWorkRoutingModule } from './remote-work-routing.module';
-import { BrowseRemoteWorkComponent } from './browse-remote-work/browse-remote-work.component';
-import { RemoteWorkDialogComponent } from './browse-remote-work/remote-work-dialog/remote-work-dialog.component';
-import { RemoteWorkContentComponent } from './browse-remote-work/remote-work-content/remote-work-content.component';
+import {RemoteWorkRoutingModule} from './remote-work-routing.module';
+import {BrowseRemoteWorkComponent} from './browse-remote-work/browse-remote-work.component';
+import {RemoteWorkDialogComponent} from './browse-remote-work/remote-work-dialog/remote-work-dialog.component';
+import {RemoteWorkContentComponent} from './browse-remote-work/remote-work-content/remote-work-content.component';
 import {HttpClient} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {ILangFacade, LangFacade} from "@core/facades/lang.facade";
@@ -28,7 +28,6 @@ import {PrivilegesDirectiveModule} from "@shared/sh-directives/privileges.direct
 import {TagModule} from "primeng/tag";
 import {MenuModule} from "primeng/menu";
 import {ColorPickerModule} from "primeng/colorpicker";
-import {BrowseStaffState} from "../staff-requirement/states/browse-staff.state";
 import {InputNumberModule} from "primeng/inputnumber";
 import {NodataTableModule} from "@shared/components/nodata-table/nodata-table.module";
 import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcrumb.component";

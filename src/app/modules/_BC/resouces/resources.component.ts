@@ -2,12 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {ILangFacade} from '@core/facades/lang.facade';
 import {TABS} from "../resouces/tempData.conts";
 import {map} from "rxjs/operators";
-import {BrowseActivityAnalysisState} from "../activity-analysis/states/browse-activity-analysis.state";
-import {BcCycles} from "../../../api/models";
 import {Observable} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BrowseResourceAction} from "./states/browse-resource.action";
+import {BrowseResourceState} from "./states/browse-resource.state";
 
 @Component({
   selector: 'app-resources',
@@ -18,8 +17,8 @@ export class ResourcesComponent implements OnInit {
   tabs = TABS;
 
 
-  @Select(BrowseActivityAnalysisState.tabIndex)
-  public tabIndex$: Observable<BcCycles>;
+  @Select(BrowseResourceState.tabIndex)
+  public tabIndex$: Observable<any>;
 
   public dir$ = this.lang.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))

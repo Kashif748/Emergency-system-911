@@ -41,8 +41,15 @@
     "WORK-REMOTLY":"Working Remotely Requirements",
     "PERSONAL_DESIG":"Personnel Designation",
     "PRIORITY_LEVEL":"Priority Level",
-
-    "":""
+    "ADD_WORK":"Add Remote Work Requirement",
+    "EDIT_WORK":"Edit Remote Work Requirement",
+    "VIEW_WORK":"View Remote Work Requirement",
+    "TASK_REMOTE":"Tasks nature and skills  needed to perform work remotely",
+    "NETWORK_SYSTEM":"Internal Network Systems that can work remotely",
+    "OTHER_REMOTE":"Other Needs to Work Remotely",
+    "STAFF_DISTRI":"Staff Distribution (Inside Workplace)",
+    "STAFF_DISTRIBUTION_OUTSIDE":"Staff Distribution (Outside Workplace)",
+    "OTHER_REMARK":"ملاحظات أخرى"
   },
   "RECORDS": {
     "TAB_LABEL": "Records",
