@@ -1,0 +1,116 @@
+{
+  "NO_DATA": "No Data found",
+  "MANAGEMENT": "Management",
+  "SECTOR": "Sector",
+  "ACTIVITY": "Activity",
+  "DRAFT": "Draft",
+  "APPROVE": "Approve",
+  "ORG_ARTCH": "Organization Hierarchy",
+  "createdBy": "Created By",
+  "STATUS": "Status",
+  "REVIEW": "Review",
+  "ANALYSISـRESULT": " Analysis Result",
+  "ACTIVITY_CRITICALITY": "Activity Criticality Level",
+  "RECOVERY_TIME": "Recovery Time Objective (RTO)",
+  "IMPACT_COMPLETION": "Impact Completion",
+  "COMPLETED": "Completed",
+  "IN_PROGRESS": "In Progress",
+  "POINT_FAILURE": "Single Point of Failure",
+
+  "STAFF_REQ": {
+    "TAB_LABEL": "Staff Requirements",
+    "STAFF_REQ_MAIN":"Staff Requirements for Main Roles",
+    "PERSONAL_DESIGNATION":"Personnel Designation",
+    "KEY_RESPONSE":"Key Responsibilities",
+    "DIALOG": {
+      "KEY_RES": "Key Responsibilities",
+      "EDIT_STAFF_REQ": "Edit Staff Requirements: Department Manager",
+      "ADD_STAFF_REQ": "Add Staff Requirements: Department Manager",
+      "HOURS":"Minimum number of staff required during resumption of work at the alternate site or in cases outside working hours",
+      "HOURS_0_8":"Hours 8-0",
+      "HOURS_0_24":"Hours 24-8",
+      "HOURS_DAY":"Day or More",
+      "DEPT_STAFF_READ":"Department Readiness from Staff",
+      "P_EMP": "Primary Employee",
+      "S_EMP1": "Secondary Employee 1",
+      "S_EMP2": "Secondary Employee 2"
+    }
+  },
+  "REMOTE_WORK": {
+    "TAB_LABEL": "Remote Work",
+    "WORK-REMOTLY":"Working Remotely Requirements",
+    "PERSONAL_DESIG":"Personnel Designation",
+    "PRIORITY_LEVEL":"Priority Level",
+
+    "":""
+  },
+  "RECORDS": {
+    "TAB_LABEL": "Records",
+    "ADD_RECORD":"Add New Record",
+    "EDIT_RECORD":"Edit Record",
+    "VIEW_RECORD":"View Record",
+    "BAU":"Vital Records for Business As Usual (BAU)",
+    "RECORD_NAME":"Record Name",
+    "RECORD_TYPE":"Record Type",
+    "CRITICALLITY":"Criticality",
+    "ADD_NEW_RECORD":"Add New Record",
+    "RECORD_CUSTODIAN":"Record Custodian",
+    "CURRENT_LOCATION":"Current Location",
+    "ALTERNATE_SOUREC":"Alternate Source"
+
+
+  },
+  "APP_SYS": {
+    "TAB_LABEL": "Applications & Systems",
+    "APP_SYSTEM":"Application and Software requirement for Business As Usual (BAU) and Alternate Locations",
+    "APP_REQ":"Required for / Purpose",
+    "APP_SOFT":"Application/Software Name",
+    "USERS":"Number of Users",
+    "ADD_SOFTAPP":"New Required Software / Application",
+    "EDIT_SOFTAPP":"Edit Software / Application",
+    "VIEW_SOFTAPP":"VIEW Software / Application",
+    "SOFT_APP":"Software / Application",
+    "REQ_PURPOSE":"Required for / Purpose",
+    "SOFT_REQ_APP":"Software requirements and applications in normal cases",
+    "LICENSE":"Number of Licenses",
+    "LICENSE_TYPE":"License Type",
+    "MINI_NUMBER":"The minimum number of licenses/users in the alternate location",
+    "HOUR8":"Hours 8-0",
+    "HOUR24":"Hours 24-8",
+    "DAY1":"Days 2-1",
+    "WEEK1":"Week 1",
+    "WEEK2":"Week 2"
+  },
+  "IT_INFRA_REQ": {
+    "TAB_LABEL": "IT Infrastructure Requirements",
+    "INFRA":"IT Infrastructure required for resumption at alternate site",
+    "DETAILS":"Details",
+    "COUNT":"Required Count",
+    "AVAIL_COUNT":"Available Count",
+    "PURCHASED":"To Be Purchased",
+    "NEW_IT":"New IT Infrastructure Requirement",
+    "EDIT_IT":"Edit IT Infrastructure Requirement",
+    "VIEW_IT":"View IT Infrastructure Requirement",
+    "DETAIL_AR":"Details (Arabic)",
+    "DETAIL_EN":"Details (English)",
+    "INFRA_CONFIG":"Instructions / Configurations"
+  },
+  "OTHERS": {
+    "TAB_LABEL": "Other Requirements",
+    "NON_IT":"Non IT Infrastructure required  at the alternate site",
+    "DETAILS":"Details",
+    "REQUIRED_COUNT":"Required Count",
+    "ADD_IT":"New Non-IT Infrastructure Requirement",
+    "EDIT_IT":"Edit Non-IT Infrastructure Requirement",
+    "VIEW_IT":"View Non-IT Infrastructure Requirement",
+    "DETAIL_AR":"Details (Arabic)",
+    "DETAIL_EN":"Details (English)"
+  },
+  "NOTES": {
+    "TAB_LABEL": "Updates & Notes",
+
+    "HEADER": "Updates and notes for acticity anlysis",
+    "UPDATE_STAGES": "Updates Stages",
+    "NOTES": " Notes"
+  }
+}
