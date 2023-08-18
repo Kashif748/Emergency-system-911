@@ -18,6 +18,7 @@ import { BrowseActivityDependenciesAction } from './browse-dependencies.action';
 import { catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { ActivityDependenciesAction } from '@core/states/activity-analysis/dependencies/dependencies.action';
+import { DEPENDENCIES_TYPES } from '@core/states/activity-analysis/dependencies/dependencies.state';
 
 export interface BrowseActivityDependenciesStateModel {
   internalPageRequest: PageRequestModel;
@@ -245,6 +246,60 @@ export class BrowseActivityDependenciesState {
           }),
           new BrowseActivityDependenciesAction.ToggleDialog({}),
         ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+  @Action(BrowseActivityDependenciesAction.DeleteDependencies)
+  DeleteDependencies(
+    { dispatch }: StateContext<BrowseActivityDependenciesStateModel>,
+    { payload }: BrowseActivityDependenciesAction.DeleteDependencies
+  ) {
+    let deleteAction;
+    let loadAction;
+    switch (payload.dependType) {
+      case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
+        deleteAction = new ActivityDependenciesAction.DeleteInternal({
+          id: payload.id,
+        });
+        loadAction =
+          new BrowseActivityDependenciesAction.LoadDependencyInternal({
+            cycleId: payload.cycleId,
+            activityId: payload.activityId,
+          });
+
+        break;
+      case DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL:
+        deleteAction = new ActivityDependenciesAction.DeleteExternal({
+          id: payload.id,
+        });
+        loadAction =
+          new BrowseActivityDependenciesAction.LoadDependencyExternal({
+            cycleId: payload.cycleId,
+            activityId: payload.activityId,
+          });
+        break;
+      case DEPENDENCIES_TYPES.DEPENDENCY_ORG:
+        deleteAction = new ActivityDependenciesAction.DeleteOrg({
+          id: payload.id,
+        });
+        loadAction = new BrowseActivityDependenciesAction.LoadDependencyOrg({
+          cycleId: payload.cycleId,
+          activityId: payload.activityId,
+        });
+
+        break;
+      default:
+        break;
+    }
+    if (!deleteAction || !loadAction) return;
+    return dispatch(deleteAction).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([loadAction]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

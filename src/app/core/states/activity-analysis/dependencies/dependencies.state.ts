@@ -71,10 +71,6 @@ export class ActivityDependenciesState {
   ) {}
 
   /* ************************ SELECTORS ******************** */
-  // @Selector([ActivityDependenciesState])
-  // static page(state: ActivityDependenciesStateModel): BcActivityDependencies[] {
-  //   return state?.page?.content;
-  // }
 
   @Selector([ActivityDependenciesState])
   static activityDependencyInternal(state: ActivityDependenciesStateModel) {
@@ -102,6 +98,9 @@ export class ActivityDependenciesState {
   }
 
   /* ********************** ACTIONS ************************* */
+  /**
+   * Dependencies Internal  actions
+   */
   @Action(ActivityDependenciesAction.LoadDependencyInternal, {
     cancelUncompleted: true,
   })
@@ -186,7 +185,52 @@ export class ActivityDependenciesState {
         })
       );
   }
+  @Action(ActivityDependenciesAction.DeleteInternal, {
+    cancelUncompleted: true,
+  })
+  DeleteInternal(
+    { setState }: StateContext<ActivityDependenciesStateModel>,
+    { payload }: ActivityDependenciesAction.DeleteInternal
+  ) {
+    setState(
+      patch<ActivityDependenciesStateModel>({
+        loading: patch({
+          DEPENDENCY_INTERNAL: true,
+        }),
+      })
+    );
+    return this.activityDependencyInternal
+      .deleteById17({
+        id: payload.id,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<ActivityDependenciesStateModel>({
+              loading: patch({
+                DEPENDENCY_INTERNAL: false,
+              }),
+            })
+          );
+        }),
+        catchError(() => {
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<ActivityDependenciesStateModel>({
+              loading: patch({
+                DEPENDENCY_INTERNAL: false,
+              }),
+            })
+          );
+        })
+      );
+  }
 
+  /**
+   * Dependencies Org  actions
+   */
   @Action(ActivityDependenciesAction.LoadDependencyOrg, {
     cancelUncompleted: true,
   })
@@ -242,6 +286,7 @@ export class ActivityDependenciesState {
         })
       );
   }
+
   @Action(ActivityDependenciesAction.CreateOrg)
   CreateOrg(
     { setState }: StateContext<ActivityDependenciesStateModel>,
@@ -271,7 +316,52 @@ export class ActivityDependenciesState {
         })
       );
   }
+  @Action(ActivityDependenciesAction.DeleteOrg, {
+    cancelUncompleted: true,
+  })
+  DeleteOrg(
+    { setState }: StateContext<ActivityDependenciesStateModel>,
+    { payload }: ActivityDependenciesAction.DeleteOrg
+  ) {
+    setState(
+      patch<ActivityDependenciesStateModel>({
+        loading: patch({
+          DEPENDENCY_ORG: true,
+        }),
+      })
+    );
+    return this.activityDependencyOrg
+      .deleteById16({
+        id: payload.id,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<ActivityDependenciesStateModel>({
+              loading: patch({
+                DEPENDENCY_ORG: false,
+              }),
+            })
+          );
+        }),
+        catchError(() => {
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<ActivityDependenciesStateModel>({
+              loading: patch({
+                DEPENDENCY_EXTERNAL: false,
+              }),
+            })
+          );
+        })
+      );
+  }
 
+  /**
+   * Dependencies External  actions
+   */
   @Action(ActivityDependenciesAction.LoadDependencyExternal, {
     cancelUncompleted: true,
   })
@@ -349,6 +439,48 @@ export class ActivityDependenciesState {
           setState(
             patch<ActivityDependenciesStateModel>({
               blocking: patch({
+                DEPENDENCY_EXTERNAL: false,
+              }),
+            })
+          );
+        })
+      );
+  }
+  @Action(ActivityDependenciesAction.DeleteExternal, {
+    cancelUncompleted: true,
+  })
+  DeleteExternal(
+    { setState }: StateContext<ActivityDependenciesStateModel>,
+    { payload }: ActivityDependenciesAction.DeleteExternal
+  ) {
+    setState(
+      patch<ActivityDependenciesStateModel>({
+        loading: patch({
+          DEPENDENCY_EXTERNAL: true,
+        }),
+      })
+    );
+    return this.activityDependencyExternal
+      .deleteById16({
+        id: payload.id,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<ActivityDependenciesStateModel>({
+              loading: patch({
+                DEPENDENCY_EXTERNAL: false,
+              }),
+            })
+          );
+        }),
+        catchError(() => {
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<ActivityDependenciesStateModel>({
+              loading: patch({
                 DEPENDENCY_EXTERNAL: false,
               }),
             })
