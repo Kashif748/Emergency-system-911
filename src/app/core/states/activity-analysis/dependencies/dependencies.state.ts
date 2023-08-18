@@ -116,7 +116,7 @@ export class ActivityDependenciesState {
       })
     );
     return this.activityDependencyInternal
-      .search10({
+      .search13({
         isActive: true,
         cycleId: payload.cycleId,
         activityId: payload.activityId,
@@ -170,7 +170,7 @@ export class ActivityDependenciesState {
     );
 
     return this.activityDependencyInternal
-      .insertOne17({
+      .insertOne19({
         body: { ...payload },
       })
       .pipe(
@@ -200,7 +200,7 @@ export class ActivityDependenciesState {
       })
     );
     return this.activityDependencyInternal
-      .deleteById17({
+      .deleteById19({
         id: payload.id,
       })
       .pipe(

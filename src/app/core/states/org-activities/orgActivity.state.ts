@@ -128,7 +128,7 @@ export class OrgActivityState {
     { payload }: OrgActivityAction.loadIdsList
   ) {
     return this.bcActivities
-      .list8({
+      .list9({
         cycleId: payload.cycleId,
       })
       .pipe(
@@ -168,7 +168,7 @@ export class OrgActivityState {
         blocking: true,
       })
     );
-    return this.bcActivities.getOne27({ id: payload.id }).pipe(
+    return this.bcActivities.getOne28({ id: payload.id }).pipe(
       tap((res) => {
         setState(
           patch<OrgActivitiesStateModel>({
@@ -197,7 +197,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .insertOne25({
+      .insertOne26({
         body: payload,
       })
       .pipe(
@@ -222,7 +222,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .update105({
+      .update106({
         body: payload,
       })
       .pipe(

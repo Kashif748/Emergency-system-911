@@ -67,7 +67,6 @@
               formControlName="partner"
               [showClear]="true"
               appendTo="body"
-
             >
               <ng-template let-option pTemplate="selectedItem">
                 {{ option | translateObj }}
@@ -146,13 +145,12 @@
         <span class="p-float-label">
           <p-dropdown
             [autoDisplayFirst]="false"
-            formControlName="relatedActivityId"
+            formControlName="relatedActivity"
             [options]="activies$ | async"
             [filter]="true"
             filterBy="nameAr,nameEn"
             dataKey="id"
             [showClear]="true"
-            optionValue="id"
             appendTo="body"
           >
             <ng-template let-option pTemplate="selectedItem">
@@ -169,14 +167,14 @@
         </span>
         <ng-container
           *ngIf="
-            form.controls['relatedActivityId'].touched &&
-            !form.controls['relatedActivityId'].valid &&
-            form.controls['relatedActivityId'].dirty
+            form.controls['relatedActivity'].touched &&
+            !form.controls['relatedActivity'].valid &&
+            form.controls['relatedActivity'].dirty
           "
         >
           <p
             class="p-error mb-0"
-            *ngIf="form.controls['relatedActivityId'].hasError('required')"
+            *ngIf="form.controls['relatedActivity'].hasError('required')"
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>

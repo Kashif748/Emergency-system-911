@@ -299,7 +299,7 @@ export class BrowseActivityDependenciesState {
     return dispatch(deleteAction).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([loadAction]);
+        dispatch(loadAction);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
