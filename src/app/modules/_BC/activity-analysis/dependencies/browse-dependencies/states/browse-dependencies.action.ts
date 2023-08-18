@@ -89,4 +89,20 @@ export namespace BrowseActivityDependenciesAction {
      */
     constructor(public payload: { id: number }) {}
   }
+
+  export class DeleteDependencies {
+    static readonly type =
+      '[BrowseActivityDependenciesAction] Delete Dependencies';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id: number;
+        cycleId: number;
+        activityId: number;
+        dependType: DEPENDENCIES_TYPES;
+      }
+    ) {}
+  }
 }

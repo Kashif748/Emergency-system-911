@@ -13,6 +13,7 @@ import {
 } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 
 @Component({
   selector: 'app-content-dependencies',
@@ -65,6 +66,31 @@ export class ContentDependenciesComponent implements OnInit {
 
         //reject action
       },
+    });
+  }
+  deleteDependinces(item) {
+    console.log(item);
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translate.instant('GENERAL.DELETE_CONFIRM'),
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'mx-3 py-1',
+      rejectButtonStyleClass: 'mx-3 py-1',
+      accept: () => {
+        const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+        const activityAnalysis = this.store.selectSnapshot(
+          ActivityAnalysisState.activityAnalysis
+        );
+        this.store.dispatch(
+          new BrowseActivityDependenciesAction.DeleteDependencies({
+            activityId: activityAnalysis.id,
+            cycleId: cycle.id,
+            id: item.id,
+            dependType: this.dependType,
+          })
+        );
+      },
+      reject: () => {},
     });
   }
 
