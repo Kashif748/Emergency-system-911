@@ -76,4 +76,26 @@ export namespace ActivityDependenciesAction {
      */
     constructor(public payload: BcActivityDependencyExternal) {}
   }
+
+  export class DeleteInternal {
+    static readonly type = '[BcActivityLocations] Delete Internal';
+    /**
+     *
+     */
+    constructor(public payload: { id: number }) {}
+  }
+  export class DeleteExternal {
+    static readonly type = '[BcActivityLocations] Delete External';
+    /**
+     *
+     */
+    constructor(public payload: { id: number }) {}
+  }
+  export class DeleteOrg {
+    static readonly type = '[BcActivityLocations] Delete Org';
+    /**
+     *
+     */
+    constructor(public payload: { id: number }) {}
+  }
 }
