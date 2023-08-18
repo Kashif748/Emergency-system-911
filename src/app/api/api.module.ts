@@ -21,6 +21,7 @@ import { SituationControllerService } from './services/situation-controller.serv
 import { ShiftConfigurationControllerService } from './services/shift-configuration-controller.service';
 import { ShiftControllerService } from './services/shift-controller.service';
 import { RoleControllerService } from './services/role-controller.service';
+import { ResendSmsControllerService } from './services/resend-sms-controller.service';
 import { ReportingViaControllerService } from './services/reporting-via-controller.service';
 import { AuthenticationControllerService } from './services/authentication-controller.service';
 import { ReasonControllerService } from './services/reason-controller.service';
@@ -114,9 +115,9 @@ import { BcImpactLevelControllerService } from './services/bc-impact-level-contr
 import { BcCyclesControllerService } from './services/bc-cycles-controller.service';
 import { BcCycleStatusControllerService } from './services/bc-cycle-status-controller.service';
 import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
+import { BcActivityDependencyExternalControllerService } from './services/bc-activity-dependency-external-controller.service';
 import { BcActivityDependencyOrgControllerService } from './services/bc-activity-dependency-org-controller.service';
 import { BcActivityDependencyInternalControllerService } from './services/bc-activity-dependency-internal-controller.service';
-import { BcActivityDependencyExternalControllerService } from './services/bc-activity-dependency-external-controller.service';
 import { BcActivitySystemsControllerService } from './services/bc-activity-systems-controller.service';
 import { BcActivityLocationsControllerService } from './services/bc-activity-locations-controller.service';
 import { BcActivityImpactMatrixControllerService } from './services/bc-activity-impact-matrix-controller.service';
@@ -148,7 +149,6 @@ import { UserLogInAttemptsControllerService } from './services/user-log-in-attem
 import { TaskStatusControllerService } from './services/task-status-controller.service';
 import { ServiceCenterAreaServiceControllerService } from './services/service-center-area-service-controller.service';
 import { ScadKoiControllerService } from './services/scad-koi-controller.service';
-import { ResendSmsControllerService } from './services/resend-sms-controller.service';
 import { ReportsControllerService } from './services/reports-controller.service';
 import { PrivilegeControllerService } from './services/privilege-controller.service';
 import { OrganizationTypesService } from './services/organization-types.service';
@@ -191,6 +191,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     ShiftConfigurationControllerService,
     ShiftControllerService,
     RoleControllerService,
+    ResendSmsControllerService,
     ReportingViaControllerService,
     AuthenticationControllerService,
     ReasonControllerService,
@@ -284,9 +285,9 @@ import { MigrationControllerService } from './services/migration-controller.serv
     BcCyclesControllerService,
     BcCycleStatusControllerService,
     BcActivityFrequenciesControllerService,
+    BcActivityDependencyExternalControllerService,
     BcActivityDependencyOrgControllerService,
     BcActivityDependencyInternalControllerService,
-    BcActivityDependencyExternalControllerService,
     BcActivitySystemsControllerService,
     BcActivityLocationsControllerService,
     BcActivityImpactMatrixControllerService,
@@ -318,7 +319,6 @@ import { MigrationControllerService } from './services/migration-controller.serv
     TaskStatusControllerService,
     ServiceCenterAreaServiceControllerService,
     ScadKoiControllerService,
-    ResendSmsControllerService,
     ReportsControllerService,
     PrivilegeControllerService,
     OrganizationTypesService,
@@ -351,7 +351,7 @@ export class ApiModule {
     }
   }
 
-  constructor( 
+  constructor(
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

@@ -89,7 +89,7 @@ export class ActivityAnalysisState {
     { payload }: ActivityAnalysisAction.LoadPage
   ) {
     return this.activitiesAnalysisController
-      .search18({
+      .search20({
         pageable: {
           page: payload?.page,
           size: payload?.size,
@@ -133,7 +133,7 @@ export class ActivityAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.getOne23({ id: payload.id }).pipe(
+    return this.activitiesAnalysisController.getOne24({ id: payload.id }).pipe(
       tap((bc) => {
         setState(
           patch<ActivityAnalysisStateModel>({
@@ -206,7 +206,7 @@ export class ActivityAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.update104({ body: payload }).pipe(
+    return this.activitiesAnalysisController.update105({ body: payload }).pipe(
       map((response) => response.result),
       tap((activityAnalysis) => {
         setState(

@@ -14,6 +14,6 @@ export interface BcActivityDependencyInternal {
   isFound: boolean;
   orderSeq?: number;
   orgHierarchy: BcOrgHierarchy;
-  relatedActivityId?: number;
+  relatedActivity?: BcActivities;
 }
 

@@ -59,13 +59,13 @@
             </div>
             <div *ngIf="item?.activityName" class="d-flex flex-column col-6">
               <span class="font-weight-bold">
-                {{ "ACTIVITY" | translate }}
+                {{ "DEPENDENCIES.ACTIVIE_NAME" | translate }}
               </span>
               <span> {{ item?.activityName }}</span>
             </div>
-            <div *ngIf="item?.relatedActivityId" class="d-flex flex-column col-6">
+            <div *ngIf="item?.relatedActivity" class="d-flex flex-column col-6">
               <span class="font-weight-bold">
-                {{ "DEPENDENCIES.ACTIVIE_NAME" | translate }}
+                {{ "ACTIVITY" | translate }}
               </span>
               <span> {{ item?.relatedActivity | translateObj }}</span>
             </div>
@@ -93,7 +93,7 @@
                 pRipple
                 type="button"
                 icon="pi pi-trash"
-                class="p-button-rounded p-button-icon p-button-danger"
+                class="p-button-rounded p-button-danger p-button-text"
               ></button>
             </div>
           </div>
