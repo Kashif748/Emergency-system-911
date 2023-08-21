@@ -83,7 +83,7 @@ export class ContentDependenciesComponent implements OnInit {
         );
         this.store.dispatch(
           new BrowseActivityDependenciesAction.DeleteDependencies({
-            activityId: activityAnalysis.id,
+            activityId:  activityAnalysis.activity.id,
             cycleId: cycle.id,
             id: item.id,
             dependType: this.dependType,

@@ -82,7 +82,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
             break;
           case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
             this.form
-              .get('relatedActivityId')
+              .get('relatedActivity')
               .setValidators(Validators.required);
             this.form.get('orgHierarchy').setValidators(Validators.required);
             break;
@@ -159,7 +159,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
   }
   buildForm() {
     this.form = this.formBuilder.group({
-      relatedActivityId: [null],
+      relatedActivity: [null],
       dependencyDetails: [null, [Validators.required]],
       orgHierarchy: [null],
       activityName: [null],

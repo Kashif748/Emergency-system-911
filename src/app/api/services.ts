@@ -15,6 +15,7 @@ export { SituationControllerService } from './services/situation-controller.serv
 export { ShiftConfigurationControllerService } from './services/shift-configuration-controller.service';
 export { ShiftControllerService } from './services/shift-controller.service';
 export { RoleControllerService } from './services/role-controller.service';
+export { ResendSmsControllerService } from './services/resend-sms-controller.service';
 export { ReportingViaControllerService } from './services/reporting-via-controller.service';
 export { AuthenticationControllerService } from './services/authentication-controller.service';
 export { ReasonControllerService } from './services/reason-controller.service';
@@ -108,9 +109,9 @@ export { BcImpactLevelControllerService } from './services/bc-impact-level-contr
 export { BcCyclesControllerService } from './services/bc-cycles-controller.service';
 export { BcCycleStatusControllerService } from './services/bc-cycle-status-controller.service';
 export { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
+export { BcActivityDependencyExternalControllerService } from './services/bc-activity-dependency-external-controller.service';
 export { BcActivityDependencyOrgControllerService } from './services/bc-activity-dependency-org-controller.service';
 export { BcActivityDependencyInternalControllerService } from './services/bc-activity-dependency-internal-controller.service';
-export { BcActivityDependencyExternalControllerService } from './services/bc-activity-dependency-external-controller.service';
 export { BcActivitySystemsControllerService } from './services/bc-activity-systems-controller.service';
 export { BcActivityLocationsControllerService } from './services/bc-activity-locations-controller.service';
 export { BcActivityImpactMatrixControllerService } from './services/bc-activity-impact-matrix-controller.service';
@@ -142,7 +143,6 @@ export { UserLogInAttemptsControllerService } from './services/user-log-in-attem
 export { TaskStatusControllerService } from './services/task-status-controller.service';
 export { ServiceCenterAreaServiceControllerService } from './services/service-center-area-service-controller.service';
 export { ScadKoiControllerService } from './services/scad-koi-controller.service';
-export { ResendSmsControllerService } from './services/resend-sms-controller.service';
 export { ReportsControllerService } from './services/reports-controller.service';
 export { PrivilegeControllerService } from './services/privilege-controller.service';
 export { OrganizationTypesService } from './services/organization-types.service';
