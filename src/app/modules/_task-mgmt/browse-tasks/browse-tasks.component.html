@@ -45,7 +45,7 @@
 
                 <div class="p-field p-col-6 p-md-3">
 
-                  <p-multiSelect [options]="statuses$ | async" placeholder="{{'SHARED.STATUS' | translate}}"
+                  <p-multiSelect [options]="filterStatuses$ | async" placeholder="{{'SHARED.STATUS' | translate}}"
                     defaultLabel="Select Items" styleClass="w-100" [ngModel]="state.pageRequest.filters['status']"
                     optionDisabled="disabled" [filter]="false" (ngModelChange)="updateFilter({status: $event}, $event)"
                     dataKey="id">
