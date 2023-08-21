@@ -59,9 +59,22 @@
             </div>
             <div *ngIf="item?.activityName" class="d-flex flex-column col-6">
               <span class="font-weight-bold">
-                {{ "ACTIVITY" | translate }}
+                {{ "DEPENDENCIES.ACTIVIE_NAME" | translate }}
               </span>
               <span> {{ item?.activityName }}</span>
+            </div>
+            <div *ngIf="item?.relatedActivity" class="d-flex flex-column col-6">
+              <span class="font-weight-bold">
+                {{ "ACTIVITY" | translate }}
+              </span>
+              <span> {{ item?.relatedActivity | translateObj }}</span>
+            </div>
+
+            <div *ngIf="item?.partner" class="d-flex flex-column col-6">
+              <span class="font-weight-bold">
+                {{ "DEPENDENCIES.VENDORS" | translate }}
+              </span>
+              <span> {{ item?.partner | translateObj }}</span>
             </div>
 
             <div class="d-flex flex-column col pt-4">
@@ -75,11 +88,12 @@
               style="width: 50px"
             >
               <button
+                (click)="deleteDependinces(item)"
                 pButton
                 pRipple
                 type="button"
-                icon="pi pi-ellipsis-v"
-                class="p-button-rounded p-button-text"
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-text"
               ></button>
             </div>
           </div>

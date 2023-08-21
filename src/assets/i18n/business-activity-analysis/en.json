@@ -57,6 +57,8 @@
     "LIMIT": "Reliability limits",
     "SECTION": "Related Section",
     "ACTIVIE_DEPT": "Activity dependency",
+    "VENDORS": "Vendors",
+    "ACTIVIE_NAME":"Activity Name",
 
     "ASSOCIATED_MANG": "Associated management",
     "TITLE": "Activity reliability",

@@ -106,7 +106,7 @@ export class ImpactAnalysisState {
       })
     );
     return this.activitiesAnalysisController
-      .search18({
+      .search20({
         pageable: {
           page: payload?.page,
           size: payload?.size,
@@ -169,7 +169,7 @@ export class ImpactAnalysisState {
     { setState }: StateContext<ImpactAnalysisStateModel>,
     {}: ImapactAnalysisAction.LoadActivitiesStatuses
   ) {
-    return this.statusController.list7().pipe(
+    return this.statusController.list8().pipe(
       tap((bc) => {
         setState(
           patch<ImpactAnalysisStateModel>({
@@ -200,7 +200,7 @@ export class ImpactAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.getOne23({ id: payload.id }).pipe(
+    return this.activitiesAnalysisController.getOne24({ id: payload.id }).pipe(
       tap((bc) => {
         setState(
           patch<ImpactAnalysisStateModel>({

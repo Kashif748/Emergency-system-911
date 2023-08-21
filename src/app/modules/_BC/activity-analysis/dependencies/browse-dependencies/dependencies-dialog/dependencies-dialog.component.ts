@@ -12,6 +12,8 @@ import {
   OrgActivityState,
   OrgDetailAction,
   OrgDetailState,
+  VenderAction,
+  VenderState,
 } from '@core/states';
 import { TreeNode } from 'primeng/api';
 import { BcActivities, BcOrgHierarchy } from 'src/app/api/models';
@@ -31,9 +33,12 @@ import { TreeHelper } from '@core/helpers/tree.helper';
   styleUrls: ['./dependencies-dialog.component.scss'],
 })
 export class DependenciesDialogComponent implements OnInit, OnDestroy {
-  dependenciesLimts = [];
   opened$: Observable<boolean>;
   dependType: DEPENDENCIES_TYPES;
+  DEPENDENCIES_TYPES = DEPENDENCIES_TYPES;
+
+  @Select(VenderState.page)
+  vendors$: Observable<BcActivities[]>;
 
   @Select(OrgActivityState.page)
   activies$: Observable<BcActivities[]>;
@@ -55,28 +60,42 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private translateObj: TranslateObjPipe,
     private store: Store
-  ) {
-    this.dependenciesLimts = [
-      {
-        name: 'DEPENDENCY_EXTERNAL',
-        value: DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL,
-      },
-      {
-        name: 'DEPENDENCY_INTERNAL',
-        value: DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL,
-      },
-      { name: 'DEPENDENCY_ORG', value: DEPENDENCIES_TYPES.DEPENDENCY_ORG },
-    ];
-  }
+  ) {}
 
   ngOnInit(): void {
     this.buildForm();
+    this.store.dispatch([
+      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
+    ]);
 
     this.opened$ = this.route.queryParams.pipe(
       takeUntil(this.destroy$),
       tap((params) => {
         this.form.reset();
         this.dependType = params['_dependType'];
+        switch (this.dependType) {
+          case DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL:
+            this.store.dispatch(
+              new VenderAction.LoadPage({ page: 0, size: 100 })
+            );
+            this.form.get('partner').setValidators(Validators.required);
+            break;
+          case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
+            this.form
+              .get('relatedActivity')
+              .setValidators(Validators.required);
+            this.form.get('orgHierarchy').setValidators(Validators.required);
+            break;
+          case DEPENDENCIES_TYPES.DEPENDENCY_ORG:
+            this.form.get('activityName').setValidators(Validators.required);
+            this.form.get('orgHierarchy').setValidators(Validators.required);
+            break;
+
+          default:
+            break;
+        }
+
+        this.form.updateValueAndValidity();
       }),
       map((params) => params['_dialog'] === 'opened')
     );
@@ -86,11 +105,6 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
       filter((p) => !!p),
       map((data) => data[this.dependType])
     );
-    this.store.dispatch([
-      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
-
-      new OrgActivityAction.LoadPage({ page: 0, size: 100 }),
-    ]);
 
     this.store
       .select(OrgDetailState.orgHirSearch)
@@ -100,6 +114,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
         map((data) => this.setTree(data))
       )
       .subscribe();
+
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
@@ -144,9 +159,11 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
   }
   buildForm() {
     this.form = this.formBuilder.group({
-      activity: [null, [Validators.required]],
+      relatedActivity: [null],
       dependencyDetails: [null, [Validators.required]],
-      orgHierarchy: [null, [Validators.required]],
+      orgHierarchy: [null],
+      activityName: [null],
+      partner: [null],
     });
   }
 
@@ -169,8 +186,6 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
         id: formValue?.orgHierarchy?.key,
       },
       isFound: true,
-      activityName: formValue.activity?.nameEn,
-      relatedActivityId: formValue.activity?.id,
       isActive: true,
       activity: {
         internal: activityAnalysis?.activity?.internal,
@@ -204,6 +219,15 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  loadActivities(node) {
+    this.store.dispatch(
+      new OrgActivityAction.LoadPage({
+        page: 0,
+        size: 100,
+        filters: { orgHierarchyId: node?.key },
+      })
+    );
+  }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
   }

@@ -52,12 +52,13 @@
   },
   "DEPENDENCIES": {
     "TAB_LABEL": "الاعتمادية",
+    "VENDORS": "المزودين",
 
     "ADD_NEW": "إضافة اعتمادية جديدة",
     "LIMIT": "حدود الاعتمادية",
     "SECTION": "القسم المرتبط",
     "ACTIVIE_DEPT": "اعتمادية النشاط",
-
+    "ACTIVIE_NAME":"اسم النشاط",
     "ASSOCIATED_MANG": "الإدارة المرتبطة",
     "TITLE": "اعتمادية النشاط",
 
