@@ -39,6 +39,8 @@ export class BrowseTasksComponent implements OnInit {
   @Select(CommonDataState.taskStatuses)
   public statuses$: Observable<any[]>;
 
+  public filterStatuses$: Observable<any[]>;
+
   private destroy$ = new Subject();
 
   public sortableColumns$ = this.langFacade.vm$.pipe(
@@ -111,6 +113,9 @@ export class BrowseTasksComponent implements OnInit {
       .subscribe(() => {
         this.changeView('CARDS');
       });
+    this.filterStatuses$ = this.statuses$.pipe(
+      map(statuses => statuses.filter(status => status.id !== 8))
+    );
     const taskActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
