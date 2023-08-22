@@ -27,7 +27,7 @@
             </th>
 
             <th style="width: 92px">{{ "ACTIONS.ACTIVE" | translate }}</th>
-            <th style="width: 92px">
+            <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">
               {{ "ACTIONS.ACTIONS" | translate }}
             </th>
           </tr>
@@ -93,7 +93,7 @@
             </th>
 
             <th style="width: 92px">{{ "ACTIONS.ACTIVE" | translate }}</th>
-            <th style="width: 92px">
+            <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">
               {{ "ACTIONS.ACTIONS" | translate }}
             </th>
           </tr>
@@ -213,7 +213,7 @@
               </p-cellEditor>
             </td>
             <td style="text-align: center">
-              <div class="d-flex p-flex-column p-ai-center p-jc-center">
+              <div *checkPrivileges="'PRIV_ED_BC_LISTS'" class="d-flex p-flex-column p-ai-center p-jc-center">
                 <button
                   [disabled]="disableButton$ |async"
                   *ngIf="!editing"

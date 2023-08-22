@@ -39,14 +39,14 @@ const routes: Routes = [
         loadChildren: () => import('./rto/rto.module').then((m) => m.RtoModule),
       },
       {
-        path: 'activey-frquency',
+        path: 'activity-frquency',
         loadChildren: () =>
           import('./activity-frquency/activity-frquency.module').then(
             (m) => m.ActivityFrquencyModule
           ),
       },
       {
-        path: 'activey-priority',
+        path: 'activity-priority',
         loadChildren: () =>
           import(
             './activity-priority-sequence/activity-priority-sequence.module'
