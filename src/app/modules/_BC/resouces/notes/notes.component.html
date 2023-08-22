@@ -1,0 +1,74 @@
+<div class="p-col-12" style="display: flex; justify-content: space-between">
+  <h3 class="card-title align-items-start flex-column m-0">
+    <span class="card-label font-weight-bolder">{{
+      "NOTES.HEADER" | translate
+    }}</span>
+  </h3>
+</div>
+<section class="row">
+  <div class="card timeline timeline-3 col-9">
+    <div class="timeline-items">
+      <perfect-scrollbar
+        #scroll
+        [config]="{ wheelSpeed: 2 }"
+        class="ps-container ps-theme-default ps-active-y p-4"
+        style="
+          scroll-behavior: smooth;
+          scroll-snap-type: proximity;
+          height: 500px !important;
+        "
+      >
+        <div class="timeline-item pl-10" *ngFor="let note of notes">
+          <div class="timeline-content">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>
+                <p class="font-weight-bold">
+                  {{ note.label }}
+                </p>
+              </div>
+              <span class="label label-light-primary label-inline mr-2 h-auto">
+                {{ note.type }}
+              </span>
+            </div>
+
+            <div class="d-flex align-items-center mb-3">
+              <div class="mr-2"></div>
+              <span class="text-muted m-">
+                {{ note?.user }}
+              </span>
+              <span class="text-muted mx-20">
+                {{ note?.manage }}
+              </span>
+              <span class="text-muted ml-2">
+                {{ note?.date }}
+              </span>
+            </div>
+          </div>
+          <div class="timeline-media">
+            <div class="symbol symbol-circle symbol-45 symbol-light-primary">
+              <span class="symbol-label"> A </span>
+            </div>
+          </div>
+        </div>
+      </perfect-scrollbar>
+    </div>
+  </div>
+  <div class="col-3 d-flex flex-column p-10">
+    <div class="p-5">
+      <p-checkbox
+        name="groupname"
+        value="val1"
+        label="
+    {{ 'NOTES.UPDATE_STAGES' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div class="p-5">
+      <p-checkbox
+        name="groupname"
+        value="val2"
+        label="
+  {{ 'NOTES.NOTES' | translate }}"
+      ></p-checkbox>
+    </div>
+  </div>
+</section>
