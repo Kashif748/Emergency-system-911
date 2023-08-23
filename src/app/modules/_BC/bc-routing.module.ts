@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BCComponent } from './bc/bc.component';
+import {ResoucesModule} from "./resouces/resouces.module";
 
 const routes: Routes = [
   {
@@ -38,6 +39,20 @@ const routes: Routes = [
           import(
             './organization-activities/organization-activities.module'
           ).then((m) => m.OrganizationActivitiesModule),
+      },
+      {
+        path: 'org-activities',
+        loadChildren: () =>
+          import(
+            './organization-activities/organization-activities.module'
+            ).then((m) => m.OrganizationActivitiesModule),
+      },
+      {
+        path: 'resources',
+        loadChildren: () =>
+          import(
+            './resouces/resouces.module'
+            ).then((m) => m.ResoucesModule),
       },
     ],
   },
