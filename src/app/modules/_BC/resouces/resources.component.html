@@ -35,14 +35,14 @@
             </span
           >
         </div>
-        <!-- <div class="d-flex flex-column">
+         <div class="d-flex flex-column">
           <span class="mb-3">إدارة</span>
           <span class="font-weight-bold text-primary">الموارد البشرية</span>
-        </div> -->
-        <!-- <div class="d-flex flex-column">
+        </div>
+        <div class="d-flex flex-column">
           <span class="mb-3">قسم </span>
           <span class="font-weight-bold text-primary"> الرواتب </span>
-        </div> -->
+        </div>
         <div class="d-flex flex-column">
           <span class="mb-3"> {{ "createdBy" | translate }}</span>
           <span class="font-weight-bold text-primary">مصطفى السبول </span>
@@ -57,27 +57,80 @@
 
       <p-divider></p-divider>
 
-      <div class="row p-4">
-        <div class="col-4">
+      <div class="row p-4 col-12">
+        <div class="p-md-3 p-col-12">
           <p-card
-            header="{{ 'ANALYSISـRESULT' | translate }}"
             styleClass="shadow-none border h-100"
           >
-            <div class="d-flex p-jc-between">
-              <div class="d-flex flex-column">
-                <span>{{ "ACTIVITY_CRITICALITY" | translate }}</span>
-                <p class="font-weight-bold font-size-h4 mt-4">مرتفع</p>
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'REMOTELY' | translate }}</span>
+                <i class="pi pi-info-circle"></i>
               </div>
-              <p-divider layout="vertical"></p-divider>
 
-              <div class="d-flex flex-column">
-                <span>{{ "RECOVERY_TIME" | translate }}</span>
-                <p class="font-weight-bold font-size-h4 mt-4">1 - 4 ساعات</p>
+            </ng-template>
+            <div class="align-items-center">
+              <div class="flex-column">
+                <p class="text-center font-weight-bold font-size-h2 mt-4">8</p>
               </div>
             </div>
           </p-card>
         </div>
-        <div class="col-4">
+        <div class="p-md-3 p-col-12">
+          <p-card
+            styleClass="shadow-none border h-100"
+          >
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'PERSON' | translate }}</span>
+                <i class="pi pi-info-circle"></i>
+              </div>
+
+            </ng-template>
+            <div class="align-items-center">
+              <div class="flex-column">
+                <p class="text-center font-weight-bold font-size-h2 mt-4">5</p>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        <div class="p-md-3 p-col-12">
+          <p-card
+            styleClass="shadow-none border h-100"
+          >
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'NON_VITAL' | translate }}</span>
+                <i class="pi pi-info-circle"></i>
+              </div>
+
+            </ng-template>
+            <div class="align-items-center">
+              <div class="flex-column">
+                <p class="text-center font-weight-bold font-size-h2 mt-4">2</p>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        <div class="p-md-3 p-col-12">
+          <p-card
+            styleClass="shadow-none border h-100"
+          >
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'VITAL' | translate }}</span>
+                <i class="pi pi-info-circle"></i>
+              </div>
+
+            </ng-template>
+            <div class="align-items-center">
+              <div class="flex-column">
+                <p class="text-center font-weight-bold font-size-h2 mt-4">10</p>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        <!--<div class="col-4">
           <p-card
             header="{{ 'IMPACT_COMPLETION' | translate }}"
             styleClass="shadow-none border h-100"
@@ -109,8 +162,8 @@
               </div>
             </div>
           </p-card>
-        </div>
-        <div class="col-4">
+        </div>-->
+        <!--<div class="col-4">
           <p-card
             header="  {{ 'POINT_FAILURE' | translate }}"
             styleClass="shadow-none border h-100"
@@ -129,7 +182,7 @@
               </div>
             </div>
           </p-card>
-        </div>
+        </div>-->
       </div>
       <section class="mt-12">
         <p-tabView
