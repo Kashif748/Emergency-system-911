@@ -8,6 +8,11 @@ const routes: Routes = [
     component: ResourcesComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'staff-requirement',
+        pathMatch: 'full',
+      },
+      {
         path: 'staff-requirement',
         loadChildren: () =>
           import('./staff-requirement/staff-requirement.module').then(
