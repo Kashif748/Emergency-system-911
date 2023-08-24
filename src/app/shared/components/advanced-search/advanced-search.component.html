@@ -1,3 +1,15 @@
+<div class="d-flex pb-4 justify-content-between align-items-center ">
+  <span class="font-weight-bolder">
+    {{ "ACTIONS.ADVANCED_SEARCH" | translate }}</span
+  >
+  <button class="btn btn-icon btn-light-primary btn-sm" (click)="dialogRef.close()">
+    <span
+      [inlineSVG]="'/assets/media/svg/icons/Code/Error-circle.svg'"
+      cacheSVG="true"
+      class="svg-icon"
+    ></span>
+  </button>
+</div>
 <form [formGroup]="advncedFilterForm" class="mt-4">
   <div class="row">
     <!-- subject -->
@@ -219,33 +231,33 @@
 
     <!-- category -->
     <div
-    class="form-group col-lg-6 pl-4 pr-4"
-    *ngIf="formFields | showFormControl : advancedSearchFields.CATEGORY"
-  >
-    <mat-form-field
-      [dir]="directionality.value"
-      appearance="fill"
-      class="w-100"
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl : advancedSearchFields.CATEGORY"
     >
-      <mat-label>{{ "INCIDENTS.CATEGORY" | translate }}</mat-label>
-      <mat-select
-        placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
-        [id]="advancedSearchFields.CATEGORY"
-        [formControlName]="advancedSearchFields.CATEGORY"
-        (selectionChange)="onCategoryChange($event)"
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
       >
-        <mat-option
-          *ngFor="
+        <mat-label>{{ "INCIDENTS.CATEGORY" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
+          [id]="advancedSearchFields.CATEGORY"
+          [formControlName]="advancedSearchFields.CATEGORY"
+          (selectionChange)="onCategoryChange($event)"
+        >
+          <mat-option
+            *ngFor="
               let category of dataLists
                 | extractDataList : advancedSearchFields.CATEGORY
             "
-          [value]="category.id"
-        >
-          {{ category | propTranslator : "name" }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+            [value]="category.id"
+          >
+            {{ category | propTranslator : "name" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <!--Sub category -->
     <div
@@ -262,12 +274,9 @@
           placeholder="{{ 'INCIDENTS.SUBCATEGORY' | translate }}"
           [id]="advancedSearchFields.SUB_CATEGORY"
           [formControlName]="advancedSearchFields.SUB_CATEGORY"
-
         >
           <mat-option
-            *ngFor="
-              let subCategories of incSubCategories
-            "
+            *ngFor="let subCategories of incSubCategories"
             [value]="subCategories.id"
           >
             {{ subCategories | propTranslator : "name" }}
@@ -398,8 +407,7 @@
         >
           <mat-option
             *ngFor="
-              let rv of dataLists
-                | extractDataList : advancedSearchFields.GROUP
+              let rv of dataLists | extractDataList : advancedSearchFields.GROUP
             "
             [value]="rv.id"
           >
