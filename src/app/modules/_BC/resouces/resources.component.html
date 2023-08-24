@@ -8,7 +8,7 @@
       <p-toolbar>
         <div class="p-toolbar-group-left">
           <h2 class="m-0">
-
+            {{ 'RESOURCES' | translate }}
           </h2>
         </div>
         <div class="p-toolbar-group-right" style="gap: 10px">
@@ -185,11 +185,11 @@
         </div>-->
       </div>
       <section class="mt-12">
-        <p-tabView
+        <p-tabView class="p-md-12"
           [activeIndex]="tabIndex$ | async"
           (activeIndexChange)="changeTab($event)"
         >
-          <p-tabPanel
+          <p-tabPanel class="p-md-6"
             header="{{ item.label + '.TAB_LABEL' | translate }}"
             *ngFor="let item of tabs"
           >
