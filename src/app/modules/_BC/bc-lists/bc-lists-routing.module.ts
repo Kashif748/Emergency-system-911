@@ -39,7 +39,7 @@ const routes: Routes = [
         loadChildren: () => import('./rto/rto.module').then((m) => m.RtoModule),
       },
       {
-        path: 'activity-frquency',
+        path: 'activity-frequency',
         loadChildren: () =>
           import('./activity-frquency/activity-frquency.module').then(
             (m) => m.ActivityFrquencyModule
