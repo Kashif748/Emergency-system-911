@@ -157,6 +157,7 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
       this.store.dispatch(
         UpdateFilter({ filter: this.advncedFilterForm.value })
       );
+      this.dialogRef.close(this.advncedFilterForm.value);
     }
   }
 
