@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ILangFacade} from '@core/facades/lang.facade';
 import {TABS} from "../resouces/tempData.conts";
 import {map} from "rxjs/operators";
 import {Observable} from "rxjs";
@@ -7,6 +6,7 @@ import {Select, Store} from "@ngxs/store";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BrowseResourceAction} from "./states/browse-resource.action";
 import {BrowseResourceState} from "./states/browse-resource.state";
+import {ILangFacade} from "@core/facades/lang.facade";
 
 @Component({
   selector: 'app-resources',
