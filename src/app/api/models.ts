@@ -366,6 +366,9 @@ export { ApiErrorCircularStatus } from './models/api-error-circular-status';
 export { RestApiResponseCircularStatus } from './models/rest-api-response-circular-status';
 export { ApiErrorConfidentialty } from './models/api-error-confidentialty';
 export { RestApiResponseConfidentialty } from './models/rest-api-response-confidentialty';
+export { BcWorkLogTypes } from './models/bc-work-log-types';
+export { ApiErrorBcWorkLogTypes } from './models/api-error-bc-work-log-types';
+export { RestApiResponseBcWorkLogTypes } from './models/rest-api-response-bc-work-log-types';
 export { BcVersionsStatus } from './models/bc-versions-status';
 export { ApiErrorBcVersionsStatus } from './models/api-error-bc-versions-status';
 export { RestApiResponseBcVersionsStatus } from './models/rest-api-response-bc-versions-status';
@@ -1193,6 +1196,8 @@ export { RestApiResponsePageCircularWithOrgsProjection } from './models/rest-api
 export { ApiErrorPageConfidentialty } from './models/api-error-page-confidentialty';
 export { PageConfidentialty } from './models/page-confidentialty';
 export { RestApiResponsePageConfidentialty } from './models/rest-api-response-page-confidentialty';
+export { ApiErrorListBcWorkLogTypes } from './models/api-error-list-bc-work-log-types';
+export { RestApiResponseListBcWorkLogTypes } from './models/rest-api-response-list-bc-work-log-types';
 export { ApiErrorPageBcVersionsStatus } from './models/api-error-page-bc-versions-status';
 export { PageBcVersionsStatus } from './models/page-bc-versions-status';
 export { RestApiResponsePageBcVersionsStatus } from './models/rest-api-response-page-bc-versions-status';
