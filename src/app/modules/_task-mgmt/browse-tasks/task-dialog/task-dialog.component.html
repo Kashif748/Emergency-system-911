@@ -120,7 +120,7 @@
 
           <div class="p-field p-col-12 p-md-6" *ngIf="editMode">
             <span class="p-float-label" [ngClass]="{'outline-primary rounded-sm': !closedStatus && viewOnly}">
-              <p-dropdown [options]="statuses$ | async" [autoDisplayFirst]="false" [showClear]="false" dataKey="id"
+              <p-dropdown [options]="filterStatuses$ | async" [autoDisplayFirst]="false" [showClear]="false" dataKey="id"
                 appendTo="body" formControlName="statusId" (onChange)="viewOnly && updateStatus($event.value)">
                 <ng-template let-item pTemplate="selectedItem">
                   {{ item | translateObj }}
