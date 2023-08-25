@@ -87,6 +87,7 @@ import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysi
 import { NgxsStoragePluginModule } from './_async-storage/storage.module';
 import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
+import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/worklogs.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -169,6 +170,7 @@ export function getHighlightLanguages() {
         ActivityEmployeesState,
         ActivityLocationsState,
         ActivityDependenciesState,
+        ActivityWorklogsState,
         ImpactAnalysisState,
         ActivityImpactMatrixState,
         VenderState

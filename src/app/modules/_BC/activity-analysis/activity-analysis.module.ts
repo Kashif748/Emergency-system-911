@@ -69,9 +69,9 @@ const routes: Routes = [
           import('./recovery/recovery.module').then((m) => m.RecoveryModule),
       },
       {
-        path: 'notes',
+        path: 'worklogs',
         loadChildren: () =>
-          import('./notes/notes.module').then((m) => m.NotesModule),
+          import('./worklogs/worklogs.module').then((m) => m.WorklogsModule),
       },
     ],
   },

@@ -98,6 +98,7 @@ import { CircularCcControllerService } from './services/circular-cc-controller.s
 import { CircularControllerService } from './services/circular-controller.service';
 import { CircularStatusControllerService } from './services/circular-status-controller.service';
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+import { BcWorkLogTypesControllerService } from './services/bc-work-log-types-controller.service';
 import { BcVersionsControllerService } from './services/bc-versions-controller.service';
 import { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
 import { BcSystemsControllerService } from './services/bc-systems-controller.service';
@@ -268,6 +269,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     CircularControllerService,
     CircularStatusControllerService,
     ConfidentialtyControllerService,
+    BcWorkLogTypesControllerService,
     BcVersionsControllerService,
     BcVersionsStatusControllerService,
     BcSystemsControllerService,
@@ -351,7 +353,7 @@ export class ApiModule {
     }
   }
 
-  constructor(
+  constructor( 
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {
