@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { IAuthService } from '@core/services/auth.service';
 import { BCState } from '@core/states';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
 import { FormUtils } from '@core/utils';
 import { Select, Store } from '@ngxs/store';
 import { GenericValidators } from '@shared/validators/generic-validators';
@@ -30,7 +31,6 @@ export class BCComponent implements OnInit, OnDestroy {
 
   public dialogOpened$: Observable<boolean>;
 
-  @Select(BCState.versions)
   public versions$: Observable<BcVersions[]>;
 
   selectedVersion: BcVersions;
@@ -73,6 +73,16 @@ export class BCComponent implements OnInit, OnDestroy {
         tap((version) => (this.selectedVersion = version))
       )
       .subscribe();
+
+    this.versions$ = this.store.select(BCState.versions).pipe(
+      takeUntil(this.destroy$),
+      filter((p) => !!p),
+      map((versions) =>
+        versions.filter(
+          (version) => version.status?.id !== VERSION_STATUSES.ARCHIVED
+        )
+      )
+    );
   }
   createForm() {
     this.form = this.formBuilder.group({
@@ -115,11 +125,14 @@ export class BCComponent implements OnInit, OnDestroy {
       .subscribe();
   }
   setValueGlobally(value: BcVersions) {
-    this.store.dispatch(
-      new BrowseBCAction.SetVersionId({
-        versionId: value.id,
-      })
-    ).toPromise().then(()=>this.toggleDialog());
+    this.store
+      .dispatch(
+        new BrowseBCAction.SetVersionId({
+          versionId: value.id,
+        })
+      )
+      .toPromise()
+      .then(() => this.toggleDialog());
   }
   ngOnDestroy(): void {
     this.destroy$.next();

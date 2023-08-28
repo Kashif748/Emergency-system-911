@@ -44,7 +44,6 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
   @Select(BCState.blocking)
   public blocking$: Observable<boolean>;
 
-  @Select(BCState.versions)
   public versions$: Observable<BcVersions[]>;
 
   private destroy$ = new Subject();
@@ -70,6 +69,16 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
         tap((version) => (this.selectedVersion = version))
       )
       .subscribe();
+
+      this.versions$ = this.store.select(BCState.versions).pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((versions) =>
+          versions.filter(
+            (version) => version.status?.id !== VERSION_STATUSES.ARCHIVED
+          )
+        )
+      );
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
