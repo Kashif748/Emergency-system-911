@@ -21,6 +21,8 @@ import { BaseComponent } from '@shared/components/base.component';
 import { AppCommonData } from '@core/entities/AppCommonData';
 import { AppCommonDataService } from '@core/services/app-common-data.service';
 import { AlertsService } from '../../../../_metronic/core/services/alerts.service';
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {ConfirmDialogComponent} from "../../../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-incident-task',
@@ -50,7 +52,8 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
     private incidentsService: IncidentsService,
     private appCommonService: AppCommonDataService,
     private alertService: AlertsService,
-    public cd: ChangeDetectorRef
+    public cd: ChangeDetectorRef,
+    private dialog: MatDialog,
   ) {
     super();
   }
@@ -166,6 +169,38 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
     this.router.navigate(['incidents/updateTask', id], {
       queryParams: { _redirect: this.router.url },
     });
+  }
+
+  deleteTask(id) {
+    // const message = 'GENERAL.RESENT_CONFIRM';
+    // const actionName = 'GENERAL.SEND_CONFIRM';
+
+    const dialogConfig = new MatDialogConfig();
+   /* dialogConfig.data = {
+      confirmMessage: message,
+      action: actionName,
+    };*/
+
+    this.dialog
+      .open(ConfirmDialogComponent)
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.incidentsService
+            .deleteTask(id)
+            .subscribe(
+              (response) => {
+                /*this.incidentsService.getNotifications(
+                  this.activeTable.value
+                );*/
+                this.alertService.openSuccessSnackBar();
+              },
+              (err) => {
+                this.alertService.openFailureSnackBar();
+              }
+            );
+        }
+      });
   }
 }
 
