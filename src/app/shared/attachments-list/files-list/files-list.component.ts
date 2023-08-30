@@ -59,6 +59,7 @@ export class FilesListComponent implements OnInit, AfterViewInit {
   // UI
   @Input() recordId = 0;
   @Input() inline = false;
+  @Input() withOrgId = false;
   @Input() tagId = 0;
   @Input() reporterTagId = 0;
   @Input() foreignHelperId = null;
@@ -106,6 +107,10 @@ export class FilesListComponent implements OnInit, AfterViewInit {
   attachments: any[] = [];
   uploadTagConst = UploadTagIdConst;
 
+  get orgId() {
+    return this.auth.getClaim('orgId');
+  }
+
   constructor(
     private attachmentsService: AttachmentsService,
     private authService: IAuthService,
@@ -115,6 +120,7 @@ export class FilesListComponent implements OnInit, AfterViewInit {
     private translationService: TranslationService,
     private incidentService: IncidentsService,
     public matDialog: MatDialog,
+    private auth: IAuthService,
     private messageHelper: MessageHelper
   ) {}
 
@@ -168,8 +174,13 @@ export class FilesListComponent implements OnInit, AfterViewInit {
         .use(ScreenCapture, { target: Dashboard });
 
       if (this.recordId) {
+        let endpoint = `${environment.apiUrl}/dms/upload/?recordId=${this.recordId}&tagId=${this.tagId}`;
+
+        if (this.withOrgId) {
+          endpoint = `${endpoint}&orgId=${this.orgId}`;
+        }
         this.uppy = this.uppy.use(XHRUpload, {
-          endpoint: `${environment.apiUrl}/dms/upload/?recordId=${this.recordId}&tagId=${this.tagId}`,
+          endpoint: endpoint,
           headers: {
             Authorization: `Bearer ${this.authService.accessToken}`,
           },
@@ -194,8 +205,14 @@ export class FilesListComponent implements OnInit, AfterViewInit {
 
   async upload(id, modifyEndpoint = true) {
     if (modifyEndpoint) {
+      let endpoint = `${environment.apiUrl}/dms/upload/?recordId=${id}&tagId=${this.tagId}`;
+
+      if (this.withOrgId) {
+        endpoint = `${endpoint}&orgId=${this.orgId}`;
+      }
+
       this.uppy.use(XHRUpload, {
-        endpoint: `${environment.apiUrl}/dms/upload/?recordId=${id}&tagId=${this.tagId}`,
+        endpoint: endpoint,
         headers: {
           Authorization: `Bearer ${this.authService.accessToken}`,
         },
@@ -659,13 +676,18 @@ export class FilesListComponent implements OnInit, AfterViewInit {
   private loadSituationsAttachments() {
     forkJoin({
       situationAttachmentsRes: this.attachmentsService.getFilesList(
-        this.recordId, this.tagId
-      )
+        this.recordId,
+        this.tagId
+      ),
     }).subscribe(
-      ({
-         situationAttachmentsRes,
-       }) => {
-        this.fillAttachmentsList(null, null, null, null, situationAttachmentsRes);
+      ({ situationAttachmentsRes }) => {
+        this.fillAttachmentsList(
+          null,
+          null,
+          null,
+          null,
+          situationAttachmentsRes
+        );
         this.groupAttachmentsForUI();
         this.cd.detectChanges();
       },

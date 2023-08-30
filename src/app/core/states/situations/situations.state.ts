@@ -1,23 +1,34 @@
-import {Injectable} from '@angular/core';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
-import {patch} from '@ngxs/store/operators';
-import {EMPTY} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {SituationsAction} from './situations.action';
-import {PageSituationProjection} from 'src/app/api/models/page-situation-projection';
-import {SituationControllerService} from 'src/app/api/services/situation-controller.service';
-import {SituationProjection} from 'src/app/api/models/situation-projection';
-import {DateTimeUtil} from '@core/utils/DateTimeUtil';
-import {SituationChartReportResponse, SituationStatisticsResponse} from 'src/app/api/models';
-import {UrlHelperService} from '@core/services/url-helper.service';
-import {ILangFacade} from '@core/facades/lang.facade';
-import {PageAttachmentPerSituationResponse} from "../../../api/models/page-attachment-per-situation-response";
-import {AlertnessLevelControllerService} from "../../../api/services/alertness-level-controller.service";
-import {PageAlertnessLevel} from "../../../api/models/page-alertness-level";
+import { Injectable } from '@angular/core';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { patch } from '@ngxs/store/operators';
+import { EMPTY, forkJoin } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { SituationsAction } from './situations.action';
+import { PageSituationProjection } from 'src/app/api/models/page-situation-projection';
+import { SituationControllerService } from 'src/app/api/services/situation-controller.service';
+import { SituationProjection } from 'src/app/api/models/situation-projection';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import {
+  SituationChartReportResponse,
+  SituationStatisticsResponse,
+} from 'src/app/api/models';
+import { UrlHelperService } from '@core/services/url-helper.service';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { PageAttachmentPerSituationResponse } from '../../../api/models/page-attachment-per-situation-response';
+import { AlertnessLevelControllerService } from '../../../api/services/alertness-level-controller.service';
+import { PageAlertnessLevel } from '../../../api/models/page-alertness-level';
+import { AttachmentsService } from 'src/app/_metronic/core/services/attachments.service';
 
 export interface SituationsStateModel {
   page: PageSituationProjection;
-  situationAttachmentPage: PageAttachmentPerSituationResponse;
+  situationAttachment: any[];
   situation: SituationProjection;
   createdSituation: SituationProjection;
   activeSituation: SituationProjection;
@@ -42,6 +53,7 @@ export class SituationsState {
     private situationsService: SituationControllerService,
     private urlHelper: UrlHelperService,
     private langFacade: ILangFacade,
+    private attachmentsService: AttachmentsService,
     private alertness: AlertnessLevelControllerService
   ) {}
   /* ************************ SELECTORS ******************** */
@@ -62,12 +74,12 @@ export class SituationsState {
     return state?.page?.content;
   }
   @Selector([SituationsState])
-  static situationAttachmentPage(state: SituationsStateModel) {
-    return state?.situationAttachmentPage.content;
+  static situationAttachment(state: SituationsStateModel) {
+    return state?.situationAttachment;
   }
   @Selector([SituationsState])
   static situationTotalRecords(state: SituationsStateModel) {
-    return state?.situationAttachmentPage.totalElements;
+    return state?.situationAttachment.length;
   }
   @Selector([SituationsState])
   static totalRecords(state: SituationsStateModel) {
@@ -177,18 +189,25 @@ export class SituationsState {
         attachmentLoading: true,
       })
     );
-    return this.situationsService.attachments({
-      situationId: payload.id,
-      pageable: {
-        page: payload.page,
-        size: payload.size,
-        sort: payload.sort,
-      }
-    }).pipe(
-      tap((res) => {
+    return forkJoin([
+      this.attachmentsService.getSituationsAttachments({
+        situationId: payload.situationId,
+        entityTagId: 32,
+        orgId: payload.orgId,
+        withSub: payload.withSub,
+      }),
+
+      this.attachmentsService.getSituationsAttachments({
+        situationId: payload.situationId,
+        entityTagId: 33,
+        orgId: payload.orgId,
+        withSub: payload.withSub,
+      }),
+    ]).pipe(
+      tap(([res1, res2]) => {
         setState(
           patch<SituationsStateModel>({
-            situationAttachmentPage: res.result,
+            situationAttachment: [...res1?.result, ...res2?.result],
             attachmentLoading: false,
           })
         );
@@ -196,7 +215,7 @@ export class SituationsState {
       catchError(() => {
         setState(
           patch<SituationsStateModel>({
-            situationAttachmentPage: { content: [], totalElements: 0 },
+            situationAttachment: [],
           })
         );
         return EMPTY;
@@ -216,31 +235,32 @@ export class SituationsState {
     { setState }: StateContext<SituationsStateModel>,
     { payload }: SituationsAction.GetAlertnessLevel
   ) {
-    return this.alertness.getByActivePage({
-      pageable: {
-        page: payload.page,
-        size: payload.size,
-        sort: payload.sort,
-      }
-    }).pipe(
-      tap((res) => {
-        setState(
-          patch<SituationsStateModel>({
-            alertnessLevelPage: res.result,
-          })
-        );
-      }),
-      catchError(() => {
-        setState(
-          patch<SituationsStateModel>({
-            situationAttachmentPage: { content: [], totalElements: 0 },
-          })
-        );
-        return EMPTY;
-      }),
-      finalize(() => {
+    return this.alertness
+      .getByActivePage({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
       })
-    );
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<SituationsStateModel>({
+              alertnessLevelPage: res.result,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<SituationsStateModel>({
+              situationAttachment: [],
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {})
+      );
   }
 
   @Action(SituationsAction.GetSituation, { cancelUncompleted: true })

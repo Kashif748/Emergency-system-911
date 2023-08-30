@@ -72,7 +72,20 @@ export class AttachmentsService {
       observe: 'response',
     });
   }
-
+  getSituationsAttachments(payload: {
+    entityTagId: number;
+    situationId: number;
+    orgId: number;
+    withSub: boolean;
+  }) {
+    return this.http
+      .get<any>(
+        `${environment.apiUrl}/dms/tag?entityTagId=${payload.entityTagId}&entityId=${payload.situationId}&orgId=${payload.orgId}&withSub=${payload.withSub}`
+      )
+      .pipe((res) => {
+        return res;
+      });
+  }
   getIncidentAttachments(incidentId: number) {
     return this.http
       .get<any>(

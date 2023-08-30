@@ -23,11 +23,9 @@ export namespace SituationsAction {
      */
     constructor(
       public payload: {
-        id?: number
-        filters?: { [key: string]: any };
-        sort?: string[];
-        page: number;
-        size: number;
+        situationId: number;
+        orgId: number;
+        withSub: boolean;
       }
     ) {}
   }
