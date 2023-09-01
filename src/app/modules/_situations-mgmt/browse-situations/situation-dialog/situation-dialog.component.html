@@ -365,8 +365,6 @@
                 dataKey="id"
                 [autoLayout]="true"
                 selectionMode="single"
-                (sortFunction)="customSort($event)"
-                [customSort]="true"
               >
                 <ng-template pTemplate="colgroup" let-columns>
                   <colgroup>
@@ -380,25 +378,20 @@
                   <tr>
                     <th></th>
 
-                    <th pSortableColumn="document.fileName">
+                    <th>
                       <div class="p-d-flex p-jc-start p-ai-center">
                         {{ "SITUATIONS.ATTACHMENT_NAMR" | translate }}
-                        <p-sortIcon field="document.fileName"></p-sortIcon>
                       </div>
                     </th>
-                    <th pSortableColumn="orgStructure.nameEn">
+                    <th>
                       <div class="p-d-flex p-jc-start p-ai-center">
-                        {{ "SITUATIONS.ORG_NAME" | translate
-                        }}<p-sortIcon field="orgStructure.nameEn"></p-sortIcon>
+                        {{ "SITUATIONS.ORG_NAME" | translate }}
                       </div>
                     </th>
 
-                    <th pSortableColumn="document.entityTag.tag">
+                    <th>
                       <div class="p-d-flex p-jc-start p-ai-center">
-                        {{ "SITUATIONS.ATTACHMENT_TYPE" | translate
-                        }}<p-sortIcon
-                          field="document.entityTag.tag"
-                        ></p-sortIcon>
+                        {{ "SITUATIONS.ATTACHMENT_TYPE" | translate }}
                       </div>
                     </th>
                     <th></th>
@@ -422,11 +415,7 @@
                       {{ item.orgStructure | translateObj }}
                     </td>
                     <td class="max-w-250px">
-                      {{
-                        item.tagId == "32"
-                          ? ("SITUATIONS.PLAN" | translate)
-                          : ("SITUATIONS.SHIFT" | translate)
-                      }}
+                      {{ item?.description | translateObj }}
                     </td>
                     <td class="max-w-250px">
                       <button

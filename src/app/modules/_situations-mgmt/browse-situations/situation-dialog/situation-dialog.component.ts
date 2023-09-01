@@ -147,6 +147,8 @@ export class SituationDialogComponent
       });
 
     if (this.viewOnly) {
+      const entityTags = this.store.selectSnapshot(CommonDataState.entityTags);
+
       this.store.dispatch(
         new BrowseSituationsAction.LoadAttachmentSituations({
           situationId: this._situationId,
@@ -158,7 +160,20 @@ export class SituationDialogComponent
         .select(SituationsState.situationAttachment)
         .pipe(
           filter((p) => !!p),
-          tap(console.log)
+          map((attachments) => {
+            return attachments.map((attachment) => {
+              const tag = entityTags.find(
+                (tag) => tag.id === attachment?.entityTag?.id
+              );
+              if (tag.description) {
+                attachment = {
+                  ...attachment,
+                  description: JSON.parse(tag?.description),
+                };
+              }
+              return attachment;
+            });
+          })
         );
     }
   }
