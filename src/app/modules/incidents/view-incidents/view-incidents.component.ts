@@ -262,13 +262,13 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
 
   private loadIncident(id: any) {
     forkJoin({
-      reportLocationRequest: this.shareLocationService.getReporterLocation(
+     /* reportLocationRequest: this.shareLocationService.getReporterLocation(
         this.incidentId
-      ),
+      ),*/
       incidentDetails: this.incidentsService.viewIncidents(id),
     }).subscribe(
-      ({ reportLocationRequest, incidentDetails }) => {
-        if (reportLocationRequest['result']) {
+      ({ incidentDetails }) => {
+        /*if (reportLocationRequest['result']) {
           if (reportLocationRequest['result']['location']) {
             const [latitude, longitude] = reportLocationRequest['result'][
               'location'
@@ -282,7 +282,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
               Address: '',
             };
           }
-        }
+        }*/
 
         if (incidentDetails) {
           this.incidentDetails = incidentDetails.result;
@@ -309,7 +309,6 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
           }
           this.getOrgName();
           this.canEditResponsible();
-          this.showMapComponent = true;
           this.cd.detectChanges();
         }
       },
@@ -367,7 +366,7 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
         await this.loadTasks();
         break;
       case 5:
-        await this.getReporterLocation();
+        await this.getReporterLocation(this.incidentId);
         break;
       case 7:
         await this.loadHospitals();
@@ -388,6 +387,22 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     this.shareLocationService
       .getReporterLocation(incidentId)
       .subscribe((assets: any) => {
+        if (assets['result']) {
+          if (assets['result']['location']) {
+            const [latitude, longitude] = assets['result'][
+              'location'
+              ]['text']
+              .replace('POINT (', '')
+              .replace(')', '')
+              .split(' ');
+            this.addressPointLocation = {
+              Lat: latitude ?? '',
+              Lng: longitude ?? '',
+              Address: '',
+            };
+          }
+        }
+        this.showMapComponent = true;
         if (assets['location']) {
           const [latitude, longitude] = assets['location']['text']
             .replace('POINT (', '')
@@ -398,8 +413,8 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
             Lng: longitude ?? '',
             Address: '',
           };
-          this.cd.detectChanges();
         }
+        this.cd.detectChanges();
       });
   }
 
