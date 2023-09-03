@@ -97,6 +97,16 @@ export { BcVersionsControllerService } from './services/bc-versions-controller.s
 export { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
 export { BcSystemsControllerService } from './services/bc-systems-controller.service';
 export { BcrtoControllerService } from './services/bcrto-controller.service';
+export { BcResourcesStaffReqControllerService } from './services/bc-resources-staff-req-controller.service';
+export { BcResourcesRemoteWorkControllerService } from './services/bc-resources-remote-work-controller.service';
+export { BcResourcesRecordsControllerService } from './services/bc-resources-records-controller.service';
+export { BcResourcesNonItInfrastructureControllerService } from './services/bc-resources-non-it-infrastructure-controller.service';
+export { BcResourcesMinPersonnelReqControllerService } from './services/bc-resources-min-personnel-req-controller.service';
+export { BcResourcesMinLicenseReqControllerService } from './services/bc-resources-min-license-req-controller.service';
+export { BcResourcesItInfrastructureControllerService } from './services/bc-resources-it-infrastructure-controller.service';
+export { BcResourcesDesignationControllerService } from './services/bc-resources-designation-controller.service';
+export { BcResourcesControllerService } from './services/bc-resources-controller.service';
+export { BcResourcesAppAndSoftwareControllerService } from './services/bc-resources-app-and-software-controller.service';
 export { BcPartnersControllerService } from './services/bc-partners-controller.service';
 export { BcOrgHierarchyControllerService } from './services/bc-org-hierarchy-controller.service';
 export { BcOrgHierarchyTypeControllerService } from './services/bc-org-hierarchy-type-controller.service';
