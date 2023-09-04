@@ -18,6 +18,7 @@ import {ResourcesComponent} from "./resources.component";
 import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
 import {ILangFacade, LangFacade} from "@core/facades/lang.facade";
 import {BrowseResourceState} from "./states/browse-resource.state";
+import {BadgeModule} from "primeng/badge";
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -51,6 +52,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     AvatarModule,
     BlockUIModule,
+    BadgeModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
