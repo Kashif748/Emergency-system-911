@@ -89,6 +89,8 @@ import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/worklogs.state';
 import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
+import {RecordsState} from "@core/states/bc-resources/records/records.state";
+import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -175,7 +177,9 @@ export function getHighlightLanguages() {
         ImpactAnalysisState,
         ActivityImpactMatrixState,
         VenderState,
-        RemoteWorkState
+        RemoteWorkState,
+        RecordsState,
+        AppSystemState
       ],
       {
         developmentMode: !environment.production,
@@ -195,6 +199,8 @@ export function getHighlightLanguages() {
           'browse_org_activities',
           'browse_vender',
           'browse_remote_work',
+          'browse_record',
+          'browse_app_system'
         ],
       },
       ['common_data']

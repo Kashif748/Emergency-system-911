@@ -4,7 +4,12 @@ import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageHelper} from '@core/helpers/message.helper';
 import {ApiHelper} from '@core/helpers/api.helper';
+import {iif, patch} from "@ngxs/store/operators";
+import {BrowseRemoteWorkStateModel} from "../../remote-work/states/browse-remote-work.state";
+import {EMPTY} from "rxjs";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseAppSystemAction} from "./browse-app-system.action";
+import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
 
 export interface BrowseAppSystemStateModel {
   pageRequest: PageRequestModel;
@@ -13,7 +18,7 @@ export interface BrowseAppSystemStateModel {
 }
 
 export const BROWSE_APP_SYSTEM_UI_STATE_TOKEN = new StateToken<BrowseAppSystemStateModel>(
-  'browse_appSystem'
+  'browse_app_system'
 );
 
 @State<BrowseAppSystemStateModel>({
@@ -48,6 +53,68 @@ export class BrowseAppSystemState {
   }
 
   /* ********************** ACTIONS ************************* */
+  @Action(BrowseAppSystemAction.LoadAppSys)
+  loadAppSys(
+    { setState, dispatch, getState }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseAppSystemAction.LoadAppSys
+  ) {
+    setState(
+      patch<BrowseRemoteWorkStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+
+    return dispatch(
+      new AppSystemAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        resourceId: payload.resourceId,
+      })
+    );
+  }
+  @Action(BrowseAppSystemAction.CreateAppSys)
+  createAppSys(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseAppSystemAction.CreateAppSys
+  ) {
+    return dispatch(new AppSystemAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([
+          new BrowseAppSystemAction.LoadAppSys(),
+          new BrowseAppSystemAction.ToggleDialog({}),
+        ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+  @Action(BrowseAppSystemAction.UpdateAppSys)
+  updateAppSys(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseAppSystemAction.UpdateAppSys
+  ) {
+    return dispatch(new AppSystemAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseAppSystemAction.LoadAppSys());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseAppSystemAction.ToggleDialog({}));
+      })
+    );
+  }
   @Action(BrowseAppSystemAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
     { dispatch }: StateContext<BrowseAppSystemStateModel>,

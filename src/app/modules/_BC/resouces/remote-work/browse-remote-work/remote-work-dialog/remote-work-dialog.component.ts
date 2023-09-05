@@ -9,7 +9,7 @@ import {auditTime, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {BrowseRemoteWorkAction} from "../../states/browse-remote-work.action";
 import {ImpLevelWorkingAction, UserAction, UserState} from "@core/states";
 import {Dropdown} from "primeng/dropdown";
-import {BcSystems, BcWorkImportanceLevels} from "../../../../../../api/models";
+import {BcResourcesRemoteWork, BcSystems, BcWorkImportanceLevels} from "../../../../../../api/models";
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 import {SystemsState} from "@core/states/bc-setup/systems/systems.state";
 import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
@@ -20,6 +20,9 @@ import {OrganizationDialogComponent} from "../../../../organization-activities/b
 import {Dialog} from "primeng/dialog";
 import {BrowseOrganizationAction} from "../../../../organization-activities/states/browse-organization.action";
 import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
+import {BcResourcesRemoteWorkSystems} from "../../../../../../api/models/bc-resources-remote-work-systems";
+import {BcResources} from "../../../../../../api/models/bc-resources";
+import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
 
 @Component({
   selector: 'app-remote-work-dialog',
@@ -133,7 +136,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       .subscribe((searchText) => {
         this.store.dispatch(
           new ImpLevelWorkingAction.LoadPage({ page: 0,
-            size: 15, versionId: 1})
+            size: 15, versionId: 337})
         );
       });
 
@@ -175,8 +178,29 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const remoteWork = {
+    const remote = {
       ...this.form.getRawValue(),
+    };
+    const remoteWork: BcResourcesRemoteWork = {
+      id: this._remoteWorkId,
+      importantLevel: remote.importantLevel.id,
+      isActive: true,
+      notes: remote.notes,
+      resource: {
+        id: 0
+      },
+      resourceDesignation: remote.resourceDesignation,
+      resourcesRemoteWorkSystems: [{
+        system: remote.resourcesRemoteWorkSystemsInternal.id,
+        isInternal: true,
+      },
+        {
+          system: remote.resourcesRemoteWorkSystemsExternal.id,
+          isInternal: false,
+        }],
+      skillsNeeded: remote.skillsNeeded,
+      staffDistributionIn: remote.staffDistributionIn,
+      staffDistributionOut: remote.staffDistributionOut,
     };
 
     if (this.editMode) {
@@ -197,7 +221,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
     if (direct) {
       this.store.dispatch(
         new ImpLevelWorkingAction.LoadPage({ page: 0,
-          size: 30, versionId: 1})
+          size: 30, versionId: 337})
       );
       return;
     }

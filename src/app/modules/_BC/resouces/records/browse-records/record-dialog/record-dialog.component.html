@@ -1,25 +1,55 @@
 <div class="p-toolbar-group-right">
   <button
-
     pButton
-    *checkPrivileges="'PRIV_ED_BC_LISTS'"
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
     (click)="openDialog()"
   ></button>
 </div>
 
+<!-- as a dialog -->
 <p-dialog
-  [visible]="opened$ | async" (visibleChange)="close()"
+  #dialog
+  [visible]="opened$ | async"
   [modal]="true"
+  (visibleChange)="close()"
   [style]="{ width: '55vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
   [maximizable]="true"
   [baseZIndex]="10000"
-  [draggable]="false"
+  [draggable]="true"
   [resizable]="false"
 >
   <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px"></div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
         {{'RECORDS.EDIT_RECORD' | translate}}
@@ -33,36 +63,59 @@
         {{'RECORDS.VIEW_RECORD' | translate}}
       </ng-container>
     </h3>
-  </ng-template>
+  </div>
 
-  <form [formGroup]="form" class="p-fluid p-grid mt-5">
-    <div class="p-field p-col-12 p-md-6">
+  <span class="flex-grow-1"></span>
+  <a
+    *ngIf="asDialog"
+    queryParamsHandling="merge"
+    pRipple
+    pButton
+    icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"
+  ></a>
+</ng-template>
+
+
+<!-- templates content -->
+<ng-template #content>
+  <div
+    class="w-100 pt-2"
+    [ngStyle]="{
+      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '65vh'
+    }"
+  >
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+      <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="name" pInputText />
+        <input type="text" formControlName="recordName" pInputText />
         <label>
           {{ "RECORDS.RECORD_NAME" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
-          form.controls['name'].touched &&
-          !form.controls['name'].valid &&
-          form.controls['name'].dirty"
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['name'].hasError('required')"
+        <ng-container
+          *ngIf="
+          form.controls['recordName'].touched &&
+          !form.controls['recordName'].valid &&
+          form.controls['recordName'].dirty"
         >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['recordName'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
 
 
-    <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <p-dropdown [options]="" [autoDisplayFirst]="false" formControlName="recordType"
+                <p-dropdown [options]="recordType" [autoDisplayFirst]="false" formControlName="recordType"
                             dataKey="id" [showClear]="true" appendTo="body">
                   <ng-template let-option pTemplate="selectedItem">
                     {{ option | translateObj : 'name' }}
@@ -76,17 +129,17 @@
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
-      <ng-container *ngIf="form.controls['recordType'].touched && !form.controls['recordType'].valid &&
+        <ng-container *ngIf="form.controls['recordType'].touched && !form.controls['recordType'].valid &&
           form.controls['recordType'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['recordType'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <p class="p-error mb-0" *ngIf="form.controls['recordType'].hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
 
-    <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <p-dropdown [options]="" [autoDisplayFirst]="false" formControlName="criticality"
+                <p-dropdown [options]="criticalityType" [autoDisplayFirst]="false" formControlName="isCritical"
                             dataKey="id" [showClear]="true" appendTo="body">
                   <ng-template let-option pTemplate="selectedItem">
                     {{ option | translateObj : 'name' }}
@@ -100,98 +153,124 @@
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
-      <ng-container *ngIf="form.controls['criticality'].touched && !form.controls['criticality'].valid &&
-          form.controls['criticality'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['criticality'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+        <ng-container *ngIf="form.controls['isCritical'].touched && !form.controls['isCritical'].valid &&
+          form.controls['isCritical'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['isCritical'].hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
 
-    <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="custody" pInputText />
+        <input type="text" formControlName="recordCustodian" pInputText />
         <label>
           {{ "RECORDS.RECORD_CUSTODIAN" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
-          form.controls['custody'].touched &&
-          !form.controls['custody'].valid &&
-          form.controls['custody'].dirty
+        <ng-container
+          *ngIf="
+          form.controls['recordCustodian'].touched &&
+          !form.controls['recordCustodian'].valid &&
+          form.controls['recordCustodian'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['custody'].hasError('required')"
         >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['recordCustodian'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
 
-    <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="currentLocation" pInputText />
+        <input type="text" formControlName="location" pInputText />
         <label>
           {{ "RECORDS.CURRENT_LOCATION" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
-          form.controls['currentLocation'].touched &&
-          !form.controls['currentLocation'].valid &&
-          form.controls['currentLocation'].dirty
+        <ng-container
+          *ngIf="
+          form.controls['location'].touched &&
+          !form.controls['location'].valid &&
+          form.controls['location'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['currentLocation'].hasError('required')"
         >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['location'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
 
-    <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="source" pInputText />
+        <input type="text" formControlName="alternateSource" pInputText />
         <label>
           {{ "RECORDS.ALTERNATE_SOUREC" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
-          form.controls['source'].touched &&
-          !form.controls['source'].valid &&
-          form.controls['source'].dirty
+        <ng-container
+          *ngIf="
+          form.controls['alternateSource'].touched &&
+          !form.controls['alternateSource'].valid &&
+          form.controls['alternateSource'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['source'].hasError('required')"
         >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
-  </form>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['alternateSource'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+</ng-template>
 
-  <ng-template pTemplate="footer">
-    <div class="p-col text-center">
-      <div class="text-center" *ngIf="!(viewOnly$ | async)">
+
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <button
+      *ngIf="asDialog"
+      pButton
+      icon="pi pi-times"
+      (click)="close()"
+      label="{{ 'ACTIONS.CLOSE' | translate }}"
+    ></button>
+
+    <div class="ml-dir-auto"></div>
+
+    <ng-container *ngIf="!(viewOnly$ | async)">
+      <div class="mx-1">
         <button
           pButton
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-          [disabled]="form.invalid"
-          (click)="submit()"
+          type="button"
+          label="{{ 'ACTIONS.CLEAR' | translate }}"
+          icon="pi pi-replay"
+          class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"
         ></button>
       </div>
+    </ng-container>
+
+    <div class="mx-1" *ngIf="!(viewOnly$ | async)">
+      <button
+        pButton
+        label="{{ 'ACTIONS.SAVE' | translate }}"
+        icon="pi pi-save"
+        [loading]="blocking$ | async"
+        (click)="submit()"
+      ></button>
     </div>
-  </ng-template>
-</p-dialog>
+  </div>
+</ng-template>

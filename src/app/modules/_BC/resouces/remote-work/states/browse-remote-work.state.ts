@@ -78,7 +78,7 @@ export class BrowseRemoteWorkState {
   }
 
   @Action(BrowseRemoteWorkAction.CreateRemoteWork)
-  createRto(
+  createRemoteWork(
     { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
     { payload }: BrowseRemoteWorkAction.CreateRemoteWork
   ) {
@@ -97,7 +97,7 @@ export class BrowseRemoteWorkState {
     );
   }
   @Action(BrowseRemoteWorkAction.UpdateRemoteWork)
-  updateRto(
+  updateRemoteWork(
     { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
     { payload }: BrowseRemoteWorkAction.UpdateRemoteWork
   ) {
