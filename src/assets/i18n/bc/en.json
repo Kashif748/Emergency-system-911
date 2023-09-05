@@ -115,7 +115,8 @@
     "DEPARTMENT": {
       "DEPT_MGMT": "Department Manager",
       "FIRST_BUSI_COORDINATOR": "First Business Continuity Coordinator",
-      "SECOND_BUSI_COORDINATOR": "Second Business Continuity Coordinator"
+      "SECOND_BUSI_COORDINATOR": "Second Business Continuity Coordinator",
+      "COORDINATOR" : "Business Continuity Coordinators"
     },
     "SECTION": {
       "USER_DATA": "User Data",
