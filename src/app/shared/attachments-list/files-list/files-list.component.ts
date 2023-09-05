@@ -179,6 +179,8 @@ export class FilesListComponent implements OnInit, AfterViewInit {
         if (this.withOrgId) {
           endpoint = `${endpoint}&orgId=${this.orgId}`;
         }
+        console.log(endpoint);
+
         this.uppy = this.uppy.use(XHRUpload, {
           endpoint: endpoint,
           headers: {
@@ -674,11 +676,25 @@ export class FilesListComponent implements OnInit, AfterViewInit {
   }
 
   private loadSituationsAttachments() {
+    let situationAttachmentsRes = this.attachmentsService.getFilesList(
+      this.recordId,
+      this.tagId
+    );
+    console.log(this.tagId);
+    if (
+      this.tagId == UploadTagIdConst.PLAN_SITUATION ||
+      this.tagId == UploadTagIdConst.SHIFT_SITUATION
+    ) {
+      situationAttachmentsRes =
+        this.attachmentsService.getSituationsAttachments({
+          orgId: this.orgId,
+          situationId: this.recordId,
+          entityTagId: this.tagId,
+          withSub: false,
+        });
+    }
     forkJoin({
-      situationAttachmentsRes: this.attachmentsService.getFilesList(
-        this.recordId,
-        this.tagId
-      ),
+      situationAttachmentsRes: situationAttachmentsRes,
     }).subscribe(
       ({ situationAttachmentsRes }) => {
         this.fillAttachmentsList(
