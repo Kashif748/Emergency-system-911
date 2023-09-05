@@ -66,7 +66,10 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
       .getTaskTypes()
       .pipe(map((r) => r.result))
       .toPromise();
+    this.loadIncidentTask();
+  }
 
+  loadIncidentTask(){
     this.incidentsService
       .getIncidentTasks(this.incidentId, this.paginationConfig)
       .pipe(map(this.taskMap), takeUntil(this.destroy$))
@@ -193,6 +196,7 @@ export class IncidentTaskComponent extends BaseComponent implements OnInit {
                 /*this.incidentsService.getNotifications(
                   this.activeTable.value
                 );*/
+                this.loadIncidentTask();
                 this.alertService.openSuccessSnackBar();
               },
               (err) => {

@@ -46,7 +46,7 @@
   <ng-container>
     <!--begin::Header-->
     <div
-      *ngIf="user$ | async as user"
+      *ngIf="userDetails"
       class="d-flex align-items-center p-8 rounded-top"
     >
       <!--begin::Symbol-->
@@ -67,13 +67,13 @@
         *ngIf="dir == 'ltr'"
         class="text-dark m-0 flex-grow-1 mr-3 font-size-h5"
       >
-        {{ user?.firstNameEn }} {{ user?.lastNameEn }}
+        {{ userDetails?.firstNameEn }} {{ userDetails?.lastNameEn }}
       </div>
       <div
         *ngIf="dir == 'rtl'"
         class="text-dark m-0 flex-grow-1 mr-3 font-size-h5"
       >
-        {{ user?.firstNameAr }} {{ user?.lastNameAr }}
+        {{ userDetails?.firstNameAr }} {{ userDetails?.lastNameAr }}
       </div>
       <!--end::Text-->
     </div>
