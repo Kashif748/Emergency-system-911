@@ -29,9 +29,15 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TreeModule } from 'primeng/tree';
-import { TranslateHttpLoaderFactory } from '../bc.module';
 import { BCListsRoutingModule } from './bc-lists-routing.module';
-
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function TranslateHttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(
+    http,
+    'assets/i18n/bc/',
+    '.json'
+  );
+}
 @NgModule({
   declarations: [BcListsComponent],
   imports: [
