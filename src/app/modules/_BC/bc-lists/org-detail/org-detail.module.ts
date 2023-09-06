@@ -40,6 +40,7 @@ import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.dire
 import { OrgHierarchyComponent } from './org-hierarchy/org-hierarchy.component';
 import { TreeDragDropService } from 'primeng/api';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MultiSelectModule } from 'primeng/multiselect';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -91,6 +92,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     DialogModule,
     SidebarModule,
     TranslateObjModule,
+    MultiSelectModule,
     SharedBreadcrumbModule,
     DividerModule,
     ToggleButtonModule,

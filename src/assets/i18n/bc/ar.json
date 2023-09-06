@@ -117,7 +117,8 @@
     "DEPARTMENT": {
       "DEPT_MGMT": "مدير الإدارة ",
       "FIRST_BUSI_COORDINATOR": "منسق استمرارية أعمال أول ",
-      "SECOND_BUSI_COORDINATOR": "منسق استمرارية أعمال ثاني "
+      "SECOND_BUSI_COORDINATOR": "منسق استمرارية أعمال ثاني ",
+      "COORDINATOR" : "منسقي استمرارية الأعمال"
     },
     "SECTION": {
       "USER_DATA": "بيانات المستخدمين",

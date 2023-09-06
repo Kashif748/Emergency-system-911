@@ -95,7 +95,7 @@ export class OrgDetailState {
     );
 
     return this.orgHir
-      .search9({
+      .search16({
         isActive: true,
         pageable: {
           page: payload.page,
@@ -177,7 +177,7 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    return this.orgHir.getOne5(payload).pipe(
+    return this.orgHir.getOne16(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -197,7 +197,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.insertOne6({ body: payload }).pipe(
+    return this.orgHir.insertOne17({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -217,7 +217,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.update85({ body: payload }).pipe(
+    return this.orgHir.update96({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -238,7 +238,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.deleteById4(payload).pipe(
+    return this.orgHir.deleteById15(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -261,7 +261,7 @@ export class OrgDetailState {
     );
 
     return this.orgHirTypes
-      .getAll14({
+      .getAll13({
         isActive: true,
         pageable: {
           page: payload.page,
