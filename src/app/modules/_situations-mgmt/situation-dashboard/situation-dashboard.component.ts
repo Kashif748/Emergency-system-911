@@ -49,6 +49,9 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   @Select(SituationsState.loading)
   public loading$: Observable<boolean>;
 
+  @Select(SituationsState.exportLoading)
+  public exportLoading$: Observable<boolean>
+
   @Select(SituationsState.statisticsLoading)
   public statisticsLoading$: Observable<boolean>;
 

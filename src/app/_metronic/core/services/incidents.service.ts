@@ -21,6 +21,7 @@ import {
 } from '../../../modules/incidents/doh-dashboard/doh-modal';
 import { AlertsService } from './alerts.service';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
+import {IpaginationResponce} from "../../../modules/news/models/paginationResponce";
 
 @Injectable({
   providedIn: 'root',
@@ -1171,5 +1172,19 @@ export class IncidentsService implements Resolve<any> {
       .pipe((incident) => {
         return incident;
       });
+  }
+  deleteTask(id) {
+    const url = `task/${id}/8`;
+
+    return this.http.put<any[]>(`${environment.apiUrl}/tasks/${id}/status/8`, '').pipe(
+      map((items) => {
+        if (items) {
+          // this.notificationTransaction =  items;
+          // this.notificationTransaction$.next(this.notificationTransaction);
+          // return this.notificationTransaction;
+        }
+        return [];
+      })
+    );
   }
 }

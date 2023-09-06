@@ -92,6 +92,7 @@ export { CircularCcControllerService } from './services/circular-cc-controller.s
 export { CircularControllerService } from './services/circular-controller.service';
 export { CircularStatusControllerService } from './services/circular-status-controller.service';
 export { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+export { BcWorkLogTypesControllerService } from './services/bc-work-log-types-controller.service';
 export { BcVersionsControllerService } from './services/bc-versions-controller.service';
 export { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
 export { BcSystemsControllerService } from './services/bc-systems-controller.service';

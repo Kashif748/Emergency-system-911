@@ -37,7 +37,7 @@
       </p>
       <div class="w-200px"></div>
       <div class="p-toolbar-group-right">
-        <button pButton label="{{'SITUATIONS.PRINT' | translate}}" icon="pi pi-print" (click)="export()"></button>
+        <button pButton label="{{'SITUATIONS.PRINT' | translate}}" [icon]="(exportLoading$ | async) ? 'pi pi-spinner pi-spin': 'pi pi-print'" (click)="export()"></button>
       </div>
     </div>
   </p-toolbar>
@@ -49,7 +49,7 @@
         <div
           (click)="
             redirectToReport({
-              status: '1'
+              status: '1,2,3'
             })
           "
           class="card card-custom m-0 border h-100 p-10 cursor-pointer"

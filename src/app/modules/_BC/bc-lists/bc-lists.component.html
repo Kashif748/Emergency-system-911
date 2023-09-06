@@ -33,7 +33,7 @@
           <span>
             {{ selectedVersion | translateObj }}
           </span>
-          <span>
+          <span *ngIf="selectedVersion">
             <p-badge
               value="{{ selectedVersion?.status | translateObj }}"
               styleClass="version-badge"

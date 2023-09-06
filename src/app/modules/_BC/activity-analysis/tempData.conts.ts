@@ -129,6 +129,90 @@ export const TABS = [
   },
   {
     label: 'NOTES',
-    router: 'notes',
+    router: 'worklogs',
+  },
+];
+
+
+actions: [
+  // draft --> Under_review
+  {
+    nameAr: 'ارسال للمراجعة',
+    nameEn: 'Send For Review',
+    currentStatus: {
+      id: 1,
+      nameAr: 'مسودة',
+      nameEn: 'draft',
+    },
+    targetStatus: {
+      id: 4,
+      nameAr: 'تحت المراجعة',
+      nameEn: 'Under Review',
+    },
+  },
+
+  // Under_review --> draft
+  {
+    nameAr: 'إعادة للتعديل',
+    nameEn: 'Return For Modification',
+    currentStatus: {
+      id: 4,
+      nameAr: 'تحت المراجعة',
+      nameEn: 'Under Review',
+    },
+    targetStatus: {
+      id: 1,
+      nameAr: 'مسودة',
+      nameEn: 'draft',
+    },
+  },
+
+  // Under_review --> Under_Approval
+  {
+    nameAr: 'ارسال للاعتماد',
+    nameEn: 'Send For upproval',
+    currentStatus: {
+      id: 2,
+      nameAr: 'تحت المراجعة',
+      nameEn: 'Under Review',
+    },
+    targetStatus: {
+      id: 4,
+      nameAr: 'تحت الإعتماد',
+      nameEn: 'Under Approval',
+    },
+  },
+
+  // Under_Approval -->  draft
+  {
+    nameAr: 'إعادة للتعديل',
+    nameEn: 'Return For Modification',
+    currentStatus: {
+      id: 4,
+      nameAr: 'تحت الإعتماد',
+      nameEn: 'Under Approval',
+    },
+    targetStatus: {
+      id: 1,
+      nameAr: 'مسودة',
+      nameEn: 'draft',
+    },
+  },
+
+  // Under_Approval -->  Approved
+
+  {
+    nameAr: 'اعتماد',
+    nameEn: 'Approve',
+    currentStatus: {
+      id: 4,
+      nameAr: 'تحت الإعتماد',
+      nameEn: 'Under Approval',
+    },
+    targetStatus: {
+      id: 5,
+      nameAr: 'معتمدة',
+      nameEn: 'approved',
+    },
   },
 ];

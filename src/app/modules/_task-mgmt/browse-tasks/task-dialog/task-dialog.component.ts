@@ -35,7 +35,7 @@ import { MapComponent } from '@shared/sh-components/map/map.component';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { TreeNode } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
-import { EMPTY, Observable, Subject } from 'rxjs';
+import {EMPTY, Observable, of, Subject} from 'rxjs';
 import {
   auditTime,
   catchError,
@@ -103,6 +103,8 @@ export class TaskDialogComponent
 
   @Select(CommonDataState.taskStatuses)
   public statuses$: Observable<TaskStatus[]>;
+
+  public filterStatuses$: Observable<TaskStatus[]>;
 
   @Select(CommonDataState.assetsCategories)
   public assetsCategories$: Observable<AssetsCategoryProjection[]>;
@@ -304,7 +306,8 @@ export class TaskDialogComponent
     private cfr: ComponentFactoryResolver,
     private translateObj: TranslateObjPipe,
     private privileges: PrivilegesService,
-    private router: Router
+    private router: Router,
+    private privilegesService: PrivilegesService
   ) {
     this.route.queryParams
       .pipe(
@@ -394,6 +397,13 @@ export class TaskDialogComponent
       map((params) => params['_dialog'] === 'opened')
     );
     this.buildForm();
+    if (!this.privilegesService.checkActionPrivileges('PRIV_UP_TASK')) {
+      this.filterStatuses$ = this.statuses$.pipe(
+        map(statuses => statuses.filter(status => status.id !== 8))  // task status is 8 for filter delete option
+      );
+    } else {
+      this.filterStatuses$ = this.statuses$.pipe();
+    }
 
     this.auditLoadIncidents$
       .pipe(takeUntil(this.destroy$), auditTime(1000))

@@ -7,37 +7,53 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {CommonDataState} from '@core/states';
-import {SituationsAction} from '@core/states/situations/situations.action';
-import {SituationsState} from '@core/states/situations/situations.state';
-import {FormUtils} from '@core/utils';
-import {Select, Store} from '@ngxs/store';
-import {GenericValidators} from '@shared/validators/generic-validators';
-import {EMPTY, Observable, Subject} from 'rxjs';
-import {catchError, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {SituationProjection} from 'src/app/api/models';
-import {BrowseSituationsAction} from '../../states/browse-situations.action';
-import {Dialog} from "primeng/dialog";
-import {TabView} from "primeng/tabview";
-import {FilesListComponent} from "@shared/attachments-list/files-list/files-list.component";
-import {LazyLoadEvent, SortEvent} from "primeng/api";
-import {BrowseSituationsState, BrowseSituationsStateModel} from "../../states/browse-situations.state";
-import {SituationAttachmentDetails} from "../../../../api/models/situation-attachment-details";
-import {PrivilegesService} from "@core/services/privileges.service";
-import {AlertnessLevel} from "../../../../api/models/alertness-level";
-import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
-import {MessageHelper} from "@core/helpers/message.helper";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CommonDataState } from '@core/states';
+import { SituationsAction } from '@core/states/situations/situations.action';
+import { SituationsState } from '@core/states/situations/situations.state';
+import { FormUtils } from '@core/utils';
+import { Select, Store } from '@ngxs/store';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { EMPTY, Observable, Subject } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { SituationProjection } from 'src/app/api/models';
+import { BrowseSituationsAction } from '../../states/browse-situations.action';
+import { Dialog } from 'primeng/dialog';
+import { TabView } from 'primeng/tabview';
+import { FilesListComponent } from '@shared/attachments-list/files-list/files-list.component';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import {
+  BrowseSituationsState,
+  BrowseSituationsStateModel,
+} from '../../states/browse-situations.state';
+import { SituationAttachmentDetails } from '../../../../api/models/situation-attachment-details';
+import { PrivilegesService } from '@core/services/privileges.service';
+import { AlertnessLevel } from '../../../../api/models/alertness-level';
+import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { IAuthService } from '@core/services/auth.service';
+import { HttpResponse } from '@angular/common/http';
+import { AttachmentsService } from 'src/app/_metronic/core/services/attachments.service';
 
 @Component({
   selector: 'app-situation-dialog',
   templateUrl: './situation-dialog.component.html',
   styleUrls: ['./situation-dialog.component.scss'],
 })
-export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class SituationDialogComponent
+  implements OnInit, OnDestroy, AfterViewChecked
+{
   public attachmentPage$: Observable<SituationAttachmentDetails[]>;
 
   public alertnessLevel$: Observable<AlertnessLevel[]>;
@@ -51,15 +67,13 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   @Select(SituationsState.situationTotalRecords)
   public situationTotalRecords$: Observable<number>;
 
-  @ViewChild('attachPlanContainer', {read: ViewContainerRef})
+  @ViewChild('attachPlanContainer', { read: ViewContainerRef })
   attachPlanContainer: ViewContainerRef;
   attachPlanComponent: FilesListComponent;
-
 
   public get asDialog() {
     return this.route.component !== SituationDialogComponent;
   }
-
 
   totalRecords: number;
 
@@ -89,17 +103,14 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
   }
 
   get viewOnly() {
-    return (
-      this.route.snapshot.queryParams['_mode'] === 'viewonly'
-    );
+    return this.route.snapshot.queryParams['_mode'] === 'viewonly';
   }
 
   _situationId: number;
   _mode: string;
   type: boolean;
+  downloading = false;
   editAttachmentType: boolean;
-
-
 
   @Input()
   set situationId(v: number) {
@@ -112,7 +123,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     this.attachPlanComponent = undefined;
 
     this.store
-      .dispatch(new SituationsAction.GetSituation({id: v}))
+      .dispatch(new SituationsAction.GetSituation({ id: v }))
       .pipe(
         switchMap(() => this.store.select(SituationsState.situation)),
         takeUntil(this.destroy$),
@@ -125,7 +136,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
             endDate: new Date(t.endDate),
             themeType: t?.themeType,
             type: t?.newsType,
-            theme: t?.themeType
+            theme: t?.themeType,
           });
         })
       )
@@ -136,26 +147,34 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
       });
 
     if (this.viewOnly) {
+      const entityTags = this.store.selectSnapshot(CommonDataState.entityTags);
+
       this.store.dispatch(
         new BrowseSituationsAction.LoadAttachmentSituations({
-          id: this._situationId,
-          pageRequest: {
-            first: 0,
-            rows: 10,
-          },
+          situationId: this._situationId,
+          orgId: this.orgId,
+          withSub: true,
         })
-      ).pipe(
-        switchMap(() =>    this.attachmentPage$ = this.store.select(SituationsState.situationAttachmentPage).pipe(
+      );
+      this.attachmentPage$ = this.store
+        .select(SituationsState.situationAttachment)
+        .pipe(
           filter((p) => !!p),
-          map((page) =>
-            page[0].attachments?.map((u) => {
-              return {
-                ...u,
-              };
-            })
-          )
-        ))
-      ).subscribe();
+          map((attachments) => {
+            return attachments.map((attachment) => {
+              const tag = entityTags.find(
+                (tag) => tag.id === attachment?.entityTag?.id
+              );
+              if (tag.description) {
+                attachment = {
+                  ...attachment,
+                  description: JSON.parse(tag?.description),
+                };
+              }
+              return attachment;
+            });
+          })
+        );
     }
   }
 
@@ -179,6 +198,9 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     },
   ];
 
+  get orgId() {
+    return this.auth.getClaim('orgId');
+  }
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -187,6 +209,8 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     private injector: Injector,
     private privilegesService: PrivilegesService,
     private messageHelper: MessageHelper,
+    private auth: IAuthService,
+    private attachmentsService: AttachmentsService
   ) {
     this.route.queryParams
       .pipe(
@@ -196,10 +220,11 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
       .subscribe((id) => {
         this.situationId = id;
       });
-    this.route.queryParams.pipe(
-      map((params) => params['_mode']),
-      takeUntil(this.destroy$)
-    )
+    this.route.queryParams
+      .pipe(
+        map((params) => params['_mode']),
+        takeUntil(this.destroy$)
+      )
       .subscribe((mode) => {
         this._mode = mode;
       });
@@ -213,8 +238,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
             } else {
               this.form.enable();
             }
-          } catch {
-          }
+          } catch {}
         }
       })
     );
@@ -231,8 +255,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
               this.type = false;
               // this.editAttachmentType = true;
             }
-          } catch {
-          }
+          } catch {}
         }
       })
     );
@@ -244,27 +267,35 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
       map((params) => params['_dialog'] === '_form_dialog')
     );
 
-    this.store.dispatch(
-      new SituationsAction.GetAlertnessLevel({
+    this.store
+      .dispatch(
+        new SituationsAction.GetAlertnessLevel({
           page: 0,
           size: 10,
-      })
-    ).pipe(
-      takeUntil(this.destroy$),
-      take(1),
-      switchMap(() =>    this.alertnessLevel$ = this.store.select(SituationsState.alertness).pipe(
+        })
+      )
+      .pipe(
         takeUntil(this.destroy$),
         take(1),
-        filter((p) => !!p),
-        map((page) =>
-          page?.map((u) => {
-            return {
-              ...u,
-            };
-          })
+        switchMap(
+          () =>
+            (this.alertnessLevel$ = this.store
+              .select(SituationsState.alertness)
+              .pipe(
+                takeUntil(this.destroy$),
+                take(1),
+                filter((p) => !!p),
+                map((page) =>
+                  page?.map((u) => {
+                    return {
+                      ...u,
+                    };
+                  })
+                )
+              ))
         )
-      ))
-    ).subscribe();
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -287,7 +318,6 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
 
   async submit() {
     if (this.editMode && this.editAttachmentType) {
-
     } else if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -311,7 +341,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
       if (this.editAttachmentType) {
         await this.attachPlanComponent?.upload(this._situationId, false);
         this.messageHelper.success();
-        this.store.dispatch( new BrowseSituationsAction.LoadSituations());
+        this.store.dispatch(new BrowseSituationsAction.LoadSituations());
         this.close();
       } else {
         this.store
@@ -325,7 +355,6 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
           )
           .subscribe();
       }
-
     } else {
       this.store
         .dispatch(new BrowseSituationsAction.CreateSituations(situation))
@@ -335,8 +364,7 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
           filter((t) => !!t),
           take(1)
         )
-        .subscribe(async (t) => {
-        });
+        .subscribe(async (t) => {});
     }
   }
 
@@ -350,17 +378,14 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     this.situationId = situationId;
   }
 
-  tab(index: number) {
-  }
+  tab(index: number) {}
 
   public loadAttachmentPage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseSituationsAction.LoadAttachmentSituations({
-        id: this._situationId,
-        pageRequest: {
-          first: event?.first,
-          rows: event?.rows,
-        },
+        situationId: this._situationId,
+        orgId: this.orgId,
+        withSub: true,
       })
     );
   }
@@ -369,50 +394,73 @@ export class SituationDialogComponent implements OnInit, OnDestroy, AfterViewChe
     this.attachPlanContainer?.clear();
     if (this.attachPlanComponent) return;
     this.attachPlanContainer?.clear();
-    const {FilesListComponent} = await import(
+    const { FilesListComponent } = await import(
       '@shared/attachments-list/files-list/files-list.component'
-      );
+    );
     const factory = this.cfr.resolveComponentFactory(FilesListComponent);
 
-    const {instance, changeDetectorRef: cdr} =
+    const { instance, changeDetectorRef: cdr } =
       this.attachPlanContainer.createComponent(factory, null, this.injector);
     const situation = this.store.selectSnapshot(SituationsState.situation);
+    instance.withOrgId = true;
 
     instance.recordId = this._situationId;
     instance.foreignHelperId = (situation?.id as any)?.id;
-    instance.tagId = this.type ? UploadTagIdConst.PLAN_SITUATION : UploadTagIdConst.SHIFT_SITUATION;
+    instance.tagId = this.type
+      ? UploadTagIdConst.PLAN_SITUATION
+      : UploadTagIdConst.SHIFT_SITUATION;
     instance.inline = true;
     this.attachPlanComponent = instance;
     cdr.detectChanges();
   }
   customSort(event: SortEvent) {
-    this.store.dispatch(
-      new BrowseSituationsAction.SortAttachments({ field: event.field })
-    );
+    // this.store.dispatch(
+    //   new BrowseSituationsAction.SortAttachments({ field: event.field })
+    // );
   }
 
+  download(uuid, fileName) {
+    this.downloading = true;
+    this.attachmentsService
+      .downloadFile(uuid)
+      .subscribe((response: HttpResponse<Blob>) => {
+        this.downloading = false;
+
+        const binaryData = [];
+        binaryData.push(response.body);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(
+          new Blob(binaryData, { type: 'blob' })
+        );
+        downloadLink.setAttribute('download', fileName);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      });
+  }
   ngAfterViewChecked() {
-    const checkAttachment = this.privilegesService.checkActionPrivilege('PRIV_ADD_FILE_SITUATION');
-    const checkAdd = this.privilegesService.checkActionPrivilege('PRIV_ADD_SITUATION');
-    const checkEdit = this.privilegesService.checkActionPrivilege('PRIV_ED_DEL_SITUATION');
+    const checkAttachment = this.privilegesService.checkActionPrivilege(
+      'PRIV_ADD_FILE_SITUATION'
+    );
+    const checkAdd =
+      this.privilegesService.checkActionPrivilege('PRIV_ADD_SITUATION');
+    const checkEdit = this.privilegesService.checkActionPrivilege(
+      'PRIV_ED_DEL_SITUATION'
+    );
     if (checkAttachment) {
       if (checkEdit) {
-
       } else if (checkAdd) {
         if (this._situationId) {
           if (this.form) {
             try {
               this.form.disable();
-            } catch {
-            }
+            } catch {}
           }
         }
       } else {
         if (this.form) {
           try {
             this.form.disable();
-          } catch {
-          }
+          } catch {}
         }
       }
     }

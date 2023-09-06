@@ -143,6 +143,21 @@
                 ></span>
               </span>
             </button>
+            <button
+              *appPrivileges="'PRIV_UP_TASK'"
+              (click)="deleteTask(item.id); $event.stopPropagation()"
+              class="btn btn-sm btn-clean btn-icon mr-2"
+              matTooltip="{{ 'TASK.UPDATE_TASK' | translate }}"
+            >
+              <span class="svg-icon svg-icon-md">
+                <span
+                  [inlineSVG]="
+                    './assets/media/svg/icons/General/Trash.svg'
+                  "
+                  [cacheSVG]="true"
+                ></span>
+              </span>
+            </button>
           </td>
         </tr>
       </tbody>
