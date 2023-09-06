@@ -10,7 +10,7 @@ import {
 import { Select } from '@ngxs/store';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { Store } from '@ngxs/store';
-import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
+import { BrowseImpactAnalysisAction } from '../../../states/browse-impact-analysis.action';
 import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { OrgActivityAction, OrgActivityState } from '@core/states';
 

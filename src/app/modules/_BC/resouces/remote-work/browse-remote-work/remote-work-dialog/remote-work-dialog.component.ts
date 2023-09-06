@@ -193,16 +193,16 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       resourcesRemoteWorkSystems: [{
         system: remote.resourcesRemoteWorkSystemsInternal.id,
         isInternal: true,
-       /* bcResourcesRemoteWork: {
+        bcResourcesRemoteWork: {
           id: 0
-        }*/
+        }
       },
         {
           system: remote.resourcesRemoteWorkSystemsExternal.id,
           isInternal: false,
-          /*bcResourcesRemoteWork: {
+          bcResourcesRemoteWork: {
             id: 0
-          }*/
+          }
         }],
       skillsNeeded: remote.skillsNeeded,
       staffDistributionIn: remote.staffDistributionIn,

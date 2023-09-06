@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActivityDialogComponent } from './activity-dialog.component';
+import { ReopenAnalysisMgmtComponent } from './reopen-analysis-mgmt.component';
 
-describe('ActivityDialogComponent', () => {
-  let component: ActivityDialogComponent;
-  let fixture: ComponentFixture<ActivityDialogComponent>;
+describe('ReopenAnalysisMgmtComponent', () => {
+  let component: ReopenAnalysisMgmtComponent;
+  let fixture: ComponentFixture<ReopenAnalysisMgmtComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActivityDialogComponent ]
+      declarations: [ ReopenAnalysisMgmtComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ActivityDialogComponent);
+    fixture = TestBed.createComponent(ReopenAnalysisMgmtComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

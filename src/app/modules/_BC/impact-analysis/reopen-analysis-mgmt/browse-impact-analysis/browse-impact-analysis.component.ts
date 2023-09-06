@@ -8,7 +8,7 @@ import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
   BrowseImpactAnalysisState,
   BrowseImpactAnalysisStateModel,
-} from '../states/browse-impact-analysis.state';
+} from '../../states/browse-impact-analysis.state';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import {
@@ -18,7 +18,7 @@ import {
   BcOrgHierarchy,
   Bcrto,
 } from 'src/app/api/models';
-import { BrowseImpactAnalysisAction } from '../states/browse-impact-analysis.action';
+import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
 import {
   ActivityFrquencyAction,
   ActivityFrquencyState,

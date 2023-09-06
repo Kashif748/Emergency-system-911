@@ -1,0 +1,25 @@
+<div class="container-fluid">
+  <div class="mx-4 my-10">
+    <div class="row">
+      <div class="d-flex p-jc-between w-100 p-ai-center">
+        <app-breadcrumb></app-breadcrumb>
+        <div class="ml-dir-auto d-flex">
+          <app-cycle-dialog></app-cycle-dialog>
+        </div>
+      </div>
+      <div class="col-12">
+        <p-tabView>
+          <p-tabPanel header="{{ 'ORG_ACT' | translate }}">
+            <ng-template pTemplate="content">
+              <app-browse-impact-analysis></app-browse-impact-analysis> </ng-template
+            ></p-tabPanel>
+          <p-tabPanel header="{{ 'RES' | translate }}" >
+            <ng-template pTemplate="content">
+              <app-browse-resource-analysis></app-browse-resource-analysis>
+            </ng-template>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UserAndRoleProjection} from "../../../../../api/models";
+import {UserAndRoleProjection} from "../../../../../../api/models";
 import {PageRequestModel} from "@core/models/page-request.model";
 import {LazyLoadEvent} from "primeng/api";
 import {Store} from "@ngxs/store";
-import {BrowseUsersAction} from "../../../../_user-mgmt/states/browse-users.action";
+import {BrowseUsersAction} from "../../../../../_user-mgmt/states/browse-users.action";
 
 @Component({
   selector: 'app-content-impact-analysis',

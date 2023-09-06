@@ -3,6 +3,8 @@
   "NEW_ANALYSIS_CYCLIE":"دورة تحليل جديدة",
   "SELECT_CYCLE_MSG" :"يرجى إختيار دورة تحليل للمتابعة ",
   "DEPARTMENT":"إدارة ",
+  "ORG_ACT": "الأنشطة المؤسسية",
+  "RES": "متطلبات الموارد",
   "SECTOR":"قطاع ",
   "SECTION":"القسم",
   "ORG_ACTIVITIES":"الأنشطة المؤسسية",
@@ -18,6 +20,7 @@
   "ADD_ACTIVITY_ACTION": " اضافة أنشطة للتحليل",
   "ORG_ARTCH": "الهيكل الإداري",
   "START_ANALYSIS" :"تحليل النشاط",
+  "START_RESOURC_ANALYSIS": "تحليل الموارد",
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY":"إضافة نشاط جديد",
     "ACTIVITY_DETAILS":"بيانات النشاط",
@@ -37,5 +40,13 @@
     "NAME":"اسم دورة التحليل",
     "NAME_BC":"اصدار قوائم الاستمرارية",
     "DATE":"تاريخ استحقاق ادخال التحليل "
+  },
+  "RESOURCES": {
+    "ADD_RESOURCE": "إضافة الموارد",
+    "DIVISION": "إسم الإدارة",
+    "CYCLE": "دورة التحليل",
+    "ONSITE_STAFF": "الموظفين اللازمين في مقر العمل",
+    "OFFSITE_STAFF": "الموظفين اللازمين للعمل عن بعد",
+    "STATUS": "الحالة"
   }
 }

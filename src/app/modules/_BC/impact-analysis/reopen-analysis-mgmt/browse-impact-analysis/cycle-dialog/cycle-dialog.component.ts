@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
+import { BrowseImpactAnalysisAction } from '../../../states/browse-impact-analysis.action';
 import { FormUtils } from '@core/utils';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { BcVersions } from 'src/app/api/models';

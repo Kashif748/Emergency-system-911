@@ -92,6 +92,7 @@ import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work
 import {RecordsState} from "@core/states/bc-resources/records/records.state";
 import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
 import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -181,7 +182,8 @@ export function getHighlightLanguages() {
         RemoteWorkState,
         RecordsState,
         AppSystemState,
-        InfraState
+        InfraState,
+        ResourceAnalysisState
       ],
       {
         developmentMode: !environment.production,
@@ -203,7 +205,8 @@ export function getHighlightLanguages() {
           'browse_remote_work',
           'browse_record',
           'browse_app_system',
-          'browse_infra'
+          'browse_infra',
+          'browse_resource_analysis'
         ],
       },
       ['common_data']
