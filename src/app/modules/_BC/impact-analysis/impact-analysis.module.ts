@@ -36,6 +36,9 @@ import {InputSwitchModule} from "primeng/inputswitch";
 import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
 import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 import { CheckboxModule } from 'primeng/checkbox';
+import { BrowseResourceAnalysisComponent } from './browse-resource-analysis/browse-resource-analysis.component';
+import { ContentResourceAnalysisComponent } from './browse-resource-analysis/content-resource-analysis/content-resource-analysis.component';
+import { ActivityDialogComponent } from './browse-resource-analysis/activity-dialog/activity-dialog.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -47,7 +50,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [BrowseImpactAnalysisComponent, ContentImpactAnalysisComponent, CycleDialogComponent, ActivitiesDialogComponent],
+  declarations: [BrowseImpactAnalysisComponent, ContentImpactAnalysisComponent, CycleDialogComponent, ActivitiesDialogComponent, BrowseResourceAnalysisComponent, ContentResourceAnalysisComponent, ActivityDialogComponent],
   imports: [
     CommonModule,
     ImpactAnalysisRoutingModule,

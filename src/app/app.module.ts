@@ -91,6 +91,7 @@ import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/w
 import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
 import {RecordsState} from "@core/states/bc-resources/records/records.state";
 import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
+import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -179,7 +180,8 @@ export function getHighlightLanguages() {
         VenderState,
         RemoteWorkState,
         RecordsState,
-        AppSystemState
+        AppSystemState,
+        InfraState
       ],
       {
         developmentMode: !environment.production,
@@ -200,7 +202,8 @@ export function getHighlightLanguages() {
           'browse_vender',
           'browse_remote_work',
           'browse_record',
-          'browse_app_system'
+          'browse_app_system',
+          'browse_infra'
         ],
       },
       ['common_data']

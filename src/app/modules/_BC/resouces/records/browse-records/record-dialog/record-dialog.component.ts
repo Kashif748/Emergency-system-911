@@ -55,7 +55,7 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
     this.store
       .dispatch(new RecordsAction.GetRecords({ id: v }))
       .pipe(
-        switchMap(() => this.store.select(VenderState.vender)),
+        switchMap(() => this.store.select(RecordsState.records)),
         takeUntil(this.destroy$),
         take(1),
         filter((t) => !!t),
@@ -119,13 +119,13 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
         isCritical: this.criticalityType[1]
       });
     }
-    if (record.recordType === 1) {
+    if (record.recordType == 1) {
       this.form.patchValue({
         recordType: this.recordType[0]
       });
     } else {
       this.form.patchValue({
-        isCritical: this.recordType[1]
+        recordType: this.recordType[1]
       });
     }
   }
@@ -179,7 +179,7 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
       ...this.form.getRawValue(),
     };
     record.resource = {
-      id: 0
+      id: 1
     };
     record.isCritical = record.isCritical.id === 1 ? true : false;
     record.recordType = record.recordType.id === 1 ? 1 : 2;

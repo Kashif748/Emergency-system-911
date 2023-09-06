@@ -115,18 +115,18 @@
                     }"
                   ></div>
                 </td>
-                <td class="min-w-100px">
+                <td class="min-w-100px" (click)="item.isActive && openView(item.id)">
                   {{ rowIndex + 1 }}
                 </td>
-                <td class="min-w-200px max-w-300px" >
+                <td class="min-w-200px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item.recordName}}
                 </td>
 
-                <td class="min-w-200px max-w-300px" >
+                <td class="min-w-200px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item.recordType}}
                 </td>
 
-                <td class="min-w-250px max-w-300px" >
+                <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">
                   {{ item.isCritical}}
                 </td>
 

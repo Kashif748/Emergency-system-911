@@ -4,24 +4,24 @@ import {EMPTY} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {patch} from '@ngxs/store/operators';
 import {BcResourcesRecordsControllerService} from "../../../../api/services/bc-resources-records-controller.service";
-import {RecordsAction} from "@core/states/bc-resources/records/records.action";
 import {PageBcResourcesRecords} from "../../../../api/models/page-bc-resources-records";
 import {BcResourcesRecords} from "../../../../api/models/bc-resources-records";
+import {OtherAction} from "@core/states/bc-resources/other/other.action";
 
-export interface RecordsStateModel {
+export interface OtherStateModel {
   page: PageBcResourcesRecords;
-  records: BcResourcesRecords;
+  other: BcResourcesRecords;
   loading: boolean;
   blocking: boolean;
 }
 
-const RECORDS_STATE_TOKEN =
-  new StateToken<RecordsStateModel>('records');
+const OTHER_STATE_TOKEN =
+  new StateToken<OtherStateModel>('other');
 
-@State<RecordsStateModel>({ name: RECORDS_STATE_TOKEN })
+@State<OtherStateModel>({ name: OTHER_STATE_TOKEN })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-export class RecordsState {
+export class OtherState {
   /**
    *
    */
@@ -30,39 +30,39 @@ export class RecordsState {
   ) {}
 
   /* ************************ SELECTORS ******************** */
-  @Selector([RecordsState])
-  static page(state: RecordsStateModel) {
+  @Selector([OtherState])
+  static page(state: OtherStateModel) {
     return state?.page?.content;
   }
 
-  @Selector([RecordsState])
-  static records(state: RecordsStateModel) {
-    return state?.records;
+  @Selector([OtherState])
+  static other(state: OtherStateModel) {
+    return state?.other;
   }
 
-  @Selector([RecordsState])
-  static totalRecords(state: RecordsStateModel) {
+  @Selector([OtherState])
+  static totalRecords(state: OtherStateModel) {
     return state?.page?.totalElements;
   }
 
-  @Selector([RecordsState])
-  static loading(state: RecordsStateModel) {
+  @Selector([OtherState])
+  static loading(state: OtherStateModel) {
     return state?.loading;
   }
 
-  @Selector([RecordsState])
-  static blocking(state: RecordsStateModel) {
+  @Selector([OtherState])
+  static blocking(state: OtherStateModel) {
     return state?.blocking;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(RecordsAction.LoadPage, { cancelUncompleted: true })
+  @Action(OtherAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    { setState }: StateContext<RecordsStateModel>,
-    { payload }: RecordsAction.LoadPage
+    { setState }: StateContext<OtherStateModel>,
+    { payload }: OtherAction.LoadPage
   ) {
     setState(
-      patch<RecordsStateModel>({
+      patch<OtherStateModel>({
         loading: true,
       })
     );
@@ -79,7 +79,7 @@ export class RecordsState {
       .pipe(
         tap((res) => {
           setState(
-            patch<RecordsStateModel>({
+            patch<OtherStateModel>({
               page: res.result,
               loading: false,
             })
@@ -87,7 +87,7 @@ export class RecordsState {
         }),
         catchError(() => {
           setState(
-            patch<RecordsStateModel>({
+            patch<OtherStateModel>({
               page: { content: [], totalElements: 0 },
             })
           );
@@ -95,7 +95,7 @@ export class RecordsState {
         }),
         finalize(() => {
           setState(
-            patch<RecordsStateModel>({
+            patch<OtherStateModel>({
               loading: false,
             })
           );
@@ -103,13 +103,13 @@ export class RecordsState {
       );
   }
 
-  @Action(RecordsAction.Create)
+  @Action(OtherAction.Create)
   create(
-    { setState }: StateContext<RecordsStateModel>,
-    { payload }: RecordsAction.Create
+    { setState }: StateContext<OtherStateModel>,
+    { payload }: OtherAction.Create
   ) {
     setState(
-      patch<RecordsStateModel>({
+      patch<OtherStateModel>({
         blocking: true,
       })
     );
@@ -120,7 +120,7 @@ export class RecordsState {
       .pipe(
         finalize(() => {
           setState(
-            patch<RecordsStateModel>({
+            patch<OtherStateModel>({
               blocking: false,
             })
           );
@@ -128,13 +128,13 @@ export class RecordsState {
       );
   }
 
-  @Action(RecordsAction.Update)
+  @Action(OtherAction.Update)
   update(
-    { setState }: StateContext<RecordsStateModel>,
-    { payload }: RecordsAction.Update
+    { setState }: StateContext<OtherStateModel>,
+    { payload }: OtherAction.Update
   ) {
     setState(
-      patch<RecordsStateModel>({
+      patch<OtherStateModel>({
         blocking: true,
       })
     );
@@ -145,7 +145,7 @@ export class RecordsState {
       .pipe(
         finalize(() => {
           setState(
-            patch<RecordsStateModel>({
+            patch<OtherStateModel>({
               blocking: false,
             })
           );
@@ -153,35 +153,35 @@ export class RecordsState {
       );
   }
 
-  @Action(RecordsAction.GetRecords, { cancelUncompleted: true })
-  getRecords(
-    { setState }: StateContext<RecordsStateModel>,
-    { payload }: RecordsAction.GetRecords
+  @Action(OtherAction.GetOther, { cancelUncompleted: true })
+  getOther(
+    { setState }: StateContext<OtherStateModel>,
+    { payload }: OtherAction.GetOther
   ) {
     if (payload.id === undefined || payload.id === null) {
       setState(
-        patch<RecordsStateModel>({
-          records: undefined,
+        patch<OtherStateModel>({
+          other: undefined,
         })
       );
       return;
     }
     setState(
-      patch<RecordsStateModel>({
+      patch<OtherStateModel>({
         blocking: true,
       })
     );
     return this.bcRecords.getOne8({ id: payload.id }).pipe(
       tap((records) => {
         setState(
-          patch<RecordsStateModel>({
-            records: records.result,
+          patch<OtherStateModel>({
+            other: records.result,
           })
         );
       }),
       finalize(() => {
         setState(
-          patch<RecordsStateModel>({
+          patch<OtherStateModel>({
             blocking: false,
           })
         );

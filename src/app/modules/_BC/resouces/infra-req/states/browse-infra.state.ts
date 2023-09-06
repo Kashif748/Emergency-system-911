@@ -4,7 +4,12 @@ import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageHelper} from '@core/helpers/message.helper';
 import {ApiHelper} from '@core/helpers/api.helper';
+import {iif, patch} from "@ngxs/store/operators";
+import {BrowseRemoteWorkStateModel} from "../../remote-work/states/browse-remote-work.state";
+import {EMPTY} from "rxjs";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseInfraAction} from "./browse-infra.action";
+import {InfraAction} from "@core/states/bc-resources/infra-req/infra.action";
 
 export interface BrowseInfraStateModel {
   pageRequest: PageRequestModel;
@@ -48,6 +53,68 @@ export class BrowseInfraState {
   }
 
   /* ********************** ACTIONS ************************* */
+  @Action(BrowseInfraAction.LoadInfra)
+  loadRecord(
+    { setState, dispatch, getState }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseInfraAction.LoadInfra
+  ) {
+    setState(
+      patch<BrowseRemoteWorkStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+
+    return dispatch(
+      new InfraAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        resourceId: payload.resourceId,
+      })
+    );
+  }
+  @Action(BrowseInfraAction.CreateInfra)
+  createRecord(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseInfraAction.CreateInfra
+  ) {
+    return dispatch(new InfraAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([
+          new BrowseInfraAction.LoadInfra(),
+          new BrowseInfraAction.ToggleDialog({}),
+        ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+  @Action(BrowseInfraAction.UpdateInfra)
+  updateRecord(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseInfraAction.UpdateInfra
+  ) {
+    return dispatch(new InfraAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseInfraAction.LoadInfra());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseInfraAction.ToggleDialog({}));
+      })
+    );
+  }
   @Action(BrowseInfraAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
     { dispatch }: StateContext<BrowseInfraStateModel>,
