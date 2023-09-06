@@ -42,7 +42,7 @@ build-job: # This job runs in the build stage, which runs first.
   stage: build
   extends: .only-dev-and-stg
   tags:
-    - autobot
+    - gitlab
   script:
     - (docker image prune -f) || true
     - (docker rmi $(docker images $IMG_NAME -a -q | tac | uniq | tail -n +2) -f) || true
@@ -53,7 +53,7 @@ publish-job: # This job runs in the build for tags, which runs first.
   stage: publish
   extends: .only-tags
   tags:
-    - autobot
+    - gitlab
   script:
     - (docker image prune -f) || true
     - (docker rmi $(docker images $IMG_NAME -a -q | tac | uniq | tail -n +2) -f) || true
@@ -68,7 +68,7 @@ unit-test-job: # This job runs in the test stage.
   stage: test # It only starts when the job in the build stage completes successfully.
   extends: .only-dev-and-stg
   tags:
-    - autobot
+    - gitlab
   script:
     - echo "Running unit tests... This will take about 60 seconds."
     - echo "Code coverage is 90%"
@@ -77,7 +77,7 @@ lint-test-job: # This job also runs in the test stage.
   stage: test # It can run at the same time as unit-test-job (in parallel).
   extends: .only-dev-and-stg
   tags:
-    - autobot
+    - gitlab
   script:
     - echo "Linting code... This will take about 10 seconds."
     # - sleep 10
@@ -107,7 +107,7 @@ lint-test-job: # This job also runs in the test stage.
 deploy-stg-job: # This job runs in the deploy stage.
   stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
   tags:
-    - autobot
+    - gitlab
   only:
     - stg
   variables:
@@ -117,7 +117,7 @@ deploy-stg-job: # This job runs in the deploy stage.
 deploy-dev-job: # This job runs in the deploy stage.
   stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
   tags:
-    - autobot
+    - gitlab
   only:
     - dev
   extends: .deploy-script
