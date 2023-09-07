@@ -1,16 +1,21 @@
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {patch} from '@ngxs/store/operators';
-import {catchError, finalize, tap} from 'rxjs/operators';
+import {catchError, finalize, map, tap} from 'rxjs/operators';
 import {EMPTY} from 'rxjs';
 import {PageBcResources} from "../../../api/models/page-bc-resources";
 import {BcResources} from "../../../api/models/bc-resources";
 import {BcResourcesControllerService} from "../../../api/services/bc-resources-controller.service";
 import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
+import {ActivityAnalysisAction} from "@core/states/activity-analysis/activity-analysis.action";
+import {ActivityAnalysisStateModel} from "@core/states/activity-analysis/activity-analysis.state";
+import {BcCycles} from "../../../api/models";
+import {BcCyclesControllerService} from "../../../api/services";
 
 export interface ResourceAnalysisStateModel {
   page: PageBcResources;
   resourceAnalysis: BcResources;
+  cycle: BcCycles;
   loading: boolean;
   blocking: boolean;
 }
@@ -24,7 +29,8 @@ export class ResourceAnalysisState {
   /**
    *
    */
-  constructor(private bcResources: BcResourcesControllerService, private store: Store) {}
+  constructor(private bcResources: BcResourcesControllerService, private store: Store,
+              private cyclesController: BcCyclesControllerService) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([ResourceAnalysisState])
@@ -174,6 +180,42 @@ export class ResourceAnalysisState {
         setState(
           patch<ResourceAnalysisStateModel>({
             resourceAnalysis: resource.result,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<ResourceAnalysisStateModel>({
+            blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(ResourceAnalysisAction.GetCycle, { cancelUncompleted: true })
+  GetCycle(
+    { setState }: StateContext<ResourceAnalysisStateModel>,
+    { payload }: ResourceAnalysisAction.GetCycle
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      setState(
+        patch<ResourceAnalysisStateModel>({
+          cycle: undefined,
+        })
+      );
+      return;
+    }
+    setState(
+      patch<ResourceAnalysisStateModel>({
+        blocking: true,
+      })
+    );
+    return this.cyclesController.getOne13({ id: payload.id }).pipe(
+      map((response) => response.result),
+      tap((cycle) => {
+        setState(
+          patch<ResourceAnalysisStateModel>({
+            cycle,
           })
         );
       }),

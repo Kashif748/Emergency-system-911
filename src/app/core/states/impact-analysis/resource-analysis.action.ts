@@ -45,4 +45,16 @@ export namespace ResourceAnalysisAction {
       }
     ) {}
   }
+
+  export class GetCycle {
+    static readonly type = '[ResourceAnalysisAction] Get Resource Cycle';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

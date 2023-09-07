@@ -4,6 +4,12 @@ import {Router} from "@angular/router";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {patch} from "@ngxs/store/operators";
 import {BrowseResourceAction} from "./browse-resource.action";
+import {ActivityAnalysisAction} from "@core/states/activity-analysis/activity-analysis.action";
+import {EMPTY} from "rxjs";
+import {BrowseActivityAnalysisStateModel} from "../../activity-analysis/states/browse-activity-analysis.state";
+import {BrowseActivityAnalysisAction} from "../../activity-analysis/states/browse-activity-analysis.action";
+import {catchError, tap} from "rxjs/operators";
+import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
 
 
 export interface BrowseResourceStateModel {
@@ -51,6 +57,34 @@ export class BrowseResourceState {
     setState(
       patch<BrowseResourceStateModel>({
         tabIndex: payload?.index,
+      })
+    );
+  }
+  @Action(BrowseResourceAction.GetResourceAnalysis)
+  GetActivityAnalysis(
+    { dispatch, setState }: StateContext<BrowseResourceStateModel>,
+    { payload }: BrowseResourceAction.GetResourceAnalysis
+  ) {
+    return dispatch(
+      new ResourceAnalysisAction.GetResourceAnalysis(payload)
+    ).pipe(
+      tap(() => {}),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseResourceAction.GetCycle)
+  GetCycle(
+    { dispatch, setState }: StateContext<BrowseResourceStateModel>,
+    { payload }: BrowseResourceAction.GetCycle
+  ) {
+    return dispatch(new ResourceAnalysisAction.GetCycle(payload)).pipe(
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
       })
     );
   }

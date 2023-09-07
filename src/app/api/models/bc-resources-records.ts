@@ -9,7 +9,7 @@ export interface BcResourcesRecords {
   location?: string;
   recordCustodian?: string;
   recordName: string;
-  recordType: string;
+  recordType: boolean;
   resource: BcResources;
 }
 

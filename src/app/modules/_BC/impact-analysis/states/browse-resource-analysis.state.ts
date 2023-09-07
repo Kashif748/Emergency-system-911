@@ -7,12 +7,10 @@ import {ApiHelper} from '@core/helpers/api.helper';
 import {TextUtils} from '@core/utils';
 import {iif, patch} from '@ngxs/store/operators';
 import {BrowseResourceAnalysisAction} from "./browse-resource-analysis.action";
-import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
-import {ResourceAnalysisAction} from "@core/states/org-activities/orgActivity.action";
 import {throwError} from "rxjs";
 import {BrowseOrganizationAction} from "../../organization-activities/states/browse-organization.action";
-import {BrowseReourceAnalysisStateModel} from "../../organization-activities/states/browse-organization.state";
 import {catchError, finalize, tap} from "rxjs/operators";
+import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
 
 export interface BrowseReourceAnalysisStateModel {
   pageRequest: PageRequestModel;

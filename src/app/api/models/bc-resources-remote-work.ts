@@ -6,11 +6,11 @@ import { BcResourcesRemoteWorkSystems } from './bc-resources-remote-work-systems
 import { BcWorkImportanceLevels } from './bc-work-importance-levels';
 export interface BcResourcesRemoteWork {
   id?: number;
-  importantLevel: BcWorkImportanceLevels;
+  importantLevel?: BcWorkImportanceLevels;
   isActive?: boolean;
   notes?: string;
-  resource: BcResources;
-  resourceDesignation: BcResourcesDesignation;
+  resource?: BcResources;
+  resourceDesignation?: BcResourcesDesignation;
   resourcesRemoteWorkSystems?: Array<BcResourcesRemoteWorkSystems>;
   skillsNeeded?: string;
   staffDistributionIn?: number;

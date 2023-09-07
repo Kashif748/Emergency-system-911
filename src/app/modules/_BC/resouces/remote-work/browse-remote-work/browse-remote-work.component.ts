@@ -11,6 +11,8 @@ import {BcResourcesRemoteWork} from "../../../../../api/models/bc-resources-remo
 import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
 import {BrowseRemoteWorkState, BrowseRemoteWorkStateModel} from "../states/browse-remote-work.state";
 import {BrowseRemoteWorkAction} from "../states/browse-remote-work.action";
+import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-browse-remote-work',
@@ -77,13 +79,14 @@ export class BrowseRemoteWorkComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseRemoteWorkAction.ToggleDialog({ remoteWorkId: id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     this.store.dispatch(
       new BrowseRemoteWorkAction.LoadRemoteWork({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        resourceId: 1,
+        resourceId: resource?.id,
       })
     );
   }

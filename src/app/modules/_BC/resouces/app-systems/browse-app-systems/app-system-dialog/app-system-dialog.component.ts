@@ -12,6 +12,7 @@ import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import {FormUtils} from "@core/utils/form.utils";
 import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
 import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
+import {RecordsAction} from "@core/states/bc-resources/records/records.action";
 
 @Component({
   selector: 'app-app-system-dialog',
@@ -147,6 +148,13 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
       });
       return;
     }
+  }
+
+  clear() {
+    this.store.dispatch(new AppSystemAction.GetAppSystem({}));
+    this.form.reset();
+    this.form.patchValue(this.defaultFormValue);
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy(): void {

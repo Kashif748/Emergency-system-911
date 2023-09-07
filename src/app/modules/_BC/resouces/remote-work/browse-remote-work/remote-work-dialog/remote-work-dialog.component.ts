@@ -23,6 +23,7 @@ import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action"
 import {BcResourcesRemoteWorkSystems} from "../../../../../../api/models/bc-resources-remote-work-systems";
 import {BcResources} from "../../../../../../api/models/bc-resources";
 import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-remote-work-dialog',
@@ -181,13 +182,14 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
     const remote = {
       ...this.form.getRawValue(),
     };
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     const remoteWork: BcResourcesRemoteWork = {
       id: this._remoteWorkId,
       importantLevel: remote.importantLevel.id,
       isActive: true,
       notes: remote.notes,
       resource: {
-        id: 1
+        id: resource?.id
       },
       resourceDesignation: remote.resourceDesignation,
       resourcesRemoteWorkSystems: [{

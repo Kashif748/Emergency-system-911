@@ -248,7 +248,7 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
     this.router.navigate(['bc/resources'], {
       queryParams: {
         _cycle: resource?.cycle?.id,
-        _activity: resource?.id,
+        _resource: resource?.id,
       },
     });
   }
