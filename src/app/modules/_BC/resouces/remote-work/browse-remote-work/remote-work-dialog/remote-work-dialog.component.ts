@@ -7,21 +7,16 @@ import {Select, Store} from "@ngxs/store";
 import {ActivatedRoute, Router} from "@angular/router";
 import {auditTime, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {BrowseRemoteWorkAction} from "../../states/browse-remote-work.action";
-import {ImpLevelWorkingAction, UserAction, UserState} from "@core/states";
+import {ImpLevelWorkingAction, RemoteWorkAction, UserAction, UserState} from "@core/states";
 import {Dropdown} from "primeng/dropdown";
 import {BcResourcesRemoteWork, BcSystems, BcWorkImportanceLevels} from "../../../../../../api/models";
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
 import {SystemsState} from "@core/states/bc-setup/systems/systems.state";
 import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
 import {FormUtils} from "@core/utils/form.utils";
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
-import {OrganizationDialogComponent} from "../../../../organization-activities/browse-organizations/organization-dialog/organization-dialog.component";
 import {Dialog} from "primeng/dialog";
-import {BrowseOrganizationAction} from "../../../../organization-activities/states/browse-organization.action";
 import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
-import {BcResourcesRemoteWorkSystems} from "../../../../../../api/models/bc-resources-remote-work-systems";
-import {BcResources} from "../../../../../../api/models/bc-resources";
 import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
@@ -37,9 +32,16 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
   @ViewChild(Dialog) dialog: Dialog;
   @ViewChild('priorityLevel') priorityLevelDropdown: Dropdown;
   @ViewChild('system') systemDropdown: Dropdown;
+  @ViewChild('resourceDesignation') resourceDesignationDropdown: Dropdown;
 
   @Select(ImpLevelWorkingState.page)
   priorityLevel$: Observable<BcWorkImportanceLevels[]>;
+
+  @Select(RemoteWorkState.personalDesignationPage)
+  resourceDesignation$: Observable<BcResourcesDesignation[]>;
+
+  @Select(RemoteWorkState.personalDesignationLoading)
+  resourceDesignationLoading$: Observable<boolean>;
 
   @Select(SystemsState.page)
   systems$: Observable<BcSystems[]>;
@@ -59,6 +61,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
   private defaultFormValue: { [key: string]: any } = {};
   private auditLoadPriorityLevel$ = new Subject<string>();
   private auditLoadSystemLevel$ = new Subject<string>();
+  private auditLoadPersonalDesignation$ = new Subject<string>();
 
   form: FormGroup;
   _remoteWorkId: number;
@@ -137,7 +140,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       .subscribe((searchText) => {
         this.store.dispatch(
           new ImpLevelWorkingAction.LoadPage({ page: 0,
-            size: 15, versionId: 337})
+            size: 50, versionId: 337})
         );
       });
 
@@ -146,7 +149,16 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       .subscribe((searchText) => {
         this.store.dispatch(
           new SystemsAction.LoadPage({ page: 0,
-            size: 15})
+            size: 50})
+        );
+      });
+
+    this.auditLoadPersonalDesignation$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((searchText) => {
+        this.store.dispatch(
+          new RemoteWorkAction.LoadDesignationPage({ page: 0,
+            size: 50})
         );
       });
   }
@@ -185,7 +197,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
     const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     const remoteWork: BcResourcesRemoteWork = {
       id: this._remoteWorkId,
-      importantLevel: remote.importantLevel.id,
+      importantLevel: { id: remote.importantLevel.id},
       isActive: true,
       notes: remote.notes,
       resource: {
@@ -193,14 +205,14 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       },
       resourceDesignation: remote.resourceDesignation,
       resourcesRemoteWorkSystems: [{
-        system: remote.resourcesRemoteWorkSystemsInternal.id,
+        system: {id: remote.resourcesRemoteWorkSystemsInternal.id},
         isInternal: true,
         bcResourcesRemoteWork: {
           id: 0
         }
       },
         {
-          system: remote.resourcesRemoteWorkSystemsExternal.id,
+          system: {id: remote.resourcesRemoteWorkSystemsInternal.id},
           isInternal: false,
           bcResourcesRemoteWork: {
             id: 0
@@ -229,18 +241,29 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
     if (direct) {
       this.store.dispatch(
         new ImpLevelWorkingAction.LoadPage({ page: 0,
-          size: 30, versionId: 337})
+          size: 50, versionId: 337})
       );
       return;
     }
     this.auditLoadPriorityLevel$.next(searchText);
   }
 
+  loadPersonalDesignation(searchText?: string, direct = false, id?: number) {
+    if (direct) {
+      this.store.dispatch(
+        new RemoteWorkAction.LoadDesignationPage({ page: 0,
+          size: 50})
+      );
+      return;
+    }
+    this.auditLoadPersonalDesignation$.next(searchText);
+  }
+
   loadSystems(searchText?: string, direct = false, id?: number) {
     if (direct) {
       this.store.dispatch(
         new SystemsAction.LoadPage({ page: 0,
-          size: 30})
+          size: 50})
       );
       return;
     }

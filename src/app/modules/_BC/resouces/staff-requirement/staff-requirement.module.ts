@@ -35,6 +35,8 @@ import {NodataTableModule} from "@shared/components/nodata-table/nodata-table.mo
 import {ILangFacade, LangFacade} from "@core/facades/lang.facade";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {BrowseStaffState} from "./states/browse-staff.state";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {BlockUIModule} from "primeng/blockui";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -85,7 +87,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     DividerModule,
     ToggleButtonModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    BlockUIModule,
+    ProgressSpinnerModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

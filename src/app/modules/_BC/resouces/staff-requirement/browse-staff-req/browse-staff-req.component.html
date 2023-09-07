@@ -1,1 +1,6 @@
-<app-staff-req-content></app-staff-req-content>
+<div *ngIf="state$ | async as state">
+  <app-staff-req-content [loading]="loading$ | async" [page]="page$ | async"
+                         [columns]="state.columns" [totalRecords]="totalRecords$ | async"
+                         [pageRequest]="state?.pageRequest"
+                         (onPageChange)="loadPage($event)"></app-staff-req-content>
+</div>

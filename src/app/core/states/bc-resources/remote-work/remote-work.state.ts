@@ -7,11 +7,15 @@ import {BcResourcesRemoteWorkControllerService} from "../../../../api/services/b
 import {PageBcResourcesRemoteWork} from "../../../../api/models/page-bc-resources-remote-work";
 import {BcResourcesRemoteWork} from "../../../../api/models/bc-resources-remote-work";
 import {RemoteWorkAction} from "@core/states/bc-resources/remote-work/remote-work.action";
+import {PageBcResourcesDesignation} from "../../../../api/models/page-bc-resources-designation";
+import {BcResourcesDesignationControllerService} from "../../../../api/services/bc-resources-designation-controller.service";
 
 export interface RemoteWorkStateModel {
   page: PageBcResourcesRemoteWork;
   remoteWork: BcResourcesRemoteWork;
+  personalDesignationPage: PageBcResourcesDesignation;
   loading: boolean;
+  personalDesignationLoading: boolean;
   blocking: boolean;
 }
 
@@ -26,13 +30,24 @@ export class RemoteWorkState {
    *
    */
   constructor(
-    private remoteWork: BcResourcesRemoteWorkControllerService
+    private remoteWork: BcResourcesRemoteWorkControllerService,
+    private personalDesignation: BcResourcesDesignationControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([RemoteWorkState])
   static page(state: RemoteWorkStateModel) {
     return state?.page?.content;
+  }
+
+  @Selector([RemoteWorkState])
+  static personalDesignationPage(state: RemoteWorkStateModel) {
+    return state?.personalDesignationPage?.content;
+  }
+
+  @Selector([RemoteWorkState])
+  static personalDesignationLoading(state: RemoteWorkStateModel) {
+    return state?.personalDesignationLoading;
   }
 
   @Selector([RemoteWorkState])
@@ -97,6 +112,51 @@ export class RemoteWorkState {
           setState(
             patch<RemoteWorkStateModel>({
               loading: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(RemoteWorkAction.LoadDesignationPage, { cancelUncompleted: true })
+  loadPersonalDesi(
+    { setState }: StateContext<RemoteWorkStateModel>,
+    { payload }: RemoteWorkAction.LoadDesignationPage
+  ) {
+    setState(
+      patch<RemoteWorkStateModel>({
+        personalDesignationLoading: true,
+      })
+    );
+    return this.personalDesignation
+      .getAsPage2({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<RemoteWorkStateModel>({
+              personalDesignationPage: res.result,
+              personalDesignationLoading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<RemoteWorkStateModel>({
+              personalDesignationPage: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<RemoteWorkStateModel>({
+              personalDesignationLoading: false,
             })
           );
         })

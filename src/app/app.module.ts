@@ -93,6 +93,7 @@ import {RecordsState} from "@core/states/bc-resources/records/records.state";
 import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
 import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {StaffState} from "@core/states/bc-resources/staff/staff.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -183,7 +184,8 @@ export function getHighlightLanguages() {
         RecordsState,
         AppSystemState,
         InfraState,
-        ResourceAnalysisState
+        ResourceAnalysisState,
+        StaffState
       ],
       {
         developmentMode: !environment.production,
@@ -206,7 +208,8 @@ export function getHighlightLanguages() {
           'browse_record',
           'browse_app_system',
           'browse_infra',
-          'browse_resource_analysis'
+          'browse_resource_analysis',
+          'browse_staff'
         ],
       },
       ['common_data']

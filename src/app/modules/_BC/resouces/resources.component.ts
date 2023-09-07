@@ -87,7 +87,7 @@ export class ResourcesComponent implements OnInit {
       });
   }
 
-  changeStatus(id, status: ACTIVITY_STATUSES) {
+  changeStatus(id, status: RESOURCE_STATUSES) {
     const newStatus: BcResourcesChangeStatusDto = {
       resourceId: id,
       statusId: status,

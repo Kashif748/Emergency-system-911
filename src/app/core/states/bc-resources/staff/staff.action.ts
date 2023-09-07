@@ -1,8 +1,8 @@
-import {BcResourcesRemoteWork} from "../../../../api/models/bc-resources-remote-work";
+import {BcResourcesStaffReq} from "../../../../api/models/bc-resources-staff-req";
 
-export namespace RemoteWorkAction {
+export namespace StaffAction {
   export class LoadPage {
-    static readonly type = '[remoteWork] Load Page';
+    static readonly type = '[staff] Load Page';
 
     /**
      *
@@ -20,8 +20,8 @@ export namespace RemoteWorkAction {
     }
   }
 
-  export class LoadDesignationPage {
-    static readonly type = '[remoteWork] Load Personal designation Page';
+  export class LoadMinPage {
+    static readonly type = '[staff] Load min Personal Page';
 
     /**
      *
@@ -38,27 +38,27 @@ export namespace RemoteWorkAction {
   }
 
   export class Create {
-    static readonly type = '[remoteWork] Create';
+    static readonly type = '[staff] Create';
     /**
      *
      */
     constructor(
-      public payload: BcResourcesRemoteWork
+      public payload: BcResourcesStaffReq
     ) {}
   }
 
   export class Update {
-    static readonly type = '[remoteWork] Update';
+    static readonly type = '[staff] Update';
     /**
      *
      */
     constructor(
-      public payload: BcResourcesRemoteWork
+      public payload: BcResourcesStaffReq
     ) {}
   }
 
-  export class GetRemoteWork {
-    static readonly type = '[remoteWork] Get remoteWork';
+  export class GetStaff {
+    static readonly type = '[staff] Get staff';
     /**
      *
      */

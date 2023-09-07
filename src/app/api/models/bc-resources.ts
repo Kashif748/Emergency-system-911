@@ -6,12 +6,12 @@ import { BcOrgHierarchy } from './bc-org-hierarchy';
 export interface BcResources {
   createdBy?: number;
   createdOn?: string;
-  cycle: BcCycles;
+  cycle?: BcCycles;
   id?: number;
   isActive?: boolean;
-  orgHierarchy: BcOrgHierarchy;
+  orgHierarchy?: BcOrgHierarchy;
   staffOnSite?: number;
   staffRemotely?: number;
-  status: BcAnalysisStatus;
+  status?: BcAnalysisStatus;
 }
 
