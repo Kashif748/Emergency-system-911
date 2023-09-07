@@ -84,12 +84,26 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       return;
     }
     this.store
-      .dispatch(new UserAction.GetUser({ id: v }))
+      .dispatch(new RemoteWorkAction.GetRemoteWork({ id: v }))
       .pipe(
-        switchMap(() => this.store.select(UserState.user)),
+        switchMap(() => this.store.select(RemoteWorkState.remoteWork)),
         takeUntil(this.destroy$),
         take(1),
-        tap((user) => {
+        tap((remoteWork) => {
+          this.loadPersonalDesignation(
+            '',
+            true);
+          this.loadPriorityLevel(
+            '',
+            true);
+          this.loadSystems(
+            '',
+            true);
+
+          this.form.patchValue({
+            ...remoteWork,
+          });
+          this.patchValue(remoteWork);
         })
       )
       .subscribe();
@@ -127,6 +141,16 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  patchValue(remoteWork) {
+    if (remoteWork.resourcesRemoteWorkSystems[0].isInternal === true) {
+      this.form.get('resourcesRemoteWorkSystemsInternal').setValue(remoteWork.resourcesRemoteWorkSystems[0].system);
+      this.form.get('resourcesRemoteWorkSystemsExternal').setValue(remoteWork.resourcesRemoteWorkSystems[1].system);
+    } else {
+      this.form.get('resourcesRemoteWorkSystemsInternal').setValue(remoteWork.resourcesRemoteWorkSystems[1].system);
+      this.form.get('resourcesRemoteWorkSystemsExternal').setValue(remoteWork.resourcesRemoteWorkSystems[0].system);
+    }
   }
 
   ngOnInit(): void {
@@ -212,7 +236,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
         }
       },
         {
-          system: {id: remote.resourcesRemoteWorkSystemsInternal.id},
+          system: {id: remote.resourcesRemoteWorkSystemsExternal.id},
           isInternal: false,
           bcResourcesRemoteWork: {
             id: 0

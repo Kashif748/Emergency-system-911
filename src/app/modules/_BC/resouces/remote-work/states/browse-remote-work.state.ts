@@ -86,7 +86,9 @@ export class BrowseRemoteWorkState {
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseRemoteWorkAction.LoadRemoteWork(),
+          new BrowseRemoteWorkAction.LoadRemoteWork({
+            resourceId: payload.resource?.id,
+          }),
           new BrowseRemoteWorkAction.ToggleDialog({}),
         ]);
       }),
@@ -104,7 +106,9 @@ export class BrowseRemoteWorkState {
     return dispatch(new RemoteWorkAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseRemoteWorkAction.LoadRemoteWork());
+        dispatch(new BrowseRemoteWorkAction.LoadRemoteWork({
+          resourceId: payload.resource?.id,
+        }));
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
