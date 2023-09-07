@@ -14,7 +14,10 @@
         <h4 class="p-text-bold mb-0 mx-2">
           {{ selectedOrgHirNode?.parent?.label }}
         </h4>
-        <p-tag value="{{selectedOrgHirNode?.label  | translate}}" severity="primary"></p-tag>
+        <p-tag
+          value="{{ selectedOrgHirNode?.label | translate }}"
+          severity="primary"
+        ></p-tag>
       </ng-template>
     </ng-container>
   </header>
@@ -150,39 +153,45 @@
       </div>
       <!-- coordinator  -->
       <div class="p-field p-col-12 p-md-6">
-        <p-dropdown
+        <p-multiSelect
           [options]="users$ | async"
-          [autoDisplayFirst]="false"
-          [showClear]="true"
           appendTo="body"
           dataKey="id"
-          formControlName="coordinator"
           [filter]="true"
           filterBy="nameAr,nameEn"
           (onFilter)="loadUsers($event?.filter)"
-          placeholder="{{
-            'ORG_HIE.DEPARTMENT.FIRST_BUSI_COORDINATOR' | translate
-          }}"
+          placeholder="{{ 'ORG_HIE.DEPARTMENT.COORDINATOR' | translate }}"
+          formControlName="coordinators"
+          optionLabel="name"
         >
-          <ng-template let-item pTemplate="selectedItem">
-            {{ item | translateObj }}
+          <ng-template let-value pTemplate="selectedItems">
+            <span *ngFor="let item of value">
+              {{ item | translateObj : "firstName" }}
+              {{ item | translateObj : "lastName" }} ,
+            </span>
+            <div
+              *ngIf="!value || value.length === 0"
+              class="country-placeholder"
+            >
+              {{ "ORG_HIE.DEPARTMENT.COORDINATOR" | translate }}
+            </div>
           </ng-template>
 
           <ng-template let-item pTemplate="item">
             {{ item | translateObj }}
           </ng-template>
-        </p-dropdown>
+        </p-multiSelect>
 
         <ng-container
           *ngIf="
-            form.controls['coordinator'].touched &&
-            !form.controls['coordinator'].valid &&
-            form.controls['coordinator'].dirty
+            form.controls['coordinators'].touched &&
+            !form.controls['coordinators'].valid &&
+            form.controls['coordinators'].dirty
           "
         >
           <p
             class="p-error mb-0"
-            *ngIf="form.controls['coordinator'].hasError('required')"
+            *ngIf="form.controls['coordinators'].hasError('required')"
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>

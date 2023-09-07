@@ -166,7 +166,7 @@ export class LogComponent implements OnInit, OnDestroy {
   @HostListener('document:visibilitychange', ['$event'])
   visibilityChange($event: Event) {
     if (document.visibilityState === 'visible') {
-      this.pageIndex--;
+      this.initLogPages();
       this.getNexLogs();
     }
   }
