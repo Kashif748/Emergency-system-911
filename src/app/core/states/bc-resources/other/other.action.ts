@@ -1,3 +1,4 @@
+import {BcResourcesNonItInfrastructure} from "../../../../api/models/bc-resources-non-it-infrastructure";
 
 
 export namespace OtherAction {
@@ -26,7 +27,7 @@ export namespace OtherAction {
      *
      */
     constructor(
-      public payload: BcResourcesRecords
+      public payload: BcResourcesNonItInfrastructure
     ) {}
   }
 
@@ -36,7 +37,7 @@ export namespace OtherAction {
      *
      */
     constructor(
-      public payload: BcResourcesRecords
+      public payload: BcResourcesNonItInfrastructure
     ) {}
   }
 

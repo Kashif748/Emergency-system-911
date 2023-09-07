@@ -54,7 +54,7 @@ export class BrowseInfraState {
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseInfraAction.LoadInfra)
-  loadRecord(
+  loadInfra(
     { setState, dispatch, getState }: StateContext<BrowseRemoteWorkStateModel>,
     { payload }: BrowseInfraAction.LoadInfra
   ) {
@@ -78,7 +78,7 @@ export class BrowseInfraState {
     );
   }
   @Action(BrowseInfraAction.CreateInfra)
-  createRecord(
+  createInfra(
     { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
     { payload }: BrowseInfraAction.CreateInfra
   ) {
@@ -86,7 +86,9 @@ export class BrowseInfraState {
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseInfraAction.LoadInfra(),
+          new BrowseInfraAction.LoadInfra({
+            resourceId: payload.resource?.id,
+          }),
           new BrowseInfraAction.ToggleDialog({}),
         ]);
       }),
@@ -97,14 +99,16 @@ export class BrowseInfraState {
     );
   }
   @Action(BrowseInfraAction.UpdateInfra)
-  updateRecord(
+  updateInfra(
     { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
     { payload }: BrowseInfraAction.UpdateInfra
   ) {
     return dispatch(new InfraAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseInfraAction.LoadInfra());
+        dispatch(new BrowseInfraAction.LoadInfra({
+          resourceId: payload.resource?.id,
+        }));
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

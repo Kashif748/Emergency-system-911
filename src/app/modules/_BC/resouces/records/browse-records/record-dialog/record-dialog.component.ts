@@ -11,7 +11,7 @@ import {Dialog} from "primeng/dialog";
 import {RecordsState} from "@core/states/bc-resources/records/records.state";
 import {RecordsAction} from "@core/states/bc-resources/records/records.action";
 import {FormUtils} from "@core/utils/form.utils";
-import {VenderState} from "@core/states/bc-setup/venders/vender.state";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-record-dialog',
@@ -178,11 +178,12 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
     const record = {
       ...this.form.getRawValue(),
     };
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     record.resource = {
-      id: 1
+      id: resource.id
     };
     record.isCritical = record.isCritical.id === 1 ? true : false;
-    record.recordType = record.recordType.id === 1 ? 1 : 2;
+    record.recordType = record.recordType.id === 1 ? true : false;
     record.isActive = true;
     record.id = 0;
 

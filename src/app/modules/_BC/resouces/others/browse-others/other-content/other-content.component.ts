@@ -3,8 +3,9 @@ import {ILangFacade} from "@core/facades/lang.facade";
 import {TranslateService} from "@ngx-translate/core";
 import {Store} from "@ngxs/store";
 import {PageRequestModel} from "@core/models/page-request.model";
-import {BcResourcesRemoteWork} from "../../../../../../api/models/bc-resources-remote-work";
 import {LazyLoadEvent} from "primeng/api";
+import {BrowseRecordAction} from "../../../records/states/browse-records.action";
+import {BcResourcesNonItInfrastructure} from "../../../../../../api/models/bc-resources-non-it-infrastructure";
 import {BrowseOtherAction} from "../../states/browse-other.action";
 
 @Component({
@@ -16,7 +17,7 @@ export class OtherContentComponent implements OnInit {
   @Input()
   loading: boolean;
   @Input()
-  page: BcResourcesRemoteWork[];
+  page: BcResourcesNonItInfrastructure[];
   @Input()
   columns: string[];
   @Input()

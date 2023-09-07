@@ -121,8 +121,29 @@
           </div>
         </p-divider>
       </div>
+      <ng-container formArrayName="hours">
+      <div *ngFor="let field of getControls(); let i = index" [formGroupName]="i" class="p-field p-col-12 p-md-4">
+    <span class="p-float-label">
+      <input
+        type="number"
+        formControlName="hour"
+        pInputText
+      />
+      <label>
+        {{ field.get('label').value }}
+        <strong class="required-asterisk"> * </strong>
+      </label>
+    </span>
 
-      <div class="p-field p-col-12 p-md-4">
+        <ng-container *ngIf="field.get('hour').touched && field.get('hour').invalid && field.get('hour').dirty">
+          <p class="p-error mb-0" *ngIf="field.get('hour').hasError('required')">
+            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+          </p>
+        </ng-container>
+      </div>
+  </ng-container>
+
+      <!--<div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
         <input type="number" formControlName="day_more" pInputText/>
         <label>
@@ -174,7 +195,7 @@
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>
-      </div>
+      </div>-->
 
       <div class="p-col-12">
         <p-divider align="left">

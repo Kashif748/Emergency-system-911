@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {FormUtils} from "@core/utils/form.utils";
 import {Observable, Subject} from "rxjs";
@@ -14,6 +14,10 @@ import {IAuthService} from "@core/services/auth.service";
 import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 import {LazyLoadEvent} from "primeng/api";
 import {BcResourcesMinPersonnelReq} from "../../../../../../api/models/bc-resources-min-personnel-req";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {StaffState} from "@core/states/bc-resources/staff/staff.state";
+import {TranslateService} from "@ngx-translate/core";
+import {BcResourcesStaffReq} from "../../../../../../api/models/bc-resources-staff-req";
 
 @Component({
   selector: 'app-staff-req-dialog',
@@ -23,7 +27,7 @@ import {BcResourcesMinPersonnelReq} from "../../../../../../api/models/bc-resour
 export class StaffReqDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
-
+  public fields;
   public page$: Observable<BcResourcesMinPersonnelReq[]>;
 
   @ViewChild(Dialog) dialog: Dialog;
@@ -74,6 +78,7 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
     private auth: IAuthService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) {
     this.route.queryParams
       .pipe(
@@ -104,9 +109,31 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
+
   }
 
-  public loadMinPersonal(event?: LazyLoadEvent) {
+  dynamicForm() {
+    this.store.select(StaffState.minPersonalPage)
+      .pipe(take(1),
+        takeUntil(this.destroy$),
+      ).subscribe(data => {
+      if (data) {
+        const hours = this.form.get(
+          'hours'
+        ) as FormArray;
+        hours.clear();
+        this.fields = data;
+        data.forEach((v) => {
+          hours.push(this.createForm(v));
+        });
+        this.cdr.detectChanges()
+        console.log(hours);
+        console.log(this.form);
+      }
+    });
+  }
+
+  async loadMinPersonal(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseStaffAction.LoadMinPersonal({
         pageRequest: {
@@ -114,28 +141,42 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
           rows: event?.rows,
         },
       })
-    );
+    ).toPromise().then(() => {
+      this.dynamicForm();
+    });
+  }
+
+  createForm(formFields): FormGroup {
+    return this.formBuilder.group({
+      id: formFields.id,
+      label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
+      hour: [null, [Validators.required]], // Add validation as needed
+    });
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
       description: [null, [Validators.required]],
-      day_more: [null, [Validators.required]],
-      hour1: [null, [Validators.required]],
-      hour2: [null, [Validators.required]],
       p_emp: [null, [Validators.required]],
       s_emp: [null, [Validators.required]],
       s_emp1: [null, [Validators.required]],
+      hours: this.formBuilder.array([]),
     });
+    this.loadMinPersonal();
     this.defaultFormValue = {
       ...this.defaultFormValue,
     };
+  }
+
+  getControls(): AbstractControl[] {
+    return (this.form.get('hours') as FormArray).controls;
   }
 
   openDialog(id?: number) {
     this.store.dispatch(new BrowseStaffAction.ToggleDialog({ staffId: id }));
   }
   submit() {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -143,7 +184,32 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
       });
       return;
     }
+    const staff = {
+      ...this.form.getRawValue(),
+    };
 
+    const staffWork: BcResourcesStaffReq = {
+      id: this._staffId,
+      isActive: true,
+      keyResponsibilities: staff.description,
+      resource: {
+        id: resource?.id
+      },
+      minPersonnelRequired: '1',
+      primaryEmpName: staff.p_emp,
+      secondaryEmp1Name: staff.s_emp,
+      secondaryEmp2Name: staff.s_emp1
+    };
+
+    if (this.editMode) {
+      this.store.dispatch(
+        new BrowseStaffAction.UpdateStaff(staffWork)
+      );
+    } else {
+      this.store.dispatch(
+        new BrowseStaffAction.CreateStaff(staffWork)
+      );
+    }
   }
 
   close() {

@@ -86,7 +86,9 @@ export class BrowseRecordsState {
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseRecordAction.LoadRecords(),
+          new BrowseRecordAction.LoadRecords({
+            resourceId: payload.resource?.id,
+          }),
           new BrowseRecordAction.ToggleDialog({}),
         ]);
       }),
@@ -104,7 +106,9 @@ export class BrowseRecordsState {
     return dispatch(new RecordsAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseRecordAction.LoadRecords());
+        dispatch(new BrowseRecordAction.LoadRecords({
+          resourceId: payload.resource?.id,
+        }));
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

@@ -1,33 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Select, Store} from "@ngxs/store";
 import {filter, map} from "rxjs/operators";
-import {RecordsState} from "@core/states/bc-resources/records/records.state";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {TranslateService} from "@ngx-translate/core";
 import {ActivatedRoute} from "@angular/router";
-import {BcResourcesRecords} from "../../../../../api/models/bc-resources-records";
-import {BrowseRecordsState, BrowseRecordStateModel} from "../../records/states/browse-records.state";
-import {BrowseRecordAction} from "../../records/states/browse-records.action";
 import {Observable, Subject} from "rxjs";
 import {MessageHelper} from "@core/helpers/message.helper";
+import {BcResourcesNonItInfrastructure} from "../../../../../api/models/bc-resources-non-it-infrastructure";
+import {OtherState} from "@core/states/bc-resources/other/other.state";
+import {BrowseOtherState, BrowseOtherStateModel} from "../states/browse-other.state";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BrowseOtherAction} from "../states/browse-other.action";
 
 @Component({
   selector: 'app-browse-others',
   templateUrl: './browse-others.component.html',
   styleUrls: ['./browse-others.component.scss']
 })
-export class BrowseOthersComponent implements OnInit {
-  public page$: Observable<BcResourcesRecords[]>;
+export class BrowseOthersComponent implements OnInit, OnDestroy {
+  public page$: Observable<BcResourcesNonItInfrastructure[]>;
 
-  @Select(RecordsState.totalRecords)
+  @Select(OtherState.totalRecords)
   public totalRecords$: Observable<number>;
 
-  @Select(RecordsState.loading)
+  @Select(OtherState.loading)
   public loading$: Observable<boolean>;
 
-  @Select(BrowseRecordsState.state)
-  public state$: Observable<BrowseRecordStateModel>;
+  @Select(BrowseOtherState.state)
+  public state$: Observable<BrowseOtherStateModel>;
 
   private destroy$ = new Subject();
   constructor(
@@ -39,7 +40,7 @@ export class BrowseOthersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const recordActions = [
+    const otherActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
         icon: 'pi pi-pencil',
@@ -50,7 +51,7 @@ export class BrowseOthersComponent implements OnInit {
       },
     ] as MenuItem[];
 
-    this.page$ = this.store.select(RecordsState.page).pipe(
+    this.page$ = this.store.select(OtherState.page).pipe(
       filter((p) => !!p),
       map((page) => [...page].sort((a, b) => a.id - b.id)),
       map((page) =>
@@ -59,7 +60,7 @@ export class BrowseOthersComponent implements OnInit {
             ...u,
             actions: [
               {
-                ...recordActions[0],
+                ...otherActions[0],
                 command: () => {
                   this.openDialog(u.id);
                 },
@@ -72,16 +73,17 @@ export class BrowseOthersComponent implements OnInit {
     );
   }
   openDialog(id?: number) {
-    this.store.dispatch(new BrowseRecordAction.ToggleDialog({ recordId: id }));
+    this.store.dispatch(new BrowseOtherAction.ToggleDialog({ otherId: id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     this.store.dispatch(
-      new BrowseRecordAction.LoadRecords({
+      new BrowseOtherAction.LoadOther({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        resourceId: 1,
+        resourceId: resource.id,
       })
     );
   }

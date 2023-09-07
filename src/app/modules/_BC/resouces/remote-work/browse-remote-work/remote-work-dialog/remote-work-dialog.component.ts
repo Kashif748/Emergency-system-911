@@ -19,6 +19,7 @@ import {Dialog} from "primeng/dialog";
 import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
 import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
 
 @Component({
   selector: 'app-remote-work-dialog',
@@ -158,13 +159,13 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
-
+    const cycle = this.store.selectSnapshot(ResourceAnalysisState.cycle);
     this.auditLoadPriorityLevel$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
       .subscribe((searchText) => {
         this.store.dispatch(
           new ImpLevelWorkingAction.LoadPage({ page: 0,
-            size: 50, versionId: 337})
+            size: 50, versionId: cycle?.versionId})
         );
       });
 
@@ -262,10 +263,11 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   loadPriorityLevel(searchText?: string, direct = false, id?: number) {
+    const cycle = this.store.selectSnapshot(ResourceAnalysisState.cycle);
     if (direct) {
       this.store.dispatch(
         new ImpLevelWorkingAction.LoadPage({ page: 0,
-          size: 50, versionId: 337})
+          size: 50, versionId: cycle.versionId})
       );
       return;
     }

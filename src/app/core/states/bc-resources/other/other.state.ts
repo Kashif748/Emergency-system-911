@@ -3,14 +3,14 @@ import {Injectable} from '@angular/core';
 import {EMPTY} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {patch} from '@ngxs/store/operators';
-import {BcResourcesRecordsControllerService} from "../../../../api/services/bc-resources-records-controller.service";
-import {PageBcResourcesRecords} from "../../../../api/models/page-bc-resources-records";
-import {BcResourcesRecords} from "../../../../api/models/bc-resources-records";
 import {OtherAction} from "@core/states/bc-resources/other/other.action";
+import {BcResourcesNonItInfrastructureControllerService} from "../../../../api/services/bc-resources-non-it-infrastructure-controller.service";
+import {PageBcResourcesNonItInfrastructure} from "../../../../api/models/page-bc-resources-non-it-infrastructure";
+import {BcResourcesNonItInfrastructure} from "../../../../api/models/bc-resources-non-it-infrastructure";
 
 export interface OtherStateModel {
-  page: PageBcResourcesRecords;
-  other: BcResourcesRecords;
+  page: PageBcResourcesNonItInfrastructure;
+  other: BcResourcesNonItInfrastructure;
   loading: boolean;
   blocking: boolean;
 }
@@ -26,7 +26,7 @@ export class OtherState {
    *
    */
   constructor(
-    private bcRecords: BcResourcesRecordsControllerService
+    private other: BcResourcesNonItInfrastructureControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -66,8 +66,8 @@ export class OtherState {
         loading: true,
       })
     );
-    return this.bcRecords
-      .search12({
+    return this.other
+      .search13({
         resourceId: payload.resourceId,
         isActive: true,
         pageable: {
@@ -113,8 +113,8 @@ export class OtherState {
         blocking: true,
       })
     );
-    return this.bcRecords
-      .insertOne7({
+    return this.other
+      .insertOne8({
         body: payload,
       })
       .pipe(
@@ -138,8 +138,8 @@ export class OtherState {
         blocking: true,
       })
     );
-    return this.bcRecords
-      .update86({
+    return this.other
+      .update87({
         body: payload,
       })
       .pipe(
@@ -171,7 +171,7 @@ export class OtherState {
         blocking: true,
       })
     );
-    return this.bcRecords.getOne8({ id: payload.id }).pipe(
+    return this.other.getOne9({ id: payload.id }).pipe(
       tap((records) => {
         setState(
           patch<OtherStateModel>({

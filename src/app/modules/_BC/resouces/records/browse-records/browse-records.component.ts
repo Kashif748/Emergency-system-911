@@ -11,6 +11,7 @@ import {MessageHelper} from "@core/helpers/message.helper";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {filter, map} from "rxjs/operators";
 import {BrowseRecordAction} from "../states/browse-records.action";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-browse-records',
@@ -75,13 +76,14 @@ export class BrowseRecordsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseRecordAction.ToggleDialog({ recordId: id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     this.store.dispatch(
       new BrowseRecordAction.LoadRecords({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        resourceId: 1,
+        resourceId: resource.id,
       })
     );
   }

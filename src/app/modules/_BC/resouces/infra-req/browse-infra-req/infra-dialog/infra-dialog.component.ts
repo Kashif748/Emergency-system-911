@@ -12,6 +12,9 @@ import {Dialog} from "primeng/dialog";
 import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
 import {InfraAction} from "@core/states/bc-resources/infra-req/infra.action";
+import {BrowseRemoteWorkAction} from "../../../remote-work/states/browse-remote-work.action";
+import {FormUtils} from "@core/utils/form.utils";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-infra-dialog',
@@ -112,10 +115,10 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       detailEn: [null, [Validators.required, GenericValidators.english]],
       detailAr: [null, [Validators.required, GenericValidators.arabic]],
-      config: [null, [Validators.required]],
-      count: [null, [Validators.required]],
-      avail_count: [null, [Validators.required]],
-      purchased: [null, [Validators.required]],
+      specialInstruction: [null, [Validators.required]],
+      requiredCount: [null, [Validators.required]],
+      availableCount: [null, [Validators.required]],
+      purchasedCount: [null, [Validators.required]],
     });
     this.defaultFormValue = {
       ...this.defaultFormValue,
@@ -145,6 +148,29 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseInfraAction.ToggleDialog({ infraId: id }));
   }
   submit() {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      FormUtils.ForEach(this.form, (fc) => {
+        fc.markAsDirty();
+      });
+      return;
+    }
+
+    const infra = {
+      ...this.form.getRawValue(),
+    };
+    infra.resource = {
+      id : resource.id
+    }
+    if (this.editMode) {
+      this.store
+        .dispatch(new BrowseInfraAction.UpdateInfra(infra));
+
+    } else {
+      this.store
+        .dispatch(new BrowseInfraAction.CreateInfra(infra));
+    }
   }
   ngOnDestroy(): void {
     this.destroy$.next();

@@ -51,4 +51,20 @@ export namespace AppSystemAction {
       }
     ) {}
   }
+  export class LoadMinLicense {
+    static readonly type = '[appSystem] Load min License Page';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        filters?: { [key: string]: any };
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {
+    }
+  }
 }

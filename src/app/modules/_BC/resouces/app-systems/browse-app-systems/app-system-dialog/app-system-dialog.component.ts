@@ -1,18 +1,22 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Observable, Subject} from "rxjs";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ILangFacade} from "@core/facades/lang.facade";
 import {IAuthService} from "@core/services/auth.service";
 import {Select, Store} from "@ngxs/store";
 import {ActivatedRoute, Router} from "@angular/router";
-import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {BrowseAppSystemAction} from "../../states/browse-app-system.action";
 import {Dialog} from "primeng/dialog";
-import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import {FormUtils} from "@core/utils/form.utils";
 import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
 import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
-import {RecordsAction} from "@core/states/bc-resources/records/records.action";
+import {Dropdown} from "primeng/dropdown";
+import {SystemsState} from "@core/states/bc-setup/systems/systems.state";
+import {BcSystems} from "../../../../../../api/models";
+import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
+import {LazyLoadEvent} from "primeng/api";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-app-system-dialog',
@@ -23,12 +27,20 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
   @ViewChild(Dialog) dialog: Dialog;
+  @ViewChild('system') systemDropdown: Dropdown;
 
   @Select(AppSystemState.blocking)
   blocking$: Observable<boolean>;
+
+  @Select(SystemsState.page)
+  systems$: Observable<BcSystems[]>;
+
+  @Select(SystemsState.loading)
+  systemsLoading$: Observable<boolean>;
+
   form: FormGroup;
   _appSystemId: number;
-
+  private auditLoadSystemLevel$ = new Subject<string>();
   get editMode() {
     return this._appSystemId !== undefined && this._appSystemId !== null;
   }
@@ -55,11 +67,14 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.store
       .dispatch(new AppSystemAction.GetAppSystem({ id: v }))
       .pipe(
-        switchMap(() => this.store.select(VenderState.vender)),
+        switchMap(() => this.store.select(AppSystemState.appSystem)),
         takeUntil(this.destroy$),
         take(1),
         filter((t) => !!t),
         tap((record) => {
+          this.loadSystems(
+            '',
+            true);
           this.form.patchValue({
             ...record,
           });
@@ -76,6 +91,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     private auth: IAuthService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) {
     this.route.queryParams
       .pipe(
@@ -107,24 +123,71 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
+
+    this.auditLoadSystemLevel$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((searchText) => {
+        this.store.dispatch(
+          new SystemsAction.LoadPage({ page: 0,
+            size: 50})
+        );
+      });
+  }
+  async loadMinPersonal(event?: LazyLoadEvent) {
+    this.store.dispatch(
+      new BrowseAppSystemAction.LoadMinLicense({
+        pageRequest: {
+          first: event?.first,
+          rows: event?.rows,
+        },
+      })
+    ).toPromise().then(() => {
+      this.dynamicForm();
+    });
+  }
+  dynamicForm() {
+    this.store.select(AppSystemState.minLicensePage)
+      .pipe(take(1),
+        takeUntil(this.destroy$),
+      ).subscribe(data => {
+      if (data) {
+        const hours = this.form.get(
+          'hours'
+        ) as FormArray;
+        hours.clear();
+        // this.fields = data;
+        data.forEach((v) => {
+          hours.push(this.createForm(v));
+        });
+        this.cdr.detectChanges();
+      }
+    });
+  }
+  createForm(formFields): FormGroup {
+    return this.formBuilder.group({
+      id: formFields.id,
+      label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
+      hour: [null, [Validators.required]], // Add validation as needed
+    });
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      softApp: [null, [Validators.required]],
+      applicationAndSoftware: [null, [Validators.required]],
       purpose: [null, [Validators.required]],
       users: [null, [Validators.required]],
       license: [null, [Validators.required]],
       license_Type: [null, [Validators.required]],
-      day1: [null, [Validators.required]],
-      hour8: [null, [Validators.required]],
-      hour24: [null, [Validators.required]],
-      week1: [null, [Validators.required]],
-      week2: [null, [Validators.required]],
+      hours: this.formBuilder.array([]),
     });
+    this.loadMinPersonal();
     this.defaultFormValue = {
       ...this.defaultFormValue,
     };
+  }
+
+  getControls(): AbstractControl[] {
+    return (this.form.get('hours') as FormArray).controls;
   }
 
   close() {
@@ -148,6 +211,18 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
       });
       return;
     }
+
+    const app = {
+      ...this.form.getRawValue(),
+    };
+    if (this.editMode) {
+      this.store
+        .dispatch(new BrowseAppSystemAction.UpdateAppSys(app));
+
+    } else {
+      this.store
+        .dispatch(new BrowseAppSystemAction.CreateAppSys(app));
+    }
   }
 
   clear() {
@@ -160,6 +235,16 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  loadSystems(searchText?: string, direct = false, id?: number) {
+    if (direct) {
+      this.store.dispatch(
+        new SystemsAction.LoadPage({ page: 0,
+          size: 50})
+      );
+      return;
+    }
+    this.auditLoadSystemLevel$.next(searchText);
   }
 
 }

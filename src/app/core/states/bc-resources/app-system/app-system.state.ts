@@ -7,11 +7,15 @@ import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.a
 import {PageBcResourcesAppAndSoftware} from "../../../../api/models/page-bc-resources-app-and-software";
 import {BcResourcesAppAndSoftware} from "../../../../api/models/bc-resources-app-and-software";
 import {BcResourcesAppAndSoftwareControllerService} from "../../../../api/services/bc-resources-app-and-software-controller.service";
+import {BcResourcesMinLicenseReqControllerService} from "../../../../api/services/bc-resources-min-license-req-controller.service";
+import {PageBcResourcesMinLicenseReq} from "../../../../api/models/page-bc-resources-min-license-req";
 
 export interface AppSystemStateModel {
   page: PageBcResourcesAppAndSoftware;
   appSystem: BcResourcesAppAndSoftware;
+  minLicensePage: PageBcResourcesMinLicenseReq;
   loading: boolean;
+  minLicenseLoading: boolean;
   blocking: boolean;
 }
 
@@ -26,7 +30,8 @@ export class AppSystemState {
    *
    */
   constructor(
-    private bcResourcesAppAndSoftwareService: BcResourcesAppAndSoftwareControllerService
+    private bcResourcesAppAndSoftwareService: BcResourcesAppAndSoftwareControllerService,
+    private minLicense: BcResourcesMinLicenseReqControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -48,6 +53,16 @@ export class AppSystemState {
   @Selector([AppSystemState])
   static loading(state: AppSystemStateModel) {
     return state?.loading;
+  }
+
+  @Selector([AppSystemState])
+  static minLicensePage(state: AppSystemStateModel) {
+    return state?.minLicensePage.content;
+  }
+
+  @Selector([AppSystemState])
+  static minLicenseLoading(state: AppSystemStateModel) {
+    return state?.minLicenseLoading;
   }
 
   @Selector([AppSystemState])
@@ -102,6 +117,51 @@ export class AppSystemState {
         })
       );
   }
+  @Action(AppSystemAction.LoadMinLicense, { cancelUncompleted: true })
+  loadMinLicense(
+    { setState }: StateContext<AppSystemStateModel>,
+    { payload }: AppSystemAction.LoadMinLicense
+  ) {
+    setState(
+      patch<AppSystemStateModel>({
+        minLicenseLoading: true,
+      })
+    );
+    return this.minLicense
+      .getAsPage1({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<AppSystemStateModel>({
+              minLicensePage: res.result,
+              minLicenseLoading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<AppSystemStateModel>({
+              minLicensePage: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<AppSystemStateModel>({
+              minLicenseLoading: false,
+            })
+          );
+        })
+      );
+  }
+
 
   @Action(AppSystemAction.Create)
   create(

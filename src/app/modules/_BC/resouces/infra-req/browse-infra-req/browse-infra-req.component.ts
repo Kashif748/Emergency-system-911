@@ -11,6 +11,7 @@ import {BcResourcesItInfrastructure} from "../../../../../api/models/bc-resource
 import {BrowseInfraState, BrowseInfraStateModel} from "../states/browse-infra.state";
 import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
 import {BrowseInfraAction} from "../states/browse-infra.action";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-browse-infra-req',
@@ -75,13 +76,14 @@ export class BrowseInfraReqComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseInfraAction.ToggleDialog({ infraId: id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     this.store.dispatch(
       new BrowseInfraAction.LoadInfra({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        resourceId: 1,
+        resourceId: resource.id,
       })
     );
   }

@@ -55,11 +55,11 @@ export class BrowseAppSystemState {
   /* ********************** ACTIONS ************************* */
   @Action(BrowseAppSystemAction.LoadAppSys)
   loadAppSys(
-    { setState, dispatch, getState }: StateContext<BrowseRemoteWorkStateModel>,
+    { setState, dispatch, getState }: StateContext<BrowseAppSystemStateModel>,
     { payload }: BrowseAppSystemAction.LoadAppSys
   ) {
     setState(
-      patch<BrowseRemoteWorkStateModel>({
+      patch<BrowseAppSystemStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
@@ -74,6 +74,30 @@ export class BrowseAppSystemState {
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         resourceId: payload.resourceId,
+      })
+    );
+  }
+
+  @Action(BrowseAppSystemAction.LoadMinLicense)
+  loadMinLicense(
+    { setState, dispatch, getState }: StateContext<BrowseAppSystemStateModel>,
+    { payload }: BrowseAppSystemAction.LoadMinLicense
+  ) {
+    setState(
+      patch<BrowseAppSystemStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+
+    return dispatch(
+      new AppSystemAction.LoadMinLicense({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
       })
     );
   }

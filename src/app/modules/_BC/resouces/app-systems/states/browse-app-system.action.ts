@@ -44,4 +44,13 @@ export namespace BrowseAppSystemAction {
      */
     constructor(public payload: { appSystemId: number }) {}
   }
+  export class LoadMinLicense {
+    static readonly type = '[BrowseAppSystem] Load Min License';
+
+    /**
+     *
+     */
+    constructor(public payload?: { pageRequest?: PageRequestModel } ) {
+    }
+  }
 }

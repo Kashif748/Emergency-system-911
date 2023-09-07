@@ -14,6 +14,7 @@ import {BrowseAppSystemState, BrowseAppSystemStateModel} from "../states/browse-
 import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
 import {BcResourcesAppAndSoftware} from "../../../../../api/models/bc-resources-app-and-software";
 import {BrowseAppSystemAction} from "../states/browse-app-system.action";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-browse-app-systems',
@@ -78,13 +79,14 @@ export class BrowseAppSystemsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseAppSystemAction.ToggleDialog({ appSystemId: id }));
   }
   public loadPage(event?: LazyLoadEvent) {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     this.store.dispatch(
       new BrowseAppSystemAction.LoadAppSys({
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
         },
-        resourceId: 1,
+        resourceId: resource.id,
       })
     );
   }
