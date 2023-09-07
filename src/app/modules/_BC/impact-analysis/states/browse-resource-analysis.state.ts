@@ -28,6 +28,8 @@ export const BROWSE_RESOURCE_ANALYSIS_UI_STATE_TOKEN =
       filters: {},
       first: 0,
       rows: 10,
+      sortField: 'id',
+      sortOrder: 'asc',
     },
     columns: [
       'orgHierarchy',

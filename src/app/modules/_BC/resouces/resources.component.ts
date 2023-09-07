@@ -7,7 +7,11 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {BrowseResourceAction} from "./states/browse-resource.action";
 import {BrowseResourceState} from "./states/browse-resource.state";
 import {ILangFacade} from "@core/facades/lang.facade";
-import {BrowseActivityAnalysisAction} from "../activity-analysis/states/browse-activity-analysis.action";
+import {BcCycles} from "../../../api/models";
+import {ACTIVITY_STATUSES} from "@core/states/activity-analysis/activity-analysis.state";
+import {RESOURCE_STATUSES, ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../api/models/bc-resources";
+import {BcResourcesChangeStatusDto} from "../../../api/models/bc-resources-change-status-dto";
 
 @Component({
   selector: 'app-resources',
@@ -16,13 +20,21 @@ import {BrowseActivityAnalysisAction} from "../activity-analysis/states/browse-a
 })
 export class ResourcesComponent implements OnInit {
   tabs = TABS;
+  RESOURCE_STATUSES = RESOURCE_STATUSES;
+  @Select(ResourceAnalysisState.cycle)
+  public cycle$: Observable<BcCycles>;
 
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
 
   @Select(BrowseResourceState.tabIndex)
   public tabIndex$: Observable<any>;
 
   public dir$ = this.lang.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
+  );
+  public icon$ = this.lang.vm$.pipe(
+    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'))
   );
   private destroy$ = new Subject();
   constructor(
@@ -73,5 +85,16 @@ export class ResourcesComponent implements OnInit {
           }
         );
       });
+  }
+
+  changeStatus(id, status: ACTIVITY_STATUSES) {
+    const newStatus: BcResourcesChangeStatusDto = {
+      resourceId: id,
+      statusId: status,
+      notes: '',
+    };
+    this.store.dispatch([
+      new BrowseResourceAction.ChangeStatus(newStatus),
+    ]);
   }
 }

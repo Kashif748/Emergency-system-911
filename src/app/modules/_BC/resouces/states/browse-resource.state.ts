@@ -88,4 +88,24 @@ export class BrowseResourceState {
       })
     );
   }
+  @Action(BrowseResourceAction.ChangeStatus)
+  ChangeStatus(
+    { dispatch }: StateContext<BrowseResourceStateModel>,
+    { payload }: BrowseResourceAction.ChangeStatus
+  ) {
+    return dispatch(new ResourceAnalysisAction.ChangeStatus(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(
+          new BrowseResourceAction.GetResourceAnalysis({
+            id: payload.resourceId,
+          })
+        );
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
 }

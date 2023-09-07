@@ -1,28 +1,50 @@
 <ng-container >
-  <ng-container >
+  <ng-container *ngIf="cycle$ | async as cycle">
     <section
-
+      *ngIf="resourceAnalysis$ | async as resourceAnalysis"
       class="d-flex flex-column p-6 position-relative"
       [dir]="dir$ | async"
     >
       <p-toolbar>
         <div class="p-toolbar-group-left">
+          <div class="p-col p-d-flex">
+            <button pButton [icon]="icon$ | async" routerLink="/bc/impact-analysis">
+            </button>
+          </div>
           <h2 class="m-0">
-            {{ 'RESOURCES' | translate }}
+            {{ resourceAnalysis?.orgHierarchy | translateObj}} -
+            {{ resourceAnalysis?.cycle | translateObj }}
           </h2>
         </div>
         <div class="p-toolbar-group-right" style="gap: 10px">
           <p-button
-
+            *ngIf="resourceAnalysis?.status?.id != RESOURCE_STATUSES.DRAFT"
             label="{{ 'DRAFT' | translate }}"
             styleClass="p-button-outlined p-button-danger"
-
+            (click)="
+              changeStatus(resourceAnalysis?.id, RESOURCE_STATUSES.DRAFT)
+            "
           ></p-button>
           <p-button
+            *ngIf="
+              resourceAnalysis?.status?.id != RESOURCE_STATUSES.UNDER_REVIEW
+            "
             label="{{ 'REVIEW' | translate }}"
             styleClass="p-button-outlined"
-            ></p-button>
+            (click)="
+              changeStatus(resourceAnalysis?.id, RESOURCE_STATUSES.UNDER_REVIEW)
+            "
+          ></p-button>
           <p-button
+            *ngIf="
+              resourceAnalysis?.status?.id != RESOURCE_STATUSES.UNDER_APPROVAL
+            "
+            (click)="
+              changeStatus(
+                resourceAnalysis?.id,
+                RESOURCE_STATUSES.UNDER_APPROVAL
+              )
+            "
             label="{{ 'APPROVE' | translate }}"
           ></p-button>
           <p-button icon="pi pi-ellipsis-v"></p-button>
@@ -32,17 +54,17 @@
         <div class="d-flex flex-column">
           <span class="mb-3">{{ "ORG_ARTCH" | translate }}</span>
           <span class="font-weight-bold text-primary">
-            </span
+            {{ resourceAnalysis?.orgHierarchy | translateObj }}</span
           >
         </div>
-         <div class="d-flex flex-column">
+        <!-- <div class="d-flex flex-column">
           <span class="mb-3">إدارة</span>
           <span class="font-weight-bold text-primary">الموارد البشرية</span>
-        </div>
-        <div class="d-flex flex-column">
+        </div> -->
+        <!-- <div class="d-flex flex-column">
           <span class="mb-3">قسم </span>
           <span class="font-weight-bold text-primary"> الرواتب </span>
-        </div>
+        </div> -->
         <div class="d-flex flex-column">
           <span class="mb-3"> {{ "createdBy" | translate }}</span>
           <span class="font-weight-bold text-primary">مصطفى السبول </span>
@@ -50,7 +72,7 @@
         <div class="d-flex flex-column">
           <span class="mb-3"> {{ "STATUS" | translate }}</span>
           <span class="font-weight-bold text-primary">
-
+            {{ resourceAnalysis?.status | translateObj }}
           </span>
         </div>
       </div>

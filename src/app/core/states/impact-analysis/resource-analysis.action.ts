@@ -1,4 +1,5 @@
 import {BcResources} from "../../../api/models/bc-resources";
+import {BcResourcesChangeStatusDto} from "../../../api/models/bc-resources-change-status-dto";
 
 export namespace ResourceAnalysisAction {
   export class LoadPage {
@@ -56,5 +57,12 @@ export namespace ResourceAnalysisAction {
         id?: number;
       }
     ) {}
+  }
+  export class ChangeStatus {
+    static readonly type = '[ResourceAnalysisAction]  Change Resource Status';
+    /**
+     *
+     */
+    constructor(public payload: BcResourcesChangeStatusDto) {}
   }
 }

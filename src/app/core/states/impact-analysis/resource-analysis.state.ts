@@ -7,10 +7,18 @@ import {PageBcResources} from "../../../api/models/page-bc-resources";
 import {BcResources} from "../../../api/models/bc-resources";
 import {BcResourcesControllerService} from "../../../api/services/bc-resources-controller.service";
 import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
-import {ActivityAnalysisAction} from "@core/states/activity-analysis/activity-analysis.action";
-import {ActivityAnalysisStateModel} from "@core/states/activity-analysis/activity-analysis.state";
 import {BcCycles} from "../../../api/models";
 import {BcCyclesControllerService} from "../../../api/services";
+
+export enum RESOURCE_STATUSES {
+  DRAFT = 1,
+  UNDER_REVIEW,
+  REVIEWED,
+  UNDER_APPROVAL,
+  APPROVED,
+  ACTIVE,
+  EXPIRED,
+}
 
 export interface ResourceAnalysisStateModel {
   page: PageBcResources;
@@ -41,6 +49,11 @@ export class ResourceAnalysisState {
   @Selector([ResourceAnalysisState])
   static resourceAnalysis(state: ResourceAnalysisStateModel) {
     return state?.resourceAnalysis;
+  }
+
+  @Selector([ResourceAnalysisState])
+  static cycle(state: ResourceAnalysisStateModel) {
+    return state?.cycle;
   }
 
   @Selector([ResourceAnalysisState])
@@ -227,5 +240,37 @@ export class ResourceAnalysisState {
         );
       })
     );
+  }
+
+  @Action(ResourceAnalysisAction.ChangeStatus, { cancelUncompleted: true })
+  ChangeStatus(
+    { setState }: StateContext<ResourceAnalysisStateModel>,
+    { payload }: ResourceAnalysisAction.ChangeStatus
+  ) {
+    setState(
+      patch<ResourceAnalysisStateModel>({
+        blocking: true,
+      })
+    );
+    return this.bcResources
+      .changeStatus({ body: payload })
+      .pipe(
+        tap((res) => {
+          console.log(res);
+
+          // setState(
+          //   patch<ActivityAnalysisStateModel>({
+          //     activityAnalysis,
+          //   })
+          // );
+        }),
+        finalize(() => {
+          setState(
+            patch<ResourceAnalysisStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
   }
 }
