@@ -29,8 +29,8 @@
     "KEY_RESPONSE":"Key Responsibilities",
     "DIALOG": {
       "KEY_RES": "Key Responsibilities",
-      "EDIT_STAFF_REQ": "Edit Staff Requirements: Department Manager",
-      "ADD_STAFF_REQ": "Add Staff Requirements: Department Manager",
+      "EDIT_STAFF_REQ": "Edit Staff Requirements:",
+      "ADD_STAFF_REQ": "Add Staff Requirements",
       "HOURS":"Minimum number of staff required during resumption of work at the alternate site or in cases outside working hours",
       "HOURS_0_8":"Hours 8-0",
       "HOURS_0_24":"Hours 24-8",

@@ -76,10 +76,14 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
         switchMap(() => this.store.select(StaffState.staff)),
         takeUntil(this.destroy$),
         take(1),
-        tap((user) => {
+        tap((staff) => {
           this.loadPersonalDesignation(
             '',
             true);
+          this.form.patchValue({
+            ...staff,
+          });
+          this.patchValue(staff);
         })
       )
       .subscribe();
@@ -178,7 +182,21 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
       this.dynamicForm();
     });
   }
+  patchValue(staff) {
+    const data = JSON.parse(staff.minPersonnelRequired);
+    const hoursFormArray = this.form.get('hours') as FormArray;
 
+    for (const item of data.minPersonnelReq) {
+      const matchingControl = hoursFormArray.controls.find(
+        (control: FormGroup) => control.get('label')?.value === item.key
+      );
+
+      if (matchingControl) {
+        matchingControl.get('hour')?.setValue(item.value);
+      }
+      this.cdr.detectChanges()
+    }
+  }
   createForm(formFields): FormGroup {
     return this.formBuilder.group({
       id: formFields.id,
@@ -189,11 +207,11 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      description: [null, [Validators.required]],
+      keyResponsibilities: [null, [Validators.required]],
       resourceDesignation: [null, [Validators.required]],
-      p_emp: [null, [Validators.required]],
-      s_emp: [null, [Validators.required]],
-      s_emp1: [null, [Validators.required]],
+      primaryEmpName: [null, [Validators.required]],
+      secondaryEmp1Name: [null, [Validators.required]],
+      secondaryEmp2Name: [null, [Validators.required]],
       hours: this.formBuilder.array([]),
     });
     this.loadMinPersonal();
@@ -225,15 +243,15 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
     const staffWork: BcResourcesStaffReq = {
       id: this._staffId,
       isActive: true,
-      keyResponsibilities: staff.description,
+      keyResponsibilities: staff.keyResponsibilities,
       resource: {
         id: resource?.id
       },
       resourceDesignation: staff.resourceDesignation,
       minPersonnelRequired: formattedString,
-      primaryEmpName: staff.p_emp,
-      secondaryEmp1Name: staff.s_emp,
-      secondaryEmp2Name: staff.s_emp1
+      primaryEmpName: staff.primaryEmpName,
+      secondaryEmp1Name: staff.secondaryEmp1Name,
+      secondaryEmp2Name: staff.secondaryEmp2Name
     };
 
 
