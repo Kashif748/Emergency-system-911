@@ -8,17 +8,24 @@
       <p-toolbar>
         <div class="p-toolbar-group-left">
           <div class="p-col p-d-flex">
-            <button pButton [icon]="icon$ | async" routerLink="/bc/impact-analysis">
-            </button>
+            <button
+              pButton
+              [icon]="icon$ | async"
+              routerLink="/bc/impact-analysis"
+            ></button>
           </div>
           <h2 class="m-0">
             {{ activityAnalysis?.activity?.activityFrequence | translateObj }} -
             {{ activityAnalysis?.activity | translateObj }}
           </h2>
         </div>
-        <div class="p-toolbar-group-right" style="gap: 10px">
+        <div
+          *ngIf="activityStatus$ | async as activityStatus"
+          class="p-toolbar-group-right"
+          style="gap: 10px"
+        >
           <p-button
-            *ngIf="activityAnalysis?.status?.id != ACTIVITY_STATUSES.DRAFT"
+            *ngIf="activityStatus?.id != ACTIVITY_STATUSES.DRAFT"
             label="{{ 'DRAFT' | translate }}"
             styleClass="p-button-outlined p-button-danger"
             (click)="
@@ -26,9 +33,7 @@
             "
           ></p-button>
           <p-button
-            *ngIf="
-              activityAnalysis?.status?.id != ACTIVITY_STATUSES.UNDER_REVIEW
-            "
+            *ngIf="activityStatus?.id != ACTIVITY_STATUSES.UNDER_REVIEW"
             label="{{ 'REVIEW' | translate }}"
             styleClass="p-button-outlined"
             (click)="
@@ -36,9 +41,7 @@
             "
           ></p-button>
           <p-button
-            *ngIf="
-              activityAnalysis?.status?.id != ACTIVITY_STATUSES.UNDER_APPROVAL
-            "
+            *ngIf="activityStatus?.id != ACTIVITY_STATUSES.UNDER_APPROVAL"
             (click)="
               changeStatus(
                 activityAnalysis?.id,
@@ -72,7 +75,7 @@
         <div class="d-flex flex-column">
           <span class="mb-3"> {{ "STATUS" | translate }}</span>
           <span class="font-weight-bold text-primary">
-            {{ activityAnalysis?.status | translateObj }}
+            {{ activityStatus$ | async | translateObj }}
           </span>
         </div>
       </div>
