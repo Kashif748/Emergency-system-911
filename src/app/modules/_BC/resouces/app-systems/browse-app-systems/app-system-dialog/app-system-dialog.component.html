@@ -153,7 +153,7 @@
 
       <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="number" formControlName="users" pInputText/>
+        <input type="number" formControlName="numberOfUsers" pInputText/>
         <label>
           {{ "APP_SYS.USERS" | translate }}
           <strong class="required-asterisk"> * </strong>
@@ -161,9 +161,9 @@
       </span>
 
         <ng-container
-          *ngIf="form.controls['users'].touched && !form.controls['users'].valid &&
-          form.controls['users'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['users'].hasError('required')">
+          *ngIf="form.controls['numberOfUsers'].touched && !form.controls['numberOfUsers'].valid &&
+          form.controls['numberOfUsers'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['numberOfUsers'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>
@@ -171,7 +171,7 @@
 
       <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="number" formControlName="license" pInputText/>
+        <input type="number" formControlName="numberOfLicense" pInputText/>
         <label>
           {{ "APP_SYS.LICENSE" | translate }}
           <strong class="required-asterisk"> * </strong>
@@ -179,9 +179,9 @@
       </span>
 
         <ng-container
-          *ngIf="form.controls['license'].touched && !form.controls['license'].valid &&
-          form.controls['license'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['license'].hasError('required')">
+          *ngIf="form.controls['numberOfLicense'].touched && !form.controls['numberOfLicense'].valid &&
+          form.controls['numberOfLicense'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['numberOfLicense'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>
@@ -189,7 +189,7 @@
 
       <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="number" formControlName="license_Type" pInputText/>
+        <input type="text" formControlName="licenseType" pInputText/>
         <label>
           {{ "APP_SYS.LICENSE_TYPE" | translate }}
           <strong class="required-asterisk"> * </strong>
@@ -197,9 +197,9 @@
       </span>
 
         <ng-container
-          *ngIf="form.controls['license_Type'].touched && !form.controls['license_Type'].valid &&
-          form.controls['license_Type'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['license_Type'].hasError('required')">
+          *ngIf="form.controls['licenseType'].touched && !form.controls['licenseType'].valid &&
+          form.controls['licenseType'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['licenseType'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>

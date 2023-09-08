@@ -221,8 +221,6 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
       if (value) {
         this.loadMinPersonal();
       }
-      console.log('Value from opened$: ', value);
-      // You can use 'value' in your code as needed.
     });
     this.defaultFormValue = {
       ...this.defaultFormValue,

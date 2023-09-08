@@ -110,7 +110,9 @@ export class BrowseAppSystemState {
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseAppSystemAction.LoadAppSys(),
+          new BrowseAppSystemAction.LoadAppSys({
+            resourceId: payload.resource?.id,
+          }),
           new BrowseAppSystemAction.ToggleDialog({}),
         ]);
       }),
@@ -128,7 +130,9 @@ export class BrowseAppSystemState {
     return dispatch(new AppSystemAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseAppSystemAction.LoadAppSys());
+        dispatch(new BrowseAppSystemAction.LoadAppSys({
+          resourceId: payload.resource?.id,
+        }));
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
