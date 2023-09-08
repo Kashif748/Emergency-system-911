@@ -139,6 +139,7 @@ export class ImpactAnalysisState {
   ) {
     return this.cyclesController
       .getAll22({
+        isActive :true,
         pageable: {
           page: payload?.page,
           size: payload?.size,
