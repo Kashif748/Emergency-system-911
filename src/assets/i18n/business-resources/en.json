@@ -17,10 +17,10 @@
   "COMPLETED": "Completed",
   "IN_PROGRESS": "In Progress",
   "POINT_FAILURE": "Single Point of Failure",
-  "REMOTELY":"Employees required to work remotely",
-  "PERSON":"Personnel needed at the workplace",
-  "NON_VITAL":"Non-Vital Activities",
-  "VITAL":"Vital Activities",
+  "REMOTELY":"Employees Needed Remotely",
+  "PERSON":"Employees Needed On-site",
+  "NON_VITAL":"Non-Critical Activities",
+  "VITAL":"Critical Activities",
 
   "STAFF_REQ": {
     "TAB_LABEL": "Staff Requirements",
@@ -54,7 +54,7 @@
     "OTHER_REMOTE":"Other Needs to Work Remotely",
     "STAFF_DISTRI":"Staff Distribution (Inside Workplace)",
     "STAFF_DISTRIBUTION_OUTSIDE":"Staff Distribution (Outside Workplace)",
-    "OTHER_REMARK":"ملاحظات أخرى"
+    "OTHER_REMARK":"Other Remarks"
   },
   "RECORDS": {
     "TAB_LABEL": "Records",

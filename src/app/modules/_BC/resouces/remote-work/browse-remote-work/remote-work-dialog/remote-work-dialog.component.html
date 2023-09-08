@@ -7,66 +7,134 @@
   ></button>
 </div>
 
+<!-- as a dialog -->
 <p-dialog
-  [visible]="opened$ | async" (visibleChange)="close()"
+  #dialog
+  [visible]="opened$ | async"
   [modal]="true"
+  (visibleChange)="close()"
   [style]="{ width: '55vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
   [maximizable]="true"
   [baseZIndex]="10000"
-  [draggable]="false"
+  [draggable]="true"
   [resizable]="false"
 >
   <ng-template pTemplate="header">
-    <h3>
-      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'REMOTE_WORK.EDIT_WORK' | translate}}
-
-      </ng-container>
-      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'REMOTE_WORK.ADD_WORK' | translate}}
-      </ng-container>
-
-      <ng-container *ngIf="viewOnly$ | async">
-        {{'REMOTE_WORK.VIEW_WORK' | translate}}
-      </ng-container>
-    </h3>
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
 
-  <form [formGroup]="form" class="p-fluid p-grid mt-5">
-    <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="pDesignation" pInputText />
-        <label>
-          {{ "REMOTE_WORK.PERSONAL_DESIG" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-      <ng-container
-        *ngIf="
-          form.controls['pDesignation'].touched &&
-          !form.controls['pDesignation'].valid &&
-          form.controls['pDesignation'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['pDesignation'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px"></div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+  <!-- templates header -->
+  <ng-template #header>
+    <div class="d-flex">
+      <h3>
+        <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+          {{'REMOTE_WORK.EDIT_WORK' | translate}}
+
+        </ng-container>
+        <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+          {{'REMOTE_WORK.ADD_WORK' | translate}}
+        </ng-container>
+
+        <ng-container *ngIf="viewOnly$ | async">
+          {{'REMOTE_WORK.VIEW_WORK' | translate}}
+        </ng-container>
+      </h3>
     </div>
 
-    <div class="p-field p-col-12 p-md-6">
+    <span class="flex-grow-1"></span>
+    <a
+      *ngIf="asDialog"
+      queryParamsHandling="merge"
+      pRipple
+      pButton
+      icon="pi pi-link"
+      class="p-button-rounded p-button-text p-button-plain"
+    ></a>
+  </ng-template>
+
+
+  <!-- templates content -->
+  <ng-template #content>
+    <div
+      class="w-100 pt-2"
+      [ngStyle]="{
+      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '65vh'
+    }"
+    >
+      <p-blockUI>
+        <p-progressSpinner></p-progressSpinner>
+      </p-blockUI>
+      <form [formGroup]="form" class="p-fluid p-grid mt-5">
+        <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <p-dropdown [options]="" [autoDisplayFirst]="false" formControlName="pLevel"
-                            dataKey="id" [showClear]="true" appendTo="body">
-                  <ng-template let-option pTemplate="selectedItem">
-                    {{ option | translateObj : 'name' }}
+                <p-dropdown #resourceDesignation [options]="resourceDesignation$ | async" [autoDisplayFirst]="false"
+                            formControlName="resourceDesignation" [filter]="true"
+                            (onFilter)="loadPersonalDesignation($event?.filter)" dataKey="id"
+                            (onShow)="loadPersonalDesignation(resourceDesignation.filterValue, true)" [showClear]="true"
+                            appendTo="body"
+                            styleClass="w-100" class="w-100"
+                            [dropdownIcon]="(resourceDesignationLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{ item | translateObj: 'name'}}
                   </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option | translateObj : 'name' }}
+
+                  <ng-template let-item pTemplate="item">
+                  {{ item | translateObj: 'name'}}
+                  </ng-template>
+                </p-dropdown>
+               <label>
+                  {{'REMOTE_WORK.PERSONAL_DESIG' | translate}}
+                  <strong class="required-asterisk"> * </strong>
+                </label>
+              </span>
+          <ng-container *ngIf="form.controls['resourceDesignation'].touched && !form.controls['resourceDesignation'].valid &&
+          form.controls['resourceDesignation'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['resourceDesignation'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
+        </div>
+
+
+        <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <p-dropdown #priorityLevel [options]="priorityLevel$ | async" [autoDisplayFirst]="false"
+                            formControlName="importantLevel" [filter]="true"
+                            (onFilter)="loadPriorityLevel($event?.filter)" dataKey="id"
+                            (onShow)="loadPriorityLevel(priorityLevel.filterValue, true)" [showClear]="true"
+                            appendTo="body"
+                            styleClass="w-100" class="w-100"
+                            [dropdownIcon]="(priorityLevelLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{ item | translateObj: 'name'}}
+                  </ng-template>
+
+                  <ng-template let-item pTemplate="item">
+                  {{ item | translateObj: 'name'}}
                   </ng-template>
                 </p-dropdown>
                <label>
@@ -74,20 +142,20 @@
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
-      <ng-container *ngIf="form.controls['pLevel'].touched && !form.controls['pLevel'].valid &&
-          form.controls['pLevel'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['pLevel'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <ng-container *ngIf="form.controls['importantLevel'].touched && !form.controls['importantLevel'].valid &&
+          form.controls['importantLevel'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['importantLevel'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
+        </div>
 
-    <div class="p-field p-col-12 p-md-12">
+        <div class="p-field p-col-12 p-md-12">
               <span class="p-float-label">
                 <textarea
                   pInputText
                   type="text"
-                  formControlName="description"
+                  formControlName="skillsNeeded"
                   rows="5"
                 ></textarea>
                 <label>{{ 'REMOTE_WORK.TASK_REMOTE' | translate }}
@@ -95,23 +163,29 @@
                 </label>
               </span>
 
-      <ng-container
-        *ngIf="form.controls['description'].touched && !form.controls['description'].valid && form.controls['description'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['description'].hasError('required')">
-          {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <ng-container
+            *ngIf="form.controls['skillsNeeded'].touched && !form.controls['skillsNeeded'].valid && form.controls['skillsNeeded'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['skillsNeeded'].hasError('required')">
+              {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+            </p>
+          </ng-container>
+        </div>
 
-    <div class="p-field p-col-12 p-md-6">
+        <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <p-dropdown [options]="" [autoDisplayFirst]="false" formControlName="internal_system"
-                            dataKey="id" [showClear]="true" appendTo="body">
-                  <ng-template let-option pTemplate="selectedItem">
-                    {{ option | translateObj : 'name' }}
+                <p-dropdown #system [options]="systems$ | async" [autoDisplayFirst]="false"
+                            formControlName="resourcesRemoteWorkSystemsInternal" [filter]="true"
+                            (onFilter)="loadSystems($event?.filter)" dataKey="id"
+                            (onShow)="loadSystems(system.filterValue, true)" [showClear]="true"
+                            appendTo="body"
+                            styleClass="w-100" class="w-100"
+                            [dropdownIcon]="(systemsLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
+                  <ng-template let-item pTemplate="selectedItem">
+                    {{ item | translateObj: 'name'}}
                   </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option | translateObj : 'name' }}
+
+                  <ng-template let-item pTemplate="item">
+                  {{ item | translateObj: 'name'}}
                   </ng-template>
                 </p-dropdown>
                <label>
@@ -119,18 +193,24 @@
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
-      <ng-container *ngIf="form.controls['internal_system'].touched && !form.controls['internal_system'].valid &&
-          form.controls['internal_system'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['internal_system'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <ng-container *ngIf="form.controls['resourcesRemoteWorkSystemsInternal'].touched && !form.controls['resourcesRemoteWorkSystemsInternal'].valid &&
+          form.controls['resourcesRemoteWorkSystemsInternal'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['resourcesRemoteWorkSystemsInternal'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
+        </div>
 
-    <div class="p-field p-col-12 p-md-6">
+        <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <p-dropdown [options]="" [autoDisplayFirst]="false" formControlName="other"
-                            dataKey="id" [showClear]="true" appendTo="body">
+                <p-dropdown #system [options]="systems$ | async" [autoDisplayFirst]="false"
+                            formControlName="resourcesRemoteWorkSystemsExternal"
+                            [filter]="true"
+                            (onFilter)="loadSystems($event?.filter)" dataKey="id"
+                            (onShow)="loadSystems(system.filterValue, true)" [showClear]="true"
+                            appendTo="body"
+                            styleClass="w-100" class="w-100"
+                            [dropdownIcon]="(systemsLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
                   <ng-template let-option pTemplate="selectedItem">
                     {{ option | translateObj : 'name' }}
                   </ng-template>
@@ -143,57 +223,57 @@
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
-      <ng-container *ngIf="form.controls['other'].touched && !form.controls['other'].valid &&
-          form.controls['other'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['other'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <ng-container *ngIf="form.controls['resourcesRemoteWorkSystemsExternal'].touched && !form.controls['resourcesRemoteWorkSystemsExternal'].valid &&
+          form.controls['resourcesRemoteWorkSystemsExternal'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['resourcesRemoteWorkSystemsExternal'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
+        </div>
 
 
-    <div class="p-field p-col-12 p-md-6">
+        <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="number" formControlName="inside" pInputText/>
+        <input type="number" formControlName="staffDistributionIn" pInputText/>
         <label>
           {{ "REMOTE_WORK.STAFF_DISTRI" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
 
-      <ng-container
-        *ngIf="form.controls['inside'].touched && !form.controls['inside'].valid &&
-          form.controls['inside'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['inside'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <ng-container
+            *ngIf="form.controls['staffDistributionIn'].touched && !form.controls['staffDistributionIn'].valid &&
+          form.controls['staffDistributionIn'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['staffDistributionIn'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
+        </div>
 
-    <div class="p-field p-col-12 p-md-6">
+        <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="number" formControlName="outside" pInputText/>
+        <input type="number" formControlName="staffDistributionOut" pInputText/>
         <label>
           {{ "REMOTE_WORK.STAFF_DISTRIBUTION_OUTSIDE" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
 
-      <ng-container
-        *ngIf="form.controls['outside'].touched && !form.controls['outside'].valid &&
-          form.controls['outside'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['outside'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <ng-container
+            *ngIf="form.controls['staffDistributionOut'].touched && !form.controls['staffDistributionOut'].valid &&
+          form.controls['staffDistributionOut'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['staffDistributionOut'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+          </ng-container>
+        </div>
 
-    <div class="p-field p-col-12 p-md-12">
+        <div class="p-field p-col-12 p-md-12">
               <span class="p-float-label">
                 <textarea
                   pInputText
                   type="text"
-                  formControlName="otherRemarks"
+                  formControlName="notes"
                   rows="5"
                 ></textarea>
                 <label>{{ 'REMOTE_WORK.OTHER_REMARK' | translate }}
@@ -201,27 +281,55 @@
                 </label>
               </span>
 
-      <ng-container
-        *ngIf="form.controls['otherRemarks'].touched && !form.controls['otherRemarks'].valid && form.controls['otherRemarks'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['otherRemarks'].hasError('required')">
-          {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-        </p>
-      </ng-container>
+          <ng-container
+            *ngIf="form.controls['notes'].touched && !form.controls['notes'].valid && form.controls['notes'].dirty">
+            <p class="p-error mb-0" *ngIf="form.controls['notes'].hasError('required')">
+              {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+            </p>
+          </ng-container>
+        </div>
+
+      </form>
+
+
     </div>
+  </ng-template>
 
-  </form>
 
-  <ng-template pTemplate="footer">
-    <div class="p-col text-center">
-      <div class="text-center" *ngIf="!(viewOnly$ | async)">
+
+  <!--footer-->
+  <ng-template #footer>
+    <div class="p-col p-d-flex">
+      <button
+        *ngIf="asDialog"
+        pButton
+        icon="pi pi-times"
+        (click)="close()"
+        label="{{ 'ACTIONS.CLOSE' | translate }}"
+      ></button>
+
+      <div class="ml-dir-auto"></div>
+
+      <ng-container *ngIf="!(viewOnly$ | async)">
+        <div class="mx-1">
+          <button
+            pButton
+            type="button"
+            label="{{ 'ACTIONS.CLEAR' | translate }}"
+            icon="pi pi-replay"
+            class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"
+          ></button>
+        </div>
+      </ng-container>
+
+      <div class="mx-1" *ngIf="!(viewOnly$ | async)">
         <button
           pButton
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
-          [disabled]="form.invalid"
+          [loading]="blocking$ | async"
           (click)="submit()"
         ></button>
       </div>
     </div>
   </ng-template>
-</p-dialog>

@@ -28,14 +28,20 @@ import {NgxsModule} from "@ngxs/store";
 import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcrumb.component";
 import {BlockUIModule} from "primeng/blockui";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
-import {BrowseImpactAnalysisComponent} from "./browse-impact-analysis/browse-impact-analysis.component";
-import {ActivitiesDialogComponent} from "./browse-impact-analysis/activities-dialog/activities-dialog.component";
-import {ContentImpactAnalysisComponent} from "./browse-impact-analysis/content-impact-analysis/content-impact-analysis.component";
-import {CycleDialogComponent} from "./browse-impact-analysis/cycle-dialog/cycle-dialog.component";
+import {BrowseImpactAnalysisComponent} from "./reopen-analysis-mgmt/browse-impact-analysis/browse-impact-analysis.component";
+import {ActivitiesDialogComponent} from "./reopen-analysis-mgmt/browse-impact-analysis/activities-dialog/activities-dialog.component";
+import {ContentImpactAnalysisComponent} from "./reopen-analysis-mgmt/browse-impact-analysis/content-impact-analysis/content-impact-analysis.component";
+import {CycleDialogComponent} from "./reopen-analysis-mgmt/browse-impact-analysis/cycle-dialog/cycle-dialog.component";
 import {InputSwitchModule} from "primeng/inputswitch";
 import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
 import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
 import { CheckboxModule } from 'primeng/checkbox';
+import { BrowseResourceAnalysisComponent } from './reopen-analysis-mgmt/browse-resource-analysis/browse-resource-analysis.component';
+import { ContentResourceAnalysisComponent } from './reopen-analysis-mgmt/browse-resource-analysis/content-resource-analysis/content-resource-analysis.component';
+import { ResourceDialogComponent } from './reopen-analysis-mgmt/browse-resource-analysis/resource-dialog/resource-dialog.component';
+import { ReopenAnalysisMgmtComponent } from './reopen-analysis-mgmt/reopen-analysis-mgmt.component';
+import {TabViewModule} from "primeng/tabview";
+import {BrowseResourceAnalysisState} from "./states/browse-resource-analysis.state";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -47,11 +53,11 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [BrowseImpactAnalysisComponent, ContentImpactAnalysisComponent, CycleDialogComponent, ActivitiesDialogComponent],
+  declarations: [BrowseImpactAnalysisComponent, ContentImpactAnalysisComponent, CycleDialogComponent, ActivitiesDialogComponent, BrowseResourceAnalysisComponent, ContentResourceAnalysisComponent, ResourceDialogComponent, ReopenAnalysisMgmtComponent],
   imports: [
     CommonModule,
     ImpactAnalysisRoutingModule,
-    NgxsModule.forFeature([BrowseImpactAnalysisState]),
+    NgxsModule.forFeature([BrowseImpactAnalysisState, BrowseResourceAnalysisState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
@@ -86,7 +92,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     InputSwitchModule,
     TreeSelectModule,
     CheckboxModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    TabViewModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

@@ -35,6 +35,8 @@ import {SidebarModule} from "primeng/sidebar";
 import {PaginatorModule} from "primeng/paginator";
 import {OrganizationChartModule} from "primeng/organizationchart";
 import {BrowseRemoteWorkState} from "./states/browse-remote-work.state";
+import {BlockUIModule} from "primeng/blockui";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -84,7 +86,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     DividerModule,
     ToggleButtonModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    BlockUIModule,
+    ProgressSpinnerModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

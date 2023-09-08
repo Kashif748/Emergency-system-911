@@ -1,5 +1,5 @@
 <section>
-  <header class="d-flex p-jc-between p-ai-center border-bottom py-8">
+  <header class="d-flex p-jc-between p-ai-center border-bottom py-4">
     <h4 class="text-info p-text-bold mb-0">{{ "REMOTE_WORK.WORK-REMOTLY" | translate }}</h4>
 
     <app-remote-work-dialog></app-remote-work-dialog>
@@ -102,18 +102,16 @@
                     }"
                   ></div>
                 </td>
-                <td class="min-w-100px">
+                <td class="min-w-100px" (click)="openView(item.id)">
                   {{ rowIndex + 1 }}
                 </td>
-                <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'criticality'}}
+                <td class="min-w-200px max-w-300px" (click)="openView(item.id)">
+                  {{ item.resourceDesignation | translateObj : 'name'}}
                 </td>
 
-                <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'name'}}
+                <td class="min-w-200px max-w-300px" (click)="openView(item.id)">
+                  {{ item.importantLevel | translateObj : 'name'}}
                 </td>
-
-
 
                 <td>
                   <button
@@ -146,7 +144,9 @@
         </ng-template>
       </ng-container>
 
-      <p-paginator>
+      <p-paginator #pg [first]="pageRequest?.first" [rows]="pageRequest?.rows" [totalRecords]="totalRecords"
+                   [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
+                   currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)">
       </p-paginator>
     </div>
   </div>
