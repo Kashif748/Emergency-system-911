@@ -5,15 +5,19 @@ import {catchError, finalize, tap} from 'rxjs/operators';
 import {patch} from '@ngxs/store/operators';
 import {BcResourcesStaffReqControllerService} from "../../../../api/services/bc-resources-staff-req-controller.service";
 import {PageBcResourcesStaffReq} from "../../../../api/models/page-bc-resources-staff-req";
-import {BcResourcesStaffReq} from "../../../../api/models/bc-resources-staff-req";
 import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 import {BcResourcesMinPersonnelReqControllerService} from "../../../../api/services/bc-resources-min-personnel-req-controller.service";
 import {PageBcResourcesMinPersonnelReq} from "../../../../api/models/page-bc-resources-min-personnel-req";
+import {PageBcResourcesDesignation} from "../../../../api/models/page-bc-resources-designation";
+import {BcResourcesStaffReq} from "../../../../api/models/bc-resources-staff-req";
+import {BcResourcesDesignationControllerService} from "../../../../api/services/bc-resources-designation-controller.service";
 
 export interface StaffStateModel {
   page: PageBcResourcesStaffReq;
   staff: BcResourcesStaffReq;
   minPersonalPage: PageBcResourcesMinPersonnelReq;
+  designationPage: PageBcResourcesDesignation;
+  designationLoading: boolean;
   loading: boolean;
   minPersonalPageLoading: boolean;
   blocking: boolean;
@@ -31,7 +35,8 @@ export class StaffState {
    */
   constructor(
     private staff: BcResourcesStaffReqControllerService,
-    private minPerson: BcResourcesMinPersonnelReqControllerService
+    private minPerson: BcResourcesMinPersonnelReqControllerService,
+    private personalDesignation: BcResourcesDesignationControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -48,6 +53,16 @@ export class StaffState {
   @Selector([StaffState])
   static minPersonalPageLoading(state: StaffStateModel) {
     return state?.minPersonalPageLoading;
+  }
+
+  @Selector([StaffState])
+  static designationPage(state: StaffStateModel) {
+    return state?.designationPage?.content;
+  }
+
+  @Selector([StaffState])
+  static designationLoading(state: StaffStateModel) {
+    return state?.designationLoading;
   }
 
   @Selector([StaffState])
@@ -119,7 +134,7 @@ export class StaffState {
   }
 
   @Action(StaffAction.LoadMinPage, { cancelUncompleted: true })
-  loadPersonalDesi(
+  loadMInPersonal(
     { setState }: StateContext<StaffStateModel>,
     { payload }: StaffAction.LoadMinPage
   ) {
@@ -157,6 +172,51 @@ export class StaffState {
           setState(
             patch<StaffStateModel>({
               minPersonalPageLoading: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(StaffAction.LoadDesignationPage, { cancelUncompleted: true })
+  loadPersonalDesignation(
+    { setState }: StateContext<StaffStateModel>,
+    { payload }: StaffAction.LoadDesignationPage
+  ) {
+    setState(
+      patch<StaffStateModel>({
+        designationLoading: true,
+      })
+    );
+    return this.personalDesignation
+      .getAsPage2({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<StaffStateModel>({
+              designationPage: res.result,
+              designationLoading: false,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<StaffStateModel>({
+              designationPage: { content: [], totalElements: 0 },
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {
+          setState(
+            patch<StaffStateModel>({
+              designationLoading: false,
             })
           );
         })

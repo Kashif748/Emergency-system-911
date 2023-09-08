@@ -107,15 +107,15 @@
                   {{ rowIndex + 1 }}
                 </td>
                 <td class="min-w-100px max-w-150px" >
-                  {{ item | translateObj : 'criticality'}}
+                  {{ item.resourceDesignation| translateObj : 'name'}}
                 </td>
 
                 <td class="min-w-100px max-w-150px">
-                  {{ item | translateObj : 'name'}}
+                  {{ item.keyResponsibilities}}
                 </td>
 
                 <td>
-                  <div class="button-row">
+                  <!--<div class="button-row">
                     <button
                       pButton
                       pRipple
@@ -138,8 +138,8 @@
                       (click)="openDialog(1)"
                       class="p-button-rounded p-button-text my-auto p-button-plain"
                     ></button>
-                  </div>
-                  <!--<button
+                  </div>-->
+                  <button
                     pButton
                     pRipple
                     type="button"
@@ -152,7 +152,7 @@
                     appendTo="body"
                     [popup]="true"
                     [model]="item.actions"
-                  ></p-menu>-->
+                  ></p-menu>
                 </td>
               </tr>
             </ng-template>

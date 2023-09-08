@@ -5,13 +5,13 @@ import {ActivatedRoute} from "@angular/router";
 import {Select, Store} from "@ngxs/store";
 import {Observable, Subject} from "rxjs";
 import {MessageHelper} from "@core/helpers/message.helper";
-import {BcResourcesStaffReq} from "../../../../../api/models/bc-resources-staff-req";
 import {StaffState} from "@core/states/bc-resources/staff/staff.state";
 import {BrowseStaffState, BrowseStaffStateModel} from "../states/browse-staff.state";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {filter, map} from "rxjs/operators";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BrowseStaffAction} from "../states/browse-staff.action";
+import {BcResourcesStaffReq} from "../../../../../api/models/bc-resources-staff-req";
 
 @Component({
   selector: 'app-browse-staff-req',
