@@ -123,10 +123,10 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
+    this.buildForm();
     this.auditLoadPersonalDesignation$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
       .subscribe((searchText) => {
@@ -186,7 +186,7 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
     const data = JSON.parse(staff.minPersonnelRequired);
     const hoursFormArray = this.form.get('hours') as FormArray;
 
-    for (const item of data.minPersonnelReq) {
+    for (const item of data?.minPersonnelReq) {
       const matchingControl = hoursFormArray.controls.find(
         (control: FormGroup) => control.get('label')?.value === item.key
       );
@@ -214,7 +214,16 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
       secondaryEmp2Name: [null, [Validators.required]],
       hours: this.formBuilder.array([]),
     });
-    this.loadMinPersonal();
+    this.opened$?.pipe(
+      take(1)
+    ).subscribe((value) => {
+      // 'value' contains the value emitted by the 'opened$' observable
+      if (value) {
+        this.loadMinPersonal();
+      }
+      console.log('Value from opened$: ', value);
+      // You can use 'value' in your code as needed.
+    });
     this.defaultFormValue = {
       ...this.defaultFormValue,
     };
