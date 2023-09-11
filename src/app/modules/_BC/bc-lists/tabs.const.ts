@@ -36,7 +36,7 @@ export const TABS: MenuItem[] = [
     label: 'ACTIVETY_FREQUENCY',
     icon: 'flaticon2-refresh',
     state: {
-      routerLink: 'activity-frquency',
+      routerLink: 'activity-frequency',
       requiredVersion: false,
     },
   },
