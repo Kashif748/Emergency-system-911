@@ -35,7 +35,7 @@ export enum ACTIVITY_STATUSES {
 export interface ActivityAnalysisStateModel {
   page: PageBcActivityAnalysis;
   activityAnalysis: BcActivityAnalysis;
-  activityStatus : ActivityAnalysisStatusAction,
+  activityStatus: ActivityAnalysisStatusAction;
   cycle: BcCycles;
   loading: boolean;
   blocking: boolean;
@@ -177,22 +177,24 @@ export class ActivityAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.getOneByIdContainingActions({ id: payload.id }).pipe(
-      tap((bc) => {
-        setState(
-          patch<ActivityAnalysisStateModel>({
-            activityStatus: bc.result?.status,
-          })
-        );
-      }),
-      finalize(() => {
-        setState(
-          patch<ActivityAnalysisStateModel>({
-            blocking: false,
-          })
-        );
-      })
-    );
+    return this.activitiesAnalysisController
+      .getOneByIdContainingActions({ id: payload.id })
+      .pipe(
+        tap((bc) => {
+          setState(
+            patch<ActivityAnalysisStateModel>({
+              activityStatus: bc.result?.status,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ActivityAnalysisStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
   }
 
   @Action(ActivityAnalysisAction.GetCycle, { cancelUncompleted: true })
@@ -287,7 +289,7 @@ export class ActivityAnalysisState {
 
           // setState(
           //   patch<ActivityAnalysisStateModel>({
-          //     activityAnalysis,
+          //     activityStatus : res,
           //   })
           // );
         }),

@@ -134,7 +134,7 @@ export class BrowseActivityAnalysisState {
       tap(() => {
         this.messageHelper.success();
         dispatch(
-          new BrowseActivityAnalysisAction.GetActivityAnalysis({
+          new BrowseActivityAnalysisAction.GetActivityAnalysisStatus({
             id: payload.activityAnalysisId,
           })
         );

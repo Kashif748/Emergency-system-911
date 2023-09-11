@@ -47,7 +47,9 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   public impactTotal$: Observable<number>;
 
   tabs = TABS;
-
+  displayNote = false;
+  notes = '';
+  newStatus: BcActivityAnalysisChangeStatusDto;
   public dir$ = this.lang.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
   );
@@ -110,17 +112,31 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
         );
       });
   }
-  changeStatus(id, status: ACTIVITY_STATUSES) {
-    const newStatus: BcActivityAnalysisChangeStatusDto = {
+  changeStatus(id, action) {
+    this.newStatus = {
       activityAnalysisId: id,
-      statusId: status,
+      statusId: action?.id,
       notes: '',
     };
-    this.store.dispatch([
-      new BrowseActivityAnalysisAction.ChangeStatus(newStatus),
-    ]);
+    if (action.requiresNote) {
+      this.displayNote = true;
+      return;
+    } else {
+      this.applyStatus();
+    }
   }
-
+  applyStatus() {
+    this.newStatus = {
+      ...this.newStatus,
+      notes: this.notes,
+    };
+    this.store
+      .dispatch([new BrowseActivityAnalysisAction.ChangeStatus(this.newStatus)])
+      .toPromise()
+      .then(() => {
+        this.displayNote = false;
+      });
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

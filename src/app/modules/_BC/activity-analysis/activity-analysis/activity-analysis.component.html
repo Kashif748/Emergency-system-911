@@ -24,33 +24,14 @@
           class="p-toolbar-group-right"
           style="gap: 10px"
         >
-          <p-button
-            *ngIf="activityStatus?.id != ACTIVITY_STATUSES.DRAFT"
-            label="{{ 'DRAFT' | translate }}"
-            styleClass="p-button-outlined p-button-danger"
-            (click)="
-              changeStatus(activityAnalysis?.id, ACTIVITY_STATUSES.DRAFT)
-            "
-          ></p-button>
-          <p-button
-            *ngIf="activityStatus?.id != ACTIVITY_STATUSES.UNDER_REVIEW"
-            label="{{ 'REVIEW' | translate }}"
-            styleClass="p-button-outlined"
-            (click)="
-              changeStatus(activityAnalysis?.id, ACTIVITY_STATUSES.UNDER_REVIEW)
-            "
-          ></p-button>
-          <p-button
-            *ngIf="activityStatus?.id != ACTIVITY_STATUSES.UNDER_APPROVAL"
-            (click)="
-              changeStatus(
-                activityAnalysis?.id,
-                ACTIVITY_STATUSES.UNDER_APPROVAL
-              )
-            "
-            label="{{ 'APPROVE' | translate }}"
-          ></p-button>
-          <p-button icon="pi pi-ellipsis-v"></p-button>
+          <ng-container *ngFor="let action of activityStatus?.actions">
+            <p-button
+              [loading]="blocking$ | async"
+              label="{{ action | translateObj }}"
+              [styleClass]="action?.cssClass"
+              (click)="changeStatus(activityAnalysis?.id, action)"
+            ></p-button>
+          </ng-container>
         </div>
       </p-toolbar>
       <div class="d-flex p-5 sub-header p-jc-around">
@@ -172,3 +153,37 @@
     </section>
   </ng-container>
 </ng-container>
+
+<!--  notes dialog -->
+
+<p-dialog [(visible)]="displayNote" [style]="{ width: '40vw' }">
+  <ng-template pTemplate="header">
+    {{ "NOTES.NOTES" | translate }}
+  </ng-template>
+  <div class="p-field p-col-12">
+    <span class="p-float-label">
+      <textarea
+        class="w-100"
+        pInputText
+        type="text"
+        [(ngModel)]="notes"
+        rows="5"
+      ></textarea>
+      <label>{{ "NOTES.NOTES" | translate }}</label>
+    </span>
+  </div>
+  <p-footer>
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [loading]="blocking$ | async"
+          [disabled]="notes === ''"
+          (click)="applyStatus()"
+        ></button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
