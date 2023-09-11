@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ILangFacade} from "@core/facades/lang.facade";
 import {TranslateService} from "@ngx-translate/core";
-import {BrowseRtoAction} from "../../../../bc-lists/rto/states/browse-rto.action";
 import {Store} from "@ngxs/store";
 import {BrowseStaffAction} from "../../states/browse-staff.action";
+import {PageRequestModel} from "@core/models/page-request.model";
+import {LazyLoadEvent} from "primeng/api";
+import {BcResourcesStaffReq} from "../../../../../../api/models/bc-resources-staff-req";
 
 @Component({
   selector: 'app-staff-req-content',
@@ -11,12 +13,20 @@ import {BrowseStaffAction} from "../../states/browse-staff.action";
   styleUrls: ['./staff-req-content.component.scss']
 })
 export class StaffReqContentComponent implements OnInit {
-  loading = false;
-  columns = ['test', 'test2'];
-  page = [
-    {id: 1, criticalityAr: 'الأربعاء', criticalityEn: 'Test1122', nameAr: 'الأربعاء', nameEn: 'Test2'},
-    {id: 2, criticalityAr: 'الأربعاء', criticalityEn: 'Test1122', nameAr: 'الأربعاء', nameEn: 'Test2'},
-    ]
+  @Input()
+  loading: boolean;
+  @Input()
+  page: BcResourcesStaffReq[];
+  @Input()
+  columns: string[];
+  @Input()
+  totalRecords: number;
+  @Input()
+  pageRequest: PageRequestModel;
+
+  @Output()
+  onPageChange = new EventEmitter<LazyLoadEvent>();
+
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
@@ -24,10 +34,18 @@ export class StaffReqContentComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.onPageChange.emit({
+      first: this.pageRequest?.first,
+      rows: this.pageRequest?.rows,
+    });
+  }
+
+  openView(id?: number) {
+    this.store.dispatch(new BrowseStaffAction.OpenView({ staffId: id }));
   }
 
   openDialog(id?: number) {
-    this.store.dispatch(new BrowseStaffAction.ToggleDialog({ staffId: id }));
   }
+
 
 }

@@ -4,7 +4,12 @@ import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageHelper} from '@core/helpers/message.helper';
 import {ApiHelper} from '@core/helpers/api.helper';
+import {BrowseRemoteWorkStateModel} from "../../remote-work/states/browse-remote-work.state";
+import {iif, patch} from "@ngxs/store/operators";
+import {EMPTY} from "rxjs";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseRecordAction} from "./browse-records.action";
+import {RecordsAction} from "@core/states/bc-resources/records/records.action";
 
 export interface BrowseRecordStateModel {
   pageRequest: PageRequestModel;
@@ -48,6 +53,72 @@ export class BrowseRecordsState {
   }
 
   /* ********************** ACTIONS ************************* */
+  @Action(BrowseRecordAction.LoadRecords)
+  loadRecord(
+    { setState, dispatch, getState }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseRecordAction.LoadRecords
+  ) {
+    setState(
+      patch<BrowseRemoteWorkStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+
+    return dispatch(
+      new RecordsAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        resourceId: payload.resourceId,
+      })
+    );
+  }
+  @Action(BrowseRecordAction.CreateRecord)
+  createRecord(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseRecordAction.CreateRecord
+  ) {
+    return dispatch(new RecordsAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([
+          new BrowseRecordAction.LoadRecords({
+            resourceId: payload.resource?.id,
+          }),
+          new BrowseRecordAction.ToggleDialog({}),
+        ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+  @Action(BrowseRecordAction.UpdateRecord)
+  updateRecord(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseRecordAction.UpdateRecord
+  ) {
+    return dispatch(new RecordsAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseRecordAction.LoadRecords({
+          resourceId: payload.resource?.id,
+        }));
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseRecordAction.ToggleDialog({}));
+      })
+    );
+  }
   @Action(BrowseRecordAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
     { dispatch }: StateContext<BrowseRecordStateModel>,

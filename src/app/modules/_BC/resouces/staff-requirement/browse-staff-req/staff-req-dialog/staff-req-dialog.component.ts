@@ -1,14 +1,24 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ILangFacade} from "@core/facades/lang.facade";
-import {GenericValidators} from "@shared/validators/generic-validators";
-import {BrowseRtoAction} from "../../../../bc-lists/rto/states/browse-rto.action";
 import {FormUtils} from "@core/utils/form.utils";
 import {Observable, Subject} from "rxjs";
-import {map, tap} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
+import {auditTime, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BrowseStaffAction} from "../../states/browse-staff.action";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
+import {Dialog} from "primeng/dialog";
+import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
+import {IAuthService} from "@core/services/auth.service";
+import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
+import {LazyLoadEvent} from "primeng/api";
+import {BcResourcesMinPersonnelReq} from "../../../../../../api/models/bc-resources-min-personnel-req";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {StaffState} from "@core/states/bc-resources/staff/staff.state";
+import {TranslateService} from "@ngx-translate/core";
+import {BcResourcesStaffReq} from "../../../../../../api/models/bc-resources-staff-req";
+import {Dropdown} from "primeng/dropdown";
+import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
 
 @Component({
   selector: 'app-staff-req-dialog',
@@ -18,22 +28,84 @@ import {Store} from "@ngxs/store";
 export class StaffReqDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+  @ViewChild('resourceDesignation') resourceDesignationDropdown: Dropdown;
 
+  @Select(StaffState.designationPage)
+  resourceDesignation$: Observable<BcResourcesDesignation[]>;
+
+  @Select(StaffState.designationLoading)
+  resourceDesignationLoading$: Observable<boolean>;
+
+  private auditLoadPersonalDesignation$ = new Subject<string>();
+
+  public fields;
+  public page$: Observable<BcResourcesMinPersonnelReq[]>;
+
+  @ViewChild(Dialog) dialog: Dialog;
+
+  @Select(RemoteWorkState.blocking)
+  blocking$: Observable<boolean>;
+
+  public get asDialog() {
+    return this.route.component !== StaffReqDialogComponent;
+  }
+  private defaultFormValue: { [key: string]: any } = {};
   form: FormGroup;
   destroy$ = new Subject();
-
-  _staffId: number;
 
   get editMode() {
     return this._staffId !== undefined && this._staffId !== null;
   }
+  get viewOnly() {
+    return (
+      this.route.snapshot.queryParams['_mode'] === 'viewonly'
+    );
+  }
+  _staffId: number;
 
+  @Input()
+  set staffId(v: number) {
+    this._staffId = v;
+    this.buildForm();
+    if (v === undefined || v === null) {
+      return;
+    }
+    this.store
+      .dispatch(new StaffAction.GetStaff({ id: v }))
+      .pipe(
+        switchMap(() => this.store.select(StaffState.staff)),
+        takeUntil(this.destroy$),
+        take(1),
+        tap((staff) => {
+          this.loadPersonalDesignation(
+            '',
+            true);
+          this.form.patchValue({
+            ...staff,
+          });
+          this.patchValue(staff);
+        })
+      )
+      .subscribe();
+  }
   constructor(
     private formBuilder: FormBuilder,
     private lang: ILangFacade,
-    private route: ActivatedRoute,
     private store: Store,
+    private route: ActivatedRoute,
+    private auth: IAuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) {
+    this.route.queryParams
+      .pipe(
+        map((params) => params['_id']),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((id) => {
+        this.staffId = id;
+      })
     this.viewOnly$ = this.route.queryParams.pipe(
       map((params) => params['_mode'] === 'viewonly'),
       tap((v) => {
@@ -51,34 +123,191 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
+    this.buildForm();
+    this.auditLoadPersonalDesignation$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((searchText) => {
+        this.store.dispatch(
+          new StaffAction.LoadDesignationPage({ page: 0,
+            size: 50})
+        );
+      });
+  }
+
+  loadPersonalDesignation(searchText?: string, direct = false, id?: number) {
+    if (direct) {
+      this.store.dispatch(
+        new StaffAction.LoadDesignationPage({ page: 0,
+          size: 50})
+      );
+      return;
+    }
+    this.auditLoadPersonalDesignation$.next(searchText);
+  }
+
+
+  dynamicForm() {
+    this.store.select(StaffState.minPersonalPage)
+      .pipe(take(1),
+        takeUntil(this.destroy$),
+      ).subscribe(data => {
+      if (data) {
+        const hours = this.form.get(
+          'hours'
+        ) as FormArray;
+        hours.clear();
+        this.fields = data;
+        data.forEach((v) => {
+          hours.push(this.createForm(v));
+        });
+        this.cdr.detectChanges()
+        console.log(hours);
+        console.log(this.form);
+      }
+    });
+  }
+
+  async loadMinPersonal(event?: LazyLoadEvent) {
+    this.store.dispatch(
+      new BrowseStaffAction.LoadMinPersonal({
+        pageRequest: {
+          first: event?.first,
+          rows: event?.rows,
+        },
+      })
+    ).toPromise().then(() => {
+      this.dynamicForm();
+    });
+  }
+  patchValue(staff) {
+    const data = JSON.parse(staff.minPersonnelRequired);
+    const hoursFormArray = this.form.get('hours') as FormArray;
+
+    for (const item of data?.minPersonnelReq) {
+      const matchingControl = hoursFormArray.controls.find(
+        (control: FormGroup) => control.get('label')?.value === item.key
+      );
+
+      if (matchingControl) {
+        matchingControl.get('hour')?.setValue(item.value);
+      }
+      this.cdr.detectChanges()
+    }
+  }
+  createForm(formFields): FormGroup {
+    return this.formBuilder.group({
+      id: formFields.id,
+      label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
+      hour: [null, [Validators.required]], // Add validation as needed
+    });
   }
 
   buildForm() {
     this.form = this.formBuilder.group({
-      description: [null, [Validators.required]],
-      day_more: [null, [Validators.required]],
-      hour1: [null, [Validators.required]],
-      hour2: [null, [Validators.required]],
-      p_emp: [null, [Validators.required]],
-      s_emp: [null, [Validators.required]],
-      s_emp1: [null, [Validators.required]],
+      keyResponsibilities: [null, [Validators.required]],
+      resourceDesignation: [null, [Validators.required]],
+      primaryEmpName: [null, [Validators.required]],
+      secondaryEmp1Name: [null, [Validators.required]],
+      secondaryEmp2Name: [null, [Validators.required]],
+      hours: this.formBuilder.array([]),
     });
+    this.opened$?.pipe(
+      take(1)
+    ).subscribe((value) => {
+      // 'value' contains the value emitted by the 'opened$' observable
+      if (value) {
+        this.loadMinPersonal();
+      }
+    });
+    this.defaultFormValue = {
+      ...this.defaultFormValue,
+    };
+  }
+
+  getControls(): AbstractControl[] {
+    return (this.form.get('hours') as FormArray).controls;
+  }
+
+  openDialog(id?: number) {
+    this.store.dispatch(new BrowseStaffAction.ToggleDialog({ staffId: id }));
+  }
+  submit() {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      FormUtils.ForEach(this.form, (fc) => {
+        fc.markAsDirty();
+      });
+      return;
+    }
+    const staff = {
+      ...this.form.getRawValue(),
+    };
+    const formattedString = this.convertToFormattedString(staff.hours);
+    const staffWork: BcResourcesStaffReq = {
+      id: this._staffId,
+      isActive: true,
+      keyResponsibilities: staff.keyResponsibilities,
+      resource: {
+        id: resource?.id
+      },
+      resourceDesignation: staff.resourceDesignation,
+      minPersonnelRequired: formattedString,
+      primaryEmpName: staff.primaryEmpName,
+      secondaryEmp1Name: staff.secondaryEmp1Name,
+      secondaryEmp2Name: staff.secondaryEmp2Name
+    };
+
+
+
+    // const result = { 'minPersonnelReq' : [{'key': item["id", 'value': staff.hours[0].hour]} for item in staff.hour]}
+
+    if (this.editMode) {
+      this.store.dispatch(
+        new BrowseStaffAction.UpdateStaff(staffWork)
+      );
+    } else {
+      this.store.dispatch(
+        new BrowseStaffAction.CreateStaff(staffWork)
+      );
+    }
+  }
+
+  convertToFormattedString(data) {
+    const formattedData = {
+      minPersonnelReq: data.map(item => ({
+        key: item.label,
+        value: item.hour
+      }))
+    };
+    const jsonString = JSON.stringify(formattedData);
+    return jsonString;
   }
 
   close() {
-    this.store.dispatch(new BrowseStaffAction.ToggleDialog({}));
+    if (this.asDialog) {
+      this.store.dispatch(new BrowseStaffAction.ToggleDialog({}));
+    } else {
+      this.router.navigate(this.redirect, { relativeTo: this.route });
+    }
   }
-  submit() {
 
+  clear() {
+    this.store.dispatch(new StaffAction.GetStaff({}));
+    this.form.reset();
+    this.form.patchValue(this.defaultFormValue);
+    this.cdr.detectChanges();
+  }
+
+  get redirect() {
+    return [this.route.snapshot.queryParams['_redirect'] ?? '..'];
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 }

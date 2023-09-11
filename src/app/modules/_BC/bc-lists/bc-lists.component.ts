@@ -96,7 +96,7 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.items = this.prepareMenu(TABS);
       this.cdr.detectChanges();
-    }, 1000);
+    }, 2000);
   }
   prepareMenu(items: MenuItem[]): MenuItem[] {
     return items.map((tab) => {

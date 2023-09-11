@@ -3,7 +3,8 @@
   "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle",
   "DEPARTMENT": "Department",
   "SELECT_CYCLE_MSG": "Please select cycle to continue",
-
+  "ORG_ACT": "Organization Activities",
+  "RES": "Resources",
   "SECTOR": "Sector",
   "SECTION": "Section",
   "ORG_ACTIVITIES": "Organization Activities",
@@ -19,6 +20,8 @@
   "ADD_ACTIVITY_ACTION": "  Add Activities Analysis  ",
   "ORG_ARTCH": "Organization Hierarchy",
   "START_ANALYSIS": "Analyze Activity ",
+  "START_RESOURC_ANALYSIS": "Analyze Resources",
+
 
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY": "Add New Activity",
@@ -39,5 +42,16 @@
     "NAME": "Analysis Cycle Name",
     "NAME_BC": "BC Lists Version",
     "DATE": "Cycle Entry Due DATE"
+  },
+  "RESOURCES": {
+    "ADD_RESOURCE": "Add Resources",
+    "DIVISION": "Division Name",
+    "CYCLE": "Analysis Cycle",
+    "ONSITE_STAFF": "Staff Needed On-Site",
+    "OFFSITE_STAFF": "Staff Needed Remotely",
+    "STATUS": "Status",
+    "DIALOG": {
+      "ADD": "Add New Resource"
+    }
   }
 }

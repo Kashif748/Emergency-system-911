@@ -1,7 +1,7 @@
 <section>
   <header class="d-flex p-jc-between p-ai-center border-bottom py-8">
     <h4 class="text-info p-text-bold mb-0">{{ "STAFF_REQ.STAFF_REQ_MAIN" | translate }}</h4>
-
+    <app-staff-req-dialog></app-staff-req-dialog>
 
   </header>
   <div class="row">
@@ -107,15 +107,15 @@
                   {{ rowIndex + 1 }}
                 </td>
                 <td class="min-w-100px max-w-150px" >
-                  {{ item | translateObj : 'criticality'}}
+                  {{ item.resourceDesignation| translateObj : 'name'}}
                 </td>
 
                 <td class="min-w-100px max-w-150px">
-                  {{ item | translateObj : 'name'}}
+                  {{ item.keyResponsibilities}}
                 </td>
 
                 <td>
-                  <div class="button-row">
+                  <!--<div class="button-row">
                     <button
                       pButton
                       pRipple
@@ -138,8 +138,8 @@
                       (click)="openDialog(1)"
                       class="p-button-rounded p-button-text my-auto p-button-plain"
                     ></button>
-                  </div>
-                  <!--<button
+                  </div>-->
+                  <button
                     pButton
                     pRipple
                     type="button"
@@ -152,7 +152,7 @@
                     appendTo="body"
                     [popup]="true"
                     [model]="item.actions"
-                  ></p-menu>-->
+                  ></p-menu>
                 </td>
               </tr>
             </ng-template>
@@ -169,9 +169,10 @@
         </ng-template>
       </ng-container>
 
-      <p-paginator>
+      <p-paginator #pg [first]="pageRequest?.first" [rows]="pageRequest?.rows" [totalRecords]="totalRecords"
+                   [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
+                   currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)">
       </p-paginator>
     </div>
   </div>
 </section>
-<app-staff-req-dialog></app-staff-req-dialog>

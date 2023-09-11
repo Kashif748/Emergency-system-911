@@ -88,6 +88,13 @@ import { NgxsStoragePluginModule } from './_async-storage/storage.module';
 import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/worklogs.state';
+import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
+import {RecordsState} from "@core/states/bc-resources/records/records.state";
+import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
+import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {StaffState} from "@core/states/bc-resources/staff/staff.state";
+import {OtherState} from "@core/states/bc-resources/other/other.state";
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -173,7 +180,14 @@ export function getHighlightLanguages() {
         ActivityWorklogsState,
         ImpactAnalysisState,
         ActivityImpactMatrixState,
-        VenderState
+        VenderState,
+        RemoteWorkState,
+        RecordsState,
+        AppSystemState,
+        InfraState,
+        ResourceAnalysisState,
+        StaffState,
+        OtherState
       ],
       {
         developmentMode: !environment.production,
@@ -192,6 +206,13 @@ export function getHighlightLanguages() {
           'browse_impact_analysis',
           'browse_org_activities',
           'browse_vender',
+          'browse_remote_work',
+          'browse_record',
+          'browse_app_system',
+          'browse_infra',
+          'browse_resource_analysis',
+          'browse_staff',
+          'browse_other'
         ],
       },
       ['common_data']
