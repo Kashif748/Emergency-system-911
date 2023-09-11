@@ -17,6 +17,7 @@ import {BcSystems} from "../../../../../../api/models";
 import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
 import {LazyLoadEvent} from "primeng/api";
 import {TranslateService} from "@ngx-translate/core";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 
 @Component({
   selector: 'app-app-system-dialog',
@@ -71,14 +72,14 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         take(1),
         filter((t) => !!t),
-        tap((record) => {
+        tap((app) => {
           this.loadSystems(
             '',
             true);
           this.form.patchValue({
-            ...record,
+            ...app,
           });
-          // this.patchValues(record);
+          this.patchValue(app);
         })
       )
       .subscribe();
@@ -117,7 +118,21 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
       })
     );
   }
+  patchValue(app) {
+    const data = JSON.parse(app.minPersonnelRequired);
+    const hoursFormArray = this.form.get('hours') as FormArray;
 
+    for (const item of data?.minPersonnelReq) {
+      const matchingControl = hoursFormArray.controls.find(
+        (control: FormGroup) => control.get('label')?.value === item.key
+      );
+
+      if (matchingControl) {
+        matchingControl.get('hour')?.setValue(item.value);
+      }
+      this.cdr.detectChanges();
+    }
+  }
   ngOnInit(): void {
     this.buildForm()
     this.opened$ = this.route.queryParams.pipe(
@@ -175,12 +190,19 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       applicationAndSoftware: [null, [Validators.required]],
       purpose: [null, [Validators.required]],
-      users: [null, [Validators.required]],
-      license: [null, [Validators.required]],
-      license_Type: [null, [Validators.required]],
+      numberOfUsers: [null, [Validators.required]],
+      numberOfLicense: [null, [Validators.required]],
+      licenseType: [null, [Validators.required]],
       hours: this.formBuilder.array([]),
     });
-    this.loadMinPersonal();
+    this.opened$?.pipe(
+      take(1)
+    ).subscribe((value) => {
+      // 'value' contains the value emitted by the 'opened$' observable
+      if (value) {
+        this.loadMinPersonal();
+      }
+    });
     this.defaultFormValue = {
       ...this.defaultFormValue,
     };
@@ -204,6 +226,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseAppSystemAction.ToggleDialog({ appSystemId: id }));
   }
   submit() {
+    const resource = this.store.selectSnapshot(ResourceAnalysisState.resourceAnalysis);
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -215,6 +238,12 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     const app = {
       ...this.form.getRawValue(),
     };
+    const formattedString = this.convertToFormattedString(app.hours);
+    app.resource = {
+      id: resource?.id
+    }
+    app.minLicenseRequired = formattedString
+
     if (this.editMode) {
       this.store
         .dispatch(new BrowseAppSystemAction.UpdateAppSys(app));
@@ -223,6 +252,17 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
       this.store
         .dispatch(new BrowseAppSystemAction.CreateAppSys(app));
     }
+  }
+
+  convertToFormattedString(data) {
+    const formattedData = {
+      minPersonnelReq: data.map(item => ({
+        key: item.label,
+        value: item.hour
+      }))
+    };
+    const jsonString = JSON.stringify(formattedData);
+    return jsonString;
   }
 
   clear() {

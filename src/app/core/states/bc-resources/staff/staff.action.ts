@@ -1,5 +1,6 @@
 import {BcResourcesStaffReq} from "../../../../api/models/bc-resources-staff-req";
 
+
 export namespace StaffAction {
   export class LoadPage {
     static readonly type = '[staff] Load Page';
@@ -67,5 +68,21 @@ export namespace StaffAction {
         id?: number;
       }
     ) {}
+  }
+  export class LoadDesignationPage {
+    static readonly type = '[staff] Load designation Page';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        filters?: { [key: string]: any };
+        sort?: string[];
+        page: number;
+        size: number;
+      }
+    ) {
+    }
   }
 }

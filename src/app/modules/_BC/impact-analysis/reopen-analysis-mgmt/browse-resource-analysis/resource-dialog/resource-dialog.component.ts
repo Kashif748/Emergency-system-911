@@ -132,8 +132,6 @@ export class ResourceDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       orgHierarchy: [null, [Validators.required]],
       cycle:  [null, [Validators.required]],
-      staffOnSite: [null, [Validators.required]],
-      staffRemotely: [null, [Validators.required]],
       isActive: [true]
     });
     this.defaultFormValue = {

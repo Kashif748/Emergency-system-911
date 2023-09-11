@@ -233,15 +233,15 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
   }
 
   sort(event) {
-    /*  this.store.dispatch(
-      new BrowseUsersAction.SortUsers({ field: event.value })
-    );*/
+    this.store.dispatch(
+      new BrowseResourceAnalysisAction.Sort({ field: event.value })
+    );
   }
 
   order(event) {
-    /*this.store.dispatch(
-      new BrowseUsersAction.SortUsers({ order: event.checked ? 'desc' : 'asc' })
-    );*/
+    this.store.dispatch(
+      new BrowseResourceAnalysisAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+    );
   }
 
   startAnalysis(resource: BcResources) {

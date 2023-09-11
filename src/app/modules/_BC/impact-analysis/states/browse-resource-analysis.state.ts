@@ -28,7 +28,7 @@ export const BROWSE_RESOURCE_ANALYSIS_UI_STATE_TOKEN =
       filters: {},
       first: 0,
       rows: 10,
-      sortField: 'id',
+      sortField: 'cycle.id',
       sortOrder: 'asc',
     },
     columns: [
@@ -99,15 +99,16 @@ export class BrowseResourceAnalysisState {
         filters: {
           ...pageRequest.filters,
           orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+          cycleId: pageRequest?.filters?.cycleId,
         },
       })
     );
   }
 
-  @Action(BrowseOrganizationAction.SortOrganization)
+  @Action(BrowseResourceAnalysisAction.Sort)
   sortResource(
     { setState, dispatch, getState }: StateContext<BrowseReourceAnalysisStateModel>,
-    { payload }: BrowseOrganizationAction.SortOrganization
+    { payload }: BrowseResourceAnalysisAction.Sort
   ) {
     setState(
       patch<BrowseReourceAnalysisStateModel>({

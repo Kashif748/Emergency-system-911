@@ -85,8 +85,8 @@ export class ResourceAnalysisState {
     return this.bcResources
       .search10({
         isActive: true,
-        cycleId: payload.cycleId,
-        orgHierarchyId: payload.orgHierarchyId,
+        cycleId: payload.filters.cycleId,
+        orgHierarchyId: payload.filters.orgHierarchyId,
         pageable: {
           page: payload.page,
           size: payload.size,

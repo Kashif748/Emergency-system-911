@@ -109,7 +109,9 @@ export class BrowseStaffState {
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseStaffAction.LoadStaff(),
+          new BrowseStaffAction.LoadStaff({
+            resourceId: payload.resource?.id,
+          }),
           new BrowseStaffAction.ToggleDialog({}),
         ]);
       }),
@@ -127,7 +129,9 @@ export class BrowseStaffState {
     return dispatch(new StaffAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseStaffAction.LoadStaff());
+        dispatch(new BrowseStaffAction.LoadStaff({
+          resourceId: payload.resource?.id,
+        }));
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

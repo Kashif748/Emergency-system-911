@@ -7,7 +7,7 @@ import {Select, Store} from "@ngxs/store";
 import {ActivatedRoute, Router} from "@angular/router";
 import {auditTime, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {BrowseRemoteWorkAction} from "../../states/browse-remote-work.action";
-import {ImpLevelWorkingAction, RemoteWorkAction, UserAction, UserState} from "@core/states";
+import {ImpLevelWorkingAction, RemoteWorkAction} from "@core/states";
 import {Dropdown} from "primeng/dropdown";
 import {BcResourcesRemoteWork, BcSystems, BcWorkImportanceLevels} from "../../../../../../api/models";
 import {ImpLevelWorkingState} from "@core/states/bc/imp-level-working/imp-level-working.state";
@@ -19,7 +19,6 @@ import {Dialog} from "primeng/dialog";
 import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
 import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
-import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
 
 @Component({
   selector: 'app-remote-work-dialog',
