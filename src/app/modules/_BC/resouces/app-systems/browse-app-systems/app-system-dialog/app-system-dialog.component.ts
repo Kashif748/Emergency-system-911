@@ -119,10 +119,10 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     );
   }
   patchValue(app) {
-    const data = JSON.parse(app.minPersonnelRequired);
+    const data = JSON.parse(app.minLicenseRequired);
     const hoursFormArray = this.form.get('hours') as FormArray;
 
-    for (const item of data?.minPersonnelReq) {
+    for (const item of data?.minLicenseRequired) {
       const matchingControl = hoursFormArray.controls.find(
         (control: FormGroup) => control.get('label')?.value === item.key
       );
@@ -177,12 +177,15 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       }
     });
+    this.defaultFormValue = {
+      ...this.form,
+    };
   }
   createForm(formFields): FormGroup {
     return this.formBuilder.group({
       id: formFields.id,
       label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
-      hour: [null, [Validators.required]], // Add validation as needed
+      hour: [null, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -190,10 +193,11 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       applicationAndSoftware: [null, [Validators.required]],
       purpose: [null, [Validators.required]],
-      numberOfUsers: [null, [Validators.required]],
-      numberOfLicense: [null, [Validators.required]],
+      numberOfUsers: [null, [Validators.required, Validators.min(0)]],
+      numberOfLicense: [null, [Validators.required, Validators.min(0)]],
       licenseType: [null, [Validators.required]],
       hours: this.formBuilder.array([]),
+      isActive: [true]
     });
     this.opened$?.pipe(
       take(1)
@@ -241,8 +245,9 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     const formattedString = this.convertToFormattedString(app.hours);
     app.resource = {
       id: resource?.id
-    }
-    app.minLicenseRequired = formattedString
+    };
+    app.id = this._appSystemId;
+    app.minLicenseRequired = formattedString;
 
     if (this.editMode) {
       this.store
@@ -256,7 +261,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
 
   convertToFormattedString(data) {
     const formattedData = {
-      minPersonnelReq: data.map(item => ({
+      minLicenseRequired: data.map(item => ({
         key: item.label,
         value: item.hour
       }))
@@ -269,6 +274,11 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new AppSystemAction.GetAppSystem({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
+    const hoursArray = this.defaultFormValue.value.hours;
+    for (let i = 0; i < hoursArray.length; i++) {
+      const hourControl = hoursArray.at(i) as FormGroup;
+      (this.form.get('hours') as FormArray).controls[i].get('label').setValue(hourControl['label']);
+    }
     this.cdr.detectChanges();
   }
 

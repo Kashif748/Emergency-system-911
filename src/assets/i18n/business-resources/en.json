@@ -43,7 +43,7 @@
   },
   "REMOTE_WORK": {
     "TAB_LABEL": "Remote Work",
-    "WORK-REMOTLY":"Working Remotely Requirements",
+    "WORK-REMOTLY":"Remote Work Requirements",
     "PERSONAL_DESIG":"Personnel Designation",
     "PRIORITY_LEVEL":"Priority Level",
     "ADD_WORK":"Add Remote Work Requirement",
@@ -68,8 +68,11 @@
     "ADD_NEW_RECORD":"Add New Record",
     "RECORD_CUSTODIAN":"Record Custodian",
     "CURRENT_LOCATION":"Current Location",
-    "ALTERNATE_SOUREC":"Alternate Source"
-
+    "ALTERNATE_SOUREC":"Alternate Source",
+    "HARD": "Hard",
+    "SOFT": "Soft",
+    "CRITICAL": "Critical",
+    "NON_CRITICAL": "Non-Critical"
 
   },
   "APP_SYS": {

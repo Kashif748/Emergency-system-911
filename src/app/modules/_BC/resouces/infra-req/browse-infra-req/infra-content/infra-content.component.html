@@ -132,18 +132,18 @@
                   {{ rowIndex + 1 }}
                 </td>
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'criticality'}}
+                  {{ langu == 'ar' ? item.detailsAr : item.detailsEn}}
                 </td>
 
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'name'}}
+                  {{ item.requiredCount}}
                 </td>
 
                 <td class="min-w-250px max-w-300px" >
-                  {{ item | translateObj : 'description'}}
+                  {{ item.availableCount}}
                 </td>
                 <td class="min-w-250px max-w-300px" >
-                  {{ item | translateObj : 'description'}}
+                  {{ item.purchasedCount}}
                 </td>
 
                 <td>

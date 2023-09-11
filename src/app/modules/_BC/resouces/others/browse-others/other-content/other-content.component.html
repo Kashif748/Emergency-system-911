@@ -105,11 +105,11 @@
                   {{ rowIndex + 1 }}
                 </td>
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'criticality'}}
+                  {{ langu == 'ar' ? item.detailsAr : item.detailsEn}}
                 </td>
 
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'name'}}
+                  {{ item.requiredCount}}
                 </td>
 
 
