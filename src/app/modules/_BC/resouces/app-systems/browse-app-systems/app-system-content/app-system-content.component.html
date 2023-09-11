@@ -119,15 +119,15 @@
                   {{ rowIndex + 1 }}
                 </td>
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'criticality'}}
+                  {{ item.applicationAndSoftware | translateObj : 'name'}}
                 </td>
 
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'name'}}
+                  {{ item.purpose}}
                 </td>
 
                 <td class="min-w-250px max-w-300px" >
-                  {{ item | translateObj : 'description'}}
+                  {{ item.numberOfUsers}}
                 </td>
 
                 <td>

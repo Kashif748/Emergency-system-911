@@ -119,10 +119,10 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     );
   }
   patchValue(app) {
-    const data = JSON.parse(app.minPersonnelRequired);
+    const data = JSON.parse(app.minLicenseRequired);
     const hoursFormArray = this.form.get('hours') as FormArray;
 
-    for (const item of data?.minPersonnelReq) {
+    for (const item of data?.minLicenseRequired) {
       const matchingControl = hoursFormArray.controls.find(
         (control: FormGroup) => control.get('label')?.value === item.key
       );
@@ -194,6 +194,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
       numberOfLicense: [null, [Validators.required]],
       licenseType: [null, [Validators.required]],
       hours: this.formBuilder.array([]),
+      isActive: [true]
     });
     this.opened$?.pipe(
       take(1)
@@ -241,8 +242,9 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     const formattedString = this.convertToFormattedString(app.hours);
     app.resource = {
       id: resource?.id
-    }
-    app.minLicenseRequired = formattedString
+    };
+    app.id = this._appSystemId;
+    app.minLicenseRequired = formattedString;
 
     if (this.editMode) {
       this.store
@@ -256,7 +258,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
 
   convertToFormattedString(data) {
     const formattedData = {
-      minPersonnelReq: data.map(item => ({
+      minLicenseRequired: data.map(item => ({
         key: item.label,
         value: item.hour
       }))

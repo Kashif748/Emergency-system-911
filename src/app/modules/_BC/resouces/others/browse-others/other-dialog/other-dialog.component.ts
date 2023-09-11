@@ -106,9 +106,10 @@ export class OtherDialogComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      detailEn: [null, [Validators.required, GenericValidators.english]],
-      detailAr: [null, [Validators.required, GenericValidators.arabic]],
-      count: [null, [Validators.required]],
+      detailsEn: [null, [Validators.required, GenericValidators.english]],
+      detailsAr: [null, [Validators.required, GenericValidators.arabic]],
+      requiredCount: [null, [Validators.required]],
+      isActive: [true]
     });
     this.defaultFormValue = {
       ...this.defaultFormValue,
