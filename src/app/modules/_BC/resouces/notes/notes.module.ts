@@ -1,14 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NotesComponent } from './notes.component';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
-import { HttpClient } from '@angular/common/http';
-import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Routes, RouterModule } from '@angular/router';
-import { CheckboxModule } from 'primeng/checkbox';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NotesComponent} from './notes.component';
+import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {ILangFacade, LangFacade} from '@core/facades/lang.facade';
+import {HttpClient} from '@angular/common/http';
+import {TranslateObjModule} from '@shared/sh-pipes/translate-obj.pipe';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {RouterModule, Routes} from '@angular/router';
+import {CheckboxModule} from 'primeng/checkbox';
+import {SkeletonModule} from "primeng/skeleton";
+import {SharedModule} from "@shared/shared.module";
+import {ListboxModule} from "primeng/listbox";
+import {InputTextModule} from "primeng/inputtext";
+import {ButtonModule} from "primeng/button";
+import {DialogModule} from "primeng/dialog";
+import {NgxsModule} from "@ngxs/store";
+import {BrowseResourceWorklogsState} from "./states/browse-resource-worklogs.state";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/business-activity-analysis/', '.json');
@@ -24,6 +32,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    NgxsModule.forFeature([BrowseResourceWorklogsState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
@@ -37,6 +46,15 @@ const routes: Routes = [
     TranslateObjModule,
     PerfectScrollbarModule,
     CheckboxModule,
+    SkeletonModule,
+    TranslateObjModule,
+    PerfectScrollbarModule,
+    CheckboxModule,
+    InputTextModule,
+    ButtonModule,
+    DialogModule,
+    SharedModule,
+    ListboxModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
