@@ -194,8 +194,8 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       skillsNeeded: [null, [Validators.required]],
       resourcesRemoteWorkSystemsInternal: [null, [Validators.required]],
       resourcesRemoteWorkSystemsExternal: [null, [Validators.required]],
-      staffDistributionIn: [null, [Validators.required]],
-      staffDistributionOut: [null, [Validators.required]],
+      staffDistributionIn: [null, [Validators.required, Validators.min(0)]],
+      staffDistributionOut: [null, [Validators.required, Validators.min(0)]],
       notes: [null, [Validators.required]],
     });
     this.defaultFormValue = {

@@ -57,17 +57,9 @@
             {{ resourceAnalysis?.orgHierarchy | translateObj }}</span
           >
         </div>
-        <!-- <div class="d-flex flex-column">
-          <span class="mb-3">إدارة</span>
-          <span class="font-weight-bold text-primary">الموارد البشرية</span>
-        </div> -->
-        <!-- <div class="d-flex flex-column">
-          <span class="mb-3">قسم </span>
-          <span class="font-weight-bold text-primary"> الرواتب </span>
-        </div> -->
         <div class="d-flex flex-column">
           <span class="mb-3"> {{ "createdBy" | translate }}</span>
-          <span class="font-weight-bold text-primary">مصطفى السبول </span>
+          <span class="font-weight-bold text-primary">{{resourceAnalysis.createdBy | translateObj : 'FirstName'}}&nbsp;{{resourceAnalysis.createdBy | translateObj : 'LastName'}}</span>
         </div>
         <div class="d-flex flex-column">
           <span class="mb-3"> {{ "STATUS" | translate }}</span>
@@ -88,7 +80,7 @@
               <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
                 <span class="font-weight-bold">{{ 'REMOTELY' | translate }}</span>
                 <p-badge
-                  value="8"
+                  [value]="resourceAnalysis.staffRemotely"
                   styleClass="version-badge"
                 >
                 </p-badge>
@@ -106,7 +98,7 @@
               <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
                 <span class="font-weight-bold">{{ 'PERSON' | translate }}</span>
                 <p-badge
-                  value="5"
+                  [value]="resourceAnalysis.staffOnSite"
                   styleClass="version-badge"
                 >
                 </p-badge>

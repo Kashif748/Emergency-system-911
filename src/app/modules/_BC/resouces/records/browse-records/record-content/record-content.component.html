@@ -123,11 +123,11 @@
                 </td>
 
                 <td class="min-w-200px max-w-300px" (click)="item.isActive && openView(item.id)">
-                  {{ item.recordType}}
+                  {{ item.recordType ? ('RECORDS.HARD' | translate) : ('RECORDS.SOFT' | translate)}}
                 </td>
 
                 <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">
-                  {{ item.isCritical}}
+                  {{ item.isCritical ? ('RECORDS.CRITICALLITY' | translate) : ('RECORDS.NON_CRITICAL' | translate)}}
                 </td>
 
                 <td>

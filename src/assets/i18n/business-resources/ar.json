@@ -65,7 +65,11 @@
     "ADD_NEW_RECORD":"اضافة سجل / وثائق جديدة",
     "RECORD_CUSTODIAN":"المسؤول عن السجل",
     "CURRENT_LOCATION":"الموقع الحالي",
-    "ALTERNATE_SOUREC":"المصدر البديل"
+    "ALTERNATE_SOUREC":"المصدر البديل",
+    "HARD": "ورقي",
+    "SOFT": "إلكتروني",
+    "CRITICAL": "مهم",
+    "NON_CRITICAL": "غير مهم"
   },
   "APP_SYS": {
     "TAB_LABEL": "البرامج و التطبيقات",

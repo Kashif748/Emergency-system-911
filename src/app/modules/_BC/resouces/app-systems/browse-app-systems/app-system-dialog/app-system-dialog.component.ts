@@ -177,12 +177,15 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       }
     });
+    this.defaultFormValue = {
+      ...this.form,
+    };
   }
   createForm(formFields): FormGroup {
     return this.formBuilder.group({
       id: formFields.id,
       label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
-      hour: [null, [Validators.required]], // Add validation as needed
+      hour: [null, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -190,8 +193,8 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       applicationAndSoftware: [null, [Validators.required]],
       purpose: [null, [Validators.required]],
-      numberOfUsers: [null, [Validators.required]],
-      numberOfLicense: [null, [Validators.required]],
+      numberOfUsers: [null, [Validators.required, Validators.min(0)]],
+      numberOfLicense: [null, [Validators.required, Validators.min(0)]],
       licenseType: [null, [Validators.required]],
       hours: this.formBuilder.array([]),
       isActive: [true]
@@ -271,6 +274,11 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new AppSystemAction.GetAppSystem({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
+    const hoursArray = this.defaultFormValue.value.hours;
+    for (let i = 0; i < hoursArray.length; i++) {
+      const hourControl = hoursArray.at(i) as FormGroup;
+      (this.form.get('hours') as FormArray).controls[i].get('label').setValue(hourControl['label']);
+    }
     this.cdr.detectChanges();
   }
 

@@ -116,9 +116,9 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
       detailsEn: [null, [Validators.required, GenericValidators.english]],
       detailsAr: [null, [Validators.required, GenericValidators.arabic]],
       specialInstruction: [null, [Validators.required]],
-      requiredCount: [null, [Validators.required]],
-      availableCount: [null, [Validators.required]],
-      purchasedCount: [null, [Validators.required]],
+      requiredCount: [null, [Validators.required, Validators.min(0)]],
+      availableCount: [null, [Validators.required, Validators.min(0)]],
+      purchasedCount: [null, [Validators.required, Validators.min(0)]],
       isActive: [true]
     });
     this.defaultFormValue = {
