@@ -212,8 +212,8 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-            <td style="text-align: center">
-              <div *checkPrivileges="'PRIV_ED_BC_LISTS'" class="d-flex p-flex-column p-ai-center p-jc-center">
+            <td style="text-align: center" *checkPrivileges="'PRIV_ED_BC_LISTS'">
+              <div  class="d-flex p-flex-column p-ai-center p-jc-center">
                 <button
                   [disabled]="disableButton$ |async"
                   *ngIf="!editing"

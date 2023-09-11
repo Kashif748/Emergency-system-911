@@ -110,7 +110,7 @@
 
                 <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">{{ item.nameEn }}</td>
 
-                <td>
+                <td *checkPrivileges="'PRIV_ED_BC_LISTS'">
                   <button
                     pButton
                     pRipple
@@ -118,7 +118,6 @@
                     icon="pi pi-ellipsis-v"
                     class="p-button-rounded p-button-text my-auto p-button-plain"
                     (click)="menu.toggle($event)"
-                    *checkPrivileges="'PRIV_ED_BC_LISTS'"
                   ></button>
                   <p-menu
                     #menu

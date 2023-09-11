@@ -145,7 +145,7 @@
               </ng-container>
             </ng-container>
 
-            <td>
+            <td *checkPrivileges="'PRIV_ED_BC_LISTS'">
               <button
                 [disabled]="disableButton$ |async"
                 pButton
@@ -154,7 +154,7 @@
                 icon="pi pi-ellipsis-v"
                 class="p-button-rounded p-button-text my-auto p-button-plain"
                 (click)="menu.toggle($event)"
-                *checkPrivileges="'PRIV_ED_BC_LISTS'"
+
               ></button>
               <p-menu
                 #menu
