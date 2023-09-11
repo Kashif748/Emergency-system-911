@@ -27,12 +27,23 @@ export class OtherContentComponent implements OnInit {
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
-
+  public langu;
   constructor(
     private translate: TranslateService,
     private lang: ILangFacade,
     private store: Store,
-  ) { }
+  ) {
+    this.lang.vm$
+    .pipe
+    ()
+    .subscribe((res) => {
+      if (res.ActiveLang.key == 'ar') {
+        this.langu = 'ar';
+      } else {
+        this.langu = 'en';
+      }
+      console.log(this.langu);
+    }); }
 
   ngOnInit(): void {
     this.onPageChange.emit({

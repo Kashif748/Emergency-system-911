@@ -163,6 +163,9 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
         data.forEach((v) => {
           hours.push(this.createForm(v));
         });
+        this.defaultFormValue = {
+          ...this.form,
+        };
         this.cdr.detectChanges()
         console.log(hours);
         console.log(this.form);
@@ -194,14 +197,14 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
       if (matchingControl) {
         matchingControl.get('hour')?.setValue(item.value);
       }
-      this.cdr.detectChanges()
+      this.cdr.detectChanges();
     }
   }
   createForm(formFields): FormGroup {
     return this.formBuilder.group({
       id: formFields.id,
       label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
-      hour: [null, [Validators.required]], // Add validation as needed
+      hour: [null, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -222,9 +225,6 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
         this.loadMinPersonal();
       }
     });
-    this.defaultFormValue = {
-      ...this.defaultFormValue,
-    };
   }
 
   getControls(): AbstractControl[] {
@@ -299,6 +299,11 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new StaffAction.GetStaff({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
+    const hoursArray = this.defaultFormValue.value.hours;
+    for (let i = 0; i < hoursArray.length; i++) {
+      const hourControl = hoursArray.at(i) as FormGroup;
+      (this.form.get('hours') as FormArray).controls[i].get('label').setValue(hourControl['label']);
+    }
     this.cdr.detectChanges();
   }
 

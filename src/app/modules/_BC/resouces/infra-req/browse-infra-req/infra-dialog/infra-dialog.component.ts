@@ -58,13 +58,13 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
     this.store
       .dispatch(new InfraAction.GetInfra({ id: v }))
       .pipe(
-        switchMap(() => this.store.select(VenderState.vender)),
+        switchMap(() => this.store.select(InfraState.infra)),
         takeUntil(this.destroy$),
         take(1),
         filter((t) => !!t),
-        tap((record) => {
+        tap((infra) => {
           this.form.patchValue({
-            ...record,
+            ...infra,
           });
           // this.patchValues(record);
         })
@@ -113,12 +113,13 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
   }
   buildForm() {
     this.form = this.formBuilder.group({
-      detailEn: [null, [Validators.required, GenericValidators.english]],
-      detailAr: [null, [Validators.required, GenericValidators.arabic]],
+      detailsEn: [null, [Validators.required, GenericValidators.english]],
+      detailsAr: [null, [Validators.required, GenericValidators.arabic]],
       specialInstruction: [null, [Validators.required]],
-      requiredCount: [null, [Validators.required]],
-      availableCount: [null, [Validators.required]],
-      purchasedCount: [null, [Validators.required]],
+      requiredCount: [null, [Validators.required, Validators.min(0)]],
+      availableCount: [null, [Validators.required, Validators.min(0)]],
+      purchasedCount: [null, [Validators.required, Validators.min(0)]],
+      isActive: [true]
     });
     this.defaultFormValue = {
       ...this.defaultFormValue,
@@ -162,7 +163,9 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
     };
     infra.resource = {
       id : resource.id
-    }
+    };
+    infra.id = this._infraId;
+
     if (this.editMode) {
       this.store
         .dispatch(new BrowseInfraAction.UpdateInfra(infra));

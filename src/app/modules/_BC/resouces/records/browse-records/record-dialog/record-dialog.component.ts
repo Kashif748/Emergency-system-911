@@ -21,8 +21,7 @@ import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analy
 export class RecordDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
-  public recordType = [{id: 1, nameAr: 'ورقي', nameEn: 'Hard'}, {id: 2, nameAr: 'إلكتروني', nameEn: 'Soft'}];
-  public criticalityType = [{id: 1, nameEn: "Critical", nameAr: "مهم"}, {id: 2, nameEn: "Non-Critical", nameAr: "غير مهم"}];
+
   @ViewChild(Dialog) dialog: Dialog;
 
   @Select(RecordsState.blocking)
@@ -63,7 +62,7 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...record,
           });
-          this.patchValues(record);
+          // this.patchValues(record);
         })
       )
       .subscribe();
@@ -109,26 +108,18 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  patchValues(record) {
+/*  patchValues(record) {
     if (record.isCritical) {
       this.form.patchValue({
         isCritical: this.criticalityType[0]
       });
-    } else {
-      this.form.patchValue({
-        isCritical: this.criticalityType[1]
-      });
     }
     if (record.recordType == 1) {
       this.form.patchValue({
-        recordType: this.recordType[0]
-      });
-    } else {
-      this.form.patchValue({
-        recordType: this.recordType[1]
+        // recordType: this.recordType[0]
       });
     }
-  }
+  }*/
 
   buildForm() {
     this.form = this.formBuilder.group({
@@ -138,6 +129,7 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
       recordCustodian: [null, [Validators.required]],
       location: [null, [Validators.required]],
       alternateSource: [null, [Validators.required]],
+      isActive: [true]
     });
     this.defaultFormValue = {
       ...this.defaultFormValue,
@@ -182,11 +174,6 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
     record.resource = {
       id: resource.id
     };
-    record.isCritical = record.isCritical.id === 1 ? true : false;
-    record.recordType = record.recordType.id === 1 ? true : false;
-    record.isActive = true;
-    record.id = 0;
-
     record.id = this._recordId;
     if (this.editMode) {
       this.store.dispatch(new BrowseRecordAction.UpdateRecord(record));
