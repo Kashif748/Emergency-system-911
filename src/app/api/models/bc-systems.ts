@@ -8,6 +8,6 @@ export interface BcSystems {
   nameAr?: string;
   nameEn?: string;
   orgHierarchy?: BcOrgHierarchy;
-  orgStructure: OrgStructure;
+  orgStructure?: OrgStructure;
 }
 

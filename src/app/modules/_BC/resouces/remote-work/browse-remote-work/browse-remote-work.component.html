@@ -1,1 +1,6 @@
-<app-remote-work-content></app-remote-work-content>
+<div *ngIf="state$ | async as state">
+  <app-remote-work-content [loading]="loading$ | async" [page]="page$ | async"
+                           [columns]="state.columns" [totalRecords]="totalRecords$ | async"
+                           [pageRequest]="state?.pageRequest"
+                           (onPageChange)="loadPage($event)"></app-remote-work-content>
+</div>

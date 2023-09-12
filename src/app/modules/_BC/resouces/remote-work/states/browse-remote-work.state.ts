@@ -4,7 +4,11 @@ import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageHelper} from '@core/helpers/message.helper';
 import {ApiHelper} from '@core/helpers/api.helper';
+import {iif, patch} from "@ngxs/store/operators";
+import {EMPTY} from "rxjs";
+import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseRemoteWorkAction} from "./browse-remote-work.action";
+import {RemoteWorkAction} from "@core/states/bc-resources/remote-work/remote-work.action";
 
 export interface BrowseRemoteWorkStateModel {
   pageRequest: PageRequestModel;
@@ -48,6 +52,74 @@ export class BrowseRemoteWorkState {
   }
 
   /* ********************** ACTIONS ************************* */
+  @Action(BrowseRemoteWorkAction.LoadRemoteWork)
+  loadRemoteWork(
+    { setState, dispatch, getState }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseRemoteWorkAction.LoadRemoteWork
+  ) {
+    setState(
+      patch<BrowseRemoteWorkStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
+          rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+        }),
+      })
+    );
+    const pageRequest = getState().pageRequest;
+
+    return dispatch(
+      new RemoteWorkAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        resourceId: payload.resourceId,
+      })
+    );
+  }
+
+  @Action(BrowseRemoteWorkAction.CreateRemoteWork)
+  createRemoteWork(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseRemoteWorkAction.CreateRemoteWork
+  ) {
+    return dispatch(new RemoteWorkAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([
+          new BrowseRemoteWorkAction.LoadRemoteWork({
+            resourceId: payload.resource?.id,
+          }),
+          new BrowseRemoteWorkAction.ToggleDialog({}),
+        ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+  @Action(BrowseRemoteWorkAction.UpdateRemoteWork)
+  updateRemoteWork(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseRemoteWorkAction.UpdateRemoteWork
+  ) {
+    return dispatch(new RemoteWorkAction.Update(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseRemoteWorkAction.LoadRemoteWork({
+          resourceId: payload.resource?.id,
+        }));
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseRemoteWorkAction.ToggleDialog({}));
+      })
+    );
+  }
+
   @Action(BrowseRemoteWorkAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
     { dispatch }: StateContext<BrowseRemoteWorkStateModel>,

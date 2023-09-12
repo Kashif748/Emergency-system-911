@@ -36,6 +36,8 @@ import {PaginatorModule} from "primeng/paginator";
 import {OrganizationChartModule} from "primeng/organizationchart";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {BrowseAppSystemState} from "./states/browse-app-system.state";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {BlockUIModule} from "primeng/blockui";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -85,7 +87,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     DividerModule,
     ToggleButtonModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    BlockUIModule,
+    ProgressSpinnerModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

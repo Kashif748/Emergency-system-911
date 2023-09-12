@@ -105,11 +105,11 @@
                   {{ rowIndex + 1 }}
                 </td>
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'criticality'}}
+                  {{ langu == 'ar' ? item.detailsAr : item.detailsEn}}
                 </td>
 
                 <td class="min-w-200px max-w-300px" >
-                  {{ item | translateObj : 'name'}}
+                  {{ item.requiredCount}}
                 </td>
 
 
@@ -144,7 +144,9 @@
         </ng-template>
       </ng-container>
 
-      <p-paginator>
+      <p-paginator #pg [first]="pageRequest?.first" [rows]="pageRequest?.rows" [totalRecords]="totalRecords"
+                   [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
+                   currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)">
       </p-paginator>
     </div>
   </div>

@@ -53,9 +53,13 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         tap((node) => {
           this.loadUsers('', true);
+
           if (node?.data) {
             this.selectedOrgHirId = node.data?.id;
-            this.form.patchValue(node.data);
+            const coordinators = node.data?.coordinators?.map((co) => co?.user);
+            console.log(coordinators);
+
+            this.form.patchValue({ ...node.data, coordinators });
           } else {
             this.selectedOrgHirId = null;
             this.buildForm();
@@ -88,7 +92,7 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
       manager: [null],
       parentId: '',
       id: '',
-      coordinator: [null],
+      coordinators: [null],
       bcOrgHirType: null,
       isActive: true,
     });
@@ -103,10 +107,14 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
       return;
     }
     const payload: BcOrgHierarchy = {
-      ...this.form.value,
-      coordinatorId: this.form.value?.coordinator?.id,
+       ...this.form.value,
+      coordinators: this.form.value?.coordinators?.map((user) => {
+        return {   user :user };
+      }),
       managerId: this.form.value?.manager?.id,
     };
+    console.log(payload);
+
     if (this.editMode) {
       this.store.dispatch(
         new BrowseOrgDetailAction.UpdateOrgHierarchy(payload)

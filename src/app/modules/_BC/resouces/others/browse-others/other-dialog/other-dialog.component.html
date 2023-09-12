@@ -7,124 +7,206 @@
   ></button>
 </div>
 
+<!-- as a dialog -->
 <p-dialog
-  [visible]="opened$ | async" (visibleChange)="close()"
+  #dialog
+  [visible]="opened$ | async"
   [modal]="true"
+  (visibleChange)="close()"
   [style]="{ width: '55vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
   [maximizable]="true"
   [baseZIndex]="10000"
-  [draggable]="false"
+  [draggable]="true"
   [resizable]="false"
 >
   <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px"></div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'APP_SYS.EDIT_SOFTAPP' | translate}}
+        {{'OTHERS.EDIT_IT' | translate}}
 
       </ng-container>
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'APP_SYS.ADD_SOFTAPP' | translate}}
+        {{'OTHERS.ADD_IT' | translate}}
       </ng-container>
 
       <ng-container *ngIf="viewOnly$ | async">
-        {{'APP_SYS.VIEW_SOFTAPP' | translate}}
+        {{'OTHERS.VIEW_IT' | translate}}
       </ng-container>
     </h3>
-  </ng-template>
+  </div>
 
-  <form [formGroup]="form" class="p-fluid p-grid mt-5">
-    <div class="p-field p-col-12 p-md-6">
+  <span class="flex-grow-1"></span>
+  <a
+    *ngIf="asDialog"
+    queryParamsHandling="merge"
+    pRipple
+    pButton
+    icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"
+  ></a>
+</ng-template>
+
+
+<!-- templates content -->
+<ng-template #content>
+  <div
+    class="w-100 pt-2"
+    [ngStyle]="{
+      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '65vh'
+    }"
+  >
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+      <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="detailEn" pInputText />
+        <input type="text" formControlName="detailsEn" pInputText />
         <label>
           {{ "OTHERS.DETAIL_EN" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
-          form.controls['detailEn'].touched &&
-          !form.controls['detailEn'].valid &&
-          form.controls['detailEn'].dirty
+        <ng-container
+          *ngIf="
+          form.controls['detailsEn'].touched &&
+          !form.controls['detailsEn'].valid &&
+          form.controls['detailsEn'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['detailEn'].hasError('required')"
         >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['detailEn'].hasError('english')"
-        >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-        </p>
-      </ng-container>
-    </div>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['detailsEn'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['detailsEn'].hasError('english')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+          </p>
+        </ng-container>
+      </div>
 
-    <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="detailAr" pInputText />
+        <input type="text" formControlName="detailsAr" pInputText />
         <label>
           {{ "OTHERS.DETAIL_AR" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
 
-      <ng-container
-        *ngIf="
-          form.controls['detailAr'].touched &&
-          !form.controls['detailAr'].valid &&
-          form.controls['detailAr'].dirty
+        <ng-container
+          *ngIf="
+          form.controls['detailsAr'].touched &&
+          !form.controls['detailsAr'].valid &&
+          form.controls['detailsAr'].dirty
         "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['detailAr'].hasError('required')"
         >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['detailAr'].hasError('arabic')"
-        >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
-        </p>
-      </ng-container>
-    </div>
-    <div class="p-field p-col-12 p-md-6">
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['detailsAr'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['detailsAr'].hasError('arabic')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+          </p>
+        </ng-container>
+      </div>
+      <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="number" formControlName="count" pInputText/>
+        <input type="number" formControlName="requiredCount" pInputText/>
         <label>
           {{ "OTHERS.REQUIRED_COUNT" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
 
-      <ng-container
-        *ngIf="form.controls['count'].touched && !form.controls['count'].valid &&
-          form.controls['count'].dirty">
-        <p class="p-error mb-0" *ngIf="form.controls['count'].hasError('required')">
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
-    </div>
+        <ng-container
+          *ngIf="form.controls['requiredCount'].touched && !form.controls['requiredCount'].valid &&
+          form.controls['requiredCount'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['requiredCount'].hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
 
-  </form>
+    </form>
+  </div>
+</ng-template>
 
-  <ng-template pTemplate="footer">
-    <div class="p-col text-center">
-      <div class="text-center" *ngIf="!(viewOnly$ | async)">
+
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <button
+      *ngIf="asDialog"
+      pButton
+      icon="pi pi-times"
+      (click)="close()"
+      label="{{ 'ACTIONS.CLOSE' | translate }}"
+    ></button>
+
+    <div class="ml-dir-auto"></div>
+
+    <ng-container *ngIf="!(viewOnly$ | async)">
+      <div class="mx-1">
         <button
           pButton
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-          [disabled]="form.invalid"
-          (click)="submit()"
+          type="button"
+          label="{{ 'ACTIONS.CLEAR' | translate }}"
+          icon="pi pi-replay"
+          class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"
         ></button>
       </div>
+    </ng-container>
+
+    <div class="mx-1" *ngIf="!(viewOnly$ | async)">
+      <button
+        pButton
+        label="{{ 'ACTIONS.SAVE' | translate }}"
+        icon="pi pi-save"
+        [loading]="blocking$ | async"
+        (click)="submit()"
+      ></button>
     </div>
-  </ng-template>
-</p-dialog>
+  </div>
+</ng-template>
+

@@ -103,6 +103,16 @@ import { BcVersionsControllerService } from './services/bc-versions-controller.s
 import { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
 import { BcSystemsControllerService } from './services/bc-systems-controller.service';
 import { BcrtoControllerService } from './services/bcrto-controller.service';
+import { BcResourcesStaffReqControllerService } from './services/bc-resources-staff-req-controller.service';
+import { BcResourcesRemoteWorkControllerService } from './services/bc-resources-remote-work-controller.service';
+import { BcResourcesRecordsControllerService } from './services/bc-resources-records-controller.service';
+import { BcResourcesNonItInfrastructureControllerService } from './services/bc-resources-non-it-infrastructure-controller.service';
+import { BcResourcesMinPersonnelReqControllerService } from './services/bc-resources-min-personnel-req-controller.service';
+import { BcResourcesMinLicenseReqControllerService } from './services/bc-resources-min-license-req-controller.service';
+import { BcResourcesItInfrastructureControllerService } from './services/bc-resources-it-infrastructure-controller.service';
+import { BcResourcesDesignationControllerService } from './services/bc-resources-designation-controller.service';
+import { BcResourcesControllerService } from './services/bc-resources-controller.service';
+import { BcResourcesAppAndSoftwareControllerService } from './services/bc-resources-app-and-software-controller.service';
 import { BcPartnersControllerService } from './services/bc-partners-controller.service';
 import { BcOrgHierarchyControllerService } from './services/bc-org-hierarchy-controller.service';
 import { BcOrgHierarchyTypeControllerService } from './services/bc-org-hierarchy-type-controller.service';
@@ -274,6 +284,16 @@ import { MigrationControllerService } from './services/migration-controller.serv
     BcVersionsStatusControllerService,
     BcSystemsControllerService,
     BcrtoControllerService,
+    BcResourcesStaffReqControllerService,
+    BcResourcesRemoteWorkControllerService,
+    BcResourcesRecordsControllerService,
+    BcResourcesNonItInfrastructureControllerService,
+    BcResourcesMinPersonnelReqControllerService,
+    BcResourcesMinLicenseReqControllerService,
+    BcResourcesItInfrastructureControllerService,
+    BcResourcesDesignationControllerService,
+    BcResourcesControllerService,
+    BcResourcesAppAndSoftwareControllerService,
     BcPartnersControllerService,
     BcOrgHierarchyControllerService,
     BcOrgHierarchyTypeControllerService,
