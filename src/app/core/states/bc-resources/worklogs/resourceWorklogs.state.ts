@@ -24,8 +24,8 @@ import {ResourceWorklogsAction} from "@core/states/bc-resources/worklogs/resourc
 
 export interface ResourceWorklogsStateModel {
   page: PageBcActivityAnalysisWorkLog;
-  activityWorklog: BcActivityAnalysisWorkLog;
-  activityWorklogTypes: BcWorkLogTypes[];
+  Worklog: BcActivityAnalysisWorkLog;
+  WorklogTypes: BcWorkLogTypes[];
   loading: boolean;
   blocking: boolean;
 }
@@ -41,8 +41,8 @@ export class ResourceWorklogsState {
    *
    */
   constructor(
-    private activityWorklogs: BcActivityAnalysisWorkLogControllerService,
-    private activityWorklogsTypes: BcWorkLogTypesControllerService
+    private Worklogs: BcActivityAnalysisWorkLogControllerService,
+    private WorklogsTypes: BcWorkLogTypesControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -52,8 +52,8 @@ export class ResourceWorklogsState {
   }
 
   @Selector([ResourceWorklogsState])
-  static activityWorklog(state: ResourceWorklogsStateModel) {
-    return state?.activityWorklog;
+  static Worklog(state: ResourceWorklogsStateModel) {
+    return state?.Worklog;
   }
 
   @Selector([ResourceWorklogsState])
@@ -72,7 +72,7 @@ export class ResourceWorklogsState {
   }
   @Selector([ResourceWorklogsState])
   static activityWorklogTypes(state: ResourceWorklogsStateModel) {
-    return state?.activityWorklogTypes;
+    return state?.WorklogTypes;
   }
 
   /* ********************** ACTIONS ************************* */
@@ -86,11 +86,11 @@ export class ResourceWorklogsState {
         loading: true,
       })
     );
-    return this.activityWorklogs
-      .search19({
+    return this.Worklogs
+      .search26({
         isActive: true,
         actionTypeId: payload.actionTypeId,
-        activityAnalysisId: payload.activityAnalysisId,
+        resourceId: payload.resourceId,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -126,18 +126,18 @@ export class ResourceWorklogsState {
 
   @Action(ResourceWorklogsAction.LoadWorklogsTypes, { cancelUncompleted: true })
   loadWorklogsTypes({ setState }: StateContext<ResourceWorklogsStateModel>) {
-    return this.activityWorklogsTypes.list7({}).pipe(
+    return this.WorklogsTypes.list7({}).pipe(
       tap((res) => {
         setState(
           patch<ResourceWorklogsStateModel>({
-            activityWorklogTypes: res.result,
+            WorklogTypes: res.result,
           })
         );
       }),
       catchError(() => {
         setState(
           patch<ResourceWorklogsStateModel>({
-            activityWorklogTypes: [],
+            WorklogTypes: [],
           })
         );
         return EMPTY;
@@ -156,15 +156,15 @@ export class ResourceWorklogsState {
       })
     );
 
-    return this.activityWorklogs
-      .insertOne24({
+    return this.Worklogs
+      .insertOne34({
         body: { ...payload },
       })
       .pipe(
         tap((activityWorklogs) => {
           setState(
             patch<ResourceWorklogsStateModel>({
-              activityWorklog: activityWorklogs.result,
+              Worklog: activityWorklogs.result,
             })
           );
         }),
@@ -188,8 +188,8 @@ export class ResourceWorklogsState {
       })
     );
 
-    return this.activityWorklogs
-      .update103({
+    return this.Worklogs
+      .update113({
         body: { ...payload },
       })
       .pipe(
@@ -211,7 +211,7 @@ export class ResourceWorklogsState {
     if (payload.id === undefined || payload.id === null) {
       setState(
         patch<ResourceWorklogsStateModel>({
-          activityWorklog: undefined,
+          Worklog: undefined,
         })
       );
       return;
@@ -221,11 +221,11 @@ export class ResourceWorklogsState {
         blocking: true,
       })
     );
-    return this.activityWorklogs.getOne26({ id: payload.id }).pipe(
+    return this.Worklogs.getOne36({ id: payload.id }).pipe(
       tap((activityWorklogs) => {
         setState(
           patch<ResourceWorklogsStateModel>({
-            activityWorklog: activityWorklogs.result,
+            Worklog: activityWorklogs.result,
           })
         );
       }),

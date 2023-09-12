@@ -13,7 +13,7 @@ export namespace BrowseResourceWorklogsAction {
       public payload?: {
         pageRequest?: PageRequestModel;
         actionTypeId?: number;
-        activityAnalysisId: number;
+        resourceId: number;
       }
     ) {}
   }

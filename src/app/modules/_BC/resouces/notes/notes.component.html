@@ -1,11 +1,40 @@
-<div class="p-col-12" style="display: flex; justify-content: space-between">
-  <h3 class="card-title align-items-start flex-column m-0">
+<div class="p-col-12">
+  <h3 class="col-12 p-md-6 card-title align-items-start flex-column m-0">
     <span class="card-label font-weight-bolder">{{
       "NOTES.HEADER" | translate
     }}</span>
   </h3>
+
+  <div class="col-12 p-md-6 flex-column px-6 py-5">
+    <p-selectButton [options]="activityWorklogTypes$ | async" (onChange)="filter($event?.value)"
+                    [multiple]="false"
+                    optionLabel="name">
+      <ng-template let-item pTemplate="item">
+        <div class="country-item">
+          <div>{{ item | translateObj }}</div>
+        </div>
+      </ng-template>
+    </p-selectButton>
+  </div>
 </div>
 <section class="row">
+
+    <!--<p-listbox
+      [options]="activityWorklogTypes$ | async"
+      (onChange)="filter($event?.value)"
+      [metaKeySelection]="false"
+      [checkbox]="true"
+      [multiple]="false"
+      optionLabel="name"
+      [style]="{ width: '100%' }"
+    >
+      <ng-template let-item pTemplate="item">
+        <div class="country-item">
+          <div>{{ item | translateObj }}</div>
+        </div>
+      </ng-template>
+    </p-listbox>-->
+
   <div class="card timeline timeline-3 col-9 p-0">
     <div class="timeline-items p-3">
       <ng-container *ngIf="loading$ | async; else tableTemplate">
@@ -133,23 +162,7 @@
       </div>
     </div>
   </div>
-  <div class="col-3 d-flex flex-column px-10">
-    <p-listbox
-      [options]="activityWorklogTypes$ | async"
-      (onChange)="filter($event?.value)"
-      [metaKeySelection]="false"
-      [checkbox]="true"
-      [multiple]="false"
-      optionLabel="name"
-      [style]="{ width: '100%' }"
-    >
-      <ng-template let-item pTemplate="item">
-        <div class="country-item">
-          <div>{{ item | translateObj }}</div>
-        </div>
-      </ng-template>
-    </p-listbox>
-  </div>
+
 </section>
 
 <p-dialog [(visible)]="display">

@@ -17,6 +17,7 @@ import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { ActivityWorklogsAction } from '@core/states/activity-analysis/worklogs/worklogs.action';
 import {BrowseResourceWorklogsAction} from "./browse-resource-worklogs.action";
+import {ResourceWorklogsAction} from "@core/states/bc-resources/worklogs/resourceWorklogs.action";
 
 export interface BrowseResourceWorklogsStateModel {
   pageRequest: PageRequestModel;
@@ -83,9 +84,9 @@ export class BrowseResourceWorklogsState {
     const pageRequest = getState().pageRequest;
 
     return dispatch(
-      new ActivityWorklogsAction.LoadPage({
+      new ResourceWorklogsAction.LoadPage({
         actionTypeId: payload?.actionTypeId,
-        activityAnalysisId: payload.activityAnalysisId,
+        resourceId: payload.resourceId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
@@ -98,7 +99,7 @@ export class BrowseResourceWorklogsState {
   LoadActivityWorklogsTypes({
                               dispatch,
                             }: StateContext<BrowseResourceWorklogsStateModel>) {
-    return dispatch(new ActivityWorklogsAction.LoadWorklogsTypes());
+    return dispatch(new ResourceWorklogsAction.LoadWorklogsTypes());
   }
 
   @Action(BrowseResourceWorklogsAction.Create)
@@ -106,13 +107,13 @@ export class BrowseResourceWorklogsState {
     { dispatch, getState }: StateContext<BrowseResourceWorklogsStateModel>,
     { payload }: BrowseResourceWorklogsAction.Create
   ) {
-    return dispatch(new ActivityWorklogsAction.Create(payload)).pipe(
+    return dispatch(new ResourceWorklogsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(
           new BrowseResourceWorklogsAction.LoadResourceWorklogs({
             actionTypeId: payload.actionType.id,
-            activityAnalysisId: payload.activityAnalysis?.id,
+            resourceId: payload.resource?.id,
           })
         );
       }),
@@ -128,13 +129,13 @@ export class BrowseResourceWorklogsState {
     { dispatch }: StateContext<BrowseResourceWorklogsStateModel>,
     { payload }: BrowseResourceWorklogsAction.Update
   ) {
-    return dispatch(new ActivityWorklogsAction.Update(payload)).pipe(
+    return dispatch(new ResourceWorklogsAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(
           new BrowseResourceWorklogsAction.LoadResourceWorklogs({
             actionTypeId: payload.actionType.id,
-            activityAnalysisId: payload.activityAnalysis?.id,
+            resourceId: payload.resource?.id,
           })
         );
       }),

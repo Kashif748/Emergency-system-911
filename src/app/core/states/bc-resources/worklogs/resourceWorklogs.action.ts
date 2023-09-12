@@ -14,7 +14,7 @@ export namespace ResourceWorklogsAction {
         page: number;
         size: number;
         actionTypeId?: number;
-        activityAnalysisId: number;
+        resourceId: number;
       }
     ) {}
   }

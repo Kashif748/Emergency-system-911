@@ -1,6 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { NOTES } from '../tempData.conts';
+import {ILangFacade} from '@core/facades/lang.facade';
 import {ActivityWorklogsState} from "@core/states/activity-analysis/worklogs/worklogs.state";
 import {BrowseActivityWorklogsState, BrowseActivityWorklogsStateModel} from "../../activity-analysis/worklogs/states/browse-worklogs.state";
 import {Select, Store} from "@ngxs/store";
@@ -10,9 +9,7 @@ import {BcWorkLogTypes} from "../../../../api/models/bc-work-log-types";
 import {FormControl, Validators} from "@angular/forms";
 import {DmsService} from "@core/api/services/dms.service";
 import {MessageHelper} from "@core/helpers/message.helper";
-import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
 import {filter, switchMap, takeUntil, tap} from "rxjs/operators";
-import {BrowseActivityWorklogsAction} from "../../activity-analysis/worklogs/states/browse-worklogs.action";
 import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
 import {ResourceWorklogsState} from "@core/states/bc-resources/worklogs/resourceWorklogs.state";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
@@ -25,7 +22,7 @@ import {BrowseResourceWorklogsAction} from "./states/browse-resource-worklogs.ac
 })
 export class NotesComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput: ElementRef;
-  @Select(ActivityWorklogsState.page)
+  @Select(ResourceWorklogsState.page)
   public page$: Observable<BcActivityAnalysisWorkLog[]>;
 
   public activityWorklog : BcActivityAnalysisWorkLog;
@@ -49,7 +46,7 @@ export class NotesComponent implements OnInit, OnDestroy {
   public files: File[] = [];
   uploading = false;
   display: boolean = false;
-  loadingImage= false
+  loadingImage = false
   note = new FormControl('', Validators.required);
 
   constructor(
@@ -68,7 +65,7 @@ export class NotesComponent implements OnInit, OnDestroy {
           this.store.dispatch([
             new BrowseResourceWorklogsAction.LoadResourceWorklogsTypes(),
             new BrowseResourceWorklogsAction.LoadResourceWorklogs({
-              activityAnalysisId: activity.id,
+              resourceId: activity.id,
             }),
           ]);
         })
@@ -80,17 +77,17 @@ export class NotesComponent implements OnInit, OnDestroy {
       return;
     }
     const activityAnalysis = this.store.selectSnapshot(
-      ActivityAnalysisState.activityAnalysis
+      ResourceAnalysisState.resourceAnalysis
     );
-    let worklog: BcActivityAnalysisWorkLog = {
+    const worklog: BcActivityAnalysisWorkLog = {
       notes: this.note.value,
-      activityAnalysis: activityAnalysis,
+      resource: {id: activityAnalysis.id}
     };
     this.store
-      .dispatch([new BrowseActivityWorklogsAction.Create(worklog)])
+      .dispatch([new BrowseResourceWorklogsAction.Create(worklog)])
       .pipe(
         switchMap(() =>
-          this.store.select(ActivityWorklogsState.activityWorklog)
+          this.store.select(ResourceWorklogsState.Worklog)
         ),
         filter((p) => !!p),
         tap(async (data) => {
@@ -100,13 +97,13 @@ export class NotesComponent implements OnInit, OnDestroy {
       ).subscribe();
   }
   filter(event) {
-    const activityAnalysis = this.store.selectSnapshot(
-      ActivityAnalysisState.activityAnalysis
+    const resource = this.store.selectSnapshot(
+      ResourceAnalysisState.resourceAnalysis
     );
     this.store.dispatch(
-      new BrowseActivityWorklogsAction.LoadActivityWorklogs({
+      new BrowseResourceWorklogsAction.LoadResourceWorklogs({
         actionTypeId: event.id,
-        activityAnalysisId: activityAnalysis.id,
+        resourceId: resource.id,
       })
     );
   }

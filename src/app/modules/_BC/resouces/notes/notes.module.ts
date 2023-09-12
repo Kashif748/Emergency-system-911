@@ -17,9 +17,10 @@ import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseResourceWorklogsState} from "./states/browse-resource-worklogs.state";
+import {SelectButtonModule} from "primeng/selectbutton";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/business-activity-analysis/', '.json');
+  return new TranslateHttpLoader(http, 'assets/i18n/business-resources/', '.json');
 }
 const routes: Routes = [
   {
@@ -55,6 +56,7 @@ const routes: Routes = [
     DialogModule,
     SharedModule,
     ListboxModule,
+    SelectButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
