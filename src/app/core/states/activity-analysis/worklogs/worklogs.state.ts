@@ -88,7 +88,7 @@ export class ActivityWorklogsState {
       })
     );
     return this.activityWorklogs
-      .search19({
+      .search26({
         isActive: true,
         actionTypeId: payload.actionTypeId,
         activityAnalysisId: payload.activityAnalysisId,
@@ -158,7 +158,7 @@ export class ActivityWorklogsState {
     );
 
     return this.activityWorklogs
-      .insertOne24({
+      .insertOne34({
         body: { ...payload },
       })
       .pipe(
@@ -190,7 +190,7 @@ export class ActivityWorklogsState {
     );
 
     return this.activityWorklogs
-      .update103({
+      .update113({
         body: { ...payload },
       })
       .pipe(
@@ -222,7 +222,7 @@ export class ActivityWorklogsState {
         blocking: true,
       })
     );
-    return this.activityWorklogs.getOne26({ id: payload.id }).pipe(
+    return this.activityWorklogs.getOne36({ id: payload.id }).pipe(
       tap((activityWorklogs) => {
         setState(
           patch<ActivityWorklogsStateModel>({

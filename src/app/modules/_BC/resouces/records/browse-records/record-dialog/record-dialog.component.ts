@@ -124,8 +124,8 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
   buildForm() {
     this.form = this.formBuilder.group({
       recordName: [null, [Validators.required]],
-      recordType: [null, [Validators.required]],
-      isCritical: [null, [Validators.required]],
+      recordType: [true, [Validators.required]],
+      isCritical: [true, [Validators.required]],
       recordCustodian: [null, [Validators.required]],
       location: [null, [Validators.required]],
       alternateSource: [null, [Validators.required]],

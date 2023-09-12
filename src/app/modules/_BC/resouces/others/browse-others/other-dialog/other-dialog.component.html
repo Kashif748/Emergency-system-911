@@ -66,14 +66,14 @@
   </div>
 
   <span class="flex-grow-1"></span>
-  <a
+  <!--<a
     *ngIf="asDialog"
     queryParamsHandling="merge"
     pRipple
     pButton
     icon="pi pi-link"
     class="p-button-rounded p-button-text p-button-plain"
-  ></a>
+  ></a>-->
 </ng-template>
 
 
@@ -82,7 +82,7 @@
   <div
     class="w-100 pt-2"
     [ngStyle]="{
-      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '65vh'
+      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '30vh'
     }"
   >
     <p-blockUI>
