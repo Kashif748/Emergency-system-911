@@ -3,9 +3,9 @@
     <div class="row" #chartTemplate>
       <div class="col-12">
         <div class="row">
-          <div class="col-md-5 mb-4">
-            <div class="row h-100 min-h-200px">
-              <div class="col-4 ">
+          <div class="col-md-5">
+            <div class="row h-100">
+              <div class="col-md-4 mb-4 min-h-200px">
                 <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
                   <h6 class="position-absolute header-indicator mt-1 mx-1">
                     {{ "CHARTS.TOTAL" | translate }}
@@ -18,7 +18,7 @@
                 </div>
               </div>
 
-              <div class="col-4">
+              <div class="col-md-4 mb-4 min-h-200px">
                 <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
                   <h6 class="position-absolute header-indicator mt-1 mx-1">
                     {{ "CHARTS.AVERAGE_CLOSE_TIME" | translate }}
@@ -36,7 +36,7 @@
                 </div>
               </div>
 
-              <div class="col-4">
+              <div class="col-md-4 mb-4 min-h-200px">
                 <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
                   <h6 class="position-absolute header-indicator mt-1 mx-1">
                     {{ "CHARTS.RATE_CLOSE_WITHIN_TIME" | translate }}
@@ -119,9 +119,9 @@
     <div class="row">
       <div class="col-12">
         <div class="row">
-          <div class="col-md-5 mb-4">
-            <div class="row h-100 min-h-200px">
-              <div class="col-4 ">
+          <div class="col-md-5">
+            <div class="row h-100">
+              <div class="col-md-4 mb-4 min-h-200px">
                 <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
                   <h6 class="position-absolute header-indicator mt-1 mx-1">
                     {{ "CHARTS.TOTAL" | translate }}
@@ -136,7 +136,7 @@
                 </div>
               </div>
 
-              <div class="col-4">
+              <div class="col-md-4 mb-4 min-h-200px">
                 <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
                   <h6 class="position-absolute header-indicator mt-1 mx-1">
                     {{ "CHARTS.AVERAGE_CLOSE_TIME" | translate }}
@@ -157,7 +157,7 @@
                 </div>
               </div>
 
-              <div class="col-4">
+              <div class="col-md-4 mb-4 min-h-200px">
                 <div class="mx-1 border border-dark rounded-sm h-100 w-100 position-relative">
                   <h6 class="position-absolute header-indicator mt-1 mx-1 ">
                     {{ "CHARTS.RATE_CLOSE_WITHIN_TIME" | translate }}
@@ -247,8 +247,8 @@
                   [chart]="{type: 'bar', height: 150, width: '100%', stacked: true, stackType: '100%'}"
                   [plotOptions]="{ bar: { horizontal: true, borderRadius: 5,endingShape: 'rounded', startingShape: 'rounded'} }"
                   [stroke]="{width: 1,colors: ['#fff']}"
-                  [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}}"
-                  [yaxis]="{show: false, labels: {show: false, formatter: yaxisFormatter }, axisBorder: {show: false}, axisTicks: {show: false}}"
+                  [xaxis]="{show: false,labels: {show: false},axisBorder: {show: false},axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
+                  [yaxis]="{show: false, labels: {show: false, formatter: yaxisFormatter }, axisBorder: {show: false}, axisTicks: {show: false}, floating: true, decimalsInFloat: 2}"
                   [fill]="{opacity: 1}" [dataLabels]="{formatter: dataLabelsFormatter}"
                   [legend]="{position: 'bottom',horizontalAlign: 'left',itemMargin: {horizontal: 40}}"
                   [grid]="{show: false}" [tooltip]="{x:{show:false}}" [stroke]="{width:0}"></apx-chart>
