@@ -34,7 +34,7 @@ export const BROWSE_ACTIVITY_WORKLOGS_UI_STATE_TOKEN =
     pageRequest: {
       filters: {},
       first: 0,
-      rows: 10,
+      rows: 100,
     },
     columns: ['criticality', 'rtoEn', 'description'],
     view: 'TABLE',
@@ -91,6 +91,7 @@ export class BrowseActivityWorklogsState {
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         // filters: this.filters(pageRequest),
+        resetPage: payload.resetPage
       })
     );
   }
@@ -110,14 +111,16 @@ export class BrowseActivityWorklogsState {
     return dispatch(new ActivityWorklogsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(
-          new BrowseActivityWorklogsAction.LoadActivityWorklogs({
-            actionTypeId: payload.actionType.id,
-            activityAnalysisId: payload.activityAnalysis?.id,
-          })
-        );
+        // dispatch(
+        //   new BrowseActivityWorklogsAction.LoadActivityWorklogs({
+        //     actionTypeId: payload.actionType.id,
+        //     activityAnalysisId: payload.activityAnalysis?.id,
+        //   })
+        // );
       }),
       catchError((err) => {
+        console.log(err);
+
         this.messageHelper.error({ error: err });
         return EMPTY;
       })
@@ -136,6 +139,7 @@ export class BrowseActivityWorklogsState {
           new BrowseActivityWorklogsAction.LoadActivityWorklogs({
             actionTypeId: payload.actionType.id,
             activityAnalysisId: payload.activityAnalysis?.id,
+            resetPage: true,
           })
         );
       }),
@@ -144,5 +148,24 @@ export class BrowseActivityWorklogsState {
         return EMPTY;
       })
     );
+  }
+
+  @Action(BrowseActivityWorklogsAction.ToggleEditMode, {
+    cancelUncompleted: true,
+  })
+  openDialog(
+    {}: StateContext<BrowseActivityWorklogsStateModel>,
+    { payload }: BrowseActivityWorklogsAction.ToggleEditMode
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _mode:
+          this.route.snapshot.queryParams['_mode'] == 'edit'
+            ? undefined
+            : 'edit',
+        _id: payload.log?.id,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

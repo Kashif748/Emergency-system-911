@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -10,12 +11,16 @@ import { DmsService } from '@core/api/services/dms.service';
 import { UploadTagIdConst } from '@core/constant/UploadTagIdConst';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { MessageHelper } from '@core/helpers/message.helper';
+import { CommonDataState } from '@core/states';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/worklogs.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { BcActivityAnalysisWorkLog } from 'src/app/api/models';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  BcActivityAnalysisWorkLog,
+  UserMinimunProjection,
+} from 'src/app/api/models';
 import { BcWorkLogTypes } from 'src/app/api/models/bc-work-log-types';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 import { NOTES } from '../tempData.conts';
@@ -36,9 +41,8 @@ export class WorklogsComponent implements OnInit, OnDestroy {
   @Select(ActivityWorklogsState.page)
   public page$: Observable<BcActivityAnalysisWorkLog[]>;
 
-  public activityWorklog : BcActivityAnalysisWorkLog;
+  public activityWorklog: BcActivityAnalysisWorkLog;
 
-  @Select(ActivityWorklogsState.activityWorklogTypes)
   public activityWorklogTypes$: Observable<BcWorkLogTypes[]>;
 
   @Select(ActivityWorklogsState.totalRecords)
@@ -53,12 +57,19 @@ export class WorklogsComponent implements OnInit, OnDestroy {
   @Select(BrowseActivityWorklogsState.state)
   public state$: Observable<BrowseActivityWorklogsStateModel>;
 
+  @Select(CommonDataState.currentUser)
+  public user$: Observable<UserMinimunProjection>;
+
+  public selectedWorklogType: BcWorkLogTypes;
+
   private destroy$ = new Subject();
   public files: File[] = [];
   uploading = false;
   display: boolean = false;
-loadingImage= false
+  loadingImage = false;
   note = new FormControl('', Validators.required);
+
+  _worklogId: number;
 
   constructor(
     private store: Store,
@@ -77,13 +88,53 @@ loadingImage= false
             new BrowseActivityWorklogsAction.LoadActivityWorklogsTypes(),
             new BrowseActivityWorklogsAction.LoadActivityWorklogs({
               activityAnalysisId: activity.id,
+              resetPage: true,
             }),
           ]);
         })
       )
       .subscribe();
+
+    this.activityWorklogTypes$ = this.store
+      .select(ActivityWorklogsState.activityWorklogTypes)
+      .pipe(
+        filter((p) => !!p),
+        map((types) => {
+          const allType: BcWorkLogTypes = {
+            nameAr: 'الكل',
+            nameEn: 'All',
+            id: 0,
+          };
+          return [allType, ...types];
+        })
+      );
   }
 
+  setEditMode(log) {
+    this.store.dispatch(new BrowseActivityWorklogsAction.ToggleEditMode(log));
+  }
+  deleteWorkLog(log) {}
+
+  public loadPage() {
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
+    const page = this.store.selectSnapshot(ActivityWorklogsState.page);
+    const totalRecords = this.store.selectSnapshot(
+      ActivityWorklogsState.totalRecords
+    );
+    this.store.dispatch(
+      new BrowseActivityWorklogsAction.LoadActivityWorklogs({
+        activityAnalysisId: activityAnalysis.id,
+        actionTypeId: this.selectedWorklogType?.id,
+        pageRequest: {
+          first: totalRecords - page.length,
+          rows: 20,
+        },
+        resetPage: false,
+      })
+    );
+  }
   async submit() {
     if (this.note.invalid) {
       return;
@@ -104,18 +155,22 @@ loadingImage= false
         filter((p) => !!p),
         tap(async (data) => {
           console.log(data);
+          this.note.reset();
           await this.uploadFiles(data.id, this.note.value);
         })
-      ).subscribe();
+      )
+      .subscribe();
   }
   filter(event) {
+    this.selectedWorklogType = event;
     const activityAnalysis = this.store.selectSnapshot(
       ActivityAnalysisState.activityAnalysis
     );
     this.store.dispatch(
       new BrowseActivityWorklogsAction.LoadActivityWorklogs({
-        actionTypeId: event.id,
-        activityAnalysisId: activityAnalysis.id,
+        actionTypeId: event.id == 0 ? null : event.id,
+        activityAnalysisId: activityAnalysis?.id,
+        resetPage: true,
       })
     );
   }
@@ -143,8 +198,8 @@ loadingImage= false
 
   showDialog(activityWorklog) {
     this.activityWorklog = activityWorklog;
-      this.display = true;
-      this.loadingImage =true;
+    this.display = true;
+    this.loadingImage = true;
   }
   ngOnDestroy(): void {
     this.destroy$.next();
