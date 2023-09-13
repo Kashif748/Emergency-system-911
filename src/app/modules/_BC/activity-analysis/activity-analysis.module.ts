@@ -17,6 +17,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisComponent } from './activity-analysis/activity-analysis.component';
+import { DialogModule } from 'primeng/dialog';
+import { FormsModule } from '@angular/forms';
+
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -96,9 +99,11 @@ const routes: Routes = [
       isolate: true,
     }),
     NgxsModule.forFeature([BrowseActivityAnalysisState]),
+    FormsModule,
     DividerModule,
     ProgressBarModule,
     TranslateObjModule,
+    DialogModule,
     AvatarModule,
     BlockUIModule,
   ],

@@ -9,9 +9,13 @@ import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BcActivityAnalysis, BcCycles } from 'src/app/api/models';
+import { ActivityAnalysisStatusAction } from 'src/app/api/models/activity-analysis-status-action';
 import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 import { BrowseActivityAnalysisAction } from '../states/browse-activity-analysis.action';
-import { BrowseActivityAnalysisState, BrowseActivityAnalysisStateModel } from '../states/browse-activity-analysis.state';
+import {
+  BrowseActivityAnalysisState,
+  BrowseActivityAnalysisStateModel,
+} from '../states/browse-activity-analysis.state';
 import { TABS } from '../tempData.conts';
 
 @Component({
@@ -27,28 +31,33 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   @Select(ActivityAnalysisState.activityAnalysis)
   public activityAnalysis$: Observable<BcActivityAnalysis>;
 
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
   @Select(ActivityAnalysisState.cycle)
   public cycle$: Observable<BcCycles>;
 
   @Select(BrowseActivityAnalysisState.tabIndex)
   public tabIndex$: Observable<BcCycles>;
 
-
   @Select(ActivityAnalysisState.blocking)
   public blocking$: Observable<boolean>;
-
 
   @Select(BrowseActivityAnalysisState.impactTotal)
   public impactTotal$: Observable<number>;
 
   tabs = TABS;
-
+  displayNote = false;
+  notes = '';
+  newStatus: BcActivityAnalysisChangeStatusDto;
   public dir$ = this.lang.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
   );
 
   public icon$ = this.lang.vm$.pipe(
-    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'))
+    map(({ ActiveLang: { key } }) =>
+      key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'
+    )
   );
 
   private destroy$ = new Subject();
@@ -68,6 +77,9 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
           const index = this.tabs.findIndex((item) => item.router == path);
           this.store.dispatch([
             new BrowseActivityAnalysisAction.GetActivityAnalysis({
+              id: params['_activity'],
+            }),
+            new BrowseActivityAnalysisAction.GetActivityAnalysisStatus({
               id: params['_activity'],
             }),
             new BrowseActivityAnalysisAction.GetCycle({
@@ -100,17 +112,31 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
         );
       });
   }
-  changeStatus(id, status: ACTIVITY_STATUSES) {
-    const newStatus: BcActivityAnalysisChangeStatusDto = {
+  changeStatus(id, action) {
+    this.newStatus = {
       activityAnalysisId: id,
-      statusId: status,
+      actionId: action?.id,
       notes: '',
     };
-    this.store.dispatch([
-      new BrowseActivityAnalysisAction.ChangeStatus(newStatus),
-    ]);
+    if (action.requiresNote) {
+      this.displayNote = true;
+      return;
+    } else {
+      this.applyStatus();
+    }
   }
-
+  applyStatus() {
+    this.newStatus = {
+      ...this.newStatus,
+      notes: this.notes,
+    };
+    this.store
+      .dispatch([new BrowseActivityAnalysisAction.ChangeStatus(this.newStatus)])
+      .toPromise()
+      .then(() => {
+        this.displayNote = false;
+      });
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

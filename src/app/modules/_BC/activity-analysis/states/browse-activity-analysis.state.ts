@@ -92,6 +92,21 @@ export class BrowseActivityAnalysisState {
       })
     );
   }
+  @Action(BrowseActivityAnalysisAction.GetActivityAnalysisStatus)
+  GetActivityAnalysisStatus(
+    { dispatch, setState }: StateContext<BrowseActivityAnalysisStateModel>,
+    { payload }: BrowseActivityAnalysisAction.GetActivityAnalysisStatus
+  ) {
+    return dispatch(
+      new ActivityAnalysisAction.GetActivityAnalysisStatus(payload)
+    ).pipe(
+      tap(() => {}),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
 
   @Action(BrowseActivityAnalysisAction.Update)
   Update(
@@ -119,7 +134,7 @@ export class BrowseActivityAnalysisState {
       tap(() => {
         this.messageHelper.success();
         dispatch(
-          new BrowseActivityAnalysisAction.GetActivityAnalysis({
+          new BrowseActivityAnalysisAction.GetActivityAnalysisStatus({
             id: payload.activityAnalysisId,
           })
         );
