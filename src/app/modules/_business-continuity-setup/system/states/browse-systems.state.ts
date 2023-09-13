@@ -79,7 +79,7 @@ export class BrowseSystemsState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
+        filters: pageRequest.filters,
       })
     );
   }
@@ -224,6 +224,31 @@ export class BrowseSystemsState {
     setState(
       patch<BrowseSystemsStateModel>({
         view: payload.view,
+      })
+    );
+  }
+
+  @Action(BrowseSystemsAction.SortSystems)
+  sortLocation(
+    { setState, dispatch, getState }: StateContext<BrowseSystemsStateModel>,
+    { payload }: BrowseSystemsAction.SortSystems
+  ) {
+    setState(
+      patch<BrowseSystemsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new SystemsAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: pageRequest.filters,
       })
     );
   }

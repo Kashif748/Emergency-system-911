@@ -106,7 +106,7 @@ export class ImpactAnalysisState {
       })
     );
     return this.activitiesAnalysisController
-      .search20({
+      .search27({
         pageable: {
           page: payload?.page,
           size: payload?.size,
@@ -201,7 +201,7 @@ export class ImpactAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.getOne24({ id: payload.id }).pipe(
+    return this.activitiesAnalysisController.getOne34({ id: payload.id }).pipe(
       tap((bc) => {
         setState(
           patch<ImpactAnalysisStateModel>({

@@ -14,6 +14,18 @@ export namespace BrowseActivityAnalysisAction {
       }
     ) {}
   }
+  export class GetActivityAnalysisStatus {
+    static readonly type = '[BrowseActivityAnalysis] Get Activity Status';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 
   export class GetCycle {
     static readonly type = '[BrowseActivityAnalysis] Get Cycle';
