@@ -196,7 +196,7 @@
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
               <td class="flag-td">
-                <div class="bg-secondary"></div>
+                <!--<div class="bg-secondary"></div>-->
               </td>
 
               <td *ngIf="columns?.includes('activityName')">
@@ -291,12 +291,12 @@
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
               <td class="flag-td">
-                <div
+                <!--<div
                   [ngClass]="{
                     'bg-primary': item.isActive,
                     'bg-warning': !item.isActive
                   }"
-                ></div>
+                ></div>-->
               </td>
 
               <td

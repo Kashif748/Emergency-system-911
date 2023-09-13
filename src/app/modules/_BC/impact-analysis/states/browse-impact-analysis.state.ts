@@ -17,6 +17,9 @@ import { BrowseImpactAnalysisAction } from './browse-impact-analysis.action';
 import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
 import { catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
+import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
+import {BrowseResourceAnalysisAction} from "./browse-resource-analysis.action";
+import {BrowseReourceAnalysisStateModel} from "./browse-resource-analysis.state";
 
 export interface BrowseImpactAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -104,6 +107,32 @@ export class BrowseImpactAnalysisState {
         filters: {
           ...pageRequest.filters,
           orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+        },
+      })
+    );
+  }
+  @Action(BrowseImpactAnalysisAction.Sort)
+  sort(
+    { setState, dispatch, getState }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.Sort
+  ) {
+    setState(
+      patch<BrowseImpactAnalysisStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new ImapactAnalysisAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
         },
       })
     );

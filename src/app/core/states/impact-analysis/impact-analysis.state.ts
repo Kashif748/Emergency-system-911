@@ -110,6 +110,7 @@ export class ImpactAnalysisState {
         pageable: {
           page: payload?.page,
           size: payload?.size,
+          sort: payload.sort,
         },
         ...payload.filters,
       })

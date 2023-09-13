@@ -2,8 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PageRequestModel} from "@core/models/page-request.model";
 import {BrowseUsersAction} from "../../../../../_user-mgmt/states/browse-users.action";
 import {Store} from "@ngxs/store";
-import {UserAndRoleProjection} from "../../../../../../api/models";
 import {LazyLoadEvent} from "primeng/api";
+import {BcResources} from "../../../../../../api/models/bc-resources";
 
 @Component({
   selector: 'app-content-resource-analysis',
@@ -16,7 +16,7 @@ export class ContentResourceAnalysisComponent implements OnInit {
   @Input()
   loading: boolean;
   @Input()
-  page: UserAndRoleProjection[];
+  page: BcResources[];
   @Input()
   columns: string[];
   @Input()
