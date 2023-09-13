@@ -1,4 +1,72 @@
 <div class="row" *ngIf="state$ | async as state">
+  <!--advance search-->
+  <div class="col-12 position-relative">
+    <p-fieldset
+      [toggleable]="true"
+      styleClass="px-3 py-2 search-section"
+      legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+      [collapsed]="true"
+    >
+      <div class="p-fluid p-grid">
+        <div class="p-field p-col-4 p-md-2">
+          <input
+            type="text"
+            pInputText
+            [ngModel]="state.pageRequest.filters['name']"
+            placeholder="{{ 'SYSTEMS.SYSTEM_NAME' | translate }}"
+            (keyup)="updateFilter({ name: $event.target.value }, $event)"
+          />
+        </div>
+        <div class="p-field p-col-4 p-md-2">
+          <p-treeSelect
+            [options]="orgHir"
+            [filter]="true"
+            selectionMode="checkbox"
+            [filterBy]="'data.nameAr,data.nameEn,data.code'"
+            [ngModel]="state.pageRequest.filters['orgHierarchyId']"
+            (ngModelChange)="updateFilter({ orgHierarchyId: $event }, $event)"
+            [loading]="loadingOrgHir$ | async"
+            (onFilter)="filterOrgHir($event)"
+            (onNodeExpand)="nodeExpand($event?.node)"
+            placeholder="{{ 'SYSTEMS.OWNER_DEPT' | translate }}"
+            appendTo="body"
+          >
+            <ng-template let-option let-placeholder pTemplate="value">
+              <span *ngFor="let item of option"> {{ item?.label }} , </span>
+              <div *ngIf="!option || option?.length === 0">
+                {{ "SYSTEMS.OWNER_DEPT" | translate }}
+              </div>
+            </ng-template>
+          </p-treeSelect>
+        </div>
+        <div class="p-field p-col-4 p-md-2"></div>
+
+        <div class="p-col p-d-flex">
+          <div class="ml-dir-auto"></div>
+          <div class="mx-1">
+            <button
+              [disabled]="loading$ | async"
+              pButton
+              type="button"
+              label="{{ 'ACTIONS.CLEAR' | translate }}"
+              icon="pi pi-times"
+              class="p-button-outlined"
+              (click)="clear()"
+            ></button>
+          </div>
+          <div class="mx-1">
+            <button
+              [loading]="loading$ | async"
+              pButton
+              label="{{ 'ACTIONS.SEARCH' | translate }}"
+              icon="pi pi-search"
+              (click)="search()"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </p-fieldset>
+  </div>
   <!--sort colums-->
   <div class="col-12 mt-3">
     <p-toolbar>
@@ -31,7 +99,7 @@
           </p-multiSelect>
         </div>
         <div class="p-1 w-100 w-md-225px">
-          <!-- <div class="p-inputgroup">
+          <div class="p-inputgroup">
             <p-dropdown
               [options]="sortableColumns"
               [autoDisplayFirst]="false"
@@ -42,7 +110,7 @@
               optionValue="code"
               styleClass="w-100 h-100"
               class="w-100 h-100"
-
+              (onChange)="sort($event)"
             >
               <ng-template let-option pTemplate="selectedItem">
                 {{ option.name | translate }}
@@ -62,7 +130,7 @@
                 (onChange)="order($event)"
               ></p-toggleButton>
             </div>
-          </div> -->
+          </div>
         </div>
       </div>
     </p-toolbar>

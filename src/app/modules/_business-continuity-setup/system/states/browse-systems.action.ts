@@ -80,4 +80,13 @@ export namespace BrowseSystemsAction {
      */
     constructor(public payload: { clear?: boolean; [key: string]: any }) {}
   }
+
+  export class SortSystems {
+    static readonly type = '[BrowseSystems] Sort Systems';
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+  }
+
 }
