@@ -115,7 +115,7 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   changeStatus(id, action) {
     this.newStatus = {
       activityAnalysisId: id,
-      statusId: action?.id,
+      actionId: action?.id,
       notes: '',
     };
     if (action.requiresNote) {
