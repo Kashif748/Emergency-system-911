@@ -144,6 +144,7 @@ export class SituationDialogComponent
             type: t?.newsType,
             theme: t?.themeType,
           });
+          this.patchValue(t);
         })
       )
       .subscribe(() => {
@@ -266,7 +267,17 @@ export class SituationDialogComponent
       })
     );
   }
-
+  patchValue(t) {
+    const incidentCategories = t.mainIncCategory.map(category => ({
+      id: category.category.id,
+      nameAr: category.category.nameAr,
+      nameEn: category.category.nameEn,
+      serialNumber: category.id,
+    }));
+    this.form.patchValue({
+      mainIncCategory: incidentCategories
+    });
+  }
   ngOnInit(): void {
     this.buildForm();
     this.formDialog$ = this.route.queryParams.pipe(
@@ -350,6 +361,13 @@ export class SituationDialogComponent
       theme: situation.theme?.id,
     };
 
+    const transformedCategory = situation.mainIncCategory.map(item => ({
+      category: {
+        id: item.id
+      }
+    }));
+
+    situation.mainIncCategory = transformedCategory
     if (this.editMode) {
       if (this.editAttachmentType) {
         await this.attachPlanComponent?.upload(this._situationId, false);
