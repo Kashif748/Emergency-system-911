@@ -81,8 +81,8 @@ export class BrowseImpactLevelState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        versionId: payload.versionId,
-        isActive:null
+        versionId: payload?.versionId,
+        isActive: null
 
       })
     );
@@ -113,7 +113,9 @@ export class BrowseImpactLevelState {
     return dispatch(new ImpactLevelAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([new BrowseImpactLevelAction.LoadImpactLevel()]);
+        dispatch([new BrowseImpactLevelAction.LoadImpactLevel({
+          versionId: payload.versionId
+        })]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
