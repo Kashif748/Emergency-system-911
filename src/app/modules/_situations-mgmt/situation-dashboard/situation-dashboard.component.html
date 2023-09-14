@@ -264,7 +264,6 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="content">
-                <ng-template pTemplate="content">
                   <div *ngIf="statistics$ | async as statistics">
                     <ng-container *ngIf="statisticsLoading$ | async; else tableTemplate">
                       <p-table [value]="[].constructor(10)">
@@ -359,7 +358,6 @@
                       </p-table>
                     </ng-template>
                   </div>
-                </ng-template>
               </ng-template>
             </p-tabPanel>
           </p-tabView>

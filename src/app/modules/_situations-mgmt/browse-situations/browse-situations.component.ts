@@ -78,14 +78,6 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
               },
               // print
               {
-                label: this.translate.instant('SITUATIONS.PRINT'),
-                icon: 'pi pi-print',
-                command: () => {
-                  this.exportPDF(u.id);
-                },
-                disabled: !u.isActive,
-              },
-              {
                 label: this.translate.instant('SITUATIONS.DELETE'),
                 icon: 'pi pi-trash',
                 command: () => {
@@ -154,12 +146,6 @@ export class BrowseSituationsComponent implements OnInit, OnDestroy {
         situationId: id,
         type: situationType
       })
-    );
-  }
-
-  exportPDF(id) {
-    this.store.dispatch(
-      new BrowseSituationsAction.Export({ type: 'PDF', situationId: id })
     );
   }
 

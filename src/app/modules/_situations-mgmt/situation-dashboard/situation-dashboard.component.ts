@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef, Input,
   OnDestroy,
@@ -97,6 +98,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     private commonService: CommonService,
     private router: Router,
     private langFacade: ILangFacade,
+    private cdr: ChangeDetectorRef,
   ) {
     // status chart
     this.chartOptions = {
@@ -195,7 +197,10 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     this.page$ = this.store
       .select(SituationsState.page)
       .pipe(filter((p) => !!p));
-
+    this.statistics$ = this.store.select(SituationsState.statistics).pipe(
+      filter((p) => !!p),
+      map((s) => this.prepareStatistics(s))
+    );
     this.chartReport$ = this.store.select(SituationsState.chartReport).pipe(
       filter((p) => !!p),
       tap((data) => {
@@ -220,7 +225,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   }
   public getStatistics(situationId: number) {
     this.store.dispatch(
-      new BrowseSituationsAction.GetStatistics({ situationId })
+      new BrowseSituationsAction.GetStatistics({ situationId, poi: this.activeTab === 0 ? 'by_location' : 'by_org'})
     );
   }
   public getChartReport(situationId: number) {
@@ -332,24 +337,27 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   }
 
   export() {
-    this.store.dispatch(new BrowseSituationsAction.Export({ type: 'PDF', situationId: this._situationId }));
+    this.store.dispatch(new BrowseSituationsAction.Export({ type: 'PDF', situationId: this._situationId ,
+      poi: this.activeTab === 0 ? 'by_location' : 'by_org'}));
   }
   back() {
       this.router.navigate(['..'], { relativeTo: this.route });
   }
   tab(index: number) {
     switch (index) {
-      case 1:
+      case 0:
+        this.getStatistics(this._situationId)
         this.statistics$ = this.store.select(SituationsState.statistics).pipe(
           filter((p) => !!p),
           map((s) => this.prepareStatistics(s))
         );
         break;
-      case 2:
+      case 1:
+        this.getStatistics(this._situationId)
         this.statistics$ = this.store.select(SituationsState.statistics).pipe(
           filter((p) => !!p),
-          map((s) => this.prepareStatistics(s))
-        );
+          map((s) => this.prepareStatistics(s)));
+        this.cdr.detectChanges()
         break;
       default:
         break;

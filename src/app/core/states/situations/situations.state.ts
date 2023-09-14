@@ -459,6 +459,7 @@ export class SituationsState {
       .generate1({
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
         situationId: payload.situationId,
+        poi: payload.poi,
       })
       .pipe(
         tap((res: any) => {
