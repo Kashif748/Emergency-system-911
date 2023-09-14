@@ -14,6 +14,7 @@ export namespace BrowseActivityWorklogsAction {
         pageRequest?: PageRequestModel;
         actionTypeId?: number;
         activityAnalysisId: number;
+        resetPage : boolean;
       }
     ) {}
   }
@@ -63,5 +64,13 @@ export namespace BrowseActivityWorklogsAction {
         id?: number;
       }
     ) {}
+  }
+
+  export class ToggleEditMode {
+    static readonly type = '[BrowseActivityWorklogsAction] Toggle Edit Mode';
+    /**
+     *
+     */
+    constructor(public payload: { log?: BcActivityAnalysisWorkLog }) {}
   }
 }

@@ -17,6 +17,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ListboxModule } from 'primeng/listbox';
 import { SkeletonModule } from 'primeng/skeleton';
 import { DialogModule } from 'primeng/dialog';
+import { CdateModule } from '@shared/sh-pipes/cdate.pipe';
 import { SharedModule } from '@shared/shared.module';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -57,6 +58,7 @@ const routes: Routes = [
     ButtonModule,
     DialogModule,
     SharedModule,
+    CdateModule,
     ListboxModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],

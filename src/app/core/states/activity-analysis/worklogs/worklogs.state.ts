@@ -79,7 +79,7 @@ export class ActivityWorklogsState {
   /* ********************** ACTIONS ************************* */
   @Action(ActivityWorklogsAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    { setState }: StateContext<ActivityWorklogsStateModel>,
+    { setState, getState }: StateContext<ActivityWorklogsStateModel>,
     { payload }: ActivityWorklogsAction.LoadPage
   ) {
     setState(
@@ -100,6 +100,13 @@ export class ActivityWorklogsState {
       })
       .pipe(
         tap((res) => {
+          if (!payload.resetPage) {
+            let currentPage = getState().page;
+            res.result.content = [
+              ...res.result.content,
+              ...currentPage.content,
+            ];
+          }
           setState(
             patch<ActivityWorklogsStateModel>({
               page: res.result,

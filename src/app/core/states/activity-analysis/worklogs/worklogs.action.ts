@@ -15,6 +15,7 @@ export namespace ActivityWorklogsAction {
         size: number;
         actionTypeId?: number;
         activityAnalysisId: number;
+        resetPage : boolean;
       }
     ) {}
   }
