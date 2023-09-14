@@ -27,7 +27,7 @@ export const BROWSE_RESOURCE_ANALYSIS_UI_STATE_TOKEN =
     pageRequest: {
       filters: {},
       first: 0,
-      rows: 10,
+      rows: 5,
       sortField: 'cycle.id',
       sortOrder: 'asc',
     },
