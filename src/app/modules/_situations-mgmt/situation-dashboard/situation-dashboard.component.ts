@@ -1,6 +1,6 @@
 import {
   Component,
-  ElementRef,
+  ElementRef, Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -31,6 +31,7 @@ import {
 } from '../states/browse-situations.state';
 import {BrowseGroupsAction} from "../../_team-mgmt/states/browse-groups.action";
 import {ILangFacade} from "@core/facades/lang.facade";
+import {TabView} from "primeng/tabview";
 
 @Component({
   selector: 'app-situation-dashboard',
@@ -39,6 +40,8 @@ import {ILangFacade} from "@core/facades/lang.facade";
 })
 export class SituationDashboardComponent implements OnInit, OnDestroy {
   @ViewChild('outer') outer: ElementRef<HTMLLinkElement>;
+  @ViewChild(TabView) tabv: TabView;
+
   public chartOptions: any;
   situationsDialog$: Observable<boolean>;
 
@@ -60,6 +63,9 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
 
   situationModel;
   situation$: Observable<SituationProjection>;
+
+  @Input()
+  activeTab: number = 0;
 
   public columns = ['id', 'name', 'newsType'];
   public statistics$: Observable<any>;
@@ -189,11 +195,6 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     this.page$ = this.store
       .select(SituationsState.page)
       .pipe(filter((p) => !!p));
-
-    this.statistics$ = this.store.select(SituationsState.statistics).pipe(
-      filter((p) => !!p),
-      map((s) => this.prepareStatistics(s))
-    );
 
     this.chartReport$ = this.store.select(SituationsState.chartReport).pipe(
       filter((p) => !!p),
@@ -335,5 +336,23 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   }
   back() {
       this.router.navigate(['..'], { relativeTo: this.route });
+  }
+  tab(index: number) {
+    switch (index) {
+      case 1:
+        this.statistics$ = this.store.select(SituationsState.statistics).pipe(
+          filter((p) => !!p),
+          map((s) => this.prepareStatistics(s))
+        );
+        break;
+      case 2:
+        this.statistics$ = this.store.select(SituationsState.statistics).pipe(
+          filter((p) => !!p),
+          map((s) => this.prepareStatistics(s))
+        );
+        break;
+      default:
+        break;
+    }
   }
 }

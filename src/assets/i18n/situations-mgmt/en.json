@@ -29,6 +29,8 @@
     "PLAN": "Plan",
     "SHIFT": "Shift",
     "PLAN_ATTACH": "Plans Attachments",
-    "SHIFT_ATTACH": "Shifts Attachments"
+    "SHIFT_ATTACH": "Shifts Attachments",
+    "GEO_LOCATION": "Statistics based on Geographic Locations",
+    "SPECIFIC_CENTER": "Statistics based on Geographic Locations"
   }
 }
