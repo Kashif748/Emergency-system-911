@@ -262,6 +262,20 @@ export class IncidentsService implements Resolve<any> {
     );
   }
 
+  getSimilarIncidents(params: {
+    zone: string;
+    sector: string;
+    incidentCategory: string;
+  }) {
+    return this.http
+      .get<any>(
+        `${environment.apiUrl}/incidents/location/coordinates-difference`,
+        {
+          params: params,
+        }
+      )
+      .pipe(map((res) => res.result));
+  }
   viewInterimIncidents(id) {
     return this.http
       .get<any>(`${environment.apiUrl}/interim-incidents/${id}`)

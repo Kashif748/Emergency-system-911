@@ -15,7 +15,8 @@ import { patch } from '@ngxs/store/operators';
 import { ActivityWorklogsAction } from './worklogs.action';
 import {
   BcActivityAnalysisWorkLog,
-  PageBcActivityAnalysisWorkLog,
+  BcActivityAnalysisWorkLogProjection,
+  PageBcActivityAnalysisWorkLogProjection,
 } from 'src/app/api/models';
 import {
   BcActivityAnalysisWorkLogControllerService,
@@ -24,8 +25,8 @@ import {
 import { BcWorkLogTypes } from 'src/app/api/models/bc-work-log-types';
 
 export interface ActivityWorklogsStateModel {
-  page: PageBcActivityAnalysisWorkLog;
-  activityWorklog: BcActivityAnalysisWorkLog;
+  page: PageBcActivityAnalysisWorkLogProjection;
+  activityWorklog: BcActivityAnalysisWorkLogProjection;
   activityWorklogTypes: BcWorkLogTypes[];
   loading: boolean;
   blocking: boolean;
@@ -48,7 +49,7 @@ export class ActivityWorklogsState {
 
   /* ************************ SELECTORS ******************** */
   @Selector([ActivityWorklogsState])
-  static page(state: ActivityWorklogsStateModel): BcActivityAnalysisWorkLog[] {
+  static page(state: ActivityWorklogsStateModel): BcActivityAnalysisWorkLogProjection[] {
     return state?.page?.content;
   }
 
@@ -229,7 +230,7 @@ export class ActivityWorklogsState {
         blocking: true,
       })
     );
-    return this.activityWorklogs.getOne36({ id: payload.id }).pipe(
+    return this.activityWorklogs.getById11({ id: payload.id }).pipe(
       tap((activityWorklogs) => {
         setState(
           patch<ActivityWorklogsStateModel>({

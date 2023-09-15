@@ -241,11 +241,13 @@ export class SituationControllerService extends BaseService {
    */
   statistics2$Response(params: {
     situationId: number;
+    poi: string;
   }): Observable<StrictHttpResponse<RestApiResponseSituationStatisticsResponse>> {
 
     const rb = new RequestBuilder(this.rootUrl, SituationControllerService.Statistics2Path, 'get');
     if (params) {
       rb.query('situationId', params.situationId, {});
+      rb.query('poi', params.poi, {});
     }
 
     return this.http.request(rb.build({
@@ -267,6 +269,7 @@ export class SituationControllerService extends BaseService {
    */
   statistics2(params: {
     situationId: number;
+    poi: string;
   }): Observable<RestApiResponseSituationStatisticsResponse> {
 
     return this.statistics2$Response(params).pipe(
@@ -288,12 +291,14 @@ export class SituationControllerService extends BaseService {
   generate1$Response(params: {
     situationId: number;
     lang: boolean;
+    poi: string;
   }): Observable<StrictHttpResponse<any>> {
 
     const rb = new RequestBuilder(this.rootUrl, SituationControllerService.Generate1Path, 'get');
     if (params) {
       rb.query('situationId', params.situationId, {});
       rb.query('lang', params.lang, {});
+      rb.query('poi', params.poi, {});
     }
 
     return this.http.request(rb.build({
@@ -316,6 +321,7 @@ export class SituationControllerService extends BaseService {
   generate1(params: {
     situationId: number;
     lang: boolean;
+    poi: string;
   }): Observable<any> {
 
     return this.generate1$Response(params).pipe(

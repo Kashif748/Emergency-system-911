@@ -1,4 +1,4 @@
-<section class="row" *ngIf="state$ | async as state">
+<section class="" *ngIf="state$ | async as state">
   <div class="col-12 position-relative">
     <p-fieldset
       [toggleable]="true"
@@ -196,6 +196,107 @@
       </div>
     </p-fieldset>
   </div>
+
+  <div class="p-col-12">
+    <h6 style="font-size: 20px; color: #2196F3" class="font-weight-bold text-center">{{ 'RES' | translate }}</h6>
+  </div>
+
+  <div class="col-12 my-3" *ngIf="browseResourceState$ | async as resourceState">
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        <div class="p-1 w-100 w-md-200px">
+          <p-multiSelect
+            [options]="resoureColumns"
+            defaultLabel="Select Columns"
+            [ngModel]="resourceState.columns"
+            optionLabel="name"
+            styleClass="w-100"
+            [optionValue]="'code'"
+            optionDisabled="disabled"
+            (onChange)="resourceChangeColumns($event)"
+          >
+            <ng-template let-options pTemplate="selectedItems">
+              <ng-container *ngIf="options?.length > 0">
+                {{
+                options?.length +
+                " " +
+                ("SHARED.SELCTED_ITEM" | translate)
+                }}
+              </ng-container>
+              <ng-container *ngIf="!options || options.length === 0">
+                {{ "SHARED.SELECT_SHOWING_FIELDS" | translate }}
+              </ng-container>
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              {{ option.name | translate }}
+            </ng-template>
+          </p-multiSelect>
+        </div>
+        <div class="p-1 w-100 w-md-225px">
+          <div class="p-inputgroup">
+            <p-dropdown
+              [options]="resourceSortableColumns"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [ngModel]="resourceState?.pageRequest?.sortField"
+              placeholder="{{
+                        'SHARED.SELECT_SORTING_FIELD' | translate
+                      }}"
+              optionLabel="name"
+              optionValue="code"
+              styleClass="w-100 h-100"
+              class="w-100 h-100"
+              (onChange)="resourceSort($event)"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                {{ option.name | translate }}
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.name | translate }}
+              </ng-template>
+            </p-dropdown>
+            <div class="p-inputgroup-addon p-0">
+              <p-toggleButton
+                class="w-100 h-100"
+                [onIcon]="'pi pi-sort-amount-up'"
+                [ngModel]="resourceState?.pageRequest?.sortOrder === 'desc'"
+                offIcon="pi pi-sort-amount-down-alt"
+                iconPos="right"
+                styleClass="w-100 h-100"
+                (onChange)="resourceOrder($event)"
+              ></p-toggleButton>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ml-dir-auto d-flex">
+        <app-resource-dialog [orgHir]="orgHir" [cycles]="cycles$ | async"></app-resource-dialog>
+      </div>
+    </p-toolbar>
+  </div>
+
+  <section class="" *ngIf="browseResourceState$ | async as resourceState">
+    <div class="col-12">
+      <app-content-resource-analysis
+        [view]="resourceState.view"
+        [page]="resourcePage$ | async"
+        [columns]="resourceState.columns"
+        [pageRequest]="resourceState?.pageRequest"
+        (onPageChange)="loadResourcePage($event)"
+        [loading]="resourceLoading$ | async"
+        [totalRecords]="resourceTotalRecords$ | async"
+      ></app-content-resource-analysis>
+    </div>
+  </section>
+
+
+  <p-divider [align]="'center'" styleClass="bg-transparent"></p-divider>
+  <div class="p-col-12">
+    <h6 style="font-size: 20px; color: #2196F3" class="font-weight-bold text-center">{{ 'ORG_ACT' | translate }}</h6>
+  </div>
+
+
+
   <div class="col-12 my-3">
     <p-toolbar>
       <div class="p-toolbar-group-left">
@@ -264,31 +365,14 @@
           </div>
         </div>
       </div>
-    </p-toolbar>
-  </div>
-
-  <div class="col-12">
-    <div class="d-flex p-jc-between p-ai-center">
-      <p-divider [align]="'left'" styleClass="bg-transparent">
-        <p-selectButton
-          [options]="[
-                    { icon: 'pi pi-bars', view: 'TABLE' },
-                    { icon: 'pi pi-th-large', view: 'CARDS' }
-                  ]"
-          optionLabel="icon"
-          optionValue="view"
-          [ngModel]="state.view"
-          (onChange)="changeView($event.value)"
-        >
-          <ng-template let-item>
-            <i [class]="item.icon"></i>
-          </ng-template>
-        </p-selectButton>
-      </p-divider>
-
       <div class="ml-dir-auto d-flex">
         <app-activities-dialog></app-activities-dialog>
       </div>
+    </p-toolbar>
+  </div>
+  <div class="col-12">
+    <div class="d-flex p-jc-between p-ai-center">
+
     </div>
   </div>
   <div class="col-12">

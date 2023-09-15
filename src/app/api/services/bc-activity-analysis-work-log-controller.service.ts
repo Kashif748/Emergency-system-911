@@ -12,7 +12,8 @@ import { map, filter } from 'rxjs/operators';
 import { BcActivityAnalysisWorkLog } from '../models/bc-activity-analysis-work-log';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseBcActivityAnalysisWorkLog } from '../models/rest-api-response-bc-activity-analysis-work-log';
-import { RestApiResponsePageBcActivityAnalysisWorkLog } from '../models/rest-api-response-page-bc-activity-analysis-work-log';
+import { RestApiResponseBcActivityAnalysisWorkLogProjection } from '../models/rest-api-response-bc-activity-analysis-work-log-projection';
+import { RestApiResponsePageBcActivityAnalysisWorkLogProjection } from '../models/rest-api-response-page-bc-activity-analysis-work-log-projection';
 
 @Injectable()
 export class BcActivityAnalysisWorkLogControllerService extends BaseService {
@@ -162,21 +163,21 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getOne36
+   * Path part for operation getById11
    */
-  static readonly GetOne36Path = '/v1/bc/activity-analysis/work-log/{id}';
+  static readonly GetById11Path = '/v1/bc/activity-analysis/work-log/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne36()` instead.
+   * To access only the response body, use `getById11()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne36$Response(params: {
+  getById11$Response(params: {
     id: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>> {
+  }): Observable<StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLogProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.GetOne36Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.GetById11Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -187,23 +188,23 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>;
+        return r as StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLogProjection>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne36$Response()` instead.
+   * To access the full response (for headers, for example), `getById11$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne36(params: {
+  getById11(params: {
     id: number;
-  }): Observable<RestApiResponseBcActivityAnalysisWorkLog> {
+  }): Observable<RestApiResponseBcActivityAnalysisWorkLogProjection> {
 
-    return this.getOne36$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>) => r.body as RestApiResponseBcActivityAnalysisWorkLog)
+    return this.getById11$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLogProjection>) => r.body as RestApiResponseBcActivityAnalysisWorkLogProjection)
     );
   }
 
@@ -225,7 +226,7 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
     createdBy?: number;
     isActive?: boolean;
     pageable: Pageable;
-  }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityAnalysisWorkLog>> {
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityAnalysisWorkLogProjection>> {
 
     const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.Search26Path, 'get');
     if (params) {
@@ -243,7 +244,7 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponsePageBcActivityAnalysisWorkLog>;
+        return r as StrictHttpResponse<RestApiResponsePageBcActivityAnalysisWorkLogProjection>;
       })
     );
   }
@@ -261,10 +262,10 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
     createdBy?: number;
     isActive?: boolean;
     pageable: Pageable;
-  }): Observable<RestApiResponsePageBcActivityAnalysisWorkLog> {
+  }): Observable<RestApiResponsePageBcActivityAnalysisWorkLogProjection> {
 
     return this.search26$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponsePageBcActivityAnalysisWorkLog>) => r.body as RestApiResponsePageBcActivityAnalysisWorkLog)
+      map((r: StrictHttpResponse<RestApiResponsePageBcActivityAnalysisWorkLogProjection>) => r.body as RestApiResponsePageBcActivityAnalysisWorkLogProjection)
     );
   }
 

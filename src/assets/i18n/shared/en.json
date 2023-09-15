@@ -497,6 +497,9 @@
         }
       },
       "INCIDENTS": "Incidents",
+      "SIMILAR_INCIDENTS": "Similar Incidents",
+      "SIMILAR_INCIDENTS_MSG": "There is already {{count}} similar incidents",
+      "LINK": "link",
       "REPORTER": "Location Shared By Reporter",
       "TEAM_LOCATION": "Team Location",
       "OPEN_TASKS": "Open Tasks",

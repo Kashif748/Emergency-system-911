@@ -191,7 +191,7 @@
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
               <td class="flag-td">
-                <div class="bg-secondary"></div>
+                <!--<div class="bg-secondary"></div>-->
               </td>
 
               <td *ngIf="columns?.includes('orgHierarchy')">
@@ -277,12 +277,12 @@
           <ng-template pTemplate="body" let-item>
             <tr class="cursor-pointer hoverable">
               <td class="flag-td">
-                <div
+                <!--<div
                   [ngClass]="{
                     'bg-primary': item.isActive,
                     'bg-warning': !item.isActive
                   }"
-                ></div>
+                ></div>-->
               </td>
 
               <td
@@ -355,7 +355,7 @@
       [first]="pageRequest.first"
       [rows]="pageRequest.rows"
       [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="[10, 20, 50]"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
       [showCurrentPageReport]="true"
       currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
       (onPageChange)="onPageChange.emit($event)"

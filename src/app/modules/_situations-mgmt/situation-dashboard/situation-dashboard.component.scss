@@ -10,5 +10,11 @@
     .pi-sign-out {
       transform: scaleX(-1);
     }
+    .p-tabview .p-tabview-nav li {
+      width: 50% !important;
+    }
+    .p-tabview .p-tabview-nav li div{
+      text-align: center;
+    }
   }
 }

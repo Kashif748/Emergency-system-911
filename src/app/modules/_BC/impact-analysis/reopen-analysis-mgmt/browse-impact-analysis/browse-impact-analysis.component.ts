@@ -18,7 +18,7 @@ import {
   BcOrgHierarchy,
   Bcrto,
 } from 'src/app/api/models';
-import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
+import {BrowseImpactAnalysisAction} from '../../states/browse-impact-analysis.action';
 import {
   ActivityFrquencyAction,
   ActivityFrquencyState,
@@ -33,6 +33,10 @@ import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { Router } from '@angular/router';
 import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 import { TreeHelper } from '@core/helpers/tree.helper';
+import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState} from "../../states/browse-resource-analysis.state";
+import {BcResources} from "../../../../../api/models/bc-resources";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BrowseResourceAnalysisAction} from "../../states/browse-resource-analysis.action";
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -40,6 +44,21 @@ import { TreeHelper } from '@core/helpers/tree.helper';
   styleUrls: ['./browse-impact-analysis.component.scss'],
 })
 export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
+  // resource page
+
+  public resourcePage$: Observable<BcResources[]>;
+
+  @Select(ResourceAnalysisState.totalRecords)
+  public resourceTotalRecords$: Observable<number>;
+
+  @Select(ResourceAnalysisState.loading)
+  public resourceLoading$: Observable<boolean>;
+
+  @Select(BrowseResourceAnalysisState.state)
+  public browseResourceState$: Observable<BrowseReourceAnalysisStateModel>;
+
+
+  //   analysis page
   // filters
   public orgHir: TreeNode[] = [];
 
@@ -82,8 +101,20 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   public sortableColumns = [
     {
       name: 'ACTIVITY_NAME',
-      code: 'activityName',
+      code: 'activityName.id',
     },
+    {
+      name: 'ACTIVITY_FEQ',
+      code: 'activityFrequence.id',
+    },
+    { name: 'ANALYSIS_CRCLE', code: 'cycle.id' },
+    { name: 'RTO', code: 'rto' },
+    { name: 'PRIORITY_LEVEL', code: 'priorityLevel' },
+    { name: 'STATUS', code: 'status.id' },
+  ];
+
+  public columns = [
+    { name: 'ACTIVITY_NAME', code: 'activityName', disabled: true},
     {
       name: 'ACTIVITY_FEQ',
       code: 'activityFrequency',
@@ -94,16 +125,33 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     { name: 'STATUS', code: 'status' },
   ];
 
-  public columns = [
-    { name: 'ACTIVITY_NAME', code: 'activityName' },
+  public resourceSortableColumns = [
     {
-      name: 'ACTIVITY_FEQ',
-      code: 'activityFrequency',
+      name: 'RESOURCES.DIVISION',
+      code: 'orgHierarchy.id',
     },
-    { name: 'ANALYSIS_CRCLE', code: 'analysisCycle' },
-    { name: 'RTO', code: 'rto' },
-    { name: 'PRIORITY_LEVEL', code: 'priorityLevel' },
-    { name: 'STATUS', code: 'status' },
+    {
+      name: 'RESOURCES.CYCLE',
+      code: 'cycle.id',
+    },
+    { name: 'RESOURCES.ONSITE_STAFF', code: 'staffOnSite' },
+    { name: 'RESOURCES.OFFSITE_STAFF', code: 'staffRemotely' },
+    { name: 'RESOURCES.STATUS', code: 'status' },
+  ];
+
+  public resoureColumns = [
+    {
+      name: 'RESOURCES.DIVISION',
+      code: 'orgHierarchy',
+      disabled: true,
+    },
+    {
+      name: 'RESOURCES.CYCLE',
+      code: 'cycle',
+    },
+    { name: 'RESOURCES.ONSITE_STAFF', code: 'staffOnSite' },
+    { name: 'RESOURCES.OFFSITE_STAFF', code: 'staffRemotely' },
+    { name: 'RESOURCES.STATUS', code: 'status' },
   ];
 
   /**
@@ -117,7 +165,22 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private treeHelper: TreeHelper,
     private router: Router
-  ) {}
+  ) {
+    this.lang.vm$
+      .pipe
+      ()
+      .subscribe((res) => {
+        if (res['key'] == 'ar') {
+          this.sortableColumns[0].code = 'activity.nameAr';
+          this.sortableColumns[1].code = 'activity.activityFrequence.nameAr';
+          this.sortableColumns[2].code = 'cycle.nameAr';
+        } else {
+          this.sortableColumns[0].code = 'activity.nameEn';
+          this.sortableColumns[1].code = 'activity.activityFrequence.nameEn';
+          this.sortableColumns[2].code = 'cycle.nameEn';
+        }
+      });
+  }
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -167,6 +230,34 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
           })
         );
       });
+
+    // resourec table state
+
+    this.resourcePage$ = this.store
+      .select(ResourceAnalysisState.page)
+      .pipe(
+        filter((p) => !!p),
+
+        map((page) =>
+          page?.map((u) => {
+            return {
+              ...u,
+              actions: [
+                {
+                  label: this.translate.instant('START_RESOURC_ANALYSIS'),
+                  icon: 'pi pi-pencil',
+                  command: () => {
+                    this.startResourceAnalysis(u);
+                  },
+                },
+              ],
+            };
+          })
+        )
+      );
+
+
+
 
     // Table State
     this.page$ = this.store
@@ -233,6 +324,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
 
   search() {
     this.store.dispatch(new BrowseImpactAnalysisAction.LoadPage());
+    this.store.dispatch(new BrowseResourceAnalysisAction.LoadPage());
   }
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
     if (event?.key === 'Enter') {
@@ -240,6 +332,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch(new BrowseImpactAnalysisAction.UpdateFilter(filter));
+    this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));
   }
   clear() {
     this.store.dispatch([
@@ -253,20 +346,46 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       new BrowseImpactAnalysisAction.ChangeColumns({ columns: event.value })
     );
   }
+  resourceChangeColumns(event) {
+    this.store.dispatch(
+      new BrowseResourceAnalysisAction.ChangeColumns({ columns: event.value })
+    );
+  }
   changeView(view: 'TABLE' | 'CARDS') {
     // this.store.dispatch(new BrowseUsersAction.ChangeView({ view }));
   }
 
   sort(event) {
-    /*  this.store.dispatch(
-      new BrowseUsersAction.SortUsers({ field: event.value })
-    );*/
+    this.store.dispatch(
+      new BrowseImpactAnalysisAction.Sort({ field: event.value })
+    );
+  }
+
+  resourceSort(event) {
+    this.store.dispatch(
+      new BrowseResourceAnalysisAction.Sort({ field: event.value })
+    );
+  }
+
+  resourceOrder(event) {
+    this.store.dispatch(
+      new BrowseResourceAnalysisAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+    );
   }
 
   order(event) {
-    /*this.store.dispatch(
-      new BrowseUsersAction.SortUsers({ order: event.checked ? 'desc' : 'asc' })
-    );*/
+    this.store.dispatch(
+      new BrowseImpactAnalysisAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+    );
+  }
+
+  startResourceAnalysis(resource: BcResources) {
+    this.router.navigate(['bc/resources'], {
+      queryParams: {
+        _cycle: resource?.cycle?.id,
+        _resource: resource?.id,
+      },
+    });
   }
 
   startAnalysis(activity: BcActivityAnalysis) {
@@ -280,6 +399,16 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   public loadPage(event: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseImpactAnalysisAction.LoadPage({
+        pageRequest: {
+          first: event.first,
+          rows: event.rows,
+        },
+      })
+    );
+  }
+  public loadResourcePage(event: LazyLoadEvent) {
+    this.store.dispatch(
+      new BrowseResourceAnalysisAction.LoadPage({
         pageRequest: {
           first: event.first,
           rows: event.rows,

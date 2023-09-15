@@ -1,4 +1,5 @@
-import { Situation } from 'src/app/api/models/situation';
+import {Situation} from "../../../api/models";
+
 
 export namespace SituationsAction {
   export class LoadPage {
@@ -99,6 +100,7 @@ export namespace SituationsAction {
     constructor(
       public payload: {
         situationId: number;
+        poi: string
       }
     ) {}
   }
@@ -123,6 +125,7 @@ export namespace SituationsAction {
       public payload: {
         type: 'PDF' | 'EXCEL';
         situationId: number;
+        poi: string
       }
     ) {}
   }

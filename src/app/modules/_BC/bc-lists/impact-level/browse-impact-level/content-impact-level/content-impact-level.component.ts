@@ -83,11 +83,14 @@ export class ContentImpactLevelComponent implements OnInit {
       });
       return;
     }
+    const impactLevel = {
+      ...this.formGroup.getRawValue(),
+    };
     const updatedLevel: BcImpactLevel = {
       id: this.clonedLevels[level.id].id,
       versionId: this.clonedLevels[level.id].versionId,
-      nameAr: this.clonedLevels[level.id].nameAr,
-      nameEn: this.clonedLevels[level.id].nameEn,
+      nameAr: impactLevel.nameAr,
+      nameEn: impactLevel.nameEn,
       colorCode: this.clonedLevels[level.id].colorCode,
       isActive: this.clonedLevels[level.id].isActive
     };
@@ -107,7 +110,7 @@ export class ContentImpactLevelComponent implements OnInit {
       reject: () => {},
     });
   }
-  onRowEditCancel(level: BcImpactLevel, index: number) {
+  onRowEditCancel(level: BcImpactLevel) {
     delete this.clonedLevels[level.id];
   }
   getValidationErrorMessage(controlName: string): string {
