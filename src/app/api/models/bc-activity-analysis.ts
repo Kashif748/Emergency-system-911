@@ -8,6 +8,7 @@ import { BcRecoveryPriorities } from './bc-recovery-priorities';
 export interface BcActivityAnalysis {
   activity: BcActivities;
   capacity?: number;
+  createdBy?: { [key: string]: {  } };
   cycle: BcCycles;
   id?: number;
   isActive?: boolean;

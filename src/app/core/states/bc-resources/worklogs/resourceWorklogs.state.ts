@@ -12,8 +12,8 @@ import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
 import {
-  BcActivityAnalysisWorkLog,
-  PageBcActivityAnalysisWorkLog,
+  BcActivityAnalysisWorkLogProjection,
+  PageBcActivityAnalysisWorkLogProjection,
 } from 'src/app/api/models';
 import {
   BcActivityAnalysisWorkLogControllerService,
@@ -23,8 +23,8 @@ import { BcWorkLogTypes } from 'src/app/api/models/bc-work-log-types';
 import {ResourceWorklogsAction} from "@core/states/bc-resources/worklogs/resourceWorklogs.action";
 
 export interface ResourceWorklogsStateModel {
-  page: PageBcActivityAnalysisWorkLog;
-  Worklog: BcActivityAnalysisWorkLog;
+  page: PageBcActivityAnalysisWorkLogProjection;
+  Worklog: BcActivityAnalysisWorkLogProjection;
   WorklogTypes: BcWorkLogTypes[];
   loading: boolean;
   blocking: boolean;
@@ -47,7 +47,7 @@ export class ResourceWorklogsState {
 
   /* ************************ SELECTORS ******************** */
   @Selector([ResourceWorklogsState])
-  static page(state: ResourceWorklogsStateModel): BcActivityAnalysisWorkLog[] {
+  static page(state: ResourceWorklogsStateModel): BcActivityAnalysisWorkLogProjection[] {
     return state?.page?.content;
   }
 
@@ -221,7 +221,7 @@ export class ResourceWorklogsState {
         blocking: true,
       })
     );
-    return this.Worklogs.getOne36({ id: payload.id }).pipe(
+    return this.Worklogs.getById11({ id: payload.id }).pipe(
       tap((activityWorklogs) => {
         setState(
           patch<ResourceWorklogsStateModel>({
