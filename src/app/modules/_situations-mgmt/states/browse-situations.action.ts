@@ -1,5 +1,5 @@
 import { PageRequestModel } from '@core/models/page-request.model';
-import { Situation } from 'src/app/api/models/situation';
+import {Situation} from "../../../api/models";
 export namespace BrowseSituationsAction {
   export class LoadSituations {
     static readonly type = '[BrowseSituations] Load Situations';
@@ -49,7 +49,7 @@ export namespace BrowseSituationsAction {
      *
      */
     constructor(
-      public payload: { type: 'PDF' | 'EXCEL'; situationId: number }
+      public payload: { type: 'PDF' | 'EXCEL'; situationId: number; poi: string}
     ) {}
   }
 
@@ -118,6 +118,7 @@ export namespace BrowseSituationsAction {
     constructor(
       public payload: {
         situationId: number;
+        poi: string
       }
     ) {}
   }
