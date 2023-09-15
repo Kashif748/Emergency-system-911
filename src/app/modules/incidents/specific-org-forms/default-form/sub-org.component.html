@@ -516,6 +516,28 @@
                   />
                 </mat-form-field>
               </div>
+
+              <div
+                *ngIf="showSimilarAlert"
+                class="alert alert-custom alert-light-primary fade show mx-5 p-3 w-100"
+                role="alert"
+              >
+                <div class="alert-text">
+                  {{
+                    "INCIDENTS.SIMILAR_INCIDENTS_MSG"
+                      | translate
+                        : { count: similarIncidentDataSource?.data?.length }
+                  }}
+                </div>
+                <div class="alert-close">
+                  <button
+                    (click)="openSimilarPopup()"
+                    class="btn btn-light-primary font-weight-bold mr-2"
+                  >
+                    {{ "ACTIONS.VIEW" | translate }}
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div class="row section border rounded">
@@ -652,7 +674,13 @@
               <mat-spinner class="m-auto" diameter="50"></mat-spinner>
             </div>
 
-            <div class="row section border rounded p-4" [ngClass]="{'justify-content-between': isAddMode, 'justify-content-end': (!isAddMode)}">
+            <div
+              class="row section border rounded p-4"
+              [ngClass]="{
+                'justify-content-between': isAddMode,
+                'justify-content-end': !isAddMode
+              }"
+            >
               <button
                 [disabled]="disableSubmitButton()"
                 mat-raised-button
