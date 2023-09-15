@@ -110,7 +110,7 @@ export class ContentImpactLevelComponent implements OnInit {
       reject: () => {},
     });
   }
-  onRowEditCancel(level: BcImpactLevel, index: number) {
+  onRowEditCancel(level: BcImpactLevel) {
     delete this.clonedLevels[level.id];
   }
   getValidationErrorMessage(controlName: string): string {

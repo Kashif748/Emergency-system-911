@@ -1345,6 +1345,13 @@ export { BcActivityAnalysisWorkflow } from './models/bc-activity-analysis-workfl
 export { RestApiResponseBcActivityAnalysisWorkflow } from './models/rest-api-response-bc-activity-analysis-workflow';
 export { ApiErrorListBcActivityAnalysisWorkflow } from './models/api-error-list-bc-activity-analysis-workflow';
 export { RestApiResponseListBcActivityAnalysisWorkflow } from './models/rest-api-response-list-bc-activity-analysis-workflow';
+export { ApiErrorBcActivityAnalysisWorkLogProjection } from './models/api-error-bc-activity-analysis-work-log-projection';
+export { BcActivityAnalysisWorkLogProjection } from './models/bc-activity-analysis-work-log-projection';
+export { BcWorkLogTypesProjection } from './models/bc-work-log-types-projection';
+export { RestApiResponseBcActivityAnalysisWorkLogProjection } from './models/rest-api-response-bc-activity-analysis-work-log-projection';
+export { ApiErrorPageBcActivityAnalysisWorkLogProjection } from './models/api-error-page-bc-activity-analysis-work-log-projection';
+export { PageBcActivityAnalysisWorkLogProjection } from './models/page-bc-activity-analysis-work-log-projection';
+export { RestApiResponsePageBcActivityAnalysisWorkLogProjection } from './models/rest-api-response-page-bc-activity-analysis-work-log-projection';
 export { ActivityAnalysisStatusAction } from './models/activity-analysis-status-action';
 export { ApiErrorBcActivityAnalysisDtoWithStatus } from './models/api-error-bc-activity-analysis-dto-with-status';
 export { BcActivityAnalysisDtoWithStatus } from './models/bc-activity-analysis-dto-with-status';

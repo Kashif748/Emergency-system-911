@@ -1,10 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
-import { BcActivityAnalysisWorkLog } from './bc-activity-analysis-work-log';
+import { BcActivityAnalysisWorkLogProjection } from './bc-activity-analysis-work-log-projection';
 import { PageableObject } from './pageable-object';
 import { SortObject } from './sort-object';
-export interface PageBcActivityAnalysisWorkLog {
-  content?: Array<BcActivityAnalysisWorkLog>;
+export interface PageBcActivityAnalysisWorkLogProjection {
+  content?: Array<BcActivityAnalysisWorkLogProjection>;
   empty?: boolean;
   first?: boolean;
   last?: boolean;
