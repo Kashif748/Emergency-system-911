@@ -74,7 +74,7 @@ export class IncidentsService {
     private langFacade: ILangFacade,
     private alertService: AlertsService,
     private translationService: TranslationService,
-    private  translateService : TranslateService,
+    private translateService: TranslateService
   ) {
     this.responsibleOrgsChange = new BehaviorSubject([]);
     this.onDohDataChange = new BehaviorSubject([]);
@@ -365,7 +365,7 @@ export class IncidentsService {
     search['lang'] =
       (this.langFacade.stateSanpshot.ActiveLang.key == 'ar') + '';
     if (selectedColumns && selectedColumns.length > 0) {
-      search['columns'] =  selectedColumns.join(',');
+      search['columns'] = selectedColumns.join(',');
     }
     const params = this.mapToHttpParams(search);
 

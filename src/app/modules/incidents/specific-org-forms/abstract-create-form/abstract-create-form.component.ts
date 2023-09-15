@@ -25,7 +25,7 @@ import { OrgService } from '@core/api/services/org.service';
 import { FilesListComponent } from '@shared/attachments-list/files-list/files-list.component';
 import { CustomDatePipe } from '@shared/pipes/custom-date.pipe';
 import * as _ from 'lodash';
-import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { combineLatest, forkJoin, Observable, of, Subject } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -66,6 +66,9 @@ import { StringValueToken } from 'html2canvas/dist/types/css/syntax/tokenizer';
 import { IncidentDashboardStateModel } from '../../new-incidents-view/store/incidents-dashboard.reducer';
 import { MatSelectChange } from '@angular/material/select';
 import { ShareLocationService } from '../../../share-location/shareLocation.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SimilarPopupComponent } from '../similar-popup/similar-popup.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 const utmObj = require('utm-latlng');
 const utm = new utmObj();
@@ -111,6 +114,9 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   incidents: any;
   stas: any;
   isCenter = false;
+  showSimilarAlert = false;
+  similarIncidentDataSource = new MatTableDataSource<any>([]);
+
   displayAttachments: boolean;
   currentDate: any;
   filteredOptions: Observable<any[]>;
@@ -151,7 +157,8 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     protected dialogService: DialogService,
     protected directionality: Directionality,
     protected store: Store,
-    protected shareLocationService: ShareLocationService
+    protected shareLocationService: ShareLocationService,
+    public dialog: MatDialog
   ) {
     this.currentDate = new Date();
     this.notificationsService.requestPermission();
@@ -673,6 +680,28 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
             () => {}
           );
       });
+
+    // check similar popups
+    combineLatest([
+      this.formGroup.get('incidentCommunity').valueChanges,
+      this.formGroup.get('incidentDistrict').valueChanges,
+      this.formGroup.get('incidentCategory').valueChanges,
+    ]).subscribe(([sector, zone, category]) => {
+      console.log([sector, zone, category]);
+      this.incidentService
+        .getSimilarIncidents({
+          sector: sector?.sectorId,
+          zone: zone?.zoneId,
+          incidentCategory: category,
+        })
+        .subscribe((data) => {
+          console.log(data);
+          if (data?.length > 0) {
+            this.similarIncidentDataSource.data = data;
+            this.showSimilarAlert = true;
+          }
+        });
+    });
   }
 
   calculateUtmfromCoordinates(lat: number, long: number): Observable<any> {
@@ -1024,6 +1053,15 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     return this.incidentStatus == '2' || this.loading;
   }
 
+  openSimilarPopup() {
+    const dialogRef = this.dialog.open(SimilarPopupComponent, {
+      data: this.similarIncidentDataSource,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
+  }
   public onChangeDist(event): void {
     this.cdr.detectChanges();
     const name = event?.nameEn ? event.nameEn : event;
@@ -1077,7 +1115,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.formGroup.get('status').setValue(1);
-     this.formGroup.get('incidentDistrict').setValidators(Validators.required);
+    this.formGroup.get('incidentDistrict').setValidators(Validators.required);
     this.formGroup.get('incidentDistrict').updateValueAndValidity();
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
@@ -1153,7 +1191,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
       ? (res.interimIncident = Number(this.interimId))
       : (res.interimIncident = null);
 
-     this.incidentService.createIncident(res).subscribe(
+    this.incidentService.createIncident(res).subscribe(
       async (data) => {
         if (data) {
           this.incidentId = data.result.id;
@@ -1437,18 +1475,20 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   }
 
   loadNonGlobalGroups(id, page, size) {
-    this.groupService.getNonGlobalGroupsByOrgId(id, '', page, size, 'orgStructure.id,id,asc').subscribe(
-      (data) => {
-        if (data) {
-          this.groups.push(...data.result?.content);
-        }
-        if (data.result?.totalPages > page) {
-          this.loadNonGlobalGroups(id, page + 1, size);
-        }
-        this.cdr.detectChanges();
-      },
-      (error) => {}
-    );
+    this.groupService
+      .getNonGlobalGroupsByOrgId(id, '', page, size, 'orgStructure.id,id,asc')
+      .subscribe(
+        (data) => {
+          if (data) {
+            this.groups.push(...data.result?.content);
+          }
+          if (data.result?.totalPages > page) {
+            this.loadNonGlobalGroups(id, page + 1, size);
+          }
+          this.cdr.detectChanges();
+        },
+        (error) => {}
+      );
   }
 
   getSubCatCenter() {
