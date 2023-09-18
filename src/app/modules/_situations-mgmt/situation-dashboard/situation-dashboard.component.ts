@@ -279,7 +279,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
 
     if (statistics.mainCategory?.length > 0) {
       table['value'] = statistics.mainCategory;
-      table['columns'] = statistics.mainCategory[0].primaryOrgs;
+      table['columns'] = statistics.mainCategory[0].header;
     }
     if (statistics.recoveryRate) {
       table['recoveryRate'] = statistics.recoveryRate.map(

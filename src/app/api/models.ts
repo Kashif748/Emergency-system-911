@@ -739,6 +739,7 @@ export { ApiErrorPageSlaDetails } from './models/api-error-page-sla-details';
 export { PageSlaDetails } from './models/page-sla-details';
 export { RestApiResponsePageSlaDetails } from './models/rest-api-response-page-sla-details';
 export { ApiErrorSituationStatisticsResponse } from './models/api-error-situation-statistics-response';
+export { Header } from './models/header';
 export { MainCategoryStatisticsResponse } from './models/main-category-statistics-response';
 export { RecoveryRate } from './models/recovery-rate';
 export { RestApiResponseSituationStatisticsResponse } from './models/rest-api-response-situation-statistics-response';

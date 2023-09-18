@@ -87,6 +87,7 @@ export class ResourceAnalysisState {
         isActive: true,
         cycleId: payload.filters.cycleId,
         orgHierarchyId: payload.filters.orgHierarchyId,
+        statusId: payload.filters.activityAnalysisStatusId,
         pageable: {
           page: payload.page,
           size: payload.size,
