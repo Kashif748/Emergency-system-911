@@ -15,10 +15,20 @@ import { CommonDataState } from '@core/states';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/worklogs.state';
 import { Select, Store } from '@ngxs/store';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  debounceTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import {
   BcActivityAnalysisWorkLog,
+  BcActivityAnalysisWorkLogProjection,
   UserMinimunProjection,
 } from 'src/app/api/models';
 import { BcWorkLogTypes } from 'src/app/api/models/bc-work-log-types';
@@ -37,12 +47,14 @@ import {
 })
 export class WorklogsComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild(PerfectScrollbarComponent)
+  public directiveScroll: PerfectScrollbarComponent;
 
-  @Select(ActivityWorklogsState.page)
-  public page$: Observable<BcActivityAnalysisWorkLog[]>;
+  public page$: Observable<BcActivityAnalysisWorkLogProjection[]>;
 
   public activityWorklog: BcActivityAnalysisWorkLog;
 
+  @Select(ActivityWorklogsState.activityWorklogTypes)
   public activityWorklogTypes$: Observable<BcWorkLogTypes[]>;
 
   @Select(ActivityWorklogsState.totalRecords)
@@ -95,19 +107,16 @@ export class WorklogsComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.activityWorklogTypes$ = this.store
-      .select(ActivityWorklogsState.activityWorklogTypes)
-      .pipe(
-        filter((p) => !!p),
-        map((types) => {
-          const allType: BcWorkLogTypes = {
-            nameAr: 'الكل',
-            nameEn: 'All',
-            id: 0,
-          };
-          return [allType, ...types];
-        })
-      );
+    this.page$ = this.store.select(ActivityWorklogsState.page).pipe(
+      takeUntil(this.destroy$),
+      filter((p) => !!p),
+
+      tap(() =>
+        setTimeout(() => {
+          this.scrollBottom();
+        }, 400)
+      )
+    );
   }
 
   setEditMode(log) {
@@ -135,6 +144,11 @@ export class WorklogsComponent implements OnInit, OnDestroy {
       })
     );
   }
+  async keydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.submit();
+    }
+  }
   async submit() {
     if (this.note.invalid) {
       return;
@@ -154,7 +168,6 @@ export class WorklogsComponent implements OnInit, OnDestroy {
         ),
         filter((p) => !!p),
         tap(async (data) => {
-          console.log(data);
           this.note.reset();
           await this.uploadFiles(data.id, this.note.value);
         })
@@ -162,13 +175,17 @@ export class WorklogsComponent implements OnInit, OnDestroy {
       .subscribe();
   }
   filter(event) {
-    this.selectedWorklogType = event;
+    if (this.selectedWorklogType?.id == event.id) {
+      this.selectedWorklogType = null;
+    } else {
+      this.selectedWorklogType = event;
+    }
     const activityAnalysis = this.store.selectSnapshot(
       ActivityAnalysisState.activityAnalysis
     );
     this.store.dispatch(
       new BrowseActivityWorklogsAction.LoadActivityWorklogs({
-        actionTypeId: event.id == 0 ? null : event.id,
+        actionTypeId: this.selectedWorklogType?.id,
         activityAnalysisId: activityAnalysis?.id,
         resetPage: true,
       })
@@ -200,6 +217,10 @@ export class WorklogsComponent implements OnInit, OnDestroy {
     this.activityWorklog = activityWorklog;
     this.display = true;
     this.loadingImage = true;
+  }
+  scrollBottom() {
+    if (!this.directiveScroll) return;
+    this.directiveScroll.directiveRef.scrollToBottom(0, 100);
   }
   ngOnDestroy(): void {
     this.destroy$.next();
