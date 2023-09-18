@@ -12,6 +12,7 @@ export namespace ResourceAnalysisAction {
       public payload: {
         cycleId?: number,
         orgHierarchyId?: number,
+        statusId?: number
         filters?: { [key: string]: any };
         page: number;
         size: number;
