@@ -1,17 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {TABS} from "../resouces/tempData.conts";
-import {filter, map, takeUntil, tap} from "rxjs/operators";
-import {Observable, Subject} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {ActivatedRoute, Router} from "@angular/router";
-import {BrowseResourceAction} from "./states/browse-resource.action";
-import {BrowseResourceState} from "./states/browse-resource.state";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {BcCycles} from "../../../api/models";
-import {ACTIVITY_STATUSES} from "@core/states/activity-analysis/activity-analysis.state";
-import {RESOURCE_STATUSES, ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
-import {BcResources} from "../../../api/models/bc-resources";
-import {BcResourcesChangeStatusDto} from "../../../api/models/bc-resources-change-status-dto";
+import { Component, OnInit } from '@angular/core';
+import { TABS } from '../resouces/tempData.conts';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BrowseResourceAction } from './states/browse-resource.action';
+import { BrowseResourceState } from './states/browse-resource.state';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { BcCycles } from '../../../api/models';
+import {
+  RESOURCE_STATUSES,
+  ResourceAnalysisState,
+} from '@core/states/impact-analysis/resource-analysis.state';
+import { BcResources } from '../../../api/models/bc-resources';
+import { BcResourcesChangeStatusDto } from '../../../api/models/bc-resources-change-status-dto';
 
 @Component({
   selector: 'app-resources',
@@ -34,14 +36,17 @@ export class ResourcesComponent implements OnInit {
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
   );
   public icon$ = this.lang.vm$.pipe(
-    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'))
+    map(({ ActiveLang: { key } }) =>
+      key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'
+    )
   );
   private destroy$ = new Subject();
   constructor(
     private lang: ILangFacade,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private store: Store) {
+    private store: Store
+  ) {
     activeRoute.url
       .pipe(
         takeUntil(this.destroy$),
@@ -78,12 +83,9 @@ export class ResourcesComponent implements OnInit {
       ])
       .toPromise()
       .then(() => {
-        this.router.navigate(
-          ['bc/resources/' + this.tabs[index].router],
-          {
-            queryParamsHandling: 'merge',
-          }
-        );
+        this.router.navigate(['bc/resources/' + this.tabs[index].router], {
+          queryParamsHandling: 'merge',
+        });
       });
   }
 
@@ -93,8 +95,6 @@ export class ResourcesComponent implements OnInit {
       statusId: status,
       notes: '',
     };
-    this.store.dispatch([
-      new BrowseResourceAction.ChangeStatus(newStatus),
-    ]);
+    this.store.dispatch([new BrowseResourceAction.ChangeStatus(newStatus)]);
   }
 }

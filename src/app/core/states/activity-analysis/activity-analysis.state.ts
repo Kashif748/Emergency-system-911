@@ -23,15 +23,6 @@ import {
 import { ActivityAnalysisAction } from './activity-analysis.action';
 import { ActivityAnalysisStatusAction } from 'src/app/api/models/activity-analysis-status-action';
 
-export enum ACTIVITY_STATUSES {
-  DRAFT = 1,
-  UNDER_REVIEW,
-  REVIEWED,
-  UNDER_APPROVAL,
-  APPROVED,
-  ACTIVE,
-  EXPIRED,
-}
 export interface ActivityAnalysisStateModel {
   page: PageBcActivityAnalysis;
   activityAnalysis: BcActivityAnalysis;

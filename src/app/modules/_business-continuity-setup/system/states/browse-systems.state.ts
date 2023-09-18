@@ -25,7 +25,7 @@ export interface BrowseSystemsStateModel {
 }
 
 export const BROWSE_SYSTEMS_UI_STATE_TOKEN =
-  new StateToken<BrowseSystemsStateModel>('browse_systems');
+  new StateToken<BrowseSystemsStateModel>('bc_setup_browse_systems');
 
 @State<BrowseSystemsStateModel>({
   name: BROWSE_SYSTEMS_UI_STATE_TOKEN,
