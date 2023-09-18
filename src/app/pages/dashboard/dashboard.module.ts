@@ -22,6 +22,12 @@ import { NewsBarState } from './news-bar/states/news-bar.state';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import {DropdownModule} from "primeng/dropdown";
+import {TreeModule} from "primeng/tree";
+import {MultiSelectModule} from "primeng/multiselect";
+import {TreeSelectModule} from "@shared/sh-components/treeselect/treeselect.component";
+import { BcWidgetComponent } from './bc-widget/bc-widget.component';
+import {ChipModule} from "primeng/chip";
 
 @NgModule({
   declarations: [
@@ -31,6 +37,7 @@ import { ButtonModule } from 'primeng/button';
     CovidDahsboardComponent,
     LogsComponent,
     NewsBarComponent,
+    BcWidgetComponent,
   ],
   imports: [
     CommonModule,
@@ -57,6 +64,11 @@ import { ButtonModule } from 'primeng/button';
     TranslateObjModule,
     DialogModule,
     ButtonModule,
+    DropdownModule,
+    TreeModule,
+    MultiSelectModule,
+    TreeSelectModule,
+    ChipModule
   ],
   providers: [DatePipe, CustomDatePipe],
 })

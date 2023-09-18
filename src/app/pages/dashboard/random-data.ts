@@ -18,6 +18,41 @@ export interface DashboardStatistics {
 export const data = {
   widget1: [
     {
+      title: 'NATIONAL_PERCENTAGE',
+      icon: 'Custome/ruler-combined-solid',
+      value: 'incomingCorrespondence',
+      color: 'text-dark-65',
+      changed: false,
+    },
+    {
+      title: 'CURRENT_CYCLE',
+      icon: 'Communication/Incoming-box',
+      value: 'incomingCorrespondence',
+      color: 'text-dark-65',
+      changed: false,
+    },
+    {
+      title: 'CRITICAL_ACTIVITY',
+      icon: 'Custome/heartbeat-solid',
+      value: 'incomingCorrespondence',
+      color: 'text-dark-65',
+      changed: false,
+    },
+    {
+      title: 'CRITICAL_EMPLOY',
+      icon: 'Communication/Incoming-box',
+      value: 'incomingCorrespondence',
+      color: 'text-dark-65',
+      changed: false,
+    },
+    {
+      title: 'CRITICAL_SYSTEM',
+      icon: 'Custome/laptop-code-solid',
+      value: 'incomingCorrespondence',
+      color: 'text-dark-65',
+      changed: false,
+    },
+    {
       title: 'REGISTERED_INCIDENTS',
       icon: 'Custome/registered-incidents',
       value: 'registeredIncidents',

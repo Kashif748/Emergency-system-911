@@ -1,4 +1,57 @@
 <div class="container-fluid">
+  <div class="mb-3 border-bottom">
+    <div class="row">
+      <div class="d-flex p-jc-between w-100 p-ai-center">
+        <app-breadcrumbs></app-breadcrumbs>
+        <div class="ml-dir-auto d-flex">
+          <div class="p-field p-col-4 p-md-6 mx-4">
+            <p-treeSelect
+              [options]="orgHir"
+              [filter]="true"
+              selectionMode="single"
+              [loading]="loadingOrgHir$ | async"
+              (onFilter)="filterOrgHir($event)"
+              (onNodeExpand)="nodeExpand($event?.node)"
+              placeholder="{{ 'DASHBOARD.ORG_ARTCH' | translate }}"
+              appendTo="body"
+            >
+              <ng-template let-option let-placeholder pTemplate="value">
+                {{
+                option
+                ? (option | translateObj : "label")
+                : ("DASHBOARD.ORG_ARTCH" | translate)
+                }}
+              </ng-template>
+            </p-treeSelect>
+          </div>
+          <div class="p-field p-col-4 p-md-4">
+            <p-dropdown
+              [autoDisplayFirst]="false"
+              [options]="cycles$ | async"
+              [showClear]="true"
+              dataKey="id"
+              optionValue="id"
+              placeholder="{{ 'DASHBOARD.ANALYSIS_CRCLE' | translate }}"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item | translateObj }}
+              </ng-template>
+
+              <ng-template let-item pTemplate="item">
+                {{ item | translateObj }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+ <!-- <div class="py-4 border-bottom">
+  <app-breadcrumbs></app-breadcrumbs>
+  </div>-->
   <div class="row pb-20">
     <div class="header-state mb-2 col-lg-2 col-md-12">
       <div class="row shadow-0">
@@ -9,6 +62,9 @@
     </div>
     <div class="col-lg-10 col-md-12">
       <div class="row">
+        <div class="col-12 col-md-12">
+          <app-bc-widget></app-bc-widget>
+        </div>
         <div class="col-12 mb-8">
           <div class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm">
             <div class="card-body  p-0 h-100">
