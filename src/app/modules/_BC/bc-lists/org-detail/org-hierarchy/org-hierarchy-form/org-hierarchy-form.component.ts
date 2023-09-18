@@ -107,9 +107,9 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
       return;
     }
     const payload: BcOrgHierarchy = {
-       ...this.form.value,
+      ...this.form.value,
       coordinators: this.form.value?.coordinators?.map((user) => {
-        return {   user :user };
+        return { user: { id: user?.id } };
       }),
       managerId: this.form.value?.manager?.id,
     };

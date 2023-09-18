@@ -136,7 +136,10 @@
                 {{ item | translateObj : "employeeName" }}
               </td>
               <td class="min-w-200px max-w-300px">
-                {{ item.isPrimary }}
+                {{
+                  (item.isPrimary ? "EMPLOYEES.PRIMARY" : "EMPLOYEES.SECONDARY")
+                    | translate
+                }}
               </td>
               <td class="min-w-200px max-w-300px">
                 {{ item.phoneNumber }}
