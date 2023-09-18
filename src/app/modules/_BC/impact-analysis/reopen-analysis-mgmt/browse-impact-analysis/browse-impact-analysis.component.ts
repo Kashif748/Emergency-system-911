@@ -97,6 +97,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   public hasFilters$: Observable<boolean>;
 
   private destroy$ = new Subject();
+  avoidSearch = false;
 
   public sortableColumns = [
     {
@@ -324,19 +325,27 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
 
   search() {
     this.store.dispatch(new BrowseImpactAnalysisAction.LoadPage());
-    this.store.dispatch(new BrowseResourceAnalysisAction.LoadPage());
+    if (!this.avoidSearch) {
+      this.store.dispatch(new BrowseResourceAnalysisAction.LoadPage());
+    }
   }
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
     if (event?.key === 'Enter') {
       return this.search();
     }
-
+    if (filter['activityName'] || filter['activityFrequenceId']) {
+      this.avoidSearch = true;
+    } else {
+      this.avoidSearch = false;
+    }
     this.store.dispatch(new BrowseImpactAnalysisAction.UpdateFilter(filter));
     this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));
   }
   clear() {
     this.store.dispatch([
       new BrowseImpactAnalysisAction.UpdateFilter({ clear: true }),
+      new BrowseResourceAnalysisAction.UpdateFilter({ clear: true }),
+      new BrowseResourceAnalysisAction.LoadPage(),
       new BrowseImpactAnalysisAction.LoadPage(),
     ]);
   }
@@ -352,7 +361,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     );
   }
   changeView(view: 'TABLE' | 'CARDS') {
-    // this.store.dispatch(new BrowseUsersAction.ChangeView({ view }));
+    //  this.store.dispatch(new BrowseUsersAction.ChangeView({ view }));
   }
 
   sort(event) {

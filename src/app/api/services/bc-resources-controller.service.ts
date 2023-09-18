@@ -269,6 +269,7 @@ export class BcResourcesControllerService extends BaseService {
     cycleId?: number;
     isActive: boolean;
     orgHierarchyId?: number;
+    statusId?: Array<number>;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcResources>> {
 
@@ -277,6 +278,7 @@ export class BcResourcesControllerService extends BaseService {
       rb.query('cycleId', params.cycleId, {});
       rb.query('isActive', params.isActive, {});
       rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('statusId', params.statusId, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -301,6 +303,7 @@ export class BcResourcesControllerService extends BaseService {
     cycleId?: number;
     isActive: boolean;
     orgHierarchyId?: number;
+    statusId?: Array<number>;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcResources> {
 
