@@ -47,16 +47,12 @@ export class BrowseSystemComponent implements OnInit, OnDestroy {
 
   public sortableColumns = [
     {
-      name: 'SYSTEMS.NO',
-      code: 'id',
-    },
-    {
-      name: 'SYSTEMS.DEPARTMENT_NAME',
+      name: 'SYSTEMS.SYSTEM_NAME',
       code: 'name',
     },
     {
       name: 'SYSTEMS.OWNER_DEPT',
-      code: 'orgHierarchy',
+      code: 'orgHierarchy.name',
     },
   ];
 
@@ -77,9 +73,11 @@ export class BrowseSystemComponent implements OnInit, OnDestroy {
   ) {
     this.langFacade.vm$.pipe().subscribe((res) => {
       if (res.ActiveLang?.key == 'ar') {
-        this.sortableColumns[1].code = 'nameAr';
+        this.sortableColumns[0].code = 'nameAr';
+        this.sortableColumns[1].code = 'orgHierarchy.nameAr';
       } else {
-        this.sortableColumns[1].code = 'nameEn';
+        this.sortableColumns[0].code = 'nameEn';
+        this.sortableColumns[1].code = 'orgHierarchy.nameEn';
       }
     });
   }
