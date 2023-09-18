@@ -213,7 +213,7 @@
                           </td>
                           <td
                             class="max-w-250px"
-                            *ngFor="let org of item?.primaryOrgs"
+                            *ngFor="let org of item?.header"
                             (click)="
                 redirectToReport({
                   orgId: org.id,
@@ -318,7 +318,7 @@
                             </td>
                             <td
                               class="max-w-250px"
-                              *ngFor="let org of item?.primaryOrgs"
+                              *ngFor="let org of item?.header"
                               (click)="
                 redirectToReport({
                   orgId: org.id,
