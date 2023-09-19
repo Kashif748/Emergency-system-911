@@ -84,10 +84,10 @@ export class SystemsState {
           sort: payload.sort,
         },
         orgHierarchyId:
-          payload.filters['orgHierarchyId']
+          payload?.filters?.orgHierarchyId
             ?.map((node) => node.key)
             ?.join(',') || '',
-        name: payload.filters['name'],
+        name: payload.filters?.name ,
       })
       .pipe(
         tap((res) => {

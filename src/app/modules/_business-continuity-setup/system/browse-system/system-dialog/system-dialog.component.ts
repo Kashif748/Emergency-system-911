@@ -1,21 +1,36 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Select, Store} from '@ngxs/store';
-import {OrgDetailAction, OrgDetailState} from '@core/states';
-import {Observable, Subject} from 'rxjs';
-import {BcSystems} from 'src/app/api/models/bc-systems';
-import {TreeNode} from 'primeng/api';
-import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
-import {auditTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {FormUtils} from '@core/utils';
-import {BrowseSystemsAction} from '../../states/browse-systems.action';
-import {SystemsState} from '@core/states/bc-setup/systems/systems.state';
-import {SystemsAction} from '@core/states/bc-setup/systems/systems.action';
-import {GenericValidators} from '@shared/validators/generic-validators';
-import {Dialog} from "primeng/dialog";
-import {BcOrgHierarchyProjection} from 'src/app/api/models/bc-org-hierarchy-projection';
-import {TreeHelper} from "@core/helpers/tree.helper";
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { OrgDetailAction, OrgDetailState } from '@core/states';
+import { Observable, Subject } from 'rxjs';
+import { BcSystems } from 'src/app/api/models/bc-systems';
+import { TreeNode } from 'primeng/api';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import {
+  auditTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { FormUtils } from '@core/utils';
+import { BrowseSystemsAction } from '../../states/browse-systems.action';
+import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
+import { SystemsAction } from '@core/states/bc-setup/systems/systems.action';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { Dialog } from 'primeng/dialog';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import { TreeHelper } from '@core/helpers/tree.helper';
 
 @Component({
   selector: 'app-system-dialog',
@@ -76,7 +91,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     private translateObj: TranslateObjPipe,
     private router: Router,
     protected cdr: ChangeDetectorRef,
-    private treeHelper: TreeHelper,
+    private treeHelper: TreeHelper
   ) {
     this.route.queryParams
       .pipe(
@@ -104,9 +119,9 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
   patchvalue(system) {
     this.form.patchValue({
       orgHierarchy: {
-        id: system.orgHierarchy.id,
+        key: system.orgHierarchy.id,
         label: this.translateObj.transform(system.orgHierarchy),
-      }
+      },
     });
   }
 
@@ -169,7 +184,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
-      orgHierarchy: [null],
+      orgHierarchy: [null, [Validators.required]],
       isActive: true,
       id: null,
     });

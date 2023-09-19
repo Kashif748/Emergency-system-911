@@ -49,7 +49,9 @@ export class ActivityWorklogsState {
 
   /* ************************ SELECTORS ******************** */
   @Selector([ActivityWorklogsState])
-  static page(state: ActivityWorklogsStateModel): BcActivityAnalysisWorkLogProjection[] {
+  static page(
+    state: ActivityWorklogsStateModel
+  ): BcActivityAnalysisWorkLogProjection[] {
     return state?.page?.content;
   }
 
@@ -96,7 +98,7 @@ export class ActivityWorklogsState {
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort,
+          sort: ['createdOn'],
         },
       })
       .pipe(

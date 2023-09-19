@@ -1,10 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
-import {
-  ActivityAnalysisState,
-  ACTIVITY_STATUSES,
-} from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -24,7 +21,6 @@ import { TABS } from '../tempData.conts';
   styleUrls: ['./activity-analysis.component.scss'],
 })
 export class ActivityAnalysisComponent implements OnInit, OnDestroy {
-  ACTIVITY_STATUSES = ACTIVITY_STATUSES;
   @Select(BrowseActivityAnalysisState.state)
   public state$: Observable<BrowseActivityAnalysisStateModel>;
 
