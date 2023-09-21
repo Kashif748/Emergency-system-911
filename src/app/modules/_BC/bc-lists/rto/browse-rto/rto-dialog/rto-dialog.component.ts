@@ -17,6 +17,9 @@ import { GenericValidators } from '@shared/validators/generic-validators';
   styleUrls: ['./rto-dialog.component.scss'],
 })
 export class RtoDialogComponent implements OnInit, OnDestroy {
+  public color = '#ffffff';
+  public colorOptions = ['#FF0017', '#FFBB3A', '#FFFC4C', '#89CF60', '#FFFFFF'];
+
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
@@ -27,7 +30,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   @Input()
-  shouldDisable :boolean
+  shouldDisable: boolean;
   public version: number;
 
   _rtoId: number;
@@ -57,6 +60,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...rto,
           });
+          this.setColor(rto.color);
         })
       )
       .subscribe();
@@ -110,6 +114,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
+      color: [null, [Validators.required]],
       isActive: [true],
       isCritical: [false],
       versionId: this.version,
@@ -141,6 +146,20 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  setColor(color: string) {
+    this.color = color;
+    this.form.patchValue({
+      color: color,
+    });
+  }
+  onValueChange(value: string): void {
+    this.form.patchValue({
+      color: value,
+    });
+  }
+  isValidColorCode(value: string): boolean {
+    return this.colorOptions.includes(value);
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

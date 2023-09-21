@@ -1,8 +1,10 @@
 <section>
   <header class="d-flex p-jc-between p-ai-center border-bottom py-8">
-    <h4 class="text-info p-text-bold mb-0">{{ "RTO_LIST_LABEL" | translate }}</h4>
+    <h4 class="text-info p-text-bold mb-0">
+      {{ "RTO_LIST_LABEL" | translate }}
+    </h4>
 
-    <app-rto-dialog [shouldDisable]="disableButton$ |async"></app-rto-dialog>
+    <app-rto-dialog [shouldDisable]="disableButton$ | async"></app-rto-dialog>
   </header>
   <div class="row">
     <div class="col-12">
@@ -12,33 +14,39 @@
             <ng-template pTemplate="header">
               <tr>
                 <th style="width: 0"></th>
-                <th class="min-w-100px">
+                <th class="min-w-50px">
                   <div class="p-d-flex p-jc-between p-ai-center">#</div>
                 </th>
+
                 <th class="min-w-200px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.CRITICALITY" | translate }}
                   </div>
                 </th>
-                <th class="min-w-200px max-w-300px" >
+                <th class="min-w-200px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_ENG" | translate }}
                   </div>
                 </th>
 
-                <th class="min-w-250px max-w-300px" >
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_DESC" | translate }}
                   </div>
                 </th>
 
-                <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">
+                  {{ "ACTIONS.ACTIONS" | translate }}
+                </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
               <tr class="cursor-pointer hoverable">
                 <td class="flag-td">
                   <div class="bg-secondary"></div>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
                 </td>
                 <td>
                   <p-skeleton></p-skeleton>
@@ -82,27 +90,34 @@
             <ng-template pTemplate="header">
               <tr>
                 <th></th>
-                <th class="min-w-100px">
+                <th class="min-w-50px">
                   <div class="p-d-flex p-jc-between p-ai-center">#</div>
                 </th>
-                <th class="min-w-200px max-w-300px" >
+                <th class="min-w-150px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-200px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.CRITICALITY" | translate }}
                   </div>
                 </th>
-                <th class="min-w-200px max-w-300px" >
+                <th class="min-w-200px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_ENG" | translate }}
                   </div>
                 </th>
 
-                <th class="min-w-250px max-w-300px" >
+                <th class="min-w-250px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "RTO_LIST.RTO_DESC" | translate }}
                   </div>
                 </th>
 
-                <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">
+                  {{ "ACTIONS.ACTIONS" | translate }}
+                </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
@@ -115,31 +130,48 @@
                     }"
                   ></div>
                 </td>
-                <td (click)="item.isActive && openView(item.id)" class="min-w-100px">
+                <td
+                  (click)="item.isActive && openView(item.id)"
+                  class="min-w-100px"
+                >
                   {{ rowIndex + 1 }}
                 </td>
-                <td class="min-w-200px max-w-300px" (click)="item.isActive && openView(item.id)">
-                  {{ item | translateObj : 'criticality'}}
+                <td (click)="item.isActive && openView(item.id)">
+                  <p-colorPicker
+                    [disabled]="true"
+                    [(ngModel)]="item.color"
+                  ></p-colorPicker>
+                </td>
+                <td
+                  class="min-w-200px max-w-300px"
+                  (click)="item.isActive && openView(item.id)"
+                >
+                  {{ item | translateObj : "criticality" }}
                 </td>
 
-                <td class="min-w-200px max-w-300px" (click)="item.isActive && openView(item.id)">
-                  {{ item | translateObj : 'name'}}
+                <td
+                  class="min-w-200px max-w-300px"
+                  (click)="item.isActive && openView(item.id)"
+                >
+                  {{ item | translateObj : "name" }}
                 </td>
 
-                <td class="min-w-250px max-w-300px" (click)="item.isActive && openView(item.id)">
-                  {{ item | translateObj : 'description'}}
+                <td
+                  class="min-w-250px max-w-300px"
+                  (click)="item.isActive && openView(item.id)"
+                >
+                  {{ item | translateObj : "description" }}
                 </td>
 
                 <td *checkPrivileges="'PRIV_ED_BC_LISTS'">
                   <button
-                    [disabled]="disableButton$ |async"
+                    [disabled]="disableButton$ | async"
                     pButton
                     pRipple
                     type="button"
                     icon="pi pi-ellipsis-v"
                     class="p-button-rounded p-button-text my-auto p-button-plain"
                     (click)="menu.toggle($event)"
-
                   ></button>
                   <p-menu
                     #menu
@@ -170,9 +202,16 @@
           </div>
         </ng-container>
       </div>-->
-      <p-paginator #pg [first]="pageRequest?.first" [rows]="pageRequest?.rows" [totalRecords]="totalRecords"
-                   [rowsPerPageOptions]="[10,20,50]" [showCurrentPageReport]="true"
-                   currentPageReportTemplate="{{'SHARED.PAGE_REPORT' | translate}}" (onPageChange)="onPageChange.emit($event)">
+      <p-paginator
+        #pg
+        [first]="pageRequest?.first"
+        [rows]="pageRequest?.rows"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
+        (onPageChange)="onPageChange.emit($event)"
+      >
       </p-paginator>
     </div>
   </div>
