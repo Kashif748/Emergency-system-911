@@ -94,11 +94,10 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
       }
       return;
     }
+
     const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
-    // console.log(parentId ,parentNode);
-
     if (parentNode && parentId) {
       parentNode.children = [...branch, ...parentNode.children];
     } else {
