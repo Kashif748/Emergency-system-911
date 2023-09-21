@@ -12,6 +12,7 @@ import { BrowseActivityEmployeesAction } from '../../states/browse-employees.act
 import { FormUtils } from '@core/utils';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { BcActivityEmployees } from 'src/app/api/models';
+import { RegxConst } from '@core/constant/RegxConst';
 
 @Component({
   selector: 'app-employees-dialog',
@@ -100,6 +101,11 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       employeeNameAr: [null, [Validators.required, GenericValidators.arabic]],
       employeeNameEn: [null, [Validators.required, GenericValidators.english]],
+      email: [
+        null,
+        [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
+      ],
+
       isActive: true,
       mobileNumber: [null],
       phoneNumber: [null],
