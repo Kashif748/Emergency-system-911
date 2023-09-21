@@ -77,7 +77,7 @@ export class ActivityEmployeesState {
       })
     );
     return this.activityEmployees
-      .search15({
+      .search24({
         isActive: true,
         cycleId: payload.cycleId,
         activityId: payload.activityId,
@@ -126,7 +126,7 @@ export class ActivityEmployeesState {
     );
 
     return this.activityEmployees
-      .insertOne22({
+      .insertOne33({
         body: { ...payload },
       })
       .pipe(
@@ -151,7 +151,7 @@ export class ActivityEmployeesState {
     );
 
     return this.activityEmployees
-      .update101({
+      .update112({
         body: { ...payload },
       })
       .pipe(
@@ -183,7 +183,7 @@ export class ActivityEmployeesState {
         blocking: true,
       })
     );
-    return this.activityEmployees.getOne22({ id: payload.id }).pipe(
+    return this.activityEmployees.getOne33({ id: payload.id }).pipe(
       tap((activityEmployees) => {
         setState(
           patch<ActivityEmployeesStateModel>({

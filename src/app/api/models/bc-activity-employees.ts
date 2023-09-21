@@ -5,6 +5,7 @@ import { BcCycles } from './bc-cycles';
 export interface BcActivityEmployees {
   activity: BcActivities;
   cycle: BcCycles;
+  email?: string;
   employeeNameAr?: string;
   employeeNameEn?: string;
   id?: number;

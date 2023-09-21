@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface Bcrto {
+  color?: string;
   criticalityAr?: string;
   criticalityEn?: string;
   descriptionAr?: string;

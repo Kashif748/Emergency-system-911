@@ -10,7 +10,7 @@
 <!-- as a dialog -->
 <p-dialog
   [visible]="opened$ | async"
-   [modal]="true"
+  [modal]="true"
   (visibleChange)="toggleDialog()"
   [style]="{ width: '55vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
@@ -203,6 +203,43 @@
           <input type="text" formControlName="secondNumber" pInputText />
           <label>{{ "EMPLOYEES.OTHER_PHONE" | translate }} </label>
         </span>
+      </div>
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <input type="text" formControlName="email" pInputText />
+          <label>
+            {{ "SHARED.EMAIL" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+        <ng-container
+          *ngIf="
+            form.controls['email'].touched &&
+            !form.controls['email'].valid &&
+            form.controls['email'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['email'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['email'].hasError('pattern')"
+          >
+            {{ "VALIDATION_MSG.EMAIL.INVALID" | translate }}
+          </p>
+
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['email'].hasError('alreadyInUse')"
+          >
+            {{ "VALIDATION_MSG.EMAIL.INUSE" | translate }}
+          </p>
+        </ng-container>
       </div>
       <!-- IsPrimary -->
       <div class="p-field p-col-12 p-md-6">
