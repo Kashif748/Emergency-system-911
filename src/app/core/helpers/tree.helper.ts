@@ -96,13 +96,16 @@ export class TreeHelper {
   }
 
   findOrgHirById(tree: TreeNode[], targetId): TreeNode {
+    let resNode;
     for (let i = 0; i < tree.length; i++) {
       const node = tree[i];
-      if (node.key == targetId) return node;
-      if (node?.children?.length > 0) {
-        return this.findOrgHirById(node?.children, targetId);
+      if (node.key == targetId) {
+        resNode = node;
+      }
+      if (!resNode && node?.children?.length) {
+        resNode = this.findOrgHirById(node?.children, targetId);
       }
     }
-    return null;
+    return resNode;
   }
 }
