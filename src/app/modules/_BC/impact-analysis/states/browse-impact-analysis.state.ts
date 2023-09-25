@@ -1,25 +1,15 @@
-import { PageRequestModel } from '@core/models/page-request.model';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { TextUtils } from '@core/utils';
-import { iif, patch } from '@ngxs/store/operators';
-import { BrowseImpactAnalysisAction } from './browse-impact-analysis.action';
-import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
-import { catchError, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
-import {BrowseResourceAnalysisAction} from "./browse-resource-analysis.action";
-import {BrowseReourceAnalysisStateModel} from "./browse-resource-analysis.state";
+import {PageRequestModel} from '@core/models/page-request.model';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {TextUtils} from '@core/utils';
+import {iif, patch} from '@ngxs/store/operators';
+import {BrowseImpactAnalysisAction} from './browse-impact-analysis.action';
+import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
+import {catchError, tap} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
 
 export interface BrowseImpactAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -232,6 +222,7 @@ export class BrowseImpactAnalysisState {
             ? undefined
             : payload?.dialog,
         _id: payload.id,
+        _cycleId: payload.cycle,
         _mode: undefined,
       },
       queryParamsHandling: 'merge',
@@ -248,5 +239,23 @@ export class BrowseImpactAnalysisState {
         columns: payload.columns,
       })
     );
+  }
+  @Action(BrowseImpactAnalysisAction.OpenView, { cancelUncompleted: true })
+  openView(
+    {}: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.OpenView
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'activities',
+        _id: payload.id,
+        _cycleId: payload.cycle,
+        _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

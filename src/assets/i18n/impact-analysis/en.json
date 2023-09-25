@@ -25,6 +25,7 @@
 
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY": "Add New Activity",
+    "VIEW_ACTIVITY": "View Activity Analysis",
     "ACTIVITY_DETAILS": "Activity Details",
     "NAME_AR": "Name (Arabic)",
     "NAME_EN": "Name (English)",
@@ -53,5 +54,39 @@
     "DIALOG": {
       "ADD": "Add New Resource"
     }
+  },
+  "SYSTEMS": {
+    "TITLE": "Technology systems to perform the activity or process",
+    "COL1": "System name"
+  },
+  "RECOVERY": {
+    "TAB_LABEL": "Recovery",
+    "CAPACITY": "Capacity",
+    "ACTIVITY_PRIORITY": "Activity Priority",
+    "SPOF": "Single Point of Failure (SPOF)",
+    "SKILLS": "Skills",
+    "REMOTELY": "Can be done remotely"
+  },
+  "EMPLOYEES": {
+    "TAB_LABEL": "Primary & Secondary Employees",
+    "SECONDARY": "Secondary",
+    "PRIMARY": "Primary"
+  },
+  "LOCATIONS": {
+    "TAB_LABEL": "Locations",
+    "COL2": "Web site name"
+  },
+  "DEPENDENCIES": {
+    "TAB_LABEL": "Dependencies Outsite",
+    "DETAILS": "Dependency details",
+    "VENDER": "Vender/Partner",
+    "TAB_INSIDE": "Dependencies Inside Organization",
+    "SECTOR":"Sector",
+    "ACTIVITY":"Activity",
+    "TAB_DEPT":"Dependencies Inside Department"
+  },
+  "IMPACT_MATRIX": {
+    "TAB_LABEL": "Impact Matrix",
+    "TABLE_CELL": " Impact Types / Time Period"
   }
 }
