@@ -4,6 +4,7 @@ import {PageRequestModel} from "@core/models/page-request.model";
 import {LazyLoadEvent} from "primeng/api";
 import {Store} from "@ngxs/store";
 import {BrowseUsersAction} from "../../../../../_user-mgmt/states/browse-users.action";
+import {BrowseImpactAnalysisAction} from "../../../states/browse-impact-analysis.action";
 
 @Component({
   selector: 'app-content-impact-analysis',
@@ -34,7 +35,7 @@ export class ContentImpactAnalysisComponent implements OnInit {
       rows: this.pageRequest?.rows,
     });
   }
-  openView(id?: number) {
-    this.store.dispatch(new BrowseUsersAction.OpenView({ userId: id }));
+  openView(analysisId?: number, cycleId?: number) {
+    this.store.dispatch(new BrowseImpactAnalysisAction.OpenView({ id: analysisId, cycle: cycleId }));
   }
 }

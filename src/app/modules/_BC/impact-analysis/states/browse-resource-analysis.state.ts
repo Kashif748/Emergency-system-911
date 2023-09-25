@@ -224,4 +224,21 @@ export class BrowseResourceAnalysisState {
       })
     );
   }
+  @Action(BrowseResourceAnalysisAction.OpenView, { cancelUncompleted: true })
+  openView(
+    {}: StateContext<BrowseReourceAnalysisStateModel>,
+    { payload }: BrowseResourceAnalysisAction.OpenView
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'opened',
+        _id: payload.id,
+        _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
 }

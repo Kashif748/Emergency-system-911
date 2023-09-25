@@ -1,4 +1,51 @@
 :host ::ng-deep .row-disabled {
   background-color: rgba(0,0,0,.15) !important;
   cursor: auto !important;
+  .p-tabview .p-tabview-panels {
+    height: 97%;
+    overflow-y: auto;
+    .p-tabview-panel {
+      height: 97%;
+    }
+  }
 }
+:host ::ng-deep {
+  .p-datatable .p-datatable-tbody > tr > td{
+    font-weight: 100 !important;
+  }
+}
+.read-only-row {
+  background-color: #f8f9fa !important; /* Set the background color to a light gray */
+  color: #495057; /* Set the text color to a darker gray */
+  /* Change the cursor to 'not-allowed' */
+}
+.card{
+  background-color: #f8f9fa !important;
+}
+.vertical-table {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px;
+}
+
+.vertical-row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  padding: 10px;
+  width: 100%;
+}
+
+.vertical-header {
+  font-weight: bold;
+  width: 60%; /* Adjust the width as needed */
+}
+
+.vertical-data {
+  margin-left: 10px;
+}
+
+
+
+

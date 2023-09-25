@@ -91,7 +91,7 @@ export namespace BrowseImpactAnalysisAction {
     /**
      *
      */
-    constructor(public payload: { dialog?: string; id?: number }) {}
+    constructor(public payload: { dialog?: string; id?: number; cycle?: number }) {}
   }
 
   export class OpenView {
@@ -100,6 +100,6 @@ export namespace BrowseImpactAnalysisAction {
     /**
      *
      */
-    constructor(public payload: { id: number }) {}
+    constructor(public payload: { id: number, cycle: number}) {}
   }
 }

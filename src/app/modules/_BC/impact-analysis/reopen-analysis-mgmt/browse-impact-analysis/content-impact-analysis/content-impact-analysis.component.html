@@ -301,39 +301,39 @@
 
               <td
                 *ngIf="columns?.includes('activityName')"
-                (click)="item.isActive && openView(item.id)"
+                (click)="item.isActive && openView(item.id, item.cycle?.id)"
               >
                 {{ item.activity | translateObj }}
               </td>
 
               <td
                 *ngIf="columns?.includes('activityFrequency')"
-                (click)="item.isActive && openView(item.id)"
+                (click)="item.isActive && openView(item.id, item.cycle?.id)"
               >
                 {{ item.activity?.activityFrequence | translateObj }}
               </td>
               <td
                 *ngIf="columns?.includes('analysisCycle')"
-                (click)="item.isActive && openView(item.id)"
+                (click)="item.isActive && openView(item.id, item.cycle?.id)"
               >
                 {{ item.cycle | translateObj }}
               </td>
               <td
                 *ngIf="columns?.includes('rto')"
-                (click)="item.isActive && openView(item.id)"
+                (click)="item.isActive && openView(item.id, item.cycle?.id)"
               >
                 {{ item.rto | translateObj }}
               </td>
               <td
                 *ngIf="columns?.includes('priorityLevel')"
-                (click)="item.isActive && openView(item.id)"
+                (click)="item.isActive && openView(item.id, item.cycle?.id)"
               >
                 {{ item.recoveryPriority | translateObj }}
               </td>
 
               <td
                 *ngIf="columns?.includes('status')"
-                (click)="item.isActive && openView(item.id)"
+                (click)="item.isActive && openView(item.id, item.cycle?.id)"
               >
                 {{ item.status | translateObj }}
               </td>
