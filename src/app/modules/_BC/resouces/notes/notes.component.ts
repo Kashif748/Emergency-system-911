@@ -4,7 +4,7 @@ import {ActivityWorklogsState} from "@core/states/activity-analysis/worklogs/wor
 import {BrowseActivityWorklogsState, BrowseActivityWorklogsStateModel} from "../../activity-analysis/worklogs/states/browse-worklogs.state";
 import {Select, Store} from "@ngxs/store";
 import {Observable, Subject} from "rxjs";
-import {BcActivityAnalysisWorkLog} from "../../../../api/models";
+import {BcActivityAnalysisWorkLog, BcActivityAnalysisWorkLogProjection} from "../../../../api/models";
 import {BcWorkLogTypes} from "../../../../api/models/bc-work-log-types";
 import {FormControl, Validators} from "@angular/forms";
 import {DmsService} from "@core/api/services/dms.service";
@@ -14,6 +14,10 @@ import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
 import {ResourceWorklogsState} from "@core/states/bc-resources/worklogs/resourceWorklogs.state";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BrowseResourceWorklogsAction} from "./states/browse-resource-worklogs.action";
+import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
+import {BrowseActivityWorklogsAction} from "../../activity-analysis/worklogs/states/browse-worklogs.action";
+import {PerfectScrollbarComponent} from "ngx-perfect-scrollbar";
+import {BrowseResourceWorklogsState, BrowseResourceWorklogsStateModel} from "./states/browse-resource-worklogs.state";
 
 @Component({
   selector: 'app-notes',
@@ -22,10 +26,11 @@ import {BrowseResourceWorklogsAction} from "./states/browse-resource-worklogs.ac
 })
 export class NotesComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput: ElementRef;
-  @Select(ResourceWorklogsState.page)
-  public page$: Observable<BcActivityAnalysisWorkLog[]>;
 
-  public activityWorklog : BcActivityAnalysisWorkLog;
+  @ViewChild(PerfectScrollbarComponent)
+  public directiveScroll: PerfectScrollbarComponent;
+
+  public activityWorklog: BcActivityAnalysisWorkLog;
 
   @Select(ResourceWorklogsState.activityWorklogTypes)
   public activityWorklogTypes$: Observable<BcWorkLogTypes[]>;
@@ -39,8 +44,11 @@ export class NotesComponent implements OnInit, OnDestroy {
   @Select(ResourceWorklogsState.blocking)
   public blocking$: Observable<boolean>;
 
-  @Select(BrowseActivityWorklogsState.state)
-  public state$: Observable<BrowseActivityWorklogsStateModel>;
+  @Select(BrowseResourceWorklogsState.state)
+  public state$: Observable<BrowseResourceWorklogsStateModel>;
+
+  public selectedWorklogType: BcWorkLogTypes;
+  public page$: Observable<BcActivityAnalysisWorkLogProjection[]>;
 
   private destroy$ = new Subject();
   public files: File[] = [];
@@ -66,12 +74,49 @@ export class NotesComponent implements OnInit, OnDestroy {
             new BrowseResourceWorklogsAction.LoadResourceWorklogsTypes(),
             new BrowseResourceWorklogsAction.LoadResourceWorklogs({
               resourceId: activity.id,
+              resetPage: true,
             }),
           ]);
         })
       )
       .subscribe();
+    this.page$ = this.store.select(ResourceWorklogsState.page).pipe(
+      takeUntil(this.destroy$),
+      filter((p) => !!p),
+
+      tap(() =>
+        setTimeout(() => {
+          this.scrollBottom();
+        }, 400)
+      )
+    );
   }
+  setEditMode(log) {
+    this.store.dispatch(new BrowseResourceWorklogsAction.ToggleEditMode(log));
+  }
+  deleteWorkLog(log) {}
+
+  public loadPage() {
+    const resource = this.store.selectSnapshot(
+      ResourceAnalysisState.resourceAnalysis
+    );
+    const page = this.store.selectSnapshot(ActivityWorklogsState.page);
+    const totalRecords = this.store.selectSnapshot(
+      ActivityWorklogsState.totalRecords
+    );
+    this.store.dispatch(
+      new BrowseResourceWorklogsAction.LoadResourceWorklogs({
+        resourceId: resource.id,
+        actionTypeId: this.selectedWorklogType?.id,
+        pageRequest: {
+          first: totalRecords - page.length,
+          rows: 20,
+        },
+        resetPage: false,
+      })
+    );
+  }
+
   async submit() {
     if (this.note.invalid) {
       return;
@@ -96,14 +141,21 @@ export class NotesComponent implements OnInit, OnDestroy {
         })
       ).subscribe();
   }
+
   filter(event) {
+    if (this.selectedWorklogType?.id == event.id) {
+      this.selectedWorklogType = null;
+    } else {
+      this.selectedWorklogType = event;
+    }
     const resource = this.store.selectSnapshot(
       ResourceAnalysisState.resourceAnalysis
     );
     this.store.dispatch(
       new BrowseResourceWorklogsAction.LoadResourceWorklogs({
-        actionTypeId: event.id,
-        resourceId: resource.id,
+        actionTypeId: this.selectedWorklogType?.id,
+        resourceId: resource?.id,
+        resetPage: true,
       })
     );
   }
@@ -130,7 +182,16 @@ export class NotesComponent implements OnInit, OnDestroy {
   showDialog(activityWorklog) {
     this.activityWorklog = activityWorklog;
     this.display = true;
-    this.loadingImage =true;
+    this.loadingImage = true;
+  }
+  async keydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.submit();
+    }
+  }
+  scrollBottom() {
+    if (!this.directiveScroll) return;
+    this.directiveScroll.directiveRef.scrollToBottom(0, 100);
   }
   ngOnDestroy(): void {
     this.destroy$.next();

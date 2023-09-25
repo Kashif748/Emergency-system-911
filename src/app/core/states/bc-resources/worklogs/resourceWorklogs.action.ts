@@ -15,6 +15,7 @@ export namespace ResourceWorklogsAction {
         size: number;
         actionTypeId?: number;
         resourceId: number;
+        resetPage: boolean;
       }
     ) {}
   }

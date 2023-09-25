@@ -258,12 +258,6 @@ export class ResourceAnalysisState {
       .pipe(
         tap((res) => {
           console.log(res);
-
-          // setState(
-          //   patch<ActivityAnalysisStateModel>({
-          //     activityAnalysis,
-          //   })
-          // );
         }),
         finalize(() => {
           setState(
