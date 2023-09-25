@@ -62,7 +62,7 @@ export class BCComponent implements OnInit, OnDestroy {
     this.dialogOpened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'version_dialog')
     );
-    this.store.dispatch(new BrowseBCAction.LoadPage());
+
     this.createForm();
 
     this.store

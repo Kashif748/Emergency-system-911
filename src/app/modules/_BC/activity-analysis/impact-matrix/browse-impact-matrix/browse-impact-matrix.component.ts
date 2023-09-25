@@ -79,6 +79,7 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
       filter((s) => !!s),
       tap(() => this.loadTableData())
     );
+
     if (this.accordion) {
       this.accordion.activeIndex = -1;
     }
@@ -257,9 +258,14 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
       activityId: activityAnalysis.activity.id,
     };
 
-    this.store.dispatch(
-      new BrowseActivityImpactMatrixAction.UpdateImpactMatrix(payload)
-    );
+    this.store
+      .dispatch(
+        new BrowseActivityImpactMatrixAction.UpdateImpactMatrix(payload)
+      )
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
   ngOnDestroy(): void {
     this.destroy$.next();

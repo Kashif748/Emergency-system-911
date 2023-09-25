@@ -60,6 +60,7 @@ export class BcListsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   ngOnInit() {
+    this.store.dispatch(new BrowseBCAction.LoadPage());
     this.store
       .select(BCState.selectedVersion)
       .pipe(
