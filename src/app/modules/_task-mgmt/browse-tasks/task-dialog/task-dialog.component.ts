@@ -450,6 +450,17 @@ export class TaskDialogComponent
           })
         );
       });
+    this.filterStatuses$ = this.filterStatuses$.pipe(
+      map((status) => {
+        return status.map(option => {
+          if (option.id === 1){   // here 1 indicate that status is Not Viewed
+            return {... option, disabled: true};
+          } else {
+            return {... option, disabled: false};
+          }
+        });
+      }
+    ));
   }
 
   ngOnDestroy(): void {
