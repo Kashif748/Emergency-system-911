@@ -1,4 +1,4 @@
-<ng-container >
+<ng-container *ngIf="state$ | async">
   <ng-container *ngIf="cycle$ | async as cycle">
     <section
       *ngIf="resourceAnalysis$ | async as resourceAnalysis"
@@ -175,3 +175,40 @@
     </section>
   </ng-container>
 </ng-container>
+
+<!--  notes dialog -->
+
+<p-dialog [(visible)]="displayNote" [style]="{ width: '40vw' }" [modal]="true" [baseZIndex]="10000">
+  <ng-template pTemplate="header">
+    {{ "NOTES.NOTES" | translate }}
+  </ng-template>
+  <div class="p-grid mt-5">
+    <div class="p-field p-col-12">
+    <span class="p-float-label">
+      <textarea
+        class="w-100"
+        pInputText
+        type="text"
+        [(ngModel)]="notes"
+        placeholder="{{ 'NOTES.NOTES' | translate }}"
+        rows="5"
+      ></textarea>
+      <!--<label>{{ "NOTES.NOTES" | translate }}</label>-->
+    </span>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [loading]="blocking$ | async"
+          [disabled]="notes === ''"
+          (click)="applyStatus()"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
