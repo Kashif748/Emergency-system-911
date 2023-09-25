@@ -34,6 +34,6 @@
   <input type="tel" [id]="inputId" autocomplete="off" [ngClass]="cssClass" (blur)="onTouched()"
     (keypress)="onInputKeyPress($event)" [(ngModel)]="phoneNumber" (ngModelChange)="onPhoneNumberChange()"
     [disabled]="disabled" [placeholder]="resolvePlaceholder()" [attr.maxLength]="maxLength"
-    [attr.validation]="phoneValidation" (focus)="class='p-inputwrapper-focus'"
+    [attr.validation]="phoneValidation" [attr.phonetype]="phoneType" (focus)="class='p-inputwrapper-focus'"
     (focusout)="[null,undefined,''].includes($event.target.value) && class=''" #focusable>
 </div>

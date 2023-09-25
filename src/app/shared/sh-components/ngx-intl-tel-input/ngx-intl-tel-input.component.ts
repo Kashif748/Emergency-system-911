@@ -63,6 +63,18 @@ export class NgxIntlTelInputComponent implements OnInit, OnChanges {
   @Input() phoneValidation = true;
   @Input() inputId = 'phone';
   @Input() separateDialCode = false;
+  @Input() phoneType:
+    | 'FIXED_LINE'
+    | 'FIXED_LINE_OR_MOBILE'
+    | 'MOBILE'
+    | 'PAGER'
+    | 'PERSONAL_NUMBER'
+    | 'PREMIUM_RATE'
+    | 'SHARED_COST'
+    | 'TOLL_FREE'
+    | 'UAN'
+    | 'VOICEMAIL'
+    | 'VOIP';
   separateDialCodeClass: string;
   @HostBinding('class') class = '';
   @Output() readonly countryChange = new EventEmitter<Country>();
