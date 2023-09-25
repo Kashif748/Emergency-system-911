@@ -18,6 +18,7 @@ import {DialogModule} from "primeng/dialog";
 import {NgxsModule} from "@ngxs/store";
 import {BrowseResourceWorklogsState} from "./states/browse-resource-worklogs.state";
 import {SelectButtonModule} from "primeng/selectbutton";
+import {CdateModule} from "@shared/sh-pipes/cdate.pipe";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/business-resources/', '.json');
@@ -49,14 +50,14 @@ const routes: Routes = [
     CheckboxModule,
     SkeletonModule,
     TranslateObjModule,
-    PerfectScrollbarModule,
     CheckboxModule,
     InputTextModule,
     ButtonModule,
     DialogModule,
     SharedModule,
     ListboxModule,
-    SelectButtonModule
+    SelectButtonModule,
+    CdateModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

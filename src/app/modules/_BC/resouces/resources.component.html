@@ -16,7 +16,21 @@
             {{ resourceAnalysis?.cycle | translateObj }}
           </h2>
         </div>
-        <div class="p-toolbar-group-right" style="gap: 10px">
+        <div
+          *ngIf="resourceAnalysis.status.actions"
+          class="p-toolbar-group-right"
+          style="gap: 10px"
+        >
+          <ng-container *ngFor="let action of resourceAnalysis.status.actions">
+            <p-button
+              [loading]="blocking$ | async"
+              label="{{ action | translateObj }}"
+              [styleClass]="action?.cssClass"
+              (click)="changeStatus(action?.id, action)"
+            ></p-button>
+          </ng-container>
+        </div>
+        <!--<div class="p-toolbar-group-right" style="gap: 10px">
           <p-button
             *ngIf="resourceAnalysis?.status?.id != RESOURCE_STATUSES.DRAFT"
             label="{{ 'DRAFT' | translate }}"
@@ -48,7 +62,7 @@
             label="{{ 'APPROVE' | translate }}"
           ></p-button>
           <p-button icon="pi pi-ellipsis-v"></p-button>
-        </div>
+        </div>-->
       </p-toolbar>
       <div class="d-flex p-5 sub-header p-jc-around">
         <div class="d-flex flex-column">

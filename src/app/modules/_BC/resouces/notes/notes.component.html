@@ -1,42 +1,37 @@
-<div class="p-col-12">
-  <h3 class="col-12 p-md-6 card-title align-items-start flex-column m-0">
+<div
+  class="p-col-12 mb-4"
+  style="display: flex; justify-content: space-between"
+>
+  <h3 class="card-title align-items-start flex-column m-0">
     <span class="card-label font-weight-bolder">{{
       "NOTES.HEADER" | translate
     }}</span>
   </h3>
-
-  <div class="col-12 p-md-6 flex-column px-6 py-5">
-    <p-selectButton [options]="activityWorklogTypes$ | async" (onChange)="filter($event?.value)"
-                    [multiple]="false"
-                    optionLabel="name">
-      <ng-template let-item pTemplate="item">
-        <div class="country-item">
-          <div>{{ item | translateObj }}</div>
-        </div>
-      </ng-template>
-    </p-selectButton>
-  </div>
 </div>
-<section class="row">
-
-    <!--<p-listbox
-      [options]="activityWorklogTypes$ | async"
+<section *ngIf="state$ | async as state" class="row px-20">
+  <div
+    class="col-9 m-auto p-2"
+    *ngIf="activityWorklogTypes$ | async as activityWorklogTypes"
+  >
+    <button
       (onChange)="filter($event?.value)"
-      [metaKeySelection]="false"
-      [checkbox]="true"
-      [multiple]="false"
-      optionLabel="name"
-      [style]="{ width: '100%' }"
+      *ngFor="let type of activityWorklogTypes"
+      pButton
+      type="button"
+      class="font-weight-bold px-2 text-center py-1 ml-2 p-button-rounded p-button-sm"
+      [class]="
+        type?.id == selectedWorklogType?.id
+          ? 'active p-button-primary'
+          : 'p-button-outlined'
+      "
+      (click)="filter(type)"
     >
-      <ng-template let-item pTemplate="item">
-        <div class="country-item">
-          <div>{{ item | translateObj }}</div>
-        </div>
-      </ng-template>
-    </p-listbox>-->
+      <span class="m-auto"> {{ type | translateObj }} </span>
+    </button>
+  </div>
 
-  <div class="card timeline timeline-3 col-9 p-0">
-    <div class="timeline-items p-3">
+  <div class="card timeline timeline-3 col-9 m-auto p-0">
+    <div dir="rtl" class="timeline-items p-3">
       <ng-container *ngIf="loading$ | async; else tableTemplate">
         <div
           class="timeline-item pl-10"
@@ -77,53 +72,93 @@
             height: 500px !important;
           "
         >
-          <div
-            class="timeline-item pl-10"
-            *ngFor="let worklog of page$ | async"
+          <!-- <div
+            *ngIf="totalRecords$ | async as totalRecords"
+            class="w-100 p-2 text-center"
           >
-            <div class="timeline-content">
-              <div
-                class="d-flex align-items-center justify-content-between mb-3"
-              >
-                <div>
-                  <p class="font-weight-bold">
-                    {{ worklog?.notes }}
-                  </p>
-                </div>
-                <span
-                  class="label label-light-primary label-inline mr-2 h-auto"
+            *ngIf="page.length <= totalRecords"
+            <button
+              (click)="loadPage()"
+              [disabled]="loading$ | async"
+              class="btn btn-md btn-primary font-weight-bold btn-pill w-150px py-1 m-auto"
+            >
+              {{ "ACTIONS.LOAD_MORE" | translate }}
+              <i
+                class="flaticon-up-arrow mx-2"
+                style="transform: rotate(180deg)"
+              ></i>
+            </button>
+          </div> -->
+          <ng-container *ngIf="page$ | async as page">
+            <div
+              class="timeline-item border-0"
+              *ngFor="let worklog of page"
+              [id]="'msg-' + worklog?.id"
+            >
+              <div class="timeline-content">
+                <div
+                  class="d-flex align-items-center justify-content-between mb-3"
                 >
-                  {{ worklog?.actionType | translateObj }}
-                </span>
-              </div>
-
-              <div
-                class="d-flex align-items-center justify-content-between mt-4"
-              >
-                <div class="d-flex align-items-center">
-                  <span class="text-muted">
-                    {{ worklog?.createdBy | translateObj : "FirstName" }}
-                    {{ worklog?.createdBy | translateObj : "LastName" }}
+                  <div>
+                    <p class="font-weight-bold">
+                      {{ worklog?.notes }}
+                    </p>
+                  </div>
+                  <span
+                    class="label label-light-primary label-inline mr-2 h-auto"
+                  >
+                    {{ worklog?.actionType | translateObj }}
                   </span>
-                  <div class="mr-2"></div>
-                  <button
-                    *ngIf="worklog?.hasAttachments"
-                    pButton
-                    (click)="showDialog(worklog)"
-                    pRipple
-                    type="button"
-                    icon="pi pi-paperclip"
-                    class="p-button-rounded p-button-text"
-                  ></button>
+                </div>
+
+                <div
+                  class="d-flex align-items-center justify-content-between mt-4"
+                >
+                  <div class="d-flex align-items-center">
+                    <span class="text-muted">
+                      {{ worklog?.createdBy | translateObj : "FirstName" }}
+                      {{ worklog?.createdBy | translateObj : "LastName" }}
+                    </span>
+                    <div class="mr-2"></div>
+                    <span class="mx-2 text-muted">
+                      {{ worklog?.createdOn | cdate }}
+                    </span>
+                    <div class="mr-2"></div>
+
+                    <button
+                      *ngIf="worklog?.hasAttachments"
+                      pButton
+                      (click)="showDialog(worklog)"
+                      pRipple
+                      type="button"
+                      icon="pi pi-paperclip"
+                      class="p-button-rounded p-button-text"
+                    ></button>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-media">
+                <div
+                  class="symbol symbol-circle symbol-45 symbol-light-primary"
+                >
+                  <img
+                    *ngIf="!worklog?.createdBy?.photo"
+                    class="avatar align-self-end"
+                    src="./assets/media/users/default.jpg"
+                    alt="..."
+                  />
+                  <img
+                    class="avatar align-self-end"
+                    *ngIf="worklog?.createdBy?.photo"
+                    [attr.src]="worklog?.createdBy?.photo | secure"
+                  />
                 </div>
               </div>
             </div>
-            <div class="timeline-media">
-              <div class="symbol symbol-circle symbol-45 symbol-light-primary">
-                <span class="symbol-label"> A </span>
-              </div>
+            <div *ngIf="!page || page?.length == 0" class="w-100 mt-40">
+              <nodata-table></nodata-table>
             </div>
-          </div>
+          </ng-container>
         </perfect-scrollbar>
       </ng-template>
     </div>
@@ -142,7 +177,13 @@
           />
         </div>
 
-        <input type="text" [formControl]="note" pInputText class="h-50px" />
+        <input
+          type="text"
+          (keypress)="keydown($event)"
+          [formControl]="note"
+          pInputText
+          class="h-50px"
+        />
         <label
           for="signature-input"
           class="d-flex align-items-center btn btn-secondary m-0 rounded-0"
@@ -162,8 +203,8 @@
       </div>
     </div>
   </div>
-
 </section>
+
 
 <p-dialog [(visible)]="display">
   <ng-template pTemplate="header">
@@ -177,18 +218,30 @@
       </ng-container>
       <img
         [hidden]="loadingImage"
-
         (load)="loadingImage = false"
         class="img img-thumbnail w-100 h-100"
         [src]="image['uuid'] | secure"
       />
     </div>
-
-    <!-- <img
-      [src]="file['image']"
-      style="width: 150px; height: 150px"
-      class="img img-thumbnail"
-      (click)="showFullImageDialog(file['uuid'])"
-    /> -->
   </div>
 </p-dialog>
+
+<!-- actions -->
+<ng-template #actions let-worklog="worklog">
+  <div>
+    <button
+      [attr.data-actionvalue]="'editWorkLog'"
+      (click)="setEditMode(worklog)"
+      class="btn btn-icon btn-hover-light-primary btn-circle btn-sm mr-2"
+    >
+      <i class="flaticon2-edit"></i>
+    </button>
+    <button
+      [attr.data-actionvalue]="'deleteWorkLog'"
+      (click)="deleteWorkLog(worklog)"
+      class="btn btn-icon btn-hover-light-danger btn-circle btn-sm mr-2"
+    >
+      <i class="flaticon2-rubbish-bin-delete-button"></i>
+    </button>
+  </div>
+</ng-template>
