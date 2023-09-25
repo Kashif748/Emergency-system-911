@@ -14,6 +14,7 @@ export namespace BrowseResourceWorklogsAction {
         pageRequest?: PageRequestModel;
         actionTypeId?: number;
         resourceId: number;
+        resetPage: boolean;
       }
     ) {}
   }
@@ -63,5 +64,12 @@ export namespace BrowseResourceWorklogsAction {
         id?: number;
       }
     ) {}
+  }
+  export class ToggleEditMode {
+    static readonly type = '[BrowseResourceWorklogsAction] Toggle Edit Mode';
+    /**
+     *
+     */
+    constructor(public payload: { log?: BcActivityAnalysisWorkLog }) {}
   }
 }

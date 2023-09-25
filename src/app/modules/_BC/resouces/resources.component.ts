@@ -1,19 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { TABS } from '../resouces/tempData.conts';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BrowseResourceAction } from './states/browse-resource.action';
-import { BrowseResourceState } from './states/browse-resource.state';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { BcCycles } from '../../../api/models';
-import {
-  RESOURCE_STATUSES,
-  ResourceAnalysisState,
-} from '@core/states/impact-analysis/resource-analysis.state';
-import { BcResources } from '../../../api/models/bc-resources';
-import { BcResourcesChangeStatusDto } from '../../../api/models/bc-resources-change-status-dto';
+import {Component, OnInit} from '@angular/core';
+import {TABS} from '../resouces/tempData.conts';
+import {filter, map, takeUntil, tap} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {Select, Store} from '@ngxs/store';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BrowseResourceAction} from './states/browse-resource.action';
+import {BrowseResourceState} from './states/browse-resource.state';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {BcCycles} from '../../../api/models';
+import {RESOURCE_STATUSES, ResourceAnalysisState} from '@core/states/impact-analysis/resource-analysis.state';
+import {BcResources} from '../../../api/models/bc-resources';
+import {BcResourcesChangeStatusDto} from '../../../api/models/bc-resources-change-status-dto';
+import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
 
 @Component({
   selector: 'app-resources',
@@ -29,6 +27,9 @@ export class ResourcesComponent implements OnInit {
   @Select(ResourceAnalysisState.resourceAnalysis)
   public resourceAnalysis$: Observable<BcResources>;
 
+  @Select(ResourceAnalysisState.blocking)
+  public blocking$: Observable<boolean>;
+
   @Select(BrowseResourceState.tabIndex)
   public tabIndex$: Observable<any>;
 
@@ -40,6 +41,10 @@ export class ResourcesComponent implements OnInit {
       key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'
     )
   );
+  newStatus: BcResourcesChangeStatusDto;
+  displayNote = false;
+  notes = '';
+
   private destroy$ = new Subject();
   constructor(
     private lang: ILangFacade,
@@ -89,12 +94,39 @@ export class ResourcesComponent implements OnInit {
       });
   }
 
-  changeStatus(id, status: RESOURCE_STATUSES) {
+/*  changeStatus(id, status: RESOURCE_STATUSES) {
     const newStatus: BcResourcesChangeStatusDto = {
       resourceId: id,
       statusId: status,
       notes: '',
     };
     this.store.dispatch([new BrowseResourceAction.ChangeStatus(newStatus)]);
+  }*/
+
+  changeStatus(id, action) {
+    this.newStatus = {
+      resourceId: id,
+      actionId: action?.id,
+      notes: '',
+    };
+    if (action.requiresNote == 'true') {
+      this.displayNote = true;
+      return;
+    } else {
+      this.applyStatus();
+    }
+  }
+
+  applyStatus() {
+    this.newStatus = {
+      ...this.newStatus,
+      notes: this.notes,
+    };
+    this.store
+      .dispatch([new BrowseResourceAction.ChangeStatus(this.newStatus)])
+      .toPromise()
+      .then(() => {
+        this.displayNote = false;
+      });
   }
 }

@@ -4,10 +4,7 @@ import {Router} from "@angular/router";
 import {MessageHelper} from "@core/helpers/message.helper";
 import {patch} from "@ngxs/store/operators";
 import {BrowseResourceAction} from "./browse-resource.action";
-import {ActivityAnalysisAction} from "@core/states/activity-analysis/activity-analysis.action";
 import {EMPTY} from "rxjs";
-import {BrowseActivityAnalysisStateModel} from "../../activity-analysis/states/browse-activity-analysis.state";
-import {BrowseActivityAnalysisAction} from "../../activity-analysis/states/browse-activity-analysis.action";
 import {catchError, tap} from "rxjs/operators";
 import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
 

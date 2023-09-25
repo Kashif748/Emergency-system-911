@@ -1,21 +1,12 @@
-import { PageRequestModel } from '@core/models/page-request.model';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-  Store,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { iif, patch } from '@ngxs/store/operators';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { ActivityWorklogsAction } from '@core/states/activity-analysis/worklogs/worklogs.action';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {iif, patch} from '@ngxs/store/operators';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {catchError, tap} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
 import {BrowseResourceWorklogsAction} from "./browse-resource-worklogs.action";
 import {ResourceWorklogsAction} from "@core/states/bc-resources/worklogs/resourceWorklogs.action";
 
@@ -91,6 +82,7 @@ export class BrowseResourceWorklogsState {
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         // filters: this.filters(pageRequest),
+        resetPage: payload.resetPage
       })
     );
   }
@@ -110,12 +102,12 @@ export class BrowseResourceWorklogsState {
     return dispatch(new ResourceWorklogsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(
+        /*dispatch(
           new BrowseResourceWorklogsAction.LoadResourceWorklogs({
             actionTypeId: payload.actionType.id,
             resourceId: payload.resource?.id,
           })
-        );
+        );*/
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -136,6 +128,7 @@ export class BrowseResourceWorklogsState {
           new BrowseResourceWorklogsAction.LoadResourceWorklogs({
             actionTypeId: payload.actionType.id,
             resourceId: payload.resource?.id,
+            resetPage: true,
           })
         );
       }),
@@ -144,5 +137,24 @@ export class BrowseResourceWorklogsState {
         return EMPTY;
       })
     );
+  }
+
+  @Action(BrowseResourceWorklogsAction.ToggleEditMode, {
+    cancelUncompleted: true,
+  })
+  openDialog(
+    {}: StateContext<BrowseResourceWorklogsStateModel>,
+    { payload }: BrowseResourceWorklogsAction.ToggleEditMode
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _mode:
+          this.route.snapshot.queryParams['_mode'] == 'edit'
+            ? undefined
+            : 'edit',
+        _id: payload.log?.id,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

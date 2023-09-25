@@ -78,7 +78,7 @@ export class ResourceWorklogsState {
   /* ********************** ACTIONS ************************* */
   @Action(ResourceWorklogsAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    { setState }: StateContext<ResourceWorklogsStateModel>,
+    { setState, getState}: StateContext<ResourceWorklogsStateModel>,
     { payload }: ResourceWorklogsAction.LoadPage
   ) {
     setState(
@@ -99,6 +99,13 @@ export class ResourceWorklogsState {
       })
       .pipe(
         tap((res) => {
+          if (!payload.resetPage) {
+            let currentPage = getState().page;
+            res.result.content = [
+              ...res.result.content,
+              ...currentPage.content,
+            ];
+          }
           setState(
             patch<ResourceWorklogsStateModel>({
               page: res.result,
