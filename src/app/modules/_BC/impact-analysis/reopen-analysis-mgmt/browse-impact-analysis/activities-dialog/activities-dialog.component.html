@@ -14,7 +14,7 @@
   [visible]="opened$ | async"
   (visibleChange)="close()"
   [modal]="true"
-  [style]="{ width: '55vw' }"
+  [style]="{'width': editMode ? '100%' : '55vw', 'height': editMode ? '100%' : 'auto'}"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
   [maximizable]="true"
   [baseZIndex]="10000"
@@ -34,19 +34,17 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <span>{{ "ADD_NEW_ACTIVITY" | translate }}</span>
-      <span
-        *ngIf="true"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="false"
-        class="label label-lg label-light-success label-inline"
-      >
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+        {{'ACTIVITY_DIALOG.VIEW_ACTIVITY' | translate}}
+
+      </ng-container>
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+        {{'ADD_NEW_ACTIVITY' | translate}}
+      </ng-container>
+
+      <ng-container *ngIf="viewOnly$ | async">
+        {{'RTO_LIST.TITLE_RTO' | translate}}
+      </ng-container>
     </h3>
   </div>
 
@@ -61,8 +59,8 @@
 </ng-template>
 
 <!-- templates content -->
-<ng-template #content>
-  <div class="w-100 pt-2 min-h-400px">
+<ng-template #content >
+  <div *ngIf="!editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-400px">
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
@@ -244,6 +242,778 @@
       </div>
     </div>
   </div>
+
+  <div *ngIf="editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-200px">
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+
+    <div class="row">
+
+      <!--Impact Matrix table-->
+
+      <div class="m-2 col-md-8 col-sm-12 card" *ngIf="editMode && !(viewOnly$ | async)">
+        <ng-container>
+          <ng-container *ngIf="impactMatrixLoading; else tableTemplate">
+            <p-table [value]="[].constructor(6)">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 0"></th>
+                  <th class="min-w-20px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "IMPACT_MATRIX.TABLE_CELL" | translate }}
+                    </div>
+                  </th>
+                  <th
+                    class="min-w-200px max-w-300px"
+                    *ngFor="let _ of [].constructor(4)"
+                  >
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      <p-skeleton></p-skeleton>
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td class="flag-td">
+                    <div class="bg-secondary"></div>
+                  </td>
+                  <td *ngFor="let _ of [].constructor(5)">
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              [columns]="rtosPage$ | async"
+              totalRecords="10"
+              [value]="tableValue$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th class="min-w-200px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "IMPACT_MATRIX.TABLE_CELL" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-200px" *ngFor="let item of columns">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ item | translateObj }}
+                    </div>
+                  </th>
+                </tr></ng-template
+              >
+              <ng-template
+                pTemplate="body"
+                let-item
+                let-rowData
+                let-columns="columns"
+              >
+                <tr class="read-only-row">
+                  <td class="min-w-150px">
+                    <span class="px-3">
+                  {{ rowData?.impactType | translateObj }}
+                </span>
+                  </td>
+                  <td
+                    class="min-w-200px"
+                    *ngFor="let cell of rowData?.bcRto; let i = index"
+                  >
+                    {{cell.value?.bcImpactLevels | translateObj}}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+      </div>
+
+
+      <!--recovery table-->
+      <div class="m-2 col-md-3 col-sm-12 card" *ngIf="editMode && !(viewOnly$ | async)">
+        <ng-container>
+          <ng-container *ngIf="recoveryLoading; else tableTemplate">
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "RECOVERY.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "RECOVERY.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+            </p-table>
+            <div class="vertical-table">
+              <div class="vertical-row border-bottom">
+                <div class="vertical-header">{{ "RECOVERY.ACTIVITY_PRIORITY" | translate }}</div>
+                <div class="vertical-data">{{recoveryPageData.recoveryPriority | translateObj}}</div>
+              </div>
+              <div class="vertical-row border-bottom">
+                <div class="vertical-header">{{ "RECOVERY.CAPACITY" | translate }}</div>
+                <div class="vertical-data">{{recoveryPageData.capacity}}</div>
+              </div>
+              <div class="vertical-row border-bottom">
+                <div class="vertical-header">{{ "RECOVERY.SPOF" | translate }}</div>
+                <div class="vertical-data">{{recoveryPageData.spof}}</div>
+              </div>
+              <div class="vertical-row border-bottom">
+                <div class="vertical-header">{{ "RECOVERY.SKILLS" | translate }}</div>
+                <div class="vertical-data">{{recoveryPageData.skills}}</div>
+              </div>
+              <div class="vertical-row border-bottom">
+                <div class="vertical-header">{{ "RECOVERY.REMOTELY" | translate }}</div>
+                <div class="vertical-data">{{recoveryPageData.remote}}</div>
+              </div>
+              <!-- Add more rows as needed -->
+            </div>
+
+            <!--<p-table
+              [columns]="recoveryColumns"
+              totalRecords="5"
+              [value]="[recoveryPageData]"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "RECOVERY.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-100px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "RECOVERY.ACTIVITY_PRIORITY" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-100px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "RECOVERY.CAPACITY" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "RECOVERY.SPOF" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-100px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "RECOVERY.SKILLS" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-100px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "RECOVERY.REMOTELY" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item >
+                <tr class="read-only-row">
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.recoveryPriority | translateObj }}
+                  </td>
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.capacity }}
+                  </td>
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.spof }}
+                  </td>
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.skills }}
+                  </td>
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.remote }}
+                  </td>
+
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>-->
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div *ngIf="editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-200px">
+    <p-blockUI>
+      <p-progressSpinner></p-progressSpinner>
+    </p-blockUI>
+
+    <div class="row">
+      <!--system table-->
+      <div class="m-2 col-md-4 col-sm-6 card">
+        <ng-container>
+          <ng-container *ngIf="systemLoading; else tableTemplate">
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "SYSTEMS.TITLE" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "SYSTEMS.COL1" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              [columns]="systemColumns"
+              totalRecords="5"
+              [value]="systemPage$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "SYSTEMS.TITLE" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "SYSTEMS.COL1" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="read-only-row">
+                  <td class="min-w-200px max-w-300px">
+                    {{ item.system | translateObj }}
+                  </td>
+
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+      </div>
+      <!--Employee tab-->
+      <div class="m-2 col-md-4 col-sm-6 card" *ngIf="editMode && !(viewOnly$ | async)">
+        <ng-container>
+          <ng-container *ngIf="employLoading; else tableTemplate">
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "EMPLOYEES.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "EMPLOYEES.TAB_LABEL" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              [columns]="employeeColumns"
+              totalRecords="5"
+              [value]="employeePage$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "EMPLOYEES.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "EMPLOYEES.PRIMARY" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "EMPLOYEES.SECONDARY" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="read-only-row">
+                  <td class="min-w-200px max-w-300px">
+                    {{ item.isPrimary ?  (item | translateObj : 'employeeName'): ''}}
+                  </td>
+                  <td class="min-w-200px max-w-300px">
+                    {{ item.isPrimary ? '' : (item | translateObj : 'employeeName')}}
+                  </td>
+
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+      </div>
+
+      <!--Location tab-->
+      <div class="m-2 col-md-3 col-sm-6 card" *ngIf="editMode && !(viewOnly$ | async)">
+        <ng-container>
+          <ng-container *ngIf="locationLoading; else tableTemplate">
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "LOCATIONS.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "LOCATIONS.TAB_LABEL" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              [columns]="employeeColumns"
+              totalRecords="5"
+              [value]="locationPage$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "LOCATIONS.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "LOCATIONS.COL2" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="read-only-row">
+                  <td class="min-w-200px max-w-300px">
+                    {{ item.location | translateObj}}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row">
+      <!--department insisde table-->
+      <div class="m-2 col-md-4 col-sm-6 card" *ngIf="editMode && !(viewOnly$ | async)">
+        <ng-container>
+          <ng-container *ngIf="deptInsideLoading; else tableTemplate">
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "DEPENDENCIES.TAB_DEPT" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              [columns]="systemColumns"
+              totalRecords="5"
+              [value]="orgInternalPage$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "DEPENDENCIES.TAB_DEPT" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.SECTOR" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-100px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.ACTIVITY" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-150px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.DETAILS" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="read-only-row">
+                  <td class="min-w-200px max-w-300px">
+                    {{ item.orgHierarchy | translateObj : 'name'}}
+                  </td>
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.activityName }}
+                  </td>
+                  <td class="min-w-150px max-w-300px">
+                    {{ item.dependencyDetails }}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+      </div>
+      <!--dependency inside tab-->
+      <div class="m-2 col-md-4 col-sm-6 card" *ngIf="editMode && !(viewOnly$ | async)">
+        <ng-container>
+          <ng-container *ngIf="departInsideLoading; else tableTemplate">
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "DEPENDENCIES.TAB_INSIDE" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              [columns]="employeeColumns"
+              totalRecords="5"
+              [value]="dependencyInternalPage$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "DEPENDENCIES.TAB_INSIDE" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.SECTOR" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-100px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.ACTIVITY" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-150px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.DETAILS" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="read-only-row">
+                  <td class="min-w-200px max-w-300px">
+                    {{ item.orgHierarchy | translateObj : 'name'}}
+                  </td>
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.relatedActivity | translateObj : 'name'}}
+                  </td>
+                  <td class="min-w-150px max-w-300px">
+                    {{ item.dependencyDetails}}
+                  </td>
+
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+      </div>
+
+      <!--vender tab-->
+      <div class="m-2 col-md-3 col-sm-6 card" *ngIf="editMode && !(viewOnly$ | async)">
+        <ng-container>
+          <ng-container *ngIf="venderLoading; else tableTemplate">
+            <p-table [value]="[].constructor(5)">
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "DEPENDENCIES.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="cursor-pointer hoverable">
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                  <td>
+                    <p-skeleton></p-skeleton>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #tableTemplate>
+            <p-table
+              [columns]="employeeColumns"
+              totalRecords="5"
+              [value]="venderPage$ | async"
+              dataKey="id"
+              [autoLayout]="true"
+            >
+              <ng-template pTemplate="caption">
+                <div class="table-header">
+                  {{ "DEPENDENCIES.TAB_LABEL" | translate }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="min-w-200px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.VENDER" | translate }}
+                    </div>
+                  </th>
+                  <th class="min-w-100px max-w-300px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DEPENDENCIES.DETAILS" | translate }}
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr class="read-only-row">
+                  <td class="min-w-200px max-w-300px">
+                    {{ item.partner | translateObj : 'name'}}
+                  </td>
+                  <td class="min-w-100px max-w-300px">
+                    {{ item.dependencyDetails}}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="100%">
+                    <div class="w-100">
+                      <nodata-table></nodata-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+
+
 </ng-template>
 
 <!--footer-->
@@ -251,8 +1021,8 @@
   <div class="p-col p-d-flex">
     <div class="ml-dir-auto"></div>
 
-    <div class="p-col text-center">
-      <div class="text-center">
+    <div class="p-col text-center" *ngIf="!editMode && !(viewOnly$ | async)">
+      <div class="text-center" >
         <button
           [disabled]="!selectedActivities"
           pButton
