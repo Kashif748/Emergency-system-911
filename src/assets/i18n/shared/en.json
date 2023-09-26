@@ -338,11 +338,12 @@
       "INCIDENT": "Incident",
       "NATIONAL_PERCENTAGE": "National Standard Compliance Percentage",
       "CURRENT_CYCLE": "Current Analysis Cycle",
-      "CRITICAL_ACTIVITY": "Number of Critical Activities",
-      "CRITICAL_EMPLOY": "Percentage of Critical Activities",
+      "CRITICAL_ACTIVITY": "Number - Percentage of Critical Activities",
+      "CRITICAL_EMPLOY": "Number of Critical Employees",
       "CRITICAL_SYSTEM":"Number of Critical Systems",
       "ORG_ARTCH": "Organization Hierarchy",
-      "ANALYSIS_CRCLE": "Analysis Cycle"
+      "ANALYSIS_CRCLE": "Analysis Cycle",
+      "TITTLE_SECTION":"Business Continuity Section - Contact Details"
     },
     "AUTH": {
       "GENERAL": {

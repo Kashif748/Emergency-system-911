@@ -14,6 +14,7 @@
               (onNodeExpand)="nodeExpand($event?.node)"
               placeholder="{{ 'DASHBOARD.ORG_ARTCH' | translate }}"
               appendTo="body"
+              [(ngModel)]="selectedHie"
             >
               <ng-template let-option let-placeholder pTemplate="value">
                 {{
@@ -27,11 +28,13 @@
           <div class="p-field p-col-4 p-md-4">
             <p-dropdown
               [autoDisplayFirst]="false"
-              [options]="cycles$ | async"
+              [options]="sortCycles$ | async"
               [showClear]="true"
               dataKey="id"
               optionValue="id"
               placeholder="{{ 'DASHBOARD.ANALYSIS_CRCLE' | translate }}"
+              [(ngModel)]="selectedCycle"
+              (ngModelChange)="onCycleChange($event)"
             >
               <ng-template let-item pTemplate="selectedItem">
                 {{ item | translateObj }}
@@ -48,7 +51,6 @@
   </div>
 
 
-
  <!-- <div class="py-4 border-bottom">
   <app-breadcrumbs></app-breadcrumbs>
   </div>-->
@@ -63,7 +65,7 @@
     <div class="col-lg-10 col-md-12">
       <div class="row">
         <div class="col-12 col-md-12">
-          <app-bc-widget></app-bc-widget>
+          <app-bc-widget *appPrivileges="'PRIV_VW_BC_LISTS'"></app-bc-widget>
         </div>
         <div class="col-12 mb-8">
           <div class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm">

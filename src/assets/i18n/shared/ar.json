@@ -375,7 +375,8 @@
       "CRITICAL_EMPLOY": "نسبة العمليات الحيوية",
       "CRITICAL_SYSTEM": "عدد الموظفين الحيويين",
       "ORG_ARTCH": "الهيكل الإداري",
-      "ANALYSIS_CRCLE": "دورة التحليل"
+      "ANALYSIS_CRCLE": "دورة التحليل",
+      "TITTLE_SECTION":"قسم استمرارية الأعمال - بيانات التواصل"
     },
     "AUTH": {
       "GENERAL": {

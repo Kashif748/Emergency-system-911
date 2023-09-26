@@ -28,6 +28,7 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {TreeSelectModule} from "@shared/sh-components/treeselect/treeselect.component";
 import { BcWidgetComponent } from './bc-widget/bc-widget.component';
 import {ChipModule} from "primeng/chip";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import {ChipModule} from "primeng/chip";
     TreeModule,
     MultiSelectModule,
     TreeSelectModule,
-    ChipModule
+    ChipModule,
+    FormsModule
   ],
   providers: [DatePipe, CustomDatePipe],
 })
