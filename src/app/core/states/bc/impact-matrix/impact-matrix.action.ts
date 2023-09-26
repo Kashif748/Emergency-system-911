@@ -46,4 +46,16 @@ export namespace ImpactMatrixAction {
       }
     ) {}
   }
+  export class Export {
+    static readonly type = '[ImpactMatrix] Export';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        type: 'PDF' | 'EXCEL';
+        versionId: number
+      }
+    ) {}
+  }
 }

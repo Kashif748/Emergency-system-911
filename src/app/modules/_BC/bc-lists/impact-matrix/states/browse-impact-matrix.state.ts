@@ -17,6 +17,9 @@ import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { BrowseImpactMatrixAction } from './browse-impact-matrix.action';
 import { ImpactLevelAction, ImpactMatrixAction } from '@core/states';
+import {BrowseRtoStateModel} from "../../rto/states/browse-rto.state";
+import {RtoAction} from "@core/states/bc/rto/rto.action";
+import {BrowseRtoAction} from "../../rto/states/browse-rto.action";
 
 export interface BrowseImpactMatrixStateModel {
   pageRequest: PageRequestModel;
@@ -186,6 +189,19 @@ export class BrowseImpactMatrixState {
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         versionId: payload.versionId,
+      })
+    );
+  }
+
+  @Action(BrowseImpactMatrixAction.Export, { cancelUncompleted: true })
+  export(
+    { getState, dispatch }: StateContext<BrowseImpactMatrixStateModel>,
+    { payload }: BrowseImpactMatrixAction.Export
+  ) {
+    return dispatch(
+      new ImpactMatrixAction.Export({
+        type: payload.type,
+        versionId: payload.versionId
       })
     );
   }

@@ -10,6 +10,9 @@ import { ActivatedRoute } from '@angular/router';
 import { IAuthService } from '@core/services/auth.service';
 import { RtoAction, RtoState } from '@core/states';
 import { GenericValidators } from '@shared/validators/generic-validators';
+import {MenuItem} from "primeng/api";
+import {TranslateService} from "@ngx-translate/core";
+import {BrowseUsersAction} from "../../../../../_user-mgmt/states/browse-users.action";
 
 @Component({
   selector: 'app-rto-dialog',
@@ -71,7 +74,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private store: Store,
     private route: ActivatedRoute,
-    private auth: IAuthService
+    private auth: IAuthService,
+    private translate: TranslateService,
   ) {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -159,6 +163,9 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   }
   isValidColorCode(value: string): boolean {
     return this.colorOptions.includes(value);
+  }
+  export(types: 'EXCEL') {
+    this.store.dispatch(new BrowseRtoAction.Export({ type: types, versionId: this.version}));
   }
   ngOnDestroy(): void {
     this.destroy$.next();
