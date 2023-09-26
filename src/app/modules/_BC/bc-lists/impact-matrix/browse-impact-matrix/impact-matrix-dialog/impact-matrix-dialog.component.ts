@@ -21,6 +21,7 @@ import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.stat
 import { BcImpactLevel } from 'src/app/api/models';
 import { BcImpactMatrixDto } from 'src/app/api/models';
 import { TranslateService } from '@ngx-translate/core';
+import {BrowseRtoAction} from "../../../rto/states/browse-rto.action";
 
 @Component({
   selector: 'app-impact-matrix-dialog',
@@ -234,6 +235,10 @@ export class ImpactMatrixDialogComponent implements OnInit, OnDestroy {
         new BrowseImpactMatrixAction.CreateImpactMatrix(impactMatrix)
       );
     }
+  }
+
+  export(types: 'EXCEL') {
+    this.store.dispatch(new BrowseImpactMatrixAction.Export({ type: types, versionId: this.version}));
   }
 
   ngOnDestroy(): void {

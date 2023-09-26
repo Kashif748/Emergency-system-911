@@ -1,24 +1,25 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TABS} from '../resouces/tempData.conts';
 import {filter, map, takeUntil, tap} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BrowseResourceAction} from './states/browse-resource.action';
-import {BrowseResourceState} from './states/browse-resource.state';
+import {BrowseResourceState, BrowseResourceStateModel} from './states/browse-resource.state';
 import {ILangFacade} from '@core/facades/lang.facade';
 import {BcCycles} from '../../../api/models';
 import {RESOURCE_STATUSES, ResourceAnalysisState} from '@core/states/impact-analysis/resource-analysis.state';
 import {BcResources} from '../../../api/models/bc-resources';
 import {BcResourcesChangeStatusDto} from '../../../api/models/bc-resources-change-status-dto';
-import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
 
 @Component({
   selector: 'app-resources',
   templateUrl: './resources.component.html',
   styleUrls: ['./resources.components.scss'],
 })
-export class ResourcesComponent implements OnInit {
+export class ResourcesComponent implements OnInit, OnDestroy {
+  @Select(BrowseResourceState.state)
+  public state$: Observable<BrowseResourceStateModel>;
   tabs = TABS;
   RESOURCE_STATUSES = RESOURCE_STATUSES;
   @Select(ResourceAnalysisState.cycle)
@@ -128,5 +129,9 @@ export class ResourcesComponent implements OnInit {
       .then(() => {
         this.displayNote = false;
       });
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

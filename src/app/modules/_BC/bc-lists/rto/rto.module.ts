@@ -35,6 +35,7 @@ import {TranslateObjModule} from "@shared/sh-pipes/translate-obj.pipe";
 import {DividerModule} from "primeng/divider";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
+import {SplitButtonModule} from "primeng/splitbutton";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -84,7 +85,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     DividerModule,
     ToggleButtonModule,
-    PrivilegesDirectiveModule
+    PrivilegesDirectiveModule,
+    SplitButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

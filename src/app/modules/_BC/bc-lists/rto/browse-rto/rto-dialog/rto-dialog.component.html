@@ -6,7 +6,12 @@
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
     (click)="openDialog()"
+    style="margin-inline-end: 10px;"
   ></button>
+  <button pButton label="{{'ACTIONS.EXPORT' | translate}}"
+          icon="pi pi-external-link"
+          (click)="export('EXCEL')">
+  </button>
 </div>
 
 <p-dialog
