@@ -65,7 +65,7 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
   buildForm() {
     this.form = this.formBuilder.group({
       recoveryPriority: [null, [Validators.required]],
-      capacity: [null, [Validators.required]],
+      capacity: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
       spof: [null, [Validators.required]],
       skills: [null, [Validators.required]],
       remote: [true],
