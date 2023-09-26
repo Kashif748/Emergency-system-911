@@ -1,19 +1,13 @@
-import { EMPTY } from 'rxjs';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-  Store,
-} from '@ngxs/store';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { patch } from '@ngxs/store/operators';
-import { Injectable } from '@angular/core';
-import { ImpactMatrixAction } from '@core/states/bc/impact-matrix/impact-matrix.action';
-import { BcImpactMatrixDto } from 'src/app/api/models';
-import { BcImpactTypesMatrixControllerService } from 'src/app/api/services';
+import {EMPTY} from 'rxjs';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {patch} from '@ngxs/store/operators';
+import {Injectable} from '@angular/core';
+import {ImpactMatrixAction} from '@core/states/bc/impact-matrix/impact-matrix.action';
+import {BcImpactMatrixDto} from 'src/app/api/models';
+import {BcImpactTypesMatrixControllerService} from 'src/app/api/services';
+import {UrlHelperService} from "@core/services/url-helper.service";
+import {ILangFacade} from "@core/facades/lang.facade";
 
 export interface ImpactMatrixStateModel {
   page: BcImpactMatrixDto[];
@@ -35,7 +29,7 @@ export class ImpactMatrixState {
    */
   constructor(
     private impactMatrix: BcImpactTypesMatrixControllerService,
-    private store: Store
+    private store: Store, private langFacade: ILangFacade, private urlHelper: UrlHelperService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -149,7 +143,7 @@ export class ImpactMatrixState {
     );
 
     return this.impactMatrix
-      .update90({
+      .update101({
         body: payload,
       })
       .pipe(
@@ -197,5 +191,30 @@ export class ImpactMatrixState {
         );
       })
     );
+  }
+  @Action(ImpactMatrixAction.Export, { cancelUncompleted: true })
+  export({}: StateContext<ImpactMatrixStateModel>, { payload }: ImpactMatrixAction.Export) {
+    return this.impactMatrix
+      .export7({
+        as: payload.type,
+        lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
+        isActive: true,
+        versionId: payload.versionId,
+      })
+      .pipe(
+        tap((res: any) => {
+          const newBlob = new Blob([res], {
+            type: `application/${
+              payload.type === 'PDF'
+                ? 'pdf'
+                : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              }`,
+          });
+          this.urlHelper.downloadBlob(
+            newBlob,
+            `BUSINESS IMPACT ANALYSIS MATRIX - ${new Date().toISOString().split('.')[0]}`
+          );
+        })
+      );
   }
 }

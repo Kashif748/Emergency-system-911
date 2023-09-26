@@ -1,22 +1,14 @@
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-  Store,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { patch } from '@ngxs/store/operators';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { Bcrto } from '../../../../api/models/bcrto';
-import { BcrtoControllerService } from '../../../../api/services/bcrto-controller.service';
-import { PageBcrto } from '../../../../api/models/page-bcrto';
-import { RtoAction } from '@core/states';
-import {UserAction} from "@core/states/user/user.action";
-import {UserStateModel} from "@core/states/user/user.state";
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {patch} from '@ngxs/store/operators';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
+import {Bcrto} from '../../../../api/models/bcrto';
+import {BcrtoControllerService} from '../../../../api/services/bcrto-controller.service';
+import {PageBcrto} from '../../../../api/models/page-bcrto';
+import {RtoAction} from '@core/states';
+import {ILangFacade} from "@core/facades/lang.facade";
+import {UrlHelperService} from "@core/services/url-helper.service";
 
 export interface RtoStateModel {
   page: PageBcrto;
@@ -34,7 +26,8 @@ export class RtoState {
   /**
    *
    */
-  constructor(private rto: BcrtoControllerService, private store: Store) {}
+  constructor(private rto: BcrtoControllerService, private store: Store,
+              private langFacade: ILangFacade, private urlHelper: UrlHelperService) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([RtoState])
@@ -201,11 +194,12 @@ export class RtoState {
 
   @Action(RtoAction.Export, { cancelUncompleted: true })
   export({}: StateContext<RtoStateModel>, { payload }: RtoAction.Export) {
-    return this.userService
-      .export1({
+    return this.rto
+      .exportAsAspose({
         as: payload.type,
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
-        request: payload.filters,
+        isActive: true,
+        versionId: payload.versionId,
       })
       .pipe(
         tap((res: any) => {
@@ -218,7 +212,7 @@ export class RtoState {
           });
           this.urlHelper.downloadBlob(
             newBlob,
-            `USERS - ${new Date().toISOString().split('.')[0]}`
+            `RTO-LIST - ${new Date().toISOString().split('.')[0]}`
           );
         })
       );

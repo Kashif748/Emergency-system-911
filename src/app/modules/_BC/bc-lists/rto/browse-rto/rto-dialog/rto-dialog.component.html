@@ -1,16 +1,4 @@
 <div class="p-toolbar-group-right">
-  <p-splitButton label="{{'ACTIONS.EXPORT' | translate}}" icon="pi pi-external-link"
-                 [model]="exportActions" (onClick)="export('EXCEL')"></p-splitButton>
-  <!--<button
-    [disabled]="shouldDisable"
-    pButton
-    *checkPrivileges="'PRIV_ED_BC_LISTS'"
-    label="{{ 'ACTIONS.ADD' | translate }}"
-    icon="pi pi-plus"
-    (click)="openDialog()"
-    style="margin-inline-end: 10px;"
-  ></button>-->
-
   <button
     [disabled]="shouldDisable"
     pButton
@@ -20,6 +8,10 @@
     (click)="openDialog()"
     style="margin-inline-end: 10px;"
   ></button>
+  <button pButton label="{{'ACTIONS.EXPORT' | translate}}"
+          icon="pi pi-external-link"
+          (click)="export('EXCEL')">
+  </button>
 </div>
 
 <p-dialog

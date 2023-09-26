@@ -23,19 +23,6 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   public color = '#ffffff';
   public colorOptions = ['#FF0017', '#FFBB3A', '#FFFC4C', '#89CF60', '#FFFFFF'];
 
-  public exportActions = [
-    {
-      label: this.translate.instant('ACTIONS.EXPORT_TO_XLSX'),
-      icon: 'pi pi-file-excel',
-      command: () => this.export('EXCEL'),
-    },
-    {
-      label: this.translate.instant('ACTIONS.EXPORT_TO_PDF'),
-      icon: 'pi pi-file-pdf',
-      command: () => this.export('PDF'),
-    },
-  ] as MenuItem[];
-
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
@@ -177,8 +164,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   isValidColorCode(value: string): boolean {
     return this.colorOptions.includes(value);
   }
-  export(type: 'EXCEL' | 'PDF') {
-    this.store.dispatch(new BrowseRtoAction.Export({ type }));
+  export(types: 'EXCEL') {
+    this.store.dispatch(new BrowseRtoAction.Export({ type: types, versionId: this.version}));
   }
   ngOnDestroy(): void {
     this.destroy$.next();

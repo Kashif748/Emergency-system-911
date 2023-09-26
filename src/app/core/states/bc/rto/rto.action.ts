@@ -54,6 +54,7 @@ export namespace RtoAction {
     constructor(
       public payload: {
         type: 'PDF' | 'EXCEL';
+        versionId: number
       }
     ) {}
   }

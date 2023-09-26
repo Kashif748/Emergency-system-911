@@ -38,7 +38,7 @@ export namespace BrowseRtoAction {
     /**
      *
      */
-    constructor(public payload: { type: 'PDF' | 'EXCEL' }) {}
+    constructor(public payload: { type: 'PDF' | 'EXCEL', versionId: number }) {}
   }
 
   export class ToggleDialog {

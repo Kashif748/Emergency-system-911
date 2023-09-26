@@ -1,25 +1,15 @@
-import { PageRequestModel } from '@core/models/page-request.model';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { iif, patch } from '@ngxs/store/operators';
-import { BrowseRtoAction } from './browse-rto.action';
-import { RtoAction } from '@core/states/bc/rto/rto.action';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { Store } from '@ngxs/store';
-import {UserAction} from "@core/states/user/user.action";
-import {BrowseUsersAction} from "../../../../_user-mgmt/states/browse-users.action";
-import {BrowseUsersStateModel} from "../../../../_user-mgmt/states/browse-users.state";
+import {PageRequestModel} from '@core/models/page-request.model';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {iif, patch} from '@ngxs/store/operators';
+import {BrowseRtoAction} from './browse-rto.action';
+import {RtoAction} from '@core/states/bc/rto/rto.action';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
+
 export interface BrowseRtoStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
@@ -132,10 +122,10 @@ export class BrowseRtoState {
     { getState, dispatch }: StateContext<BrowseRtoStateModel>,
     { payload }: BrowseRtoAction.Export
   ) {
-    const pageRequest = getState().pageRequest;
     return dispatch(
-      new BrowseRtoAction.Export({
+      new RtoAction.Export({
         type: payload.type,
+        versionId: payload.versionId
       })
     );
   }
