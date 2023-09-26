@@ -33,6 +33,14 @@ export namespace BrowseRtoAction {
     ) {}
   }
 
+  export class Export {
+    static readonly type = '[BrowseRto] Export';
+    /**
+     *
+     */
+    constructor(public payload: { type: 'PDF' | 'EXCEL' }) {}
+  }
+
   export class ToggleDialog {
     static readonly type = '[BrowseRto] Toggle Dialog';
     /**

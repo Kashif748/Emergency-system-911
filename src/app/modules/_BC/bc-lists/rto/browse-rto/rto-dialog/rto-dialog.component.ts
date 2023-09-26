@@ -10,6 +10,9 @@ import { ActivatedRoute } from '@angular/router';
 import { IAuthService } from '@core/services/auth.service';
 import { RtoAction, RtoState } from '@core/states';
 import { GenericValidators } from '@shared/validators/generic-validators';
+import {MenuItem} from "primeng/api";
+import {TranslateService} from "@ngx-translate/core";
+import {BrowseUsersAction} from "../../../../../_user-mgmt/states/browse-users.action";
 
 @Component({
   selector: 'app-rto-dialog',
@@ -19,6 +22,19 @@ import { GenericValidators } from '@shared/validators/generic-validators';
 export class RtoDialogComponent implements OnInit, OnDestroy {
   public color = '#ffffff';
   public colorOptions = ['#FF0017', '#FFBB3A', '#FFFC4C', '#89CF60', '#FFFFFF'];
+
+  public exportActions = [
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_XLSX'),
+      icon: 'pi pi-file-excel',
+      command: () => this.export('EXCEL'),
+    },
+    {
+      label: this.translate.instant('ACTIONS.EXPORT_TO_PDF'),
+      icon: 'pi pi-file-pdf',
+      command: () => this.export('PDF'),
+    },
+  ] as MenuItem[];
 
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
@@ -71,7 +87,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private store: Store,
     private route: ActivatedRoute,
-    private auth: IAuthService
+    private auth: IAuthService,
+    private translate: TranslateService,
   ) {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -159,6 +176,9 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   }
   isValidColorCode(value: string): boolean {
     return this.colorOptions.includes(value);
+  }
+  export(type: 'EXCEL' | 'PDF') {
+    this.store.dispatch(new BrowseRtoAction.Export({ type }));
   }
   ngOnDestroy(): void {
     this.destroy$.next();

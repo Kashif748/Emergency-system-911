@@ -17,6 +17,9 @@ import { ApiHelper } from '@core/helpers/api.helper';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Store } from '@ngxs/store';
+import {UserAction} from "@core/states/user/user.action";
+import {BrowseUsersAction} from "../../../../_user-mgmt/states/browse-users.action";
+import {BrowseUsersStateModel} from "../../../../_user-mgmt/states/browse-users.state";
 export interface BrowseRtoStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
@@ -120,6 +123,19 @@ export class BrowseRtoState {
       }),
       finalize(() => {
         dispatch(new BrowseRtoAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowseRtoAction.Export, { cancelUncompleted: true })
+  export(
+    { getState, dispatch }: StateContext<BrowseRtoStateModel>,
+    { payload }: BrowseRtoAction.Export
+  ) {
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new BrowseRtoAction.Export({
+        type: payload.type,
       })
     );
   }

@@ -45,4 +45,16 @@ export namespace RtoAction {
       }
     ) {}
   }
+
+  export class Export {
+    static readonly type = '[Rto] Export';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        type: 'PDF' | 'EXCEL';
+      }
+    ) {}
+  }
 }

@@ -15,6 +15,8 @@ import { Bcrto } from '../../../../api/models/bcrto';
 import { BcrtoControllerService } from '../../../../api/services/bcrto-controller.service';
 import { PageBcrto } from '../../../../api/models/page-bcrto';
 import { RtoAction } from '@core/states';
+import {UserAction} from "@core/states/user/user.action";
+import {UserStateModel} from "@core/states/user/user.state";
 
 export interface RtoStateModel {
   page: PageBcrto;
@@ -195,5 +197,30 @@ export class RtoState {
         );
       })
     );
+  }
+
+  @Action(RtoAction.Export, { cancelUncompleted: true })
+  export({}: StateContext<RtoStateModel>, { payload }: RtoAction.Export) {
+    return this.userService
+      .export1({
+        as: payload.type,
+        lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
+        request: payload.filters,
+      })
+      .pipe(
+        tap((res: any) => {
+          const newBlob = new Blob([res], {
+            type: `application/${
+              payload.type === 'PDF'
+                ? 'pdf'
+                : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              }`,
+          });
+          this.urlHelper.downloadBlob(
+            newBlob,
+            `USERS - ${new Date().toISOString().split('.')[0]}`
+          );
+        })
+      );
   }
 }
