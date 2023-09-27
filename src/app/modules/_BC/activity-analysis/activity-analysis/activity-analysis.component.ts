@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { BcActivityAnalysis, BcCycles } from 'src/app/api/models';
+import { filter, map, skip, takeUntil, tap } from 'rxjs/operators';
+import { BcActivityAnalysis, BcCycles, Bcrto } from 'src/app/api/models';
 import { ActivityAnalysisStatusAction } from 'src/app/api/models/activity-analysis-status-action';
 import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 import { BrowseActivityAnalysisAction } from '../states/browse-activity-analysis.action';
@@ -39,8 +40,14 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   @Select(ActivityAnalysisState.blocking)
   public blocking$: Observable<boolean>;
 
+  @Select(ActivityImpactMatrixState.loading)
+  public loadingImpactAnalysisRes$: Observable<boolean>;
+
+
   @Select(BrowseActivityAnalysisState.impactTotal)
   public impactTotal$: Observable<number>;
+
+  public impactAnalysisRes$: Observable<Bcrto>;
 
   tabs = TABS;
   displayNote = false;
@@ -90,7 +97,11 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.impactAnalysisRes$ = this.store
+      .select(BrowseActivityAnalysisState.impactAnalysisRes)
+      .pipe(skip(1));
+  }
   changeTab(index: number) {
     this.store
       .dispatch([

@@ -19,6 +19,7 @@ import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisComponent } from './activity-analysis/activity-analysis.component';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
+import { SkeletonModule } from 'primeng/skeleton';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -106,6 +107,7 @@ const routes: Routes = [
     DialogModule,
     AvatarModule,
     BlockUIModule,
+    SkeletonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
