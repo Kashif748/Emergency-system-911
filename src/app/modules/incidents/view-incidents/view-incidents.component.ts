@@ -685,9 +685,8 @@ export class ViewIncidentsComponent extends BaseComponent implements OnInit {
     if (this.incidentDetails?.status?.id === 2) {
       return false;
     }
-    this.canEdit =
-      this.incidentDetails?.responsibleOrg?.id ==
-      this.commonData?.currentOrgDetails?.id;
+    this.canEdit = this.incidentDetails?.responsibleOrg?.id ==
+      this.commonData?.currentOrgDetails?.id && this.incidentDetails?.status?.id === 1;
     this.cd.detectChanges();
   }
 

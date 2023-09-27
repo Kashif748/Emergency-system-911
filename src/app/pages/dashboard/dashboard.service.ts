@@ -4,8 +4,10 @@ import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { Inew } from 'src/app/modules/news/models/new.interface';
 import { New } from 'src/app/modules/news/models/new.model';
 import { DataSourceService } from 'src/app/modules/services/data-source/data-source.service';
-import { DashboardStatistics } from './random-data';
+import {DashboardBCStatistics, DashboardStatistics} from './random-data';
 import { NotificationsEvents } from '@core/constant/NotificationsEvents';
+import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
+import {TranslationService} from "../../modules/i18n/translation.service";
 
 const baseUrl = '';
 
@@ -15,13 +17,16 @@ const baseUrl = '';
 export class DashboardService extends DataSourceService {
   newsChanged$: Subject<New[]> = new Subject();
   statistics: DashboardStatistics;
+  bcStatistics: DashboardBCStatistics;
+  bcStatisticsChange$: BehaviorSubject<DashboardBCStatistics | null> =
+    new BehaviorSubject(null);
   statisticsChange$: BehaviorSubject<DashboardStatistics | null> =
     new BehaviorSubject(null);
 
   workLogs: any[];
   workogsChange$: BehaviorSubject<any[]> = new BehaviorSubject([]);
 
-  constructor() {
+  constructor(private translationService: TranslationService) {
     super(baseUrl);
   }
 
@@ -159,12 +164,42 @@ export class DashboardService extends DataSourceService {
     );
   }
 
+
+  getBcStatistic(cycle, hie?) {
+    const lang = this.translationService.getSelectedLanguage();
+    return forkJoin({
+      bcStatistics: this.getAll<any>(
+        'bc/dashboard/statistics?', {
+          cycleId: cycle,
+          orgHierarchyId: hie || ''
+        }
+      ),
+    }).pipe(
+      tap(
+        ({
+           bcStatistics,
+         }) => {
+          this.bcStatistics = {
+            ...bcStatistics,
+            currentAnalysisCycle: (bcStatistics.nameAr != 'Null' && bcStatistics.nameAr != '' && bcStatistics.nameEn != 'Null' && bcStatistics.nameEn != '') ?
+              lang == 'en' ? bcStatistics.nameEn : bcStatistics.nameAr : '-'
+          };
+          this.bcStatisticsChange$.next(this.bcStatistics);
+        }
+      )
+    )
+      .subscribe();
+  }
+
   getStatistic() {
     return forkJoin({
       incidentsStatistics: this.getAll<any>('dashboard/incidents/statistics'),
       tasksStatistics: this.getAll<any>('dashboard/tasks/statistics'),
       correspondenceStatistics: this.getAll<any>(
         'dashboard/correspondence/statistics'
+      ),
+      bcSectionDetail: this.getAll<any>(
+        'bc/dashboard/section-details'
       ),
     })
       .pipe(
@@ -173,11 +208,14 @@ export class DashboardService extends DataSourceService {
             incidentsStatistics,
             tasksStatistics,
             correspondenceStatistics,
+             bcSectionDetail
           }) => {
             this.statistics = {
               ...incidentsStatistics,
               ...tasksStatistics,
               ...correspondenceStatistics,
+              nationalCompliance: bcSectionDetail.nationalCompliance,
+              bcSectiondetails: bcSectionDetail.bcSectionDetails
             };
             this.statisticsChange$.next(this.statistics);
           }
