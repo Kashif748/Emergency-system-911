@@ -29,6 +29,7 @@ export interface ActivityAnalysisStateModel {
   activityStatus: ActivityAnalysisStatusAction;
   cycle: BcCycles;
   loading: boolean;
+  loadingStatus: boolean;
   blocking: boolean;
 }
 
@@ -72,6 +73,10 @@ export class ActivityAnalysisState {
   @Selector([ActivityAnalysisState])
   static loading(state: ActivityAnalysisStateModel) {
     return state?.loading;
+  }
+  @Selector([ActivityAnalysisState])
+  static loadingStatus(state: ActivityAnalysisStateModel) {
+    return state?.loadingStatus;
   }
 
   @Selector([ActivityAnalysisState])
@@ -127,7 +132,7 @@ export class ActivityAnalysisState {
     }
     setState(
       patch<ActivityAnalysisStateModel>({
-        blocking: true,
+        loading: true,
       })
     );
     return this.activitiesAnalysisController.getOne34({ id: payload.id }).pipe(
@@ -141,7 +146,7 @@ export class ActivityAnalysisState {
       finalize(() => {
         setState(
           patch<ActivityAnalysisStateModel>({
-            blocking: false,
+            loading: false,
           })
         );
       })
@@ -165,7 +170,7 @@ export class ActivityAnalysisState {
     }
     setState(
       patch<ActivityAnalysisStateModel>({
-        blocking: true,
+        loadingStatus: true,
       })
     );
     return this.activitiesAnalysisController
@@ -181,7 +186,7 @@ export class ActivityAnalysisState {
         finalize(() => {
           setState(
             patch<ActivityAnalysisStateModel>({
-              blocking: false,
+              loadingStatus: false,
             })
           );
         })

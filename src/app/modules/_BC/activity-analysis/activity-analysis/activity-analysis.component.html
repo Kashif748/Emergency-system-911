@@ -45,8 +45,8 @@
         <div class="d-flex flex-column">
           <span class="mb-3"> {{ "createdBy" | translate }}</span>
           <span class="font-weight-bold text-primary"
-            >{{ activityAnalysis?.createdBy | translateObj : 'FirstName' }}
-            {{ activityAnalysis?.createdBy | translateObj :'LastName' }}
+            >{{ activityAnalysis?.createdBy | translateObj : "FirstName" }}
+            {{ activityAnalysis?.createdBy | translateObj : "LastName" }}
           </span>
         </div>
         <div class="d-flex flex-column">
@@ -65,16 +65,23 @@
             header="{{ 'ANALYSISـRESULT' | translate }}"
             styleClass="shadow-none border h-100"
           >
-            <div class="d-flex p-jc-between">
+            <div
+              *ngIf="impactAnalysisRes$ | async as impactAnalysisRes"
+              class="d-flex p-jc-between"
+            >
               <div class="d-flex flex-column">
                 <span>{{ "ACTIVITY_CRITICALITY" | translate }}</span>
-                <p class="font-weight-bold font-size-h4 mt-4">مرتفع</p>
+                <p class="font-weight-bold font-size-h4 mt-4">
+                  {{ impactAnalysisRes | translateObj : "criticality" }}
+                </p>
               </div>
               <p-divider layout="vertical"></p-divider>
 
               <div class="d-flex flex-column">
                 <span>{{ "RECOVERY_TIME" | translate }}</span>
-                <p class="font-weight-bold font-size-h4 mt-4">1 - 4 ساعات</p>
+                <p class="font-weight-bold font-size-h4 mt-4">
+                  {{ impactAnalysisRes | translateObj }}
+                </p>
               </div>
             </div>
           </p-card>
@@ -119,13 +126,7 @@
           >
             <div class="d-flex">
               <div class="d-flex">
-                <p-avatar
-                  icon="pi pi-user"
-                  styleClass="p-mr-2"
-                  size="xlarge"
-                ></p-avatar>
-
-                <p class="font-weight-bold font-size-h4 px-4">
+                <p class="font-weight-bolder font-size-h3 px-4 m-0">
                   {{ activityAnalysis?.spof }}
                 </p>
               </div>

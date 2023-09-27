@@ -160,6 +160,8 @@ export class BrowseActivityImpactMatrixState {
         pageRequest: patch<PageRequestModel>({
           first: iif(!!payload?.pageRequest, payload?.pageRequest?.first),
           rows: iif(!!payload?.pageRequest, payload?.pageRequest?.rows),
+          sortField: payload.pageRequest?.sortField,
+          sortOrder: payload.pageRequest?.sortOrder,
         }),
       })
     );
