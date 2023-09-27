@@ -15,6 +15,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {ILangFacade, LangFacade} from "@core/facades/lang.facade";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {DropdownModule} from "primeng/dropdown";
+import { InputNumberModule } from 'primeng/inputnumber';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -45,7 +46,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ButtonModule,
     TranslateObjModule,
     DropdownModule,
-    CheckboxModule
+    CheckboxModule,
+    InputNumberModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

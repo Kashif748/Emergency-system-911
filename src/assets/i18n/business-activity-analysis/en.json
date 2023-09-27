@@ -58,7 +58,7 @@
     "SECTION": "Related Section",
     "ACTIVIE_DEPT": "Activity dependency",
     "VENDORS": "Vendors",
-    "ACTIVIE_NAME":"Activity Name",
+    "ACTIVIE_NAME": "Activity Name",
 
     "ASSOCIATED_MANG": "Associated management",
     "TITLE": "Activity reliability",
@@ -74,12 +74,12 @@
     "TAB_LABEL": "Locations",
 
     "SITE": "Choose a new site",
-    "NAME": "Web site name",
+    "NAME": "Location Name",
     "LOCATION": "Location",
     "REGION": "Region",
     "TITLE": "Activity sites",
     "COL1": "Location type",
-    "COL2": "Web site name",
+    "COL2": "Location Name",
     "COL3": "Region"
   },
   "IMPACT_MATRIX": {
