@@ -14,9 +14,60 @@ export interface DashboardStatistics {
   // CorrespondenceStatistics
   delayedCorrespondence: number;
   incomingCorrespondence: number;
+  // bc
+  nationalCompliance: number;
+  bcSectiondetails: [];
+}
+export interface DashboardBCStatistics {
+  // bc
+  currentAnalysisCycle: number;
+  criticalActivities: number;
+  criticalEmployees: number;
+  criticalSystems: number;
 }
 export const data = {
   widget1: [
+    {
+      title: 'NATIONAL_PERCENTAGE',
+      icon: 'Custome/ruler-combined-solid',
+      value: 'nationalCompliance',
+      color: 'text-dark-65',
+      privileges: ['PRIV_VW_BC_LISTS'],
+      changed: false,
+    },
+    {
+      title: 'CURRENT_CYCLE',
+      icon: 'Custome/magnifying-glass-chart-solid',
+      value: 'currentAnalysisCycle',
+      color: 'text-dark-65',
+      privileges: ['PRIV_VW_BC_LISTS'],
+      changed: false,
+    },
+    {
+      title: 'CRITICAL_ACTIVITY',
+      icon: 'Custome/heartbeat-solid',
+      value: 'criticalActivities',
+      color: 'text-dark-65',
+      privileges: ['PRIV_VW_ORG_ACTIVITY'],
+      changed: false,
+    },
+    {
+      title: 'CRITICAL_EMPLOY',
+      icon: 'Custome/person-rays-solid',
+      value: 'criticalEmployees',
+      color: 'text-dark-65',
+      privileges: ['PRIV_VW_ORG_ACTIVITY'],
+      changed: false,
+    },
+    {
+      title: 'CRITICAL_SYSTEM',
+      icon: 'Custome/laptop-code-solid',
+      value: 'criticalSystems',
+      color: 'text-dark-65',
+      url: null,
+      privileges: ['PRIV_VW_ORG_ACTIVITY'],
+      changed: false,
+    },
     {
       title: 'REGISTERED_INCIDENTS',
       icon: 'Custome/registered-incidents',

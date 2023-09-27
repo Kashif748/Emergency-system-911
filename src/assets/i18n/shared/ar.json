@@ -368,7 +368,15 @@
       "COMPLETED_INCIDENTS": "بلاغات منجزة (اليوم)",
       "INCOMING_LATE_TASK": "المهام الواردة / المتأخرة",
       "TASK": "مهمة",
-      "INCIDENT": "بلاغ"
+      "INCIDENT": "بلاغ",
+      "NATIONAL_PERCENTAGE": "نسبة الامتثال للمعيار الوطني",
+      "CURRENT_CYCLE": "دورة التحليل الحالية",
+      "CRITICAL_ACTIVITY": "عدد العمليات الحيوية",
+      "CRITICAL_EMPLOY": "نسبة العمليات الحيوية",
+      "CRITICAL_SYSTEM": "عدد الموظفين الحيويين",
+      "ORG_ARTCH": "الهيكل الإداري",
+      "ANALYSIS_CRCLE": "دورة التحليل",
+      "TITTLE_SECTION":"قسم استمرارية الأعمال - بيانات التواصل"
     },
     "AUTH": {
       "GENERAL": {
