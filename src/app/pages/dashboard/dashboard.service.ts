@@ -8,6 +8,7 @@ import {DashboardBCStatistics, DashboardStatistics} from './random-data';
 import { NotificationsEvents } from '@core/constant/NotificationsEvents';
 import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
 import {TranslationService} from "../../modules/i18n/translation.service";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 const baseUrl = '';
 
@@ -26,7 +27,7 @@ export class DashboardService extends DataSourceService {
   workLogs: any[];
   workogsChange$: BehaviorSubject<any[]> = new BehaviorSubject([]);
 
-  constructor(private translationService: TranslationService) {
+  constructor(private translationService: TranslationService, private privilegesService: PrivilegesService,) {
     super(baseUrl);
   }
 
@@ -192,34 +193,45 @@ export class DashboardService extends DataSourceService {
   }
 
   getStatistic() {
-    return forkJoin({
-      incidentsStatistics: this.getAll<any>('dashboard/incidents/statistics'),
-      tasksStatistics: this.getAll<any>('dashboard/tasks/statistics'),
-      correspondenceStatistics: this.getAll<any>(
-        'dashboard/correspondence/statistics'
+    const checkUpdateLocation = this.privilegesService.checkActionPrivilege('PRIV_VW_ORG_ACTIVITY');
+
+    forkJoin({
+      incidentsStatistics: this.getAll<any>('dashboard/incidents/statistics').pipe(
+        catchError(error => {
+          console.error('Error fetching incidents statistics', error);
+          return of(null);
+        })
       ),
-      bcSectionDetail: this.getAll<any>(
-        'bc/dashboard/section-details'
+      tasksStatistics: this.getAll<any>('dashboard/tasks/statistics').pipe(
+        catchError(error => {
+          console.error('Error fetching tasks statistics', error);
+          return of(null);
+        })
       ),
+      correspondenceStatistics: this.getAll<any>('dashboard/correspondence/statistics').pipe(
+        catchError(error => {
+          console.error('Error fetching correspondence statistics', error);
+          return of(null);
+        })
+      ),
+      bcSectionDetail: checkUpdateLocation ? this.getAll<any>('bc/dashboard/section-details').pipe(
+        catchError(error => {
+          console.error('Error fetching bcSectionDetail', error);
+          return of(null);
+        })
+      ) : of(null),
     })
       .pipe(
-        tap(
-          ({
-            incidentsStatistics,
-            tasksStatistics,
-            correspondenceStatistics,
-             bcSectionDetail
-          }) => {
-            this.statistics = {
-              ...incidentsStatistics,
-              ...tasksStatistics,
-              ...correspondenceStatistics,
-              nationalCompliance: bcSectionDetail.nationalCompliance,
-              bcSectiondetails: bcSectionDetail.bcSectionDetails
-            };
-            this.statisticsChange$.next(this.statistics);
-          }
-        )
+        tap(({ incidentsStatistics, tasksStatistics, correspondenceStatistics, bcSectionDetail }) => {
+          this.statistics = {
+            ...(incidentsStatistics || {}),
+            ...(tasksStatistics || {}),
+            ...(correspondenceStatistics || {}),
+            nationalCompliance: bcSectionDetail ? bcSectionDetail.nationalCompliance : null,
+            bcSectiondetails: bcSectionDetail ? bcSectionDetail.bcSectionDetails : null,
+          };
+          this.statisticsChange$.next(this.statistics);
+        })
       )
       .subscribe();
   }

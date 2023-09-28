@@ -16,6 +16,7 @@ import {filter, map, switchMap, takeUntil} from "rxjs/operators";
 import {BcOrgHierarchyProjection} from "../../api/models/bc-org-hierarchy-projection";
 import {TreeHelper} from "@core/helpers/tree.helper";
 import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -52,26 +53,30 @@ export class DashboardComponent implements OnInit {
     private store: Store,
     private treeHelper: TreeHelper,
     private translateObj: TranslateObjPipe,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private privilegesService: PrivilegesService,
   ) {
     this.lang = this.translationService.getSelectedLanguage();
-    this.store.dispatch([
-      new ImapactAnalysisAction.LoadCycles({ page: 0, size: 100 }),
-      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 })]);
+    const checkUpdateLocation = this.privilegesService.checkActionPrivilege('PRIV_VW_ORG_ACTIVITY');
+    if (checkUpdateLocation) {
+      this.store.dispatch([
+        new ImapactAnalysisAction.LoadCycles({ page: 0, size: 100 }),
+        new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 })]);
 
-    this.sortCycles$ = this.cycles$.pipe(
-      filter((cycles) => !!cycles),
-      switchMap((cycles) => {
-        return of([...cycles].sort((a, b) => b.id - a.id));
-      })
-    );
-    this.sortCycles$.subscribe(cycles => {
-      if (cycles.length > 0) {
-        const sortedCycles = [...cycles];
-        this.selectedCycle = sortedCycles[0].id;
-        this.dashboardService.getBcStatistic(this.selectedCycle, this.selectedHie);
-      }
-    });
+      this.sortCycles$ = this.cycles$.pipe(
+        filter((cycles) => !!cycles),
+        switchMap((cycles) => {
+          return of([...cycles].sort((a, b) => b.id - a.id));
+        })
+      );
+      this.sortCycles$.subscribe(cycles => {
+        if (cycles.length > 0) {
+          const sortedCycles = [...cycles];
+          this.selectedCycle = sortedCycles[0].id;
+          this.dashboardService.getBcStatistic(this.selectedCycle, this.selectedHie);
+        }
+      });
+    }
   }
 
   ngOnInit(): void {
