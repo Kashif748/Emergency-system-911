@@ -3,7 +3,7 @@
     <div class="row">
       <div class="d-flex p-jc-between w-100 p-ai-center">
         <app-breadcrumbs></app-breadcrumbs>
-        <div class="ml-dir-auto d-flex">
+        <div class="ml-dir-auto d-flex" *appPrivileges="'PRIV_VW_ORG_ACTIVITY'">
           <div class="p-field p-col-4 p-md-6 mx-4">
             <p-treeSelect
               [options]="orgHir"

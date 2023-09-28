@@ -78,4 +78,11 @@ export namespace BrowseVenderAction {
      */
     constructor(public payload: { venderId?: number }) {}
   }
+  export class DeleteVender {
+    static readonly type = '[BrowseVender] Delete Vender';
+    /**
+     *
+     */
+    constructor(public payload: { id?: number }) {}
+  }
 }

@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 import {Select, Store} from "@ngxs/store";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
@@ -11,6 +11,7 @@ import {filter, map, takeUntil} from "rxjs/operators";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {BrowseVenderAction} from "../states/browse-vender.action";
 import {PrivilegesService} from "@core/services/privileges.service";
+import {MessageHelper} from "@core/helpers/message.helper";
 
 @Component({
   selector: 'app-browse-vender',
@@ -65,7 +66,9 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
-    private privilegesService: PrivilegesService
+    private privilegesService: PrivilegesService,
+    private messageHelper: MessageHelper,
+
   ) {
     this.langFacade.vm$.pipe(
     ).subscribe((res) => {
@@ -109,12 +112,36 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
                 },
                 disabled: !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_RESOURCE'),
               },
+              {
+                label: this.translate.instant('ACTIONS.DELETE'),
+                icon: 'pi pi-trash',
+                command: () => {
+                  this.activate(u.id);
+                },
+                disabled: !this.privilegesService.checkActionPrivileges(
+                  'PRIV_ED_BC_RESOURCE'
+                ),
+              },
             ],
           };
         }).sort((a, b) => a.id - b.id)
       )
     );
   }
+  activate(id: number) {
+    this.messageHelper.delete({
+      summary: 'SHARED.DIALOG.DELETE.TITLE',
+      detail: 'SHARED.DIALOG.DELETE.MESSAGE',
+      yesCommand: () => {
+        this.store.dispatch(new BrowseVenderAction.DeleteVender({ id }));
+        this.messageHelper.closeConfirm();
+      },
+      noCommand: () => {
+        this.messageHelper.closeConfirm();
+      },
+    });
+  }
+
 
   ngOnDestroy(): void {
     this.destroy$.next();
