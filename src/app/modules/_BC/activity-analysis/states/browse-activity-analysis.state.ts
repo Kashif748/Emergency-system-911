@@ -14,11 +14,13 @@ import { EMPTY } from 'rxjs';
 import { patch } from '@ngxs/store/operators';
 import { BrowseActivityAnalysisAction } from './browse-activity-analysis.action';
 import { ActivityAnalysisAction } from '@core/states/activity-analysis/activity-analysis.action';
+import { Bcrto } from 'src/app/api/models';
 
 export interface BrowseActivityAnalysisStateModel {
   tabIndex: number;
   versionsDialogOpend: boolean;
   impactTotal: number;
+  impactAnalysisRes:  Bcrto
 }
 
 export const BROWSE_ACTIVITY_ANALYSIS_UI_STATE_TOKEN =
@@ -30,6 +32,7 @@ export const BROWSE_ACTIVITY_ANALYSIS_UI_STATE_TOKEN =
     tabIndex: -1,
     versionsDialogOpend: false,
     impactTotal: 0,
+    impactAnalysisRes:null
   },
 })
 @Injectable()
@@ -57,6 +60,12 @@ export class BrowseActivityAnalysisState {
   static impactTotal(state: BrowseActivityAnalysisStateModel): number {
     return state.impactTotal;
   }
+
+  @Selector([BrowseActivityAnalysisState])
+  static impactAnalysisRes(state: BrowseActivityAnalysisStateModel): Bcrto {
+    return state.impactAnalysisRes;
+  }
+
 
   @Selector([BrowseActivityAnalysisState])
   static versionsDialogOpend(state: BrowseActivityAnalysisStateModel): boolean {
@@ -168,6 +177,22 @@ export class BrowseActivityAnalysisState {
     setState(
       patch<BrowseActivityAnalysisStateModel>({
         impactTotal: payload?.impactTotal,
+      })
+    );
+  }
+
+  @Action(BrowseActivityAnalysisAction.setImpactAnalysisRes, {
+    cancelUncompleted: true,
+  })
+  setImpactAnalysisRes(
+    { setState }: StateContext<BrowseActivityAnalysisStateModel>,
+    { payload }: BrowseActivityAnalysisAction.setImpactAnalysisRes
+  ) {
+    console.log(payload);
+
+    setState(
+      patch<BrowseActivityAnalysisStateModel>({
+        impactAnalysisRes: payload?.impactAnalysisRes,
       })
     );
   }

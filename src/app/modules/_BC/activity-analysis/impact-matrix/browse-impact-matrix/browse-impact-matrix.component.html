@@ -4,9 +4,10 @@
       "IMPACT_MATRIX.HEADER" | translate
     }}</span>
   </h3>
+
   <p-button
-    [disabled]="selectedCells.length == 0"
     [loading]="blocking$ | async"
+    [disabled]="selectedCells.length == 0"
     label="{{ 'ACTIONS.SAVE' | translate }}"
     (click)="save()"
     icon="pi pi-save"

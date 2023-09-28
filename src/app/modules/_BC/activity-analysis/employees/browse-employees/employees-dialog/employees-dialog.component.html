@@ -117,7 +117,7 @@
         </ng-container>
       </div>
 
-      <!-- Mobile -->
+      <!-- Landline -->
       <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
           <ngx-intl-tel-input
@@ -126,6 +126,7 @@
             formControlName="phoneNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
+            [phoneType]="'FIXED_LINE'"
           >
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -157,6 +158,7 @@
         </ng-container>
       </div>
 
+      <!-- Mobile -->
       <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
           <ngx-intl-tel-input
@@ -165,6 +167,7 @@
             formControlName="mobileNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
+            [phoneType]="'MOBILE'"
           >
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -198,11 +201,37 @@
         </ng-container>
       </div>
 
+      <!-- OTHER_PHONE -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
-          <input type="text" formControlName="secondNumber" pInputText />
+          <ngx-intl-tel-input
+            cssClass="p-inputtext p-component p-text-left"
+            [onlyCountries]="['ae']"
+            formControlName="secondNumber"
+            [enablePlaceholder]="false"
+            [enableAutoCountrySelect]="true"
+            [phoneType]="'FIXED_LINE_OR_MOBILE'"
+          >
+          </ngx-intl-tel-input>
           <label>{{ "EMPLOYEES.OTHER_PHONE" | translate }} </label>
         </span>
+        <ng-container
+          *ngIf="
+            this.form.get('secondNumber').touched &&
+            !this.form.get('secondNumber').valid &&
+            this.form.get('secondNumber').dirty
+          "
+        >
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="
+              this.form.get('secondNumber').hasError('validatePhoneNumber')
+            "
+          >
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
       </div>
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">

@@ -15,14 +15,14 @@
   "IMPACT_COMPLETION": "نسبة انجاز التأثيرات",
   "COMPLETED": "منجز",
   "IN_PROGRESS": "قيد الاجراء",
-  "POINT_FAILURE": "نقطة الفشل الوحيدة",
+  "POINT_FAILURE": "نقطة الفشل الوحيدة للنشاط",
 
   "RECOVERY": {
     "TAB_LABEL": "الاسترجاع",
     "RECOVERY_DETAILS": "بيانات استرجاع النشاط",
     "CAPACITY": "القدرة",
     "ACTIVITY_PRIORITY": "تسلسل استرجاع النشاط",
-    "SPOF": "نقطة الفشل الوحيدة",
+    "SPOF": "نقطة الفشل الوحيدة للنشاط",
     "SKILLS": "المهارات",
     "REMOTELY": "بالامكان انجازه عن بعد"
   },

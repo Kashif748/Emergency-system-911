@@ -17,6 +17,7 @@ import {
   BcActivityImpactMatrixDetailsDto,
   BcImpactLevel,
   BcImpactTypesDetails,
+  BcImpactTypesResponse,
   Bcrto,
   BCRtoDetails,
 } from 'src/app/api/models';
@@ -40,10 +41,10 @@ import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   @ViewChild('accordion') accordion: any;
 
-  @Select(ImpactMatrixState.loading)
+  @Select(ActivityImpactMatrixState.loading)
   public loading$: Observable<boolean>;
 
-  @Select(ImpactMatrixState.blocking)
+  @Select(ActivityImpactMatrixState.blocking)
   public blocking$: Observable<boolean>;
 
   public state$: Observable<BrowseActivityImpactMatrixStateModel>;
@@ -128,6 +129,7 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
         impactTotal =
           (impactTotal * 100) / (rtos?.length * impactMatrix?.length);
 
+        this.calcImpactAnalysisRes(activityImpact, rtos);
         this.store.dispatch(
           new BrowseActivityAnalysisAction.setImpactTotal({ impactTotal })
         );
@@ -211,6 +213,8 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
         pageRequest: {
           first: event?.first,
           rows: event?.rows,
+          sortField: 'id',
+          sortOrder: 'asc',
         },
         versionId: versionId,
       })
@@ -246,6 +250,34 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
     }
   }
 
+  calcImpactAnalysisRes(
+    activityImpact: BcImpactTypesResponse[],
+    rtos: Bcrto[]
+  ) {
+    // Step 1: reshape data then sort based on impact level id
+    let rtosList = activityImpact
+      .map((impact) => impact.bcRto)
+      .flat()
+      .filter((rto) => !!rto.bcImpactLevels)
+      .sort((a, b) => a.id - b.id);
+
+    const minLevel = Math.min(...rtosList.map((o) => o.bcImpactLevels.id));
+    const secondLevel = rtosList.find(
+      (obj) => obj.bcImpactLevels.id !== minLevel
+    );
+    let tragetRto;
+    if (secondLevel) {
+      tragetRto = rtos.find((rto) => rto.id === secondLevel.id);
+    } else if (rtos.length > 2) {
+      tragetRto = rtos[1];
+    }
+
+    this.store.dispatch(
+      new BrowseActivityAnalysisAction.setImpactAnalysisRes({
+        impactAnalysisRes: tragetRto,
+      })
+    );
+  }
   save() {
     const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
     const activityAnalysis = this.store.selectSnapshot(

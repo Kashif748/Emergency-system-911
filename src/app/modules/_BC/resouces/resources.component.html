@@ -26,7 +26,7 @@
               [loading]="blocking$ | async"
               label="{{ action | translateObj }}"
               [styleClass]="action?.cssClass"
-              (click)="changeStatus(action?.id, action)"
+              (click)="changeStatus(resourceAnalysis?.id, action)"
             ></p-button>
           </ng-container>
         </div>
