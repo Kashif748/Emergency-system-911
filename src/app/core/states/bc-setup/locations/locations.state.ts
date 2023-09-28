@@ -1,22 +1,11 @@
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-  Store,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { patch } from '@ngxs/store/operators';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
-import { BcLocations, PageBcLocations } from 'src/app/api/models';
-import { BcLocationsControllerService } from 'src/app/api/services';
-import { LocationsAction } from './locations.action';
-import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
-import {SystemsStateModel} from "@core/states/bc-setup/systems/systems.state";
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {patch} from '@ngxs/store/operators';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
+import {BcLocations, PageBcLocations} from 'src/app/api/models';
+import {BcLocationsControllerService} from 'src/app/api/services';
+import {LocationsAction} from './locations.action';
 
 export interface LocationsStateModel {
   page: PageBcLocations;

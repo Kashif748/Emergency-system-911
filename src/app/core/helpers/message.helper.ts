@@ -77,6 +77,25 @@ export class MessageHelper {
     });
   }
 
+  delete(param: {
+    summary: 'SHARED.DIALOG.DELETE.TITLE';
+    detail: 'SHARED.DIALOG.DELETE.MESSAGE';
+    yesCommand?: () => void;
+    noCommand?: () => void;
+  }) {
+    this.messageService.add({
+      key: 'confirm_dialog',
+      sticky: true,
+      severity: 'warn',
+      summary: param.summary,
+      detail: param.detail,
+      data: {
+        yesCommand: param.yesCommand ?? this.closeConfirm,
+        noCommand: param.noCommand ?? this.closeConfirm,
+      },
+    });
+  }
+
   closeConfirm() {
     this.messageService.clear('confirm_dialog');
   }

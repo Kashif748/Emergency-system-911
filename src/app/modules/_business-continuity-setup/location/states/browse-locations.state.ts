@@ -242,7 +242,7 @@ export class BrowseLocationsState {
     { dispatch }: StateContext<BrowseLocationsStateModel>,
     { payload }: BrowseLocationsAction.DeleteLocation
   ) {
-    return dispatch(new SystemsAction.Delete(payload)).pipe(
+    return dispatch(new LocationsAction.Delete(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseLocationsAction.LoadLocations());

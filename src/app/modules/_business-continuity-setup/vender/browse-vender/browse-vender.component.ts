@@ -129,9 +129,9 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
     );
   }
   activate(id: number) {
-    this.messageHelper.confirm({
-      summary: 'SHARED.DIALOG.ARE_YOU_SURE',
-      detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE',
+    this.messageHelper.delete({
+      summary: 'SHARED.DIALOG.DELETE.TITLE',
+      detail: 'SHARED.DIALOG.DELETE.MESSAGE',
       yesCommand: () => {
         this.store.dispatch(new BrowseVenderAction.DeleteVender({ id }));
         this.messageHelper.closeConfirm();

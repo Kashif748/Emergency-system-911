@@ -250,7 +250,7 @@ export class BrowseVenderState {
     { dispatch }: StateContext<BrowseVenderStateModel>,
     { payload }: BrowseVenderAction.DeleteVender
   ) {
-    return dispatch(new SystemsAction.Delete(payload)).pipe(
+    return dispatch(new VenderAction.Delete(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseVenderAction.LoadVender());
