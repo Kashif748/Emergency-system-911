@@ -75,6 +75,7 @@ export class VenderState {
           size: payload.size,
           sort: payload.sort,
         },
+        isActive: true,
         ...payload.filters
       })
       .pipe(
@@ -122,7 +123,7 @@ export class VenderState {
         blocking: true,
       })
     );
-    return this.vender.getOne4({ id: payload.id }).pipe(
+    return this.vender.getOne15({ id: payload.id }).pipe(
       tap((res) => {
         setState(
           patch<VenderStateModel>({
@@ -151,7 +152,7 @@ export class VenderState {
       })
     );
     return this.vender
-      .insertOne4({
+      .insertOne15({
         body: payload,
       })
       .pipe(
@@ -165,6 +166,14 @@ export class VenderState {
       );
   }
 
+  @Action(VenderAction.Delete)
+  delete(
+    { setState }: StateContext<VenderStateModel>,
+    { payload }: VenderAction.Delete
+  ) {
+    return this.vender.deleteById15({ id: payload.id });
+  }
+
   @Action(VenderAction.Update)
   update(
     { setState }: StateContext<VenderStateModel>,
@@ -176,7 +185,7 @@ export class VenderState {
       })
     );
     return this.vender
-      .update83({
+      .update94({
         body: payload,
       })
       .pipe(

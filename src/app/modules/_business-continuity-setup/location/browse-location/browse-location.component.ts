@@ -13,6 +13,7 @@ import {filter, map} from 'rxjs/operators';
 import {PrivilegesService} from "@core/services/privileges.service";
 import {LocationTypeAction, LocationTypeState} from "@core/states";
 import {BcLocationTypes} from "../../../../api/models";
+import {MessageHelper} from "@core/helpers/message.helper";
 
 @Component({
   selector: 'app-browse-location',
@@ -67,6 +68,7 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private privilegesService: PrivilegesService,
     private langFacade: ILangFacade,
+    private messageHelper: MessageHelper,
 
   ) {
     this.langFacade.vm$.pipe(
@@ -103,11 +105,35 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive || !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_RESOURCE'),
               },
+              {
+                label: this.translate.instant('ACTIONS.DELETE'),
+                icon: 'pi pi-trash',
+                command: () => {
+                  this.activate(u.id);
+                },
+                disabled: !this.privilegesService.checkActionPrivileges(
+                  'PRIV_ED_BC_RESOURCE'
+                ),
+              },
             ],
           };
         }).sort((a, b) => a.id - b.id)
       )
     );
+  }
+
+  activate(id: number) {
+    this.messageHelper.delete({
+      summary: 'SHARED.DIALOG.DELETE.TITLE',
+      detail: 'SHARED.DIALOG.DELETE.MESSAGE',
+      yesCommand: () => {
+        this.store.dispatch(new BrowseLocationsAction.DeleteLocation({ id }));
+        this.messageHelper.closeConfirm();
+      },
+      noCommand: () => {
+        this.messageHelper.closeConfirm();
+      },
+    });
   }
 
   ngOnDestroy(): void {

@@ -6,10 +6,13 @@ import {PageRequestModel} from '@core/models/page-request.model';
 import {TextUtils} from '@core/utils';
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
 import {iif, patch} from '@ngxs/store/operators';
-import {throwError} from 'rxjs';
+import {EMPTY, throwError} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {BrowseVenderAction} from "./browse-vender.action";
 import {VenderAction} from "@core/states/bc-setup/venders/vender.action";
+import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
+import {BrowseLocationsAction} from "../../location/states/browse-locations.action";
+import {BrowseLocationsStateModel} from "../../location/states/browse-locations.state";
 
 export interface BrowseVenderStateModel {
   pageRequest: PageRequestModel;
@@ -241,5 +244,21 @@ export class BrowseVenderState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseVenderAction.DeleteVender)
+  deleteVender(
+    { dispatch }: StateContext<BrowseVenderStateModel>,
+    { payload }: BrowseVenderAction.DeleteVender
+  ) {
+    return dispatch(new VenderAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseVenderAction.LoadVender());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

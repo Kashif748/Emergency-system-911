@@ -43,4 +43,11 @@ export namespace VenderAction {
      */
     constructor(public payload: BcPartners) {}
   }
+  export class Delete {
+    static readonly type = '[vender] Delete';
+    /**
+     *
+     */
+    constructor(public payload: { id?: number }) {}
+  }
 }
