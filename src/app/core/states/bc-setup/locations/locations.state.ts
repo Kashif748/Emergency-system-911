@@ -15,6 +15,8 @@ import { BrowseBCState } from '../../../../modules/_BC/states/browse-bc.state';
 import { BcLocations, PageBcLocations } from 'src/app/api/models';
 import { BcLocationsControllerService } from 'src/app/api/services';
 import { LocationsAction } from './locations.action';
+import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
+import {SystemsStateModel} from "@core/states/bc-setup/systems/systems.state";
 
 export interface LocationsStateModel {
   page: PageBcLocations;
@@ -137,6 +139,14 @@ export class LocationsState {
           );
         })
       );
+  }
+
+  @Action(LocationsAction.Delete)
+  delete(
+    { setState }: StateContext<LocationsStateModel>,
+    { payload }: LocationsAction.Delete
+  ) {
+    return this.locationService.deleteById7({ id: payload.id });
   }
 
   @Action(LocationsAction.Update)

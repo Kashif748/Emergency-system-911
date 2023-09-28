@@ -81,4 +81,11 @@ export namespace BrowseLocationsAction {
      */
     constructor(public payload: { columns: string[] }) {}
   }
+  export class DeleteLocation {
+    static readonly type = '[BrowseLocations] Delete Location';
+    /**
+     *
+     */
+    constructor(public payload: { id?: number }) {}
+  }
 }

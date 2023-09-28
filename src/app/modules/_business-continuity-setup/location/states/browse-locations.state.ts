@@ -20,6 +20,9 @@ import { LocationsAction } from '@core/states/bc-setup/locations/locations.actio
 import {BrowseVenderAction} from "../../vender/states/browse-vender.action";
 import {VenderAction} from "@core/states/bc-setup/venders/vender.action";
 import {BrowseVenderStateModel} from "../../vender/states/browse-vender.state";
+import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
+import {BrowseSystemsStateModel} from "../../system/states/browse-systems.state";
+import {BrowseSystemsAction} from "../../system/states/browse-systems.action";
 
 export interface BrowseLocationsStateModel {
   pageRequest: PageRequestModel;
@@ -231,6 +234,22 @@ export class BrowseLocationsState {
     setState(
       patch<BrowseLocationsStateModel>({
         columns: payload.columns,
+      })
+    );
+  }
+  @Action(BrowseLocationsAction.DeleteLocation)
+  deleteLocation(
+    { dispatch }: StateContext<BrowseLocationsStateModel>,
+    { payload }: BrowseLocationsAction.DeleteLocation
+  ) {
+    return dispatch(new SystemsAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseLocationsAction.LoadLocations());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
       })
     );
   }

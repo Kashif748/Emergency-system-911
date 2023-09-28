@@ -8,6 +8,8 @@ import {BcPartnersControllerService} from "../../../../api/services/bc-partners-
 import {BcPartners} from "../../../../api/models/bc-partners";
 import {PageBcPartners} from "../../../../api/models/page-bc-partners";
 import {VenderAction} from "@core/states/bc-setup/venders/vender.action";
+import {LocationsStateModel} from "@core/states/bc-setup/locations/locations.state";
+import {LocationsAction} from "@core/states/bc-setup/locations/locations.action";
 
 export interface VenderStateModel {
   page: PageBcPartners;
@@ -163,6 +165,14 @@ export class VenderState {
           );
         })
       );
+  }
+
+  @Action(VenderAction.Delete)
+  delete(
+    { setState }: StateContext<VenderStateModel>,
+    { payload }: VenderAction.Delete
+  ) {
+    return this.vender.deleteById7({ id: payload.id });
   }
 
   @Action(VenderAction.Update)

@@ -44,4 +44,11 @@ export namespace LocationsAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[Locations] Delete';
+    /**
+     *
+     */
+    constructor(public payload: { id?: number }) {}
+  }
 }
