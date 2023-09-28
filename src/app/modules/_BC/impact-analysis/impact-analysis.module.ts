@@ -93,7 +93,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TreeSelectModule,
     CheckboxModule,
     PrivilegesDirectiveModule,
-    TabViewModule
+    TabViewModule,
+    InputTextModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

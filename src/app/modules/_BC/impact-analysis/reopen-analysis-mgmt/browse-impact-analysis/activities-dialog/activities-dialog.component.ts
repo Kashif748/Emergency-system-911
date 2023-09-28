@@ -34,6 +34,7 @@ import {ActivityDependenciesState} from "@core/states/activity-analysis/dependen
 import {BrowseActivityAnalysisAction} from "../../../../activity-analysis/states/browse-activity-analysis.action";
 import {ActivityImpactMatrixState} from "@core/states/activity-analysis/impact-matrix/impact-matrix.state";
 import {ActivityImapctMatrixAction} from "@core/states/activity-analysis/impact-matrix/impact-matrix.action";
+import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
 
 interface tableRow {
   activity: BcActivities;
@@ -119,6 +120,14 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     if (v === undefined || v === null) {
       return;
     }
+    this.impactMatrixLoading = true;
+    this.recoveryLoading = true;
+    this.employLoading = true;
+    this.systemLoading = true;
+    this.locationLoading = true;
+    this.venderLoading = true;
+    this.deptInsideLoading = true;
+    this.departInsideLoading = true;
 
     this.store
       .dispatch([new ActivityAnalysisAction.GetActivityAnalysis({id: v}),
@@ -259,7 +268,8 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private lang: ILangFacade,
     private store: Store,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translateObj: TranslateObjPipe,
   ) {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -353,25 +363,17 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   }
 
   changeSelect(event) {
-    // event.selected = true
-    console.log(event);
   }
   selectCycle(event) {
     this.selectedCycle = event?.value;
     this.store.dispatch(
       new OrgActivityAction.loadIdsList({ cycleId: this.selectedCycle.id })
     );
-
-    console.log(event);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  setImpactType( test1, test3){
-
-    console.log(test1)
-    console.log(test3)
-  }
+  setImpactType( test1, test3){}
 }

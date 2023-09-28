@@ -7,6 +7,7 @@
   "RES": "Resources",
   "SECTOR": "Sector",
   "SECTION": "Section",
+  "CREATED_BY": "Created By",
   "ORG_ACTIVITIES": "Organization Activities",
   "NEW_ACTIVITY": "Add Activity",
   "RES_REQ": "Resources Requirements",
@@ -69,15 +70,17 @@
   },
   "EMPLOYEES": {
     "TAB_LABEL": "Primary & Secondary Employees",
+    "NAME":"Name",
     "SECONDARY": "Secondary",
-    "PRIMARY": "Primary"
+    "PRI": "Primary",
+    "PRIMARY": "Primary/Secondary"
   },
   "LOCATIONS": {
     "TAB_LABEL": "Locations",
     "COL2": "Web site name"
   },
   "DEPENDENCIES": {
-    "TAB_LABEL": "Dependencies Outsite",
+    "TAB_LABEL": "Dependencies Outside",
     "DETAILS": "Dependency details",
     "VENDER": "Vender/Partner",
     "TAB_INSIDE": "Dependencies Inside Organization",
