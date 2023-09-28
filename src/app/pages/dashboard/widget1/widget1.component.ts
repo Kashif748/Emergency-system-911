@@ -34,7 +34,7 @@ export class Widget1Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     let sub = combineLatest([this._dashboardService.statisticsChange$, this._dashboardService.bcStatisticsChange$])
       .pipe(
-        skipWhile(([stats, bcStats]) => !stats || !bcStats),
+        skipWhile(([stats, bcStats]) => !stats),
         tap(([stats, bcStats]) => {
           this.checkChanges(this.statistics, this._dashboardService.statistics);
           this.statistics = { ...this._dashboardService.statistics, ...bcStats};
