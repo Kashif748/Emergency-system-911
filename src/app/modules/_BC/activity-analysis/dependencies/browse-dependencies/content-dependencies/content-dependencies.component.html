@@ -109,7 +109,7 @@
         <p-checkbox
           [disabled]="page?.length > 0"
           [(ngModel)]="noDpeend"
-          (click)="confirm($event); $event.stopPropagation()"
+          (click)="confirm($event ,page?.length); $event.stopPropagation()"
           binary="true"
         ></p-checkbox>
         <label class="mx-2 my-0">
