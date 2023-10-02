@@ -1,18 +1,30 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import { BcActivitySystems, BcSystems } from 'src/app/api/models';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import {
   BrowseActivitySystemsState,
   BrowseActivitySystemsStateModel,
 } from '../../states/browse-systems.state';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  auditTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 import { BrowseActivitySystemsAction } from '../../states/browse-systems.action';
 import { SystemsAction } from '@core/states/bc-setup/systems/systems.action';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivitySystemsAction } from '@core/states/activity-analysis/systems/systems.action';
+import { TranslateService } from '@ngx-translate/core';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-systems-dialog',
@@ -36,8 +48,9 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   @Select(BrowseActivitySystemsState.state)
   public state$: Observable<BrowseActivitySystemsStateModel>;
 
-  public selectedBCSystem: BcSystems;
+  private auditLoadPage$ = new Subject<string>();
 
+  public selectedBCSystem: BcSystems;
   public columns = [
     { name: 'ACTIVITY_NAME', code: 'userName', disabled: true },
     {
@@ -85,7 +98,11 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   }
 
   destroy$ = new Subject();
-  constructor(private route: ActivatedRoute, private store: Store) {
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store,
+    private translate: TranslateService
+  ) {
     this.route.queryParams
       .pipe(
         map((params) => params['_id']),
@@ -102,22 +119,64 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
       tap((opened) => {
         if (opened) {
           this.loadPage();
+          this.selectedBCSystem = null;
+          const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+          const activityAnalysis = this.store.selectSnapshot(
+            ActivityAnalysisState.activityAnalysis
+          );
+          this.store.dispatch(
+            new ActivitySystemsAction.loadIdsList({
+              cycleId: cycle.id,
+              activityId: activityAnalysis.activity.id,
+            })
+          );
         }
       })
     );
-    this.page$ = this.store
-    .select(SystemsState.page)
-    .pipe(filter((p) => !!p),
-    );
-  }
 
-  public loadPage() {
-    this.store.dispatch(
-      new SystemsAction.LoadPage({
-        page: 0,
-        size: 50,
+    this.page$ = combineLatest([
+      this.store.select(ActivitySystemsState.idsList),
+      this.store.select(SystemsState.page),
+    ]).pipe(
+      filter(([ids, systems]) => !!ids && !!systems),
+      map(([ids, systems]) => {
+        this.selectedBCSystem = null;
+        let tableRows = systems.map((activity) => {
+          let tableRow = {
+            ...activity,
+            selected: false,
+          };
+          if (ids && ids.includes(activity.id)) {
+            tableRow.selected = true;
+            // this.selectedActivities.push(tableRow);
+          }
+          return tableRow;
+        });
+        console.log(this.selectedBCSystem);
+        return tableRows;
       })
     );
+
+    this.auditLoadPage$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((search: string) => {
+        console.log(this.translate.currentLang);
+        this.loadPage(search, true);
+      });
+  }
+
+  public loadPage(search?: string, direct = false) {
+    if (direct) {
+      this.store.dispatch(
+        new SystemsAction.LoadPage({
+          page: 0,
+          size: 50,
+          filters: { name: search },
+        })
+      );
+      return;
+    }
+    this.auditLoadPage$.next(search);
   }
   submit() {
     if (!this.selectedBCSystem) {

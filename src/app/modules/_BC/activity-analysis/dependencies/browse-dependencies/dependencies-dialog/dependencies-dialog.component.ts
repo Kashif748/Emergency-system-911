@@ -71,7 +71,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
     this.opened$ = this.route.queryParams.pipe(
       takeUntil(this.destroy$),
       tap((params) => {
-        this.form.reset();
+        this.buildForm();
         this.dependType = params['_dependType'];
         switch (this.dependType) {
           case DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL:
@@ -81,13 +81,11 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
             this.form.get('partner').setValidators(Validators.required);
             break;
           case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
-            this.form
-              .get('relatedActivity')
-              .setValidators(Validators.required);
+            this.form.get('activityName').setValidators(Validators.required);
             this.form.get('orgHierarchy').setValidators(Validators.required);
             break;
           case DEPENDENCIES_TYPES.DEPENDENCY_ORG:
-            this.form.get('activityName').setValidators(Validators.required);
+            this.form.get('relatedActivity').setValidators(Validators.required);
             this.form.get('orgHierarchy').setValidators(Validators.required);
             break;
 
