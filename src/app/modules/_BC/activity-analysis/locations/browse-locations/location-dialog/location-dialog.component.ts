@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import { BcActivityLocations, BcLocations } from 'src/app/api/models';
 import { BrowseLocationsState } from 'src/app/modules/_business-continuity-setup/location/states/browse-locations.state';
 import { BrowseLocationsStateModel } from '../../states/browse-locations.state';
@@ -21,6 +21,7 @@ import { BrowseActivityLocationsAction } from '../../states/browse-locations.act
 import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
 import { BrowseActivityAnalysisState } from '../../../states/browse-activity-analysis.state';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivityLocationsAction } from '@core/states/activity-analysis/locations/locations.action';
 
 @Component({
   selector: 'app-location-dialog',
@@ -107,6 +108,17 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       tap((opened) => {
         if (opened) {
           this.loadPage('', true);
+          this.selectedBCLocations = null;
+          const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+          const activityAnalysis = this.store.selectSnapshot(
+            ActivityAnalysisState.activityAnalysis
+          );
+          this.store.dispatch(
+            new ActivityLocationsAction.loadIdsList({
+              cycleId: cycle.id,
+              activityId: activityAnalysis.activity.id,
+            })
+          );
         }
       })
     );
@@ -123,6 +135,28 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     this.page$ = this.store
       .select(LocationsState.page)
       .pipe(filter((p) => !!p));
+    this.page$ = combineLatest([
+      this.store.select(ActivityLocationsState.idsList),
+      this.store.select(LocationsState.page),
+    ]).pipe(
+      filter(([ids, systems]) => !!ids && !!systems),
+      map(([ids, systems]) => {
+        this.selectedBCLocations = null;
+        let tableRows = systems.map((activity) => {
+          let tableRow = {
+            ...activity,
+            selected: false,
+          };
+          if (ids && ids.includes(activity.id)) {
+            tableRow.selected = true;
+            // this.selectedActivities.push(tableRow);
+          }
+          return tableRow;
+        });
+        console.log(this.selectedBCLocations);
+        return tableRows;
+      })
+    );
   }
   toggleDialog(id?: number) {
     this.store.dispatch(new BrowseActivityLocationsAction.ToggleDialog({ id }));

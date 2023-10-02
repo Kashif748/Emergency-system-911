@@ -20,6 +20,8 @@ import { ActivityLocationsAction } from './locations.action';
 export interface ActivityLocationsStateModel {
   page: PageBcActivityLocations;
   activityLocation: BcActivityLocations;
+  idsList: number[];
+
   loading: boolean;
   blocking: boolean;
 }
@@ -39,6 +41,11 @@ export class ActivityLocationsState {
   ) {}
 
   /* ************************ SELECTORS ******************** */
+  @Selector([ActivityLocationsState])
+  static idsList(state: ActivityLocationsStateModel) {
+    return state?.idsList;
+  }
+
   @Selector([ActivityLocationsState])
   static page(state: ActivityLocationsStateModel): BcActivityLocations[] {
     return state?.page?.content;
@@ -76,7 +83,7 @@ export class ActivityLocationsState {
       })
     );
     return this.activityLocations
-      .search13({
+      .search22({
         isActive: true,
         cycleId: payload.cycleId,
         activityId: payload.activityId,
@@ -113,6 +120,34 @@ export class ActivityLocationsState {
         })
       );
   }
+  @Action(ActivityLocationsAction.loadIdsList, { cancelUncompleted: true })
+  loadIdsList(
+    { setState }: StateContext<ActivityLocationsStateModel>,
+    { payload }: ActivityLocationsAction.loadIdsList
+  ) {
+    return this.activityLocations
+      .list9({
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<ActivityLocationsStateModel>({
+              idsList: res.result,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<ActivityLocationsStateModel>({
+              idsList: [],
+            })
+          );
+          return EMPTY;
+        })
+      );
+  }
 
   @Action(ActivityLocationsAction.Create)
   create(
@@ -126,7 +161,7 @@ export class ActivityLocationsState {
     );
 
     return this.activityLocations
-      .insertOne20({
+      .insertOne31({
         body: { ...payload },
       })
       .pipe(
@@ -151,7 +186,7 @@ export class ActivityLocationsState {
     );
 
     return this.activityLocations
-      .update100({
+      .update111({
         body: { ...payload },
       })
       .pipe(
@@ -183,7 +218,7 @@ export class ActivityLocationsState {
         blocking: true,
       })
     );
-    return this.activityLocations.getOne20({ id: payload.id }).pipe(
+    return this.activityLocations.getOne31({ id: payload.id }).pipe(
       tap((activityLocations) => {
         setState(
           patch<ActivityLocationsStateModel>({

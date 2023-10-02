@@ -69,7 +69,11 @@
     <div class="p-field p-col-12">
       <div class="p-inputgroup">
         <span class="p-float-label">
-          <input (keyup)="loadPage($event.target.value)" type="text" pInputText />
+          <input
+            (keyup)="loadPage($event.target.value)"
+            type="text"
+            pInputText
+          />
           <label>
             {{ "LOCATIONS.NAME" | translate }}
           </label>
@@ -154,7 +158,14 @@
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-item let-rowData>
-                <tr [pSelectableRow]="rowData" class="cursor-pointer hoverable">
+                <tr
+                  [pSelectableRow]="rowData"
+                  [pSelectableRowDisabled]="rowData.selected"
+                  class="cursor-pointer hoverable"
+                  [ngClass]="{
+                    'row-disabled': rowData.selected
+                  }"
+                >
                   <td class="min-w-100px">
                     {{ item.id }}
                   </td>
@@ -179,7 +190,10 @@
           </ng-template>
         </ng-container>
 
-        <p-paginator></p-paginator>
+        <p-paginator
+          [totalRecords]="totalRecords$ | async"
+          (onPageChange)="loadPage($event, true)"
+        ></p-paginator>
       </div>
     </div>
   </div>

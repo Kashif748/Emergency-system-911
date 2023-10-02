@@ -53,7 +53,8 @@ export class ContentDependenciesComponent implements OnInit {
     );
   }
 
-  confirm(event: Event) {
+  confirm(event: Event, pageLength) {
+    if (pageLength > 0) return;
     this.confirmationService.confirm({
       target: event.target,
       message: this.translate.instant('DEPENDENCIES.NO_DPEEND_CONFIREM'),
@@ -83,7 +84,7 @@ export class ContentDependenciesComponent implements OnInit {
         );
         this.store.dispatch(
           new BrowseActivityDependenciesAction.DeleteDependencies({
-            activityId:  activityAnalysis.activity.id,
+            activityId: activityAnalysis.activity.id,
             cycleId: cycle.id,
             id: item.id,
             dependType: this.dependType,

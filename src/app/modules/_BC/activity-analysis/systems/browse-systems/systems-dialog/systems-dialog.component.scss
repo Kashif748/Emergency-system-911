@@ -1,0 +1,11 @@
+:host ::ng-deep .row-disabled {
+  background-color: rgba(0,0,0,.15) !important;
+  cursor: auto !important;
+  .p-tabview .p-tabview-panels {
+    height: 97%;
+    overflow-y: auto;
+    .p-tabview-panel {
+      height: 97%;
+    }
+  }
+}
