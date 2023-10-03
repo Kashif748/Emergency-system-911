@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BCComponent } from './bc/bc.component';
 import {ResoucesModule} from "./resouces/resouces.module";
+import {BiaAppModule} from "./bia-app/bia-app.module";
 
 const routes: Routes = [
   {
@@ -54,6 +55,13 @@ const routes: Routes = [
             './resouces/resouces.module'
             ).then((m) => m.ResoucesModule),
       },
+      {
+        path: 'bia-apps',
+        loadChildren: () =>
+          import(
+            './bia-app/bia-app.module'
+            ).then((m) => m.BiaAppModule),
+      }
     ],
   },
 ];
