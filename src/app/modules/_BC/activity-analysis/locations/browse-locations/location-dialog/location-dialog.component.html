@@ -19,6 +19,7 @@
   [baseZIndex]="10000"
   [draggable]="true"
   [resizable]="false"
+  styleClass="overflow-hidden"
 >
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
@@ -48,37 +49,36 @@
       </span>
     </h3>
   </div>
-
-  <span class="flex-grow-1"></span>
-  <a
-    queryParamsHandling="merge"
-    pRipple
-    pButton
-    icon="pi pi-link"
-    class="p-button-rounded p-button-text p-button-plain"
-  ></a>
 </ng-template>
 
 <!-- templates content -->
 <ng-template #content>
-  <div class="w-100 pt-2">
+  <div class="w-100 pt-2 h-600px">
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
-
-    <div class="p-field p-col-12">
-      <div class="p-inputgroup">
-        <span class="p-float-label">
-          <input
-            (keyup)="loadPage($event.target.value)"
-            type="text"
-            pInputText
-          />
-          <label>
-            {{ "LOCATIONS.NAME" | translate }}
-          </label>
-        </span>
-        <button type="button" pButton pRipple icon="pi pi-search"></button>
+    <div class="row">
+      <div class="p-field p-col-10">
+        <div class="p-inputgroup">
+          <span class="p-float-label">
+            <input
+              (keyup)="loadPage($event.target.value)"
+              type="text"
+              pInputText
+            />
+            <label>
+              {{ "LOCATIONS.NAME" | translate }}
+            </label>
+          </span>
+          <button type="button" pButton pRipple icon="pi pi-search"></button>
+        </div>
+      </div>
+      <div class="p-col-2">
+        <p-button
+          (click)="display = true"
+          label="{{ 'LOCATIONS.ADD_LOCATION' | translate }}"
+          styleClass="p-button-link"
+        ></p-button>
       </div>
     </div>
 
@@ -196,6 +196,20 @@
         ></p-paginator>
       </div>
     </div>
+    <p-sidebar
+      [(visible)]="display"
+      position="bottom"
+      [baseZIndex]="-1000"
+      [modal]="false"
+      styleClass="h-100"
+    >
+      <div class="bg-white pt-5 h-100">
+        <app-location-dialog
+          (onClose)="closeCreateDialog()"
+          [asDialog]="false"
+        ></app-location-dialog>
+      </div>
+    </p-sidebar>
   </div>
 </ng-template>
 

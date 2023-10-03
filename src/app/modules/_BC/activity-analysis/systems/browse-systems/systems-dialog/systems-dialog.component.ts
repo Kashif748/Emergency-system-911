@@ -25,6 +25,8 @@ import { ActivitySystemsAction } from '@core/states/activity-analysis/systems/sy
 import { TranslateService } from '@ngx-translate/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { LazyLoadEvent } from 'primeng/api';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GenericValidators } from '@shared/validators/generic-validators';
 
 @Component({
   selector: 'app-systems-dialog',
@@ -48,7 +50,9 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   @Select(BrowseActivitySystemsState.state)
   public state$: Observable<BrowseActivitySystemsStateModel>;
 
+  display = false;
   private auditLoadPage$ = new Subject<string>();
+  form: FormGroup;
 
   public selectedBCSystem: BcSystems;
   public columns = [
@@ -101,7 +105,8 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private store: Store,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private formBuilder: FormBuilder
   ) {
     this.route.queryParams
       .pipe(
@@ -114,6 +119,7 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened'),
       tap((opened) => {
@@ -165,6 +171,15 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
       });
   }
 
+  buildForm() {
+    this.form = this.formBuilder.group({
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
+      orgHierarchy: [null, [Validators.required]],
+      isActive: true,
+      id: null,
+    });
+  }
   public loadPage(search?: string, direct = false) {
     if (direct) {
       this.store.dispatch(
@@ -202,6 +217,10 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   }
   toggleDialog(id?: number) {
     this.store.dispatch(new BrowseActivitySystemsAction.ToggleDialog({ id }));
+  }
+  closeCreateDialog() {
+    this.display = false;
+    this.loadPage();
   }
   ngOnDestroy(): void {
     this.destroy$.next();
