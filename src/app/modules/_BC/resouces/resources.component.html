@@ -23,6 +23,7 @@
         >
           <ng-container *ngFor="let action of resourceAnalysis.status.actions">
             <p-button
+              *ngIf="checkPermissoon(action)"
               [loading]="blocking$ | async"
               label="{{ action | translateObj }}"
               [styleClass]="action?.cssClass"
