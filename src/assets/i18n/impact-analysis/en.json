@@ -66,7 +66,9 @@
     "ACTIVITY_PRIORITY": "Activity Priority",
     "SPOF": "Single Point of Failure (SPOF)",
     "SKILLS": "Skills",
-    "REMOTELY": "Can be done remotely"
+    "REMOTELY": "Can be done remotely",
+    "YES": "Yes",
+    "NO": "No"
   },
   "EMPLOYEES": {
     "TAB_LABEL": "Primary & Secondary Employees",
@@ -77,7 +79,7 @@
   },
   "LOCATIONS": {
     "TAB_LABEL": "Locations",
-    "COL2": "Web site name"
+    "COL2": "Location Name"
   },
   "DEPENDENCIES": {
     "TAB_LABEL": "Dependencies Outside",

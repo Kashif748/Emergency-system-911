@@ -215,7 +215,8 @@ export function getHighlightLanguages() {
           'browse_resource_analysis',
           'browse_staff',
           'browse_other',
-          'browse_resource_worklogs'
+          'browse_resource_worklogs',
+          'browse_bia_app'
         ],
       },
       ['common_data']

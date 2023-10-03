@@ -1,0 +1,9 @@
+{
+  "APP":"Application #",
+  "DIVISION":"Division Name",
+  "CYCLE":"Cycle Name",
+  "ANALYSIS":"Analysis Completion Percentage",
+  "STATE":"State",
+  "ANALYSIS_CRCLE": "Analysis Cycle",
+  "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle"
+}

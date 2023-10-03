@@ -11,6 +11,7 @@ import {BcCycles} from '../../../api/models';
 import {RESOURCE_STATUSES, ResourceAnalysisState} from '@core/states/impact-analysis/resource-analysis.state';
 import {BcResources} from '../../../api/models/bc-resources';
 import {BcResourcesChangeStatusDto} from '../../../api/models/bc-resources-change-status-dto';
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-resources',
@@ -51,7 +52,8 @@ export class ResourcesComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private store: Store
+    private store: Store,
+    private privilegesService: PrivilegesService,
   ) {
     activeRoute.url
       .pipe(
@@ -133,5 +135,17 @@ export class ResourcesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  checkPermissoon(action) {
+    const privilige = this.privilegesService.checkActionPrivilege('PRIV_APPROVE_ACTIVITY_ANALYSIS');
+    if (action.id === 5) {
+      if (privilige) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
   }
 }
