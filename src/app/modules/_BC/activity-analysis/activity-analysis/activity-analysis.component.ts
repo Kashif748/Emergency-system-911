@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
@@ -43,7 +44,6 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   @Select(ActivityImpactMatrixState.loading)
   public loadingImpactAnalysisRes$: Observable<boolean>;
 
-
   @Select(BrowseActivityAnalysisState.impactTotal)
   public impactTotal$: Observable<number>;
 
@@ -51,7 +51,7 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
 
   tabs = TABS;
   displayNote = false;
-  notes = '';
+  notes: FormControl;
   newStatus: BcActivityAnalysisChangeStatusDto;
   public dir$ = this.lang.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
@@ -101,6 +101,7 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
     this.impactAnalysisRes$ = this.store
       .select(BrowseActivityAnalysisState.impactAnalysisRes)
       .pipe(skip(1));
+      this.notes = new FormControl('' , Validators.required);
   }
   changeTab(index: number) {
     this.store
@@ -135,7 +136,7 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   applyStatus() {
     this.newStatus = {
       ...this.newStatus,
-      notes: this.notes,
+      notes: this.notes.value,
     };
     this.store
       .dispatch([new BrowseActivityAnalysisAction.ChangeStatus(this.newStatus)])

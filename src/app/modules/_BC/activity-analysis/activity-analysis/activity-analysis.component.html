@@ -157,16 +157,16 @@
   <ng-template pTemplate="header">
     {{ "NOTES.NOTES" | translate }}
   </ng-template>
-  <div class="p-field p-col-12">
+  <div class="p-field p-col-12 mt-3">
     <span class="p-float-label">
       <textarea
+        inputId="textarea"
         class="w-100"
-        pInputText
+        pInputTextarea
         type="text"
-        [(ngModel)]="notes"
-        rows="5"
+        [formControl]="notes"
+        rows="6"
       ></textarea>
-      <label>{{ "NOTES.NOTES" | translate }}</label>
     </span>
   </div>
   <p-footer>
@@ -177,7 +177,7 @@
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
           [loading]="blocking$ | async"
-          [disabled]="notes === ''"
+          [disabled]="notes.invalid"
           (click)="applyStatus()"
         ></button>
       </div>
