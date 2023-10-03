@@ -1,9 +1,11 @@
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -31,6 +33,8 @@ import { GenericValidators } from '@shared/validators/generic-validators';
 import { Dialog } from 'primeng/dialog';
 import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 import { TreeHelper } from '@core/helpers/tree.helper';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-system-dialog',
@@ -38,7 +42,10 @@ import { TreeHelper } from '@core/helpers/tree.helper';
   styleUrls: ['./system-dialog.component.scss'],
 })
 export class SystemDialogComponent implements OnInit, OnDestroy {
-  @ViewChild(Dialog) dialog: Dialog;
+  @Input() asDialog: boolean = true;
+  @Output() onClose = new EventEmitter<boolean>();
+  @ViewChild(Dialog)
+  dialog: Dialog;
   isOpened$: Observable<boolean>;
   public orgHir: TreeNode[] = [];
   private auditLoadOrgPage$ = new Subject<string>();
@@ -54,9 +61,6 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
   _systemId: number;
   private defaultFormValue: { [key: string]: any } = {};
 
-  public get asDialog() {
-    return this.route.component !== SystemDialogComponent;
-  }
   get editMode() {
     return this._systemId !== undefined && this._systemId !== null;
   }
@@ -91,7 +95,8 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     private translateObj: TranslateObjPipe,
     private router: Router,
     protected cdr: ChangeDetectorRef,
-    private treeHelper: TreeHelper
+    private treeHelper: TreeHelper,
+    private translateService: TranslateService
   ) {
     this.route.queryParams
       .pipe(
@@ -212,7 +217,16 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     if (this.editMode) {
       this.store.dispatch(new BrowseSystemsAction.UpdateSystem(biaSystem));
     } else {
-      this.store.dispatch(new BrowseSystemsAction.CreateSystem(biaSystem));
+      this.store
+        .dispatch(new BrowseSystemsAction.CreateSystem(biaSystem))
+        .toPromise()
+        .then(() => {
+          if (this.dialog) {
+            this.store.dispatch(new BrowseSystemsAction.ToggleDialog({}));
+          } else {
+            this.onClose.emit(true);
+          }
+        });
     }
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ILangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,7 +33,7 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject();
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private langFacade: ILangFacade) {}
 
   ngOnInit(): void {
     combineLatest([

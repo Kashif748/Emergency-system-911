@@ -27,6 +27,9 @@ import { BrowseActivitySystemsState } from './states/browse-systems.state';
 import { NgxsModule } from '@ngxs/store';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { SidebarModule } from 'primeng/sidebar';
+import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
+import { SystemModule } from 'src/app/modules/_business-continuity-setup/system/system.module';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -71,7 +74,14 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ProgressSpinnerModule,
     NodataTableModule,
     DialogModule,
+    SidebarModule,
+    TreeSelectModule,
+    //
+    SystemModule,
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade },ConfirmationService],
+  providers: [
+    { provide: ILangFacade, useClass: LangFacade },
+    ConfirmationService,
+  ],
 })
 export class SystemsModule {}

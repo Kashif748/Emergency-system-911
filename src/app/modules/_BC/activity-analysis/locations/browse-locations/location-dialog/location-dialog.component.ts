@@ -24,7 +24,7 @@ import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-a
 import { ActivityLocationsAction } from '@core/states/activity-analysis/locations/locations.action';
 
 @Component({
-  selector: 'app-location-dialog',
+  selector: 'app-locations-dialog',
   templateUrl: './location-dialog.component.html',
   styleUrls: ['./location-dialog.component.scss'],
 })
@@ -48,6 +48,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   public selectedBCLocations: BcLocations;
 
   private auditLoadPage$ = new Subject<string>();
+  display = false;
 
   currentLocation: BcActivityLocations;
   _locationId: number;
@@ -198,6 +199,10 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       return;
     }
     this.auditLoadPage$.next(search);
+  }
+  closeCreateDialog() {
+    this.display = false;
+    this.loadPage();
   }
   ngOnDestroy(): void {
     this.destroy$.next();

@@ -28,9 +28,9 @@ import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.co
 import { NgxsModule } from '@ngxs/store';
 import { BrowseSystemsState } from './states/browse-systems.state';
 import { ToolbarModule } from 'primeng/toolbar';
-import {PrivilegesDirectiveModule} from "@shared/sh-directives/privileges.directive";
-import {BlockUIModule} from "primeng/blockui";
-import {ProgressSpinnerModule} from "primeng/progressspinner";
+import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.directive';
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 
@@ -86,5 +86,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     }),
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  exports: [SystemDialogComponent],
 })
 export class SystemModule {}
