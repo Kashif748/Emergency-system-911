@@ -449,7 +449,7 @@
               </div>
               <div class="vertical-row border-bottom">
                 <div class="vertical-header">{{ "RECOVERY.REMOTELY" | translate }}</div>
-                <div class="vertical-data">{{recoveryPageData.remote}}</div>
+                <div class="vertical-data">{{recoveryPageData.remote ? ("RECOVERY.YES" | translate) : ("RECOVERY.NO" | translate)}}</div>
               </div>
               <!-- Add more rows as needed -->
             </div>
@@ -690,7 +690,7 @@
                     {{ item | translateObj : 'employeeName'}}
                   </td>
                   <td class="min-w-200px max-w-300px">
-                    {{ item.isPrimary ? ("PRI" | translate) : ("SECONDARY" | translate)}}
+                    {{ item.isPrimary ? ("EMPLOYEES.PRI" | translate) : ("EMPLOYEES.SECONDARY" | translate)}}
                   </td>
 
                 </tr>
