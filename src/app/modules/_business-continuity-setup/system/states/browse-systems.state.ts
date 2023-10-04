@@ -93,10 +93,7 @@ export class BrowseSystemsState {
     return dispatch(new SystemsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([
-          new BrowseSystemsAction.LoadSystems(),
-          new BrowseSystemsAction.ToggleDialog({}),
-        ]);
+        dispatch([new BrowseSystemsAction.LoadSystems()]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

@@ -18,6 +18,7 @@
   [baseZIndex]="10000"
   [draggable]="true"
   [resizable]="false"
+  styleClass="overflow-hidden"
 >
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
@@ -55,21 +56,31 @@
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
-    <div class="p-field p-col-12">
-      <div class="p-inputgroup">
-        <span class="p-float-label">
-          <input
-            (keyup)="loadPage($event.target.value)"
-            type="text"
-            pInputText
-          />
-          <label>
-            {{ "SYSTEMS.SYSTEM" | translate }}
-          </label>
-        </span>
-        <button type="button" pButton pRipple icon="pi pi-search"></button>
+    <div class="row">
+      <div class="p-field p-col-10">
+        <div class="p-inputgroup">
+          <span class="p-float-label">
+            <input
+              (keyup)="loadPage($event.target.value)"
+              type="text"
+              pInputText
+            />
+            <label>
+              {{ "SYSTEMS.SYSTEM" | translate }}
+            </label>
+          </span>
+          <button type="button" pButton pRipple icon="pi pi-search"></button>
+        </div>
+      </div>
+      <div class="p-col-2">
+        <p-button
+          (click)="display = true"
+          label="{{ 'SYSTEMS.ADD_SYSTEM' | translate }}"
+          styleClass="p-button-link"
+        ></p-button>
       </div>
     </div>
+
     <div class="row">
       <div class="col-12">
         <ng-container>
@@ -182,10 +193,24 @@
         <p-paginator
           [rows]="50"
           [totalRecords]="totalRecords$ | async"
-          (onPageChange)="loadPage($event , true)"
+          (onPageChange)="loadPage($event, true)"
         ></p-paginator>
       </div>
     </div>
+    <p-sidebar
+      [(visible)]="display"
+      position="bottom"
+      [baseZIndex]="-1000"
+      [modal]="false"
+      styleClass="h-100"
+    >
+      <div class="bg-white pt-5 h-100">
+        <app-system-dialog
+          (onClose)="closeCreateDialog()"
+          [asDialog]="false"
+        ></app-system-dialog>
+      </div>
+    </p-sidebar>
   </div>
 </ng-template>
 

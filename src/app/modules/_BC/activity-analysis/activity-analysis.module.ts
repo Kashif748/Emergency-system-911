@@ -18,7 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisComponent } from './activity-analysis/activity-analysis.component';
 import { DialogModule } from 'primeng/dialog';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SkeletonModule } from 'primeng/skeleton';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -86,6 +86,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    ReactiveFormsModule,
     ToolbarModule,
     ButtonModule,
     CardModule,

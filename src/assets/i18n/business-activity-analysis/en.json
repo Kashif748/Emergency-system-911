@@ -32,7 +32,11 @@
     "SYSTEM_NAME": "System name",
     "COL1": "System name",
     "SYSTEM": "System",
-    "MANAGEMENT": "Owner management"
+    "MANAGEMENT": "Owner management",
+    "ADD_SYSTEM": "Add System",
+    "OWNER_DEPT": "Owner Department",
+    "NAME_EN": "Name (English)",
+    "NAME_AR": "Name (Arabic)"
   },
   "EMPLOYEES": {
     "TAB_LABEL": "Employees",
@@ -72,6 +76,7 @@
   },
   "LOCATIONS": {
     "TAB_LABEL": "Locations",
+    "ADD_LOCATION": "Add Location",
 
     "SITE": "Choose a new site",
     "NAME": "Location Name",
@@ -80,7 +85,17 @@
     "TITLE": "Activity sites",
     "COL1": "Location type",
     "COL2": "Location Name",
-    "COL3": "Region"
+    "COL3": "Region",
+    "DIALOG": {
+      "LOCATION_INFO": "Location Info",
+      "GEO_INFO": "Geographic Details",
+      "NAME_EN": "Name (English)",
+      "NAME_AR": "Name (Arabic)",
+      "LOC_TYPE": "Location Type",
+      "LONGI": "Longitude",
+      "LATI": "Latitude",
+      "CHOOSE_LOCATION": "Choose Location"
+    }
   },
   "IMPACT_MATRIX": {
     "TAB_LABEL": "Impact Matrix",

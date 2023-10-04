@@ -1,4 +1,5 @@
-<div class="p-toolbar-group-right">
+<!-- as a dialog -->
+<div *ngIf="asDialog" class="p-toolbar-group-right">
   <button
     *checkPrivileges="'PRIV_CR_BC_RESOURCE'"
     pButton
@@ -7,8 +8,6 @@
     (click)="openDialog()"
   ></button>
 </div>
-
-<!-- as a dialog -->
 <p-dialog
   *ngIf="asDialog; else page"
   #dialog
@@ -32,14 +31,14 @@
 </p-dialog>
 <!-- as a page -->
 <ng-template #page>
-  <div class="container-fluid h-100">
+  <div class="d-flex flex-column h-100">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
     <div class="row">
       <div class="col-12">
         <ng-template [ngTemplateOutlet]="content"></ng-template>
       </div>
     </div>
-    <div class="row h-30px"></div>
+    <div class="row flex-grow-1"></div>
     <div class="row">
       <div class="col-12">
         <ng-template [ngTemplateOutlet]="footer"></ng-template>
@@ -69,16 +68,6 @@
       </ng-container>
     </h3>
   </div>
-
-  <span class="flex-grow-1"></span>
-  <a
-    *ngIf="asDialog"
-    queryParamsHandling="merge"
-    pRipple
-    pButton
-    icon="pi pi-link"
-    class="p-button-rounded p-button-text p-button-plain"
-  ></a>
 </ng-template>
 
 <!-- templates content -->
