@@ -74,7 +74,7 @@
   <div
     class="w-100 pt-2"
     [ngStyle]="{
-      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '65vh'
+      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : viewOnly || (plan$ | async) ? '65vh' : ''
     }"
   >
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
@@ -343,7 +343,7 @@
         </form>
 
         <!--// Table-->
-        <ng-container>
+        <ng-container *ngIf="viewOnly$ | async">
           <ng-container *ngIf="viewOnly$ | async">
             <ng-container
               *ngIf="loadingAttachment$ | async; else tableTemplate"
