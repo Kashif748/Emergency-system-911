@@ -140,6 +140,7 @@ export const data = {
       value: 'delayedTasks',
       color: 'text-dark-75',
       url: '/incidents/tasks/incoming',
+      privileges: ['PRIV_VW_TASK'],
       changed: false,
     },
     {
