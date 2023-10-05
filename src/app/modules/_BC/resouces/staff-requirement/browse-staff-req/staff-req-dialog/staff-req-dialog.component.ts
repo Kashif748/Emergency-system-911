@@ -43,7 +43,7 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
 
   @ViewChild(Dialog) dialog: Dialog;
 
-  @Select(RemoteWorkState.blocking)
+  @Select(StaffState.blocking)
   blocking$: Observable<boolean>;
 
   public get asDialog() {
