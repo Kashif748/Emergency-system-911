@@ -158,7 +158,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       this.mapContainer?.clear();
       this.mapComponent = undefined;
       this.loadMapComponent();
-    }, 5000);
+    }, 500);
   }
   buildForm() {
     this.form = this.formBuilder.group({
@@ -194,6 +194,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       orgStructure: {
         id: this.loggedinUserId,
       },
+      district :null,
     };
 
     if (this.editMode) {
@@ -258,7 +259,10 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
           latitude: response?.pointCoordinates?.latitude,
           sector: response?.locationInfo.COMMUNITYID,
           zone: response?.locationInfo.DISTRICTID,
-          district: response?.locationInfo.DISTRICTARA,
+          district:
+            this.translate.currentLang == 'ar'
+              ? response?.locationInfo.DISTRICTARA
+              : response?.locationInfo.DISTRICTNAMEENG,
         });
       }
       cdr.detectChanges();

@@ -148,13 +148,6 @@ export class NewShareLocationComponent implements OnInit, AfterViewInit {
           hideAfterFinish: true,
           //note: this.lang == 'ar' ? 'حجم الملف يجب ان لا يتعدى ٢٠ ميجابايت' : 'File Size should not exceed 20 MB',
           locale: this.lang == 'ar' ? arabicLocale : '',
-          metaFields: [
-            {
-              id: 'desc',
-              name: this.translationService.get('ACTIONS.DESCRIPTION'),
-              placeholder: this.translationService.get('ACTIONS.PLACEHOLDER'),
-            },
-          ]
         })
         .use(Webcam, { target: Dashboard })
         .run();
