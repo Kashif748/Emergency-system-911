@@ -3,6 +3,8 @@ import { Component, OnInit } from "@angular/core";
 import { MatDialogRef, MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { ILangFacade } from "@core/facades/lang.facade";
+import { map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "src/app/modules/confirm-dialog/confirm-dialog.component";
 import { EventsManagementService } from "../../events-management.service";
 import { NavigationModalComponent } from "./navigation-modal/navigation-modal.component";
@@ -42,6 +44,7 @@ export class NavigationsComponent implements OnInit, AfterViewInit {
     "modules",
     "actions",
   ];
+  dir$ = this.langFacade.vm$.pipe(map((s) => s.ActiveLang.dir));
 
   dataSource = new MatTableDataSource<NavigationItem>();
 
@@ -53,7 +56,9 @@ export class NavigationsComponent implements OnInit, AfterViewInit {
   constructor(
     private _service: EventsManagementService,
     public _matDialog: MatDialog,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private langFacade: ILangFacade,
+
   ) {}
 
   ngOnInit(): void {
