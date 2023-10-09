@@ -69,8 +69,8 @@ export class BiaAppsState {
     return this.bia
       .analysis({
         cycleId: payload.cycleId,
-        orgHierarchyId: payload.filters.orgHierarchyId,
-        status: payload.filters.status,
+        orgHierarchyId: payload.filters?.orgHierarchyId?.id,
+        status: payload.filters?.activityAnalysisStatusId,
         pageable: {
           page: payload.page,
           size: payload.size,

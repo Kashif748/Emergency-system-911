@@ -5,5 +5,9 @@
   "ANALYSIS":"Analysis Completion Percentage",
   "STATE":"State",
   "ANALYSIS_CRCLE": "Analysis Cycle",
-  "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle"
+  "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle",
+  "NAME_BC": "BC Lists Version",
+  "DATE": "Cycle Entry Due DATE",
+  "NAME_EN": "Name (English)",
+  "NAME_AR": "Name (Arabic)"
 }

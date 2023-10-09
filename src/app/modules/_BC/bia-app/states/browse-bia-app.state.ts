@@ -8,6 +8,9 @@ import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from
 import {iif, patch} from '@ngxs/store/operators';
 import {BrowseBiaAppAction} from "./browse-bia-app.action";
 import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
+import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
+import {EMPTY} from "rxjs";
+import {catchError, tap} from "rxjs/operators";
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -124,6 +127,27 @@ export class BrowseBiaAppState {
     );
   }
 
+  @Action(BrowseBiaAppAction.LoadActivitiesStatuses)
+  LoadActivitiesStatuses(
+    { dispatch }: StateContext<BrowseBiaAppStateModel>,
+    {}: BrowseBiaAppAction.LoadActivitiesStatuses
+  ) {
+    return dispatch(new ImapactAnalysisAction.LoadActivitiesStatuses());
+  }
+
+  @Action(BrowseBiaAppAction.LoadCycles)
+  LoadCycles(
+    { dispatch }: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.LoadCycles
+  ) {
+    return dispatch(
+      new ImapactAnalysisAction.LoadCycles({
+        page: payload?.page,
+        size: payload.size,
+      })
+    );
+  }
+
   @Action(BrowseBiaAppAction.ChangeColumns)
   changeColumns(
     { setState }: StateContext<BrowseBiaAppStateModel>,
@@ -188,27 +212,32 @@ export class BrowseBiaAppState {
     );
   }*/
 
-  /*@Action(BrowseBiaAppAction.UpdateBia)
-  updateBia(
-    { dispatch }: StateContext<BrowseBiaAppStateModel>,
-    { payload }: BrowseBiaAppAction.UpdateBia
+  @Action(BrowseBiaAppAction.CreateCycle)
+  CreateCycle(
+    { dispatch, getState }: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.CreateCycle
   ) {
-    return dispatch(new BiaAction.Update(payload)).pipe(
+    return dispatch(new ImapactAnalysisAction.CreateCycle(payload.form)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseBiaAppAction.LoadBia());
+        dispatch([
+          new BrowseBiaAppAction.LoadBia({
+            pageRequest: undefined,
+            cycleId: payload.cycle
+          }),
+          new BrowseBiaAppAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
-        return throwError(err);
-      }),
-      finalize(() => {
-        dispatch(new BrowseBiaAppAction.ToggleDialog({}));
+        return EMPTY;
       })
     );
-  }*/
+  }
 
-  @Action(BrowseBiaAppAction.ToggleDialog, { cancelUncompleted: true })
+  @Action(BrowseBiaAppAction.ToggleDialog, {
+    cancelUncompleted: true,
+  })
   openDialog(
     {}: StateContext<BrowseBiaAppStateModel>,
     { payload }: BrowseBiaAppAction.ToggleDialog
@@ -216,10 +245,11 @@ export class BrowseBiaAppState {
     this.router.navigate([], {
       queryParams: {
         _dialog:
-          this.route.snapshot.queryParams['_dialog'] == 'opened'
+          this.route.snapshot.queryParams['_dialog'] == payload?.dialog
             ? undefined
-            : 'opened',
-        _id: payload.BiaId,
+            : payload?.dialog,
+        _id: payload.id,
+        _cycleId: payload.cycle,
         _mode: undefined,
       },
       queryParamsHandling: 'merge',

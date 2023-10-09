@@ -30,7 +30,7 @@ import {
   RtoState,
 } from '@core/states';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 import { TreeHelper } from '@core/helpers/tree.helper';
 import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState} from "../../states/browse-resource-analysis.state";
@@ -165,7 +165,8 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     private translateObj: TranslateObjPipe,
     private lang: ILangFacade,
     private treeHelper: TreeHelper,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.lang.vm$
       .pipe
@@ -180,6 +181,22 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
           this.sortableColumns[1].code = 'activity.activityFrequence.nameEn';
           this.sortableColumns[2].code = 'cycle.nameEn';
         }
+      });
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        const orgHierarchyId = params['_division'];
+        const idParameter = 'orgHierarchyId=' + orgHierarchyId;
+        const [key, value] = idParameter.split('=');
+        const filter = { orgHierarchyId: {
+            key: orgHierarchyId,
+            data: {
+              id: orgHierarchyId
+            }}
+        };
+        this.updateFilter(filter)
+        this.loadPage();
+        this.loadResourcePage();
       });
   }
 
@@ -405,22 +422,22 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       },
     });
   }
-  public loadPage(event: LazyLoadEvent) {
+  public loadPage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseImpactAnalysisAction.LoadPage({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );
   }
-  public loadResourcePage(event: LazyLoadEvent) {
+  public loadResourcePage(event?: LazyLoadEvent) {
     this.store.dispatch(
       new BrowseResourceAnalysisAction.LoadPage({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
       })
     );

@@ -159,11 +159,6 @@
               <td *ngIf="columns?.includes('state')">
                 <p-skeleton></p-skeleton>
               </td>
-
-              <td>
-                <button pButton pRipple type="button" icon="pi pi-ellipsis-v"
-                        class="p-button-rounded p-button-text my-auto p-button-plain"></button>
-              </td>
             </tr>
           </ng-template>
         </p-table>
@@ -218,20 +213,20 @@
                 </div>
               </td>-->
 
-              <td *ngIf="columns?.includes('application')" (click)="item.isActive && openView(item.id)">
+              <td *ngIf="columns?.includes('application')" (click)="goToResourceAndActivity(item)">
                 {{ rowIndex + 1 }}
               </td>
 
-              <td *ngIf="columns?.includes('divisionName')" (click)="item.isActive && openView(item.id)">
+              <td *ngIf="columns?.includes('divisionName')" (click)="goToResourceAndActivity(item)">
                 {{item.orgHierarchy | translateObj}}
               </td>
-              <td *ngIf="columns?.includes('cycle')" (click)="item.isActive && openView(item.id)">
+              <td *ngIf="columns?.includes('cycle')" (click)="goToResourceAndActivity(item)">
                 {{item.cycle | translateObj : 'name'}}
               </td>
-              <td *ngIf="columns?.includes('analysisCyclePercentage')" (click)="item.isActive && openView(item.id)">
+              <td *ngIf="columns?.includes('analysisCyclePercentage')" (click)="goToResourceAndActivity(item)">
                 {{item.percentage}}
               </td>
-              <td *ngIf="columns?.includes('state')" (click)="item.isActive && openView(item.id)">
+              <td *ngIf="columns?.includes('state')" (click)="goToResourceAndActivity(item)">
                 {{item.status | translateObj}}
               </td>
 

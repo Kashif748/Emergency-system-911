@@ -4,6 +4,8 @@ import {BrowseOrganizationAction} from "../../../organization-activities/states/
 import {BcActivities} from "../../../../../api/models/bc-activities";
 import {LazyLoadEvent} from "primeng/api";
 import {Store} from "@ngxs/store";
+import {BcAnalysisByOrgHierarchyResponse} from "../../../../../api/models/bc-analysis-by-org-hierarchy-response";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-content-bia-app',
@@ -26,7 +28,7 @@ export class ContentBiaAppComponent implements OnInit {
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();
-  constructor(private store: Store) {}
+  constructor(private store: Store, private router: Router) {}
 
   ngOnInit() {
 /*    this.onPageChange.emit({
@@ -37,5 +39,13 @@ export class ContentBiaAppComponent implements OnInit {
   }
   openView(id?: number) {
     this.store.dispatch(new BrowseOrganizationAction.OpenView({ organizationId: id }));
+  }
+
+  goToResourceAndActivity(org: BcAnalysisByOrgHierarchyResponse) {
+    this.router.navigate(['bc/impact-analysis'], {
+      queryParams: {
+        _division: org?.orgHierarchy.id,
+      },
+    });
   }
 }
