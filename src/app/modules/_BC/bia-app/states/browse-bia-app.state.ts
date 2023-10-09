@@ -6,10 +6,8 @@ import {PageRequestModel} from '@core/models/page-request.model';
 import {TextUtils} from '@core/utils';
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
 import {iif, patch} from '@ngxs/store/operators';
-import {throwError} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
 import {BrowseBiaAppAction} from "./browse-bia-app.action";
-import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
+import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -85,13 +83,13 @@ export class BrowseBiaAppState {
     );
     const pageRequest = getState().pageRequest;
     return dispatch(
-      new OrgActivityAction.LoadPage({
+      new BiaAction.LoadPage({
+        cycleId: payload.cycleId,
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgHierarchyId: pageRequest.filters.orgHierarchyId?.id,
         },
       })
     );
@@ -113,10 +111,11 @@ export class BrowseBiaAppState {
 
     const pageRequest = getState().pageRequest;
     return dispatch(
-      new OrgActivityAction.LoadPage({
+      new BiaAction.LoadPage({
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        cycleId: payload.cycle,
         filters: {
           ...pageRequest.filters,
           orgHierarchyId: pageRequest.filters.orgHierarchyId?.id,
@@ -170,12 +169,12 @@ export class BrowseBiaAppState {
     );
   }
 
-  @Action(BrowseBiaAppAction.CreateBia)
+ /* @Action(BrowseBiaAppAction.CreateBia)
   createBia(
     { dispatch }: StateContext<BrowseBiaAppStateModel>,
     { payload }: BrowseBiaAppAction.CreateBia
   ) {
-    return dispatch(new OrgActivityAction.Create(payload)).pipe(
+    return dispatch(new BiaAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(
@@ -187,14 +186,14 @@ export class BrowseBiaAppState {
         return throwError(err);
       })
     );
-  }
+  }*/
 
-  @Action(BrowseBiaAppAction.UpdateBia)
+  /*@Action(BrowseBiaAppAction.UpdateBia)
   updateBia(
     { dispatch }: StateContext<BrowseBiaAppStateModel>,
     { payload }: BrowseBiaAppAction.UpdateBia
   ) {
-    return dispatch(new OrgActivityAction.Update(payload)).pipe(
+    return dispatch(new BiaAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseBiaAppAction.LoadBia());
@@ -207,7 +206,7 @@ export class BrowseBiaAppState {
         dispatch(new BrowseBiaAppAction.ToggleDialog({}));
       })
     );
-  }
+  }*/
 
   @Action(BrowseBiaAppAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(

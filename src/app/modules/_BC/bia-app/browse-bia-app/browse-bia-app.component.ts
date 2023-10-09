@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from "rxjs";
-import {BcActivities} from "../../../../api/models/bc-activities";
+import {Observable, of, Subject} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
@@ -9,10 +8,16 @@ import {ILangFacade} from "@core/facades/lang.facade";
 import {PrivilegesService} from "@core/services/privileges.service";
 import {TranslateService} from "@ngx-translate/core";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {filter, map, takeUntil} from "rxjs/operators";
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
+import {filter, map, switchMap, takeUntil} from "rxjs/operators";
 import {BrowseBiaAppAction} from "../states/browse-bia-app.action";
 import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../states/browse-bia-app.state";
+import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
+import {BcAnalysisByOrgHierarchyResponse} from "../../../../api/models/bc-analysis-by-org-hierarchy-response";
+import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
+import {BcCycles} from "../../../../api/models";
+import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.state";
+import {BcResources} from "../../../../api/models/bc-resources";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-browse-bia-app',
@@ -20,19 +25,26 @@ import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../states/browse-bia-ap
   styleUrls: ['./browse-bia-app.component.scss']
 })
 export class BrowseBiaAppComponent implements OnInit, OnDestroy {
-  public page$: Observable<BcActivities[]>;
+  public page$: Observable<BcAnalysisByOrgHierarchyResponse[]>;
+
+  @Select(ImpactAnalysisState.cycles)
+  public cycles$: Observable<BcCycles[]>;
 
   @Select(BrowseBiaAppState.state)
   public state$: Observable<BrowseBiaAppStateModel>;
 
-  @Select(OrgActivityState.loading)
+  @Select(BiaAppsState.loading)
   public loading$: Observable<boolean>;
 
-  @Select(OrgActivityState.totalRecords)
+  @Select(BiaAppsState.totalRecords)
   public totalRecords$: Observable<number>;
 
   @Select(BrowseBiaAppState.hasFilters)
   public hasFilters$: Observable<boolean>;
+
+  public sortCycles$: Observable<any[]>;
+
+  selectedCycle: any;
 
   private destroy$ = new Subject();
   public exportActions = [
@@ -49,7 +61,6 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   ] as MenuItem[];
 
   public sortableColumns = [
-    { name: 'APP', code: 'application' },
     { name: 'DIVISION', code: 'divisionName' },
     { name: 'CYCLE', code: 'cycle' },
     { name: 'ANALYSIS', code: 'analysisCyclePercentage' },
@@ -78,7 +89,8 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private treeHelper: TreeHelper,
-    private privilegesService: PrivilegesService
+    private privilegesService: PrivilegesService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -91,6 +103,21 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.changeView('CARDS');
       });
+    this.store.dispatch(
+      new ImapactAnalysisAction.LoadCycles({ page: 0, size: 100 }));
+    this.sortCycles$ = this.cycles$.pipe(
+      filter((cycles) => !!cycles),
+      switchMap((cycles) => {
+        return of([...cycles].sort((a, b) => b.id - a.id));
+      })
+    );
+    this.sortCycles$.subscribe(cycles => {
+      if (cycles.length > 0) {
+        const sortedCycles = [...cycles];
+        this.selectedCycle = sortedCycles[0].id;
+        this.loadPage(null, this.selectedCycle);
+      }
+    });
     const taskActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -98,7 +125,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       },
     ] as MenuItem[];
 
-    this.page$ = this.store.select(OrgActivityState.page).pipe(
+    this.page$ = this.store.select(BiaAppsState.page).pipe(
       filter((p) => !!p),
       map((page) =>
         page?.map((u) => {
@@ -108,11 +135,8 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
               {
                 ...taskActions[0],
                 command: () => {
-                  this.openDialog(u.id);
+                  this.goToResourceAndActivity(u);
                 },
-                /*disabled: !this.privilegesService.checkActionPrivileges(
-                  'PRIV_ED_ORG_ACTIVITY'
-                ),*/
               },
             ],
           };
@@ -120,6 +144,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       )
     );
   }
+
 
   openDialog(id?: number) {
     this.store.dispatch(
@@ -190,7 +215,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
 
   sort(event) {
     this.store.dispatch(
-      new BrowseBiaAppAction.SortBia({ field: event.value })
+      new BrowseBiaAppAction.SortBia({ field: event.value, cycle: this.selectedCycle})
     );
   }
 
@@ -211,15 +236,28 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public loadPage(event: LazyLoadEvent) {
-    /*this.store.dispatch(
-      new BrowseOrganizationAction.LoadOrganization({
+  public loadPage(event?: LazyLoadEvent, cycle?) {
+    this.store.dispatch(
+      new BrowseBiaAppAction.LoadBia({
         pageRequest: {
-          first: event.first,
-          rows: event.rows,
+          first: event?.first,
+          rows: event?.rows,
         },
+        cycleId: cycle,
       })
-    );*/
+    );
   }
 
+  setCycleId(value: BcCycles) {
+   this.loadPage(null, value);
+  }
+
+  goToResourceAndActivity(org: BcAnalysisByOrgHierarchyResponse) {
+    this.router.navigate(['bc/impact-analysis'], {
+      queryParams: {
+        _cycle: this.selectedCycle,
+        _division: org?.id,
+      },
+    });
+  }
 }

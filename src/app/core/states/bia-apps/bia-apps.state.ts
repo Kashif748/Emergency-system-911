@@ -3,26 +3,22 @@ import {Injectable} from '@angular/core';
 import {EMPTY} from 'rxjs';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {patch} from '@ngxs/store/operators';
-import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
-import {PageBcResourcesAppAndSoftware} from "../../../../api/models/page-bc-resources-app-and-software";
-import {BcResourcesAppAndSoftware} from "../../../../api/models/bc-resources-app-and-software";
-import {BcResourcesAppAndSoftwareControllerService} from "../../../../api/services/bc-resources-app-and-software-controller.service";
-import {BcResourcesMinLicenseReqControllerService} from "../../../../api/services/bc-resources-min-license-req-controller.service";
-import {PageBcResourcesMinLicenseReq} from "../../../../api/models/page-bc-resources-min-license-req";
+import {BcAnalysisControllerService} from "../../../api/services/bc-analysis-controller.service";
+import {PageBcAnalysisByOrgHierarchyResponse} from "../../../api/models/page-bc-analysis-by-org-hierarchy-response";
+import {BcAnalysisByOrgHierarchyResponse} from "../../../api/models/bc-analysis-by-org-hierarchy-response";
+import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
 
-export interface AppSystemStateModel {
-  page: PageBcResourcesAppAndSoftware;
-  appSystem: BcResourcesAppAndSoftware;
-  minLicensePage: PageBcResourcesMinLicenseReq;
+export interface BiaStateModel {
+  page: PageBcAnalysisByOrgHierarchyResponse;
+  bia: BcAnalysisByOrgHierarchyResponse;
   loading: boolean;
-  minLicenseLoading: boolean;
   blocking: boolean;
 }
 
-const APP_SYSTEM_STATE_TOKEN =
-  new StateToken<AppSystemStateModel>('appSystem');
+const BIA_APPS_STATE_TOKEN =
+  new StateToken<BiaStateModel>('biaApps');
 
-@State<AppSystemStateModel>({ name: APP_SYSTEM_STATE_TOKEN })
+@State<BiaStateModel>({ name: BIA_APPS_STATE_TOKEN })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
 export class BiaAppsState {
@@ -30,61 +26,51 @@ export class BiaAppsState {
    *
    */
   constructor(
-    private bcResourcesAppAndSoftwareService: BcResourcesAppAndSoftwareControllerService,
-    private minLicense: BcResourcesMinLicenseReqControllerService
+    private bia: BcAnalysisControllerService,
   ) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([BiaAppsState])
-  static page(state: AppSystemStateModel) {
+  static page(state: BiaStateModel) {
     return state?.page?.content;
   }
 
   @Selector([BiaAppsState])
-  static appSystem(state: AppSystemStateModel) {
-    return state?.appSystem;
+  static bia(state: BiaStateModel) {
+    return state?.bia;
   }
 
   @Selector([BiaAppsState])
-  static totalRecords(state: AppSystemStateModel) {
+  static totalRecords(state: BiaStateModel) {
     return state?.page?.totalElements;
   }
 
   @Selector([BiaAppsState])
-  static loading(state: AppSystemStateModel) {
+  static loading(state: BiaStateModel) {
     return state?.loading;
   }
 
   @Selector([BiaAppsState])
-  static minLicensePage(state: AppSystemStateModel) {
-    return state?.minLicensePage.content;
-  }
-
-  @Selector([BiaAppsState])
-  static minLicenseLoading(state: AppSystemStateModel) {
-    return state?.minLicenseLoading;
-  }
-
-  @Selector([BiaAppsState])
-  static blocking(state: AppSystemStateModel) {
+  static blocking(state: BiaStateModel) {
     return state?.blocking;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(AppSystemAction.LoadPage, { cancelUncompleted: true })
+  @Action(BiaAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    { setState }: StateContext<AppSystemStateModel>,
-    { payload }: AppSystemAction.LoadPage
+    { setState }: StateContext<BiaStateModel>,
+    { payload }: BiaAction.LoadPage
   ) {
     setState(
-      patch<AppSystemStateModel>({
+      patch<BiaStateModel>({
         loading: true,
       })
     );
-    return this.bcResourcesAppAndSoftwareService
-      .search15({
-        resourceId: payload.resourceId,
-        isActive: true,
+    return this.bia
+      .analysis({
+        cycleId: payload.cycleId,
+        orgHierarchyId: payload.filters.orgHierarchyId,
+        status: payload.filters.status,
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -94,7 +80,7 @@ export class BiaAppsState {
       .pipe(
         tap((res) => {
           setState(
-            patch<AppSystemStateModel>({
+            patch<BiaStateModel>({
               page: res.result,
               loading: false,
             })
@@ -102,7 +88,7 @@ export class BiaAppsState {
         }),
         catchError(() => {
           setState(
-            patch<AppSystemStateModel>({
+            patch<BiaStateModel>({
               page: { content: [], totalElements: 0 },
             })
           );
@@ -110,142 +96,11 @@ export class BiaAppsState {
         }),
         finalize(() => {
           setState(
-            patch<AppSystemStateModel>({
+            patch<BiaStateModel>({
               loading: false,
             })
           );
         })
       );
-  }
-  @Action(AppSystemAction.LoadMinLicense, { cancelUncompleted: true })
-  loadMinLicense(
-    { setState }: StateContext<AppSystemStateModel>,
-    { payload }: AppSystemAction.LoadMinLicense
-  ) {
-    setState(
-      patch<AppSystemStateModel>({
-        minLicenseLoading: true,
-      })
-    );
-    return this.minLicense
-      .getAsPage1({
-        pageable: {
-          page: payload.page,
-          size: payload.size,
-          sort: payload.sort,
-        },
-      })
-      .pipe(
-        tap((res) => {
-          setState(
-            patch<AppSystemStateModel>({
-              minLicensePage: res.result,
-              minLicenseLoading: false,
-            })
-          );
-        }),
-        catchError(() => {
-          setState(
-            patch<AppSystemStateModel>({
-              minLicensePage: { content: [], totalElements: 0 },
-            })
-          );
-          return EMPTY;
-        }),
-        finalize(() => {
-          setState(
-            patch<AppSystemStateModel>({
-              minLicenseLoading: false,
-            })
-          );
-        })
-      );
-  }
-
-
-  @Action(AppSystemAction.Create)
-  create(
-    { setState }: StateContext<AppSystemStateModel>,
-    { payload }: AppSystemAction.Create
-  ) {
-    setState(
-      patch<AppSystemStateModel>({
-        blocking: true,
-      })
-    );
-    return this.bcResourcesAppAndSoftwareService
-      .insertOne13({
-        body: payload,
-      })
-      .pipe(
-        finalize(() => {
-          setState(
-            patch<AppSystemStateModel>({
-              blocking: false,
-            })
-          );
-        })
-      );
-  }
-
-  @Action(AppSystemAction.Update)
-  update(
-    { setState }: StateContext<AppSystemStateModel>,
-    { payload }: AppSystemAction.Update
-  ) {
-    setState(
-      patch<AppSystemStateModel>({
-        blocking: true,
-      })
-    );
-    return this.bcResourcesAppAndSoftwareService
-      .update92({
-        body: payload,
-      })
-      .pipe(
-        finalize(() => {
-          setState(
-            patch<AppSystemStateModel>({
-              blocking: false,
-            })
-          );
-        })
-      );
-  }
-
-  @Action(AppSystemAction.GetAppSystem, { cancelUncompleted: true })
-  getAppSystem(
-    { setState }: StateContext<AppSystemStateModel>,
-    { payload }: AppSystemAction.GetAppSystem
-  ) {
-    if (payload.id === undefined || payload.id === null) {
-      setState(
-        patch<AppSystemStateModel>({
-          appSystem: undefined,
-        })
-      );
-      return;
-    }
-    setState(
-      patch<AppSystemStateModel>({
-        blocking: true,
-      })
-    );
-    return this.bcResourcesAppAndSoftwareService.getOne14({ id: payload.id }).pipe(
-      tap((app) => {
-        setState(
-          patch<AppSystemStateModel>({
-            appSystem: app.result,
-          })
-        );
-      }),
-      finalize(() => {
-        setState(
-          patch<AppSystemStateModel>({
-            blocking: false,
-          })
-        );
-      })
-    );
   }
 }

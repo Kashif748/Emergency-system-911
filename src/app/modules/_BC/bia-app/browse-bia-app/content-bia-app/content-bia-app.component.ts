@@ -29,11 +29,11 @@ export class ContentBiaAppComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.onPageChange.emit({
+/*    this.onPageChange.emit({
       first: this.pageRequest?.first,
       rows: this.pageRequest?.rows,
     });
-    console.log(this.columns);
+    console.log(this.columns);*/
   }
   openView(id?: number) {
     this.store.dispatch(new BrowseOrganizationAction.OpenView({ organizationId: id }));

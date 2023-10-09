@@ -5,10 +5,12 @@
       <div class="mx-2">
         <p-dropdown
           [autoDisplayFirst]="false"
-          [options]=""
+          [options]="sortCycles$ | async"
           [showClear]="true"
           dataKey="id"
           optionValue="id"
+          [(ngModel)]="selectedCycle"
+          (ngModelChange)="setCycleId($event)"
           placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
         >
           <ng-template let-item pTemplate="selectedItem">

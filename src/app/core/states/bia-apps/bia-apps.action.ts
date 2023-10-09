@@ -1,5 +1,5 @@
 
-export namespace AppSystemAction {
+export namespace BiaAction {
   export class LoadPage {
     static readonly type = '[biaApps] Load Page';
 
@@ -8,12 +8,11 @@ export namespace AppSystemAction {
      */
     constructor(
       public payload: {
-        resourceId: number
+        cycleId: number,
         filters?: { [key: string]: any };
         sort?: string[];
         page: number;
         size: number;
-        search?: string;
       }
     ) {
     }

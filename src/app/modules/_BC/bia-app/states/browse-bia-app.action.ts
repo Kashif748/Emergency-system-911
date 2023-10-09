@@ -7,7 +7,7 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {}
+    constructor(public payload?: { pageRequest?: PageRequestModel, cycleId?: number }) {}
   }
 
   export class SortBia {
@@ -15,7 +15,7 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc', cycle?: number }) {}
   }
 
   export class ChangeColumns {
