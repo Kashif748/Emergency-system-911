@@ -6,8 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { BcActivitySystems } from 'src/app/api/models';
-import { SYSTEMS } from '../../../tempData.conts';
-import { BrowseActivitySystemsAction } from '../../states/browse-systems.action';
+ import { BrowseActivitySystemsAction } from '../../states/browse-systems.action';
 
 @Component({
   selector: 'app-content-systems',

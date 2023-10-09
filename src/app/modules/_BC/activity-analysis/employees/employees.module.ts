@@ -31,7 +31,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
-    'assets/i18n/business-activity-analysis/',
+    'assets/i18n/activity-analysis-summary/',
     '.json'
   );
 }
