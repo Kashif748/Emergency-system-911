@@ -109,5 +109,20 @@
     "HEADER": "Updates and notes for acticity anlysis",
     "UPDATE_STAGES": "Updates Stages",
     "NOTES": " Notes"
+  },
+  "SUMMARY": {
+    "TAB_LABEL": "Activity Report",
+    "CYCLE":"Analysis Cycle",
+
+    "TITLE":"Activity Summary",
+    "ACTIVITY": "Activity Name",
+    "CAPACITY": "capacity",
+    "CRITICALITY": "criticality",
+    "DIVISION": "division",
+    "RECOVERYPRIORITYSEQUENCE": "Recovery Priority Sequence",
+    "ROWNUMBER": "",
+    "RTO": "Rto",
+    "SECTION": "section",
+    "SECTOR": "Sector"
   }
 }

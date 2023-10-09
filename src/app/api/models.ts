@@ -435,6 +435,7 @@ export { ApiErrorBcRecoveryPriorities } from './models/api-error-bc-recovery-pri
 export { RestApiResponseBcRecoveryPriorities } from './models/rest-api-response-bc-recovery-priorities';
 export { BcLocationTypes } from './models/bc-location-types';
 export { BcLocations } from './models/bc-locations';
+export { LocationInfo } from './models/location-info';
 export { ApiErrorBcLocations } from './models/api-error-bc-locations';
 export { RestApiResponseBcLocations } from './models/rest-api-response-bc-locations';
 export { ApiErrorBcLocationTypes } from './models/api-error-bc-location-types';
@@ -1294,6 +1295,7 @@ export { RestApiResponsePageBcOrgHierarchyProjection } from './models/rest-api-r
 export { ApiErrorPageBcRecoveryPriorities } from './models/api-error-page-bc-recovery-priorities';
 export { PageBcRecoveryPriorities } from './models/page-bc-recovery-priorities';
 export { RestApiResponsePageBcRecoveryPriorities } from './models/rest-api-response-page-bc-recovery-priorities';
+export { BcLocationsProjection } from './models/bc-locations-projection';
 export { ApiErrorPageBcLocations } from './models/api-error-page-bc-locations';
 export { PageBcLocations } from './models/page-bc-locations';
 export { RestApiResponsePageBcLocations } from './models/rest-api-response-page-bc-locations';
@@ -1332,6 +1334,8 @@ export { RestApiResponsePageBcActivityDependencyInternal } from './models/rest-a
 export { ApiErrorPageBcActivitySystems } from './models/api-error-page-bc-activity-systems';
 export { PageBcActivitySystems } from './models/page-bc-activity-systems';
 export { RestApiResponsePageBcActivitySystems } from './models/rest-api-response-page-bc-activity-systems';
+export { ApiErrorSetLong } from './models/api-error-set-long';
+export { RestApiResponseSetLong } from './models/rest-api-response-set-long';
 export { ApiErrorPageBcActivityLocations } from './models/api-error-page-bc-activity-locations';
 export { PageBcActivityLocations } from './models/page-bc-activity-locations';
 export { RestApiResponsePageBcActivityLocations } from './models/rest-api-response-page-bc-activity-locations';
@@ -1366,8 +1370,6 @@ export { RestApiResponsePageBcActivityAnalysis } from './models/rest-api-respons
 export { ApiErrorPageBcActivities } from './models/api-error-page-bc-activities';
 export { PageBcActivities } from './models/page-bc-activities';
 export { RestApiResponsePageBcActivities } from './models/rest-api-response-page-bc-activities';
-export { ApiErrorSetLong } from './models/api-error-set-long';
-export { RestApiResponseSetLong } from './models/rest-api-response-set-long';
 export { ApiErrorOrgAsset } from './models/api-error-org-asset';
 export { RestApiResponseOrgAsset } from './models/rest-api-response-org-asset';
 export { ApiErrorPageOrgAssetsProjection } from './models/api-error-page-org-assets-projection';
