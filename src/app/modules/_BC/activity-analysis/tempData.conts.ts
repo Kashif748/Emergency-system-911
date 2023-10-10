@@ -27,8 +27,4 @@ export const TABS = [
     label: 'NOTES',
     router: 'worklogs',
   },
-  {
-    label: 'SUMMARY',
-    router: 'analysis-summary',
-  },
 ];

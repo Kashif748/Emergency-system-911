@@ -24,6 +24,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -69,7 +70,8 @@ const routes: Routes = [
     NodataTableModule,
     SplitButtonModule,
     FieldsetModule,
-    TreeSelectModule
+    TreeSelectModule,
+    SharedBreadcrumbModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
