@@ -92,6 +92,7 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
     );
     this.page$ = this.store.select(LocationsState.page).pipe(
       filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => b.id - a.id)),
       map((page) =>
         page?.map((u) => {
           return {
