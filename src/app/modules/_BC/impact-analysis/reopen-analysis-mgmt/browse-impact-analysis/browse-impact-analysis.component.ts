@@ -98,6 +98,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject();
   avoidSearch = false;
+  orgHierarchyId: number;
 
   public sortableColumns = [
     {
@@ -185,19 +186,29 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
-        const orgHierarchyId = params['_division'];
-        const idParameter = 'orgHierarchyId=' + orgHierarchyId;
-        const [key, value] = idParameter.split('=');
-        const filter = { orgHierarchyId: {
-            key: orgHierarchyId,
-            data: {
-              id: orgHierarchyId
-            }}
-        };
-        this.updateFilter(filter)
-        this.loadPage();
-        this.loadResourcePage();
+        this.orgHierarchyId = params['_division'];
+
       });
+  }
+
+  selectOrgHierarchyById(id: number) {
+    const orgItem = this.orgHir.find((item) => item.data.id == id);
+    if (orgItem) {
+      const orgHierarchyId = {
+        orgHierarchyId: orgItem
+      }
+      this.updateFilter(orgHierarchyId);
+    }
+    /*const idParameter = 'orgHierarchyId=' + this.orgHierarchyId;
+    const [key, value] = idParameter.split('=');
+    const filter = {
+      orgHierarchyId: {
+        key: this.orgHierarchyId,
+        data: {
+          id: this.orgHierarchyId
+        }
+      }
+    };*/
   }
 
   ngOnInit(): void {
@@ -235,7 +246,11 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
         filter((p) => !!p),
         map((data) => this.setTree(data))
       )
-      .subscribe();
+      .subscribe(() => {
+        this.selectOrgHierarchyById(this.orgHierarchyId);
+        this.loadPage();
+        this.loadResourcePage();
+      });
 
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
@@ -324,6 +339,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
+    console.log(this.orgHir)
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
