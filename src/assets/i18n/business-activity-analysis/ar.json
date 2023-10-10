@@ -121,6 +121,12 @@
     "ROWNUMBER": "",
     "RTO": "زمن التعافي الأمثل",
     "SECTION": "القسم",
-    "SECTOR": "القطاع"
+    "SECTOR": "القطاع",
+    "CRITICAL" : "حيوي",
+    "NOT_CRITICAL" : "غير حيوي",
+    "ALL" : "الكل"
+
+
+
   }
 }

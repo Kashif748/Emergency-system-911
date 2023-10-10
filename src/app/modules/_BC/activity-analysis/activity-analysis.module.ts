@@ -77,13 +77,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./worklogs/worklogs.module').then((m) => m.WorklogsModule),
       },
-      {
-        path: 'analysis-summary',
-        loadChildren: () =>
-          import('./analysis-summary/analysis-summary.module').then(
-            (m) => m.AnalysisSummaryModule
-          ),
-      },
+
     ],
   },
 ];

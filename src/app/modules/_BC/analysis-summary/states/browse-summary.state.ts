@@ -28,7 +28,9 @@ export const BROWSE_ANALYSIS_SUMMARY_UI_STATE_TOKEN =
   name: BROWSE_ANALYSIS_SUMMARY_UI_STATE_TOKEN,
   defaults: {
     pageRequest: {
-      filters: {},
+      filters: {
+        isCritical : null
+      },
       first: 0,
       rows: 10,
     },
