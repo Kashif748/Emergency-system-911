@@ -85,6 +85,7 @@ export class BrowseSystemComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.page$ = this.store.select(SystemsState.page).pipe(
       filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => b.id - a.id)),
       map((page) =>
         page?.map((u) => {
           return {
