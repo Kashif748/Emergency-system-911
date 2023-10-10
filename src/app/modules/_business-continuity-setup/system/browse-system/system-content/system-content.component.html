@@ -182,10 +182,10 @@
               <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-item>
+          <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
             <tr class="cursor-pointer hoverable">
               <td>
-                {{ item.id }}
+                {{ rowIndex + 1 }}
               </td>
               <td
                 *ngIf="columns?.includes('name')"

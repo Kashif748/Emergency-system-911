@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {SYSTEMS} from "../../../tempData.conts";
-import {FormBuilder, FormGroup} from "@angular/forms";
+ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ILangFacade} from "@core/facades/lang.facade";
 import { BcActivityLocations } from 'src/app/api/models';
 import { PageRequestModel } from '@core/models/page-request.model';

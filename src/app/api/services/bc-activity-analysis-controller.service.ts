@@ -17,6 +17,7 @@ import { RestApiResponseBcActivityAnalysis } from '../models/rest-api-response-b
 import { RestApiResponseBcActivityAnalysisDtoWithStatus } from '../models/rest-api-response-bc-activity-analysis-dto-with-status';
 import { RestApiResponseListBcActivityAnalysis } from '../models/rest-api-response-list-bc-activity-analysis';
 import { RestApiResponsePageBcActivityAnalysis } from '../models/rest-api-response-page-bc-activity-analysis';
+import { RestApiResponsePageBcActivityAnalysisSummaryResponse } from '../models/rest-api-response-page-bc-activity-analysis-summary-response';
 
 @Injectable()
 export class BcActivityAnalysisControllerService extends BaseService {
@@ -28,21 +29,21 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById35
+   * Path part for operation deleteById36
    */
-  static readonly DeleteById35Path = '/v1/bc/activity-analysis/delete/{id}';
+  static readonly DeleteById36Path = '/v1/bc/activity-analysis/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById35()` instead.
+   * To access only the response body, use `deleteById36()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById35$Response(params: {
+  deleteById36$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.DeleteById35Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.DeleteById36Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -60,15 +61,15 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById35$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById36$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById35(params: {
+  deleteById36(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById35$Response(params).pipe(
+    return this.deleteById36$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
@@ -310,6 +311,61 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
     return this.getOne34$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysis>) => r.body as RestApiResponseBcActivityAnalysis)
+    );
+  }
+
+  /**
+   * Path part for operation summary
+   */
+  static readonly SummaryPath = '/v1/bc/activity-analysis/summary';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `summary()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary$Response(params: {
+    orgHierarchyId?: number;
+    cycleId?: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityAnalysisSummaryResponse>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.SummaryPath, 'get');
+    if (params) {
+      rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('isCritical', params.isCritical, {});
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageBcActivityAnalysisSummaryResponse>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `summary$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary(params: {
+    orgHierarchyId?: number;
+    cycleId?: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcActivityAnalysisSummaryResponse> {
+
+    return this.summary$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcActivityAnalysisSummaryResponse>) => r.body as RestApiResponsePageBcActivityAnalysisSummaryResponse)
     );
   }
 

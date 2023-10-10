@@ -33,8 +33,7 @@ import {
 } from 'src/app/api/models';
 import { BcWorkLogTypes } from 'src/app/api/models/bc-work-log-types';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
-import { NOTES } from '../tempData.conts';
-import { BrowseActivityWorklogsAction } from './states/browse-worklogs.action';
+ import { BrowseActivityWorklogsAction } from './states/browse-worklogs.action';
 import {
   BrowseActivityWorklogsState,
   BrowseActivityWorklogsStateModel,

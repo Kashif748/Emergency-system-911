@@ -77,6 +77,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./worklogs/worklogs.module').then((m) => m.WorklogsModule),
       },
+
     ],
   },
 ];
@@ -108,7 +109,7 @@ const routes: Routes = [
     DialogModule,
     AvatarModule,
     BlockUIModule,
-    SkeletonModule
+    SkeletonModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
