@@ -166,7 +166,4 @@ export { DohControllerService } from './services/doh-controller.service';
 export { DashboardControllerService } from './services/dashboard-controller.service';
 export { TradeLicenseControllerService } from './services/trade-license-controller.service';
 export { CommonControllerService } from './services/common-controller.service';
-export { BcActivityAnalysisWorkflowControllerService } from './services/bc-activity-analysis-workflow-controller.service';
-export { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
-export { TagControllerService } from './services/tag-controller.service';
-export { MigrationControllerService } from './services/migration-controller.service';
+export { BcAnalysisControllerService } from './services/bc-analysis-controller.service';

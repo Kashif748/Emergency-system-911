@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CycleDialogComponent } from './cycle-dialog.component';
+import { NewCycleDialogComponent } from './new-cycle-dialog.component';
 
 describe('NewCycleDialogComponent', () => {
-  let component: CycleDialogComponent;
-  let fixture: ComponentFixture<CycleDialogComponent>;
+  let component: NewCycleDialogComponent;
+  let fixture: ComponentFixture<NewCycleDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CycleDialogComponent ]
+      declarations: [ NewCycleDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CycleDialogComponent);
+    fixture = TestBed.createComponent(NewCycleDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

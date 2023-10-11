@@ -175,6 +175,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
 
     this.page$ = this.store.select(OrgActivityState.page).pipe(
       filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => b.id - a.id)),
       map((page) =>
         page?.map((u) => {
           return {

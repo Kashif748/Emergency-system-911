@@ -176,6 +176,7 @@ import { BcActivityAnalysisWorkflowControllerService } from './services/bc-activ
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
+import { BcAnalysisControllerService } from './services/bc-analysis-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -357,7 +358,8 @@ import { MigrationControllerService } from './services/migration-controller.serv
     AdcmcCategoryControllerService,
     TagControllerService,
     MigrationControllerService,
-    ApiConfiguration
+    ApiConfiguration,
+    BcAnalysisControllerService
   ],
 })
 export class ApiModule {
@@ -373,7 +375,7 @@ export class ApiModule {
     }
   }
 
-  constructor( 
+  constructor(
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

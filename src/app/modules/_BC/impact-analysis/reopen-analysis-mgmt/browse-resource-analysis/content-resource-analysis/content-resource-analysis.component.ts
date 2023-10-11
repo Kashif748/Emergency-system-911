@@ -29,10 +29,10 @@ export class ContentResourceAnalysisComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.onPageChange.emit({
+    /*this.onPageChange.emit({
       first: this.pageRequest?.first,
       rows: this.pageRequest?.rows,
-    });
+    });*/
   }
   openView(id?: number) {
     this.store.dispatch(new BrowseUsersAction.OpenView({ userId: id }));

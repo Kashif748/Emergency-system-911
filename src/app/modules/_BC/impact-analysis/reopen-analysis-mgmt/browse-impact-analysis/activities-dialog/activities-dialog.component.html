@@ -856,7 +856,7 @@
                     {{ item.orgHierarchy | translateObj : 'name'}}
                   </td>
                   <td class="min-w-100px max-w-300px">
-                    {{ item.activityName }}
+                    {{ item.activity | translateObj : 'name' }}
                   </td>
                   <td class="min-w-150px max-w-300px">
                     {{ item.dependencyDetails }}
@@ -945,7 +945,7 @@
                     {{ item.orgHierarchy | translateObj : 'name'}}
                   </td>
                   <td class="min-w-100px max-w-300px">
-                    {{ item.relatedActivity | translateObj : 'name'}}
+                    {{ item.activity | translateObj: 'name' }}
                   </td>
                   <td class="min-w-150px max-w-300px">
                     {{ item.dependencyDetails}}
