@@ -23,7 +23,8 @@
     "ACTIVITY_PRIORITY": "Activity Priority",
     "SPOF": "Single Point of Failure (SPOF)",
     "SKILLS": "Skills",
-    "REMOTELY": "Can be done remotely"
+    "REMOTELY": "Can be done remotely",
+    "RTO":"Rto"
   },
   "SYSTEMS": {
     "TAB_LABEL": "Systems",

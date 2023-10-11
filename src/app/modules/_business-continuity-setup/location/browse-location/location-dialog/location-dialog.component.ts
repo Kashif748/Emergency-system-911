@@ -240,7 +240,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       (instance.config = {
         mapType: MapViewType.REPORTER,
         showSaveButton: false,
-        viewOnly: false,
+        viewOnly: this.editMode,
         pointLocation: addressPointLocation,
         // zoomModel: {
         //   referenceId: locationObj?.id,
@@ -273,6 +273,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
+    this.initMap()
     this.store.dispatch(new LocationsAction.GetLocation({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
