@@ -147,7 +147,6 @@ export class BrowseActivityDependenciesState {
             cycleId: payload.cycle?.id,
             activityId: payload.activity?.id,
           }),
-          new BrowseActivityDependenciesAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {
@@ -201,7 +200,6 @@ export class BrowseActivityDependenciesState {
             cycleId: payload.cycle?.id,
             activityId: payload.activity?.id,
           }),
-          new BrowseActivityDependenciesAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {
@@ -244,7 +242,6 @@ export class BrowseActivityDependenciesState {
             cycleId: payload.cycle?.id,
             activityId: payload.activity?.id,
           }),
-          new BrowseActivityDependenciesAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {

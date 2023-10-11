@@ -32,6 +32,7 @@ import { BrowseActivityDependenciesState } from './browse-dependencies/states/br
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -81,6 +82,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     DialogModule,
     CheckboxModule,
     ConfirmPopupModule,
+    ToggleButtonModule,
     TreeSelectModule
   ],
   providers: [

@@ -68,8 +68,8 @@
     "TITLE": "اعتمادية النشاط",
 
     "DETAILS": "تفاصيل الاعتمادية",
-    "DEPENDENCY_INTERNAL": "داخل المؤسسة ",
-    "DEPENDENCY_ORG": "داخل الإدارة ",
+    "DEPENDENCY_INTERNAL": "داخل الإدارة ",
+    "DEPENDENCY_ORG": "داخل المؤسسة",
     "DEPENDENCY_EXTERNAL": "خارج المؤسسة",
     "NO_DEPENDENCY": " لا يوجد اعتمادية ",
     "NO_DPEEND_CONFIREM": "هل أنت متأكد من هذا الإجراء؟"
@@ -111,8 +111,8 @@
   },
   "SUMMARY": {
     "TAB_LABEL": "تقرير النشاط",
-    "CYCLE":"دورة التحليل",
-    "TITLE":"ملخص النشاط",
+    "CYCLE": "دورة التحليل",
+    "TITLE": "ملخص النشاط",
     "ACTIVITY": " اسم النشاط",
     "CRITICALITY": "مستوى الأهمية",
     "CAPACITY": "القدرة",
@@ -122,11 +122,8 @@
     "RTO": "زمن التعافي الأمثل",
     "SECTION": "القسم",
     "SECTOR": "القطاع",
-    "CRITICAL" : "حيوي",
-    "NOT_CRITICAL" : "غير حيوي",
-    "ALL" : "الكل"
-
-
-
+    "CRITICAL": "حيوي",
+    "NOT_CRITICAL": "غير حيوي",
+    "ALL": "الكل"
   }
 }

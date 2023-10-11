@@ -76,6 +76,14 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.buildForm();
+    this.opened$ = this.route.queryParams.pipe(
+      map((params) => params['_dialog'] === 'opened'),
+      tap(()=> {
+        // this.buildForm()
+        this.form.reset()
+        this.form.updateValueAndValidity()
+      } )
+    );
   }
   ngAfterViewInit(): void {
     this.employeesTypes = [
@@ -90,9 +98,6 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
         value: false,
       },
     ];
-    this.opened$ = this.route.queryParams.pipe(
-      map((params) => params['_dialog'] === 'opened')
-    );
   }
   toggleDialog(id?: number) {
     this.store.dispatch(new BrowseActivityEmployeesAction.ToggleDialog({ id }));
@@ -107,8 +112,8 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
       ],
 
       isActive: true,
-      mobileNumber: [null],
-      phoneNumber: [null],
+      mobileNumber: ['', [Validators.required]],
+      phoneNumber: ['', [Validators.required]],
       secondNumber: [],
       isPrimary: false,
     });
@@ -131,6 +136,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
       ...this.form.getRawValue(),
       mobileNumber: this.form.get('mobileNumber')?.value?.number,
       phoneNumber: this.form.get('phoneNumber')?.value?.number,
+      secondNumber: this.form.get('secondNumber')?.value?.number,
       id: this._employeeId,
       activity: {
         id: activityAnalysis?.activity?.id,
