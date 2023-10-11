@@ -4,8 +4,7 @@
       <app-breadcrumb></app-breadcrumb>
       <p-dropdown
         [autoDisplayFirst]="false"
-        [options]="sortCycles$ | async"
-        [showClear]="true"
+        [options]="sortAnalysisCycles$ | async"
         dataKey="id"
         optionValue="id"
         [(ngModel)]="selectedCycle"
@@ -31,16 +30,6 @@
       <app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
     </div>
   </header>
-
-  <!--    <div class="ml-dir-auto d-flex">
-        <div class="mx-2">
-
-        </div>
-        <div class="p-toolbar-group-right">
-
-        </div>
-      </div>
-    </div>-->
   <div class="mx-4 my-10">
     <div class="row" *ngIf="state$ | async as state">
       <div class="col-12">
@@ -53,27 +42,6 @@
               [collapsed]="!(hasFilters$ | async)"
             >
               <div class="p-fluid p-grid">
-
-                <!--<div class="p-field p-col-4 p-md-2">
-                  <p-dropdown
-                    [ngModel]="state.pageRequest.filters['cycleId']"
-                    (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
-                    [autoDisplayFirst]="false"
-                    [options]="sortCycles$ | async"
-                    [showClear]="true"
-                    dataKey="id"
-                    optionValue="id"
-                    placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
-                  >
-                    <ng-template let-item pTemplate="selectedItem">
-                      {{ item | translateObj }}
-                    </ng-template>
-
-                    <ng-template let-item pTemplate="item">
-                      {{ item | translateObj }}
-                    </ng-template>
-                  </p-dropdown>
-                </div>-->
 
                 <div class="p-field p-col-4 p-md-2">
                   <p-dropdown
