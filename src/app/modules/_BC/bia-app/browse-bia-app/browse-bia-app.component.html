@@ -1,35 +1,46 @@
 <div class="container-fluid">
-  <div style="display: flex; justify-content: space-between">
-    <app-breadcrumb></app-breadcrumb>
-    <div class="ml-dir-auto d-flex">
-      <div class="mx-2">
-        <p-dropdown
-          [autoDisplayFirst]="false"
-          [options]=""
-          [showClear]="true"
-          dataKey="id"
-          optionValue="id"
-          placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
-        >
-          <ng-template let-item pTemplate="selectedItem">
-            {{ item | translateObj }}
-          </ng-template>
+  <header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
+    <div class="d-block d-sm-flex p-ai-center text-center">
+      <app-breadcrumb></app-breadcrumb>
+      <p-dropdown
+        [autoDisplayFirst]="false"
+        [options]="sortCycles$ | async"
+        [showClear]="true"
+        dataKey="id"
+        optionValue="id"
+        [(ngModel)]="selectedCycle"
+        (ngModelChange)="setCycleId($event)"
+        placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
+      >
+        <ng-template let-item pTemplate="selectedItem">
+          {{ item | translateObj }}
+        </ng-template>
 
-          <ng-template let-item pTemplate="item">
-            {{ item | translateObj }}
-          </ng-template>
-        </p-dropdown>
-      </div>
-      <div class="p-toolbar-group-right">
-        <button
-          *checkPrivileges="'PRIV_CR_ANALYSIS_CYCLE'"
-          pButton
-          label="{{ 'NEW_ANALYSIS_CYCLIE' | translate }}"
-          icon="pi pi-plus"
-        ></button>
-      </div>
+        <ng-template let-item pTemplate="item">
+          {{ item | translateObj }}
+        </ng-template>
+      </p-dropdown>
     </div>
-  </div>
+    <div>
+      <!--<button
+        *checkPrivileges="'PRIV_CR_ANALYSIS_CYCLE'"
+        pButton
+        label="{{ 'NEW_ANALYSIS_CYCLIE' | translate }}"
+        icon="pi pi-plus"
+      ></button>-->
+      <app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
+    </div>
+  </header>
+
+  <!--    <div class="ml-dir-auto d-flex">
+        <div class="mx-2">
+
+        </div>
+        <div class="p-toolbar-group-right">
+
+        </div>
+      </div>
+    </div>-->
   <div class="mx-4 my-10">
     <div class="row" *ngIf="state$ | async as state">
       <div class="col-12">
@@ -43,17 +54,16 @@
             >
               <div class="p-fluid p-grid">
 
-                <div class="p-field p-col-4 p-md-2">
+                <!--<div class="p-field p-col-4 p-md-2">
                   <p-dropdown
-                    [options]=""
-                    [ngModel]="state.pageRequest.filters['activityFrequencyId']"
-                    (ngModelChange)="
-                      updateFilter({ activityFrequencyId: $event }, $event)
-                    "
+                    [ngModel]="state.pageRequest.filters['cycleId']"
+                    (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
+                    [autoDisplayFirst]="false"
+                    [options]="sortCycles$ | async"
                     [showClear]="true"
-                    optionValue="id"
                     dataKey="id"
-                    placeholder="{{ 'CYCLE' | translate }}"
+                    optionValue="id"
+                    placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
                   >
                     <ng-template let-item pTemplate="selectedItem">
                       {{ item | translateObj }}
@@ -63,45 +73,48 @@
                       {{ item | translateObj }}
                     </ng-template>
                   </p-dropdown>
-                </div>
+                </div>-->
 
                 <div class="p-field p-col-4 p-md-2">
                   <p-dropdown
-                    [options]=""
-                    [ngModel]="state.pageRequest.filters['activityArea']"
-                    (ngModelChange)="
-                      updateFilter({ activityArea: $event }, $event)
+                    [ngModel]="
+                      state.pageRequest.filters['activityAnalysisStatusId']
                     "
-                    [showClear]="true"
+                    (ngModelChange)="
+                      updateFilter({ activityAnalysisStatusId: $event }, $event)
+                    "
+                    [options]="activityStatuses$ | async"
                     [autoDisplayFirst]="false"
+                    [showClear]="true"
                     dataKey="id"
+                    optionValue="id"
                     placeholder="{{ 'STATE' | translate }}"
                   >
                     <ng-template let-item pTemplate="selectedItem">
-                      {{ item.lable | translate }}
+                      {{ item | translateObj }}
                     </ng-template>
 
                     <ng-template let-item pTemplate="item">
-                      {{ item.lable | translate }}
+                      {{ item | translateObj }}
                     </ng-template>
                   </p-dropdown>
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
                   <p-treeSelect
-                    [options]=""
+                    [options]="orgHir"
                     [filter]="true"
+                    [filterBy]="'data.nameAr,data.nameEn,data.code'"
                     selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"
                     (ngModelChange)="
                       updateFilter({ orgHierarchyId: $event }, $event)
                     "
+                    [loading]="loadingOrgHir$ | async"
+                    (onFilter)="filterOrgHir($event)"
+                    (onNodeExpand)="nodeExpand($event?.node)"
                     placeholder="{{ 'DIVISION' | translate }}"
                     appendTo="body"
-                    display="chip"
-                    [metaKeySelection]="false"
-                    [propagateSelectionDown]="false"
-                    [propagateSelectionUp]="false"
                   >
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{

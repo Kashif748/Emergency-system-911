@@ -1,5 +1,6 @@
 import {PageRequestModel} from '@core/models/page-request.model';
 import {BcActivities} from "../../../../api/models/bc-activities";
+import {BcCycles} from "../../../../api/models";
 
 export namespace BrowseBiaAppAction {
   export class LoadBia{
@@ -7,7 +8,7 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel }) {}
+    constructor(public payload?: { pageRequest?: PageRequestModel, cycleId?: number }) {}
   }
 
   export class SortBia {
@@ -15,7 +16,7 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc', cycle?: number }) {}
   }
 
   export class ChangeColumns {
@@ -62,13 +63,37 @@ export namespace BrowseBiaAppAction {
      */
     constructor(public payload: BcActivities) {}
   }
+  export class LoadCycles {
+    static readonly type = '[BrowseBiaApp] Load Bia Cycles';
 
-  export class ToggleDialog {
-    static readonly type = '[BrowseBiaApp] Toggle Dialog';
     /**
      *
      */
-    constructor(public payload: { BiaId?: number }) {}
+    constructor(
+      public payload: {
+        page: number;
+        size: number;
+      }
+    ) {}
+  }
+
+  export class LoadActivitiesStatuses {
+    static readonly type =
+      '[BrowseBiaApp] Load Activities Statuses';
+
+    /**
+     *
+     */
+    constructor() {}
+  }
+
+  export class ToggleDialog {
+    static readonly type = '[BrowseBiaApp] Toggle Dialog';
+
+    /**
+     *
+     */
+    constructor(public payload: { dialog?: string; id?: number; cycle?: number }) {}
   }
 
   export class OpenView {
@@ -77,5 +102,12 @@ export namespace BrowseBiaAppAction {
      *
      */
     constructor(public payload: { BiaId?: number }) {}
+  }
+  export class CreateCycle {
+    static readonly type = '[BrowseBiaApp] Create Cycle';
+    /**
+     *
+     */
+    constructor(public payload: {form: BcCycles, cycle: number}) {}
   }
 }

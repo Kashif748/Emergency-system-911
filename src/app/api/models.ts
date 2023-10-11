@@ -1319,6 +1319,11 @@ export { RestApiResponsePageBcCycles } from './models/rest-api-response-page-bc-
 export { ApiErrorPageBcCycleStatus } from './models/api-error-page-bc-cycle-status';
 export { PageBcCycleStatus } from './models/page-bc-cycle-status';
 export { RestApiResponsePageBcCycleStatus } from './models/rest-api-response-page-bc-cycle-status';
+export { ApiErrorPageBcAnalysisByOrgHierarchyResponse } from './models/api-error-page-bc-analysis-by-org-hierarchy-response';
+export { BcAnalysisByOrgHierarchyResponse } from './models/bc-analysis-by-org-hierarchy-response';
+export { NameResponse } from './models/name-response';
+export { PageBcAnalysisByOrgHierarchyResponse } from './models/page-bc-analysis-by-org-hierarchy-response';
+export { RestApiResponsePageBcAnalysisByOrgHierarchyResponse } from './models/rest-api-response-page-bc-analysis-by-org-hierarchy-response';
 export { ApiErrorPageBcActivityFrequencies } from './models/api-error-page-bc-activity-frequencies';
 export { PageBcActivityFrequencies } from './models/page-bc-activity-frequencies';
 export { RestApiResponsePageBcActivityFrequencies } from './models/rest-api-response-page-bc-activity-frequencies';

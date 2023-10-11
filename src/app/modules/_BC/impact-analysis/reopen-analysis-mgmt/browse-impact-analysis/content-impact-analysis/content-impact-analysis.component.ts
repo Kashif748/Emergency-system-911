@@ -30,10 +30,10 @@ export class ContentImpactAnalysisComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.onPageChange.emit({
+    /*this.onPageChange.emit({
       first: this.pageRequest?.first,
       rows: this.pageRequest?.rows,
-    });
+    });*/
   }
   openView(analysisId?: number, cycleId?: number) {
     this.store.dispatch(new BrowseImpactAnalysisAction.OpenView({ id: analysisId, cycle: cycleId }));

@@ -3,6 +3,7 @@ import {BCState} from "@core/states/bc/bc/bc.state";
 import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
 import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
+import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
 
 export { UserAction } from './user/user.action';
 export { RoleAction } from './role/role.action';
@@ -24,6 +25,7 @@ export { BCAction } from './bc/bc/bc.action';
 export { OrgActivityAction } from './org-activities/orgActivity.action';
 export { VenderAction } from './bc-setup/venders/vender.action';
 export { RemoteWorkAction } from './bc-resources/remote-work/remote-work.action';
+export { BiaAction } from './bia-apps/bia-apps.action';
 
 
 export { UserState } from './user/user.state';
@@ -46,3 +48,4 @@ export { BCState } from './bc/bc/bc.state';
 export { OrgActivityState } from './org-activities/orgActivity.state';
 export { VenderState } from './bc-setup/venders/vender.state';
 export { RemoteWorkState } from './bc-resources/remote-work/remote-work.state';
+export { BiaAppsState } from './bia-apps/bia-apps.state';

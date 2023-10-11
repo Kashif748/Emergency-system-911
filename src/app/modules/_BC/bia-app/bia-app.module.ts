@@ -40,13 +40,15 @@ import {BlockUIModule} from "primeng/blockui";
 import {BrowseBiaAppState} from "./states/browse-bia-app.state";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {BiaAppComponent} from "./bia-app.component";
+import {NewCycleDialogComponent} from "./browse-bia-app/cycle-dialog/new-cycle-dialog.component";
+import {CalendarModule} from "primeng/calendar";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/bia-app/', '.json');
 }
 
 @NgModule({
-  declarations: [BiaAppComponent, BrowseBiaAppComponent, ContentBiaAppComponent],
+  declarations: [BiaAppComponent, BrowseBiaAppComponent, ContentBiaAppComponent, NewCycleDialogComponent],
   imports: [
     CommonModule,
     BiaAppRoutingModule,
@@ -91,6 +93,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     ProgressSpinnerModule,
     SelectButtonModule,
+    CalendarModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
