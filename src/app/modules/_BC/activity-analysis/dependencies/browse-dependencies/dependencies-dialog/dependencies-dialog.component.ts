@@ -80,11 +80,11 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
             );
             this.form.get('partner').setValidators(Validators.required);
             break;
-          case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
+          case DEPENDENCIES_TYPES.DEPENDENCY_ORG:
             this.form.get('activityName').setValidators(Validators.required);
             this.form.get('orgHierarchy').setValidators(Validators.required);
             break;
-          case DEPENDENCIES_TYPES.DEPENDENCY_ORG:
+          case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
             this.form.get('relatedActivity').setValidators(Validators.required);
             this.form.get('orgHierarchy').setValidators(Validators.required);
             break;
@@ -142,7 +142,6 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
 
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
-    // console.log(parentId ,parentNode);
 
     if (parentNode && parentId) {
       parentNode.children = [...branch, ...parentNode.children];
@@ -193,27 +192,35 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
         id: cycle.id,
       },
     };
-    console.log(dependency);
-
+     let storeRes;
     switch (this.dependType) {
       case DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL:
-        this.store.dispatch(
-          new BrowseActivityDependenciesAction.CreateInternal(dependency)
-        );
+        storeRes = this.store.dispatch([
+          new BrowseActivityDependenciesAction.CreateInternal(dependency),
+        ]);
         break;
       case DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL:
-        this.store.dispatch(
-          new BrowseActivityDependenciesAction.CreateExternal(dependency)
-        );
+        storeRes = this.store.dispatch([
+          new BrowseActivityDependenciesAction.CreateExternal(dependency),
+        ]);
         break;
       case DEPENDENCIES_TYPES.DEPENDENCY_ORG:
-        this.store.dispatch(
-          new BrowseActivityDependenciesAction.CreateOrg(dependency)
-        );
+        storeRes = this.store.dispatch([
+          new BrowseActivityDependenciesAction.CreateOrg(dependency),
+        ]);
         break;
 
       default:
         break;
+    }
+    if (storeRes) {
+      storeRes
+        ?.toPromise()
+        .then(() =>
+          this.store.dispatch([
+            new BrowseActivityDependenciesAction.ToggleDialog({}),
+          ])
+        );
     }
   }
 
