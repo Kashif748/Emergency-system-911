@@ -100,7 +100,6 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
 
     this.page$ = this.store.select(VenderState.page).pipe(
       filter((p) => !!p),
-      map((page) => [...page].sort((a, b) => b.id - a.id)),
       map((page) =>
         page?.map((u) => {
           return {
@@ -125,7 +124,7 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
               },
             ],
           };
-        }).sort((a, b) => a.id - b.id)
+        }).sort((a, b) => b.id - a.id)
       )
     );
   }

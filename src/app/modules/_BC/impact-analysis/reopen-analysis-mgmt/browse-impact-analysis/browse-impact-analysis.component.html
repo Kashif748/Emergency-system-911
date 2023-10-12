@@ -1,5 +1,78 @@
 <section class="" *ngIf="state$ | async as state">
-  <div class="col-12 position-relative">
+  <!--<div class="col-12 my-3">
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        <div class="p-1 w-100 w-md-200px">
+          <p-multiSelect
+            [options]="resoureColumns"
+            defaultLabel="Select Columns"
+            [ngModel]="resourceState.columns"
+            optionLabel="name"
+            styleClass="w-100"
+            [optionValue]="'code'"
+            optionDisabled="disabled"
+            (onChange)="resourceChangeColumns($event)"
+          >
+            <ng-template let-options pTemplate="selectedItems">
+              <ng-container *ngIf="options?.length > 0">
+                {{
+                options?.length +
+                " " +
+                ("SHARED.SELCTED_ITEM" | translate)
+                }}
+              </ng-container>
+              <ng-container *ngIf="!options || options.length === 0">
+                {{ "SHARED.SELECT_SHOWING_FIELDS" | translate }}
+              </ng-container>
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              {{ option.name | translate }}
+            </ng-template>
+          </p-multiSelect>
+        </div>
+        <div class="p-1 w-100 w-md-225px">
+          <div class="p-inputgroup">
+            <p-dropdown
+              [options]="resourceSortableColumns"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [ngModel]="resourceState?.pageRequest?.sortField"
+              placeholder="{{
+                        'SHARED.SELECT_SORTING_FIELD' | translate
+                      }}"
+              optionLabel="name"
+              optionValue="code"
+              styleClass="w-100 h-100"
+              class="w-100 h-100"
+              (onChange)="resourceSort($event)"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                {{ option.name | translate }}
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.name | translate }}
+              </ng-template>
+            </p-dropdown>
+            <div class="p-inputgroup-addon p-0">
+              <p-toggleButton
+                class="w-100 h-100"
+                [onIcon]="'pi pi-sort-amount-up'"
+                [ngModel]="resourceState?.pageRequest?.sortOrder === 'desc'"
+                offIcon="pi pi-sort-amount-down-alt"
+                iconPos="right"
+                styleClass="w-100 h-100"
+                (onChange)="resourceOrder($event)"
+              ></p-toggleButton>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ml-dir-auto d-flex">
+        <app-resource-dialog [orgHir]="orgHir" [cycles]="cycles$ | async"></app-resource-dialog>
+      </div>
+    </p-toolbar>
+  </div>-->
+  <div class="mt-4 col-12 position-relative">
     <p-fieldset
       [toggleable]="true"
       styleClass="px-3 py-2 search-section"
@@ -50,7 +123,7 @@
         <!-- Cycle -->
         <div class="p-field p-col-4 p-md-2">
           <p-dropdown
-            [ngModel]="state.pageRequest.filters['cycleId']"
+            [ngModel]="state?.pageRequest?.filters['cycleId']"
             (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
             [autoDisplayFirst]="false"
             [options]="cycles$ | async"

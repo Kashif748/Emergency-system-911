@@ -1,25 +1,16 @@
 <div class="container-fluid">
-  <div class="mx-4 my-10">
+  <header class="p-d-flex p-jc-between p-ai-center pl-4">
+    <div class="d-block d-sm-flex p-ai-center text-center">
+      <h3 class="card-title align-items-start flex-column m-0">
+          <span class="card-label font-weight-bolder">
+            {{'BUSINESS_IMPACT_ANALYSIS' | translate}}</span>
+      </h3>
+    </div>
+  </header>
+  <div class="">
     <div class="row">
-      <div class="d-flex p-jc-between w-100 p-ai-center">
-        <app-breadcrumb></app-breadcrumb>
-        <div class="ml-dir-auto d-flex">
-          <!--<app-cycle-dialog></app-cycle-dialog>-->
-        </div>
-      </div>
-      <div class="col-12">
+      <div class="mx-4 my-10 col-12">
         <app-browse-impact-analysis></app-browse-impact-analysis>
-        <!--<p-tabView>
-          <p-tabPanel header="{{ 'ORG_ACT' | translate }}">
-            <ng-template pTemplate="content">
-              <app-browse-impact-analysis></app-browse-impact-analysis> </ng-template
-            ></p-tabPanel>
-          <p-tabPanel header="{{ 'RES' | translate }}" >
-            <ng-template pTemplate="content">
-              <app-browse-resource-analysis></app-browse-resource-analysis>
-            </ng-template>
-          </p-tabPanel>
-        </p-tabView>-->
       </div>
     </div>
   </div>

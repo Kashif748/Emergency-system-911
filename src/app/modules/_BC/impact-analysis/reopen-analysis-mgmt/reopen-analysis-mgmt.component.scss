@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
+h3,
+span {
+  color: var(--text-primary-color) !important;
+}
