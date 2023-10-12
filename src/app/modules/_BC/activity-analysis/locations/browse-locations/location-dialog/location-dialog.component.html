@@ -58,7 +58,7 @@
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
     <div class="row">
-      <div class="p-field p-col-10">
+      <div class="p-field p-col-9">
         <div class="p-inputgroup">
           <span class="p-float-label">
             <input
@@ -73,9 +73,9 @@
           <button type="button" pButton pRipple icon="pi pi-search"></button>
         </div>
       </div>
-      <div class="p-col-2">
+      <div class="p-col-3">
         <p-button
-          (click)="display = true"
+          (click)="openNewLocDialog()"
           label="{{ 'LOCATIONS.ADD_LOCATION' | translate }}"
           styleClass="p-button-link"
         ></p-button>
@@ -205,6 +205,7 @@
     >
       <div class="bg-white pt-5 h-100">
         <app-location-dialog
+          #locDialog
           (onClose)="closeCreateDialog()"
           [asDialog]="false"
         ></app-location-dialog>

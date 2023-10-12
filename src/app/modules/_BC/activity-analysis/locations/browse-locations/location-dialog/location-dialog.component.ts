@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
@@ -22,13 +22,16 @@ import { ActivityLocationsState } from '@core/states/activity-analysis/locations
 import { BrowseActivityAnalysisState } from '../../../states/browse-activity-analysis.state';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivityLocationsAction } from '@core/states/activity-analysis/locations/locations.action';
+import { LocationDialogComponent } from 'src/app/modules/_business-continuity-setup/location/browse-location/location-dialog/location-dialog.component';
 
 @Component({
   selector: 'app-locations-dialog',
   templateUrl: './location-dialog.component.html',
   styleUrls: ['./location-dialog.component.scss'],
 })
-export class LocationDialogComponent implements OnInit, OnDestroy {
+export class ActivityLocationDialogComponent implements OnInit, OnDestroy {
+  @ViewChild(LocationDialogComponent) newLocCompoenent: LocationDialogComponent;
+
   public page$: Observable<BcLocations[]>;
 
   public opened$: Observable<boolean>;
@@ -158,6 +161,12 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
         return tableRows;
       })
     );
+  }
+  openNewLocDialog() {
+    this.display = true;
+    setTimeout(() => {
+      this.newLocCompoenent.initMap();
+    }, 1000);
   }
   toggleDialog(id?: number) {
     this.store.dispatch(new BrowseActivityLocationsAction.ToggleDialog({ id }));

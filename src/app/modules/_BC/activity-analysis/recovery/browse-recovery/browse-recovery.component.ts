@@ -10,9 +10,10 @@ import { FormUtils } from '@core/utils';
 import { Select, Store } from '@ngxs/store';
 import { GenericValidators } from '@shared/validators/generic-validators';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil, tap } from 'rxjs/operators';
-import { BcActivities } from 'src/app/api/models';
+import { filter, skip, takeUntil, tap } from 'rxjs/operators';
+import { BcActivities, Bcrto } from 'src/app/api/models';
 import { BrowseActivityAnalysisAction } from '../../states/browse-activity-analysis.action';
+import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 
 @Component({
   selector: 'app-browse-recovery',
@@ -29,6 +30,7 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
   @Select(ActivityAnalysisState.blocking)
   public blocking$: Observable<boolean>;
 
+  public impactAnalysisRes$: Observable<Bcrto>;
   form: FormGroup;
   private destroy$ = new Subject();
 
@@ -46,10 +48,20 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
         new ActivityPrioritySeqAction.LoadPage({
           page: 0,
           size: 100,
-          versionId :cycle.versionId
+          versionId: cycle.versionId,
         })
       );
     }
+
+    this.impactAnalysisRes$ = this.store
+      .select(BrowseActivityAnalysisState.impactAnalysisRes)
+      .pipe(
+        tap((rto) => {
+          console.log(rto);
+
+          this.form.get('rto').setValue(rto);
+        })
+      );
 
     this.store
       .select(ActivityAnalysisState.activityAnalysis)
@@ -68,6 +80,7 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
       capacity: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
       spof: [null, [Validators.required]],
       skills: [null, [Validators.required]],
+      rto: [''],
       remote: [true],
     });
   }

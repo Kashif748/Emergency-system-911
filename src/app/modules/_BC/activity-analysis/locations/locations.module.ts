@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LocationsRoutingModule } from './locations-routing.module';
 import { BrowseLocationsComponent } from './browse-locations/browse-locations.component';
 import { ContentLocationsComponent } from './browse-locations/content-locations/content-locations.component';
-import { LocationDialogComponent } from './browse-locations/location-dialog/location-dialog.component';
+import { ActivityLocationDialogComponent } from './browse-locations/location-dialog/location-dialog.component';
 import { DividerModule } from 'primeng/divider';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -42,7 +42,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   declarations: [
     BrowseLocationsComponent,
     ContentLocationsComponent,
-    LocationDialogComponent,
+    ActivityLocationDialogComponent,
   ],
   imports: [
     CommonModule,
