@@ -45,6 +45,7 @@ export class ContentBiaAppComponent implements OnInit {
     this.router.navigate(['bc/impact-analysis'], {
       queryParams: {
         _division: org?.orgHierarchy.id,
+        _cycle: org?.cycle.id
       },
     });
   }

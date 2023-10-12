@@ -193,25 +193,6 @@ export class BrowseBiaAppState {
     );
   }
 
- /* @Action(BrowseBiaAppAction.CreateBia)
-  createBia(
-    { dispatch }: StateContext<BrowseBiaAppStateModel>,
-    { payload }: BrowseBiaAppAction.CreateBia
-  ) {
-    return dispatch(new BiaAction.Create(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch(
-          [new BrowseBiaAppAction.LoadBia(),
-            new BrowseBiaAppAction.ToggleDialog({})]);
-      }),
-      catchError((err) => {
-        this.messageHelper.error({ error: err });
-        return throwError(err);
-      })
-    );
-  }*/
-
   @Action(BrowseBiaAppAction.CreateCycle)
   CreateCycle(
     { dispatch, getState }: StateContext<BrowseBiaAppStateModel>,

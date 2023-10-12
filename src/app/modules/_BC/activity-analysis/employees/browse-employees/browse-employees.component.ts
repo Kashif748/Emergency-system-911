@@ -63,6 +63,7 @@ export class BrowseEmployeesComponent implements OnInit, OnDestroy {
     ] as MenuItem[];
     this.page$ = this.store.select(ActivityEmployeesState.page).pipe(
       filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => b.id - a.id)),
       map((page) =>
         page?.map((u) => {
           return {

@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { filter, takeUntil, tap } from 'rxjs/operators';
+import {filter, map, takeUntil, tap} from 'rxjs/operators';
 import { BcActivitySystems } from 'src/app/api/models';
 import { BrowseActivitySystemsAction } from '../states/browse-systems.action';
 import {
@@ -50,6 +50,7 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
 
     this.page$ = this.store.select(ActivitySystemsState.page).pipe(
       filter((p) => !!p),
+      map((page) => [...page].sort((a, b) => b.id - a.id)),
       tap(console.log)
     );
   }

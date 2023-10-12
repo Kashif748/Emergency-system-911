@@ -16,7 +16,6 @@ import {BcAnalysisByOrgHierarchyResponse} from "../../../../api/models/bc-analys
 import {BcAnalysisStatus, BcCycles} from "../../../../api/models";
 import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.state";
 import {Router} from "@angular/router";
-import {BrowseImpactAnalysisAction} from "../../impact-analysis/states/browse-impact-analysis.action";
 import {OrgDetailAction, OrgDetailState} from "@core/states";
 import {BcOrgHierarchyProjection} from "../../../../api/models/bc-org-hierarchy-projection";
 
@@ -43,7 +42,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   @Select(BrowseBiaAppState.hasFilters)
   public hasFilters$: Observable<boolean>;
 
-  public sortCycles$: Observable<any[]>;
+  public sortAnalysisCycles$: Observable<any[]>;
 
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -70,7 +69,6 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
 
   public sortableColumns = [
     { name: 'DIVISION', code: 'orgHierarchy' },
-    { name: 'CYCLE', code: 'cycle' },
     { name: 'STATE', code: 'status' },
   ];
 
@@ -105,13 +103,11 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       ()
       .subscribe((res) => {
         if (res['key'] == 'ar') {
-          this.sortableColumns[0].code = 'orgHirNameAr';
-          this.sortableColumns[1].code = 'cycleNameAr';
-          this.sortableColumns[2].code = 'status';
+          this.sortableColumns[0].code = 'orgHierarchy.nameAr';
+          this.sortableColumns[1].code = 'status.nameAr';
         } else {
-          this.sortableColumns[0].code = 'orgHirNameEn';
-          this.sortableColumns[1].code = 'cycleNameEn';
-          this.sortableColumns[2].code = 'status';
+          this.sortableColumns[0].code = 'orgHierarchy.nameEn';
+          this.sortableColumns[1].code = 'status.nameEn';
         }
       });
   }
@@ -131,17 +127,16 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
       new BrowseBiaAppAction.LoadActivitiesStatuses(),
     ]);
-    this.sortCycles$ = this.cycles$.pipe(
+    this.sortAnalysisCycles$ = this.cycles$.pipe(
       filter((cycles) => !!cycles),
       switchMap((cycles) => {
         return of([...cycles].sort((a, b) => b.id - a.id));
       })
     );
-    this.sortCycles$.subscribe(cycles => {
+    this.sortAnalysisCycles$.subscribe(cycles => {
       if (cycles.length > 0) {
         const sortedCycles = [...cycles];
         this.selectedCycle = sortedCycles[0].id;
-        this.loadPage(null, this.selectedCycle);
       }
     });
     this.store
@@ -169,7 +164,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
     ] as MenuItem[];
-
+    this.loadPage(null, this.selectedCycle);
     this.page$ = this.store.select(BiaAppsState.page).pipe(
       filter((p) => !!p),
       map((page) => [...page].sort((a, b) => b.rowNumber - a.rowNumber)),
