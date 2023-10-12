@@ -38,6 +38,7 @@ export interface ActivityDependenciesStateModel {
 
   loading?: DependenciesFlags;
   blocking: DependenciesFlags;
+  noDepend: DependenciesFlags;
 }
 
 const ACTIVITY_DEPENDENCIES_STATE_TOKEN =
@@ -52,6 +53,11 @@ const ACTIVITY_DEPENDENCIES_STATE_TOKEN =
       DEPENDENCY_INTERNAL: false,
     },
     blocking: {
+      DEPENDENCY_EXTERNAL: false,
+      DEPENDENCY_ORG: false,
+      DEPENDENCY_INTERNAL: false,
+    },
+    noDepend: {
       DEPENDENCY_EXTERNAL: false,
       DEPENDENCY_ORG: false,
       DEPENDENCY_INTERNAL: false,
@@ -96,7 +102,10 @@ export class ActivityDependenciesState {
   static blocking(state: ActivityDependenciesStateModel) {
     return state?.blocking;
   }
-
+  @Selector([ActivityDependenciesState])
+  static noDepend(state: ActivityDependenciesStateModel) {
+    return state?.noDepend;
+  }
   /* ********************** ACTIONS ************************* */
   /**
    * Dependencies Internal  actions
@@ -130,9 +139,12 @@ export class ActivityDependenciesState {
         tap((res) => {
           setState(
             patch<ActivityDependenciesStateModel>({
-              activityDependencyInternal: res.result,
+              activityDependencyInternal:res.result,
               loading: patch({
                 DEPENDENCY_INTERNAL: false,
+              }),
+              noDepend: patch({
+                DEPENDENCY_INTERNAL: this.checkNoDepends(res.result?.content),
               }),
             })
           );
@@ -263,6 +275,9 @@ export class ActivityDependenciesState {
               activityDependencyOrg: res.result,
               loading: patch({
                 DEPENDENCY_ORG: false,
+              }),
+              noDepend: patch({
+                DEPENDENCY_ORG: this.checkNoDepends(res.result?.content),
               }),
             })
           );
@@ -395,6 +410,9 @@ export class ActivityDependenciesState {
               loading: patch({
                 DEPENDENCY_EXTERNAL: false,
               }),
+              noDepend: patch({
+                DEPENDENCY_EXTERNAL: this.checkNoDepends(res.result?.content),
+              }),
             })
           );
         }),
@@ -487,5 +505,10 @@ export class ActivityDependenciesState {
           );
         })
       );
+  }
+
+  checkNoDepends(dependencies: any[]): boolean {
+    if (!dependencies || dependencies?.length == 0) return false;
+    return dependencies.some((item) => item?.isFound == false);
   }
 }

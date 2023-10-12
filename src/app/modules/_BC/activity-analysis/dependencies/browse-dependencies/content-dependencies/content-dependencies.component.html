@@ -5,7 +5,7 @@
     >
       {{ "DEPENDENCIES." + dependType | translate }}
       <button
-        [disabled]="noDpeend"
+        [disabled]="noDpend$ | async"
         pButton
         label="{{ 'ACTIONS.ADD' | translate }}"
         icon="pi pi-plus"
@@ -45,7 +45,7 @@
   </ng-container>
   <ng-template #cardsTemplate>
     <div
-      *ngFor="let item of page"
+      *ngFor="let item of localPage"
       class="w-100 rounded bg-white border p-2 mb-3"
     >
       <div class="flex-grow-1 p-grid p-fluid">
@@ -88,7 +88,7 @@
               style="width: 50px"
             >
               <button
-                (click)="deleteDependinces(item)"
+                (click)="deleteDependinces($event, item)"
                 pButton
                 pRipple
                 type="button"
@@ -100,24 +100,29 @@
         </div>
       </div>
     </div>
-    <nodata-table *ngIf="page?.length === 0"></nodata-table>
+    <nodata-table *ngIf="localPage?.length === 0"></nodata-table>
   </ng-template>
 
   <ng-template pTemplate="footer">
     <div class="p-field m-0">
-      <div class="p-field-checkbox m-0 p-4">
-        <p-checkbox
-          [disabled]="page?.length > 0"
-          [(ngModel)]="noDpeend"
-          (click)="confirm($event ,page?.length); $event.stopPropagation()"
-          binary="true"
-        ></p-checkbox>
-        <label class="mx-2 my-0">
-          {{ "DEPENDENCIES.NO_DEPENDENCY" | translate }}</label
-        >
-      </div>
+      <ng-container
+        [ngTemplateOutlet]="btnTemp"
+        [ngTemplateOutletContext]="{ noDpend: noDpend$ | async }"
+      >
+      </ng-container>
     </div>
   </ng-template>
 </p-card>
 
 <p-confirmPopup></p-confirmPopup>
+<ng-template #btnTemp let-noDpend="noDpend">
+  <p-button
+    type="button"
+    class="custom-checkbox"
+    [styleClass]="noDpeendCssBtn"
+    [disabled]="localPage?.length > 0"
+    [icon]="noDpend ? 'pi pi-check' : 'pi pi-times'"
+    (click)="confirm($event, localPage?.length, noDpend)"
+  ></p-button>
+  {{ "DEPENDENCIES.NO_DEPENDENCY" | translate }}
+</ng-template>

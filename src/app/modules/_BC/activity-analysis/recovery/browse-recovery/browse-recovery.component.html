@@ -45,13 +45,40 @@
     </span>
   </div>
 
-  <div class="p-field p-col-12 p-md-6 mt-4">
-    <span class="p-float-label">
-      <input type="text" formControlName="spof" pInputText />
-      <label>
-        {{ "RECOVERY.SPOF" | translate }}
-      </label>
-    </span>
+  <div class="p-col-12 p-md-6 mt-4">
+    <div class="p-field">
+      <span class="p-float-label">
+        <input type="text" formControlName="spof" pInputText />
+        <label>
+          {{ "RECOVERY.SPOF" | translate }}
+        </label>
+      </span>
+    </div>
+    <div
+      *ngIf="impactAnalysisRes$ | async as impactAnalysisRes"
+      class="p-field"
+    >
+      <p-dropdown
+        formControlName="rto"
+        [options]="[impactAnalysisRes]"
+        [autoDisplayFirst]="false"
+        [showClear]="true"
+        dataKey="id"
+        [readonly]="true"
+        placeholder="{{ 'RECOVERY.RTO' | translate }}"
+      >
+        <ng-template let-item pTemplate="selectedItem">
+          {{ item | translateObj }}
+        </ng-template>
+
+        <ng-template let-item pTemplate="item">
+          {{ item | translateObj }}
+        </ng-template>
+        <ng-template pTemplate="empty">
+          {{ "NO_DATA" | translate }}
+        </ng-template>
+      </p-dropdown>
+    </div>
     <div class="p-field-checkbox mt-10">
       <p-checkbox formControlName="remote" binary="true"></p-checkbox>
       <label>{{ "RECOVERY.REMOTELY" | translate }}</label>
