@@ -94,7 +94,7 @@ export class ResourceWorklogsState {
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort,
+          sort: ['createdOn'],
         },
       })
       .pipe(

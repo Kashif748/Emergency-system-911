@@ -63,7 +63,6 @@ export class BrowseLocationsComponent implements OnInit {
     ] as MenuItem[];
     this.page$ = this.store.select(ActivityLocationsState.page).pipe(
       filter((p) => !!p),
-      map((page) => [...page].sort((a, b) => b.id - a.id)),
       map((page) =>
         page?.map((u) => {
           return {

@@ -185,7 +185,7 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         new SystemsAction.LoadPage({
           page: 0,
-          size: 50,
+          size: 10,
           filters: { name: search },
         })
       );

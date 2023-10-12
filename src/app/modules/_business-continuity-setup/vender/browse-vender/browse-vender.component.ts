@@ -124,7 +124,7 @@ export class BrowseVenderComponent implements OnInit, OnDestroy {
               },
             ],
           };
-        }).sort((a, b) => b.id - a.id)
+        })
       )
     );
   }

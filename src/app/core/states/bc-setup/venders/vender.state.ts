@@ -73,7 +73,7 @@ export class VenderState {
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort,
+          sort: payload.sort ? payload.sort : ['id', 'desc'],
         },
         isActive: true,
         ...payload.filters
