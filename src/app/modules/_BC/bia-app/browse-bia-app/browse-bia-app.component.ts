@@ -167,7 +167,6 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     this.loadPage(null, this.selectedCycle);
     this.page$ = this.store.select(BiaAppsState.page).pipe(
       filter((p) => !!p),
-      map((page) => [...page].sort((a, b) => b.rowNumber - a.rowNumber)),
       map((page) =>
         page?.map((u) => {
           return {
