@@ -6,8 +6,9 @@
   "STATE":"State",
   "ANALYSIS_CRCLE": "Analysis Cycle",
   "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle",
+  "ADD_NEW_ANALYSIS": "Add New Analysis",
   "NAME_BC": "BC Lists Version",
-  "DATE": "Cycle Entry Due DATE",
+  "DATE": "Cycle Entry Due Date",
   "NAME_EN": "Name (English)",
   "NAME_AR": "Name (Arabic)"
 }

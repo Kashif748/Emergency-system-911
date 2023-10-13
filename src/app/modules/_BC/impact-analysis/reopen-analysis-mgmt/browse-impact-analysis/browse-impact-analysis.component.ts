@@ -202,15 +202,14 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       };
       // this.updateFilter(orgHierarchyId);
     }
-   /* this.cycles$
+    this.cycles$
       .pipe(
-        map(cycles => cycles.find(cycle => cycle.id === 284)) // Change 284 to the desired ID
+        map(cycles => cycles.find(cycle => cycle.id == this.cycleId)) // Change 284 to the desired ID
       )
       .subscribe(foundCycle => {
-        desiredCycle = foundCycle;
-      });*/
-    this.cycleId = Number(this.cycleId);
-    this.updateFilter({cycleId: this.cycleId});
+        // this.cycleId = Number(this.cycleId);
+        this.updateFilter({cycleId: foundCycle});
+      });
   }
 
   ngOnInit(): void {

@@ -7,6 +7,7 @@
         [options]="sortAnalysisCycles$ | async"
         dataKey="id"
         optionValue="id"
+        styleClass="min-w-180px"
         [(ngModel)]="selectedCycle"
         (ngModelChange)="setCycleId($event)"
         placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
@@ -21,12 +22,6 @@
       </p-dropdown>
     </div>
     <div>
-      <!--<button
-        *checkPrivileges="'PRIV_CR_ANALYSIS_CYCLE'"
-        pButton
-        label="{{ 'NEW_ANALYSIS_CYCLIE' | translate }}"
-        icon="pi pi-plus"
-      ></button>-->
       <app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
     </div>
   </header>

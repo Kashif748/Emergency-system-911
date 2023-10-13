@@ -22,8 +22,7 @@
   "ORG_ARTCH": "Organization Hierarchy",
   "START_ANALYSIS": "Analyze Activity ",
   "START_RESOURC_ANALYSIS": "Analyze Resources",
-
-
+  "CYCLE_NAME": "Cycle Name",
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY": "Add New Activity",
     "VIEW_ACTIVITY": "View Activity Analysis",

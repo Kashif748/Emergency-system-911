@@ -113,6 +113,7 @@ export class ImpactAnalysisState {
           sort: payload.sort ? payload.sort : ['id', 'desc'],
         },
         ...payload.filters,
+        cycleId: payload.filters?.cycleId['id'],
       })
       .pipe(
         tap((bc) => {

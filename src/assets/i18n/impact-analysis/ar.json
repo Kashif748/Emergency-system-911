@@ -22,6 +22,7 @@
   "ORG_ARTCH": "الهيكل الإداري",
   "START_ANALYSIS" :"تحليل النشاط",
   "START_RESOURC_ANALYSIS": "تحليل الموارد",
+  "CYCLE_NAME": "اسم الدورة",
   "ACTIVITY_DIALOG": {
     "VIEW_ACTIVITY": "معاينة تحليل نشاط",
     "ADD_NEW_ACTIVITY":"إضافة نشاط جديد",
