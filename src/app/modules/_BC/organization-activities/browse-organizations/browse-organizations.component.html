@@ -97,6 +97,7 @@
                     (ngModelChange)="
                       updateFilter({ orgHierarchyId: $event }, $event)
                     "
+                    [showClear]="true"
                     placeholder="{{ 'DEPT_HIERARCHY' | translate }}"
                     appendTo="body"
                     display="chip"

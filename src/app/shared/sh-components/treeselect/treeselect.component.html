@@ -24,8 +24,13 @@
             placeholder || 'empty'
             }}</ng-container>
         </ng-template>
+
       </ng-template>
     </div>
+
+
+    <i class="p-treeselect-clear-icon pi pi-times" (click)="clear($event)"
+      *ngIf="value != null && showClear && !disabled"></i>
   </div>
   <div class="p-treeselect-trigger">
     <span class="p-treeselect-trigger-icon pi pi-chevron-down"></span>
@@ -48,9 +53,7 @@
         [selection]="value" [metaKeySelection]="metaKeySelection" (onNodeExpand)="nodeExpand($event)"
         (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="onSelect($event)" (onNodeUnselect)="onUnselect($event)"
         [filter]="filter" [filterBy]="filterBy" [propagateSelectionDown]="propagateSelectionDown"
-        (onFilter)="doFilter($event)"
-        [loading]="loading"
-        [propagateSelectionUp]="propagateSelectionUp">
+        (onFilter)="doFilter($event)" [loading]="loading" [propagateSelectionUp]="propagateSelectionUp">
         <ng-template let-node pTemplate="default">
           {{node | translateObj : 'label'}}
         </ng-template>
