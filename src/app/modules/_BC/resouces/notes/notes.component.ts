@@ -137,6 +137,7 @@ export class NotesComponent implements OnInit, OnDestroy {
         filter((p) => !!p),
         tap(async (data) => {
           console.log(data);
+          this.note.reset();
           await this.uploadFiles(data.id, this.note.value);
         })
       ).subscribe();

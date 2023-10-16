@@ -26,8 +26,6 @@ export const BROWSE_ACTIVITY_WORKLOGS_UI_STATE_TOKEN =
       filters: {},
       first: 0,
       rows: 10,
-      sortField: 'createdOn',
-      sortOrder: 'desc',
     },
     columns: ['criticality', 'rtoEn', 'description'],
     view: 'TABLE',

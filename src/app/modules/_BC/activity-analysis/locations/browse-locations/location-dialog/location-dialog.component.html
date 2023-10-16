@@ -191,7 +191,12 @@
         </ng-container>
 
         <p-paginator
+          #pg
+          [first]="0"
+          [rows]="10"
           [totalRecords]="totalRecords$ | async"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
           (onPageChange)="loadPage($event, true)"
         ></p-paginator>
       </div>

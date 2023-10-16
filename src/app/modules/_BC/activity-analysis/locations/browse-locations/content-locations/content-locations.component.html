@@ -153,6 +153,14 @@
         </p-table>
       </ng-template>
     </ng-container>
-    <p-paginator></p-paginator>
+    <p-paginator
+      #pg
+      [first]="pageRequest?.first"
+      [rows]="pageRequest?.rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
+      (onPageChange)="onPageChange.emit($event)"></p-paginator>
   </div>
 </div>

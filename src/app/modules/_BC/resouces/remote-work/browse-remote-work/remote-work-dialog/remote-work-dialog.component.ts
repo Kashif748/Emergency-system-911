@@ -172,7 +172,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$), auditTime(1000))
       .subscribe((searchText) => {
         this.store.dispatch(
-          new SystemsAction.LoadPage({ page: 0,
+          new SystemsAction.LoadPage({ page: 0, filters: {name: searchText},
             size: 50})
         );
       });
@@ -287,7 +287,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
   loadSystems(searchText?: string, direct = false, id?: number) {
     if (direct) {
       this.store.dispatch(
-        new SystemsAction.LoadPage({ page: 0,
+        new SystemsAction.LoadPage({ page: 0, filters: {name: searchText},
           size: 50})
       );
       return;

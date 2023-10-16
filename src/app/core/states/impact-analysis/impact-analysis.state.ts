@@ -110,9 +110,10 @@ export class ImpactAnalysisState {
         pageable: {
           page: payload?.page,
           size: payload?.size,
-          sort: payload.sort,
+          sort: payload.sort ? payload.sort : ['id', 'desc'],
         },
         ...payload.filters,
+        cycleId: payload.filters?.cycleId['id'],
       })
       .pipe(
         tap((bc) => {

@@ -74,7 +74,7 @@ export class BiaAppsState {
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort,
+          sort: payload.sort ? payload.sort : ['rowNumber', 'desc'],
         },
       })
       .pipe(
