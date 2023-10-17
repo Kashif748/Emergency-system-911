@@ -43,7 +43,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LocationDialogComponent implements OnInit, OnDestroy {
   @Input() asDialog: boolean = true;
-  @Output() onClose = new EventEmitter<boolean>();
 
   @Select(LocationTypeState.page)
   public locationTypes$: Observable<BcLocationTypes[]>;
@@ -194,23 +193,14 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       orgStructure: {
         id: this.loggedinUserId,
       },
-      district :null,
+      district: null,
     };
 
     if (this.editMode) {
       location.id = this._locationId;
       this.store.dispatch(new BrowseLocationsAction.UpdateLocation(location));
     } else {
-      this.store
-        .dispatch(new BrowseLocationsAction.CreateLocation(location))
-        .toPromise()
-        .then(() => {
-          if (this.dialog) {
-            this.store.dispatch(new BrowseLocationsAction.ToggleDialog({}));
-          } else {
-            this.onClose.emit(true);
-          }
-        });
+      this.store.dispatch(new BrowseLocationsAction.CreateLocation(location));
     }
   }
 
@@ -250,8 +240,6 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       });
 
     instance.OnSaveMap.subscribe((response) => {
-      console.log(response);
-
       if (response) {
         this.form.patchValue({
           ...this.form.value,
@@ -273,7 +261,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.initMap()
+    this.initMap();
     this.store.dispatch(new LocationsAction.GetLocation({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);

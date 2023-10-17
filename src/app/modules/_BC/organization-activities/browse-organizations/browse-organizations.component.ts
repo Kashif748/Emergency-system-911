@@ -291,11 +291,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
             .filter((id) => ![undefined, null].includes(id));
           break;
         case 'orgHierarchyId':
-          filter['orgHierarchyId'] = {
-            id: filter['orgHierarchyId']?.key,
-            labelEn: filter['orgHierarchyId'].data.nameEn,
-            labelAr: filter['orgHierarchyId'].data.nameAr,
-          };
+          filter['orgHierarchyId'] = filter['orgHierarchyId']?.key
+            ? {
+                id: filter['orgHierarchyId']?.key,
+                labelEn: filter['orgHierarchyId']?.data?.nameEn,
+                labelAr: filter['orgHierarchyId']?.data?.nameAr,
+              }
+            : undefined;
           break;
         default:
           break;
