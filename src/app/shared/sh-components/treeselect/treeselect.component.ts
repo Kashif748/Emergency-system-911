@@ -136,6 +136,8 @@ export class TreeselectComponent implements AfterContentInit {
 
   @Output() onNodeSelect: EventEmitter<any> = new EventEmitter();
 
+  @Input() showClear: boolean;
+
   valueTemplate: TemplateRef<any>;
 
   headerTemplate: TemplateRef<any>;
@@ -276,6 +278,10 @@ export class TreeselectComponent implements AfterContentInit {
       default:
         break;
     }
+  }
+
+  clear(event: Event) {
+    this.onSelectionChange(null);
   }
 
   show() {
@@ -579,6 +585,7 @@ export class TreeselectComponent implements AfterContentInit {
       'p-treeselect-chip': this.display === 'chip',
       'p-disabled': this.disabled,
       'p-focus': this.focused,
+      'p-treeselect-clearable': this.showClear && !this.disabled,
     };
   }
 
