@@ -6,6 +6,16 @@
             {{'BUSINESS_IMPACT_ANALYSIS' | translate}}</span>
       </h3>
     </div>
+    <div>
+      <div class="p-toolbar-group-right">
+        <button
+          pButton
+          label="{{ 'SEND_ANALYSIS' | translate }}"
+          icon="pi pi-plus"
+          (click)="toggleDialog()"
+        ></button>
+      </div>
+    </div>
   </header>
   <div class="">
     <div class="row">
@@ -15,3 +25,91 @@
     </div>
   </div>
 </div>
+
+
+
+
+<!-- as a dialog -->
+<p-dialog
+  #dialog
+  [visible]="opened$ | async"
+  [modal]="true"
+  (visibleChange)="close()"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
+    <h3>
+      <span>{{ "UPDATE_ANALYSIS" | translate }}</span>
+    </h3>
+  </div>
+</ng-template>
+
+<!-- templates content -->
+<ng-template #content>
+  <div class="w-100 pt-2">
+
+    <div class="row p-4 col-12">
+      <div class="p-md-6 p-col-6">
+        <p-card
+          styleClass="shadow-none border h-100"
+        >
+          <ng-template pTemplate="header">
+            <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+              <span class="font-weight-bold">{{ 'RES' | translate }}</span>
+              <p-badge
+                value="5"
+                styleClass="version-badge"
+              >
+              </p-badge>
+              <i class="pi pi-info-circle"></i>
+            </div>
+
+          </ng-template>
+        </p-card>
+      </div>
+
+      <div class="p-md-6 p-col-6">
+        <p-card
+          styleClass="shadow-none border h-100"
+        >
+          <ng-template pTemplate="header">
+            <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+              <span class="font-weight-bold">{{ 'ORG_ACT' | translate }}</span>
+              <p-badge
+                value="5"
+                styleClass="version-badge"
+              >
+              </p-badge>
+              <i class="pi pi-info-circle"></i>
+            </div>
+
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+
+  </div>
+</ng-template>

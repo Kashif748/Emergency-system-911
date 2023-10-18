@@ -1,6 +1,27 @@
 :host {
   display: flex;
   align-items: center;
+  ::ng-deep {
+    .p-card {
+      .p-card-title {
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
+        border-bottom: 1px solid #ebedf3 !important;
+      }
+    }
+    .version-badge {
+      color: var(--primary-color);
+      background-color: #ffffff;
+      height: 1rem;
+      font-size: 3rem;
+      line-height: 1rem;
+      vertical-align: text-top;
+      padding: 4px;
+    }
+    .p-card-body{
+      display: none;
+    }
+  }
 }
 
 h3,

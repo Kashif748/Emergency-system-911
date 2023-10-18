@@ -42,6 +42,8 @@ import { ResourceDialogComponent } from './reopen-analysis-mgmt/browse-resource-
 import { ReopenAnalysisMgmtComponent } from './reopen-analysis-mgmt/reopen-analysis-mgmt.component';
 import {TabViewModule} from "primeng/tabview";
 import {BrowseResourceAnalysisState} from "./states/browse-resource-analysis.state";
+import {BadgeModule} from "primeng/badge";
+import {CardModule} from "primeng/card";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -94,7 +96,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     CheckboxModule,
     PrivilegesDirectiveModule,
     TabViewModule,
-    InputTextModule
+    InputTextModule,
+    BadgeModule,
+    CardModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

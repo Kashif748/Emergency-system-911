@@ -1,5 +1,7 @@
 {
   "BUSINESS_IMPACT_ANALYSIS": "Business Impact Analysis - Analysis Details",
+  "SEND_ANALYSIS": "Send",
+  "UPDATE_ANALYSIS":"Are you sure you want to update?",
   "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle",
   "DEPARTMENT": "Department",
   "SELECT_CYCLE_MSG": "Please select cycle to continue",
