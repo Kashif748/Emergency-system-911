@@ -228,6 +228,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
         switchMap(() => this.store.select(OrgDetailState.orgHirSearch)),
         takeUntil(this.destroy$),
         take(1),
+        filter((p) => !!p),
         tap((data) => {
           this.setTree(data);
           const checkParentID = this.orgHir.find(item => item.data.id == this.orgHierarchyId);
@@ -380,7 +381,14 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
           size: 100,
           parentId: parseInt(node?.key),
         })
-      );
+      ).pipe(
+        switchMap(() => this.store.select(OrgDetailState.orgHirSearch)),
+        takeUntil(this.destroy$),
+        take(1),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      ).subscribe();
+
     }
   }
 
@@ -398,6 +406,21 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       this.avoidSearch = true;
     } else {
       this.avoidSearch = false;
+    }
+    const keys = Object.keys(filter);
+    if (keys.length > 0) {
+      switch (keys[0]) {
+
+        case 'orgHierarchyId':
+          filter['orgHierarchyId'] = {
+            id: filter['orgHierarchyId']?.key,
+            labelEn: filter['orgHierarchyId'].data.nameEn,
+            labelAr: filter['orgHierarchyId'].data.nameAr,
+          };
+          break;
+        default:
+          break;
+      }
     }
     this.store.dispatch(new BrowseImpactAnalysisAction.UpdateFilter(filter));
     this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));

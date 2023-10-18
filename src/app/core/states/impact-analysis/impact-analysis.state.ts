@@ -1,37 +1,27 @@
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { finalize, map, tap } from 'rxjs/operators';
-import { patch } from '@ngxs/store/operators';
-import { Injectable } from '@angular/core';
-import {
-  BcActivityAnalysis,
-  BcAnalysisStatus,
-  BcCycles,
-  PageBcActivityAnalysis,
-  PageBcCycles,
-} from 'src/app/api/models';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {finalize, map, tap} from 'rxjs/operators';
+import {patch} from '@ngxs/store/operators';
+import {Injectable} from '@angular/core';
+import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, PageBcActivityAnalysis, PageBcCycles,} from 'src/app/api/models';
 import {
   BcAcitivityAnalysisStatusControllerService,
   BcActivitiesControllerService,
   BcActivityAnalysisControllerService,
   BcCyclesControllerService,
 } from 'src/app/api/services';
-import { ImapactAnalysisAction } from './impact-analysis.action';
+import {ImapactAnalysisAction} from './impact-analysis.action';
+import {BcAnalysisControllerService} from "../../../api/services/bc-analysis-controller.service";
+import {BcAnalysisStatusDetails} from "../../../api/models/bc-analysis-status-details";
+import {RtoStateModel} from "@core/states/bc/rto/rto.state";
 
 export interface ImpactAnalysisStateModel {
   activityAnalysisPage: PageBcActivityAnalysis;
   cyclesPage: PageBcCycles;
-
   activityStatuses: BcAnalysisStatus[];
-
   ImpactAnalysis: BcActivityAnalysis;
   cycle: BcCycles;
+  statusbasedOnId: BcAnalysisStatus;
+  loadAnalysisStatus: BcAnalysisStatusDetails;
   loading: boolean;
   blocking: boolean;
 }
@@ -51,7 +41,8 @@ export class ImpactAnalysisState {
     private activitiesController: BcActivitiesControllerService,
     private activitiesAnalysisController: BcActivityAnalysisControllerService,
     private cyclesController: BcCyclesControllerService,
-    private statusController: BcAcitivityAnalysisStatusControllerService
+    private statusController: BcAcitivityAnalysisStatusControllerService,
+    private sendController: BcAnalysisControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -75,6 +66,22 @@ export class ImpactAnalysisState {
   static cycle(state: ImpactAnalysisStateModel) {
     return state?.cycle;
   }
+
+  @Selector([ImpactAnalysisState])
+  static isBCAnalysisStatusSimiliar(state: ImpactAnalysisStateModel) {
+    return state?.loadAnalysisStatus.isBCAnalysisStatusSimiliar;
+  }
+
+  @Selector([ImpactAnalysisState])
+  static loadAnalysisStatus(state: ImpactAnalysisStateModel) {
+    return state?.loadAnalysisStatus.status;
+  }
+
+  @Selector([ImpactAnalysisState])
+  static statusbasedOnId(state: ImpactAnalysisStateModel) {
+    return state?.statusbasedOnId;
+  }
+
   @Selector([ImpactAnalysisState])
   static cycles(state: ImpactAnalysisStateModel) {
     return state?.cyclesPage.content;
@@ -141,7 +148,7 @@ export class ImpactAnalysisState {
   ) {
     return this.cyclesController
       .getAll22({
-        isActive :true,
+        isActive: true,
         pageable: {
           page: payload?.page,
           size: payload?.size,
@@ -165,6 +172,60 @@ export class ImpactAnalysisState {
       );
   }
 
+  @Action(ImapactAnalysisAction.LoadAnalysisStatusInfo, { cancelUncompleted: true })
+  loadAnalysisStatusInfo(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload }: ImapactAnalysisAction.LoadAnalysisStatusInfo
+  ) {
+    return this.sendController
+      .analysisStatusInfo({
+          cycleId: payload.cycleId,
+          orgHierarchyId: payload.orgHierarchyId,
+        },
+      )
+      .pipe(
+        tap((bc) => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              loadAnalysisStatus: bc.result,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(ImapactAnalysisAction.UpdateBulkTransaction, {cancelUncompleted: true,})
+  bulkTransaction(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload }: ImapactAnalysisAction.UpdateBulkTransaction
+  ) {
+    setState(
+      patch<ImpactAnalysisStateModel>({
+        blocking: true,
+      })
+    );
+    return this.sendController
+      .bulkTransaction({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<RtoStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+
   @Action(ImapactAnalysisAction.LoadActivitiesStatuses, {
     cancelUncompleted: true,
   })
@@ -177,6 +238,26 @@ export class ImpactAnalysisState {
         setState(
           patch<ImpactAnalysisStateModel>({
             activityStatuses: bc.result,
+          })
+        );
+      })
+    );
+  }
+
+  @Action(ImapactAnalysisAction.LoadStatusBasedOnStatusId, {
+    cancelUncompleted: true,
+  })
+  loadStatusBasedOnStatusId(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload  }: ImapactAnalysisAction.LoadStatusBasedOnStatusId
+  ) {
+    return this.statusController.getOne37({
+      id: payload.id
+    }).pipe(
+      tap((bc) => {
+        setState(
+          patch<ImpactAnalysisStateModel>({
+            statusbasedOnId: bc.result,
           })
         );
       })

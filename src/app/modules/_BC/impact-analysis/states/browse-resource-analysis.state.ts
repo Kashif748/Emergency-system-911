@@ -99,7 +99,7 @@ export class BrowseResourceAnalysisState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.id,
           cycleId: pageRequest?.filters?.cycleId,
         },
       })

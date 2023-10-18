@@ -1,5 +1,6 @@
 import { PageRequestModel } from '@core/models/page-request.model';
 import { BcActivityAnalysisDto, BcCycles } from 'src/app/api/models';
+import {BcAnalysisBulkTransactionDto} from "../../../../api/models/bc-analysis-bulk-transaction-dto";
 
 export namespace BrowseImpactAnalysisAction {
   export class LoadPage {
@@ -35,6 +36,21 @@ export namespace BrowseImpactAnalysisAction {
       }
     ) {}
   }
+
+  export class LoadAnalysisStatusInfo {
+    static readonly type = '[BrowseImpactAnalysisAction] Load AnalysisStatusInfo';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        orgHierarchyId: number;
+        cycleId: number;
+      }
+    ) {}
+  }
+
   export class CreateCycle {
     static readonly type = '[BrowseImpactAnalysisAction] Create Cycle';
     /**
@@ -101,5 +117,13 @@ export namespace BrowseImpactAnalysisAction {
      *
      */
     constructor(public payload: { id: number, cycle: number}) {}
+  }
+
+  export class UpdateBulkTransaction {
+    static readonly type = '[BrowseImpactAnalysisAction] Update Transaction';
+    /**
+     *
+     */
+    constructor(public payload: BcAnalysisBulkTransactionDto) {}
   }
 }

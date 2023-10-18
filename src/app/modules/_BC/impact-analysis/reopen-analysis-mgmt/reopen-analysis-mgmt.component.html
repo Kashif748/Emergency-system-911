@@ -9,6 +9,7 @@
     <div>
       <div class="p-toolbar-group-right">
         <button
+          [disabled]="!(shouldDisable$ | async)"
           pButton
           label="{{ 'SEND_ANALYSIS' | translate }}"
           icon="pi pi-plus"
@@ -73,7 +74,7 @@
             <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
               <span class="font-weight-bold">{{ 'RES' | translate }}</span>
               <p-badge
-                value="5"
+                [value]="resourceTotalRecords$ | async"
                 styleClass="version-badge"
               >
               </p-badge>
@@ -92,7 +93,7 @@
             <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
               <span class="font-weight-bold">{{ 'ORG_ACT' | translate }}</span>
               <p-badge
-                value="5"
+                [value]="totalRecords$ | async"
                 styleClass="version-badge"
               >
               </p-badge>
@@ -101,6 +102,16 @@
 
           </ng-template>
         </p-card>
+      </div>
+      <div class="p-md-12 p-col-12 d-flex justify-content-between gap" *ngIf="statusbasedOnId$ | async as status">
+        <ng-container *ngFor="let action of status.actions">
+          <p-button
+            label="{{ action | translateObj : 'actionName'}}"
+            [styleClass]="action?.cssClass"
+            [loading]="blocking$ | async"
+            (click)="bulkUpdate(action)"
+          ></p-button>
+        </ng-container>
       </div>
     </div>
 

@@ -8,8 +8,11 @@ import {TextUtils} from '@core/utils';
 import {iif, patch} from '@ngxs/store/operators';
 import {BrowseImpactAnalysisAction} from './browse-impact-analysis.action';
 import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError, finalize, tap} from 'rxjs/operators';
 import {EMPTY} from 'rxjs';
+import {RtoAction} from "@core/states/bc/rto/rto.action";
+import {BrowseRtoStateModel} from "../../bc-lists/rto/states/browse-rto.state";
+import {BrowseRtoAction} from "../../bc-lists/rto/states/browse-rto.action";
 
 export interface BrowseImpactAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -100,7 +103,7 @@ export class BrowseImpactAnalysisState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.id,
         },
       })
     );
@@ -149,6 +152,19 @@ export class BrowseImpactAnalysisState {
       new ImapactAnalysisAction.LoadCycles({
         page: payload?.page,
         size: payload.size,
+      })
+    );
+  }
+
+  @Action(BrowseImpactAnalysisAction.LoadAnalysisStatusInfo)
+  loadAnalysisStatusInfo(
+    { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.LoadAnalysisStatusInfo
+  ) {
+    return dispatch(
+      new ImapactAnalysisAction.LoadAnalysisStatusInfo({
+        orgHierarchyId: payload.orgHierarchyId,
+        cycleId: payload.cycleId,
       })
     );
   }
@@ -218,6 +234,26 @@ export class BrowseImpactAnalysisState {
             })
           ),
         }),
+      })
+    );
+  }
+
+  @Action(BrowseImpactAnalysisAction.UpdateBulkTransaction)
+  updatebulk(
+    { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.UpdateBulkTransaction
+  ) {
+    return dispatch(new ImapactAnalysisAction.UpdateBulkTransaction(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        // dispatch(new BrowseRtoAction.LoadRto());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
       })
     );
   }
