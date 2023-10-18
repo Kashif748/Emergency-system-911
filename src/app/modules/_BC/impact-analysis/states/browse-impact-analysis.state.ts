@@ -61,14 +61,18 @@ export class BrowseImpactAnalysisState {
 
   @Selector([BrowseImpactAnalysisState])
   static hasFilters(state: BrowseImpactAnalysisStateModel): boolean {
-    return (
-      Object.keys(state.pageRequest.filters).filter(
+    const filters = state.pageRequest.filters;
+    return !('orgHierarchyId' in filters && 'cycleId' in filters) ||
+      (Object.keys(filters).filter(
         (k) =>
           k !== 'active' &&
-          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+          k !== 'orgHierarchyId' &&
+          k !== 'cycleId' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(filters[k])
       ).length > 0
-    );
+      );
   }
+
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseImpactAnalysisAction.LoadPage)
@@ -189,16 +193,26 @@ export class BrowseImpactAnalysisState {
   }
   @Action(BrowseImpactAnalysisAction.UpdateFilter, { cancelUncompleted: true })
   updateFilter(
-    { setState }: StateContext<BrowseImpactAnalysisStateModel>,
+    { setState, getState }: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.UpdateFilter
   ) {
+    const currentState = getState();
+    const updatedFilters = { orgHierarchyId : undefined , cycleId: undefined };
+    if (payload.clear) {
+      if (currentState.pageRequest.filters.orgHierarchyId) {
+        updatedFilters.orgHierarchyId = currentState.pageRequest.filters.orgHierarchyId;
+      }
+      if (currentState.pageRequest.filters.cycleId) {
+        updatedFilters.cycleId = currentState.pageRequest.filters.cycleId;
+      }
+    }
     setState(
       patch<BrowseImpactAnalysisStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: 0,
           filters: iif(
             payload.clear === true,
-            {},
+            updatedFilters,
             patch({
               ...payload,
             })

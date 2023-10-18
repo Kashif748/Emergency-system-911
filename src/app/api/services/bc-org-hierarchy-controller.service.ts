@@ -15,6 +15,7 @@ import { RestApiResponseBcOrgHierarchy } from '../models/rest-api-response-bc-or
 import { RestApiResponseListBcOrgHierarchy } from '../models/rest-api-response-list-bc-org-hierarchy';
 import { RestApiResponsePageBcOrgHierarchy } from '../models/rest-api-response-page-bc-org-hierarchy';
 import { RestApiResponsePageBcOrgHierarchyProjection } from '../models/rest-api-response-page-bc-org-hierarchy-projection';
+import { RestApiResponsePageBcOrgHierarchyProjectionWithOutCoordinators } from '../models/rest-api-response-page-bc-org-hierarchy-projection-with-out-coordinators';
 
 @Injectable()
 export class BcOrgHierarchyControllerService extends BaseService {
@@ -26,21 +27,21 @@ export class BcOrgHierarchyControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById15
+   * Path part for operation deleteById16
    */
-  static readonly DeleteById15Path = '/v1/bc/org-hir/delete/{id}';
+  static readonly DeleteById16Path = '/v1/bc/org-hir/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById15()` instead.
+   * To access only the response body, use `deleteById16()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById15$Response(params: {
+  deleteById16$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.DeleteById15Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.DeleteById16Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -58,15 +59,15 @@ export class BcOrgHierarchyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById15$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById16$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById15(params: {
+  deleteById16(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById15$Response(params).pipe(
+    return this.deleteById16$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
@@ -316,6 +317,55 @@ export class BcOrgHierarchyControllerService extends BaseService {
 
     return this.orgHierarchyForFilteration$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcOrgHierarchy>) => r.body as RestApiResponsePageBcOrgHierarchy)
+    );
+  }
+
+  /**
+   * Path part for operation topLevelParentHierarchy
+   */
+  static readonly TopLevelParentHierarchyPath = '/v1/bc/org-hir/parent-level/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `topLevelParentHierarchy()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  topLevelParentHierarchy$Response(params: {
+    id: number;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcOrgHierarchyProjectionWithOutCoordinators>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.TopLevelParentHierarchyPath, 'get');
+    if (params) {
+      rb.path('id', params.id, {});
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageBcOrgHierarchyProjectionWithOutCoordinators>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `topLevelParentHierarchy$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  topLevelParentHierarchy(params: {
+    id: number;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcOrgHierarchyProjectionWithOutCoordinators> {
+
+    return this.topLevelParentHierarchy$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcOrgHierarchyProjectionWithOutCoordinators>) => r.body as RestApiResponsePageBcOrgHierarchyProjectionWithOutCoordinators)
     );
   }
 

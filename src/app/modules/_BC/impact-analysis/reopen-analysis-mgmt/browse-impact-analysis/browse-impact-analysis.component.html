@@ -21,6 +21,9 @@
             (onFilter)="filterOrgHir($event)"
             (onNodeExpand)="nodeExpand($event?.node)"
             placeholder="{{ 'ORG_ARTCH' | translate }}"
+            [metaKeySelection]="false"
+            [propagateSelectionDown]="false"
+            [propagateSelectionUp]="false"
             appendTo="body"
           >
             <ng-template let-option let-placeholder pTemplate="value">
@@ -44,7 +47,6 @@
             (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
             [autoDisplayFirst]="false"
             [options]="cycles$ | async"
-            [showClear]="true"
             dataKey="id"
             placeholder="{{ 'CYCLE_NAME' | translate }}"
           >
@@ -107,28 +109,6 @@
             </ng-template>
           </p-dropdown>
         </div>
-
-        <!-- Cycle -->
-        <!--<div class="p-field p-col-4 p-md-2">
-          <p-dropdown
-            [ngModel]="state?.pageRequest?.filters['cycleId']"
-            (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
-            [autoDisplayFirst]="false"
-            [options]="cycles$ | async"
-            [showClear]="true"
-            dataKey="id"
-            optionValue="id"
-            placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
-          >
-            <ng-template let-item pTemplate="selectedItem">
-              {{ item | translateObj }}
-            </ng-template>
-
-            <ng-template let-item pTemplate="item">
-              {{ item | translateObj }}
-            </ng-template>
-          </p-dropdown>
-        </div>-->
 
         <!-- RTO -->
         <!-- Later we will show this filter -->
@@ -204,32 +184,6 @@
             </ng-template>
           </p-dropdown>
         </div>
-        <!-- Org Hir -->
-        <!--<div class="p-field p-col-4 p-md-2">
-          <p-treeSelect
-            [options]="orgHir"
-            [filter]="true"
-            [filterBy]="'data.nameAr,data.nameEn,data.code'"
-            selectionMode="single"
-            [ngModel]="state.pageRequest.filters['orgHierarchyId']"
-            (ngModelChange)="
-                      updateFilter({ orgHierarchyId: $event }, $event)
-                    "
-            [loading]="loadingOrgHir$ | async"
-            (onFilter)="filterOrgHir($event)"
-            (onNodeExpand)="nodeExpand($event?.node)"
-            placeholder="{{ 'ORG_ARTCH' | translate }}"
-            appendTo="body"
-          >
-            <ng-template let-option let-placeholder pTemplate="value">
-              {{
-              option
-              ? (option | translateObj : "label")
-              : ("ORG_ARTCH" | translate)
-              }}
-            </ng-template>
-          </p-treeSelect>
-        </div>-->
 
         <!-- Actions -->
         <div class="p-col p-d-flex">
