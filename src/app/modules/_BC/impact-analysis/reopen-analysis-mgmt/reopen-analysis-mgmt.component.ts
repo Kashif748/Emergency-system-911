@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {BrowseImpactAnalysisAction} from "../states/browse-impact-analysis.action";
 import {Select, Store} from "@ngxs/store";
-import {map, switchMap, take, takeUntil, tap} from "rxjs/operators";
+import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
 import {Observable, Subject} from "rxjs";
 import {TranslateService} from "@ngx-translate/core";
@@ -60,6 +60,7 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
         switchMap(() => this.store.select(ImpactAnalysisState.loadAnalysisStatus)),
         takeUntil(this.destroy$),
         take(1),
+        filter((p) => !!p),
         tap((status) => {
           this.store.dispatch(new ImapactAnalysisAction.LoadStatusBasedOnStatusId(
             { id:  status.id}));

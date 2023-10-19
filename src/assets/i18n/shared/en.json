@@ -187,6 +187,7 @@
       "CHANGE_PASSWORD": "Change Password",
       "ADD": "Add",
       "OK": "Ok",
+      "UPDATE_ANALYSIS":"Are you sure you want to update?",
       "SEND": "Send",
       "CLOSE": "Close",
       "ACTIONS": "Actions",

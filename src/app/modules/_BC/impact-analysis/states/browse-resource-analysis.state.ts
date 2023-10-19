@@ -178,23 +178,16 @@ export class BrowseResourceAnalysisState {
     { setState, getState }: StateContext<BrowseReourceAnalysisStateModel>,
     { payload }: BrowseResourceAnalysisAction.UpdateFilter
   ) {
-    const currentState = getState();
-    const updatedFilters = { orgHierarchyId : undefined , cycleId: undefined };
-    if (payload.clear) {
-      if (currentState.pageRequest.filters.orgHierarchyId) {
-        updatedFilters.orgHierarchyId = currentState.pageRequest.filters.orgHierarchyId;
-      }
-      if (currentState.pageRequest.filters.cycleId) {
-        updatedFilters.cycleId = currentState.pageRequest.filters.cycleId;
-      }
-    }
     setState(
       patch<BrowseReourceAnalysisStateModel>({
         pageRequest: patch<PageRequestModel>({
           first: 0,
           filters: iif(
             payload.clear === true,
-            updatedFilters,
+            {
+              orgHierarchyId: getState().pageRequest.filters.orgHierarchyId,
+              cycleId: getState().pageRequest.filters.cycleId,
+            },
             patch({
               ...payload,
             })

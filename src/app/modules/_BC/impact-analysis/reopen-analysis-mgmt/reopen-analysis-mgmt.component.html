@@ -11,8 +11,8 @@
         <button
           [disabled]="!(shouldDisable$ | async)"
           pButton
-          label="{{ 'SEND_ANALYSIS' | translate }}"
-          icon="pi pi-plus"
+          label="{{ 'ACTIONS.SEND' | translate }}"
+          icon="pi pi-send"
           (click)="toggleDialog()"
         ></button>
       </div>
@@ -56,7 +56,7 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <span>{{ "UPDATE_ANALYSIS" | translate }}</span>
+      <span>{{ "ACTIONS.UPDATE_ANALYSIS" | translate }}</span>
     </h3>
   </div>
 </ng-template>

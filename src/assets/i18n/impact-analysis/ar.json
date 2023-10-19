@@ -1,7 +1,5 @@
 {
   "BUSINESS_IMPACT_ANALYSIS":"تحليل التأثير على الأعمال - بيانات التحليل",
-  "SEND_ANALYSIS": "يرسل",
-  "UPDATE_ANALYSIS":"هل أنت متأكد أنك تريد التحديث؟",
   "NEW_ANALYSIS_CYCLIE":"دورة تحليل جديدة",
   "SELECT_CYCLE_MSG" :"يرجى إختيار دورة تحليل للمتابعة ",
   "DEPARTMENT":"إدارة ",

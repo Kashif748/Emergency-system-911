@@ -8,7 +8,7 @@ import {ILangFacade} from "@core/facades/lang.facade";
 import {PrivilegesService} from "@core/services/privileges.service";
 import {TranslateService} from "@ngx-translate/core";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {auditTime, filter, map, switchMap, takeUntil} from "rxjs/operators";
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {BrowseBiaAppAction} from "../states/browse-bia-app.action";
 import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../states/browse-bia-app.state";
 import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
@@ -126,7 +126,14 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       new BrowseBiaAppAction.LoadCycles({ page: 0, size: 100 }),
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
       new BrowseBiaAppAction.LoadActivitiesStatuses(),
-    ]);
+    ]).pipe(
+      takeUntil(this.destroy$),
+      take(1),
+      filter((p) => !!p),
+      tap(() => {
+        this.loadPage(null, this.selectedCycle);
+      })
+    ).subscribe();
     this.sortAnalysisCycles$ = this.cycles$.pipe(
       filter((cycles) => !!cycles),
       switchMap((cycles) => {
@@ -164,7 +171,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
     ] as MenuItem[];
-    this.loadPage(null, this.selectedCycle);
+
     this.page$ = this.store.select(BiaAppsState.page).pipe(
       filter((p) => !!p),
       map((page) =>

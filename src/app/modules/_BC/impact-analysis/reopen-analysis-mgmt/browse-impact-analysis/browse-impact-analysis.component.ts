@@ -221,7 +221,9 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.changeView('CARDS');
       });
-
+      this.hasFilters$.pipe().subscribe((v) => {
+        console.log(v)
+      })
     this.store.dispatch([new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
       new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 })])
       .pipe(
