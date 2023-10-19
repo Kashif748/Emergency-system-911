@@ -137,6 +137,7 @@ export class TreeselectComponent implements AfterContentInit {
   @Output() onNodeSelect: EventEmitter<any> = new EventEmitter();
 
   @Input() showClear: boolean;
+  @Input() styleClass: string;
 
   valueTemplate: TemplateRef<any>;
 

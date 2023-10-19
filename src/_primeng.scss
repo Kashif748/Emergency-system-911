@@ -10,14 +10,16 @@
 }
 // support left to right
 [dir="ltr"] {
-  .p-inputgroup p-dropdown:first-child:not(:only-child) .p-dropdown {
+  .p-inputgroup p-dropdown:first-child:not(:only-child) .p-dropdown,
+  .p-inputgroup p-treeselect:first-child:not(:only-child) .p-treeselect {
     border-radius: 0 !important;
     border-bottom-left-radius: 3px !important;
     border-top-left-radius: 3px !important;
     border-right: none;
   }
 
-  .p-inputgroup p-dropdown:last-child:not(:only-child) .p-dropdown {
+  .p-inputgroup p-dropdown:last-child:not(:only-child) .p-dropdown,
+  .p-inputgroup p-treeselect:last-child:not(:only-child) .p-treeselect {
     border-radius: 0 !important;
     border-top-right-radius: 3px !important;
     border-bottom-right-radius: 3px !important;
@@ -112,6 +114,7 @@
   .p-inputgroup button:first-child,
   .p-inputgroup input:first-child,
   .p-inputgroup p-dropdown:first-child .p-dropdown,
+  .p-inputgroup p-treeselect:first-child .p-treeselect,
   .p-calendar-w-btn .p-inputtext,
   .p-inputnumber-buttons-stacked .p-inputnumber-input {
     border-radius: 0 !important;
@@ -131,6 +134,7 @@
   .p-inputgroup button:last-child,
   .p-inputgroup input:last-child,
   .p-inputgroup p-dropdown:last-child .p-dropdown,
+  .p-inputgroup p-treeselect:last-child .p-treeselect,
   .p-inputgroup .p-float-label:last-child input,
   .p-calendar-w-btn .p-datepicker-trigger {
     border-radius: 0 !important;

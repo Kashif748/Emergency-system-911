@@ -1,28 +1,51 @@
 <section class="" *ngIf="state$ | async as state">
-  <div class="col-12 my-3">
-    <p-toolbar>
+  <div class="col-12 mb-4 pb-4 border-bottom">
+    <div class="row">
+      <div class="p-inputgroup d-flex p-ai-center flex-none col-md-4 px-0">
+        <span class="p-inputgroup-addon flex-none font-weight-bolder">{{'RESOURCES.DIVISION' | translate}}</span>
+        <p-treeSelect [options]="orgHir" [filter]="true" [filterBy]="'data.nameAr,data.nameEn,data.code'" class="w-100"
+          styleClass="w-100" selectionMode="single" [ngModel]="state.pageRequest.filters['orgHierarchyId']"
+          (ngModelChange)="
+                  updateFilter({ orgHierarchyId: $event }, $event)
+                " [loading]="loadingOrgHir$ | async" (onFilter)="filterOrgHir($event)"
+          (onNodeExpand)="nodeExpand($event?.node)" placeholder="{{ 'ORG_ARTCH' | translate }}" appendTo="body">
+          <ng-template let-option let-placeholder pTemplate="value">
+            {{
+            option
+            ? (option | translateObj : "label")
+            : ("ORG_ARTCH" | translate)
+            }}
+          </ng-template>
+        </p-treeSelect>
+      </div>
+      <div class="col-md-4 my-1"></div>
+      <div class="p-inputgroup d-flex p-ai-center flex-none col-md-4 px-0">
+        <span class="p-inputgroup-addon flex-none font-weight-bolder">{{'CYCLE_NAME' | translate}}</span>
+        <p-dropdown [ngModel]="state?.pageRequest?.filters['cycleId']" class="w-100" styleClass="w-100"
+          (ngModelChange)="updateFilter({ cycleId: $event }, $event)" [autoDisplayFirst]="false"
+          [options]="cycles$ | async" dataKey="id" placeholder="{{ 'CYCLE_NAME' | translate }}">
+          <ng-template let-item pTemplate="selectedItem">
+            {{ item | translateObj }}
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            {{ item | translateObj }}
+          </ng-template>
+        </p-dropdown>
+      </div>
+    </div>
+    <!-- <p-toolbar>
       <div class="p-toolbar-group-left">
         <div class="p-dropdown-container d-flex">
           <h4 class="card-title align-items-start m-2">
-          <span class="card-label font-weight-bolder">
-            {{'RESOURCES.DIVISION' | translate}}</span>
+            <span class="card-label font-weight-bolder">
+              {{'RESOURCES.DIVISION' | translate}}</span>
           </h4>
 
-          <p-treeSelect
-            [options]="orgHir"
-            [filter]="true"
-            [filterBy]="'data.nameAr,data.nameEn,data.code'"
-            selectionMode="single"
-            [ngModel]="state.pageRequest.filters['orgHierarchyId']"
-            (ngModelChange)="
+          <p-treeSelect [options]="orgHir" [filter]="true" [filterBy]="'data.nameAr,data.nameEn,data.code'"
+            selectionMode="single" [ngModel]="state.pageRequest.filters['orgHierarchyId']" (ngModelChange)="
                       updateFilter({ orgHierarchyId: $event }, $event)
-                    "
-            [loading]="loadingOrgHir$ | async"
-            (onFilter)="filterOrgHir($event)"
-            (onNodeExpand)="nodeExpand($event?.node)"
-            placeholder="{{ 'ORG_ARTCH' | translate }}"
-            appendTo="body"
-          >
+                    " [loading]="loadingOrgHir$ | async" (onFilter)="filterOrgHir($event)"
+            (onNodeExpand)="nodeExpand($event?.node)" placeholder="{{ 'ORG_ARTCH' | translate }}" appendTo="body">
             <ng-template let-option let-placeholder pTemplate="value">
               {{
               option
@@ -36,18 +59,12 @@
       <div class="ml-dir-auto ">
         <div class="p-dropdown-container d-flex">
           <h4 class="card-title align-items-start m-2">
-          <span class="card-label font-weight-bolder">
-            {{'CYCLE_NAME' | translate}}</span>
+            <span class="card-label font-weight-bolder">
+              {{'CYCLE_NAME' | translate}}</span>
           </h4>
-          <p-dropdown
-            [ngModel]="state?.pageRequest?.filters['cycleId']"
-            (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
-            [autoDisplayFirst]="false"
-            [options]="cycles$ | async"
-            [showClear]="true"
-            dataKey="id"
-            placeholder="{{ 'CYCLE_NAME' | translate }}"
-          >
+          <p-dropdown [ngModel]="state?.pageRequest?.filters['cycleId']"
+            (ngModelChange)="updateFilter({ cycleId: $event }, $event)" [autoDisplayFirst]="false"
+            [options]="cycles$ | async" [showClear]="true" dataKey="id" placeholder="{{ 'CYCLE_NAME' | translate }}">
             <ng-template let-item pTemplate="selectedItem">
               {{ item | translateObj }}
             </ng-template>
@@ -57,47 +74,30 @@
           </p-dropdown>
         </div>
       </div>
-    </p-toolbar>
+    </p-toolbar> -->
 
   </div>
   <div class="mt-4 col-12 position-relative">
-    <p-fieldset
-      [toggleable]="true"
-      styleClass="px-3 py-2 search-section"
-      legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
-      [collapsed]="!(hasFilters$ | async)"
-    >
+    <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
+      legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}" [collapsed]="!(hasFilters$ | async)">
       <div class="p-fluid p-grid">
         <!-- Name -->
         <div class="p-field p-col-4 p-md-2">
-          <input
-            type="text"
-            pInputText
-            [ngModel]="state?.pageRequest?.filters['activityName']"
-            placeholder="{{ 'ACTIVITY_NAME' | translate }}"
-            (keyup)="
+          <input type="text" pInputText [ngModel]="state?.pageRequest?.filters['activityName']"
+            placeholder="{{ 'ACTIVITY_NAME' | translate }}" (keyup)="
                       updateFilter(
                         { activityName: $event.target.value },
                         $event
                       )
-                    "
-          />
+                    " />
         </div>
 
         <!-- activity Frequence  -->
         <div class="p-field p-col-4 p-md-2">
-          <p-dropdown
-            [ngModel]="state.pageRequest.filters['activityFrequenceId']"
-            (ngModelChange)="
+          <p-dropdown [ngModel]="state.pageRequest.filters['activityFrequenceId']" (ngModelChange)="
                       updateFilter({ activityFrequenceId: $event }, $event)
-                    "
-            [autoDisplayFirst]="false"
-            [showClear]="true"
-            [options]="activityFrquency$ | async"
-            dataKey="id"
-            optionValue="id"
-            placeholder="{{ 'ACTIVITY_FEQ' | translate }}"
-          >
+                    " [autoDisplayFirst]="false" [showClear]="true" [options]="activityFrquency$ | async" dataKey="id"
+            optionValue="id" placeholder="{{ 'ACTIVITY_FEQ' | translate }}">
             <ng-template let-item pTemplate="selectedItem">
               {{ item | translateObj }}
             </ng-template>
@@ -133,16 +133,10 @@
         <!-- RTO -->
         <!-- Later we will show this filter -->
         <div *ngIf="false" class="p-field p-col-4 p-md-2">
-          <p-dropdown
-            [ngModel]="state.pageRequest.filters['rtoId']"
-            (ngModelChange)="updateFilter({ rtoId: $event }, $event)"
-            [autoDisplayFirst]="false"
-            [options]="rtosPage$ | async"
-            [showClear]="true"
-            dataKey="id"
-            optionValue="id"
-            placeholder="{{ 'RTO' | translate }}"
-          >
+          <p-dropdown [ngModel]="state.pageRequest.filters['rtoId']"
+            (ngModelChange)="updateFilter({ rtoId: $event }, $event)" [autoDisplayFirst]="false"
+            [options]="rtosPage$ | async" [showClear]="true" dataKey="id" optionValue="id"
+            placeholder="{{ 'RTO' | translate }}">
             <ng-template let-item pTemplate="selectedItem">
               {{ item | translateObj }}
             </ng-template>
@@ -157,18 +151,10 @@
         <!-- Later we will show this filter -->
 
         <div *ngIf="false" class="p-field p-col-4 p-md-2">
-          <p-dropdown
-            [ngModel]="state.pageRequest.filters['recoveryPriorityId']"
-            (ngModelChange)="
+          <p-dropdown [ngModel]="state.pageRequest.filters['recoveryPriorityId']" (ngModelChange)="
                       updateFilter({ recoveryPriorityId: $event }, $event)
-                    "
-            [options]="prioritySeq$ | async"
-            [autoDisplayFirst]="false"
-            [showClear]="true"
-            dataKey="id"
-            optionValue="id"
-            placeholder="{{ 'PRIORITY_LEVEL' | translate }}"
-          >
+                    " [options]="prioritySeq$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+            optionValue="id" placeholder="{{ 'PRIORITY_LEVEL' | translate }}">
             <ng-template let-item pTemplate="selectedItem">
               {{ item | translateObj }}
             </ng-template>
@@ -181,20 +167,12 @@
 
         <!-- Status -->
         <div class="p-field p-col-4 p-md-2">
-          <p-dropdown
-            [ngModel]="
+          <p-dropdown [ngModel]="
                       state.pageRequest.filters['activityAnalysisStatusId']
-                    "
-            (ngModelChange)="
+                    " (ngModelChange)="
                       updateFilter({ activityAnalysisStatusId: $event }, $event)
-                    "
-            [options]="activityStatuses$ | async"
-            [autoDisplayFirst]="false"
-            [showClear]="true"
-            dataKey="id"
-            optionValue="id"
-            placeholder="{{ 'STATUS' | translate }}"
-          >
+                    " [options]="activityStatuses$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+            optionValue="id" placeholder="{{ 'STATUS' | translate }}">
             <ng-template let-item pTemplate="selectedItem">
               {{ item | translateObj }}
             </ng-template>
@@ -235,22 +213,11 @@
         <div class="p-col p-d-flex">
           <div class="ml-dir-auto"></div>
           <div class="mx-1">
-            <button
-              pButton
-              type="button"
-              label="{{ 'ACTIONS.CLEAR' | translate }}"
-              icon="pi pi-times"
-              class="p-button-outlined"
-              (click)="clear()"
-            ></button>
+            <button pButton type="button" label="{{ 'ACTIONS.CLEAR' | translate }}" icon="pi pi-times"
+              class="p-button-outlined" (click)="clear()"></button>
           </div>
           <div class="mx-1">
-            <button
-              pButton
-              label="{{ 'ACTIONS.SEARCH' | translate }}"
-              icon="pi pi-search"
-              (click)="search()"
-            ></button>
+            <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search" (click)="search()"></button>
           </div>
         </div>
       </div>
@@ -265,16 +232,9 @@
     <p-toolbar>
       <div class="p-toolbar-group-left">
         <div class="p-1 w-100 w-md-200px">
-          <p-multiSelect
-            [options]="resoureColumns"
-            defaultLabel="Select Columns"
-            [ngModel]="resourceState.columns"
-            optionLabel="name"
-            styleClass="w-100"
-            [optionValue]="'code'"
-            optionDisabled="disabled"
-            (onChange)="resourceChangeColumns($event)"
-          >
+          <p-multiSelect [options]="resoureColumns" defaultLabel="Select Columns" [ngModel]="resourceState.columns"
+            optionLabel="name" styleClass="w-100" [optionValue]="'code'" optionDisabled="disabled"
+            (onChange)="resourceChangeColumns($event)">
             <ng-template let-options pTemplate="selectedItems">
               <ng-container *ngIf="options?.length > 0">
                 {{
@@ -294,20 +254,11 @@
         </div>
         <div class="p-1 w-100 w-md-225px">
           <div class="p-inputgroup">
-            <p-dropdown
-              [options]="resourceSortableColumns"
-              [autoDisplayFirst]="false"
-              [showClear]="true"
-              [ngModel]="resourceState?.pageRequest?.sortField"
-              placeholder="{{
+            <p-dropdown [options]="resourceSortableColumns" [autoDisplayFirst]="false" [showClear]="true"
+              [ngModel]="resourceState?.pageRequest?.sortField" placeholder="{{
                         'SHARED.SELECT_SORTING_FIELD' | translate
-                      }}"
-              optionLabel="name"
-              optionValue="code"
-              styleClass="w-100 h-100"
-              class="w-100 h-100"
-              (onChange)="resourceSort($event)"
-            >
+                      }}" optionLabel="name" optionValue="code" styleClass="w-100 h-100" class="w-100 h-100"
+              (onChange)="resourceSort($event)">
               <ng-template let-option pTemplate="selectedItem">
                 {{ option.name | translate }}
               </ng-template>
@@ -316,15 +267,9 @@
               </ng-template>
             </p-dropdown>
             <div class="p-inputgroup-addon p-0">
-              <p-toggleButton
-                class="w-100 h-100"
-                [onIcon]="'pi pi-sort-amount-up'"
-                [ngModel]="resourceState?.pageRequest?.sortOrder === 'desc'"
-                offIcon="pi pi-sort-amount-down-alt"
-                iconPos="right"
-                styleClass="w-100 h-100"
-                (onChange)="resourceOrder($event)"
-              ></p-toggleButton>
+              <p-toggleButton class="w-100 h-100" [onIcon]="'pi pi-sort-amount-up'"
+                [ngModel]="resourceState?.pageRequest?.sortOrder === 'desc'" offIcon="pi pi-sort-amount-down-alt"
+                iconPos="right" styleClass="w-100 h-100" (onChange)="resourceOrder($event)"></p-toggleButton>
             </div>
           </div>
         </div>
@@ -337,15 +282,10 @@
 
   <section class="" *ngIf="browseResourceState$ | async as resourceState">
     <div class="col-12">
-      <app-content-resource-analysis
-        [view]="resourceState.view"
-        [page]="resourcePage$ | async"
-        [columns]="resourceState.columns"
-        [pageRequest]="resourceState?.pageRequest"
-        (onPageChange)="loadResourcePage($event)"
-        [loading]="resourceLoading$ | async"
-        [totalRecords]="resourceTotalRecords$ | async"
-      ></app-content-resource-analysis>
+      <app-content-resource-analysis [view]="resourceState.view" [page]="resourcePage$ | async"
+        [columns]="resourceState.columns" [pageRequest]="resourceState?.pageRequest"
+        (onPageChange)="loadResourcePage($event)" [loading]="resourceLoading$ | async"
+        [totalRecords]="resourceTotalRecords$ | async"></app-content-resource-analysis>
     </div>
   </section>
 
@@ -361,16 +301,8 @@
     <p-toolbar>
       <div class="p-toolbar-group-left">
         <div class="p-1 w-100 w-md-200px">
-          <p-multiSelect
-            [options]="columns"
-            defaultLabel="Select Columns"
-            [ngModel]="state.columns"
-            optionLabel="name"
-            styleClass="w-100"
-            [optionValue]="'code'"
-            optionDisabled="disabled"
-            (onChange)="changeColumns($event)"
-          >
+          <p-multiSelect [options]="columns" defaultLabel="Select Columns" [ngModel]="state.columns" optionLabel="name"
+            styleClass="w-100" [optionValue]="'code'" optionDisabled="disabled" (onChange)="changeColumns($event)">
             <ng-template let-options pTemplate="selectedItems">
               <ng-container *ngIf="options?.length > 0">
                 {{
@@ -390,20 +322,11 @@
         </div>
         <div class="p-1 w-100 w-md-225px">
           <div class="p-inputgroup">
-            <p-dropdown
-              [options]="sortableColumns"
-              [autoDisplayFirst]="false"
-              [showClear]="true"
-              [ngModel]="state?.pageRequest?.sortField"
-              placeholder="{{
+            <p-dropdown [options]="sortableColumns" [autoDisplayFirst]="false" [showClear]="true"
+              [ngModel]="state?.pageRequest?.sortField" placeholder="{{
                         'SHARED.SELECT_SORTING_FIELD' | translate
-                      }}"
-              optionLabel="name"
-              optionValue="code"
-              styleClass="w-100 h-100"
-              class="w-100 h-100"
-              (onChange)="sort($event)"
-            >
+                      }}" optionLabel="name" optionValue="code" styleClass="w-100 h-100" class="w-100 h-100"
+              (onChange)="sort($event)">
               <ng-template let-option pTemplate="selectedItem">
                 {{ option.name | translate }}
               </ng-template>
@@ -412,15 +335,9 @@
               </ng-template>
             </p-dropdown>
             <div class="p-inputgroup-addon p-0">
-              <p-toggleButton
-                class="w-100 h-100"
-                [onIcon]="'pi pi-sort-amount-up'"
-                [ngModel]="state?.pageRequest?.sortOrder === 'desc'"
-                offIcon="pi pi-sort-amount-down-alt"
-                iconPos="right"
-                styleClass="w-100 h-100"
-                (onChange)="order($event)"
-              ></p-toggleButton>
+              <p-toggleButton class="w-100 h-100" [onIcon]="'pi pi-sort-amount-up'"
+                [ngModel]="state?.pageRequest?.sortOrder === 'desc'" offIcon="pi pi-sort-amount-down-alt"
+                iconPos="right" styleClass="w-100 h-100" (onChange)="order($event)"></p-toggleButton>
             </div>
           </div>
         </div>
@@ -436,14 +353,8 @@
     </div>
   </div>
   <div class="col-12">
-    <app-content-impact-analysis
-      [view]="state.view"
-      [page]="page$ | async"
-      [columns]="state.columns"
-      [pageRequest]="state?.pageRequest"
-      (onPageChange)="loadPage($event)"
-      [loading]="loading$ | async"
-      [totalRecords]="totalRecords$ | async"
-    ></app-content-impact-analysis>
+    <app-content-impact-analysis [view]="state.view" [page]="page$ | async" [columns]="state.columns"
+      [pageRequest]="state?.pageRequest" (onPageChange)="loadPage($event)" [loading]="loading$ | async"
+      [totalRecords]="totalRecords$ | async"></app-content-impact-analysis>
   </div>
 </section>
