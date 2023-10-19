@@ -110,6 +110,15 @@ export namespace BrowseImpactAnalysisAction {
     constructor(public payload: { dialog?: string; id?: number; cycle?: number }) {}
   }
 
+  export class UpdateRoute {
+    static readonly type = '[BrowseImpactAnalysisAction] Update Route';
+
+    /**
+     *
+     */
+    constructor(public payload: { [key: string]: any }) {}
+  }
+
   export class OpenView {
     static readonly type = '[BrowseImpactAnalysisAction] Open View';
 

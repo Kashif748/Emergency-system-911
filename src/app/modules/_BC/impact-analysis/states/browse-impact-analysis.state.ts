@@ -10,9 +10,6 @@ import {BrowseImpactAnalysisAction} from './browse-impact-analysis.action';
 import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {EMPTY} from 'rxjs';
-import {RtoAction} from "@core/states/bc/rto/rto.action";
-import {BrowseRtoStateModel} from "../../bc-lists/rto/states/browse-rto.state";
-import {BrowseRtoAction} from "../../bc-lists/rto/states/browse-rto.action";
 
 export interface BrowseImpactAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -274,6 +271,23 @@ export class BrowseImpactAnalysisState {
         _id: payload.id,
         _cycleId: payload.cycle,
         _mode: undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  @Action(BrowseImpactAnalysisAction.UpdateRoute, {
+    cancelUncompleted: true,
+  })
+  updateRoute(
+    {getState}: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.UpdateRoute
+  ) {
+    const currentState = getState();
+    this.router.navigate([], {
+      queryParams: {
+        _division: currentState.pageRequest.filters.orgHierarchyId.id,
+        _cycle: currentState.pageRequest.filters.cycleId.id,
       },
       queryParamsHandling: 'merge',
     });

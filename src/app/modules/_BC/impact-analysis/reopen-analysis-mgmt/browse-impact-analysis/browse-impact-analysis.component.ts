@@ -398,7 +398,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       this.store.dispatch(new BrowseResourceAnalysisAction.LoadPage());
     }
   }
-  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
+  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent, click?: boolean) {
     if (event?.key === 'Enter') {
       return this.search();
     }
@@ -424,7 +424,9 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(new BrowseImpactAnalysisAction.UpdateFilter(filter));
     this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));
-    if (filter['orgHierarchyId'] && filter['cycleId']) {
+
+    if (click) {
+      this.store.dispatch(new BrowseImpactAnalysisAction.UpdateRoute(filter));
       this.search();
     }
   }

@@ -14,7 +14,7 @@
             selectionMode="single"
             [ngModel]="state.pageRequest.filters['orgHierarchyId']"
             (ngModelChange)="
-                      updateFilter({ orgHierarchyId: $event }, $event)
+                      updateFilter({ orgHierarchyId: $event }, $event, true)
                     "
             [loading]="loadingOrgHir$ | async"
             (onFilter)="filterOrgHir($event)"
@@ -40,7 +40,7 @@
           </h4>
           <p-dropdown
             [ngModel]="state?.pageRequest?.filters['cycleId']"
-            (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
+            (ngModelChange)="updateFilter({ cycleId: $event }, $event, true)"
             [autoDisplayFirst]="false"
             [options]="cycles$ | async"
             dataKey="id"
