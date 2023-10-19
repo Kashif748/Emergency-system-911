@@ -10,35 +10,6 @@
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
     <app-breadcrumb></app-breadcrumb>
-    <!-- <p-dropdown [options]="versions$ | async" [(ngModel)]="selectedVersion" placeholder="{{ 'VERSION' | translate }}"
-      dataKey="id" styleClass="min-w-180px" (onChange)="setValueGlobally($event.value)" [dropdownIcon]="
-        (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
-      ">
-      <ng-template pTemplate="selectedItem">
-        <ng-container>
-          <span>
-            {{ selectedVersion | translateObj }}
-          </span>
-        </ng-container>
-      </ng-template>
-      <ng-template let-version pTemplate="item">
-        <div>{{ version | translateObj }}</div>
-      </ng-template>
-      <ng-template pTemplate="empty">
-        <ng-container *ngIf="loading$ | async; else elseTemplate">
-          {{ "ACTIONS.LOADING" | translate }}
-        </ng-container>
-        <ng-template #elseTemplate>
-          {{ "NO_DATA" | translate }}
-        </ng-template>
-      </ng-template>
-
-    </p-dropdown>
-
-    <span *ngIf="selectedVersion" class="mx-2">
-      <p-badge value="{{ selectedVersion?.status | translateObj }}">
-      </p-badge>
-    </span> -->
   </div>
 </header>
 
@@ -89,7 +60,8 @@
 
         </p-dropdown>
         <button type="button" pButton pRipple icon="pi pi-cog" class="p-button-warning"
-          *checkPrivileges="'PRIV_CR_BC_VER'" (click)="toggleDialog()"></button>
+          title="{{'VERSIONS_SETTINGS' | translate}}" *checkPrivileges="'PRIV_CR_BC_VER'"
+          (click)="toggleDialog()"></button>
       </div>
       <div class="flex-grow-1"></div>
       <div class="d-flex p-ai-center flex-none">
