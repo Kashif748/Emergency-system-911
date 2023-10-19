@@ -11,6 +11,8 @@ import {PageBcResourcesMinPersonnelReq} from "../../../../api/models/page-bc-res
 import {PageBcResourcesDesignation} from "../../../../api/models/page-bc-resources-designation";
 import {BcResourcesStaffReq} from "../../../../api/models/bc-resources-staff-req";
 import {BcResourcesDesignationControllerService} from "../../../../api/services/bc-resources-designation-controller.service";
+import {ActivitySystemsStateModel} from "@core/states/activity-analysis/systems/systems.state";
+import {ActivitySystemsAction} from "@core/states/activity-analysis/systems/systems.action";
 
 export interface StaffStateModel {
   page: PageBcResourcesStaffReq;
@@ -303,6 +305,36 @@ export class StaffState {
         setState(
           patch<StaffStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(StaffAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<StaffStateModel>,
+    { payload }: StaffAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<StaffStateModel>({
+        loading: true,
+      })
+    );
+    return this.staff.deleteById5({ id: payload.id }).pipe(
+      tap((staff) => {
+        setState(
+          patch<StaffStateModel>({
+            loading: false,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<StaffStateModel>({
+            loading: false,
           })
         );
       })
