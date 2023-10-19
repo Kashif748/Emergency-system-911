@@ -52,4 +52,15 @@ export namespace OtherAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[other] Delete other';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

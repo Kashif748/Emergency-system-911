@@ -68,4 +68,15 @@ export namespace RemoteWorkAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[remoteWork] Delete remoteWork';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

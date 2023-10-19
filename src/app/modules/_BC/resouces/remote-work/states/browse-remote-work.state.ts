@@ -9,6 +9,9 @@ import {EMPTY} from "rxjs";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseRemoteWorkAction} from "./browse-remote-work.action";
 import {RemoteWorkAction} from "@core/states/bc-resources/remote-work/remote-work.action";
+import {BrowseStaffStateModel} from "../../staff-requirement/states/browse-staff.state";
+import {BrowseStaffAction} from "../../staff-requirement/states/browse-staff.action";
+import {ActivitySystemsAction} from "@core/states/activity-analysis/systems/systems.action";
 
 export interface BrowseRemoteWorkStateModel {
   pageRequest: PageRequestModel;
@@ -154,5 +157,20 @@ export class BrowseRemoteWorkState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseRemoteWorkAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseRemoteWorkStateModel>,
+    { payload }: BrowseRemoteWorkAction.Delete
+  ) {
+    return dispatch(new RemoteWorkAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

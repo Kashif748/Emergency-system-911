@@ -7,6 +7,8 @@ import {OtherAction} from "@core/states/bc-resources/other/other.action";
 import {BcResourcesNonItInfrastructureControllerService} from "../../../../api/services/bc-resources-non-it-infrastructure-controller.service";
 import {PageBcResourcesNonItInfrastructure} from "../../../../api/models/page-bc-resources-non-it-infrastructure";
 import {BcResourcesNonItInfrastructure} from "../../../../api/models/bc-resources-non-it-infrastructure";
+import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
+import {AppSystemStateModel} from "@core/states/bc-resources/app-system/app-system.state";
 
 export interface OtherStateModel {
   page: PageBcResourcesNonItInfrastructure;
@@ -183,6 +185,36 @@ export class OtherState {
         setState(
           patch<OtherStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(OtherAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<OtherStateModel>,
+    { payload }: OtherAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<OtherStateModel>({
+        loading: true,
+      })
+    );
+    return this.other.deleteById8({ id: payload.id }).pipe(
+      tap((v) => {
+        setState(
+          patch<OtherStateModel>({
+            loading: false,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<OtherStateModel>({
+            loading: false,
           })
         );
       })

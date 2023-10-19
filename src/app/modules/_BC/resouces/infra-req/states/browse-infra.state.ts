@@ -10,6 +10,9 @@ import {EMPTY} from "rxjs";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseInfraAction} from "./browse-infra.action";
 import {InfraAction} from "@core/states/bc-resources/infra-req/infra.action";
+import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
+import {BrowseAppSystemAction} from "../../app-systems/states/browse-app-system.action";
+import {BrowseAppSystemStateModel} from "../../app-systems/states/browse-app-system.state";
 
 export interface BrowseInfraStateModel {
   pageRequest: PageRequestModel;
@@ -153,5 +156,20 @@ export class BrowseInfraState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseInfraAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseInfraStateModel>,
+    { payload }: BrowseInfraAction.Delete
+  ) {
+    return dispatch(new InfraAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

@@ -12,6 +12,7 @@ import {LazyLoadEvent, MenuItem} from "primeng/api";
 import {filter, map} from "rxjs/operators";
 import {BrowseRecordAction} from "../states/browse-records.action";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BrowseRemoteWorkAction} from "../../remote-work/states/browse-remote-work.action";
 
 @Component({
   selector: 'app-browse-records',
@@ -46,8 +47,8 @@ export class BrowseRecordsComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
 
@@ -66,11 +67,26 @@ export class BrowseRecordsComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...recordActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              },
             ],
           };
         })
       )
     );
+  }
+  delete(id) {
+    this.store
+      .dispatch(new BrowseRecordAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
   openDialog(id?: number) {
     this.store.dispatch(new BrowseRecordAction.ToggleDialog({ recordId: id }));

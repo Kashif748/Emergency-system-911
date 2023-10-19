@@ -186,7 +186,7 @@ export class BrowseStaffState {
     { dispatch }: StateContext<BrowseStaffStateModel>,
     { payload }: BrowseStaffAction.Delete
   ) {
-    return dispatch(new ActivitySystemsAction.Delete(payload)).pipe(
+    return dispatch(new StaffAction.Delete(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
       }),
