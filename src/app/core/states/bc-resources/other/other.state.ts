@@ -204,13 +204,6 @@ export class OtherState {
       })
     );
     return this.other.deleteById8({ id: payload.id }).pipe(
-      tap((v) => {
-        setState(
-          patch<OtherStateModel>({
-            loading: false,
-          })
-        );
-      }),
       finalize(() => {
         setState(
           patch<OtherStateModel>({

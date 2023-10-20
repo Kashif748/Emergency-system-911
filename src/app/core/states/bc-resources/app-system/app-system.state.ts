@@ -264,13 +264,6 @@ export class AppSystemState {
       })
     );
     return this.bcResourcesAppAndSoftwareService.deleteById14({ id: payload.id }).pipe(
-      tap((v) => {
-        setState(
-          patch<AppSystemStateModel>({
-            loading: false,
-          })
-        );
-      }),
       finalize(() => {
         setState(
           patch<AppSystemStateModel>({

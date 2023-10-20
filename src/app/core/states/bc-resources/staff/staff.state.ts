@@ -324,13 +324,6 @@ export class StaffState {
       })
     );
     return this.staff.deleteById5({ id: payload.id }).pipe(
-      tap((staff) => {
-        setState(
-          patch<StaffStateModel>({
-            loading: false,
-          })
-        );
-      }),
       finalize(() => {
         setState(
           patch<StaffStateModel>({

@@ -204,13 +204,6 @@ export class InfraState {
       })
     );
     return this.bcResourcesItInfrastructure.deleteById11({ id: payload.id }).pipe(
-      tap((staff) => {
-        setState(
-          patch<InfraStateModel>({
-            loading: false,
-          })
-        );
-      }),
       finalize(() => {
         setState(
           patch<InfraStateModel>({

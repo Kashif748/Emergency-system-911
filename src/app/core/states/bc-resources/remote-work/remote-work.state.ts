@@ -265,13 +265,6 @@ export class RemoteWorkState {
       })
     );
     return this.remoteWork.deleteById6({ id: payload.id }).pipe(
-      tap((v) => {
-        setState(
-          patch<RemoteWorkStateModel>({
-            loading: false,
-          })
-        );
-      }),
       finalize(() => {
         setState(
           patch<RemoteWorkStateModel>({

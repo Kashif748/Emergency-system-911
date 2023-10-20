@@ -204,13 +204,6 @@ export class RecordsState {
       })
     );
     return this.bcRecords.deleteById7({ id: payload.id }).pipe(
-      tap((v) => {
-        setState(
-          patch<RecordsStateModel>({
-            loading: false,
-          })
-        );
-      }),
       finalize(() => {
         setState(
           patch<RecordsStateModel>({
