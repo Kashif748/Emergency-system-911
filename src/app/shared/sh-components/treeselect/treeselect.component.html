@@ -1,11 +1,17 @@
-<div #container [ngClass]="containerClass()" (click)="onClick($event)" class="h-100 {{styleClass}}">
+<div #container [ngClass]="{
+  'p-treeselect-chip': display === 'chip',
+  'p-disabled': disabled,
+  'p-focus': focused,
+  'p-treeselect-clearable': showClear && !disabled}" (click)="onClick($event)"
+  class="h-100 p-treeselect p-component p-inputwrapper {{styleClass}}">
   <div class="p-hidden-accessible">
     <input #focusInput type="text" role="listbox" [attr.id]="inputId" readonly [disabled]="disabled" (focus)="onFocus()"
       (blur)="onBlur()" (keydown)="onKeyDown($event)" [attr.tabindex]="tabindex" aria-haspopup="true"
       [attr.aria-expanded]="overlayVisible" [attr.aria-labelledby]="ariaLabelledBy" />
   </div>
   <div class="p-treeselect-label-container">
-    <div [ngClass]="labelClass()">
+    <div class="p-treeselect-label"
+      [ngClass]="{'p-placeholder': label === placeholder, 'p-treeselect-label-empty': !placeholder && emptyValue}">
       <ng-container *ngIf="valueTemplate; else defaultValueTemplate">
         <ng-container *ngTemplateOutlet="
             valueTemplate;
