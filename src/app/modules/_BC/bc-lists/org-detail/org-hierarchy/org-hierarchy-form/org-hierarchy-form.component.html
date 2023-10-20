@@ -5,19 +5,13 @@
         <h5 class="p-text-bold mb-0 mx-2">
           {{ selectedOrgHirNode?.label }}
         </h5>
-        <p-tag
-          value=" {{ 'ACTIONS.UPDATE_ITEM' | translate }}"
-          severity="warning"
-        ></p-tag>
+        <p-tag value=" {{ 'ACTIONS.UPDATE_ITEM' | translate }}" severity="warning"></p-tag>
       </ng-container>
       <ng-template #elseTemplate>
         <h4 class="p-text-bold mb-0 mx-2">
           {{ selectedOrgHirNode?.parent?.label }}
         </h4>
-        <p-tag
-          value="{{ selectedOrgHirNode?.label | translate }}"
-          severity="primary"
-        ></p-tag>
+        <p-tag value="{{ selectedOrgHirNode?.label | translate }}" severity="primary"></p-tag>
       </ng-template>
     </ng-container>
   </header>
@@ -33,23 +27,15 @@
         </label>
       </span>
 
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           form.controls['nameAr'].touched &&
           !form.controls['nameAr'].valid &&
           form.controls['nameAr'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('required')"
-        >
+        ">
+        <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('arabic')"
-        >
+        <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
       </ng-container>
@@ -64,37 +50,23 @@
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           form.controls['nameEn'].touched &&
           !form.controls['nameEn'].valid &&
           form.controls['nameEn'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('required')"
-        >
+        ">
+        <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('english')"
-        >
+        <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
           {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
         </p>
       </ng-container>
     </div>
     <!-- Type -->
     <div class="p-field p-col-12 p-md-12">
-      <p-dropdown
-        [options]="orgHirTypes$ | async"
-        formControlName="bcOrgHirType"
-        [autoDisplayFirst]="false"
-        [showClear]="true"
-        dataKey="id"
-        placeholder=" {{ 'ORG_HIE.TYPE' | translate }}"
-      >
+      <p-dropdown [options]="orgHirTypes$ | async" formControlName="bcOrgHirType" [autoDisplayFirst]="false"
+        [showClear]="true" dataKey="id" placeholder=" {{ 'ORG_HIE.TYPE' | translate }}">
         <ng-template let-item pTemplate="selectedItem">
           {{ item | translateObj }}
         </ng-template>
@@ -115,18 +87,11 @@
       </div>
       <!-- deparement manager -->
       <div class="p-field p-col-12 p-md-6">
-        <p-dropdown
-          [options]="users$ | async"
-          [autoDisplayFirst]="false"
-          [showClear]="true"
-          appendTo="body"
-          dataKey="id"
-          formControlName="manager"
-          [filter]="true"
-          filterBy="nameAr,nameEn"
-          (onFilter)="loadUsers($event?.filter)"
+        <p-dropdown #managerDropdown [options]="users$ | async" [autoDisplayFirst]="false" [showClear]="true"
+          appendTo="body" dataKey="id" formControlName="manager" [filter]="true" filterBy="nameAr,nameEn"
+          (onFilter)="loadUsers($event?.filter)" (onShow)="loadUsers(managerDropdown.filterValue, true)"
           placeholder="{{ 'ORG_HIE.DEPARTMENT.DEPT_MGMT' | translate }}"
-        >
+          [dropdownIcon]="(usersLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
           <ng-template let-item pTemplate="selectedItem">
             {{ item | translateObj }}
           </ng-template>
@@ -136,43 +101,27 @@
           </ng-template>
         </p-dropdown>
 
-        <ng-container
-          *ngIf="
+        <ng-container *ngIf="
             form.controls['manager'].touched &&
             !form.controls['manager'].valid &&
             form.controls['manager'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['manager'].hasError('required')"
-          >
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['manager'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>
       </div>
       <!-- coordinator  -->
       <div class="p-field p-col-12 p-md-6">
-        <p-multiSelect
-          [options]="users$ | async"
-          appendTo="body"
-          dataKey="id"
-          [filter]="true"
-          filterBy="nameAr,nameEn"
-          (onFilter)="loadUsers($event?.filter)"
-          placeholder="{{ 'ORG_HIE.DEPARTMENT.COORDINATOR' | translate }}"
-          formControlName="coordinators"
-          optionLabel="name"
-        >
+        <p-multiSelect [options]="users$ | async" appendTo="body" dataKey="id" [filter]="true" filterBy="nameAr,nameEn"
+          (onFilter)="loadUsers($event?.filter)" placeholder="{{ 'ORG_HIE.DEPARTMENT.COORDINATOR' | translate }}"
+          formControlName="coordinators" optionLabel="name">
           <ng-template let-value pTemplate="selectedItems">
             <span *ngFor="let item of value">
               {{ item | translateObj : "firstName" }}
               {{ item | translateObj : "lastName" }} ,
             </span>
-            <div
-              *ngIf="!value || value.length === 0"
-              class="country-placeholder"
-            >
+            <div *ngIf="!value || value.length === 0" class="country-placeholder">
               {{ "ORG_HIE.DEPARTMENT.COORDINATOR" | translate }}
             </div>
           </ng-template>
@@ -182,17 +131,12 @@
           </ng-template>
         </p-multiSelect>
 
-        <ng-container
-          *ngIf="
+        <ng-container *ngIf="
             form.controls['coordinators'].touched &&
             !form.controls['coordinators'].valid &&
             form.controls['coordinators'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['coordinators'].hasError('required')"
-          >
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['coordinators'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>
@@ -201,27 +145,14 @@
   </form>
 
   <div class="p-col p-d-flex">
-    <button
-      (click)="submit()"
-      *checkPrivileges="'PRIV_ED_BC_LISTS'"
-      pButton
-      [loading]="loading$ | async"
-      icon="pi pi-save"
-      label="{{ 'ACTIONS.SAVE' | translate }}"
-    ></button>
+    <button (click)="submit()" *checkPrivileges="'PRIV_ED_BC_LISTS'" pButton [loading]="loading$ | async"
+      icon="pi pi-save" label="{{ 'ACTIONS.SAVE' | translate }}"></button>
     <div class="ml-dir-auto"></div>
     <ng-container>
       <div class="mx-1">
-        <button
-          *checkPrivileges="'PRIV_ED_BC_LISTS'"
-          (click)="deleteHir()"
-          [loading]="loading$ | async"
-          pButton
-          type="button"
-          label="{{ 'ORG_HIE.DELETE' | translate }}"
-          icon="pi pi-trash"
-          class="p-button-outlined"
-        ></button>
+        <button *checkPrivileges="'PRIV_ED_BC_LISTS'" (click)="deleteHir()" [loading]="loading$ | async" pButton
+          type="button" label="{{ 'ORG_HIE.DELETE' | translate }}" icon="pi pi-trash"
+          class="p-button-outlined"></button>
       </div>
     </ng-container>
   </div>
