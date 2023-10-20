@@ -117,7 +117,7 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
               },
             ],
           };
-        }).sort((a, b) => b.id - a.id)
+        })
       )
     );
   }

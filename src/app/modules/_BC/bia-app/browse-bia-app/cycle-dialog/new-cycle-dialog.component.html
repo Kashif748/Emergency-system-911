@@ -34,29 +34,6 @@
 <ng-template #content>
   <div class="w-100 pt-2">
     <form [formGroup]="form" class="p-fluid p-grid mt-5">
-      <!-- Name En -->
-      <div class="p-field p-col-12 p-md-6">
-        <span class="p-float-label">
-          <input type="text" formControlName="nameEn" pInputText />
-          <label>
-            {{ "NAME_EN" | translate }}
-            <strong class="required-asterisk"> * </strong>
-          </label>
-        </span>
-        <ng-container *ngIf="
-            form.controls['nameEn'].touched &&
-            !form.controls['nameEn'].valid &&
-            form.controls['nameEn'].dirty
-          ">
-          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
-            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-          </p>
-        </ng-container>
-      </div>
-
       <!-- Name Ar -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
@@ -77,6 +54,29 @@
           </p>
           <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
             {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <!-- Name En -->
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <input type="text" formControlName="nameEn" pInputText />
+          <label>
+            {{ "NAME_EN" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+        <ng-container *ngIf="
+            form.controls['nameEn'].touched &&
+            !form.controls['nameEn'].valid &&
+            form.controls['nameEn'].dirty
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
           </p>
         </ng-container>
       </div>
