@@ -113,7 +113,7 @@ export class BrowseSystemComponent implements OnInit, OnDestroy {
               },
             ],
           };
-        }).sort((a, b) => b.id - a.id)
+        })
       )
     );
     this.breakpointObserver

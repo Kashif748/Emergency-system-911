@@ -13,6 +13,11 @@
             <th style="width: 0"></th>
             <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
+                #
+              </div>
+            </th>
+            <th class="min-w-100px max-w-150px">
+              <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
@@ -50,7 +55,10 @@
             <td class="flag-td">
               <div class="bg-secondary"></div>
             </td>
-            <td class="min-w-100px max-w-150px">   <!--*ngIf="columns?.includes('userName')"-->
+            <td class="min-w-100px max-w-150px">
+              <p-skeleton></p-skeleton>
+            </td>
+            <td class="min-w-100px max-w-150px">
               <p-skeleton></p-skeleton>
             </td>
             <td class="min-w-100px max-w-150px">
@@ -100,6 +108,11 @@
             <th></th>
             <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
+                #
+              </div>
+            </th>
+            <th class="min-w-100px max-w-150px">
+              <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
@@ -123,6 +136,12 @@
                   'bg-warning': !item.isActive
                 }"
               ></div>
+            </td>
+
+            <td class="min-w-100px max-w-150px" (click)="openView(item.bcImpactTypes.id)">
+              <div>
+                {{ item.id }}
+              </div>
             </td>
 
             <td class="min-w-100px max-w-150px" (click)="openView(item.bcImpactTypes.id)">

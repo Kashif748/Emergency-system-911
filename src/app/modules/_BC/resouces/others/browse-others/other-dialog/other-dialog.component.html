@@ -89,35 +89,6 @@
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
     <form [formGroup]="form" class="p-fluid p-grid mt-5">
-      <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="detailsEn" pInputText />
-        <label>
-          {{ "OTHERS.DETAIL_EN" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-        <ng-container
-          *ngIf="
-          form.controls['detailsEn'].touched &&
-          !form.controls['detailsEn'].valid &&
-          form.controls['detailsEn'].dirty
-        "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['detailsEn'].hasError('required')"
-          >
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['detailsEn'].hasError('english')"
-          >
-            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-          </p>
-        </ng-container>
-      </div>
 
       <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
@@ -149,6 +120,37 @@
           </p>
         </ng-container>
       </div>
+
+      <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="detailsEn" pInputText />
+        <label>
+          {{ "OTHERS.DETAIL_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+        <ng-container
+          *ngIf="
+          form.controls['detailsEn'].touched &&
+          !form.controls['detailsEn'].valid &&
+          form.controls['detailsEn'].dirty
+        "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['detailsEn'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['detailsEn'].hasError('english')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
       <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
         <input type="number" formControlName="requiredCount" pInputText/>
