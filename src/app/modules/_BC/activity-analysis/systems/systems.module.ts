@@ -30,6 +30,7 @@ import { ConfirmationService } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
 import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.component';
 import { SystemModule } from 'src/app/modules/_business-continuity-setup/system/system.module';
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -76,6 +77,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     DialogModule,
     SidebarModule,
     TreeSelectModule,
+    TagModule,
     //
     SystemModule,
   ],

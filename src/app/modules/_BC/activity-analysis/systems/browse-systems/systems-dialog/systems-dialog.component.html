@@ -1,25 +1,11 @@
 <div class="p-toolbar-group-right">
-  <button
-    pButton
-    label="{{ 'ACTIONS.ADD' | translate }}"
-    icon="pi pi-plus"
-    (click)="toggleDialog()"
-  ></button>
+  <button pButton label="{{ 'ACTIONS.ADD' | translate }}" icon="pi pi-plus" (click)="toggleDialog()"></button>
 </div>
 
 <!-- as a dialog -->
-<p-dialog
-  [visible]="opened$ | async"
-  [modal]="true"
-  (visibleChange)="toggleDialog()"
-  [style]="{ width: '55vw' }"
-  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="true"
-  [resizable]="false"
-  styleClass="overflow-hidden"
->
+<p-dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="toggleDialog()" [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
+  [resizable]="false" styleClass="overflow-hidden">
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
@@ -33,26 +19,20 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <span>{{ "SYSTEMS.NEW" | translate }}</span>
-      <span
-        *ngIf="true"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="false"
-        class="label label-lg label-light-success label-inline"
-      >
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
+      {{ "SYSTEMS.NEW" | translate }}
     </h3>
+    
+    <div class="mx-2">
+      <p-tag>
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </p-tag>
+    </div>
   </div>
 </ng-template>
 
 <!-- templates content -->
 <ng-template #content>
-  <div class="w-100 pt-2">
+  <div class="w-100 pt-4">
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
@@ -60,11 +40,7 @@
       <div class="p-field p-col-10">
         <div class="p-inputgroup">
           <span class="p-float-label">
-            <input
-              (keyup)="loadPage($event.target.value)"
-              type="text"
-              pInputText
-            />
+            <input (keyup)="loadPage($event.target.value)" type="text" pInputText />
             <label>
               {{ "SYSTEMS.SYSTEM" | translate }}
             </label>
@@ -73,15 +49,12 @@
         </div>
       </div>
       <div class="p-col-2">
-        <p-button
-          (click)="display = true"
-          label="{{ 'SYSTEMS.ADD_SYSTEM' | translate }}"
-          styleClass="p-button-link"
-        ></p-button>
+        <p-button (click)="display = true" label="{{ 'SYSTEMS.ADD_SYSTEM' | translate }}"
+          styleClass="p-button-link"></p-button>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="!display">
       <div class="col-12">
         <ng-container>
           <ng-container *ngIf="loading$ | async; else tableTemplate">
@@ -123,15 +96,8 @@
             </p-table>
           </ng-container>
           <ng-template #tableTemplate>
-            <p-table
-              [columns]="columns"
-              totalRecords="10"
-              [value]="page$ | async"
-              dataKey="id"
-              [autoLayout]="true"
-              selectionMode="single"
-              [(selection)]="selectedBCSystem"
-            >
+            <p-table [columns]="columns" totalRecords="10" [value]="page$ | async" dataKey="id" [autoLayout]="true"
+              selectionMode="single" [(selection)]="selectedBCSystem">
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                   <!-- <col
@@ -158,16 +124,12 @@
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-item let-rowData>
-                <tr
-                  [pSelectableRow]="rowData"
-                  class="cursor-pointer hoverable"
-                  [pSelectableRowDisabled]="rowData.selected"
-                  [ngClass]="{
+                <tr [pSelectableRow]="rowData" class="cursor-pointer hoverable"
+                  [pSelectableRowDisabled]="rowData.selected" [ngClass]="{
                     'row-disabled': rowData.selected
-                  }"
-                >
+                  }">
                   <td class="min-w-100px">
-                    {{ item.id }}
+                    {{ item.sequenceNumber }}
                   </td>
                   <td class="min-w-200px max-w-300px">
                     {{ item | translateObj }}
@@ -190,29 +152,14 @@
           </ng-template>
         </ng-container>
 
-        <p-paginator
-          #pg
-          [first]="0"
-          [rows]="10"
-          [totalRecords]="totalRecords$ | async"
-          [showCurrentPageReport]="true"
+        <p-paginator #pg [first]="0" [rows]="10" [totalRecords]="totalRecords$ | async" [showCurrentPageReport]="true"
           currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
-          (onPageChange)="loadPage($event, true)"
-        ></p-paginator>
+          (onPageChange)="loadPage($event, true)"></p-paginator>
       </div>
     </div>
-    <p-sidebar
-      [(visible)]="display"
-      position="bottom"
-      [baseZIndex]="-1000"
-      [modal]="false"
-      styleClass="h-100"
-    >
+    <p-sidebar [(visible)]="display" position="bottom" [baseZIndex]="-1000" [modal]="false" styleClass="h-100">
       <div class="bg-white pt-5 h-100">
-        <app-system-dialog
-          (onClose)="closeCreateDialog()"
-          [asDialog]="false"
-        ></app-system-dialog>
+        <app-system-dialog (onClose)="closeCreateDialog()" [asDialog]="false"></app-system-dialog>
       </div>
     </p-sidebar>
   </div>
@@ -223,14 +170,8 @@
   <div class="p-col p-d-flex">
     <div class="p-col text-center">
       <div class="text-center">
-        <button
-          [disabled]="!selectedBCSystem"
-          [loading]="blocking$ | async"
-          (click)="submit()"
-          pButton
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-        ></button>
+        <button [disabled]="!selectedBCSystem" [loading]="blocking$ | async" (click)="submit()" pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
       </div>
     </div>
   </div>
