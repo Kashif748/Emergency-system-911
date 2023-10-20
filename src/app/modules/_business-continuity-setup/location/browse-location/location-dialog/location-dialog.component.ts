@@ -28,7 +28,14 @@ import { FormUtils } from '@core/utils';
 import { Observable, Subject } from 'rxjs';
 import { BcLocationTypes } from 'src/app/api/models';
 import { BrowseLocationsAction } from '../../states/browse-locations.action';
-import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  auditTime,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
 import { IAuthService } from '@core/services/auth.service';
 import { AddressSearchResultModel } from '@shared/sh-components/map/utils/map.models';
@@ -55,6 +62,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   @ViewChild(Dialog) dialog: Dialog;
 
   private defaultFormValue: { [key: string]: any } = {};
+  private auditLoadTypes$ = new Subject<string>();
 
   @ViewChild('mapContainer', { read: ViewContainerRef })
   mapContainer: ViewContainerRef;
@@ -134,6 +142,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(new LocationTypeAction.LoadPage({ page: 0, size: 50 }));
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
@@ -141,7 +150,34 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     if (!this.dialog) {
       this.initMap();
     }
+
+    this.auditLoadTypes$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((searchText) => {
+        this.store.dispatch(
+          new LocationTypeAction.LoadPage({
+            filters: { searchText },
+            page: 0,
+            size: 50,
+          })
+        );
+      });
   }
+
+  loadTypes(searchText?: string, direct = false, id?: number) {
+    if (direct) {
+      this.store.dispatch(
+        new LocationTypeAction.LoadPage({
+          filters: { searchText },
+          page: 0,
+          size: 50,
+        })
+      );
+      return;
+    }
+    this.auditLoadTypes$.next(searchText);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

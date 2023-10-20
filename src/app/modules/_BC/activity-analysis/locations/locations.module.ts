@@ -29,6 +29,7 @@ import { NgxsModule } from '@ngxs/store';
 import { BrowseActivityLocationsState } from './states/browse-locations.state';
 import { LocationModule } from 'src/app/modules/_business-continuity-setup/location/location.module';
 import { SidebarModule } from 'primeng/sidebar';
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -76,6 +77,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ProgressSpinnerModule,
     DialogModule,
     SidebarModule,
+    TagModule,
 
     LocationModule,
   ],
