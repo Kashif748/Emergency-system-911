@@ -580,24 +580,6 @@ export class TreeselectComponent implements AfterContentInit {
     }
   }
 
-  containerClass() {
-    return {
-      'p-treeselect p-component p-inputwrapper': true,
-      'p-treeselect-chip': this.display === 'chip',
-      'p-disabled': this.disabled,
-      'p-focus': this.focused,
-      'p-treeselect-clearable': this.showClear && !this.disabled,
-    };
-  }
-
-  labelClass() {
-    return {
-      'p-treeselect-label': true,
-      'p-placeholder': this.label === this.placeholder,
-      'p-treeselect-label-empty': !this.placeholder && this.emptyValue,
-    };
-  }
-
   get emptyMessageText() {
     return (
       this.emptyMessage ||
