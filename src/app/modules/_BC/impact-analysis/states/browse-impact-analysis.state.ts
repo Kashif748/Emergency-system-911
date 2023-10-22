@@ -206,7 +206,7 @@ export class BrowseImpactAnalysisState {
   }
   @Action(BrowseImpactAnalysisAction.UpdateFilter, { cancelUncompleted: true })
   updateFilter(
-    { setState, getState }: StateContext<BrowseImpactAnalysisStateModel>,
+    { setState}: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.UpdateFilter
   ) {
     setState(
@@ -216,8 +216,8 @@ export class BrowseImpactAnalysisState {
           filters: iif(
             payload.clear === true,
             {
-              orgHierarchyId: getState().pageRequest.filters.orgHierarchyId,
-              cycleId: getState().pageRequest.filters.cycleId,
+              orgHierarchyId: (v) => v,
+              cycleId: (v) => v,
             },
             patch({
               ...payload,

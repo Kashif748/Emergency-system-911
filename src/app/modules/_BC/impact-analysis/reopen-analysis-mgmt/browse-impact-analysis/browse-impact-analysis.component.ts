@@ -493,6 +493,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       queryParams: {
         _cycle: activity?.cycle?.id,
         _activity: activity?.id,
+        _division: activity?.id,
       },
     });
   }

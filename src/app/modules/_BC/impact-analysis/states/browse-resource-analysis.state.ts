@@ -185,8 +185,8 @@ export class BrowseResourceAnalysisState {
           filters: iif(
             payload.clear === true,
             {
-              orgHierarchyId: getState().pageRequest.filters.orgHierarchyId,
-              cycleId: getState().pageRequest.filters.cycleId,
+              orgHierarchyId: (v) => v,
+              cycleId: (v) => v,
             },
             patch({
               ...payload,

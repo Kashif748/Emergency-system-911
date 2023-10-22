@@ -1607,6 +1607,9 @@
       "DIALOG": {
         "YES": "نعم",
         "NO": "لا",
+        "UPDATE": {
+          "MESSAGE": "Are you sure you want to update?"
+        },
         "ARE_YOU_SURE": "هل أنت متأكد؟",
         "DELETE": {
           "TITLE": "تأكيد الحذف",

@@ -110,4 +110,12 @@ export namespace BrowseBiaAppAction {
      */
     constructor(public payload: {form: BcCycles, cycle: number}) {}
   }
+  export class UpdateCycle {
+    static readonly type = '[BrowseBiaApp] Update Cycle';
+
+    /**
+     *
+     */
+    constructor(public payload: { [key: string]: any }) {}
+  }
 }
