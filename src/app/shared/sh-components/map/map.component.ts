@@ -298,7 +298,7 @@ export class MapComponent
     }
     this.applyStyle();
     const map = this.initializeMap().then(() => {
-      if (this.mapType === 'reporter') {
+      if (this.mapType === 'reporter' && !this.data?.viewOnly) {
         this.addReporterPoint();
       }
     });

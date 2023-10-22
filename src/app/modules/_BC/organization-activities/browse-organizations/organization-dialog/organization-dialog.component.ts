@@ -1,32 +1,46 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, Subject} from "rxjs";
-import {Dialog} from "primeng/dialog";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Select, Store} from "@ngxs/store";
-import {PrivilegesService} from "@core/services/privileges.service";
-import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
-import {TreeNode} from "primeng/api";
-import {FormUtils} from "@core/utils/form.utils";
-import {TabView} from "primeng/tabview";
-import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
-import {OrgActivityState} from "@core/states/org-activities/orgActivity.state";
-import {BrowseOrganizationAction} from "../../states/browse-organization.action";
-import {ActivityFrquencyState} from "@core/states/bc/activity-frquency/activity-frquency.state";
-import {BcActivityFrequencies} from "../../../../../api/models/bc-activity-frequencies";
-import {BcOrgHierarchy} from "../../../../../api/models/bc-org-hierarchy";
-import {GenericValidators} from "@shared/validators/generic-validators";
-import {OrgDetailAction} from "@core/states";
-import {OrgDetailState} from "@core/states/bc/org-details/org-detail.state";
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  auditTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
+import { Dialog } from 'primeng/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Select, Store } from '@ngxs/store';
+import { PrivilegesService } from '@core/services/privileges.service';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import { TreeNode } from 'primeng/api';
+import { FormUtils } from '@core/utils/form.utils';
+import { TabView } from 'primeng/tabview';
+import { OrgActivityAction } from '@core/states/org-activities/orgActivity.action';
+import { OrgActivityState } from '@core/states/org-activities/orgActivity.state';
+import { BrowseOrganizationAction } from '../../states/browse-organization.action';
+import { ActivityFrquencyState } from '@core/states/bc/activity-frquency/activity-frquency.state';
+import { BcActivityFrequencies } from '../../../../../api/models/bc-activity-frequencies';
+import { BcOrgHierarchy } from '../../../../../api/models/bc-org-hierarchy';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { OrgDetailAction } from '@core/states';
+import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
 
 @Component({
   selector: 'app-organization-dialog',
   templateUrl: './organization-dialog.component.html',
-  styleUrls: ['./organization-dialog.component.scss']
+  styleUrls: ['./organization-dialog.component.scss'],
 })
 export class OrganizationDialogComponent implements OnInit, OnDestroy {
-
   @ViewChild(Dialog) dialog: Dialog;
   @ViewChild(TabView) tabv: TabView;
   private auditLoadOrgPage$ = new Subject<string>();
@@ -38,8 +52,13 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   orgHir;
 
   justifyOptions = [
-    {icon: 'pi pi-user', nameAr: 'خارجي', nameEn: 'External', isActive: true},
-    {icon: 'pi pi-tablet', nameAr: 'داخلي', nameEn: 'Internal', isActive: false},
+    { icon: 'pi pi-user', nameAr: 'خارجي', nameEn: 'External', isActive: true },
+    {
+      icon: 'pi pi-tablet',
+      nameAr: 'داخلي',
+      nameEn: 'Internal',
+      isActive: false,
+    },
   ];
   @Select(ActivityFrquencyState.page)
   activityFre$: Observable<BcActivityFrequencies[]>;
@@ -52,7 +71,6 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   public get asDialog() {
     return this.route.component !== OrganizationDialogComponent;
   }
-
 
   @Input()
   orgsTree: TreeNode[];
@@ -70,9 +88,7 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   }
 
   get viewOnly() {
-    return (
-      this.route.snapshot.queryParams['_mode'] === 'viewonly'
-    );
+    return this.route.snapshot.queryParams['_mode'] === 'viewonly';
   }
   @Input()
   set orgActivityId(v: number) {
@@ -93,6 +109,7 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
             ...orgActivity,
           });
           this.patchValues(orgActivity);
+          this.defaultFormValue = orgActivity;
         })
       )
       .subscribe();
@@ -105,8 +122,7 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
     private translateObj: TranslateObjPipe,
     private privileges: PrivilegesService,
     private router: Router,
-    private cdr: ChangeDetectorRef,
-
+    private cdr: ChangeDetectorRef
   ) {
     this.route.queryParams
       .pipe(
@@ -136,22 +152,22 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
   patchValues(value) {
     if (value?.internal) {
       this.form.patchValue({
-        internal: this.justifyOptions[1]
+        internal: this.justifyOptions[1],
       });
     } else {
       this.form.patchValue({
-        internal: this.justifyOptions[0]
+        internal: this.justifyOptions[0],
       });
     }
     const node = {
-      children : [],
+      children: [],
       data: value.orgHierarchy.id,
       labelAr: value.orgHierarchy.nameAr,
-      labelEn: value.orgHierarchy.nameEn
+      labelEn: value.orgHierarchy.nameEn,
     };
     this.form.patchValue({
-      dept: node
-    })
+      dept: node,
+    });
   }
 
   ngOnInit() {
@@ -184,12 +200,10 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   buildForm() {
     this.activeTab = 0;
@@ -200,11 +214,8 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
       description: [null, [Validators.required]],
       activityFrequence: [null, [Validators.required]],
       externalReference: [null],
-      internal: [null, [Validators.required]]
+      internal: [null, [Validators.required]],
     });
-    this.defaultFormValue = {
-      ...this.defaultFormValue,
-    };
   }
 
   async submit() {
@@ -221,35 +232,40 @@ export class OrganizationDialogComponent implements OnInit, OnDestroy {
     };
 
     const orgHie = {
-      id: orgActivities.dept.key ? orgActivities.dept.key : orgActivities.dept.data
+      id: orgActivities.dept.key
+        ? orgActivities.dept.key
+        : orgActivities.dept.data,
     };
 
     const orgActivity = {
       activityFrequence: orgActivities.activityFrequence,
-    description: orgActivities.description,
-    externalReference: orgActivities.externalReference,
-    internal: orgActivities.internal.isActive ? false : true,
-    nameAr: orgActivities.nameAr,
-    nameEn: orgActivities.nameEn,
-    orgHierarchy: orgHie as BcOrgHierarchy,
-      id: this._orgActivityId
+      description: orgActivities.description,
+      externalReference: orgActivities.externalReference,
+      internal: orgActivities.internal.isActive ? false : true,
+      nameAr: orgActivities.nameAr,
+      nameEn: orgActivities.nameEn,
+      orgHierarchy: orgHie as BcOrgHierarchy,
+      id: this._orgActivityId,
     };
 
-
     if (this.editMode) {
-      this.store
-        .dispatch(new BrowseOrganizationAction.UpdateOrganization(orgActivity));
-
+      this.store.dispatch(
+        new BrowseOrganizationAction.UpdateOrganization(orgActivity)
+      );
     } else {
-      this.store
-        .dispatch(new BrowseOrganizationAction.CreateOrganization(orgActivity));
+      this.store.dispatch(
+        new BrowseOrganizationAction.CreateOrganization(orgActivity)
+      );
     }
   }
 
   clear() {
     this.store.dispatch(new OrgActivityAction.GetOrgActivities({}));
     this.form.reset();
-    this.form.patchValue(this.defaultFormValue);
+    this.form.patchValue({
+      ...this.defaultFormValue,
+    });
+    this.patchValues(this.defaultFormValue);
     this.cdr.detectChanges();
   }
 
