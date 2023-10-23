@@ -33,6 +33,7 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -74,6 +75,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     BlockUIModule,
     FieldsetModule,
     ProgressSpinnerModule,
+    TagModule,
     NgxsModule.forFeature([BrowseSystemsState]),
     TranslateModule.forChild({
       extend: true,
