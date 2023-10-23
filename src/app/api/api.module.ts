@@ -125,6 +125,7 @@ import { BcImpactTypeControllerService } from './services/bc-impact-type-control
 import { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
 import { BcCyclesControllerService } from './services/bc-cycles-controller.service';
 import { BcCycleStatusControllerService } from './services/bc-cycle-status-controller.service';
+import { BcAnalysisControllerService } from './services/bc-analysis-controller.service';
 import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
 import { BcActivityDependencyExternalControllerService } from './services/bc-activity-dependency-external-controller.service';
 import { BcActivityDependencyOrgControllerService } from './services/bc-activity-dependency-org-controller.service';
@@ -176,7 +177,6 @@ import { BcActivityAnalysisWorkflowControllerService } from './services/bc-activ
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
-import { BcAnalysisControllerService } from './services/bc-analysis-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -307,6 +307,7 @@ import { BcAnalysisControllerService } from './services/bc-analysis-controller.s
     BcImpactLevelControllerService,
     BcCyclesControllerService,
     BcCycleStatusControllerService,
+    BcAnalysisControllerService,
     BcActivityFrequenciesControllerService,
     BcActivityDependencyExternalControllerService,
     BcActivityDependencyOrgControllerService,

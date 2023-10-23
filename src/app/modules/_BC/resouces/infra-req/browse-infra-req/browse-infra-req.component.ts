@@ -12,6 +12,7 @@ import {BrowseInfraState, BrowseInfraStateModel} from "../states/browse-infra.st
 import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
 import {BrowseInfraAction} from "../states/browse-infra.action";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BrowseStaffAction} from "../../staff-requirement/states/browse-staff.action";
 
 @Component({
   selector: 'app-browse-infra-req',
@@ -46,8 +47,8 @@ export class BrowseInfraReqComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
 
@@ -66,11 +67,26 @@ export class BrowseInfraReqComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...infraActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              },
             ],
           };
         })
       )
     );
+  }
+  delete(id) {
+    this.store
+      .dispatch(new BrowseInfraAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
   openDialog(id?: number) {
     this.store.dispatch(new BrowseInfraAction.ToggleDialog({ infraId: id }));

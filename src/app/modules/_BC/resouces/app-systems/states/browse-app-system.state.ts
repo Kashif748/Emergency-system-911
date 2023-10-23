@@ -10,6 +10,9 @@ import {EMPTY} from "rxjs";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseAppSystemAction} from "./browse-app-system.action";
 import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
+import {BrowseStaffStateModel} from "../../staff-requirement/states/browse-staff.state";
+import {BrowseStaffAction} from "../../staff-requirement/states/browse-staff.action";
+import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 
 export interface BrowseAppSystemStateModel {
   pageRequest: PageRequestModel;
@@ -177,5 +180,20 @@ export class BrowseAppSystemState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseAppSystemAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseAppSystemStateModel>,
+    { payload }: BrowseAppSystemAction.Delete
+  ) {
+    return dispatch(new AppSystemAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

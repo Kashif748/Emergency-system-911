@@ -12,6 +12,7 @@ import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work
 import {BrowseRemoteWorkState, BrowseRemoteWorkStateModel} from "../states/browse-remote-work.state";
 import {BrowseRemoteWorkAction} from "../states/browse-remote-work.action";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BrowseStaffAction} from "../../staff-requirement/states/browse-staff.action";
 
 @Component({
   selector: 'app-browse-remote-work',
@@ -47,8 +48,8 @@ export class BrowseRemoteWorkComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
 
@@ -67,11 +68,27 @@ export class BrowseRemoteWorkComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...remoteWorkActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              },
             ],
           };
         })
       )
     );
+  }
+
+  delete(id) {
+    this.store
+      .dispatch(new BrowseRemoteWorkAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
 
   openDialog(id?: number) {

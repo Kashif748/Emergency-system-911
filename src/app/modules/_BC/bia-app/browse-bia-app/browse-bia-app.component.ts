@@ -8,7 +8,7 @@ import {ILangFacade} from "@core/facades/lang.facade";
 import {PrivilegesService} from "@core/services/privileges.service";
 import {TranslateService} from "@ngx-translate/core";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {auditTime, filter, map, switchMap, takeUntil} from "rxjs/operators";
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {BrowseBiaAppAction} from "../states/browse-bia-app.action";
 import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../states/browse-bia-app.state";
 import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
@@ -18,6 +18,7 @@ import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.
 import {Router} from "@angular/router";
 import {OrgDetailAction, OrgDetailState} from "@core/states";
 import {BcOrgHierarchyProjection} from "../../../../api/models/bc-org-hierarchy-projection";
+import {BrowseImpactAnalysisAction} from "../../impact-analysis/states/browse-impact-analysis.action";
 
 @Component({
   selector: 'app-browse-bia-app',
@@ -126,7 +127,16 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       new BrowseBiaAppAction.LoadCycles({ page: 0, size: 100 }),
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
       new BrowseBiaAppAction.LoadActivitiesStatuses(),
-    ]);
+    ]).pipe(
+      takeUntil(this.destroy$),
+      take(1),
+      filter((p) => !!p),
+      tap(() => {
+        this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
+          cycle: this.selectedCycle}));
+        this.loadPage(null, this.selectedCycle);
+      })
+    ).subscribe();
     this.sortAnalysisCycles$ = this.cycles$.pipe(
       filter((cycles) => !!cycles),
       switchMap((cycles) => {
@@ -164,7 +174,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
     ] as MenuItem[];
-    this.loadPage(null, this.selectedCycle);
+
     this.page$ = this.store.select(BiaAppsState.page).pipe(
       filter((p) => !!p),
       map((page) =>
@@ -185,19 +195,11 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     );
   }
 
-
-/*  openDialog(id?: number) {
-    this.store.dispatch(
-      new BrowseBiaAppAction.ToggleDialog({ BiaId: id })
-    );
-  }*/
-
   search() {
     this.store.dispatch(new BrowseBiaAppAction.LoadBia({
       pageRequest: undefined,
       cycleId: this.selectedCycle
     }));
-    // this.loadPage(null, this.selectedCycle);
   }
 
   clear() {
@@ -294,7 +296,9 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   }
 
   setCycleId(value: BcCycles) {
-   this.loadPage(null, value);
+    this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
+      cycle: value}))
+    this.loadPage(null, value);
   }
 
 

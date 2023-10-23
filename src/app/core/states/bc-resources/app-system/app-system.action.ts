@@ -67,4 +67,15 @@ export namespace AppSystemAction {
     ) {
     }
   }
+  export class Delete {
+    static readonly type = '[appSystem] Delete AppSystem';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

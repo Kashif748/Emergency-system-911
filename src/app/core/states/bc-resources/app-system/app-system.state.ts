@@ -9,6 +9,8 @@ import {BcResourcesAppAndSoftware} from "../../../../api/models/bc-resources-app
 import {BcResourcesAppAndSoftwareControllerService} from "../../../../api/services/bc-resources-app-and-software-controller.service";
 import {BcResourcesMinLicenseReqControllerService} from "../../../../api/services/bc-resources-min-license-req-controller.service";
 import {PageBcResourcesMinLicenseReq} from "../../../../api/models/page-bc-resources-min-license-req";
+import {RecordsStateModel} from "@core/states/bc-resources/records/records.state";
+import {RecordsAction} from "@core/states/bc-resources/records/records.action";
 
 export interface AppSystemStateModel {
   page: PageBcResourcesAppAndSoftware;
@@ -243,6 +245,29 @@ export class AppSystemState {
         setState(
           patch<AppSystemStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(AppSystemAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<AppSystemStateModel>,
+    { payload }: AppSystemAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<AppSystemStateModel>({
+        loading: true,
+      })
+    );
+    return this.bcResourcesAppAndSoftwareService.deleteById14({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<AppSystemStateModel>({
+            loading: false,
           })
         );
       })

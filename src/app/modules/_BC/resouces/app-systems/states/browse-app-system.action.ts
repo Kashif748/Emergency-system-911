@@ -53,4 +53,15 @@ export namespace BrowseAppSystemAction {
     constructor(public payload?: { pageRequest?: PageRequestModel } ) {
     }
   }
+  export class Delete {
+    static readonly type = '[BrowseAppSystem] Delete AppSystem';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

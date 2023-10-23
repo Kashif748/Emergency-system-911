@@ -45,4 +45,15 @@ export namespace ActivityEmployeesAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[appSystem] Delete System';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

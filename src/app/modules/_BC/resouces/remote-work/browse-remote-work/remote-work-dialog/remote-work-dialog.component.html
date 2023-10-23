@@ -177,7 +177,7 @@
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
           <p-dropdown #system [options]="systems$ | async" [autoDisplayFirst]="false"
-            formControlName="resourcesRemoteWorkSystemsExternal" [filter]="true" filterBy="nameEn,nameAr"
+            formControlName="resourcesRemoteWorkSystemsExternal" filterBy="nameEn,nameAr" [filter]="true" filterBy="nameEn,nameAr"
             (onFilter)="loadSystems($event?.filter)" dataKey="id" (onShow)="loadSystems(system.filterValue, true)"
             [showClear]="true" appendTo="body" styleClass="w-100" class="w-100"
             [dropdownIcon]="(systemsLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">

@@ -44,4 +44,15 @@ export namespace BrowseInfraAction {
      */
     constructor(public payload: { infraId: number }) {}
   }
+  export class Delete {
+    static readonly type = '[BrowseInfra] Delete Infra';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

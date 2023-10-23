@@ -456,6 +456,7 @@ export { ApiErrorBcCycles } from './models/api-error-bc-cycles';
 export { RestApiResponseBcCycles } from './models/rest-api-response-bc-cycles';
 export { ApiErrorBcCycleStatus } from './models/api-error-bc-cycle-status';
 export { RestApiResponseBcCycleStatus } from './models/rest-api-response-bc-cycle-status';
+export { BcAnalysisBulkTransactionDto } from './models/bc-analysis-bulk-transaction-dto';
 export { BcActivityFrequencies } from './models/bc-activity-frequencies';
 export { ApiErrorBcActivityFrequencies } from './models/api-error-bc-activity-frequencies';
 export { RestApiResponseBcActivityFrequencies } from './models/rest-api-response-bc-activity-frequencies';
@@ -1319,6 +1320,9 @@ export { RestApiResponsePageBcCycles } from './models/rest-api-response-page-bc-
 export { ApiErrorPageBcCycleStatus } from './models/api-error-page-bc-cycle-status';
 export { PageBcCycleStatus } from './models/page-bc-cycle-status';
 export { RestApiResponsePageBcCycleStatus } from './models/rest-api-response-page-bc-cycle-status';
+export { ApiErrorBcAnalysisStatusDetails } from './models/api-error-bc-analysis-status-details';
+export { BcAnalysisStatusDetails } from './models/bc-analysis-status-details';
+export { RestApiResponseBcAnalysisStatusDetails } from './models/rest-api-response-bc-analysis-status-details';
 export { ApiErrorPageBcAnalysisByOrgHierarchyResponse } from './models/api-error-page-bc-analysis-by-org-hierarchy-response';
 export { BcAnalysisByOrgHierarchyResponse } from './models/bc-analysis-by-org-hierarchy-response';
 export { NameResponse } from './models/name-response';
@@ -1362,6 +1366,10 @@ export { RestApiResponseBcActivityAnalysisWorkLogProjection } from './models/res
 export { ApiErrorPageBcActivityAnalysisWorkLogProjection } from './models/api-error-page-bc-activity-analysis-work-log-projection';
 export { PageBcActivityAnalysisWorkLogProjection } from './models/page-bc-activity-analysis-work-log-projection';
 export { RestApiResponsePageBcActivityAnalysisWorkLogProjection } from './models/rest-api-response-page-bc-activity-analysis-work-log-projection';
+export { ApiErrorPageBcActivityAnalysisSummaryResponse } from './models/api-error-page-bc-activity-analysis-summary-response';
+export { BcActivityAnalysisSummaryResponse } from './models/bc-activity-analysis-summary-response';
+export { PageBcActivityAnalysisSummaryResponse } from './models/page-bc-activity-analysis-summary-response';
+export { RestApiResponsePageBcActivityAnalysisSummaryResponse } from './models/rest-api-response-page-bc-activity-analysis-summary-response';
 export { ActivityAnalysisStatusAction } from './models/activity-analysis-status-action';
 export { ApiErrorBcActivityAnalysisDtoWithStatus } from './models/api-error-bc-activity-analysis-dto-with-status';
 export { BcActivityAnalysisDtoWithStatus } from './models/bc-activity-analysis-dto-with-status';

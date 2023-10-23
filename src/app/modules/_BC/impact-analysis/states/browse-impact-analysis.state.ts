@@ -8,7 +8,7 @@ import {TextUtils} from '@core/utils';
 import {iif, patch} from '@ngxs/store/operators';
 import {BrowseImpactAnalysisAction} from './browse-impact-analysis.action';
 import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError, finalize, tap} from 'rxjs/operators';
 import {EMPTY} from 'rxjs';
 
 export interface BrowseImpactAnalysisStateModel {
@@ -61,14 +61,18 @@ export class BrowseImpactAnalysisState {
 
   @Selector([BrowseImpactAnalysisState])
   static hasFilters(state: BrowseImpactAnalysisStateModel): boolean {
-    return (
-      Object.keys(state.pageRequest.filters).filter(
+    const filters = state.pageRequest.filters;
+    return !('orgHierarchyId' in filters && 'cycleId' in filters) ||
+      (Object.keys(filters).filter(
         (k) =>
           k !== 'active' &&
-          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+          k !== 'orgHierarchyId' &&
+          k !== 'cycleId' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(filters[k])
       ).length > 0
-    );
+      );
   }
+
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseImpactAnalysisAction.LoadPage)
@@ -96,7 +100,7 @@ export class BrowseImpactAnalysisState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.id,
         },
       })
     );
@@ -149,6 +153,19 @@ export class BrowseImpactAnalysisState {
     );
   }
 
+  @Action(BrowseImpactAnalysisAction.LoadAnalysisStatusInfo)
+  loadAnalysisStatusInfo(
+    { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.LoadAnalysisStatusInfo
+  ) {
+    return dispatch(
+      new ImapactAnalysisAction.LoadAnalysisStatusInfo({
+        orgHierarchyId: payload.orgHierarchyId,
+        cycleId: payload.cycleId,
+      })
+    );
+  }
+
   @Action(BrowseImpactAnalysisAction.CreateCycle)
   CreateCycle(
     { dispatch, getState }: StateContext<BrowseImpactAnalysisStateModel>,
@@ -189,7 +206,7 @@ export class BrowseImpactAnalysisState {
   }
   @Action(BrowseImpactAnalysisAction.UpdateFilter, { cancelUncompleted: true })
   updateFilter(
-    { setState }: StateContext<BrowseImpactAnalysisStateModel>,
+    { setState}: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.UpdateFilter
   ) {
     setState(
@@ -198,12 +215,35 @@ export class BrowseImpactAnalysisState {
           first: 0,
           filters: iif(
             payload.clear === true,
-            {},
+            {
+              orgHierarchyId: (v) => v,
+              cycleId: (v) => v,
+            },
             patch({
               ...payload,
             })
           ),
         }),
+      })
+    );
+  }
+
+  @Action(BrowseImpactAnalysisAction.UpdateBulkTransaction)
+  updatebulk(
+    { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.UpdateBulkTransaction
+  ) {
+    return dispatch(new ImapactAnalysisAction.UpdateBulkTransaction(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        // dispatch(new BrowseRtoAction.LoadRto());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
       })
     );
   }
@@ -224,6 +264,23 @@ export class BrowseImpactAnalysisState {
         _id: payload.id,
         _cycleId: payload.cycle,
         _mode: undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  @Action(BrowseImpactAnalysisAction.UpdateRoute, {
+    cancelUncompleted: true,
+  })
+  updateRoute(
+    {getState}: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.UpdateRoute
+  ) {
+    const currentState = getState();
+    this.router.navigate([], {
+      queryParams: {
+        _division: currentState.pageRequest.filters.orgHierarchyId.id,
+        _cycle: currentState.pageRequest.filters.cycleId.id,
       },
       queryParamsHandling: 'merge',
     });

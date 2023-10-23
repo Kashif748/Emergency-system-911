@@ -10,6 +10,8 @@ import {EMPTY} from "rxjs";
 import {catchError, finalize, tap} from "rxjs/operators";
 import {BrowseRecordAction} from "./browse-records.action";
 import {RecordsAction} from "@core/states/bc-resources/records/records.action";
+import {RemoteWorkAction} from "@core/states/bc-resources/remote-work/remote-work.action";
+import {BrowseRemoteWorkAction} from "../../remote-work/states/browse-remote-work.action";
 
 export interface BrowseRecordStateModel {
   pageRequest: PageRequestModel;
@@ -153,5 +155,20 @@ export class BrowseRecordsState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseRecordAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseRecordStateModel>,
+    { payload }: BrowseRecordAction.Delete
+  ) {
+    return dispatch(new RecordsAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

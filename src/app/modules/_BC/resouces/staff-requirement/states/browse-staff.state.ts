@@ -9,6 +9,9 @@ import {catchError, finalize, tap} from "rxjs/operators";
 import {iif, patch} from "@ngxs/store/operators";
 import {BrowseStaffAction} from "./browse-staff.action";
 import { StaffAction} from "@core/states/bc-resources/staff/staff.action";
+import {BrowseActivitySystemsAction} from "../../../activity-analysis/systems/states/browse-systems.action";
+import {ActivitySystemsAction} from "@core/states/activity-analysis/systems/systems.action";
+import {BrowseActivitySystemsStateModel} from "../../../activity-analysis/systems/states/browse-systems.state";
 
 export interface BrowseStaffStateModel {
   pageRequest: PageRequestModel;
@@ -176,5 +179,21 @@ export class BrowseStaffState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  @Action(BrowseStaffAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseStaffStateModel>,
+    { payload }: BrowseStaffAction.Delete
+  ) {
+    return dispatch(new StaffAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }
