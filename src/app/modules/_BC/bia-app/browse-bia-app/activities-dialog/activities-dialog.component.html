@@ -1,4 +1,4 @@
-<div class="p-toolbar-group-right">
+<div class="mx-1 p-toolbar-group-right">
   <button
     *checkPrivileges="'PRIV_PERFORM_ACTIVITY_ANALYSIS'"
     pButton
@@ -235,7 +235,7 @@
     </div>
   </div>
 
-  <div *ngIf="editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-200px">
+<!--  <div *ngIf="editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-200px">
     <p-blockUI [blocked]="impactMatrixLoading">
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
@@ -282,7 +282,7 @@
         </div>
       </div>
 
-      <!--Impact Matrix table-->
+      &lt;!&ndash;Impact Matrix table&ndash;&gt;
 
       <div class="col-md-8 col-sm-12 " *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
@@ -380,7 +380,7 @@
       </div>
 
 
-      <!--recovery table-->
+      &lt;!&ndash;recovery table&ndash;&gt;
       <div class="col-md-4 col-sm-12 " *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="recoveryLoading; else tableTemplate">
@@ -444,10 +444,10 @@
                 <div class="vertical-header">{{ "RECOVERY.REMOTELY" | translate }}</div>
                 <div class="vertical-data">{{recoveryPageData.remote ? ("RECOVERY.YES" | translate) : ("RECOVERY.NO" | translate)}}</div>
               </div>
-              <!-- Add more rows as needed -->
+              &lt;!&ndash; Add more rows as needed &ndash;&gt;
             </div>
 
-            <!--<p-table
+            &lt;!&ndash;<p-table
               [columns]="recoveryColumns"
               totalRecords="5"
               [value]="[recoveryPageData]"
@@ -522,7 +522,7 @@
                   </td>
                 </tr>
               </ng-template>
-            </p-table>-->
+            </p-table>&ndash;&gt;
           </ng-template>
         </div>
       </div>
@@ -538,7 +538,7 @@
     </p-blockUI>
 
     <div class="row">
-      <!--system table-->
+      &lt;!&ndash;system table&ndash;&gt;
       <div class="mt-2 col-md-4 col-sm-6 ">
         <div class="card card-height">
           <ng-container *ngIf="systemLoading; else tableTemplate">
@@ -549,13 +549,13 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="header">
-                <!--<tr>
+                &lt;!&ndash;<tr>
                   <th class="min-w-200px max-w-300px">
                     <div class="p-d-flex p-jc-between p-ai-center">
                       {{ "SYSTEMS.COL1" | translate }}
                     </div>
                   </th>
-                </tr>-->
+                </tr>&ndash;&gt;
               </ng-template>
               <ng-template pTemplate="body" let-item>
                 <tr class="cursor-pointer hoverable">
@@ -614,7 +614,7 @@
           </ng-template>
         </div>
       </div>
-      <!--Employee tab-->
+      &lt;!&ndash;Employee tab&ndash;&gt;
       <div class="mt-2 col-md-4 col-sm-6" *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="employLoading; else tableTemplate">
@@ -625,13 +625,13 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="header">
-                <!--<tr>
+                &lt;!&ndash;<tr>
                   <th class="min-w-200px max-w-300px">
                     <div class="p-d-flex p-jc-between p-ai-center">
                       {{ "EMPLOYEES.TAB_LABEL" | translate }}
                     </div>
                   </th>
-                </tr>-->
+                </tr>&ndash;&gt;
               </ng-template>
               <ng-template pTemplate="body" let-item>
                 <tr class="cursor-pointer hoverable">
@@ -702,7 +702,7 @@
         </div>
       </div>
 
-      <!--Location tab-->
+      &lt;!&ndash;Location tab&ndash;&gt;
       <div class="mt-2 col-md-4 col-sm-6" *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="locationLoading; else tableTemplate">
@@ -713,13 +713,13 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="header">
-                <!--<tr>
+                &lt;!&ndash;<tr>
                   <th class="min-w-200px max-w-300px">
                     <div class="p-d-flex p-jc-between p-ai-center">
                       {{ "LOCATIONS.TAB_LABEL" | translate }}
                     </div>
                   </th>
-                </tr>-->
+                </tr>&ndash;&gt;
               </ng-template>
               <ng-template pTemplate="body" let-item>
                 <tr class="cursor-pointer hoverable">
@@ -783,7 +783,7 @@
     </div>
 
     <div class="row">
-      <!--department insisde table-->
+      &lt;!&ndash;department insisde table&ndash;&gt;
       <div class="mt-4 col-md-4 col-sm-6 " *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="deptInsideLoading; else tableTemplate">
@@ -869,7 +869,7 @@
           </ng-template>
         </div>
       </div>
-      <!--dependency inside tab-->
+      &lt;!&ndash;dependency inside tab&ndash;&gt;
       <div class="mt-4 col-md-4 col-sm-6 " *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="departInsideLoading; else tableTemplate">
@@ -960,7 +960,7 @@
         </div>
       </div>
 
-      <!--vender tab-->
+      &lt;!&ndash;vender tab&ndash;&gt;
       <div class="mt-4 col-md-4 col-sm-6" *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="venderLoading; else tableTemplate">
@@ -1043,7 +1043,7 @@
       </div>
     </div>
 
-  </div>
+  </div>-->
 
 
 </ng-template>

@@ -6,7 +6,7 @@
         <p-treeSelect [options]="orgHir" [filter]="true" [filterBy]="'data.nameAr,data.nameEn,data.code'" class="w-100"
           styleClass="w-100" selectionMode="single" [ngModel]="state.pageRequest.filters['orgHierarchyId']"
           (ngModelChange)="
-                  updateFilter({ orgHierarchyId: $event }, $event)
+                  updateFilter({ orgHierarchyId: $event }, $event, true)
                 " [loading]="loadingOrgHir$ | async" (onFilter)="filterOrgHir($event)"
           (onNodeExpand)="nodeExpand($event?.node)" placeholder="{{ 'ORG_ARTCH' | translate }}" appendTo="body">
           <ng-template let-option let-placeholder pTemplate="value">
@@ -22,7 +22,7 @@
       <div class="p-inputgroup d-flex p-ai-center flex-none col-md-4 px-0">
         <span class="p-inputgroup-addon flex-none font-weight-bolder">{{'CYCLE_NAME' | translate}}</span>
         <p-dropdown [ngModel]="state?.pageRequest?.filters['cycleId']" class="w-100" styleClass="w-100"
-          (ngModelChange)="updateFilter({ cycleId: $event }, $event)" [autoDisplayFirst]="false"
+          (ngModelChange)="updateFilter({ cycleId: $event }, $event, true)" [autoDisplayFirst]="false"
           [options]="cycles$ | async" dataKey="id" placeholder="{{ 'CYCLE_NAME' | translate }}">
           <ng-template let-item pTemplate="selectedItem">
             {{ item | translateObj }}

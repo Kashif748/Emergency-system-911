@@ -9,10 +9,11 @@ import {iif, patch} from '@ngxs/store/operators';
 import {BrowseBiaAppAction} from "./browse-bia-app.action";
 import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
 import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
-import {EMPTY} from "rxjs";
+import {EMPTY, throwError} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
-import {BrowseImpactAnalysisStateModel} from "../../impact-analysis/states/browse-impact-analysis.state";
+import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
 import {BrowseImpactAnalysisAction} from "../../impact-analysis/states/browse-impact-analysis.action";
+import {BrowseImpactAnalysisStateModel} from "../../impact-analysis/states/browse-impact-analysis.state";
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -270,5 +271,42 @@ export class BrowseBiaAppState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseBiaAppAction.CreateResourceAnalysis)
+  createResource(
+    { dispatch }: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.CreateResourceAnalysis
+  ) {
+    return dispatch(new ResourceAnalysisAction.Create(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(
+          [new BrowseBiaAppAction.LoadBia(),
+            new BrowseBiaAppAction.ToggleDialog({})]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return throwError(err);
+      })
+    );
+  }
+  @Action(BrowseBiaAppAction.SetCycleActivities)
+  SetCycleActivities(
+    { dispatch, getState }: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.SetCycleActivities
+  ) {
+    return dispatch(new ImapactAnalysisAction.SetCycleActivities(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([
+          new BrowseBiaAppAction.LoadBia(),
+          new BrowseBiaAppAction.ToggleDialog({}),
+        ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }
