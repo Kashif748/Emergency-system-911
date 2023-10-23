@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OrgDetailState, UserAction, UserState } from '@core/states';
 import { FormUtils } from '@core/utils';
@@ -14,6 +14,8 @@ import {
 } from 'src/app/api/models';
 import { BrowseOrgDetailAction } from '../../states/browse-orgDetail.action';
 import { BrowseOrgDetailState } from '../../states/browse-orgDetail.state';
+import { Dropdown } from 'primeng/dropdown';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 
 @Component({
   selector: 'app-org-hierarchy-form',
@@ -30,8 +32,20 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
   @Select(UserState.users)
   users$: Observable<IdNameProjection[]>;
 
+  @Select(UserState.usersIsolated('coordinator'))
+  usersCoordinator$: Observable<IdNameProjection[]>;
+
+  @Select(UserState.loading)
+  usersLoading$: Observable<boolean>;
+
+  @ViewChild('managerDropdown') managerDropdown: Dropdown;
+  @ViewChild('coordinatorDropdown') coordinatorDropdown: Dropdown;
+
   public selectedOrgHirNode$: Observable<TreeNode>;
-  private auditLoadUsers$ = new Subject<string>();
+  private auditLoadUsers$ = new Subject<{
+    search?: string;
+    selectorKey?: string;
+  }>();
 
   form: FormGroup;
 
@@ -43,7 +57,11 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
   }
   private destroy$ = new Subject();
 
-  constructor(private formBuilder: FormBuilder, private store: Store) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private store: Store,
+    private translateObj: TranslateObjPipe
+  ) {}
 
   ngOnInit(): void {
     this.buildForm();
@@ -52,7 +70,27 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         tap((node) => {
-          this.loadUsers('', true);
+          if (this.managerDropdown) {
+            setTimeout(() => {
+              const firstName = this.translateObj.transform(
+                node?.data?.manager,
+                'firstName'
+              );
+              const middleName = this.translateObj.transform(
+                node?.data?.manager,
+                'middleName'
+              );
+              const lastName = this.translateObj.transform(
+                node?.data?.manager,
+                'lastName'
+              );
+              const fullName = `${firstName ?? ''}${
+                middleName ? ' ' + middleName : ''
+              }${lastName ? ' ' + lastName : ''}`;
+              this.managerDropdown.filterValue = fullName;
+              this.loadUsers(fullName, true);
+            }, 100);
+          }
 
           if (node?.data) {
             this.selectedOrgHirId = node.data?.id;
@@ -68,14 +106,17 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
         })
       );
 
+    this.loadUsers(undefined, true, 'coordinator');
+
     this.auditLoadUsers$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
-      .subscribe((search) => {
+      .subscribe(({ search, selectorKey }) => {
         this.store.dispatch(
           new UserAction.LoadUsers({
             search,
             page: 0,
             size: 15,
+            isolatedKey: selectorKey,
           })
         );
       });
@@ -134,17 +175,18 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadUsers(search?: string, direct = false) {
+  loadUsers(search?: string, direct = false, selectorKey?: string) {
     if (direct) {
       this.store.dispatch(
         new UserAction.LoadUsers({
           search,
           page: 0,
           size: 15,
+          isolatedKey: selectorKey,
         })
       );
       return;
     }
-    this.auditLoadUsers$.next(search);
+    this.auditLoadUsers$.next({ search, selectorKey });
   }
 }
