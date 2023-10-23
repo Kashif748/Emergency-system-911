@@ -1,43 +1,31 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { LazyLoadEvent, TreeNode } from 'primeng/api';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { TranslateService } from '@ngx-translate/core';
-import { auditTime, filter, map, takeUntil, tap } from 'rxjs/operators';
-import {
-  BrowseImpactAnalysisState,
-  BrowseImpactAnalysisStateModel,
-} from '../../states/browse-impact-analysis.state';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
-import {
-  BcActivityAnalysis,
-  BcAnalysisStatus,
-  BcCycles,
-  BcOrgHierarchy,
-  Bcrto,
-} from 'src/app/api/models';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Select, Store} from '@ngxs/store';
+import {Observable, Subject} from 'rxjs';
+import {LazyLoadEvent, TreeNode} from 'primeng/api';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {TranslateService} from '@ngx-translate/core';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {BrowseImpactAnalysisState, BrowseImpactAnalysisStateModel,} from '../../states/browse-impact-analysis.state';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
+import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, Bcrto,} from 'src/app/api/models';
 import {BrowseImpactAnalysisAction} from '../../states/browse-impact-analysis.action';
 import {
   ActivityFrquencyAction,
   ActivityFrquencyState,
-  ActivityPrioritySeqAction,
   ActivityPrioritySeqState,
   OrgDetailAction,
   OrgDetailState,
-  RtoAction,
   RtoState,
 } from '@core/states';
-import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
 import {ActivatedRoute, Router} from '@angular/router';
-import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
-import { TreeHelper } from '@core/helpers/tree.helper';
+import {BcOrgHierarchyProjection} from 'src/app/api/models/bc-org-hierarchy-projection';
+import {TreeHelper} from '@core/helpers/tree.helper';
 import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState} from "../../states/browse-resource-analysis.state";
 import {BcResources} from "../../../../../api/models/bc-resources";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BrowseResourceAnalysisAction} from "../../states/browse-resource-analysis.action";
-import {BrowseGroupsAction} from "../../../../_team-mgmt/states/browse-groups.action";
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -158,9 +146,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     { name: 'RESOURCES.STATUS', code: 'status' },
   ];
 
-  /**
-   *
-   */
   constructor(
     private store: Store,
     private translate: TranslateService,
@@ -190,26 +175,40 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       .subscribe((params) => {
         this.orgHierarchyId = params['_division'];
         this.cycleId = params['_cycle'];
-
       });
   }
 
+  findObjectById(id: number, dataArray: any): any {
+    for (const item of dataArray) {
+      if (item.data.id == id) {
+        return item;
+      }
+      if (item.children && item.children.length > 0) {
+        const result = this.findObjectById(id, item.children);
+        if (result) {
+          return result;
+        }
+      }
+    }
+    return null;
+  }
+
   selectOrgHierarchyById(id: number) {
-    const orgItem = this.orgHir.find((item) => item.data.id == id);
+    this.store
+      .select(OrgDetailState.orgHirSearch)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      )
+      .subscribe();
+    const orgItem = this.findObjectById(id, this.orgHir)
     if (orgItem) {
       const orgHierarchyId = {
         orgHierarchyId: orgItem
       };
-      // this.updateFilter(orgHierarchyId);
+      this.updateFilter(orgHierarchyId);
     }
-    this.cycles$
-      .pipe(
-        map(cycles => cycles.find(cycle => cycle.id == this.cycleId)) // Change 284 to the desired ID
-      )
-      .subscribe(foundCycle => {
-        // this.cycleId = Number(this.cycleId);
-        this.updateFilter({cycleId: foundCycle});
-      });
   }
 
   ngOnInit(): void {
@@ -222,38 +221,71 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.changeView('CARDS');
       });
+      this.hasFilters$.pipe().subscribe((v) => {
+        console.log(v)
+      })
+    this.store.dispatch([new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
+      new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 })])
+      .pipe(
+        switchMap(() => this.store.select(OrgDetailState.orgHirSearch)),
+        takeUntil(this.destroy$),
+        take(1),
+        filter((p) => !!p),
+        tap((data) => {
+          this.setTree(data);
+          const checkParentID = this.orgHir.find(item => item.data.id == this.orgHierarchyId);
+          this.cycles$
+            .pipe(
+              takeUntil(this.destroy$),
+              take(1),
+              map(cycles => cycles.find(cycle => cycle.id == this.cycleId)),
+              tap((foundCycle) => {
+                this.updateFilter({ cycleId: foundCycle });
+              })
+            )
+            .subscribe();
+          if (checkParentID) {
+            const orgHierarchyId = { orgHierarchyId: checkParentID };
+            this.updateFilter(orgHierarchyId);
+            this.loadPage();
+            this.loadResourcePage();
+          } else {
+            this.store.dispatch(new OrgDetailAction.GetOrgHierarchyParent({ page: 0, size: 100, id: this.orgHierarchyId }))
+              .pipe(
+                switchMap(() => this.store.select(OrgDetailState.orgHirParent)),
+                takeUntil(this.destroy$),
+                take(1),
+                tap((orgHirParent) => {
+                  this.store.dispatch([
+                    new OrgDetailAction.GetOrgHierarchySearch({
+                      page: 0,
+                      size: 100,
+                      parentId: orgHirParent[0].id ? orgHirParent[0].id : this.orgHierarchyId
+                    }),
+                    new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 })
+                  ]).pipe(
+                    takeUntil(this.destroy$),
+                    take(1),
+                    tap(() => {
+                      this.selectOrgHierarchyById(this.orgHierarchyId);
+                      this.loadPage();
+                      this.loadResourcePage();
+                    })
+                  ).subscribe();
+                }
+              )).subscribe();
+          }
+        }),
+      )
+      .subscribe();
+
+
 
     // All filters states
-    this.store.dispatch([new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100}),
-      new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 })]).pipe()
-      .subscribe(() => {
-      this.selectOrgHierarchyById(this.orgHierarchyId);
-      this.loadPage();
-      this.loadResourcePage();
-    });
-
     this.store.dispatch([
       new BrowseImpactAnalysisAction.LoadActivitiesStatuses(),
       new ActivityFrquencyAction.LoadPage({ page: 0, size: 100 }),
-      /*new ActivityPrioritySeqAction.LoadPage({
-        page: 0,
-        size: 100,
-        versionId: 0,
-      }),
-      new RtoAction.LoadPage({
-        page: 0,
-        size: 100,
-        versionId: 0,
-      }),*/
     ]);
-    this.store
-      .select(OrgDetailState.orgHirSearch)
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((p) => !!p),
-        map((data) => this.setTree(data))
-      )
-      .subscribe();
 
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
@@ -333,14 +365,12 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
 
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
-    // console.log(parentId ,parentNode);
 
     if (parentNode && parentId) {
       parentNode.children = [...branch, ...parentNode.children];
     } else {
       this.orgHir = branch;
     }
-    console.log(this.orgHir)
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
@@ -353,7 +383,14 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
           size: 100,
           parentId: parseInt(node?.key),
         })
-      );
+      ).pipe(
+        switchMap(() => this.store.select(OrgDetailState.orgHirSearch)),
+        takeUntil(this.destroy$),
+        take(1),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      ).subscribe();
+
     }
   }
 
@@ -363,7 +400,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       this.store.dispatch(new BrowseResourceAnalysisAction.LoadPage());
     }
   }
-  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
+  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent, click?: boolean) {
     if (event?.key === 'Enter') {
       return this.search();
     }
@@ -372,8 +409,28 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.avoidSearch = false;
     }
+    const keys = Object.keys(filter);
+    if (keys.length > 0) {
+      switch (keys[0]) {
+
+        case 'orgHierarchyId':
+          filter['orgHierarchyId'] = {
+            id: filter['orgHierarchyId']?.key,
+            labelEn: filter['orgHierarchyId'].data.nameEn,
+            labelAr: filter['orgHierarchyId'].data.nameAr,
+          };
+          break;
+        default:
+          break;
+      }
+    }
     this.store.dispatch(new BrowseImpactAnalysisAction.UpdateFilter(filter));
     this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));
+
+    if (click) {
+      this.store.dispatch(new BrowseImpactAnalysisAction.UpdateRoute(filter));
+      this.search();
+    }
   }
   clear() {
     this.store.dispatch([
@@ -436,6 +493,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       queryParams: {
         _cycle: activity?.cycle?.id,
         _activity: activity?.id,
+        _division: activity?.id,
       },
     });
   }

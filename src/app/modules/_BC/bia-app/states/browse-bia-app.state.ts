@@ -11,6 +11,8 @@ import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
 import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
 import {EMPTY} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
+import {BrowseImpactAnalysisStateModel} from "../../impact-analysis/states/browse-impact-analysis.state";
+import {BrowseImpactAnalysisAction} from "../../impact-analysis/states/browse-impact-analysis.action";
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -250,6 +252,21 @@ export class BrowseBiaAppState {
             : 'opened',
         _id: payload.BiaId,
         _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  @Action(BrowseBiaAppAction.UpdateCycle, {
+    cancelUncompleted: true,
+  })
+  updateCycle(
+    {getState}: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.UpdateCycle
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _cycle: payload.cycle
       },
       queryParamsHandling: 'merge',
     });

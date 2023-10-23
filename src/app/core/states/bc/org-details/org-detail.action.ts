@@ -54,6 +54,22 @@ export namespace OrgDetailAction {
     ) {}
   }
 
+  export class GetOrgHierarchyParent {
+    static readonly type = '[OrgDetail] Get Org Hierarchy Parent';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        sort?: string[];
+        page: number;
+        size: number;
+        name?: string;
+        id: number;
+      }
+    ) {}
+  }
+
   export class GetOrgHierarchyNode {
     static readonly type = '[OrgDetail] Get Org Hierarchy Node';
     /**

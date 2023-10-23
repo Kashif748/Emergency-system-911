@@ -1612,6 +1612,9 @@
       "CREATE": "Create",
       "CREATE_NEW": "Create New",
       "DIALOG": {
+        "UPDATE": {
+          "MESSAGE": "Are you sure you want to update?"
+        },
         "YES": "Yes",
         "NO": "No",
         "ARE_YOU_SURE": "Are you sure?",

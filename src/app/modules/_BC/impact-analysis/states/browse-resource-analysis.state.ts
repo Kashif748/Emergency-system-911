@@ -61,13 +61,16 @@ export class BrowseResourceAnalysisState {
 
   @Selector([BrowseResourceAnalysisState])
   static hasFilters(state: BrowseReourceAnalysisStateModel): boolean {
-    return (
-      Object.keys(state.pageRequest.filters).filter(
-        (k) =>
-          k !== 'active' &&
-          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
-      ).length > 0
-    );
+    const filters = state.pageRequest.filters;
+    return !('orgHierarchyId' in filters && 'cycleId' in filters) ||
+      (Object.keys(filters).filter(
+          (k) =>
+            k !== 'active' &&
+            k !== 'orgHierarchyId' &&
+            k !== 'cycleId' &&
+            !TextUtils.IsEmptyOrWhiteSpaces(filters[k])
+        ).length > 0
+      );
   }
 
   /* ********************** ACTIONS ************************* */
@@ -96,7 +99,7 @@ export class BrowseResourceAnalysisState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.id,
           cycleId: pageRequest?.filters?.cycleId,
         },
       })
@@ -172,7 +175,7 @@ export class BrowseResourceAnalysisState {
 
   @Action(BrowseResourceAnalysisAction.UpdateFilter, { cancelUncompleted: true })
   updateFilter(
-    { setState }: StateContext<BrowseReourceAnalysisStateModel>,
+    { setState, getState }: StateContext<BrowseReourceAnalysisStateModel>,
     { payload }: BrowseResourceAnalysisAction.UpdateFilter
   ) {
     setState(
@@ -181,7 +184,10 @@ export class BrowseResourceAnalysisState {
           first: 0,
           filters: iif(
             payload.clear === true,
-            {},
+            {
+              orgHierarchyId: (v) => v,
+              cycleId: (v) => v,
+            },
             patch({
               ...payload,
             })
