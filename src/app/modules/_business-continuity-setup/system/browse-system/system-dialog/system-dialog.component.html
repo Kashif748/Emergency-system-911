@@ -48,7 +48,7 @@
     </h3>
     <div class="mx-2" *ngIf="!(viewOnly$ | async)">
       <p-tag>
-        {{ editMode ? "ACTIONS.UPDATE_ITEM" : "ACTIONS.NEW_ITEM" | translate }}
+        {{ (editMode ? "ACTIONS.UPDATE_ITEM" : "ACTIONS.NEW_ITEM") | translate }}
       </p-tag>
       
     </div>
