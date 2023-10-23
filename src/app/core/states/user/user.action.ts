@@ -32,6 +32,7 @@ export namespace UserAction {
         sort?: string[];
         page: number;
         size: number;
+        isolatedKey?: string;
       }
     ) {}
   }
