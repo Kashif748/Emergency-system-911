@@ -32,13 +32,20 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
   @Select(UserState.users)
   users$: Observable<IdNameProjection[]>;
 
+  @Select(UserState.usersIsolated('coordinator'))
+  usersCoordinator$: Observable<IdNameProjection[]>;
+
   @Select(UserState.loading)
   usersLoading$: Observable<boolean>;
 
   @ViewChild('managerDropdown') managerDropdown: Dropdown;
+  @ViewChild('coordinatorDropdown') coordinatorDropdown: Dropdown;
 
   public selectedOrgHirNode$: Observable<TreeNode>;
-  private auditLoadUsers$ = new Subject<string>();
+  private auditLoadUsers$ = new Subject<{
+    search?: string;
+    selectorKey?: string;
+  }>();
 
   form: FormGroup;
 
@@ -99,14 +106,17 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
         })
       );
 
+    this.loadUsers(undefined, true, 'coordinator');
+
     this.auditLoadUsers$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
-      .subscribe((search) => {
+      .subscribe(({ search, selectorKey }) => {
         this.store.dispatch(
           new UserAction.LoadUsers({
             search,
             page: 0,
             size: 15,
+            isolatedKey: selectorKey,
           })
         );
       });
@@ -165,17 +175,18 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadUsers(search?: string, direct = false) {
+  loadUsers(search?: string, direct = false, selectorKey?: string) {
     if (direct) {
       this.store.dispatch(
         new UserAction.LoadUsers({
           search,
           page: 0,
           size: 15,
+          isolatedKey: selectorKey,
         })
       );
       return;
     }
-    this.auditLoadUsers$.next(search);
+    this.auditLoadUsers$.next({ search, selectorKey });
   }
 }

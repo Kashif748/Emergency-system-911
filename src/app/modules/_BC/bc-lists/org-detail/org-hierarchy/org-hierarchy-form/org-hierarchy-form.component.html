@@ -89,8 +89,7 @@
       <div class="p-field p-col-12 p-md-6">
         <p-dropdown #managerDropdown [options]="users$ | async" [autoDisplayFirst]="false" [showClear]="true"
           appendTo="body" dataKey="id" formControlName="manager" [filter]="true" filterBy="nameAr,nameEn"
-          (onFilter)="loadUsers($event?.filter)" (onShow)="loadUsers(managerDropdown.filterValue, true)"
-          placeholder="{{ 'ORG_HIE.DEPARTMENT.DEPT_MGMT' | translate }}"
+          (onFilter)="loadUsers($event?.filter)" placeholder="{{ 'ORG_HIE.DEPARTMENT.DEPT_MGMT' | translate }}"
           [dropdownIcon]="(usersLoading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'">
           <ng-template let-item pTemplate="selectedItem">
             {{ item | translateObj }}
@@ -113,9 +112,10 @@
       </div>
       <!-- coordinator  -->
       <div class="p-field p-col-12 p-md-6">
-        <p-multiSelect [options]="users$ | async" appendTo="body" dataKey="id" [filter]="true" filterBy="nameAr,nameEn"
-          (onFilter)="loadUsers($event?.filter)" placeholder="{{ 'ORG_HIE.DEPARTMENT.COORDINATOR' | translate }}"
-          formControlName="coordinators" optionLabel="name">
+        <p-multiSelect #coordinatorDropdown [options]="usersCoordinator$ | async" appendTo="body" dataKey="id"
+          [filter]="true" filterBy="nameAr,nameEn" (onFilter)="loadUsers($event?.filter, false, 'coordinator')"
+          placeholder="{{ 'ORG_HIE.DEPARTMENT.COORDINATOR' | translate }}" formControlName="coordinators"
+          optionLabel="name">
           <ng-template let-value pTemplate="selectedItems">
             <span *ngFor="let item of value">
               {{ item | translateObj : "firstName" }}
