@@ -37,6 +37,7 @@ import { BlockUIModule } from 'primeng/blockui';
 import { BrowseLocationsState } from './states/browse-locations.state';
 import { NgxsModule } from '@ngxs/store';
 import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.directive';
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -81,6 +82,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     ProgressSpinnerModule,
     BlockUIModule,
+    TagModule,
     PrivilegesDirectiveModule,
     NgxsModule.forFeature([BrowseLocationsState]),
     TranslateModule.forChild({

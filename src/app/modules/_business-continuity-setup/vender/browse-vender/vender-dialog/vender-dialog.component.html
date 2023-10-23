@@ -1,12 +1,13 @@
 <div class="p-toolbar-group-right">
-  <button *checkPrivileges="'PRIV_CR_BC_RESOURCE'" pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus" (click)="openDialog()"></button>
+  <button *checkPrivileges="'PRIV_CR_BC_RESOURCE'" pButton label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus"
+    (click)="openDialog()"></button>
 </div>
 
 
 <!-- as a dialog -->
 <p-dialog *ngIf="asDialog;else page" #dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="close()"
-          [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
-          [baseZIndex]="10000" [draggable]="true" [resizable]="false">
+  [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
+  [baseZIndex]="10000" [draggable]="true" [resizable]="false">
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
@@ -44,14 +45,14 @@
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
         {{'VENDERS.DIALOG.EDIT_VENDER' | translate}}
         <span class="label label-lg label-light-success label-inline">
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
+          {{ "ACTIONS.UPDATE_ITEM" | translate }}
+        </span>
       </ng-container>
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
         {{'VENDERS.DIALOG.ADD_VENDER' | translate}}
         <span class="label label-lg label-light-primary label-inline">
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
+          {{ "ACTIONS.NEW_ITEM" | translate }}
+        </span>
       </ng-container>
       <ng-container *ngIf="viewOnly$ | async">
         {{'VENDERS.DIALOG.VIEW_VENDER' | translate}}
@@ -60,8 +61,6 @@
   </div>
 
   <span class="flex-grow-1"></span>
-  <a *ngIf="asDialog" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
-     class="p-button-rounded p-button-text p-button-plain"></a>
 </ng-template>
 
 
@@ -84,37 +83,16 @@
       </p-divider>
     </div>
 
-    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <form *ngIf="form" [formGroup]="form" class="p-fluid p-grid mt-5">
 
       <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="nameEn" pInputText/>
-        <label>
-          {{ "LOCATIONS.DIALOG.NAME_EN" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-        <ng-container
-          *ngIf="form.controls['nameEn'].touched && !form.controls['nameEn'].valid && form.controls['nameEn'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
-            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-          </p>
-
-          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
-            {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
-          </p>
-        </ng-container>
-      </div>
-
-
-      <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="nameAr" pInputText/>
-        <label>
-          {{ "LOCATIONS.DIALOG.NAME_AR" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="nameAr" pInputText />
+          <label>
+            {{ "LOCATIONS.DIALOG.NAME_AR" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
 
         <ng-container
           *ngIf="form.controls['nameAr'].touched && !form.controls['nameAr'].valid && form.controls['nameAr'].dirty">
@@ -129,21 +107,41 @@
       </div>
 
       <div class="p-field p-col-12 p-md-6">
-              <span class="p-float-label">
-                <p-dropdown [options]="criticalityType" [autoDisplayFirst]="false" formControlName="isCritical"
-                            dataKey="id" [showClear]="true" appendTo="body">
-                  <ng-template let-option pTemplate="selectedItem">
-                    {{ option | translateObj : 'name' }}
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option | translateObj : 'name' }}
-                  </ng-template>
-                </p-dropdown>
-               <label>
-                  {{'VENDERS.DIALOG.CRITICALITY' | translate}}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-              </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="nameEn" pInputText />
+          <label>
+            {{ "LOCATIONS.DIALOG.NAME_EN" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+        <ng-container
+          *ngIf="form.controls['nameEn'].touched && !form.controls['nameEn'].valid && form.controls['nameEn'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
+            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+          </p>
+
+          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
+            {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <p-dropdown [options]="criticalityType" [autoDisplayFirst]="false" formControlName="isCritical" dataKey="id"
+            [showClear]="true" appendTo="body">
+            <ng-template let-option pTemplate="selectedItem">
+              {{ option | translateObj : 'name' }}
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              {{ option | translateObj : 'name' }}
+            </ng-template>
+          </p-dropdown>
+          <label>
+            {{'VENDERS.DIALOG.CRITICALITY' | translate}}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
         <ng-container *ngIf="form.controls['isCritical'].touched && !form.controls['isCritical'].valid &&
           form.controls['isCritical'].dirty">
           <p class="p-error mb-0" *ngIf="form.controls['isCritical'].hasError('required')">
@@ -153,18 +151,13 @@
       </div>
 
       <div class="p-field p-col-12 p-md-6">
-              <span class="p-float-label">
-                <textarea
-                  pInputText
-                  type="text"
-                  formControlName="address"
-                  rows="5"
-                ></textarea>
-                <!--<input type="text" formControlName="descAr" >-->
-                <label>{{ 'VENDERS.DIALOG.ADDRESS' | translate }}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-              </span>
+        <span class="p-float-label">
+          <textarea pInputText type="text" formControlName="address" rows="5"></textarea>
+          <!--<input type="text" formControlName="descAr" >-->
+          <label>{{ 'VENDERS.DIALOG.ADDRESS' | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
 
         <ng-container
           *ngIf="form.controls['address'].touched && !form.controls['address'].valid && form.controls['address'].dirty">
@@ -190,18 +183,13 @@
       </div>
 
       <div class="p-field p-col-12 p-md-6">
-              <span class="p-float-label">
-                <textarea
-                  pInputText
-                  type="text"
-                  formControlName="services"
-                  rows="5"
-                ></textarea>
-                <!--                <input type="text" formControlName="descEn" pInputText>-->
-                <label>{{ 'VENDERS.DIALOG.SUP_SERVICE_REND' | translate }}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-              </span>
+        <span class="p-float-label">
+          <textarea pInputText type="text" formControlName="services" rows="5"></textarea>
+          <!--                <input type="text" formControlName="descEn" pInputText>-->
+          <label>{{ 'VENDERS.DIALOG.SUP_SERVICE_REND' | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
 
         <ng-container
           *ngIf="form.controls['services'].touched && !form.controls['services'].valid && form.controls['services'].dirty">
@@ -216,20 +204,14 @@
       </div>
 
       <div class="p-field p-col-12 p-md-6">
-              <span class="p-float-label">
-                <textarea
-                  pInputText
-                  type="text"
-                  formControlName="sla"
-                  rows="5"
-                ></textarea>
-                <label>{{ 'VENDERS.DIALOG.SERVICE_LEVEL_AGREE' | translate }}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-              </span>
+        <span class="p-float-label">
+          <textarea pInputText type="text" formControlName="sla" rows="5"></textarea>
+          <label>{{ 'VENDERS.DIALOG.SERVICE_LEVEL_AGREE' | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
 
-        <ng-container
-          *ngIf="form.controls['sla'].touched && !form.controls['sla'].valid && form.controls['sla'].dirty">
+        <ng-container *ngIf="form.controls['sla'].touched && !form.controls['sla'].valid && form.controls['sla'].dirty">
           <p class="p-error mb-0" *ngIf="form.controls['sla'].hasError('required')">
             {{ 'VALIDATION_MSG.REQUIRED' | translate }}
           </p>
@@ -251,35 +233,17 @@
         </p-divider>
       </div>
 
-      <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="pcontactNameEn" pInputText/>
-        <label>
-          {{ "LOCATIONS.DIALOG.NAME_EN" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-        <ng-container
-          *ngIf="form.controls['pcontactNameEn'].touched && !form.controls['pcontactNameEn'].valid && form.controls['pcontactNameEn'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['pcontactNameEn'].hasError('required')">
-            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-          </p>
 
-          <p class="p-error mb-0" *ngIf="form.controls['pcontactNameEn'].hasError('english')">
-            {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
-          </p>
-        </ng-container>
-      </div>
 
 
       <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="pcontactNameAr" pInputText/>
-        <label>
-          {{ "LOCATIONS.DIALOG.NAME_AR" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="pcontactNameAr" pInputText />
+          <label>
+            {{ "LOCATIONS.DIALOG.NAME_AR" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
 
         <ng-container
           *ngIf="form.controls['pcontactNameAr'].touched && !form.controls['pcontactNameAr'].valid && form.controls['pcontactNameAr'].dirty">
@@ -293,50 +257,66 @@
         </ng-container>
       </div>
 
-      <!-- phone -->
       <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="pcontactPhoneNum" pInputText />
-        <label>
-          {{ "VENDERS.DIALOG.LAND_NUMBER" | translate }}
-        </label>
-      </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="pcontactNameEn" pInputText />
+          <label>
+            {{ "LOCATIONS.DIALOG.NAME_EN" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+        <ng-container
+          *ngIf="form.controls['pcontactNameEn'].touched && !form.controls['pcontactNameEn'].valid && form.controls['pcontactNameEn'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['pcontactNameEn'].hasError('required')">
+            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+          </p>
+
+          <p class="p-error mb-0" *ngIf="form.controls['pcontactNameEn'].hasError('english')">
+            {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <!-- phone -->
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
+        <span class="p-float-label">
+          <ngx-intl-tel-input phoneType="FIXED_LINE" cssClass="p-inputtext p-component p-text-left"
+            [onlyCountries]="['ae']" formControlName="pcontactPhoneNum" [enablePlaceholder]="false"
+            [enableAutoCountrySelect]="true">
+          </ngx-intl-tel-input>
+          <label class="dir-text">
+            {{ "VENDERS.DIALOG.LAND_NUMBER" | translate }}
+          </label>
+        </span>
+        <ng-container
+          *ngIf="this.form.get('pcontactPhoneNum').touched && !this.form.get('pcontactPhoneNum').valid && this.form.get('pcontactPhoneNum').dirty">
+          <p class="dir-text" class="p-error mb-0" *ngIf="this.form.get('pcontactPhoneNum').hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p class="dir-text" class="p-error mb-0"
+            *ngIf="this.form.get('pcontactPhoneNum').hasError('validatePhoneNumber')">
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
       </div>
       <!-- mobile -->
       <div class="p-field p-col-12 p-md-6" dir="ltr">
-      <span class="p-float-label">
-        <ngx-intl-tel-input
-          cssClass="p-inputtext p-component p-text-left"
-          [onlyCountries]="['ae']"
-          formControlName="pcontactMobileNum"
-          [enablePlaceholder]="false"
-          [enableAutoCountrySelect]="true"
-        >
-        </ngx-intl-tel-input>
-        <label class="dir-text">
-          {{ "VENDERS.DIALOG.MOBILE" | translate }}
-          <span class="required-asterisk">*</span>
-        </label>
-      </span>
+        <span class="p-float-label">
+          <ngx-intl-tel-input phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
+            formControlName="pcontactMobileNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
+          </ngx-intl-tel-input>
+          <label class="dir-text">
+            {{ "VENDERS.DIALOG.MOBILE" | translate }}
+            <span class="required-asterisk">*</span>
+          </label>
+        </span>
         <ng-container
-          *ngIf="
-          this.form.get('pcontactMobileNum').touched &&
-          !this.form.get('pcontactMobileNum').valid &&
-          this.form.get('pcontactMobileNum').dirty
-        "
-        >
-          <p
-            class="dir-text"
-            class="p-error mb-0"
-            *ngIf="this.form.get('pcontactMobileNum').hasError('required')"
-          >
+          *ngIf="this.form.get('pcontactMobileNum').touched && !this.form.get('pcontactMobileNum').valid && this.form.get('pcontactMobileNum').dirty">
+          <p class="dir-text" class="p-error mb-0" *ngIf="this.form.get('pcontactMobileNum').hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
-          <p
-            class="dir-text"
-            class="p-error mb-0"
-            *ngIf="this.form.get('pcontactMobileNum').hasError('validatePhoneNumber')"
-          >
+          <p class="dir-text" class="p-error mb-0"
+            *ngIf="this.form.get('pcontactMobileNum').hasError('validatePhoneNumber')">
             {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
           </p>
         </ng-container>
@@ -344,22 +324,22 @@
 
       <!-- home phone -->
       <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="pcontactSecNum" pInputText />
-        <label>
-          {{ "VENDERS.DIALOG.HOME_NUMBER" | translate }}
-        </label>
-      </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="pcontactSecNum" pInputText />
+          <label>
+            {{ "VENDERS.DIALOG.HOME_NUMBER" | translate }}
+          </label>
+        </span>
       </div>
 
       <div class="p-field p-col-12 p-md-6">
-              <span class="p-float-label">
-                <input type="text" formControlName="pcontactEmail" pInputText>
-                <label>
-                  {{ 'SHARED.EMAIL' | translate }}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-              </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="pcontactEmail" pInputText>
+          <label>
+            {{ 'SHARED.EMAIL' | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
         <ng-container
           *ngIf="form.controls['pcontactEmail'].touched && !form.controls['pcontactEmail'].valid && form.controls['pcontactEmail'].dirty">
           <p class="p-error mb-0" *ngIf="form.controls['pcontactEmail'].hasError('required')">
@@ -386,35 +366,17 @@
         </p-divider>
       </div>
 
-      <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="scontactNameEn" pInputText/>
-        <label>
-          {{ "LOCATIONS.DIALOG.NAME_EN" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-        <ng-container
-          *ngIf="form.controls['scontactNameEn'].touched && !form.controls['scontactNameEn'].valid && form.controls['scontactNameEn'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['scontactNameEn'].hasError('required')">
-            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-          </p>
 
-          <p class="p-error mb-0" *ngIf="form.controls['scontactNameEn'].hasError('english')">
-            {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
-          </p>
-        </ng-container>
-      </div>
 
 
       <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="scontactNameAr" pInputText/>
-        <label>
-          {{ "LOCATIONS.DIALOG.NAME_AR" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="scontactNameAr" pInputText />
+          <label>
+            {{ "LOCATIONS.DIALOG.NAME_AR" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
 
         <ng-container
           *ngIf="form.controls['scontactNameAr'].touched && !form.controls['scontactNameAr'].valid && form.controls['scontactNameAr'].dirty">
@@ -428,50 +390,69 @@
         </ng-container>
       </div>
 
-      <!-- phone -->
       <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="scontactPhoneNum" pInputText />
-        <label>
-          {{ "VENDERS.DIALOG.LAND_NUMBER" | translate }}
-        </label>
-      </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="scontactNameEn" pInputText />
+          <label>
+            {{ "LOCATIONS.DIALOG.NAME_EN" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+        <ng-container
+          *ngIf="form.controls['scontactNameEn'].touched && !form.controls['scontactNameEn'].valid && form.controls['scontactNameEn'].dirty">
+          <p class="p-error mb-0" *ngIf="form.controls['scontactNameEn'].hasError('required')">
+            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+          </p>
+
+          <p class="p-error mb-0" *ngIf="form.controls['scontactNameEn'].hasError('english')">
+            {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <!-- phone -->
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
+        <span class="p-float-label">
+          <ngx-intl-tel-input phoneType="FIXED_LINE" cssClass="p-inputtext p-component p-text-left"
+            [onlyCountries]="['ae']" formControlName="scontactPhoneNum" [enablePlaceholder]="false"
+            [enableAutoCountrySelect]="true">
+          </ngx-intl-tel-input>
+          <label class="dir-text">
+            {{ "VENDERS.DIALOG.LAND_NUMBER" | translate }}
+          </label>
+        </span>
+        <ng-container
+          *ngIf="this.form.get('scontactPhoneNum').touched && !this.form.get('scontactPhoneNum').valid && this.form.get('scontactPhoneNum').dirty">
+          <p class="dir-text" class="p-error mb-0" *ngIf="this.form.get('scontactPhoneNum').hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p class="dir-text" class="p-error mb-0"
+            *ngIf="this.form.get('scontactPhoneNum').hasError('validatePhoneNumber')">
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
       </div>
       <!-- mobile -->
       <div class="p-field p-col-12 p-md-6" dir="ltr">
-      <span class="p-float-label">
-        <ngx-intl-tel-input
-          cssClass="p-inputtext p-component p-text-left"
-          [onlyCountries]="['ae']"
-          formControlName="scontactMobileNum"
-          [enablePlaceholder]="false"
-          [enableAutoCountrySelect]="true"
-        >
-        </ngx-intl-tel-input>
-        <label class="dir-text">
-          {{ "VENDERS.DIALOG.MOBILE" | translate }}
-          <span class="required-asterisk">*</span>
-        </label>
-      </span>
-        <ng-container
-          *ngIf="
+        <span class="p-float-label">
+          <ngx-intl-tel-input phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
+            formControlName="scontactMobileNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
+          </ngx-intl-tel-input>
+          <label class="dir-text">
+            {{ "VENDERS.DIALOG.MOBILE" | translate }}
+            <span class="required-asterisk">*</span>
+          </label>
+        </span>
+        <ng-container *ngIf="
           this.form.get('scontactMobileNum').touched &&
           !this.form.get('scontactMobileNum').valid &&
           this.form.get('scontactMobileNum').dirty
-        "
-        >
-          <p
-            class="dir-text"
-            class="p-error mb-0"
-            *ngIf="this.form.get('scontactMobileNum').hasError('required')"
-          >
+        ">
+          <p class="dir-text" class="p-error mb-0" *ngIf="this.form.get('scontactMobileNum').hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
-          <p
-            class="dir-text"
-            class="p-error mb-0"
-            *ngIf="this.form.get('scontactMobileNum').hasError('validatePhoneNumber')"
-          >
+          <p class="dir-text" class="p-error mb-0"
+            *ngIf="this.form.get('scontactMobileNum').hasError('validatePhoneNumber')">
             {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
           </p>
         </ng-container>
@@ -479,22 +460,22 @@
 
       <!-- home phone -->
       <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="scontactSecNum" pInputText />
-        <label>
-          {{ "VENDERS.DIALOG.HOME_NUMBER" | translate }}
-        </label>
-      </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="scontactSecNum" pInputText />
+          <label>
+            {{ "VENDERS.DIALOG.HOME_NUMBER" | translate }}
+          </label>
+        </span>
       </div>
 
       <div class="p-field p-col-12 p-md-6">
-              <span class="p-float-label">
-                <input type="text" formControlName="scontactEmail" pInputText>
-                <label>
-                  {{ 'SHARED.EMAIL' | translate }}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-              </span>
+        <span class="p-float-label">
+          <input type="text" formControlName="scontactEmail" pInputText>
+          <label>
+            {{ 'SHARED.EMAIL' | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
         <ng-container
           *ngIf="form.controls['scontactEmail'].touched && !form.controls['scontactEmail'].valid && form.controls['scontactEmail'].dirty">
           <p class="p-error mb-0" *ngIf="form.controls['scontactEmail'].hasError('required')">
@@ -520,7 +501,7 @@
 <ng-template #footer>
   <div class="p-col p-d-flex">
     <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()"
-            label="{{'ACTIONS.CLOSE' | translate }}"></button>
+      label="{{'ACTIONS.CLOSE' | translate }}"></button>
 
     <!--<button *ngIf="!asDialog" pButton icon="pi pi-sign-out"
             label="{{'ACTIONS.BACK' | translate }}"></button>-->
@@ -528,15 +509,12 @@
 
     <ng-container *ngIf="!(viewOnly$ | async)">
       <div class="mx-1">
-        <button pButton type="button" [loading]="blocking$ | async" (click)="clear()" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
-                class="p-button-outlined" ></button>
+        <button pButton type="button" [loading]="blocking$ | async" (click)="clear()"
+          label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay" class="p-button-outlined"></button>
       </div>
       <div class="mx-1">
-        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}"
-                icon="pi pi-save"
-                [loading]="blocking$ | async"
-                (click)="submit()"
-        ></button>
+        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
+          (click)="submit()"></button>
       </div>
     </ng-container>
   </div>

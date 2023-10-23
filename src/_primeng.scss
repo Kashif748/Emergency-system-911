@@ -8,6 +8,25 @@
 .p-button-icon-only .p-button-icon {
   margin: 0 !important;
 }
+// support left to right
+[dir="ltr"] {
+  .p-inputgroup p-dropdown:first-child:not(:only-child) .p-dropdown,
+  .p-inputgroup p-treeselect:first-child:not(:only-child) .p-treeselect {
+    border-radius: 0 !important;
+    border-bottom-left-radius: 3px !important;
+    border-top-left-radius: 3px !important;
+    border-right: none;
+  }
+
+  .p-inputgroup p-dropdown:last-child:not(:only-child) .p-dropdown,
+  .p-inputgroup p-treeselect:last-child:not(:only-child) .p-treeselect {
+    border-radius: 0 !important;
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
+    border-left: none;
+  }
+}
+
 // support right to left
 [dir="rtl"] {
   .pi-angle-double-right:before {
@@ -94,6 +113,8 @@
   .p-inputgroup-addon:first-child,
   .p-inputgroup button:first-child,
   .p-inputgroup input:first-child,
+  .p-inputgroup p-dropdown:first-child .p-dropdown,
+  .p-inputgroup p-treeselect:first-child .p-treeselect,
   .p-calendar-w-btn .p-inputtext,
   .p-inputnumber-buttons-stacked .p-inputnumber-input {
     border-radius: 0 !important;
@@ -102,10 +123,18 @@
     border-left: none;
     // border-left: 1px solid var(--surface-border);
   }
+  // .p-inputgroup .p-dropdown:first-child {
+  //   border-radius: 0 !important;
+  //   border-bottom-left-radius: 3px !important;
+  //   border-top-left-radius: 3px !important;
+  //   border-right: none;
+  // }
 
   .p-inputgroup-addon:last-child,
   .p-inputgroup button:last-child,
   .p-inputgroup input:last-child,
+  .p-inputgroup p-dropdown:last-child .p-dropdown,
+  .p-inputgroup p-treeselect:last-child .p-treeselect,
   .p-inputgroup .p-float-label:last-child input,
   .p-calendar-w-btn .p-datepicker-trigger {
     border-radius: 0 !important;
@@ -114,6 +143,13 @@
     border-right: none;
     // border-right: 1px solid var(--surface-border);
   }
+
+  // .p-inputgroup .p-dropdown:last-child {
+  //   border-radius: 0 !important;
+  //   border-top-right-radius: 3px !important;
+  //   border-bottom-right-radius: 3px !important;
+  //   border-left: none;
+  // }
 
   .p-float-label > label {
     left: unset !important;
@@ -620,7 +656,6 @@ button.p-button-secondary.active {
     outline: 1px solid var(--danger);
   }
 }
-
 
 .p-inputgroup .p-float-label {
   max-width: calc(100% - 2.357rem);

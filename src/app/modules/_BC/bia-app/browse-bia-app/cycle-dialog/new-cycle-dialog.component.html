@@ -1,26 +1,12 @@
 <div class="p-toolbar-group-right">
-  <button
-    *checkPrivileges="'PRIV_CR_ANALYSIS_CYCLE'"
-    pButton
-    label="{{ 'NEW_ANALYSIS_CYCLIE' | translate }}"
-    icon="pi pi-plus"
-    (click)="toggleDialog()"
-  ></button>
+  <button *checkPrivileges="'PRIV_CR_ANALYSIS_CYCLE'" pButton label="{{ 'NEW_ANALYSIS_CYCLIE' | translate }}"
+    icon="pi pi-plus" (click)="toggleDialog()"></button>
 </div>
 
 <!-- as a dialog -->
-<p-dialog
-  #dialog
-  [visible]="opened$ | async"
-  [modal]="true"
-  (visibleChange)="close()"
-  [style]="{ width: '55vw' }"
-  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="true"
-  [resizable]="false"
->
+<p-dialog #dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="close()" [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
+  [resizable]="false">
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
@@ -34,20 +20,13 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <span>{{ "ADD_NEW_ANALYSIS" | translate }}</span>
-      <span
-        *ngIf="true"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="false"
-        class="label label-lg label-light-success label-inline"
-      >
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
+      {{ "ADD_NEW_ANALYSIS" | translate }}
     </h3>
+    <div class="mx-2">
+      <p-tag severity="primary">
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </p-tag>
+    </div>
   </div>
 </ng-template>
 
@@ -55,37 +34,6 @@
 <ng-template #content>
   <div class="w-100 pt-2">
     <form [formGroup]="form" class="p-fluid p-grid mt-5">
-      <!-- Name En -->
-      <div class="p-field p-col-12 p-md-6">
-        <span class="p-float-label">
-          <input type="text" formControlName="nameEn" pInputText />
-          <label>
-            {{ "NAME_EN" | translate }}
-            <strong class="required-asterisk"> * </strong>
-          </label>
-        </span>
-        <ng-container
-          *ngIf="
-            form.controls['nameEn'].touched &&
-            !form.controls['nameEn'].valid &&
-            form.controls['nameEn'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameEn'].hasError('required')"
-          >
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameEn'].hasError('english')"
-          >
-            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-          </p>
-        </ng-container>
-      </div>
-
       <!-- Name Ar -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
@@ -96,24 +44,39 @@
           </label>
         </span>
 
-        <ng-container
-          *ngIf="
+        <ng-container *ngIf="
             form.controls['nameAr'].touched &&
             !form.controls['nameAr'].valid &&
             form.controls['nameAr'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameAr'].hasError('required')"
-          >
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameAr'].hasError('arabic')"
-          >
+          <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
             {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <!-- Name En -->
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <input type="text" formControlName="nameEn" pInputText />
+          <label>
+            {{ "NAME_EN" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+        <ng-container *ngIf="
+            form.controls['nameEn'].touched &&
+            !form.controls['nameEn'].valid &&
+            form.controls['nameEn'].dirty
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
           </p>
         </ng-container>
       </div>
@@ -121,17 +84,8 @@
       <!-- versionId -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
-          <p-dropdown
-            [autoDisplayFirst]="false"
-            [options]="versions$ | async"
-            formControlName="versionId"
-            [filter]="true"
-            filterBy="nameAr,nameEn"
-            dataKey="id"
-            optionValue="id"
-            [showClear]="true"
-            appendTo="body"
-          >
+          <p-dropdown [autoDisplayFirst]="false" [options]="versions$ | async" formControlName="versionId"
+            [filter]="true" filterBy="nameAr,nameEn" dataKey="id" optionValue="id" [showClear]="true" appendTo="body">
             <ng-template let-option pTemplate="selectedItem">
               {{ option | translateObj }}
             </ng-template>
@@ -149,30 +103,19 @@
       <!-- dueDate -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
-          <p-calendar
-            formControlName="dueDate"
-            [minDate]="minDate"
-            [showIcon]="true"
-            showButtonBar="true"
-            [showTime]="true"
-            appendTo="body"
-          ></p-calendar>
+          <p-calendar formControlName="dueDate" [minDate]="minDate" [showIcon]="true" showButtonBar="true"
+            [showTime]="true" appendTo="body"></p-calendar>
           <label>
             {{ "DATE" | translate }}
             <strong class="required-asterisk"> * </strong>
           </label>
         </span>
-        <ng-container
-          *ngIf="
+        <ng-container *ngIf="
             form.controls['dueDate'].touched &&
             !form.controls['dueDate'].valid &&
             form.controls['dueDate'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['dueDate'].hasError('required')"
-          >
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['dueDate'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>
@@ -184,21 +127,10 @@
 <!--footer-->
 <ng-template #footer>
   <div class="p-col p-d-flex">
-    <button
-      [loading]="blocking$ | async"
-      [disabled]="form.invalid"
-      (click)="submit()"
-      pButton
-      label="{{ 'ACTIONS.SAVE' | translate }}"
-      icon="pi pi-save"
-    ></button>
+    <button [loading]="blocking$ | async" [disabled]="form.invalid" (click)="submit()" pButton
+      label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
 
     <div class="ml-dir-auto"></div>
-    <button
-      (click)="toggleDialog()"
-      pButton
-      icon="pi pi-times"
-      label="{{ 'ACTIONS.CLOSE' | translate }}"
-    ></button>
+    <button (click)="toggleDialog()" pButton icon="pi pi-times" label="{{ 'ACTIONS.CLOSE' | translate }}"></button>
   </div>
 </ng-template>

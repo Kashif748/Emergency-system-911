@@ -35,35 +35,6 @@
   </ng-template>
 
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
-    <div class="p-field p-col-12 p-md-6">
-      <span class="p-float-label">
-        <input type="text" formControlName="nameEn" pInputText />
-        <label>
-          {{ "ACTIVITY_FEQ.FRQUENCY_EN" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-      <ng-container
-        *ngIf="
-          form.controls['nameEn'].touched &&
-          !form.controls['nameEn'].valid &&
-          form.controls['nameEn'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('required')"
-        >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['nameEn'].hasError('english')"
-        >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-        </p>
-      </ng-container>
-    </div>
 
     <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
@@ -92,6 +63,36 @@
           *ngIf="form.controls['nameAr'].hasError('arabic')"
         >
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="nameEn" pInputText />
+        <label>
+          {{ "ACTIVITY_FEQ.FRQUENCY_EN" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+      <ng-container
+        *ngIf="
+          form.controls['nameEn'].touched &&
+          !form.controls['nameEn'].valid &&
+          form.controls['nameEn'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
         </p>
       </ng-container>
     </div>
