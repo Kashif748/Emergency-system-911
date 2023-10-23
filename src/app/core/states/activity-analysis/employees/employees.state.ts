@@ -17,6 +17,8 @@ import {
 } from 'src/app/api/models';
 import { BcActivityEmployeesControllerService } from 'src/app/api/services';
 import { ActivityEmployeesAction } from './employees.action';
+import {AppSystemAction} from "@core/states/bc-resources/app-system/app-system.action";
+import {AppSystemStateModel} from "@core/states/bc-resources/app-system/app-system.state";
 
 export interface ActivityEmployeesStateModel {
   page: PageBcActivityEmployees;
@@ -195,6 +197,36 @@ export class ActivityEmployeesState {
         setState(
           patch<ActivityEmployeesStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(ActivityEmployeesAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<ActivityEmployeesStateModel>,
+    { payload }: ActivityEmployeesAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ActivityEmployeesStateModel>({
+        loading: true,
+      })
+    );
+    return this.activityEmployees.deleteById32({ id: payload.id }).pipe(
+      tap((v) => {
+        setState(
+          patch<ActivityEmployeesStateModel>({
+            loading: false,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<ActivityEmployeesStateModel>({
+            loading: false,
           })
         );
       })

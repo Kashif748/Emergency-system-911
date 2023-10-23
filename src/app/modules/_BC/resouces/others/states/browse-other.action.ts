@@ -44,4 +44,15 @@ export namespace BrowseOtherAction {
      */
     constructor(public payload: { otherId: number }) {}
   }
+  export class Delete {
+    static readonly type = '[BrowseOther] Delete Other';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

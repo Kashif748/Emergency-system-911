@@ -92,7 +92,7 @@
       <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
                 <p-dropdown #system [options]="systems$ | async" [autoDisplayFirst]="false"
-                            formControlName="applicationAndSoftware" [filter]="true"
+                            formControlName="applicationAndSoftware" filterBy="nameEn,nameAr" [filter]="true"
                             (onFilter)="loadSystems($event?.filter)" dataKey="id"
                             (onShow)="loadSystems(system.filterValue, true)" [showClear]="true"
                             appendTo="body"

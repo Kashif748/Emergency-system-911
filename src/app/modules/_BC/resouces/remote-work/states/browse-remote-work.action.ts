@@ -45,4 +45,16 @@ export namespace BrowseRemoteWorkAction {
      */
     constructor(public payload: { remoteWorkId: number }) {}
   }
+
+  export class Delete {
+    static readonly type = '[BrowseRemoteWork] Delete RemoteWork';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

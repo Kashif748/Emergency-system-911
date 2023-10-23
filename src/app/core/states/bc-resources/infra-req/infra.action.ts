@@ -41,7 +41,18 @@ export namespace InfraAction {
   }
 
   export class GetInfra {
-    static readonly type = '[infra] Get AppSystem';
+    static readonly type = '[infra] Get Infra';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
+  export class Delete {
+    static readonly type = '[infra] Delete Infra';
     /**
      *
      */

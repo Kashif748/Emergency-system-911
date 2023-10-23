@@ -44,4 +44,16 @@ export namespace BrowseRecordAction {
      */
     constructor(public payload: { recordId: number }) {}
   }
+
+  export class Delete {
+    static readonly type = '[BrowseRecord] Delete Record';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

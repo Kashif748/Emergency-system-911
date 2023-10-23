@@ -54,4 +54,16 @@ export namespace BrowseStaffAction {
      */
     constructor(public payload: { staffId: number }) {}
   }
+
+  export class Delete {
+    static readonly type = '[BrowseStaff] Delete Staff';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

@@ -85,4 +85,16 @@ export namespace StaffAction {
     ) {
     }
   }
+
+  export class Delete {
+    static readonly type = '[staff] Delete Staff';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

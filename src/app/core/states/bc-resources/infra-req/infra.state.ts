@@ -7,6 +7,8 @@ import {PageBcResourcesItInfrastructure} from "../../../../api/models/page-bc-re
 import {BcResourcesItInfrastructure} from "../../../../api/models/bc-resources-it-infrastructure";
 import {BcResourcesItInfrastructureControllerService} from "../../../../api/services/bc-resources-it-infrastructure-controller.service";
 import {InfraAction} from "@core/states/bc-resources/infra-req/infra.action";
+import {StaffStateModel} from "@core/states/bc-resources/staff/staff.state";
+import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 
 export interface InfraStateModel {
   page: PageBcResourcesItInfrastructure;
@@ -183,6 +185,29 @@ export class InfraState {
         setState(
           patch<InfraStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(InfraAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<InfraStateModel>,
+    { payload }: InfraAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<InfraStateModel>({
+        loading: true,
+      })
+    );
+    return this.bcResourcesItInfrastructure.deleteById11({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<InfraStateModel>({
+            loading: false,
           })
         );
       })

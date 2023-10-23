@@ -12,6 +12,7 @@ import {filter, map} from "rxjs/operators";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BrowseStaffAction} from "../states/browse-staff.action";
 import {BcResourcesStaffReq} from "../../../../../api/models/bc-resources-staff-req";
+import {BrowseActivitySystemsAction} from "../../../activity-analysis/systems/states/browse-systems.action";
 
 @Component({
   selector: 'app-browse-staff-req',
@@ -47,8 +48,8 @@ export class BrowseStaffReqComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
 
@@ -67,11 +68,27 @@ export class BrowseStaffReqComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...staffActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              },
             ],
           };
         })
       )
     );
+  }
+
+  delete(id) {
+    this.store
+      .dispatch(new BrowseStaffAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
 
   openDialog(id?: number) {

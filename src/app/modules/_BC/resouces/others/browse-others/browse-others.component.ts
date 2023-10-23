@@ -12,6 +12,7 @@ import {OtherState} from "@core/states/bc-resources/other/other.state";
 import {BrowseOtherState, BrowseOtherStateModel} from "../states/browse-other.state";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BrowseOtherAction} from "../states/browse-other.action";
+import {BrowseStaffAction} from "../../staff-requirement/states/browse-staff.action";
 
 @Component({
   selector: 'app-browse-others',
@@ -46,8 +47,8 @@ export class BrowseOthersComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
 
@@ -66,11 +67,26 @@ export class BrowseOthersComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...otherActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              },
             ],
           };
         })
       )
     );
+  }
+  delete(id) {
+    this.store
+      .dispatch(new BrowseOtherAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
   openDialog(id?: number) {
     this.store.dispatch(new BrowseOtherAction.ToggleDialog({ otherId: id }));

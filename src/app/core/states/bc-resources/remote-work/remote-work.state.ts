@@ -9,6 +9,8 @@ import {BcResourcesRemoteWork} from "../../../../api/models/bc-resources-remote-
 import {RemoteWorkAction} from "@core/states/bc-resources/remote-work/remote-work.action";
 import {PageBcResourcesDesignation} from "../../../../api/models/page-bc-resources-designation";
 import {BcResourcesDesignationControllerService} from "../../../../api/services/bc-resources-designation-controller.service";
+import {StaffStateModel} from "@core/states/bc-resources/staff/staff.state";
+import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 
 export interface RemoteWorkStateModel {
   page: PageBcResourcesRemoteWork;
@@ -243,6 +245,30 @@ export class RemoteWorkState {
         setState(
           patch<RemoteWorkStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+
+  @Action(RemoteWorkAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<RemoteWorkStateModel>,
+    { payload }: RemoteWorkAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<RemoteWorkStateModel>({
+        loading: true,
+      })
+    );
+    return this.remoteWork.deleteById6({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<RemoteWorkStateModel>({
+            loading: false,
           })
         );
       })

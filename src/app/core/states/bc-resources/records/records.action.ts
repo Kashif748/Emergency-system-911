@@ -51,4 +51,15 @@ export namespace RecordsAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[records] Delete record';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

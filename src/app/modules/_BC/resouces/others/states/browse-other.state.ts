@@ -9,6 +9,9 @@ import {catchError, finalize, tap} from "rxjs/operators";
 import {iif, patch} from "@ngxs/store/operators";
 import {BrowseOtherAction} from "./browse-other.action";
 import {OtherAction} from "@core/states/bc-resources/other/other.action";
+import {BrowseStaffStateModel} from "../../staff-requirement/states/browse-staff.state";
+import {BrowseStaffAction} from "../../staff-requirement/states/browse-staff.action";
+import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 
 export interface BrowseOtherStateModel {
   pageRequest: PageRequestModel;
@@ -152,5 +155,20 @@ export class BrowseOtherState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseOtherAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseOtherStateModel>,
+    { payload }: BrowseOtherAction.Delete
+  ) {
+    return dispatch(new OtherAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

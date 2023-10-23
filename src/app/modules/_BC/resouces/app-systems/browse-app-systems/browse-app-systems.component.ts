@@ -1,9 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BcResourcesRecords} from "../../../../../api/models/bc-resources-records";
-import {BrowseRecordsState, BrowseRecordStateModel} from "../../records/states/browse-records.state";
 import {Observable, Subject} from "rxjs";
 import {Select, Store} from "@ngxs/store";
-import {RecordsState} from "@core/states/bc-resources/records/records.state";
 import {TranslateService} from "@ngx-translate/core";
 import {ActivatedRoute} from "@angular/router";
 import {ILangFacade} from "@core/facades/lang.facade";
@@ -15,6 +12,7 @@ import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.st
 import {BcResourcesAppAndSoftware} from "../../../../../api/models/bc-resources-app-and-software";
 import {BrowseAppSystemAction} from "../states/browse-app-system.action";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BrowseStaffAction} from "../../staff-requirement/states/browse-staff.action";
 
 @Component({
   selector: 'app-browse-app-systems',
@@ -49,8 +47,8 @@ export class BrowseAppSystemsComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
 
@@ -69,11 +67,26 @@ export class BrowseAppSystemsComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...appSysActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              },
             ],
           };
         })
       )
     );
+  }
+  delete(id) {
+    this.store
+      .dispatch(new BrowseAppSystemAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
   openDialog(id?: number) {
     this.store.dispatch(new BrowseAppSystemAction.ToggleDialog({ appSystemId: id }));

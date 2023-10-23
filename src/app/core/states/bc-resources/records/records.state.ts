@@ -7,6 +7,8 @@ import {BcResourcesRecordsControllerService} from "../../../../api/services/bc-r
 import {RecordsAction} from "@core/states/bc-resources/records/records.action";
 import {PageBcResourcesRecords} from "../../../../api/models/page-bc-resources-records";
 import {BcResourcesRecords} from "../../../../api/models/bc-resources-records";
+import {RemoteWorkAction} from "@core/states/bc-resources/remote-work/remote-work.action";
+import {RemoteWorkStateModel} from "@core/states/bc-resources/remote-work/remote-work.state";
 
 export interface RecordsStateModel {
   page: PageBcResourcesRecords;
@@ -183,6 +185,29 @@ export class RecordsState {
         setState(
           patch<RecordsStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(RecordsAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<RecordsStateModel>,
+    { payload }: RecordsAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<RecordsStateModel>({
+        loading: true,
+      })
+    );
+    return this.bcRecords.deleteById7({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<RecordsStateModel>({
+            loading: false,
           })
         );
       })
