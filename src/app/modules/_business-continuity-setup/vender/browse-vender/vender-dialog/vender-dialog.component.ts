@@ -1,27 +1,33 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {IncidentsService} from "../../../../../_metronic/core/services/incidents.service";
-import {GenericValidators} from "@shared/validators/generic-validators";
-import {RegxConst} from "@core/constant/RegxConst";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Dialog} from "primeng/dialog";
-import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {Observable, Subject} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {BrowseVenderAction} from "../../states/browse-vender.action";
-import {FormUtils} from "@core/utils/form.utils";
-import {VenderState} from "@core/states/bc-setup/venders/vender.state";
-import {VenderAction} from "@core/states";
-import {PrivilegesService} from "@core/services/privileges.service";
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IncidentsService } from '../../../../../_metronic/core/services/incidents.service';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { RegxConst } from '@core/constant/RegxConst';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Dialog } from 'primeng/dialog';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { BrowseVenderAction } from '../../states/browse-vender.action';
+import { FormUtils } from '@core/utils/form.utils';
+import { VenderState } from '@core/states/bc-setup/venders/vender.state';
+import { VenderAction } from '@core/states';
+import { PrivilegesService } from '@core/services/privileges.service';
 
 @Component({
   selector: 'app-vender-dialog',
   templateUrl: './vender-dialog.component.html',
-  styleUrls: ['./vender-dialog.component.scss']
+  styleUrls: ['./vender-dialog.component.scss'],
 })
 export class VenderDialogComponent implements OnInit, OnDestroy {
   @ViewChild(Dialog) dialog: Dialog;
-
 
   @Select(VenderState.blocking)
   blocking$: Observable<boolean>;
@@ -35,8 +41,8 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
     return this.route.component !== VenderDialogComponent;
   }
   public criticalityType = [
-    {id: 1, nameEn: "Critical", nameAr: "مهم"},
-    {id: 2, nameEn: "Non-Critical", nameAr: "غير مهم"},
+    { id: 1, nameEn: 'Critical', nameAr: 'مهم' },
+    { id: 2, nameEn: 'Non-Critical', nameAr: 'غير مهم' },
   ];
 
   // variable
@@ -52,6 +58,7 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
     this._venderId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -66,11 +73,11 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
             ...vender,
           });
           this.patchValues(vender);
+          this.defaultFormValue = vender;
         })
       )
       .subscribe();
   }
-
 
   constructor(
     private formBuilder: FormBuilder,
@@ -115,11 +122,11 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
   patchValues(vender) {
     if (vender.isCritical) {
       this.form.patchValue({
-        isCritical: this.criticalityType[0]
+        isCritical: this.criticalityType[0],
       });
     } else {
       this.form.patchValue({
-        isCritical: this.criticalityType[1]
+        isCritical: this.criticalityType[1],
       });
     }
   }
@@ -139,7 +146,10 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
       sla: [null, [Validators.required]],
       pcontactNameEn: [null, [Validators.required, GenericValidators.english]],
       pcontactNameAr: [null, [Validators.required, GenericValidators.arabic]],
-      pcontactEmail: [null, [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)]],
+      pcontactEmail: [
+        null,
+        [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
+      ],
       pcontactPhoneNum: [null],
       pcontactMobileNum: [null, [Validators.required]],
       pcontactSecNum: [null],
@@ -153,9 +163,6 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
         [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
       ],
     });
-    this.defaultFormValue = {
-      ...this.defaultFormValue,
-    };
   }
 
   openDialog(id?: number) {
@@ -171,9 +178,9 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.store.dispatch(new VenderAction.GetVender({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
+    this.patchValues(this.defaultFormValue);
     this.cdr.detectChanges();
   }
 
@@ -200,7 +207,6 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
     vender.id = this._venderId;
     if (this.editMode) {
       this.store.dispatch(new BrowseVenderAction.UpdateVender(vender));
-
     } else {
       this.store.dispatch(new BrowseVenderAction.CreateVender(vender));
     }
