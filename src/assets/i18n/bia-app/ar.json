@@ -10,5 +10,15 @@
   "DATE":"تاريخ استحقاق ادخال التحليل ",
   "NAME_EN": "الاسم (انجليزي)",
   "NAME_AR": "الاسم (عربي)",
-  "ADD_NEW_ANALYSIS":"إضافة دورة تحليل جديدة"
+  "ADD_NEW_ANALYSIS":"إضافة دورة تحليل جديدة",
+  "ADD_NEW_ACTIVITY" :"إختيار النشاطات اللازمة للتحليل",
+  "ADD_ACTIVITY_ACTION": "اضافة أنشطة للتحليل",
+  "SELECT_CYCLE_MSG" :"يرجى إختيار دورة تحليل للمتابعة ",
+  "ACTIVITY_FEQ":"دورية النشاط",
+  "ACTIVITY_NAME":"إسم النشاط",
+  "ORG_ARTCH": "الهيكل الإداري",
+  "RESOURCES": {
+    "DIVISION": "إسم الإدارة",
+    "ADD_RESOURCE": "إضافة الموارد"
+  }
 }
