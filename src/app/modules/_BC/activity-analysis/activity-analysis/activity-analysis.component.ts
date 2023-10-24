@@ -149,4 +149,11 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  back() {
+    this.router.navigate(['/bc/impact-analysis'], { queryParams: {
+        _activity: undefined,
+      },
+      queryParamsHandling: "merge" });
+  }
 }

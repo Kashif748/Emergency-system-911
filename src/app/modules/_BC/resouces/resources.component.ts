@@ -148,4 +148,10 @@ export class ResourcesComponent implements OnInit, OnDestroy {
       return true;
     }
   }
+  back() {
+    this.router.navigate(['/bc/impact-analysis'], { queryParams: {
+        _activity: undefined,
+      },
+      queryParamsHandling: "merge" });
+  }
 }

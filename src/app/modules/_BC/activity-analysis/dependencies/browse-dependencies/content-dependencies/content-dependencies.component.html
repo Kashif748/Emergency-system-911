@@ -4,13 +4,15 @@
       class="d-flex p-ai-center p-jc-between p-4 font-weight-bold font-size-h4"
     >
       {{ "DEPENDENCIES." + dependType | translate }}
-      <button
-        [disabled]="noDpend$ | async"
-        pButton
-        label="{{ 'ACTIONS.ADD' | translate }}"
-        icon="pi pi-plus"
-        (click)="toggleDialog()"
-      ></button>
+      <ng-container *ngIf="activityStatus$ | async as activityStatus">
+        <button
+          [disabled]="(noDpend$ | async) || !activityStatus.editable"
+          pButton
+          label="{{ 'ACTIONS.ADD' | translate }}"
+          icon="pi pi-plus"
+          (click)="toggleDialog()"
+        ></button>
+      </ng-container>
     </div>
   </ng-template>
   <ng-container *ngIf="loading$ | async; else cardsTemplate">

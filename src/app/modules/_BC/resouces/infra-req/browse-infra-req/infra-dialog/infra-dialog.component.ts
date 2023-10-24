@@ -15,6 +15,7 @@ import {InfraAction} from "@core/states/bc-resources/infra-req/infra.action";
 import {BrowseRemoteWorkAction} from "../../../remote-work/states/browse-remote-work.action";
 import {FormUtils} from "@core/utils/form.utils";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
 
 @Component({
   selector: 'app-infra-dialog',
@@ -24,6 +25,9 @@ import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analy
 export class InfraDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
 
   @ViewChild(Dialog) dialog: Dialog;
   @Select(InfraState.blocking)

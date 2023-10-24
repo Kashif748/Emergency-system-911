@@ -1,6 +1,10 @@
+<ng-container *ngIf="activityStatus$ | async as activityStatus">
 <div class="p-toolbar-group-right">
-  <button pButton label="{{ 'ACTIONS.ADD' | translate }}" icon="pi pi-plus" (click)="toggleDialog()"></button>
+  <button pButton
+          [disabled]="(!activityStatus.editable)"
+          label="{{ 'ACTIONS.ADD' | translate }}" icon="pi pi-plus" (click)="toggleDialog()"></button>
 </div>
+</ng-container>
 
 <!-- as a dialog -->
 <p-dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="toggleDialog()" [style]="{ width: '55vw' }"
@@ -21,7 +25,7 @@
     <h3>
       {{ "SYSTEMS.NEW" | translate }}
     </h3>
-    
+
     <div class="mx-2">
       <p-tag>
         {{ "ACTIONS.NEW_ITEM" | translate }}
@@ -170,8 +174,13 @@
   <div class="p-col p-d-flex">
     <div class="p-col text-center">
       <div class="text-center">
-        <button [disabled]="!selectedBCSystem" [loading]="blocking$ | async" (click)="submit()" pButton
-          label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
+        <ng-container *ngIf="activityStatus$ | async as activityStatus">
+          <button
+            pButton
+                  [disabled]="(!activityStatus.editable) || (!selectedBCSystem)"
+                  [loading]="blocking$ | async" (click)="submit()" pButton
+                  label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
+        </ng-container>
       </div>
     </div>
   </div>

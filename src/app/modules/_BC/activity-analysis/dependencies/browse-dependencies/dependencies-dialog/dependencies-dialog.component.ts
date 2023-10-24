@@ -26,6 +26,7 @@ import {
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
 import { TreeHelper } from '@core/helpers/tree.helper';
+import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-dependencies-dialog',
@@ -42,6 +43,9 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
 
   @Select(OrgActivityState.page)
   activies$: Observable<BcActivities[]>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   public blocking$: Observable<boolean>;
 

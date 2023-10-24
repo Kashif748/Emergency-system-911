@@ -1,24 +1,20 @@
 <div class="p-toolbar-group-right">
+  <ng-container *ngIf="activityStatus$ | async as activityStatus">
   <button
     pButton
+    [disabled]="(!activityStatus.editable)"
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
     (click)="toggleDialog()"
   ></button>
+  </ng-container>
 </div>
 
+
 <!-- as a dialog -->
-<p-dialog
-  [visible]="opened$ | async"
-  [modal]="true"
-  (visibleChange)="toggleDialog()"
-  [style]="{ width: '55vw' }"
-  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="true"
-  [resizable]="false"
->
+<p-dialog *ngIf="asDialog;else page" #dialog [visible]="opened$ | async" (visibleChange)="toggleDialog()" [modal]="true"
+          [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
+          [baseZIndex]="10000" [draggable]="true" [resizable]="false">
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
@@ -27,38 +23,49 @@
     <ng-template [ngTemplateOutlet]="footer"></ng-template>
   </ng-template>
 </p-dialog>
+<!-- as a page -->
+<ng-template #page>
+  <div class="container-fluid h-100">
 
-<!-- templates header -->
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+    <div class="row">
+      <div class="col-12" style="height: 76vh;">
+        <ng-template [ngTemplateOutlet]="content"></ng-template>
+      </div>
+    </div>
+    <div class="row h-30px">
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- templates -->
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <span>{{ "EMPLOYEES.ADD_NEW" | translate }}</span>
-      <span
-        *ngIf="true"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="false"
-        class="label label-lg label-light-success label-inline"
-      >
+      <ng-container *ngIf="editMode">
+        {{ "EMPLOYEES.EDIT_NEW" | translate }}
+        <span class="label label-lg label-light-success label-inline">
         {{ "ACTIONS.UPDATE_ITEM" | translate }}
       </span>
+      </ng-container>
+      <ng-container *ngIf="!editMode">
+        {{ "EMPLOYEES.ADD_NEW" | translate }}
+        <span class="label label-lg label-light-primary label-inline">
+        {{ "ACTIONS.NEW_ITEM" | translate }}
+      </span>
+      </ng-container>
+    </h3>
+    <h3>
     </h3>
   </div>
 
   <span class="flex-grow-1"></span>
-  <a
-    queryParamsHandling="merge"
-    pRipple
-    pButton
-    icon="pi pi-link"
-    class="p-button-rounded p-button-text p-button-plain"
-  ></a>
 </ng-template>
 
-<!-- templates content -->
 <ng-template #content>
   <div class="w-100 pt-2">
     <p-blockUI>
@@ -71,7 +78,7 @@
         <span class="p-float-label">
           <input type="text" formControlName="employeeNameAr" pInputText />
           <label
-            >{{ "EMPLOYEES.NAME_AR" | translate }}
+          >{{ "EMPLOYEES.NAME_AR" | translate }}
             <strong class="required-asterisk"> * </strong>
           </label>
         </span>
@@ -96,7 +103,7 @@
         <span class="p-float-label">
           <input type="text" formControlName="employeeNameEn" pInputText />
           <label
-            >{{ "EMPLOYEES.NAME_EN" | translate }}
+          >{{ "EMPLOYEES.NAME_EN" | translate }}
             <strong class="required-asterisk"> * </strong>
           </label>
         </span>
@@ -295,22 +302,32 @@
   </div>
 </ng-template>
 
-<!--footer-->
+
 <ng-template #footer>
   <div class="p-col p-d-flex">
-    <div class="ml-dir-auto"></div>
 
-    <div class="p-col text-center">
-      <div class="text-center">
-        <button
-          pButton
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-          [loading]="blocking$ | async"
-          [disabled]="form.invalid"
-          (click)="submit()"
-        ></button>
+
+
+  </div>
+  <div class="p-col p-d-flex">
+    <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()"
+            label="{{'ACTIONS.CLOSE' | translate }}"></button>
+
+    <div class="ml-dir-auto"></div>
+    <ng-container *ngIf="">
+      <div class="mx-1">
+        <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
+                class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
       </div>
-    </div>
+    </ng-container>
+      <div class="mx-1">
+        <ng-container *ngIf="activityStatus$ | async as activityStatus">
+        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}"
+                [disabled]="(!activityStatus.editable) || form.invalid"
+                icon="pi pi-save" [loading]="blocking$ | async"
+                (click)="submit()"></button>
+        </ng-container>
+      </div>
   </div>
 </ng-template>
+

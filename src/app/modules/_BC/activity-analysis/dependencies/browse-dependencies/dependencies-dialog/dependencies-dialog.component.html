@@ -32,14 +32,8 @@
   </div>
 
   <span class="flex-grow-1"></span>
-  <a
-    queryParamsHandling="merge"
-    pRipple
-    pButton
-    icon="pi pi-link"
-    class="p-button-rounded p-button-text p-button-plain"
-  ></a>
 </ng-template>
+
 
 <!-- templates content -->
 <ng-template #content>
@@ -240,13 +234,16 @@
 
     <div class="p-col text-center">
       <div class="text-center">
-        <button
-          (click)="submit()"
-          [loading]="blocking$ | async"
-          pButton
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-        ></button>
+        <ng-container *ngIf="activityStatus$ | async as activityStatus">
+          <button
+            (click)="submit()"
+            [disabled]="(!activityStatus.editable) || this.form"
+            [loading]="blocking$ | async"
+            pButton
+            label="{{ 'ACTIONS.SAVE' | translate }}"
+            icon="pi pi-save"
+          ></button>
+        </ng-container>
       </div>
     </div>
   </div>
