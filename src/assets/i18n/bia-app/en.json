@@ -10,5 +10,15 @@
   "NAME_BC": "BC Lists Version",
   "DATE": "Cycle Entry Due Date",
   "NAME_EN": "Name (English)",
-  "NAME_AR": "Name (Arabic)"
+  "NAME_AR": "Name (Arabic)",
+  "ADD_NEW_ACTIVITY": "Select Cycle Activities",
+  "ACTIVITY_NAME": "Activity Name",
+  "ORG_ARTCH": "Organization Hierarchy",
+  "ACTIVITY_FEQ": "Activity Frequency",
+  "SELECT_CYCLE_MSG": "Please select cycle to continue",
+  "ADD_ACTIVITY_ACTION": "Add Activities Analysis",
+  "RESOURCES": {
+    "DIVISION": "Division Name",
+    "ADD_RESOURCE": "Add Resources"
+  }
 }

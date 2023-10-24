@@ -42,13 +42,15 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {BiaAppComponent} from "./bia-app.component";
 import {NewCycleDialogComponent} from "./browse-bia-app/cycle-dialog/new-cycle-dialog.component";
 import {CalendarModule} from "primeng/calendar";
+import {ResourceDialogComponent} from "./browse-bia-app/resource-dialog/resource-dialog.component";
+import {ActivitiesDialogComponent} from "./browse-bia-app/activities-dialog/activities-dialog.component";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/bia-app/', '.json');
 }
 
 @NgModule({
-  declarations: [BiaAppComponent, BrowseBiaAppComponent, ContentBiaAppComponent, NewCycleDialogComponent],
+  declarations: [BiaAppComponent, BrowseBiaAppComponent, ContentBiaAppComponent, NewCycleDialogComponent, ResourceDialogComponent, ActivitiesDialogComponent],
   imports: [
     CommonModule,
     BiaAppRoutingModule,

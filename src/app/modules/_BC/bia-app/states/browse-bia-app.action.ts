@@ -1,6 +1,7 @@
 import {PageRequestModel} from '@core/models/page-request.model';
 import {BcActivities} from "../../../../api/models/bc-activities";
-import {BcCycles} from "../../../../api/models";
+import {BcActivityAnalysisDto, BcCycles} from "../../../../api/models";
+import {BcResources} from "../../../../api/models/bc-resources";
 
 export namespace BrowseBiaAppAction {
   export class LoadBia{
@@ -117,5 +118,19 @@ export namespace BrowseBiaAppAction {
      *
      */
     constructor(public payload: { [key: string]: any }) {}
+  }
+  export class CreateResourceAnalysis {
+    static readonly type = '[BrowseBiaApp] Create ResourceAnalysis';
+    /**
+     *
+     */
+    constructor(public payload: BcResources) {}
+  }
+  export class SetCycleActivities {
+    static readonly type = '[BrowseBiaApp] Set Cycle Activites';
+    /**
+     *
+     */
+    constructor(public payload: BcActivityAnalysisDto[]) {}
   }
 }
