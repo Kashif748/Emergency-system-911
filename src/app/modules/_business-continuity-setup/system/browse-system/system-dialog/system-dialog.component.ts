@@ -70,6 +70,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     this._systemId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -83,6 +84,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
             ...system,
           });
           this.patchvalue(system);
+          this.defaultFormValue = system;
         })
       )
       .subscribe();
@@ -140,12 +142,6 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
     ]);
 
-    /*this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      map((data) => this.setTree(data)),
-      tap(console.log)
-    );*/
     this.store
       .select(OrgDetailState.orgHirSearch)
       .pipe(
@@ -193,9 +189,6 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
       isActive: true,
       id: null,
     });
-    this.defaultFormValue = {
-      ...this.defaultFormValue,
-    };
   }
   submit() {
     if (!this.form.valid) {
@@ -252,7 +245,6 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    console.log(this.orgHir);
   }
 
   ngOnDestroy(): void {
@@ -270,9 +262,9 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     }
   }
   clear() {
-    this.store.dispatch(new SystemsAction.GetSystem({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
+    this.patchvalue(this.defaultFormValue);
     this.cdr.detectChanges();
   }
 }
