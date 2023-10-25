@@ -18,6 +18,7 @@ import {SystemsAction} from "@core/states/bc-setup/systems/systems.action";
 import {LazyLoadEvent} from "primeng/api";
 import {TranslateService} from "@ngx-translate/core";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
 
 @Component({
   selector: 'app-app-system-dialog',
@@ -27,6 +28,9 @@ import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analy
 export class AppSystemDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
+
   @ViewChild(Dialog) dialog: Dialog;
   @ViewChild('system') systemDropdown: Dropdown;
 

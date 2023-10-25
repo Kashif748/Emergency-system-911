@@ -183,7 +183,8 @@ export class DashboardService extends DataSourceService {
           this.bcStatistics = {
             ...bcStatistics,
             currentAnalysisCycle: (bcStatistics.nameAr != 'Null' && bcStatistics.nameAr != '' && bcStatistics.nameEn != 'Null' && bcStatistics.nameEn != '') ?
-              lang == 'en' ? bcStatistics.nameEn : bcStatistics.nameAr : '-'
+              lang == 'en' ? bcStatistics.nameEn : bcStatistics.nameAr : '-',
+            criticalActivities: bcStatistics.criticalActivities ? (bcStatistics.criticalActivities * 100) + ' % - ' + bcStatistics.criticalActivities : 0
           };
           this.bcStatisticsChange$.next(this.bcStatistics);
         }
@@ -227,7 +228,7 @@ export class DashboardService extends DataSourceService {
             ...(incidentsStatistics || {}),
             ...(tasksStatistics || {}),
             ...(correspondenceStatistics || {}),
-            nationalCompliance: bcSectionDetail ? bcSectionDetail.nationalCompliance : null,
+            nationalCompliance: bcSectionDetail ? bcSectionDetail.nationalCompliance + ' %' : null,
             bcSectiondetails: bcSectionDetail ? bcSectionDetail.bcSectionDetails : null,
           };
           this.statisticsChange$.next(this.statistics);

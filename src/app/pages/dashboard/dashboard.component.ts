@@ -150,4 +150,8 @@ export class DashboardComponent implements OnInit {
   onCycleChange(newCycle: any) {
     this.dashboardService.getBcStatistic(newCycle, this.selectedHie?.data.id);
   }
+
+  onHieChange(hie: any) {
+    this.dashboardService.getBcStatistic(this.selectedCycle, hie?.data?.id);
+  }
 }

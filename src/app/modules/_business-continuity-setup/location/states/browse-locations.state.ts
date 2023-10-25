@@ -122,10 +122,7 @@ export class BrowseLocationsState {
     return dispatch(new LocationsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([
-          new BrowseLocationsAction.LoadLocations(),
-          new BrowseLocationsAction.ToggleDialog({}),
-        ]);
+        dispatch([new BrowseLocationsAction.LoadLocations()]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

@@ -1,28 +1,19 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
-import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable, Subject } from 'rxjs';
-import { BcActivityLocations, BcLocations } from 'src/app/api/models';
-import { BrowseLocationsState } from 'src/app/modules/_business-continuity-setup/location/states/browse-locations.state';
-import { BrowseLocationsStateModel } from '../../states/browse-locations.state';
-import {
-  auditTime,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
-import { LazyLoadEvent } from 'primeng/api';
-import { BrowseActivityLocationsAction } from '../../states/browse-locations.action';
-import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
-import { BrowseActivityAnalysisState } from '../../../states/browse-activity-analysis.state';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
-import { ActivityLocationsAction } from '@core/states/activity-analysis/locations/locations.action';
-import { LocationDialogComponent } from 'src/app/modules/_business-continuity-setup/location/browse-location/location-dialog/location-dialog.component';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {LocationsState} from '@core/states/bc-setup/locations/locations.state';
+import {Select, Store} from '@ngxs/store';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {BcActivityLocations, BcLocations} from 'src/app/api/models';
+import {BrowseLocationsState} from 'src/app/modules/_business-continuity-setup/location/states/browse-locations.state';
+import {BrowseLocationsStateModel} from '../../states/browse-locations.state';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {BrowseActivityLocationsAction} from '../../states/browse-locations.action';
+import {ActivityLocationsState} from '@core/states/activity-analysis/locations/locations.state';
+import {ActivityAnalysisState} from '@core/states/activity-analysis/activity-analysis.state';
+import {ActivityLocationsAction} from '@core/states/activity-analysis/locations/locations.action';
+import {LocationDialogComponent} from 'src/app/modules/_business-continuity-setup/location/browse-location/location-dialog/location-dialog.component';
+import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-locations-dialog',
@@ -33,6 +24,9 @@ export class ActivityLocationDialogComponent implements OnInit, OnDestroy {
   @ViewChild(LocationDialogComponent) newLocCompoenent: LocationDialogComponent;
 
   public page$: Observable<BcLocations[]>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   public opened$: Observable<boolean>;
 

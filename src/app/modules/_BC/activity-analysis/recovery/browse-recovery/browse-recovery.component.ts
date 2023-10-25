@@ -14,6 +14,7 @@ import { filter, skip, takeUntil, tap } from 'rxjs/operators';
 import { BcActivities, Bcrto } from 'src/app/api/models';
 import { BrowseActivityAnalysisAction } from '../../states/browse-activity-analysis.action';
 import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
+import {ActivityAnalysisStatusAction} from "../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-browse-recovery',
@@ -23,6 +24,9 @@ import { BrowseActivityAnalysisState } from '../../states/browse-activity-analys
 export class BrowseRecoveryComponent implements OnInit, OnDestroy {
   @Select(ActivityPrioritySeqState.page)
   public prioritySeq$: Observable<boolean>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   @Select(ActivityAnalysisState.loading)
   public loading$: Observable<boolean>;

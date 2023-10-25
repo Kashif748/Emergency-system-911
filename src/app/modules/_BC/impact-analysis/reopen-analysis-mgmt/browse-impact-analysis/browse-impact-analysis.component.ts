@@ -484,6 +484,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       queryParams: {
         _cycle: resource?.cycle?.id,
         _resource: resource?.id,
+        _division: resource?.orgHierarchy?.id,
       },
     });
   }
@@ -493,7 +494,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       queryParams: {
         _cycle: activity?.cycle?.id,
         _activity: activity?.id,
-        _division: activity?.id,
+        _division: activity?.activity?.orgHierarchy?.id,
       },
     });
   }

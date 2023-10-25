@@ -19,6 +19,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {BcResourcesStaffReq} from "../../../../../../api/models/bc-resources-staff-req";
 import {Dropdown} from "primeng/dropdown";
 import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
+import {BcResources} from "../../../../../../api/models/bc-resources";
 
 @Component({
   selector: 'app-staff-req-dialog',
@@ -32,6 +33,9 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
 
   @Select(StaffState.designationPage)
   resourceDesignation$: Observable<BcResourcesDesignation[]>;
+
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
 
   @Select(StaffState.designationLoading)
   resourceDesignationLoading$: Observable<boolean>;

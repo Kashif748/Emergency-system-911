@@ -32,6 +32,7 @@ import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.stat
 import { BcImpactLevelMatrixDto } from '../../../../../api/models/bc-impact-level-matrix-dto';
 import { BcImpactMatrixDto } from '../../../../../api/models';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import {ActivityAnalysisStatusAction} from "../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-browse-impact-matrix',
@@ -40,6 +41,9 @@ import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 })
 export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   @ViewChild('accordion') accordion: any;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   @Select(ActivityImpactMatrixState.loading)
   public loading$: Observable<boolean>;

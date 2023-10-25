@@ -8,7 +8,7 @@
       <p-toolbar>
         <div class="p-toolbar-group-left">
           <div class="p-col p-d-flex">
-            <button pButton [icon]="icon$ | async" routerLink="/bc/impact-analysis">
+            <button pButton [icon]="icon$ | async" (click)="back()">
             </button>
           </div>
           <h2 class="m-0">
@@ -16,54 +16,23 @@
             {{ resourceAnalysis?.cycle | translateObj }}
           </h2>
         </div>
-        <div
-          *ngIf="resourceAnalysis.status.actions"
-          class="p-toolbar-group-right"
-          style="gap: 10px"
-        >
-          <ng-container *ngFor="let action of resourceAnalysis.status.actions">
-            <p-button
-              *ngIf="checkPermissoon(action)"
-              [loading]="blocking$ | async"
-              label="{{ action | translateObj }}"
-              [styleClass]="action?.cssClass"
-              (click)="changeStatus(resourceAnalysis?.id, action)"
-            ></p-button>
-          </ng-container>
-        </div>
-        <!--<div class="p-toolbar-group-right" style="gap: 10px">
-          <p-button
-            *ngIf="resourceAnalysis?.status?.id != RESOURCE_STATUSES.DRAFT"
-            label="{{ 'DRAFT' | translate }}"
-            styleClass="p-button-outlined p-button-danger"
-            (click)="
-              changeStatus(resourceAnalysis?.id, RESOURCE_STATUSES.DRAFT)
-            "
-          ></p-button>
-          <p-button
-            *ngIf="
-              resourceAnalysis?.status?.id != RESOURCE_STATUSES.UNDER_REVIEW
-            "
-            label="{{ 'REVIEW' | translate }}"
-            styleClass="p-button-outlined"
-            (click)="
-              changeStatus(resourceAnalysis?.id, RESOURCE_STATUSES.UNDER_REVIEW)
-            "
-          ></p-button>
-          <p-button
-            *ngIf="
-              resourceAnalysis?.status?.id != RESOURCE_STATUSES.UNDER_APPROVAL
-            "
-            (click)="
-              changeStatus(
-                resourceAnalysis?.id,
-                RESOURCE_STATUSES.UNDER_APPROVAL
-              )
-            "
-            label="{{ 'APPROVE' | translate }}"
-          ></p-button>
-          <p-button icon="pi pi-ellipsis-v"></p-button>
-        </div>-->
+        <ng-container *ngIf="resourceAnalysis.status.editable">
+          <div
+            *ngIf="resourceAnalysis.status.actions"
+            class="p-toolbar-group-right"
+            style="gap: 10px"
+          >
+            <ng-container *ngFor="let action of resourceAnalysis.status.actions">
+              <p-button
+                *ngIf="checkPermissoon(action)"
+                [loading]="blocking$ | async"
+                label="{{ action | translateObj }}"
+                [styleClass]="action?.cssClass"
+                (click)="changeStatus(resourceAnalysis?.id, action)"
+              ></p-button>
+            </ng-container>
+          </div>
+        </ng-container>
       </p-toolbar>
       <div class="d-flex p-5 sub-header p-jc-around">
         <div class="d-flex flex-column">
