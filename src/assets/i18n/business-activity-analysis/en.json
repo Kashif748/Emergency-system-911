@@ -42,6 +42,7 @@
   "EMPLOYEES": {
     "TAB_LABEL": "Employees",
     "ADD_NEW": "Add a new employee",
+    "EDIT_NEW": "Edit Employee",
     "TITLE": "Vital staff/alternates",
     "NAME_AR": "Employee Name (Arabic)",
     "NAME_EN": "Employee Name (English)",

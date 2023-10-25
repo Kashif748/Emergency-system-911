@@ -327,7 +327,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    this.orgHireracy = this.orgHir
+    this.orgHireracy = [...this.orgHir];
     this.orgHireracy.forEach((node) => {
       this.markDisabledNodes(node);
     });

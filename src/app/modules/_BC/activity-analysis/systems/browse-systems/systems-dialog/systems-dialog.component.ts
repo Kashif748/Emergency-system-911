@@ -1,32 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable, Subject } from 'rxjs';
-import { BcActivitySystems, BcSystems } from 'src/app/api/models';
-import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
-import {
-  BrowseActivitySystemsState,
-  BrowseActivitySystemsStateModel,
-} from '../../states/browse-systems.state';
-import {
-  auditTime,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
-import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
-import { BrowseActivitySystemsAction } from '../../states/browse-systems.action';
-import { SystemsAction } from '@core/states/bc-setup/systems/systems.action';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
-import { ActivitySystemsAction } from '@core/states/activity-analysis/systems/systems.action';
-import { TranslateService } from '@ngx-translate/core';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { LazyLoadEvent } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GenericValidators } from '@shared/validators/generic-validators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Select, Store} from '@ngxs/store';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {BcActivitySystems, BcSystems} from 'src/app/api/models';
+import {ActivitySystemsState} from '@core/states/activity-analysis/systems/systems.state';
+import {BrowseActivitySystemsState, BrowseActivitySystemsStateModel,} from '../../states/browse-systems.state';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {SystemsState} from '@core/states/bc-setup/systems/systems.state';
+import {BrowseActivitySystemsAction} from '../../states/browse-systems.action';
+import {SystemsAction} from '@core/states/bc-setup/systems/systems.action';
+import {ActivityAnalysisState} from '@core/states/activity-analysis/activity-analysis.state';
+import {ActivitySystemsAction} from '@core/states/activity-analysis/systems/systems.action';
+import {TranslateService} from '@ngx-translate/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-systems-dialog',
@@ -37,6 +25,9 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   public page$: Observable<BcSystems[]>;
 
   public opened$: Observable<boolean>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   @Select(SystemsState.totalRecords)
   public totalRecords$: Observable<number>;

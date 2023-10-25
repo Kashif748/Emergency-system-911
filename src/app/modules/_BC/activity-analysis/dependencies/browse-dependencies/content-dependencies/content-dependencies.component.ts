@@ -1,32 +1,15 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
-import { TranslateService } from '@ngx-translate/core';
-import { Store } from '@ngxs/store';
-import { BrowseActivityDependenciesAction } from '../states/browse-dependencies.action';
-import {
-  ActivityDependenciesState,
-  DEPENDENCIES_TYPES,
-} from '@core/states/activity-analysis/dependencies/dependencies.state';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
-import {
-  BcActivityDependencyExternal,
-  BcActivityDependencyInternal,
-  BcActivityDependencyOrg,
-} from 'src/app/api/models';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,} from '@angular/core';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
+import {TranslateService} from '@ngx-translate/core';
+import {Select, Store} from '@ngxs/store';
+import {BrowseActivityDependenciesAction} from '../states/browse-dependencies.action';
+import {ActivityDependenciesState, DEPENDENCIES_TYPES,} from '@core/states/activity-analysis/dependencies/dependencies.state';
+import {Observable, Subject} from 'rxjs';
+import {filter, map, takeUntil, tap} from 'rxjs/operators';
+import {ActivityAnalysisState} from '@core/states/activity-analysis/activity-analysis.state';
+import {BcActivityDependencyExternal, BcActivityDependencyInternal, BcActivityDependencyOrg,} from 'src/app/api/models';
+import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-content-dependencies',
@@ -51,6 +34,9 @@ export class ContentDependenciesComponent implements OnInit, OnChanges {
   onPageChange = new EventEmitter<LazyLoadEvent>();
 
   DEPENDENCIES_TYPES = DEPENDENCIES_TYPES;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   noDpeendCssBtn = '';
   private destroy$ = new Subject();

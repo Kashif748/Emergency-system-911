@@ -19,6 +19,7 @@ import {Dialog} from "primeng/dialog";
 import {OrgActivityAction} from "@core/states/org-activities/orgActivity.action";
 import {BcResourcesDesignation} from "../../../../../../api/models/bc-resources-designation";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
 
 @Component({
   selector: 'app-remote-work-dialog',
@@ -28,6 +29,8 @@ import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analy
 export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
 
   @ViewChild(Dialog) dialog: Dialog;
   @ViewChild('priorityLevel') priorityLevelDropdown: Dropdown;

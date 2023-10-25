@@ -4,14 +4,16 @@
       "IMPACT_MATRIX.HEADER" | translate
     }}</span>
   </h3>
-
-  <p-button
-    [loading]="blocking$ | async"
-    [disabled]="selectedCells.length == 0"
-    label="{{ 'ACTIONS.SAVE' | translate }}"
-    (click)="save()"
-    icon="pi pi-save"
-  ></p-button>
+  <ng-container *ngIf="activityStatus$ | async as activityStatus">
+    <button
+      pButton
+      [loading]="blocking$ | async"
+      [disabled]="(!activityStatus.editable) || selectedCells.length == 0"
+      label="{{ 'ACTIONS.SAVE' | translate }}"
+      (click)="save()"
+      icon="pi pi-save"
+    ></button>
+  </ng-container>
 </div>
 
 <div *ngIf="state$ | async as state" class="row mt-5">

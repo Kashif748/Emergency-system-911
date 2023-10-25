@@ -12,6 +12,7 @@ import {RecordsState} from "@core/states/bc-resources/records/records.state";
 import {RecordsAction} from "@core/states/bc-resources/records/records.action";
 import {FormUtils} from "@core/utils/form.utils";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
 
 @Component({
   selector: 'app-record-dialog',
@@ -21,6 +22,9 @@ import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analy
 export class RecordDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
 
   @ViewChild(Dialog) dialog: Dialog;
 

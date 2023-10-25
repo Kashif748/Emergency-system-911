@@ -4,13 +4,16 @@
       "RECOVERY.RECOVERY_DETAILS" | translate
     }}</span>
   </h3>
-  <p-button
-    [disabled]="form?.invalid"
-    [loading]="blocking$ | async"
-    label="{{ 'ACTIONS.SAVE' | translate }}"
-    (click)="submit()"
-    icon="pi pi-save"
-  ></p-button>
+  <ng-container *ngIf="activityStatus$ | async as activityStatus">
+    <button
+      pButton
+      [disabled]="(!activityStatus.editable) || form?.invalid"
+      [loading]="blocking$ | async"
+      label="{{ 'ACTIONS.SAVE' | translate }}"
+      (click)="submit()"
+      icon="pi pi-save"
+    ></button>
+  </ng-container>
 </div>
 
 <form [formGroup]="form" class="p-fluid p-grid mt-10 p-col-8 m-auto">

@@ -13,6 +13,7 @@ import {OtherState} from "@core/states/bc-resources/other/other.state";
 import {OtherAction} from "@core/states/bc-resources/other/other.action";
 import {FormUtils} from "@core/utils/form.utils";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
 
 @Component({
   selector: 'app-other-dialog',
@@ -22,6 +23,9 @@ import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analy
 export class OtherDialogComponent implements OnInit, OnDestroy {
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
+
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
   @ViewChild(Dialog) dialog: Dialog;
   form: FormGroup;
   _otherId: number;

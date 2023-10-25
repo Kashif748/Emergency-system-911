@@ -1,5 +1,6 @@
-<div class="p-toolbar-group-right">
+<div class="p-toolbar-group-right" *ngIf="resourceAnalysis$ | async as resourceAnalysis">
   <button
+    [disabled]="!resourceAnalysis.status.editable"
     pButton
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
@@ -240,13 +241,16 @@
     </ng-container>
 
     <div class="mx-1" *ngIf="!(viewOnly$ | async)">
-      <button
-        pButton
-        label="{{ 'ACTIONS.SAVE' | translate }}"
-        icon="pi pi-save"
-        [loading]="blocking$ | async"
-        (click)="submit()"
-      ></button>
+      <ng-container *ngIf="resourceAnalysis$ | async as resourceAnalysis">
+        <button
+          [disabled]="(!resourceAnalysis.status.editable) || form.invalid"
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [loading]="blocking$ | async"
+          (click)="submit()"
+        ></button>
+      </ng-container>
     </div>
   </div>
 </ng-template>

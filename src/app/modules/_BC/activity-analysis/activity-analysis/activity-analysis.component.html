@@ -11,7 +11,7 @@
             <button
               pButton
               [icon]="icon$ | async"
-              routerLink="/bc/impact-analysis"
+              (click)="back()"
             ></button>
           </div>
           <h2 class="m-0">
@@ -24,13 +24,15 @@
           class="p-toolbar-group-right"
           style="gap: 10px"
         >
-          <ng-container *ngFor="let action of activityStatus?.actions">
-            <p-button
-              [loading]="blocking$ | async"
-              label="{{ action | translateObj }}"
-              [styleClass]="action?.cssClass"
-              (click)="changeStatus(activityAnalysis?.id, action)"
-            ></p-button>
+          <ng-container *ngIf="activityStatus.editable">
+            <ng-container *ngFor="let action of activityStatus?.actions">
+              <p-button
+                [loading]="blocking$ | async"
+                label="{{ action | translateObj }}"
+                [styleClass]="action?.cssClass"
+                (click)="changeStatus(activityAnalysis?.id, action)"
+              ></p-button>
+            </ng-container>
           </ng-container>
         </div>
       </p-toolbar>
