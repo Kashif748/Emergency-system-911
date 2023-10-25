@@ -274,6 +274,8 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
       tragetRto = rtos.find((rto) => rto.id === secondLevel.id);
     } else if (rtos.length > 2) {
       tragetRto = rtos[1];
+    } else if (rtos.length == 1) {
+      tragetRto = rtos[0];
     }
 
     this.store.dispatch(
