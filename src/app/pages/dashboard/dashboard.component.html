@@ -16,6 +16,7 @@
               placeholder="{{ 'DASHBOARD.ORG_ARTCH' | translate }}"
               appendTo="body"
               [(ngModel)]="selectedHie"
+              (ngModelChange)="onHieChange($event)"
             >
               <ng-template let-option let-placeholder pTemplate="value">
                 {{
