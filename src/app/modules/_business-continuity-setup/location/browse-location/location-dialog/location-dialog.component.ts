@@ -2,10 +2,12 @@ import {
   ChangeDetectorRef,
   Component,
   ComponentFactoryResolver,
+  EventEmitter,
   Injector,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -42,7 +44,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LocationDialogComponent implements OnInit, OnDestroy {
   @Input() asDialog: boolean = true;
-
+  @Output() onClose = new EventEmitter<boolean>();
   @Select(LocationTypeState.page)
   public locationTypes$: Observable<BcLocationTypes[]>;
 
@@ -227,7 +229,16 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       location.id = this._locationId;
       this.store.dispatch(new BrowseLocationsAction.UpdateLocation(location));
     } else {
-      this.store.dispatch(new BrowseLocationsAction.CreateLocation(location));
+      this.store
+        .dispatch(new BrowseLocationsAction.CreateLocation(location))
+        .toPromise()
+        .then(() => {
+          if (this.dialog) {
+            this.store.dispatch(new BrowseLocationsAction.ToggleDialog({}));
+          } else {
+            this.onClose.emit(true);
+          }
+        });
     }
   }
 
