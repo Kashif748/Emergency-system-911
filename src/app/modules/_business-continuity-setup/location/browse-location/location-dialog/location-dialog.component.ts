@@ -2,12 +2,10 @@ import {
   ChangeDetectorRef,
   Component,
   ComponentFactoryResolver,
-  EventEmitter,
   Injector,
   Input,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -18,11 +16,7 @@ import { Dialog } from 'primeng/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { MapComponent } from '@shared/sh-components/map/map.component';
 import { MapViewType } from '@shared/components/map/utils/MapViewType';
-import {
-  LocationTypeAction,
-  LocationTypeState,
-  VenderAction,
-} from '@core/states';
+import { LocationTypeAction, LocationTypeState } from '@core/states';
 import { Select, Store } from '@ngxs/store';
 import { FormUtils } from '@core/utils';
 import { Observable, Subject } from 'rxjs';
@@ -39,8 +33,6 @@ import {
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
 import { IAuthService } from '@core/services/auth.service';
 import { AddressSearchResultModel } from '@shared/sh-components/map/utils/map.models';
-import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
-import { LocationsAction } from '@core/states/bc-setup/locations/locations.action';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -90,6 +82,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     this._locationId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -102,6 +95,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...location,
           });
+          this.defaultFormValue = location;
         })
       )
       .subscribe();
@@ -207,9 +201,6 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       latitude: [null, [Validators.required]],
       isActive: true,
     });
-    this.defaultFormValue = {
-      ...this.defaultFormValue,
-    };
   }
   close() {
     this.store.dispatch(new BrowseLocationsAction.ToggleDialog({}));
@@ -298,7 +289,6 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
 
   clear() {
     this.initMap();
-    this.store.dispatch(new LocationsAction.GetLocation({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();
