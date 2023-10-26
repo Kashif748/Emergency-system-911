@@ -120,7 +120,7 @@
                       {{ worklog?.createdBy | translateObj : "LastName" }}
                     </span>
                     <div class="mr-2"></div>
-                    <span class="mx-2 text-muted">
+                    <span class="mx-2 text-muted" [dir]="dir$ | async">
                       {{ worklog?.createdOn | cdate }}
                     </span>
                     <div class="mr-2"></div>

@@ -51,6 +51,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   //   analysis page
   // filters
   public orgHir: TreeNode[] = [];
+  public orgHireracy: TreeNode[] = [];
 
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -372,6 +373,19 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
+    this.orgHireracy = JSON.parse(JSON.stringify(this.orgHir));
+    this.orgHireracy.forEach((node) => {
+      this.markDisabledNodes(node);
+    });
+  }
+  markDisabledNodes(node: TreeNode) {
+    if (node.children) {
+      node.expanded = true;
+      node.children.forEach((child) => {
+        this.markDisabledNodes(child);
+      });
+    }
+    node.selectable = node?.data?.bcOrgHirType?.id === 2;
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);

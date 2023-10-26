@@ -73,6 +73,10 @@ export class WorklogsComponent implements OnInit, OnDestroy {
 
   public selectedWorklogType: BcWorkLogTypes;
 
+  public dir$ = this.lang.vm$.pipe(
+    map(({ActiveLang: {key}}) => (key === 'ar' ? 'rtl' : 'ltr'))
+  );
+
   private destroy$ = new Subject();
   public files: File[] = [];
   uploading = false;
