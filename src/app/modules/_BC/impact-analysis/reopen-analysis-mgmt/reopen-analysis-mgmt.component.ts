@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {BrowseImpactAnalysisAction} from "../states/browse-impact-analysis.action";
 import {Select, Store} from "@ngxs/store";
 import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subject} from "rxjs";
 import {TranslateService} from "@ngx-translate/core";
 import {OrgDetailAction, RtoAction, RtoState} from "@core/states";
@@ -11,6 +11,7 @@ import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.
 import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
 import {BcAnalysisStatus} from "../../../../api/models";
 import {BrowseRtoAction} from "../../bc-lists/rto/states/browse-rto.action";
+import {ILangFacade} from "@core/facades/lang.facade";
 
 @Component({
   selector: 'app-reopen-analysis-mgmt',
@@ -40,10 +41,18 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
   orgHierarchyId: number;
   cycleId: number;
 
+  public icon$ = this.lang.vm$.pipe(
+    map(({ ActiveLang: { key } }) =>
+      key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'
+    )
+  );
+
   constructor(
     private store: Store,
     private route: ActivatedRoute,
     private translate: TranslateService,
+    private router: Router,
+    private lang: ILangFacade,
   ) {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -84,7 +93,7 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
   bulkUpdate(action) {
     const Status = {
       cycleId: this.cycleId,
-      actionId: action?.id,
+      actionId: action?.actionId,
       orgHierarchyId: this.orgHierarchyId,
     };
     this.store.dispatch(new BrowseImpactAnalysisAction.UpdateBulkTransaction(Status));
@@ -93,5 +102,12 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  back() {
+    this.router.navigate(['/bc/bia-apps'], { queryParams: {
+        _activity: undefined,
+        _division: undefined
+      },
+      queryParamsHandling: "merge" });
   }
 }

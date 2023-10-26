@@ -92,7 +92,7 @@ export class ResourceDialogComponent implements OnInit, OnDestroy{
         takeUntil(this.destroy$)
       )
       .subscribe((id) => {
-        this._resourceId = id;
+        this.remoteWorkId = id;
       });
     this.viewOnly$ = this.route.queryParams.pipe(
       map((params) => params['_mode'] === 'viewonly'),

@@ -1,6 +1,10 @@
 <div class="container-fluid">
   <header class="p-d-flex p-jc-between p-ai-center pl-4">
     <div class="d-block d-sm-flex p-ai-center text-center">
+      <div class="p-col p-d-flex">
+        <button pButton [icon]="icon$ | async" (click)="back()">
+        </button>
+      </div>
       <h3 class="card-title align-items-start flex-column m-0">
           <span class="card-label font-weight-bolder">
             {{'BUSINESS_IMPACT_ANALYSIS' | translate}}</span>

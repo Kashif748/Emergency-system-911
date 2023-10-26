@@ -36,6 +36,7 @@ import {BrowseResourceAnalysisAction} from "../../states/browse-resource-analysi
 export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
 // filters
   public orgHir: TreeNode[] = [];
+  public orgHireracy: TreeNode[] = [];
 
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -170,6 +171,7 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
     if (_searchResponses.length == 0) {
       if (this.orgHir.length == 0) {
         this.orgHir = [];
+        this.orgHireracy = [];
       }
       return;
     }
@@ -189,6 +191,19 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
+    this.orgHireracy = JSON.parse(JSON.stringify(this.orgHir));
+    this.orgHireracy.forEach((node) => {
+      this.markDisabledNodes(node);
+    });
+  }
+  markDisabledNodes(node: TreeNode) {
+    if (node.children) {
+      node.expanded = true;
+      node.children.forEach((child) => {
+        this.markDisabledNodes(child);
+      });
+    }
+    node.selectable = node?.data?.bcOrgHirType?.id === 2;
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
