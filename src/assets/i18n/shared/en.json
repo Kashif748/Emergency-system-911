@@ -1638,7 +1638,8 @@
         },
         "ERROR": {
           "TITLE": "Error",
-          "MESSAGE": "Something went wrong."
+          "MESSAGE": "Something went wrong.",
+          "CMESSAGE": "Already exists, please choose another."
         },
         "WARN": {
           "TITLE": "Warning"

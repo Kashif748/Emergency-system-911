@@ -147,7 +147,11 @@ export class BrowseResourceAnalysisState {
             new BrowseResourceAnalysisAction.ToggleDialog({})]);
       }),
       catchError((err) => {
-        this.messageHelper.error({ error: err });
+        if (err.status === 409) {
+          this.messageHelper.cError();
+        } else {
+          this.messageHelper.error({ error: err });
+        }
         return throwError(err);
       })
     );
