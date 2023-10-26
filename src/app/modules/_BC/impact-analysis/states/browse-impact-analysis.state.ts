@@ -10,6 +10,7 @@ import {BrowseImpactAnalysisAction} from './browse-impact-analysis.action';
 import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
 import {catchError, finalize, tap} from 'rxjs/operators';
 import {EMPTY} from 'rxjs';
+import {BrowseResourceAnalysisAction} from "./browse-resource-analysis.action";
 
 export interface BrowseImpactAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -236,7 +237,7 @@ export class BrowseImpactAnalysisState {
     return dispatch(new ImapactAnalysisAction.UpdateBulkTransaction(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        // dispatch(new BrowseRtoAction.LoadRto());
+        dispatch([new BrowseImpactAnalysisAction.LoadPage(), new BrowseResourceAnalysisAction.LoadPage()]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

@@ -26,6 +26,7 @@ import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState} from "../.
 import {BcResources} from "../../../../../api/models/bc-resources";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BrowseResourceAnalysisAction} from "../../states/browse-resource-analysis.action";
+import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -428,8 +429,9 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));
 
     if (click) {
-      this.store.dispatch(new BrowseImpactAnalysisAction.UpdateRoute(filter));
+      this.store.dispatch(new BrowseImpactAnalysisAction.UpdateRoute(filter))
       this.search();
+      this.checkStatus(filter);
     }
   }
   clear() {
@@ -517,6 +519,22 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
         },
       })
     );
+  }
+
+  public checkStatus(filters) {
+    const orgHie = filters['orgHierarchyId'] ? filters['orgHierarchyId']?.id : this.orgHierarchyId;
+    const cycle = filters['cycleId'] ? filters['cycleId']?.id : this.cycleId;
+    this.store.dispatch(new BrowseImpactAnalysisAction.LoadAnalysisStatusInfo(
+      { orgHierarchyId: orgHie, cycleId: cycle })).pipe(
+      switchMap(() => this.store.select(ImpactAnalysisState.loadAnalysisStatus)),
+      takeUntil(this.destroy$),
+      take(1),
+      filter((p) => !!p),
+      tap((status) => {
+        this.store.dispatch(new ImapactAnalysisAction.LoadStatusBasedOnStatusId(
+          { id:  status?.id}));
+      })
+    ).subscribe();
   }
 
   ngOnDestroy(): void {

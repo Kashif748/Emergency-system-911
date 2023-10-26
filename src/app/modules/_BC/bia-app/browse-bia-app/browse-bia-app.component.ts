@@ -15,10 +15,9 @@ import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
 import {BcAnalysisByOrgHierarchyResponse} from "../../../../api/models/bc-analysis-by-org-hierarchy-response";
 import {BcAnalysisStatus, BcCycles} from "../../../../api/models";
 import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.state";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {OrgDetailAction, OrgDetailState} from "@core/states";
 import {BcOrgHierarchyProjection} from "../../../../api/models/bc-org-hierarchy-projection";
-import {BrowseImpactAnalysisAction} from "../../impact-analysis/states/browse-impact-analysis.action";
 
 @Component({
   selector: 'app-browse-bia-app',
@@ -97,7 +96,8 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     private langFacade: ILangFacade,
     private treeHelper: TreeHelper,
     private privilegesService: PrivilegesService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.langFacade.vm$
       .pipe
@@ -327,18 +327,19 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    this.orgHireracy = [...this.orgHir];
+    this.orgHireracy = JSON.parse(JSON.stringify(this.orgHir));
     this.orgHireracy.forEach((node) => {
       this.markDisabledNodes(node);
     });
   }
   markDisabledNodes(node: TreeNode) {
     if (node.children) {
+      node.expanded = true;
       node.children.forEach((child) => {
         this.markDisabledNodes(child);
       });
     }
-    node.selectable = node.data.bcOrgHirType.id === 2;
+    node.selectable = node?.data?.bcOrgHirType?.id === 2;
   }
 
   filterOrgHir(event) {

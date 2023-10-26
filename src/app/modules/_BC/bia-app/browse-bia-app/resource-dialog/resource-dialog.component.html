@@ -75,7 +75,7 @@
   <div
     class="w-100 pt-2"
     [ngStyle]="{
-      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '25vh'
+      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '30vh'
     }"
   >
     <p-blockUI>
@@ -98,6 +98,7 @@
             placeholder="{{ 'RESOURCES.DIVISION' | translate }}"
             [propagateSelectionDown]="false"
             [propagateSelectionUp]="false"
+            appendTo="body"
           >
             <ng-template let-option let-placeholder pTemplate="value">
               {{ option | translateObj : "label" }}
