@@ -12,8 +12,6 @@ import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysi
 import {EMPTY, throwError} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
 import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
-import {BrowseImpactAnalysisAction} from "../../impact-analysis/states/browse-impact-analysis.action";
-import {BrowseImpactAnalysisStateModel} from "../../impact-analysis/states/browse-impact-analysis.state";
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
