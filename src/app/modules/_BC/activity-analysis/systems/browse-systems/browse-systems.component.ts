@@ -4,7 +4,7 @@ import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-a
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent } from 'primeng/api';
+import {LazyLoadEvent, MenuItem} from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import {filter, map, takeUntil, tap} from 'rxjs/operators';
 import { BcActivitySystems } from 'src/app/api/models';
@@ -33,7 +33,7 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject();
 
-  constructor(private store: Store, private langFacade: ILangFacade) {}
+  constructor(private store: Store, private langFacade: ILangFacade, private translate: TranslateService,) {}
 
   ngOnInit(): void {
     combineLatest([
@@ -48,9 +48,42 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+    const userActions = [
+      {
+        label: this.translate.instant('ACTIONS.EDIT'),
+        icon: 'pi pi-pencil',
+      },
+      {
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
+      },
+    ] as MenuItem[];
+
     this.page$ = this.store.select(ActivitySystemsState.page).pipe(
       filter((p) => !!p),
-      tap(console.log)
+      map((page) =>
+        page?.map((u) => {
+          return {
+            ...u,
+            actions: [
+              {
+                ...userActions[0],
+                command: () => {
+                  this.openDialog(u.id);
+                },
+                disabled: !u.isActive,
+              },
+              {
+                ...userActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              }
+            ],
+          };
+        })
+      )
     );
   }
 
@@ -73,7 +106,7 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
       })
     );
   }
-  deleteSystem(id) {
+  delete(id) {
     this.store
       .dispatch(new BrowseActivitySystemsAction.Delete({ id }))
       .toPromise()
