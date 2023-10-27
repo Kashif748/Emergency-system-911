@@ -64,7 +64,7 @@ export namespace BrowseActivityEmployeesAction {
     constructor(public payload: { id: number }) {}
   }
   export class Delete {
-    static readonly type = '[BrowseStaff] Delete Employee';
+    static readonly type = '[BrowseActivityEmployeesAction] Delete Employee';
     /**
      *
      */

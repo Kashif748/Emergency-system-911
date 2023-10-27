@@ -20,6 +20,9 @@ import { ActivityLocationsAction } from '@core/states/activity-analysis/location
 import { LocationsAction } from '@core/states/bc-setup/locations/locations.action';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
+import {ActivityEmployeesAction} from "@core/states/activity-analysis/employees/employees.action";
+import {BrowseActivityEmployeesAction} from "../../employees/states/browse-employees.action";
+import {BrowseActivityEmployeesStateModel} from "../../employees/states/browse-employees.state";
 
 export interface BrowseLocationsStateModel {
   pageRequest: PageRequestModel;
@@ -184,5 +187,20 @@ export class BrowseActivityLocationsState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseActivityLocationsAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseLocationsStateModel>,
+    { payload }: BrowseActivityLocationsAction.Delete
+  ) {
+    return dispatch(new ActivityLocationsAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

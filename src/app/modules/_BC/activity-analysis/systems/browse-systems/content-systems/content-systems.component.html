@@ -88,13 +88,19 @@
 
               <td class="d-flex">
                 <button
-                  (click)="deleteSystem(item.id, $event)"
                   pButton
                   pRipple
                   type="button"
-                  icon="pi pi-trash"
+                  icon="pi pi-ellipsis-v"
                   class="p-button-rounded p-button-text my-auto p-button-plain"
+                  (click)="menu.toggle($event)"
                 ></button>
+                <p-menu
+                  #menu
+                  appendTo="body"
+                  [popup]="true"
+                  [model]="item.actions"
+                ></p-menu>
               </td>
             </tr>
           </ng-template>

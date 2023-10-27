@@ -283,7 +283,11 @@ export class BrowseBiaAppState {
             new BrowseBiaAppAction.ToggleDialog({})]);
       }),
       catchError((err) => {
-        this.messageHelper.error({ error: err });
+        if (err.status === 409) {
+          this.messageHelper.cError();
+        } else {
+          this.messageHelper.error({ error: err });
+        }
         return throwError(err);
       })
     );

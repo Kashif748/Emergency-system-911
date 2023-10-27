@@ -20,6 +20,17 @@ export class MessageHelper {
     });
   }
 
+  cError(param?: { summary?: string; detail?: string }) {
+    this.messageService.add({
+      severity: 'error',
+      summary:
+        param?.summary ?? this.translate.instant('SHARED.DIALOG.ERROR.TITLE'),
+      detail:
+        param?.detail ??
+          this.translate.instant('SHARED.DIALOG.ERROR.CMESSAGE'),
+    })
+  }
+
   error(param?: {
     summary?: string;
     detail?: string;

@@ -9,7 +9,7 @@ import {BcWorkLogTypes} from "../../../../api/models/bc-work-log-types";
 import {FormControl, Validators} from "@angular/forms";
 import {DmsService} from "@core/api/services/dms.service";
 import {MessageHelper} from "@core/helpers/message.helper";
-import {filter, switchMap, takeUntil, tap} from "rxjs/operators";
+import {filter, map, switchMap, takeUntil, tap} from "rxjs/operators";
 import {UploadTagIdConst} from "@core/constant/UploadTagIdConst";
 import {ResourceWorklogsState} from "@core/states/bc-resources/worklogs/resourceWorklogs.state";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
@@ -50,6 +50,10 @@ export class NotesComponent implements OnInit, OnDestroy {
   public selectedWorklogType: BcWorkLogTypes;
   public page$: Observable<BcActivityAnalysisWorkLogProjection[]>;
 
+  public dir$ = this.lang.vm$.pipe(
+    map(({ActiveLang: {key}}) => (key === 'ar' ? 'rtl' : 'ltr'))
+  );
+
   private destroy$ = new Subject();
   public files: File[] = [];
   uploading = false;
@@ -62,7 +66,8 @@ export class NotesComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private dmsService: DmsService,
     private messageHelper: MessageHelper
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.store
@@ -91,10 +96,13 @@ export class NotesComponent implements OnInit, OnDestroy {
       )
     );
   }
+
   setEditMode(log) {
     this.store.dispatch(new BrowseResourceWorklogsAction.ToggleEditMode(log));
   }
-  deleteWorkLog(log) {}
+
+  deleteWorkLog(log) {
+  }
 
   public loadPage() {
     const resource = this.store.selectSnapshot(
@@ -160,9 +168,11 @@ export class NotesComponent implements OnInit, OnDestroy {
       })
     );
   }
+
   filesChanged(files: FileList) {
     this.files = Array.from(files);
   }
+
   async uploadFiles(id: number, description: string) {
     this.uploading = true;
     try {
@@ -180,20 +190,24 @@ export class NotesComponent implements OnInit, OnDestroy {
       this.uploading = false;
     }
   }
+
   showDialog(activityWorklog) {
     this.activityWorklog = activityWorklog;
     this.display = true;
     this.loadingImage = true;
   }
+
   async keydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.submit();
     }
   }
+
   scrollBottom() {
     if (!this.directiveScroll) return;
     this.directiveScroll.directiveRef.scrollToBottom(0, 100);
   }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

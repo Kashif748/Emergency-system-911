@@ -36,4 +36,11 @@ export namespace BrowseAnalysisSummaryAction {
      */
     constructor(public payload: { clear?: boolean; [key: string]: any }) {}
   }
+  export class SortActivities {
+    static readonly type = '[BrowseAnalysisSummaryAction] Sort activities';
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+  }
 }

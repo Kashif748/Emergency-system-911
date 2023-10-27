@@ -69,6 +69,7 @@
                   <p-treeSelect
                     [options]="orgHir"
                     [filter]="true"
+                    [showClear]="true"
                     [filterBy]="'data.nameAr,data.nameEn,data.code'"
                     selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"

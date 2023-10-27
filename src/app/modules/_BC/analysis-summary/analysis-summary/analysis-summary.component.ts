@@ -56,10 +56,10 @@ export class AnalysisSummaryComponent implements OnInit, OnDestroy {
     { name: 'SECTION', code: 'section' },
   ];
   public selectedColumns = [
+    { name: 'ACTIVITY', code: 'activity', disabled: true },
     { name: 'SECTOR', code: 'sector' },
     { name: 'DIVISION', code: 'division' },
     { name: 'SECTION', code: 'section' },
-    { name: 'ACTIVITY', code: 'activity' },
     { name: 'CRITICALITY', code: 'criticality' },
     { name: 'RTO', code: 'rto' },
     { name: 'CAPACITY', code: 'capacity' },
@@ -131,20 +131,20 @@ export class AnalysisSummaryComponent implements OnInit, OnDestroy {
   }
 
   sort(event) {
-    // this.store.dispatch(
-    //   new BrowseAnalysisSummaryAction.SortLocation({ field: event.value })
-    // );
+    this.store.dispatch(
+      new BrowseAnalysisSummaryAction.SortActivities({ field: event.value })
+    );
   }
   export(type: 'EXCEL' | 'PDF') {
     this.store.dispatch(new BrowseAnalysisSummaryAction.Export({ type }));
   }
 
   order(event) {
-    // this.store.dispatch(
-    //   new BrowseAnalysisSummaryAction.SortLocation({
-    //     order: event.checked ? 'desc' : 'asc',
-    //   })
-    // );
+    this.store.dispatch(
+      new BrowseAnalysisSummaryAction.SortActivities({
+        order: event.checked ? 'desc' : 'asc',
+      })
+    );
   }
 
   search() {
