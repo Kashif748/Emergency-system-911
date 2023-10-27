@@ -16,6 +16,8 @@ import {
 } from 'src/app/api/models';
 import { BcActivityLocationsControllerService } from 'src/app/api/services';
 import { ActivityLocationsAction } from './locations.action';
+import {ActivityEmployeesAction} from "@core/states/activity-analysis/employees/employees.action";
+import {ActivityEmployeesStateModel} from "@core/states/activity-analysis/employees/employees.state";
 
 export interface ActivityLocationsStateModel {
   page: PageBcActivityLocations;
@@ -230,6 +232,29 @@ export class ActivityLocationsState {
         setState(
           patch<ActivityLocationsStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(ActivityLocationsAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<ActivityLocationsStateModel>,
+    { payload }: ActivityLocationsAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ActivityLocationsStateModel>({
+        loading: true,
+      })
+    );
+    return this.activityLocations.deleteById32({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<ActivityLocationsStateModel>({
+            loading: false,
           })
         );
       })
