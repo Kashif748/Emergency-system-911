@@ -119,13 +119,16 @@
 
     "TITLE":"Activity Summary",
     "ACTIVITY": "Activity Name",
-    "CAPACITY": "capacity",
-    "CRITICALITY": "criticality",
-    "DIVISION": "division",
+    "CAPACITY": "Capacity",
+    "CRITICALITY": "Criticality",
+    "DIVISION": "Division",
     "RECOVERYPRIORITYSEQUENCE": "Recovery Priority Sequence",
     "ROWNUMBER": "",
     "RTO": "Rto",
-    "SECTION": "section",
-    "SECTOR": "Sector"
+    "SECTION": "Section",
+    "SECTOR": "Sector",
+    "CRITICAL": "Critical",
+    "NOT_CRITICAL": "Not critical",
+    "ALL": "All"
   }
 }

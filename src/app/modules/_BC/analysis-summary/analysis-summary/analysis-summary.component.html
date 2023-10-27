@@ -30,6 +30,7 @@
                     (onNodeExpand)="nodeExpand($event?.node)"
                     placeholder="{{ 'ORG_ARTCH' | translate }}"
                     appendTo="body"
+                    [showClear]="true"
                   >
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{
