@@ -29,7 +29,7 @@ export const BROWSE_ANALYSIS_SUMMARY_UI_STATE_TOKEN =
   defaults: {
     pageRequest: {
       filters: {
-        isCritical : null
+        isCritical: null,
       },
       first: 0,
       rows: 10,
@@ -140,6 +140,37 @@ export class BrowseAnalysisSummaryState {
             })
           ),
         }),
+      })
+    );
+  }
+
+  @Action(BrowseAnalysisSummaryAction.SortActivities)
+  sortLocation(
+    {
+      setState,
+      dispatch,
+      getState,
+    }: StateContext<BrowseAnalysisSummaryStateModel>,
+    { payload }: BrowseAnalysisSummaryAction.SortActivities
+  ) {
+    setState(
+      patch<BrowseAnalysisSummaryStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new ActivitySummaryAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+        },
       })
     );
   }
