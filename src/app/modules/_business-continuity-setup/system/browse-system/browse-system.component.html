@@ -20,17 +20,28 @@
         <div class="p-field p-col-4 p-md-2">
           <p-treeSelect
             [options]="orgHir"
-            [filter]="true"
             selectionMode="checkbox"
             [filterBy]="'data.nameAr,data.nameEn,data.code'"
             [ngModel]="state.pageRequest.filters['orgHierarchyId']"
             (ngModelChange)="updateFilter({ orgHierarchyId: $event }, $event)"
             [loading]="loadingOrgHir$ | async"
-            (onFilter)="filterOrgHir($event)"
             (onNodeExpand)="nodeExpand($event?.node)"
             placeholder="{{ 'SYSTEMS.OWNER_DEPT' | translate }}"
             appendTo="body"
           >
+          <ng-template let-option let-placeholder pTemplate="header">
+            <div class="w-100 p-2">
+              <span class="p-input-icon-left w-100">
+                <i class="pi pi-search"></i>
+                <input
+                  (keyup)="filterOrgHir($event.target.value)"
+                  type="text"
+                  pInputText
+                  class="w-100"
+                />
+              </span>
+            </div>
+          </ng-template>
             <ng-template let-option let-placeholder pTemplate="value">
               <span *ngFor="let item of option"> {{ item?.label }} , </span>
               <div *ngIf="!option || option?.length === 0">

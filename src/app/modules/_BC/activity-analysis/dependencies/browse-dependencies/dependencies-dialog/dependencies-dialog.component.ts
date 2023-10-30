@@ -120,6 +120,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
+        this.orgHir =[];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,
@@ -238,7 +239,7 @@ export class DependenciesDialogComponent implements OnInit, OnDestroy {
     );
   }
   filterOrgHir(event) {
-    this.auditLoadOrgPage$.next(event.filter);
+    this.auditLoadOrgPage$.next(event);
   }
   nodeExpand(node: TreeNode) {
     if (node.children.length === 0) {

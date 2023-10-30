@@ -18,7 +18,6 @@
                 <div class="p-field p-col-4 p-md-2">
                   <p-treeSelect
                     [options]="orgHir"
-                    [filter]="true"
                     [filterBy]="'data.nameAr,data.nameEn,data.code'"
                     selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"
@@ -26,12 +25,24 @@
                       updateFilter({ orgHierarchyId: $event }, $event)
                     "
                     [loading]="loadingOrgHir$ | async"
-                    (onFilter)="filterOrgHir($event)"
                     (onNodeExpand)="nodeExpand($event?.node)"
                     placeholder="{{ 'ORG_ARTCH' | translate }}"
                     appendTo="body"
                     [showClear]="true"
                   >
+                    <ng-template let-option let-placeholder pTemplate="header">
+                      <div class="w-100 p-2">
+                        <span class="p-input-icon-left w-100">
+                          <i class="pi pi-search"></i>
+                          <input
+                            (keyup)="filterOrgHir($event.target.value)"
+                            type="text"
+                            pInputText
+                            class="w-100"
+                          />
+                        </span>
+                      </div>
+                    </ng-template>
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{
                         option

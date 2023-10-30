@@ -139,6 +139,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
     console.log(search);
 
     if (direct) {
+      this.orgHir =[];
       this.store.dispatch(
         new BrowseOrgDetailAction.GetOrgHierarchy({
           pageRequest: { first: 0, rows: 100 },
