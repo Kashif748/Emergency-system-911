@@ -147,24 +147,33 @@
         <div class="p-field p-col-4 p-md-2">
           <p-treeSelect
             [options]="orgHir"
-            [filter]="true"
             [filterBy]="'data.nameAr,data.nameEn,data.code'"
             selectionMode="single"
             [ngModel]="state.pageRequest.filters['orgHierarchyId']"
-            (ngModelChange)="
-                      updateFilter({ orgHierarchyId: $event }, $event)
-                    "
+            (ngModelChange)="updateFilter({ orgHierarchyId: $event }, $event)"
             [loading]="loadingOrgHir$ | async"
-            (onFilter)="filterOrgHir($event)"
             (onNodeExpand)="nodeExpand($event?.node)"
             placeholder="{{ 'ORG_ARTCH' | translate }}"
             appendTo="body"
           >
+          <ng-template let-option let-placeholder pTemplate="header">
+            <div class="w-100 p-2">
+              <span class="p-input-icon-left w-100">
+                <i class="pi pi-search"></i>
+                <input
+                  (keyup)="filterOrgHir($event.target.value)"
+                  type="text"
+                  pInputText
+                  class="w-100"
+                />
+              </span>
+            </div>
+          </ng-template>
             <ng-template let-option let-placeholder pTemplate="value">
               {{
-              option
-              ? (option | translateObj : "label")
-              : ("ORG_ARTCH" | translate)
+                option
+                  ? (option | translateObj : "label")
+                  : ("ORG_ARTCH" | translate)
               }}
             </ng-template>
           </p-treeSelect>
@@ -212,9 +221,7 @@
             <ng-template let-options pTemplate="selectedItems">
               <ng-container *ngIf="options?.length > 0">
                 {{
-                options?.length +
-                " " +
-                ("SHARED.SELCTED_ITEM" | translate)
+                  options?.length + " " + ("SHARED.SELCTED_ITEM" | translate)
                 }}
               </ng-container>
               <ng-container *ngIf="!options || options.length === 0">
@@ -233,9 +240,7 @@
               [autoDisplayFirst]="false"
               [showClear]="true"
               [ngModel]="state?.pageRequest?.sortField"
-              placeholder="{{
-                        'SHARED.SELECT_SORTING_FIELD' | translate
-                      }}"
+              placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate }}"
               optionLabel="name"
               optionValue="code"
               styleClass="w-100 h-100"
@@ -271,9 +276,9 @@
       <p-divider [align]="'left'" styleClass="bg-transparent">
         <p-selectButton
           [options]="[
-                    { icon: 'pi pi-bars', view: 'TABLE' },
-                    { icon: 'pi pi-th-large', view: 'CARDS' }
-                  ]"
+            { icon: 'pi pi-bars', view: 'TABLE' },
+            { icon: 'pi pi-th-large', view: 'CARDS' }
+          ]"
           optionLabel="icon"
           optionValue="view"
           [ngModel]="state.view"
@@ -286,7 +291,10 @@
       </p-divider>
 
       <div class="ml-dir-auto d-flex">
-        <app-resource-dialog [orgHir]="orgHireracy" [cycles]="cycles$ | async"></app-resource-dialog>
+        <app-resource-dialog
+          [orgHir]="orgHireracy"
+          [cycles]="cycles$ | async"
+        ></app-resource-dialog>
       </div>
     </div>
   </div>

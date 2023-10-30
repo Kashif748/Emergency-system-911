@@ -34,7 +34,6 @@
   <span class="flex-grow-1"></span>
 </ng-template>
 
-
 <!-- templates content -->
 <ng-template #content>
   <div class="w-100 pt-2">
@@ -95,7 +94,6 @@
         <div class="p-field p-col-4 p-md-6">
           <p-treeSelect
             [options]="orgHir"
-            [filter]="true"
             [filterBy]="'data.nameAr,data.nameEn,data.code'"
             selectionMode="single"
             formControlName="orgHierarchy"
@@ -103,9 +101,21 @@
             placeholder="{{ 'DEPENDENCIES.ASSOCIATED_MANG' | translate }}"
             appendTo="body"
             [loading]="loading$ | async"
-            (onFilter)="filterOrgHir($event)"
             (onNodeExpand)="nodeExpand($event?.node)"
           >
+            <ng-template let-option let-placeholder pTemplate="header">
+              <div class="w-100 p-2">
+                <span class="p-input-icon-left w-100">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (keyup)="filterOrgHir($event.target.value)"
+                    type="text"
+                    pInputText
+                    class="w-100"
+                  />
+                </span>
+              </div>
+            </ng-template>
             <ng-template let-option let-placeholder pTemplate="value">
               {{
                 option
@@ -237,7 +247,7 @@
         <ng-container *ngIf="activityStatus$ | async as activityStatus">
           <button
             (click)="submit()"
-            [disabled]="(!activityStatus.editable) || this.form"
+            [disabled]="!activityStatus.editable || this.form"
             [loading]="blocking$ | async"
             pButton
             label="{{ 'ACTIONS.SAVE' | translate }}"

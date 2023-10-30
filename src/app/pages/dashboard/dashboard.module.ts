@@ -29,6 +29,7 @@ import {TreeSelectModule} from "@shared/sh-components/treeselect/treeselect.comp
 import { BcWidgetComponent } from './bc-widget/bc-widget.component';
 import {ChipModule} from "primeng/chip";
 import {FormsModule} from "@angular/forms";
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import {FormsModule} from "@angular/forms";
     TranslationModule,
     NgApexchartsModule,
     SharedModule,
+    InputTextModule,
     CoreModule,
     MapModule,
     NgxsModule.forFeature([NewsBarState]),

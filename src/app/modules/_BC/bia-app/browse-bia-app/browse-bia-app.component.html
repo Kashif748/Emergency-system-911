@@ -23,7 +23,10 @@
     </div>
     <div class="ml-dir-auto d-flex">
       <app-bia-activities-dialog></app-bia-activities-dialog>
-      <app-bia-resource-dialog [orgHir]="orgHireracy" [cycles]="cycles$ | async"></app-bia-resource-dialog>
+      <app-bia-resource-dialog
+        [orgHir]="orgHireracy"
+        [cycles]="cycles$ | async"
+      ></app-bia-resource-dialog>
       <app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
     </div>
   </header>
@@ -39,7 +42,6 @@
               [collapsed]="!(hasFilters$ | async)"
             >
               <div class="p-fluid p-grid">
-
                 <div class="p-field p-col-4 p-md-2">
                   <p-dropdown
                     [ngModel]="
@@ -68,8 +70,6 @@
                 <div class="p-field p-col-4 p-md-2">
                   <p-treeSelect
                     [options]="orgHir"
-                    [filter]="true"
-                    [showClear]="true"
                     [filterBy]="'data.nameAr,data.nameEn,data.code'"
                     selectionMode="single"
                     [ngModel]="state.pageRequest.filters['orgHierarchyId']"
@@ -77,16 +77,28 @@
                       updateFilter({ orgHierarchyId: $event }, $event)
                     "
                     [loading]="loadingOrgHir$ | async"
-                    (onFilter)="filterOrgHir($event)"
                     (onNodeExpand)="nodeExpand($event?.node)"
                     placeholder="{{ 'DIVISION' | translate }}"
                     appendTo="body"
                   >
+                    <ng-template let-option let-placeholder pTemplate="header">
+                      <div class="w-100 p-2">
+                        <span class="p-input-icon-left w-100">
+                          <i class="pi pi-search"></i>
+                          <input
+                            (keyup)="filterOrgHir($event.target.value)"
+                            type="text"
+                            pInputText
+                            class="w-100"
+                          />
+                        </span>
+                      </div>
+                    </ng-template>
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{
-                      option
-                      ? (option | translateObj : "label")
-                      : ("DIVISION" | translate)
+                        option
+                          ? (option | translateObj : "label")
+                          : ("DIVISION" | translate)
                       }}
                     </ng-template>
                   </p-treeSelect>
@@ -133,9 +145,9 @@
                     <ng-template let-options pTemplate="selectedItems">
                       <ng-container *ngIf="options?.length > 0">
                         {{
-                        options?.length +
-                        " " +
-                        ("SHARED.SELCTED_ITEM" | translate)
+                          options?.length +
+                            " " +
+                            ("SHARED.SELCTED_ITEM" | translate)
                         }}
                       </ng-container>
                       <ng-container *ngIf="!options || options.length === 0">
@@ -184,7 +196,6 @@
                   </div>
                 </div>
               </div>
-
             </p-toolbar>
           </div>
           <!--<div class="col-6">
