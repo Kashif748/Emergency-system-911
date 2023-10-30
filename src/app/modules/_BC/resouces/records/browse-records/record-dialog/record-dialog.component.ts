@@ -53,6 +53,7 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
     this._recordId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -66,7 +67,7 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...record,
           });
-          // this.patchValues(record);
+          this.defaultFormValue = record;
         })
       )
       .subscribe();
@@ -149,7 +150,6 @@ export class RecordDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.store.dispatch(new RecordsAction.GetRecords({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();
