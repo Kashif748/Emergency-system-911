@@ -1639,7 +1639,7 @@
         "ERROR": {
           "TITLE": "Error",
           "MESSAGE": "Something went wrong.",
-          "CMESSAGE": "Already exists, please choose another."
+          "CMESSAGE": "Resources already exist for current division and analysis cycle."
         },
         "WARN": {
           "TITLE": "Warning"
