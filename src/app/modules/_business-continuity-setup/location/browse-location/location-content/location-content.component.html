@@ -141,7 +141,7 @@
               </td>-->
 
               <td>
-                {{ rowIndex + 1 }}
+                {{ item.sequenceNumber }}
               </td>
 
               <td *ngIf="columns?.includes('dept')" (click)="item.isActive && openView(item.id)">
