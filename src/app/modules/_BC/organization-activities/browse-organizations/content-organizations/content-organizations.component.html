@@ -225,7 +225,7 @@
                 </div>
               </td>-->
               <td>
-                {{ rowIndex + 1 }}
+                {{ item.sequenceNumber }}
               </td>
 
               <td *ngIf="columns?.includes('nameEn')" (click)="item.isActive && openView(item.id)">
