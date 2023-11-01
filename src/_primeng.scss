@@ -10,7 +10,7 @@
 }
 // support left to right
 [dir="ltr"] {
-  .p-sidebar-header{
+  .p-sidebar-header {
     left: unset !important;
     right: 0 !important;
   }
@@ -125,7 +125,9 @@
     border-bottom-right-radius: 3px !important;
     border-top-right-radius: 3px !important;
     border-left: none;
-    // border-left: 1px solid var(--surface-border);
+  }
+  .p-inputgroup-addon:first-child {
+    border-right: 1px solid #ced4da;
   }
   // .p-inputgroup .p-dropdown:first-child {
   //   border-radius: 0 !important;
