@@ -88,6 +88,7 @@
 
               <td class="d-flex">
                 <button
+                  [disabled]="!activityStatus.editable"
                   pButton
                   pRipple
                   type="button"

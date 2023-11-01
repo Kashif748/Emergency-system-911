@@ -5,6 +5,7 @@
     [columns]="state.columns"
     [pageRequest]="state?.pageRequest"
     [totalRecords]="totalRecords$ | async"
+    [activityStatus]="activityStatus$ | async"
     (onPageChange)="loadPage($event)"
   ></app-content-employees>
 </div>

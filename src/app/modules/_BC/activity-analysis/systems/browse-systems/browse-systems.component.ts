@@ -7,7 +7,7 @@ import { Select, Store } from '@ngxs/store';
 import {LazyLoadEvent, MenuItem} from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import {filter, map, takeUntil, tap} from 'rxjs/operators';
-import { BcActivitySystems } from 'src/app/api/models';
+import { ActivityAnalysisStatusAction, BcActivitySystems } from 'src/app/api/models';
 import { BrowseActivitySystemsAction } from '../states/browse-systems.action';
 import {
   BrowseActivitySystemsState,
@@ -30,6 +30,9 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
 
   @Select(BrowseActivitySystemsState.state)
   public state$: Observable<BrowseActivitySystemsStateModel>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   private destroy$ = new Subject();
 

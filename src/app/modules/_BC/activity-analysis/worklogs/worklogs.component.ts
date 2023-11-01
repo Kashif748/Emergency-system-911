@@ -27,6 +27,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import {
+  ActivityAnalysisStatusAction,
   BcActivityAnalysisWorkLog,
   BcActivityAnalysisWorkLogProjection,
   UserMinimunProjection,
@@ -70,6 +71,10 @@ export class WorklogsComponent implements OnInit, OnDestroy {
 
   @Select(CommonDataState.currentUser)
   public user$: Observable<UserMinimunProjection>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
 
   public selectedWorklogType: BcWorkLogTypes;
 

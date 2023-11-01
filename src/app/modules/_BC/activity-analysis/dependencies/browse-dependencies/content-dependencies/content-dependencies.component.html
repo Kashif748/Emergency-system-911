@@ -4,7 +4,7 @@
       class="d-flex p-ai-center p-jc-between p-4 font-weight-bold font-size-h4"
     >
       {{ "DEPENDENCIES." + dependType | translate }}
-      <ng-container *ngIf="activityStatus$ | async as activityStatus">
+      <ng-container>
         <button
           [disabled]="(noDpend$ | async) || !activityStatus.editable"
           pButton
@@ -90,6 +90,7 @@
               style="width: 50px"
             >
               <button
+                [disabled]="!activityStatus.editable"
                 (click)="deleteDependinces($event, item)"
                 pButton
                 pRipple

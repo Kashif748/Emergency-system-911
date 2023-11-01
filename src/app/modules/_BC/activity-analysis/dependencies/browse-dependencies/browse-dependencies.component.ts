@@ -11,6 +11,7 @@ import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
+import { ActivityAnalysisStatusAction } from 'src/app/api/models';
 import { BrowseActivityDependenciesAction } from './states/browse-dependencies.action';
 import { BrowseActivityDependenciesState } from './states/browse-dependencies.state';
 
@@ -35,6 +36,9 @@ export class BrowseDependenciesComponent implements OnInit, OnDestroy {
 
   @Select(BrowseActivityDependenciesState.state)
   public state$: Observable<ActivityDependenciesStateModel>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   private destroy$ = new Subject();
 
