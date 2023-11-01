@@ -197,8 +197,8 @@
                 </div>
               </th>
 
-              <th *ngIf="columns?.includes('state')">
-                <div class="p-d-flex p-jc-between p-ai-center">
+              <th style="text-align : center !important;" *ngIf="columns?.includes('state')">
+                <div class="p-d-flex p-jc-center p-ai-center">
                   {{ "STATE" | translate }}
                 </div>
               </th>
@@ -226,9 +226,14 @@
               <td *ngIf="columns?.includes('analysisCyclePercentage')" (click)="goToResourceAndActivity(item)">
                 {{item.percentage}}
               </td>
-              <td *ngIf="columns?.includes('state')" (click)="goToResourceAndActivity(item)">
+              <td style="text-align : center !important;" *ngIf="columns?.includes('state') && item.status !== null; else blankState" (click)="goToResourceAndActivity(item)">
                 {{item.status | translateObj}}
               </td>
+              <ng-template #blankState>
+                <td style="text-align : center !important;" (click)="goToResourceAndActivity(item)">
+                  <span>-</span>
+                </td>
+              </ng-template>
 
               <!--<td>
                 <button  pButton pRipple type="button" icon="pi pi-ellipsis-v"
