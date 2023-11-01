@@ -13,6 +13,7 @@
       [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_ORG"
       [page]="activityDependencyOrg$ | async"
       [pageRequest]="state?.pageRequest"
+      [activityStatus]="activityStatus$ | async"
       (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_ORG, $event)"
     ></app-content-dependencies>
   </div>
@@ -21,6 +22,7 @@
       [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL"
       [page]="activityDependencyInternal$ | async"
       [pageRequest]="state?.pageRequest"
+      [activityStatus]="activityStatus$ | async"
       (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL, $event)"
     ></app-content-dependencies>
   </div>
@@ -29,6 +31,7 @@
       [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL"
       [page]="activityDependencyExternal$ | async"
       [pageRequest]="state?.pageRequest"
+      [activityStatus]="activityStatus$ | async"
       (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL, $event)"
     ></app-content-dependencies>
   </div>

@@ -201,7 +201,9 @@
           <i class="pi pi-paperclip"></i>
         </label> -->
         <button
-          [disabled]="note?.invalid || uploading"
+          [disabled]="
+            !(activityStatus$ | async).editable || note?.invalid || uploading
+          "
           [loading]="blocking$ | async"
           type="button"
           pButton

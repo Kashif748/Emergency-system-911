@@ -65,7 +65,7 @@
         <p-table
           [columns]="columns"
           totalRecords="10"
-          [value]="page "
+          [value]="page"
           dataKey="id"
           [autoLayout]="true"
         >
@@ -113,10 +113,10 @@
                 {{ item.sequenceNumber }}
               </td>
               <td class="min-w-200px max-w-300px">
-                {{ item.location?.locationType | translateObj  }}
+                {{ item.location?.locationType | translateObj }}
               </td>
               <td class="min-w-200px max-w-300px">
-                {{ item.location | translateObj  }}
+                {{ item.location | translateObj }}
               </td>
 
               <td class="min-w-200px max-w-300px">
@@ -125,6 +125,7 @@
 
               <td class="d-flex">
                 <button
+                  [disabled]="!activityStatus.editable"
                   pButton
                   pRipple
                   type="button"
@@ -161,6 +162,7 @@
       [rowsPerPageOptions]="[10, 20, 50]"
       [showCurrentPageReport]="true"
       currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
-      (onPageChange)="onPageChange.emit($event)"></p-paginator>
+      (onPageChange)="onPageChange.emit($event)"
+    ></p-paginator>
   </div>
 </div>

@@ -292,7 +292,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
-        this.orgHir =[];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,
@@ -389,7 +388,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     node.selectable = node?.data?.bcOrgHirType?.id === 2;
   }
   filterOrgHir(event) {
-    this.auditLoadOrgPage$.next(event);
+    this.auditLoadOrgPage$.next(event.filter);
   }
   nodeExpand(node: TreeNode) {
     if (node.children.length === 0) {
