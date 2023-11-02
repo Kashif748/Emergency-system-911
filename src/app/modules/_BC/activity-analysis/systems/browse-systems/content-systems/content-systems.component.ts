@@ -17,6 +17,10 @@ import { BrowseActivitySystemsAction } from '../../states/browse-systems.action'
   styleUrls: ['./content-systems.component.scss'],
 })
 export class ContentSystemsComponent implements OnInit {
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
   @Input()
   loading: boolean;
   @Input()

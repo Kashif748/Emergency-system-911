@@ -27,7 +27,9 @@
                 </th>
 
 
-                <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                <ng-container *ngIf="resourceAnalysis$ | async as resourceAnalysis">
+                  <th *ngIf="resourceAnalysis.status.editable" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                </ng-container>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item>
@@ -45,15 +47,17 @@
                   <p-skeleton></p-skeleton>
                 </td>
 
-                <td>
-                  <button
-                    pButton
-                    pRipple
-                    type="button"
-                    icon="pi pi-ellipsis-v"
-                    class="p-button-rounded p-button-text my-auto p-button-plain"
-                  ></button>
-                </td>
+                <ng-container *ngIf="resourceAnalysis$ | async as resourceAnalysis">
+                  <td *ngIf="resourceAnalysis.status.editable">
+                    <button
+                      pButton
+                      pRipple
+                      type="button"
+                      icon="pi pi-ellipsis-v"
+                      class="p-button-rounded p-button-text my-auto p-button-plain"
+                    ></button>
+                  </td>
+                </ng-container>
               </tr>
             </ng-template>
           </p-table>
@@ -88,7 +92,9 @@
                   </div>
                 </th>
 
-                <th  style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                <ng-container *ngIf="resourceAnalysis$ | async as resourceAnalysis">
+                  <th *ngIf="resourceAnalysis.status.editable" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+                </ng-container>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
@@ -113,22 +119,24 @@
                 </td>
 
 
-                <td>
-                  <button
-                    pButton
-                    pRipple
-                    type="button"
-                    icon="pi pi-ellipsis-v"
-                    class="p-button-rounded p-button-text my-auto p-button-plain"
-                    (click)="menu.toggle($event)"
-                  ></button>
-                  <p-menu
-                    #menu
-                    appendTo="body"
-                    [popup]="true"
-                    [model]="item.actions"
-                  ></p-menu>
-                </td>
+                <ng-container *ngIf="resourceAnalysis$ | async as resourceAnalysis">
+                  <td *ngIf="resourceAnalysis.status.editable">
+                    <button
+                      pButton
+                      pRipple
+                      type="button"
+                      icon="pi pi-ellipsis-v"
+                      class="p-button-rounded p-button-text my-auto p-button-plain"
+                      (click)="menu.toggle($event)"
+                    ></button>
+                    <p-menu
+                      #menu
+                      appendTo="body"
+                      [popup]="true"
+                      [model]="item.actions"
+                    ></p-menu>
+                  </td>
+                </ng-container>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">

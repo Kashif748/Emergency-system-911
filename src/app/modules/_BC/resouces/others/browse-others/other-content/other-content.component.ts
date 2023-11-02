@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ILangFacade} from "@core/facades/lang.facade";
 import {TranslateService} from "@ngx-translate/core";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {PageRequestModel} from "@core/models/page-request.model";
 import {LazyLoadEvent} from "primeng/api";
-import {BrowseRecordAction} from "../../../records/states/browse-records.action";
 import {BcResourcesNonItInfrastructure} from "../../../../../../api/models/bc-resources-non-it-infrastructure";
 import {BrowseOtherAction} from "../../states/browse-other.action";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-other-content',
@@ -14,6 +16,10 @@ import {BrowseOtherAction} from "../../states/browse-other.action";
   styleUrls: ['./other-content.component.scss']
 })
 export class OtherContentComponent implements OnInit {
+
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
+
   @Input()
   loading: boolean;
   @Input()

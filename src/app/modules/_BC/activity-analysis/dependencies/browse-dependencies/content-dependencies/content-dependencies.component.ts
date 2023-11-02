@@ -34,7 +34,6 @@ import { ActivityAnalysisStatusAction } from '../../../../../../api/models/activ
 export class ContentDependenciesComponent implements OnInit, OnChanges {
   public loading$: Observable<boolean>;
   public noDpend$: Observable<boolean>;
-
   @Input()
   page: any[];
   localPage: any[];

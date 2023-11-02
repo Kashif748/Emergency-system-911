@@ -1,17 +1,16 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BrowseImpactAnalysisAction} from "../states/browse-impact-analysis.action";
 import {Select, Store} from "@ngxs/store";
 import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subject} from "rxjs";
 import {TranslateService} from "@ngx-translate/core";
-import {OrgDetailAction, RtoAction, RtoState} from "@core/states";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.state";
 import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
 import {BcAnalysisStatus} from "../../../../api/models";
-import {BrowseRtoAction} from "../../bc-lists/rto/states/browse-rto.action";
 import {ILangFacade} from "@core/facades/lang.facade";
+import {PrivilegesService} from "@core/services/privileges.service";
 
 @Component({
   selector: 'app-reopen-analysis-mgmt',
@@ -53,6 +52,7 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private router: Router,
     private lang: ILangFacade,
+    private privilegesService: PrivilegesService,
   ) {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -109,5 +109,17 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
         _division: undefined
       },
       queryParamsHandling: "merge" });
+  }
+  checkPermissoon(action) {
+    const privilige = this.privilegesService.checkActionPrivilege('PRIV_APPROVE_ACTIVITY_ANALYSIS');
+    if (action.id === 5) {
+      if (privilige) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
   }
 }
