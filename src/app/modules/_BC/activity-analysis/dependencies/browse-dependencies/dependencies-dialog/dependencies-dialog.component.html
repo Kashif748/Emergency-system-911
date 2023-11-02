@@ -247,7 +247,7 @@
         <ng-container *ngIf="activityStatus$ | async as activityStatus">
           <button
             (click)="submit()"
-            [disabled]="!activityStatus.editable || this.form"
+            [disabled]="!activityStatus.editable || !this.form"
             [loading]="blocking$ | async"
             pButton
             label="{{ 'ACTIONS.SAVE' | translate }}"
