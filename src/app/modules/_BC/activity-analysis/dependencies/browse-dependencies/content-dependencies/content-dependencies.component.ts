@@ -38,6 +38,9 @@ export class ContentDependenciesComponent implements OnInit, OnChanges {
   page: any[];
   localPage: any[];
 
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
   @Input()
   pageRequest: PageRequestModel;
 

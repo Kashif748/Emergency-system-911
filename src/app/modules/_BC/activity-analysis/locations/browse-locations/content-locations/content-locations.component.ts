@@ -1,13 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
- import {FormBuilder, FormGroup} from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {ILangFacade} from "@core/facades/lang.facade";
-import { ActivityAnalysisStatusAction, BcActivityLocations } from 'src/app/api/models';
-import { PageRequestModel } from '@core/models/page-request.model';
- import { LazyLoadEvent } from 'primeng/api';
+import {ActivityAnalysisStatusAction, BcActivityLocations} from 'src/app/api/models';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {LazyLoadEvent} from 'primeng/api';
 import {Select} from "@ngxs/store";
 import {Observable} from "rxjs";
 import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
-import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-content-locations',
