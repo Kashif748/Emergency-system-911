@@ -160,6 +160,7 @@
               <ng-container *ngIf="activityStatus$ | async as activityStatus">
                 <td *ngIf="activityStatus.editable" class="d-flex">
                   <button
+                    [disabled]="!activityStatus.editable"
                     pButton
                     pRipple
                     type="button"

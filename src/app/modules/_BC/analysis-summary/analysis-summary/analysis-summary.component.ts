@@ -51,9 +51,9 @@ export class AnalysisSummaryComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
 
   public sortableColumns = [
-    { name: 'SECTOR', code: 'sector' },
-    { name: 'DIVISION', code: 'division' },
-    { name: 'SECTION', code: 'section' },
+    { name: 'SECTOR', code: 'sectorAr' },
+    { name: 'DIVISION', code: 'divsionAr' },
+    { name: 'SECTION', code: 'sectionAr' },
   ];
   public selectedColumns = [
     { name: 'ACTIVITY', code: 'activity', disabled: true },
@@ -75,7 +75,19 @@ export class AnalysisSummaryComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private treeHelper: TreeHelper,
     private translateObj: TranslateObjPipe
-  ) {}
+  ) {
+    this.lang.vm$.pipe().subscribe((res) => {
+      if (res.ActiveLang?.key == 'ar') {
+        this.sortableColumns[0].code = 'sectorAr';
+        this.sortableColumns[1].code = 'divsionAr';
+        this.sortableColumns[1].code = 'sectionAr';
+      } else {
+        this.sortableColumns[0].code = 'sectorEn';
+        this.sortableColumns[1].code = 'divsionEn';
+        this.sortableColumns[1].code = 'sectionEn';
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.store.dispatch([
@@ -103,7 +115,7 @@ export class AnalysisSummaryComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
-        this.orgHir =[];
+        this.orgHir = [];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,

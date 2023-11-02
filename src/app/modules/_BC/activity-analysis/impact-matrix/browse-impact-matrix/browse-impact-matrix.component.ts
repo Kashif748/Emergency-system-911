@@ -32,7 +32,7 @@ import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.stat
 import { BcImpactLevelMatrixDto } from '../../../../../api/models/bc-impact-level-matrix-dto';
 import { BcImpactMatrixDto } from '../../../../../api/models';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import {ActivityAnalysisStatusAction} from "../../../../../api/models/activity-analysis-status-action";
+import { ActivityAnalysisStatusAction } from '../../../../../api/models/activity-analysis-status-action';
 
 @Component({
   selector: 'app-browse-impact-matrix',
@@ -272,9 +272,7 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
     let tragetRto;
     if (secondLevel) {
       tragetRto = rtos.find((rto) => rto.id === secondLevel.id);
-    } else if (rtos.length > 2) {
-      tragetRto = rtos[1];
-    } else if (rtos.length == 1) {
+    } else if (rtos.length >= 1) {
       tragetRto = rtos[0];
     }
 
