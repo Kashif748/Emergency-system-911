@@ -27,6 +27,7 @@ import {BcResources} from "../../../../../api/models/bc-resources";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BrowseResourceAnalysisAction} from "../../states/browse-resource-analysis.action";
 import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
+import { cloneDeep } from "lodash";
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -196,14 +197,14 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   }
 
   selectOrgHierarchyById(id: number) {
-    this.store
+    /*this.store
       .select(OrgDetailState.orgHirSearch)
       .pipe(
         takeUntil(this.destroy$),
         filter((p) => !!p),
         map((data) => this.setTree(data))
       )
-      .subscribe();
+      .subscribe();*/
     const orgItem = this.findObjectById(id, this.orgHir)
     if (orgItem) {
       const orgHierarchyId = {
@@ -223,18 +224,25 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.changeView('CARDS');
       });
-      this.hasFilters$.pipe().subscribe((v) => {
-        console.log(v)
-      })
+
+
+    this.store
+      .select(OrgDetailState.orgHirSearch)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        map((data) => this.setTree(data))
+      )
+      .subscribe();
+
+
     this.store.dispatch([new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
       new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 })])
       .pipe(
-        switchMap(() => this.store.select(OrgDetailState.orgHirSearch)),
         takeUntil(this.destroy$),
         take(1),
         filter((p) => !!p),
-        tap((data) => {
-          this.setTree(data);
+        tap(() => {
           const checkParentID = this.orgHir.find(item => item.data.id == this.orgHierarchyId);
           this.cycles$
             .pipe(
@@ -244,8 +252,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
               tap((foundCycle) => {
                 this.updateFilter({ cycleId: foundCycle });
               })
-            )
-            .subscribe();
+            ).subscribe();
           if (checkParentID) {
             const orgHierarchyId = { orgHierarchyId: checkParentID };
             this.updateFilter(orgHierarchyId);
@@ -374,7 +381,8 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    this.orgHireracy = JSON.parse(JSON.stringify(this.orgHir));
+    console.log(this.orgHir);
+    this.orgHireracy = cloneDeep(this.orgHir);
     this.orgHireracy.forEach((node) => {
       this.markDisabledNodes(node);
     });
@@ -399,14 +407,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
           size: 100,
           parentId: parseInt(node?.key),
         })
-      ).pipe(
-        switchMap(() => this.store.select(OrgDetailState.orgHirSearch)),
-        takeUntil(this.destroy$),
-        take(1),
-        filter((p) => !!p),
-        map((data) => this.setTree(data))
-      ).subscribe();
-
+      )
     }
   }
 

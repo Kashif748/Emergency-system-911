@@ -18,6 +18,7 @@ import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.
 import {ActivatedRoute, Router} from "@angular/router";
 import {OrgDetailAction, OrgDetailState} from "@core/states";
 import {BcOrgHierarchyProjection} from "../../../../api/models/bc-org-hierarchy-projection";
+import { cloneDeep } from "lodash";
 
 @Component({
   selector: 'app-browse-bia-app',
@@ -328,7 +329,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    this.orgHireracy = JSON.parse(JSON.stringify(this.orgHir));
+    this.orgHireracy = cloneDeep(this.orgHir);
     this.orgHireracy.forEach((node) => {
       this.markDisabledNodes(node);
     });
