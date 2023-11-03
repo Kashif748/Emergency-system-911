@@ -35,7 +35,7 @@ import { MapComponent } from '@shared/sh-components/map/map.component';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { TreeNode } from 'primeng/api';
 import { Dropdown } from 'primeng/dropdown';
-import {EMPTY, Observable, of, Subject} from 'rxjs';
+import { EMPTY, Observable, of, Subject } from 'rxjs';
 import {
   auditTime,
   catchError,
@@ -61,6 +61,8 @@ import {
 import { BrowseTasksAction } from '../../states/browse-tasks.action';
 import { Dialog } from 'primeng/dialog';
 import { TabView } from 'primeng/tabview';
+import { ShareMapLocationComponent } from '@shared/components/map/share-map-location/share-map-location.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-task-dialog',
@@ -307,7 +309,9 @@ export class TaskDialogComponent
     private translateObj: TranslateObjPipe,
     private privileges: PrivilegesService,
     private router: Router,
-    private privilegesService: PrivilegesService
+    private privilegesService: PrivilegesService,
+    //TODO: to be replaced with primeng
+    public matDialog: MatDialog
   ) {
     this.route.queryParams
       .pipe(
@@ -335,6 +339,20 @@ export class TaskDialogComponent
     this.viewOnly$ = this.route.queryParams.pipe(
       map((params) => params['_mode'] === 'viewonly')
     );
+  }
+
+  openShareMapLocationDialog() {
+    const task = this.store.selectSnapshot(TaskState.task);
+    this.matDialog.open(ShareMapLocationComponent, {
+      disableClose: false,
+      panelClass: 'modal',
+      width: '400px',
+      height: 'auto',
+      data: {
+        incidentId: (task?.incidentId as any)?.id,
+        taskId: this._taskId,
+      },
+    });
   }
 
   initCreate() {
@@ -399,7 +417,7 @@ export class TaskDialogComponent
     this.buildForm();
     if (!this.privilegesService.checkActionPrivileges('PRIV_UP_TASK')) {
       this.filterStatuses$ = this.statuses$.pipe(
-        map(statuses => statuses.filter(status => status.id !== 8))  // task status is 8 for filter delete option
+        map((statuses) => statuses.filter((status) => status.id !== 8)) // task status is 8 for filter delete option
       );
     } else {
       this.filterStatuses$ = this.statuses$.pipe();
@@ -450,6 +468,18 @@ export class TaskDialogComponent
           })
         );
       });
+    this.filterStatuses$ = this.filterStatuses$.pipe(
+      map((status) => {
+        return status.map((option) => {
+          if (option.id === 1) {
+            // here 1 indicate that status is Not Viewed
+            return { ...option, disabled: true };
+          } else {
+            return { ...option, disabled: false };
+          }
+        });
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -460,7 +490,11 @@ export class TaskDialogComponent
   loadIncidents(searchText?: string, direct = false, id?: number) {
     if (direct) {
       this.store.dispatch(
-        new IncidentAction.LoadIncidents({ id, subject: searchText , status : [1,2] })
+        new IncidentAction.LoadIncidents({
+          id,
+          subject: searchText,
+          status: [1, 2],
+        })
       );
       return;
     }

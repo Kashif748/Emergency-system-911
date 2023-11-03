@@ -56,19 +56,21 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PropTranslatorPipe } from '@shared/pipes/prop-translator.pipe';
 import { AppCommonDataService } from '@core/services/app-common-data.service';
 import esri = __esri;
-import {DomSanitizer} from "@angular/platform-browser";
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+export class MapComponent
+  implements OnInit, OnDestroy, OnChanges, AfterViewInit
+{
   private queryInfo: (graphic: esri.Graphic) => Promise<LocationInfoModel>;
   filterLayersFunc$: Subject<(where: any, fName: MapActionType) => void> =
     new Subject();
   @Input() configData: MapConfig;
-  @Input() currentLocationOfUser
+  @Input() currentLocationOfUser;
   @Output() OnSaveMap: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
@@ -172,8 +174,8 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
         'esri/layers/GraphicsLayer',
         'esri/layers/WMSLayer',
         'esri/widgets/CoordinateConversion',
-        "esri/widgets/Locate",
-        "esri/widgets/Track",
+        'esri/widgets/Locate',
+        'esri/widgets/Track',
         // 'esri/urlUtils',
         // 'esri/geometry/Extent',
         // 'dojo/dom-construct',
@@ -187,15 +189,15 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ((Array.isArray(this.config))) {
+    if (Array.isArray(this.config)) {
       if (this.config.length > 0) {
-        for ( let i = 0; i < this.config.length; i++){
+        for (let i = 0; i < this.config.length; i++) {
           this.groupData.push(this.config[i]);
           if (this.groupData[i]) {
             this.mapType = this.groupData[i].mapType;
             this.showButton = !this.groupData[i].viewOnly;
-            this.showLayers = this.groupData[i].showLayers ? true : false
-            this.showLocInfo = this.groupData[i].showLocInfo ? true : false
+            this.showLayers = this.groupData[i].showLayers ? true : false;
+            this.showLocInfo = this.groupData[i].showLocInfo ? true : false;
           }
           if (this.groupData[i]?.zoomModel?.featureName && this.zoomToRequest) {
             this.zoomToRequest(
@@ -230,15 +232,15 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
   }
 
   ngOnInit(): void {
-    if ((Array.isArray(this.config))) {
+    if (Array.isArray(this.config)) {
       if (this.config.length > 0) {
-        for ( let i = 0; i < this.config.length; i++){
+        for (let i = 0; i < this.config.length; i++) {
           this.groupData.push(this.config[i]);
           if (this.groupData[i]) {
             this.mapType = this.groupData[i].mapType;
             this.showButton = !this.groupData[i].viewOnly;
-            this.showLayers = this.groupData[i].showLayers ? true : false
-            this.showLocInfo = this.groupData[i].showLocInfo ? true : false
+            this.showLayers = this.groupData[i].showLayers ? true : false;
+            this.showLocInfo = this.groupData[i].showLocInfo ? true : false;
           }
           if (this.groupData[i]?.zoomModel?.featureName && this.zoomToRequest) {
             this.zoomToRequest(
@@ -251,9 +253,9 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     }
     this.lang = this.translationService.getSelectedLanguage();
 
-    if ((Array.isArray(this.config))) {
+    if (Array.isArray(this.config)) {
       if (this.config.length > 0) {
-        for ( let i = 0; i < this.config.length; i++){
+        for (let i = 0; i < this.config.length; i++) {
           this.groupData.push(this.config[i]);
         }
       }
@@ -272,10 +274,12 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
       this.showButton = !this.data.viewOnly;
       this.showLayers = this.data.showLayers ?? true;
       this.showLocInfo = this.data.showLocInfo ?? true;
-      this.mapType === 'reporter' ? this.currentLocation = false : this.currentLocation = true;
+      this.mapType === 'reporter'
+        ? (this.currentLocation = false)
+        : (this.currentLocation = true);
     }
-    if ((Array.isArray(this.groupData)) && this.groupData.length > 0) {
-      for ( let i = 0; i < this.groupData.length; i++){
+    if (Array.isArray(this.groupData) && this.groupData.length > 0) {
+      for (let i = 0; i < this.groupData.length; i++) {
         if (this.groupData[i]) {
           this.mapType = this.groupData[i].mapType;
           this.showButton = !this.groupData[i].viewOnly;
@@ -285,22 +289,24 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
       }
     }
     this.applyStyle();
-    const map = this.initializeMap().then( () => {
-        if (this.mapType === 'reporter') {
-          this.addReporterPoint();
-        }
+    const map = this.initializeMap().then(() => {
+      if (this.mapType === 'reporter') {
+        this.addReporterPoint();
+      }
     });
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       if (this.currentLocationOfUser) {
-        let btn = document.querySelector('.esri-component.esri-locate.esri-widget--button.esri-widget');
+        let btn = document.querySelector(
+          '.esri-component.esri-locate.esri-widget--button.esri-widget'
+        );
         btn.addEventListener('click', () => {});
         let clickEvent = new Event('click');
         btn.dispatchEvent(clickEvent);
       }
-    },  7000);
+    }, 7000);
   }
 
   async initializeMap() {
@@ -403,7 +409,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
       };
 
       const popupIncidents = {
-        title: this.getIncidentTitle.bind(this),//'/2022',//this.translationService.translateAWord('INCIDENTS.SUBJECT'),
+        title: this.getIncidentTitle.bind(this), //'/2022',//this.translationService.translateAWord('INCIDENTS.SUBJECT'),
         content: this.buildIncidentDialog.bind(this),
         outFields: ['*'],
         autoOpenEnabled: true,
@@ -411,7 +417,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
       } as __esri.PopupTemplateProperties;
 
       const popupTasks: esri.PopupTemplateProperties = {
-        title: this.getIncidentTitle.bind(this),//this.translationService.translateAWord('TASK.TASK_TITLE'),
+        title: this.getIncidentTitle.bind(this), //this.translationService.translateAWord('TASK.TASK_TITLE'),
         content: this.buildTaskDialog.bind(this),
         outFields: ['*'],
         autoOpenEnabled: true,
@@ -422,50 +428,12 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
 
       const ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
-          // url: `/geosmart-imgupc/rest/services/Images/BaseMapOverview${
-          //   this.lang == 'en' ? '' : '_Ara'
-          // }/MapServer`,
-          // id: 'ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER',
-          // visible: true,
-          // title: 'Admin Boundries',
-          // opacity: 0.5,
-          // transparent: true,
-          // sublayers: [
-          //   {
-          //     id: 4,
-          //     visible: true,
-          //     title: 'Municipality',
-          //   },
-          // ],
-          url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
+          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
           id: 'MunicipalityImage',
           title: 'Municipality',
-          opacity: 0.5,
-          sublayers: [
-            {
-              id: 20,
-              visible: true,
-              title: 'Municipality Areas',
-            },
-          ],
-
-          // new layers start
-          /*url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-          id: 'MunicipalityImage',
-          title: 'Municipality',
-          opacity: 0.5,
-          sublayers: [
-            {
-              id: 3,
-              visible: true,
-              // title: 'Municipality Areas',
-              title: 'Municipality Areas',
-            },
-          ],*/
-          // new layers End
-
+          opacity: 0.2,
+          maxScale: 1155000,
         } as __esri.MapImageLayerProperties);
-
 
       const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
@@ -482,29 +450,11 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
           ],
         } as __esri.MapImageLayerProperties);
 
-// new layer start
-
-      /*const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
-              new MapImageLayer({
-        url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-        id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
-        tilte: 'Districts',
-        transparent: true,
-        minScale: 1155600,
-        sublayers: [
-          {
-            id: 2,
-            visible: true,
-          },
-        ],
-      } as __esri.MapImageLayerProperties);*/
-
-      // new layer end
       const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
             this.lang == 'ar' ? '_Ara' : '_Eng'
-            }/MapServer`,
+          }/MapServer`,
           id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
           tilte: 'Districts',
           transparent: true,
@@ -517,25 +467,6 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
           ],
         } as __esri.MapImageLayerProperties);
 
-        // new layer start here
-
-     /* const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-          id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
-          tilte: 'Plots',
-          transparent: true,
-          minScale: 10000,
-          sublayers: [
-            {
-              id: 0,
-              visible: true,
-              // tilte: 'Plots',
-            },
-          ],
-        } as __esri.MapImageLayerProperties);*/
-
-      // new layer end here
       const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
@@ -712,15 +643,27 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
         // return result as LocationInfoModel;
       };
 
+      const ABUDHABI_ARCGIS_BASE_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
+          url: `https://arcgis.sdi.abudhabi.ae/arcgis/rest/services/Pub/BaseMap${
+            this.lang == 'ar' ? 'Ara' : 'Eng'
+          }_LightGray_WM/MapServer`,
+          sublayers: [
+            { id: 0, visible: true },
+            { id: 423, visible: false },
+          ],
+        } as __esri.MapImageLayerProperties);
+
       // Configure the Map
       const mapProperties: esri.MapProperties = {
         basemap: 'satellite',
         layers: [
+          ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
+          ABUDHABI_ARCGIS_BASE_IMAGE_LAYER,
           // ONWANI_ADDRESSING_IMAGE_LAYER,
           // DistrictMapLayer,
           // CommunityMapLayer,
           // TAWAJUDI_FACILITIES_IMAGE_LAYER,
-          ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER,
           // this.ONWANI_SEARCH_DZSP_IMAGE_LAYER,
@@ -763,7 +706,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
       //console.log(findMyLocation);
       //!this.currentLocation && this.mapView.ui.add(findMyLocation, 'top-right');
 
-    /*  const track = new Track({
+      /*  const track = new Track({
         view: mapViewProperties,
         graphic: new Graphic({
           symbol: {
@@ -857,8 +800,12 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               ? polylineSymbol
               : pointSymbol,
           popupTemplate: {
-            title: address?.type == 'polygon' ? this.translationService.translateAWord('INCIDENTS.TEAM_LOCATION') :
-              this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
+            title:
+              address?.type == 'polygon'
+                ? this.translationService.translateAWord(
+                    'INCIDENTS.TEAM_LOCATION'
+                  )
+                : this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
             content: (feature: __esri.Feature) => {
               return `${address.Address}`;
             },
@@ -929,8 +876,8 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
               ? polgonSymbol
               : address?.type == 'polyline'
               ? polylineSymbol
-              : pointSymbol
-         /* popupTemplate: {
+              : pointSymbol,
+          /* popupTemplate: {
             title: 'Onwani Address',
             content: (feature: __esri.Feature) => {
               return `${address.Address}`;
@@ -942,7 +889,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
         // Add the graphics to the view's graphics layer
         this.mapView.zoom = address.zoom;
         this.addressGraphicsLayer.add(mapMarker);
-       /* this.mapView
+        /* this.mapView
           .goTo(mapMarker, { animate: true, duration: 2000 })
           .then(() => {
             this.mapView.popup.open({ features: [mapMarker] });
@@ -1105,7 +1052,8 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
         !this.smallSize && this.mapView.ui.add(compass, 'top-trailing');
 
         const findMyLocation = new Track({ view: this.mapView });
-        !this.currentLocation && this.mapView.ui.add(findMyLocation, 'top-right');
+        !this.currentLocation &&
+          this.mapView.ui.add(findMyLocation, 'top-right');
 
         // var coordinateConversionWidget = new CoordinateConversion({
         //   view: this.mapView
@@ -1113,8 +1061,8 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
 
         // this.mapView.ui.add(coordinateConversionWidget, "bottom-right");
 
-
-        if ((Array.isArray(this.groupData)) && this.groupData.length > 0) {   // for multiple Location to show
+        if (Array.isArray(this.groupData) && this.groupData.length > 0) {
+          // for multiple Location to show
           for (let i = 0; i < this.groupData.length; i++) {
             if (this.groupData[i]?.pointLocation) {
               this.zoomToGroupAddress(this.groupData[i]?.pointLocation);
@@ -1152,7 +1100,12 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
           const action = draw.create('point', { mode: 'click' });
 
           action.on('draw-complete', (evt) => {
-            createPointGraphic(evt.coordinates, mapView, Type, previousLocation);
+            createPointGraphic(
+              evt.coordinates,
+              mapView,
+              Type,
+              previousLocation
+            );
           });
         }
         enableCreatePoint(this.draw, this.mapView);
@@ -1901,12 +1854,12 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     let graphicPoint;
     if (this.mapType === 'reporter') {
       if (this.mapView?.graphics?.getItemAt(1)) {
-         graphicPoint = this.mapView?.graphics?.getItemAt(1);
+        graphicPoint = this.mapView?.graphics?.getItemAt(1);
       } else {
-         graphicPoint = this.mapView?.graphics?.getItemAt(0);
+        graphicPoint = this.mapView?.graphics?.getItemAt(0);
       }
     } else {
-       graphicPoint = this.mapView?.graphics?.getItemAt(0);
+      graphicPoint = this.mapView?.graphics?.getItemAt(0);
     }
 
     this.OnSaveMap.emit({
@@ -1971,8 +1924,10 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
       title = `<div class="row"><div class="image"><b class="textId">{INCIDENT_REF_ID}/2023</b>
     <div>
        <a class="btn btn-primary custom-btn" href="${
-        location.origin
-        }/incidents/view/${attrs.INCIDENT_REF_ID}" target="_blank"><p class="customText">
+         location.origin
+       }/incidents/view/${
+        attrs.INCIDENT_REF_ID
+      }" target="_blank"><p class="customText">
        ${this.translationService.translateAWord('INCIDENTS.showIncident')}</p>
        </a>
       </div></div></div>`;
@@ -1981,8 +1936,10 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
       title = `      
 <div class="row directionAr">
        <a class="btn btn-primary custom-btnAr" href="${
-        location.origin
-        }/incidents/view/${attrs.INCIDENT_REF_ID}" target="_blank"><p class="customText">
+         location.origin
+       }/incidents/view/${
+        attrs.INCIDENT_REF_ID
+      }" target="_blank"><p class="customText">
        ${this.translationService.translateAWord('INCIDENTS.showIncident')}</p>
        </a>
 <b class="textIdAr">2023/{INCIDENT_REF_ID}</b>
@@ -2010,32 +1967,36 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     <tbody>
       <tr>
         <th scope="row">${this.translationService.translateAWord(
-      'INCIDENTS.SUBJECT'
-    )}:</th>
+          'INCIDENTS.SUBJECT'
+        )}:</th>
         <td>{NAME}</td>
       </tr>
       
       <tr>
         <th scope="row">${this.translationService.translateAWord(
-      'INCIDENTS.CREATION_DATE')}:</th>
+          'INCIDENTS.CREATION_DATE'
+        )}:</th>
         <td>${create_Date}</td>
       </tr>
       
       <tr>
         <th scope="row">${this.translationService.translateAWord(
-      'INCIDENTS.CLOSE_DATE')}:</th>
+          'INCIDENTS.CLOSE_DATE'
+        )}:</th>
         <td>${close_Date}</td>
       </tr>
       
       <tr>
         <th scope="row">${this.translationService.translateAWord(
-      'INCIDENTS.PRIORITY')}:</th>
+          'INCIDENTS.PRIORITY'
+        )}:</th>
         <td>{PRIORITY}</td>
       </tr>
       
       <tr>
         <th scope="row">${this.translationService.translateAWord(
-      'INCIDENTS.MAIN_CATEGORY')}:</th>
+          'INCIDENTS.MAIN_CATEGORY'
+        )}:</th>
         <td>
         {INC_CATEGORY}
         </td>
@@ -2125,7 +2086,7 @@ export class MapComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit
     FormsModule,
     CommonModule,
     NgbPopoverModule,
-    MatTooltipModule,
+    MatTooltipModule
   ],
   exports: [MapComponent],
 })
