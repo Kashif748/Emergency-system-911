@@ -45,6 +45,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TabViewModule } from 'primeng/tabview';
 import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ShareMapLocationModule } from '@shared/components/map/share-map-location/share-map-location.component';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/task-mgmt/', '.json');
@@ -104,6 +105,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TabViewModule,
     SharedBreadcrumbModule,
     ProgressSpinnerModule,
+    ShareMapLocationModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

@@ -179,6 +179,9 @@ export class MapComponent
         'esri/widgets/CoordinateConversion',
         'esri/widgets/Locate',
         'esri/widgets/Track',
+        'esri/layers/VectorTileLayer',
+        'esri/Basemap',
+        'esri/WebMap',
         // 'esri/urlUtils',
         // 'esri/geometry/Extent',
         // 'dojo/dom-construct',
@@ -337,6 +340,9 @@ export class MapComponent
         Locate,
         Track,
         CoordinateConversion,
+        VectorTileLayer,
+        Basemap,
+        WebMap,
       ] = await MapComponent.loadMapModules();
 
       this.createQueryTask = (url: string) => new QueryTask(url);
@@ -434,136 +440,64 @@ export class MapComponent
 
       // -------------------------------------------------------- START ONWANI LAYERS --------------------------------------
       const ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER: __esri.MapImageLayer =
-      new MapImageLayer({
-        // url: `/geosmart-imgupc/rest/services/Images/BaseMapOverview${
-        //   this.lang == 'en' ? '' : '_Ara'
-        // }/MapServer`,
-        // id: 'ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER',
-        // visible: true,
-        // title: 'Admin Boundries',
-        // opacity: 0.5,
-        // transparent: true,
-        // sublayers: [
-        //   {
-        //     id: 4,
-        //     visible: true,
-        //     title: 'Municipality',
-        //   },
-        // ],
-        url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
-        id: 'MunicipalityImage',
-        title: 'Municipality',
-        opacity: 0.5,
-        sublayers: [
-          {
-            id: 20,
-            visible: true,
-            title: 'Municipality Areas',
-          },
-        ],
+        new MapImageLayer({
+          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+          id: 'MunicipalityImage',
+          title: 'Municipality',
+          opacity: 0.2,
+          maxScale: 1155000,
+        } as __esri.MapImageLayerProperties);
 
-        // new layers start
-        /*url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-        id: 'MunicipalityImage',
-        title: 'Municipality',
-        opacity: 0.5,
-        sublayers: [
-          {
-            id: 3,
-            visible: true,
-            // title: 'Municipality Areas',
-            title: 'Municipality Areas',
-          },
-        ],*/
-        // new layers End
+      const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
+          url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
+          id: 'TAWAJUDI_FACILITIES_IMAGE_LAYER',
+          title: 'Tawajudi Facilities',
+          opacity: 0.3,
+          sublayers: [
+            {
+              id: 12,
+              visible: true,
+              title: 'Tawajudi Facilities',
+            },
+          ],
+        } as __esri.MapImageLayerProperties);
 
-      } as __esri.MapImageLayerProperties);
+      // new layer start
 
-
-    const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
-      new MapImageLayer({
-        url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
-        id: 'TAWAJUDI_FACILITIES_IMAGE_LAYER',
-        title: 'Tawajudi Facilities',
-        opacity: 0.3,
-        sublayers: [
-          {
-            id: 12,
-            visible: true,
-            title: 'Tawajudi Facilities',
-          },
-        ],
-      } as __esri.MapImageLayerProperties);
-
-// new layer start
-
-    /*const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
-            new MapImageLayer({
-      url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-      id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
-      tilte: 'Districts',
-      transparent: true,
-      minScale: 1155600,
-      sublayers: [
-        {
-          id: 2,
-          visible: true,
-        },
-      ],
-    } as __esri.MapImageLayerProperties);*/
-
-    // new layer end
-    const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
-      new MapImageLayer({
-        url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
-          this.lang == 'ar' ? '_Ara' : '_Eng'
+      // new layer end
+      const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
+          url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
+            this.lang == 'ar' ? '_Ara' : '_Eng'
           }/MapServer`,
-        id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
-        tilte: 'Districts',
-        transparent: true,
-        minScale: 1155600,
-        sublayers: [
-          {
-            id: this.lang == 'ar' ? 147 : 23,
-            visible: true,
-          },
-        ],
-      } as __esri.MapImageLayerProperties);
+          id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
+          tilte: 'Districts',
+          transparent: true,
+          minScale: 1155600,
+          sublayers: [
+            {
+              id: this.lang == 'ar' ? 147 : 23,
+              visible: true,
+            },
+          ],
+        } as __esri.MapImageLayerProperties);
 
-      // new layer start here
-
-   /* const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
-      new MapImageLayer({
-        url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-        id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
-        tilte: 'Plots',
-        transparent: true,
-        minScale: 10000,
-        sublayers: [
-          {
-            id: 0,
-            visible: true,
-            // tilte: 'Plots',
-          },
-        ],
-      } as __esri.MapImageLayerProperties);*/
-
-    // new layer end here
-    const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
-      new MapImageLayer({
-        url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
-        id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
-        tilte: 'Plots',
-        transparent: true,
-        minScale: 10000,
-        sublayers: [
-          {
-            id: this.lang == 'ar' ? 22 : 7,
-            visible: true,
-            // tilte: 'Plots',
-          },
-        ],
-      } as __esri.MapImageLayerProperties);
+      const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
+          url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
+          id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
+          tilte: 'Plots',
+          transparent: true,
+          minScale: 10000,
+          sublayers: [
+            {
+              id: this.lang == 'ar' ? 22 : 7,
+              visible: true,
+              // tilte: 'Plots',
+            },
+          ],
+        } as __esri.MapImageLayerProperties);
 
       this.ONWANI_SEARCH_DZSP_IMAGE_LAYER = new MapImageLayer({
         // url: '/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer',
@@ -726,14 +660,25 @@ export class MapComponent
       };
 
       // Configure the Map
+      const ABUDHABI_ARCGIS_BASE_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
+          url: `https://arcgis.sdi.abudhabi.ae/arcgis/rest/services/Pub/BaseMap${
+            this.lang == 'ar' ? 'Ara' : 'Eng'
+          }_LightGray_WM/MapServer`,
+          sublayers: [
+            { id: 0, visible: true },
+            { id: 423, visible: false },
+          ],
+        } as __esri.MapImageLayerProperties);
       const mapProperties: esri.MapProperties = {
         basemap: 'satellite',
         layers: [
+          ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
+          ABUDHABI_ARCGIS_BASE_IMAGE_LAYER,
           // ONWANI_ADDRESSING_IMAGE_LAYER,
           // DistrictMapLayer,
           // CommunityMapLayer,
           // TAWAJUDI_FACILITIES_IMAGE_LAYER,
-          ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER,
           // this.ONWANI_SEARCH_DZSP_IMAGE_LAYER,
@@ -875,7 +820,9 @@ export class MapComponent
                 ? this.translationService.translateAWord(
                     'INCIDENTS.TEAM_LOCATION'
                   )
-                : this.title ? this.title :this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
+                : this.title
+                ? this.title
+                : this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
             content: (feature: __esri.Feature) => {
               return `${address.Address}`;
             },
