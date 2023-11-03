@@ -92,6 +92,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   private auditLoadPage$ = new Subject<string>();
   _analysisId: number;
   _cycleID: number;
+  _cycle: number;
   get editMode() {
     return this._analysisId !== undefined && this._analysisId !== null;
   }
@@ -104,17 +105,22 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   public get asDialog() {
     return this.route.component !== ActivitiesDialogComponent;
   }
-  // @Select(ActivityLocationsState.blocking)
-  // blocking$: Observable<boolean>;
 
-  // @Select(BrowseLocationsState.state)
-  // public state$: Observable<BrowseLocationsStateModel>;
   public selectedCycle: BcCycles;
   public selectedActivities: any[] = [];
 
   private destroy$ = new Subject();
   @Input()
   set analysisId(v: number) {
+    this.cycles$
+      .pipe(
+        filter(cycles => !!cycles),
+        take(1)
+      )
+      .subscribe(cycles => {
+        this.selectedCycle = cycles.find(cycle => cycle.id == this._cycle);
+      });
+    this.selectCycle('', this._cycle);
     this._analysisId = v;
     // this.buildForm();
     if (v === undefined || v === null) {
@@ -274,6 +280,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
+        this._cycle = params['_cycle'];
         this._cycleID = params['_cycleId'];
         this.analysisId = params['_id'];
       });
@@ -281,12 +288,13 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.opened$ = this.route.queryParams.pipe(
-      map((params) => params['_dialog'] === 'activities'),
+      map((params) => params['_dialog'] === 'activities' ),
       tap(() => {
         this.selectedActivities = [];
-        this.selectedCycle = null;
       })
     );
+
+
     this.loadPage('', true);
     this.page$ = combineLatest([
       this.store.select(OrgActivityState.idsList),
@@ -364,10 +372,10 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
 
   changeSelect(event) {
   }
-  selectCycle(event) {
-    this.selectedCycle = event?.value;
+  selectCycle(event?, cycleId?) {
+    if (event) {this.selectedCycle = event?.value}
     this.store.dispatch(
-      new OrgActivityAction.loadIdsList({ cycleId: this.selectedCycle.id })
+      new OrgActivityAction.loadIdsList({ cycleId: this.selectedCycle?.id ? this.selectedCycle.id : cycleId })
     );
   }
 

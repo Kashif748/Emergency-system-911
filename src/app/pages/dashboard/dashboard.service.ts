@@ -184,7 +184,7 @@ export class DashboardService extends DataSourceService {
             ...bcStatistics,
             currentAnalysisCycle: (bcStatistics.nameAr != 'Null' && bcStatistics.nameAr != '' && bcStatistics.nameEn != 'Null' && bcStatistics.nameEn != '') ?
               lang == 'en' ? bcStatistics.nameEn : bcStatistics.nameAr : '-',
-            criticalActivities: bcStatistics.criticalActivities ? Math.round((bcStatistics.criticalActivities / bcStatistics.totalActivities) * 100) + ' % - ' + bcStatistics.criticalActivities : 0
+            criticalActivities: bcStatistics.criticalActivities ? bcStatistics.criticalActivities + ' - ' + Math.round((bcStatistics.criticalActivities / bcStatistics.totalActivities) * 100) + ' %' : 0
           };
           this.bcStatisticsChange$.next(this.bcStatistics);
         }

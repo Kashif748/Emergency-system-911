@@ -58,12 +58,12 @@
     </p-blockUI>
 
     <div class="row p-4">
-      <h3
+     <!-- <h3
         *ngIf="!selectedCycle"
         class="col-12 pt-10 pb-3 font-weight-bold text-center"
       >
         {{ "SELECT_CYCLE_MSG" | translate }}
-      </h3>
+      </h3>-->
       <!-- Cycle -->
       <div class="p-field p-col-6 mx-auto">
         <p-dropdown
@@ -71,7 +71,6 @@
           [options]="cycles$ | async"
           [ngModel]="selectedCycle"
           (onChange)="selectCycle($event)"
-          [showClear]="true"
           dataKey="id"
           styleClass="w-100"
           placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
@@ -85,7 +84,7 @@
           </ng-template>
         </p-dropdown>
       </div>
-      <div *ngIf="selectedCycle" class="p-field p-col-6">
+      <div class="p-field p-col-6">
         <div class="p-inputgroup">
           <span class="p-float-label">
             <input
@@ -102,7 +101,7 @@
       </div>
     </div>
 
-    <div *ngIf="selectedCycle" class="row">
+    <div class="row">
       <div class="col-12">
         <ng-container>
           <ng-container *ngIf="loading$ | async; else tableTemplate">
