@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ILangFacade} from "@core/facades/lang.facade";
 import {TranslateService} from "@ngx-translate/core";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {PageRequestModel} from "@core/models/page-request.model";
-import {BcResourcesRecords} from "../../../../../../api/models/bc-resources-records";
 import {BrowseRecordAction} from "../../../records/states/browse-records.action";
 import {LazyLoadEvent} from "primeng/api";
 import {BcResourcesAppAndSoftware} from "../../../../../../api/models/bc-resources-app-and-software";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-app-system-content',
@@ -14,6 +16,10 @@ import {BcResourcesAppAndSoftware} from "../../../../../../api/models/bc-resourc
   styleUrls: ['./app-system-content.component.scss']
 })
 export class AppSystemContentComponent implements OnInit {
+
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
+
   @Input()
   loading: boolean;
   @Input()

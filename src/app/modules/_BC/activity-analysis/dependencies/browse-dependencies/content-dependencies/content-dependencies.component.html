@@ -4,7 +4,7 @@
       class="d-flex p-ai-center p-jc-between p-4 font-weight-bold font-size-h4"
     >
       {{ "DEPENDENCIES." + dependType | translate }}
-      <ng-container>
+      <ng-container *ngIf="activityStatus$ | async as activityStatus">
         <button
           [disabled]="(noDpend$ | async) || !activityStatus.editable"
           pButton
@@ -34,13 +34,15 @@
               </div>
             </div>
           </div>
-          <button
-            pButton
-            pRipple
-            type="button"
-            icon="pi pi-ellipsis-v"
-            class="p-button-rounded p-button-text mt-0 p-button-plain"
-          ></button>
+          <ng-container *ngIf="activityStatus$ | async as activityStatus">
+            <button *ngIf="activityStatus.editable"
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-ellipsis-v"
+              class="p-button-rounded p-button-text mt-0 p-button-plain"
+            ></button>
+          </ng-container>
         </div>
       </div>
     </ng-container>
@@ -89,15 +91,17 @@
               class="col-fixed d-flex p-ai-center p-jc-center pt-4"
               style="width: 50px"
             >
-              <button
-                [disabled]="!activityStatus.editable"
-                (click)="deleteDependinces($event, item)"
-                pButton
-                pRipple
-                type="button"
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-danger p-button-text"
-              ></button>
+              <ng-container *ngIf="activityStatus$ | async as activityStatus">
+                <button
+                  *ngIf="activityStatus.editable"
+                  (click)="deleteDependinces($event, item)"
+                  pButton
+                  pRipple
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger p-button-text"
+                ></button>
+              </ng-container>
             </div>
           </div>
         </div>

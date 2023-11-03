@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ILangFacade} from "@core/facades/lang.facade";
 import {TranslateService} from "@ngx-translate/core";
-import {Store} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {PageRequestModel} from "@core/models/page-request.model";
 import {LazyLoadEvent} from "primeng/api";
 import {BrowseInfraAction} from "../../states/browse-infra.action";
 import {BcResourcesItInfrastructure} from "../../../../../../api/models/bc-resources-it-infrastructure";
-import {map} from "rxjs/operators";
+import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
+import {BcResources} from "../../../../../../api/models/bc-resources";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-infra-content',
@@ -14,6 +16,10 @@ import {map} from "rxjs/operators";
   styleUrls: ['./infra-content.component.scss']
 })
 export class InfraContentComponent implements OnInit {
+
+  @Select(ResourceAnalysisState.resourceAnalysis)
+  public resourceAnalysis$: Observable<BcResources>;
+
   @Input()
   loading: boolean;
   @Input()

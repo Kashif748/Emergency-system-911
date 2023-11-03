@@ -13,6 +13,7 @@
     <div>
       <div class="p-toolbar-group-right">
         <button
+          *checkPrivileges="['PRIV_PERFORM_ACTIVITY_ANALYSIS','PRIV_APPROVE_ACTIVITY_ANALYSIS' , 'PRIV_REVIEW_ACTIVITY_ANALYSIS']"
           [disabled]="!(shouldDisable$ | async)"
           pButton
           label="{{ 'ACTIONS.SEND' | translate }}"
@@ -30,7 +31,6 @@
     </div>
   </div>
 </div>
-
 
 
 
@@ -110,6 +110,7 @@
       <div class="p-md-12 p-col-12 d-flex justify-content-between gap" *ngIf="statusbasedOnId$ | async as status">
         <ng-container *ngFor="let action of status.actions">
           <p-button
+            *ngIf="checkPermissoon(action)"
             label="{{ action | translateObj : 'actionName'}}"
             [styleClass]="action?.cssClass"
             [loading]="blocking$ | async"

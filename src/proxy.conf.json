@@ -5,8 +5,7 @@
       "^/ecms": "ecms"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/admgis/*": {
     "target": "http://10.24.10.55",
@@ -14,8 +13,7 @@
       "^/admgis": "admgis"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/agsupc/*": {
     "target": "https://geosmart.dmt.gov.ae",
@@ -23,8 +21,7 @@
       "^/agsupc": "agsupc"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/onwaniapi/*": {
     "target": "https://onwani.abudhabi.ae",
@@ -32,8 +29,7 @@
       "^/onwaniapi": "onwaniapi"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/arcgis/*": {
     "target": "https://onwani.abudhabi.ae",
@@ -41,8 +37,7 @@
       "^/arcgis": "arcgis"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/dpmags/*": {
     "target": "https://myland.dmt.gov.ae/proxy.ashx?https://smarthub.dpm.abudhabi.ae",
@@ -50,8 +45,7 @@
       "^/dpmags": "dpmags"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/proxy-gis-imgupc/*": {
     "target": "https://myland.dmt.gov.ae/proxy.ashx?https://gisserver.dpm.abudhabi.ae",
@@ -59,6 +53,14 @@
       "^/proxy-gis-imgupc": "imgupc"
     },
     "secure": false,
+    "changeOrigin": true
+  },
+  "/pubdmt/*": {
+    "target": "https://geosmart.dmt.gov.ae/proxy/proxy.ashx?https://esris.abudhabi.ae",
+    "pathRewrite": {
+      "^/pubdmt": "pubdmt"
+    },
+    "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
   },
@@ -68,8 +70,7 @@
       "^/geosmart-imgupc": "imgupc"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/geoserver/*": {
     "target": "https://geosmart.dmt.gov.ae",
@@ -77,8 +78,7 @@
       "^/geoserver": "geoserver"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   },
   "/gateway/*": {
     "target": "http://10.21.10.245:4200/",
@@ -86,7 +86,6 @@
       "^/gateway": "gateway"
     },
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": true
   }
 }

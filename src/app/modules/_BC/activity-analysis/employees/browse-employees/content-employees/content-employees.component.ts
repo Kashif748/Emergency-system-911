@@ -7,6 +7,9 @@ import {
   ActivityAnalysisStatusAction,
   BcActivityEmployees,
 } from 'src/app/api/models';
+import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
+import {Select} from "@ngxs/store";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-content-employees',
@@ -14,6 +17,10 @@ import {
   styleUrls: ['./content-employees.component.scss'],
 })
 export class ContentEmployeesComponent implements OnInit {
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
   @Input()
   loading: boolean;
   @Input()
@@ -37,4 +44,5 @@ export class ContentEmployeesComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private lang: ILangFacade) {}
 
   ngOnInit(): void {}
+
 }
