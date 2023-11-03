@@ -50,6 +50,20 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'resources',
+        canLoad: [PrivilegeGuard],
+        data: {
+          permission: [
+            'PRIV_PERFORM_ACTIVITY_ANALYSIS',
+            'PRIV_REVIEW_ACTIVITY_ANALYSIS',
+            'PRIV_APPROVE_ACTIVITY_ANALYSIS',
+          ],
+          type: 'or',
+        },
+        loadChildren: () =>
+          import('./resouces/resouces.module').then((m) => m.ResoucesModule),
+      },
+      {
         path: 'org-activities',
         canLoad: [PrivilegeGuard],
         data: {

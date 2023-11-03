@@ -23,17 +23,11 @@ import { TABS } from '../tempData.conts';
   styleUrls: ['./activity-analysis.component.scss'],
 })
 export class ActivityAnalysisComponent implements OnInit, OnDestroy {
-  @Select(BrowseActivityAnalysisState.state)
-  public state$: Observable<BrowseActivityAnalysisStateModel>;
-
   @Select(ActivityAnalysisState.activityAnalysis)
   public activityAnalysis$: Observable<BcActivityAnalysis>;
 
   @Select(ActivityAnalysisState.activityStatus)
   public activityStatus$: Observable<ActivityAnalysisStatusAction>;
-
-  @Select(ActivityAnalysisState.cycle)
-  public cycle$: Observable<BcCycles>;
 
   @Select(BrowseActivityAnalysisState.tabIndex)
   public tabIndex$: Observable<BcCycles>;
@@ -101,7 +95,7 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
     this.impactAnalysisRes$ = this.store
       .select(BrowseActivityAnalysisState.impactAnalysisRes)
       .pipe(skip(1));
-      this.notes = new FormControl('' , Validators.required);
+    this.notes = new FormControl('', Validators.required);
   }
   changeTab(index: number) {
     this.store
@@ -151,9 +145,11 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(['/bc/impact-analysis'], { queryParams: {
+    this.router.navigate(['/bc/impact-analysis'], {
+      queryParams: {
         _activity: undefined,
       },
-      queryParamsHandling: "merge" });
+      queryParamsHandling: 'merge',
+    });
   }
 }

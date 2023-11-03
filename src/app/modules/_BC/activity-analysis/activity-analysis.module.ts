@@ -20,6 +20,7 @@ import { ActivityAnalysisComponent } from './activity-analysis/activity-analysis
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SkeletonModule } from 'primeng/skeleton';
+import { BrowseActivityImpactMatrixState } from './impact-matrix/states/browse-impact-matrix.state';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -101,7 +102,7 @@ const routes: Routes = [
       },
       isolate: true,
     }),
-    NgxsModule.forFeature([BrowseActivityAnalysisState]),
+    NgxsModule.forFeature([BrowseActivityAnalysisState ,BrowseActivityImpactMatrixState]),
     FormsModule,
     DividerModule,
     ProgressBarModule,

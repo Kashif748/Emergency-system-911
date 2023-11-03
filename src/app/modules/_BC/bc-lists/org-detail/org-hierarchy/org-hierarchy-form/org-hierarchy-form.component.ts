@@ -152,7 +152,9 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
       coordinators: this.form.value?.coordinators?.map((user) => {
         return { user: { id: user?.id } };
       }),
-      manager: { id: this.form.value?.manager?.id },
+      manager: this.form.value.manager
+        ? { id: this.form.value?.manager?.id }
+        : null,
     };
     console.log(payload);
 

@@ -1,18 +1,16 @@
 import {
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ILangFacade } from '@core/facades/lang.facade';
 import { ImpactMatrixState, RtoState } from '@core/states';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
-import { combineLatest, Observable, of, Subject } from 'rxjs';
-import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { debounceTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import {
   BcActivityImpactMatrixDetailsDto,
   BcImpactLevel,
@@ -25,13 +23,11 @@ import { BrowseActivityAnalysisAction } from '../../states/browse-activity-analy
 import { BrowseActivityImpactMatrixAction } from '../states/browse-impact-matrix.action';
 import {
   BrowseActivityImpactMatrixState,
-  BrowseActivityImpactMatrixStateModel,
 } from '../states/browse-impact-matrix.state';
 import { BcImpactTypes } from '../../../../../api/models/bc-impact-types';
 import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.state';
 import { BcImpactLevelMatrixDto } from '../../../../../api/models/bc-impact-level-matrix-dto';
 import { BcImpactMatrixDto } from '../../../../../api/models';
-import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { ActivityAnalysisStatusAction } from '../../../../../api/models/activity-analysis-status-action';
 
 @Component({
@@ -51,8 +47,6 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   @Select(ActivityImpactMatrixState.blocking)
   public blocking$: Observable<boolean>;
 
-  public state$: Observable<BrowseActivityImpactMatrixStateModel>;
-
   public rtosPage$: Observable<Bcrto[]>;
 
   public impactLevelPage$: Observable<BcImpactLevel[]>;
@@ -71,19 +65,18 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
   selectedCells: BcImpactTypesDetails[] = [];
   private destroy$ = new Subject();
 
-  constructor(
-    private lang: ILangFacade,
-    private store: Store,
-    private translateObj: TranslateObjPipe,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.state$ = this.store.select(BrowseActivityImpactMatrixState.state).pipe(
-      takeUntil(this.destroy$),
-      filter((s) => !!s),
-      tap(() => this.loadTableData())
-    );
+    this.store
+      .select(BrowseActivityImpactMatrixState.state)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((s) => !!s),
+        take(1),
+        tap(() => this.loadTableData())
+      )
+      .subscribe();
 
     if (this.accordion) {
       this.accordion.activeIndex = -1;
@@ -132,11 +125,13 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
 
         impactTotal =
           (impactTotal * 100) / (rtos?.length * impactMatrix?.length);
-
-        this.calcImpactAnalysisRes(activityImpact, rtos);
         this.store.dispatch(
           new BrowseActivityAnalysisAction.setImpactTotal({ impactTotal })
         );
+        if (impactTotal > 0) {
+          this.calcImpactAnalysisRes(activityImpact, rtos);
+        }
+
         return table;
       })
     );

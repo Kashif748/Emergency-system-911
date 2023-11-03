@@ -10,12 +10,22 @@
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.ACTIVITY" | translate }}
+                  {{ "SUMMARY.SECTOR" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.CAPACITY" | translate }}
+                  {{ "SUMMARY.DIVISION" | translate }}
+                </div>
+              </th>
+              <th class="min-w-200px max-w-300px">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SUMMARY.SECTION" | translate }}
+                </div>
+              </th>
+              <th class="min-w-200px max-w-300px">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SUMMARY.ACTIVITY" | translate }}
                 </div>
               </th>
               <th class="min-w-200px max-w-300px">
@@ -30,22 +40,13 @@
               </th>
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.DIVISION" | translate }}
+                  {{ "SUMMARY.CAPACITY" | translate }}
                 </div>
               </th>
+
               <th class="min-w-200px max-w-300px">
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "SUMMARY.RECOVERYPRIORITYSEQUENCE" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.SECTOR" | translate }}
-                </div>
-              </th>
-              <th class="min-w-200px max-w-300px">
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.SECTION" | translate }}
                 </div>
               </th>
             </tr>
@@ -81,19 +82,35 @@
                 <div class="p-d-flex p-jc-between p-ai-center">#</div>
               </th>
               <th
+                *ngIf="columns?.includes('sector')"
+                class="min-w-200px max-w-300px"
+              >
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SUMMARY.SECTOR" | translate }}
+                </div>
+              </th>
+              <th
+                *ngIf="columns?.includes('division')"
+                class="min-w-200px max-w-300px"
+              >
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SUMMARY.DIVISION" | translate }}
+                </div>
+              </th>
+              <th
+                *ngIf="columns?.includes('section')"
+                class="min-w-200px max-w-300px"
+              >
+                <div class="p-d-flex p-jc-between p-ai-center">
+                  {{ "SUMMARY.SECTION" | translate }}
+                </div>
+              </th>
+              <th
                 *ngIf="columns?.includes('activity')"
                 class="min-w-200px max-w-300px"
               >
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "SUMMARY.ACTIVITY" | translate }}
-                </div>
-              </th>
-              <th
-                *ngIf="columns?.includes('capacity')"
-                class="min-w-200px max-w-300px"
-              >
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.CAPACITY" | translate }}
                 </div>
               </th>
               <th
@@ -113,35 +130,20 @@
                 </div>
               </th>
               <th
-                *ngIf="columns?.includes('division')"
+                *ngIf="columns?.includes('capacity')"
                 class="min-w-200px max-w-300px"
               >
                 <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.DIVISION" | translate }}
+                  {{ "SUMMARY.CAPACITY" | translate }}
                 </div>
               </th>
+
               <th
                 *ngIf="columns?.includes('recoveryPrioritySequence')"
                 class="min-w-200px max-w-300px"
               >
                 <div class="p-d-flex p-jc-between p-ai-center">
                   {{ "SUMMARY.RECOVERYPRIORITYSEQUENCE" | translate }}
-                </div>
-              </th>
-              <th
-                *ngIf="columns?.includes('sector')"
-                class="min-w-200px max-w-300px"
-              >
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.SECTOR" | translate }}
-                </div>
-              </th>
-              <th
-                *ngIf="columns?.includes('section')"
-                class="min-w-200px max-w-300px"
-              >
-                <div class="p-d-flex p-jc-between p-ai-center">
-                  {{ "SUMMARY.SECTION" | translate }}
                 </div>
               </th>
             </tr>
@@ -151,14 +153,26 @@
               <td class="min-w-50px">
                 {{ item.rowNumber }}
               </td>
-              <td *ngIf="columns?.includes('activity')" class="min-w-50px">
-                {{ item.activity | translateObj }}
-              </td>
               <td
-                *ngIf="columns?.includes('capacity')"
+                *ngIf="columns?.includes('sector')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.capacity }}
+                {{ item.sector | translateObj }}
+              </td>
+              <td
+                *ngIf="columns?.includes('division')"
+                class="min-w-200px max-w-300px"
+              >
+                {{ item.division | translateObj }}
+              </td>
+              <td
+                *ngIf="columns?.includes('section')"
+                class="min-w-200px max-w-300px"
+              >
+                {{ item.section | translateObj }}
+              </td>
+              <td *ngIf="columns?.includes('activity')" class="min-w-50px">
+                {{ item.activity | translateObj }}
               </td>
               <td
                 *ngIf="columns?.includes('criticality')"
@@ -173,28 +187,17 @@
                 {{ item.rto | translateObj }}
               </td>
               <td
-                *ngIf="columns?.includes('division')"
+                *ngIf="columns?.includes('capacity')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.division | translateObj }}
+                {{ item.capacity }}
               </td>
+
               <td
                 *ngIf="columns?.includes('recoveryPrioritySequence')"
                 class="min-w-200px max-w-300px"
               >
                 {{ item.recoveryPrioritySequence | translateObj }}
-              </td>
-              <td
-                *ngIf="columns?.includes('sector')"
-                class="min-w-200px max-w-300px"
-              >
-                {{ item.sector | translateObj }}
-              </td>
-              <td
-                *ngIf="columns?.includes('section')"
-                class="min-w-200px max-w-300px"
-              >
-                {{ item.section | translateObj }}
               </td>
             </tr>
           </ng-template>
