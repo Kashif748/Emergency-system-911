@@ -22,11 +22,6 @@
       </p-dropdown>
     </div>
     <div class="ml-dir-auto d-flex">
-      <app-bia-activities-dialog></app-bia-activities-dialog>
-      <app-bia-resource-dialog
-        [orgHir]="orgHireracy"
-        [cycles]="cycles$ | async"
-      ></app-bia-resource-dialog>
       <app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
     </div>
   </header>

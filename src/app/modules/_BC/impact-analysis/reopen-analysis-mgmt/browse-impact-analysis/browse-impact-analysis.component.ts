@@ -5,10 +5,10 @@ import {LazyLoadEvent, TreeNode} from 'primeng/api';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {TranslateService} from '@ngx-translate/core';
 import {auditTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {BrowseImpactAnalysisState, BrowseImpactAnalysisStateModel,} from '../../states/browse-impact-analysis.state';
+import {BrowseImpactAnalysisState, BrowseImpactAnalysisStateModel} from '../../states/browse-impact-analysis.state';
 import {ILangFacade} from '@core/facades/lang.facade';
 import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
-import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, Bcrto,} from 'src/app/api/models';
+import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, Bcrto} from 'src/app/api/models';
 import {BrowseImpactAnalysisAction} from '../../states/browse-impact-analysis.action';
 import {
   ActivityFrquencyAction,
@@ -511,7 +511,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       queryParams: {
         _cycle: activity?.cycle?.id,
         _activity: activity?.id,
-        _division: activity?.activity?.orgHierarchy?.id,
+        _division: this.orgHierarchyId,
       },
     });
   }
