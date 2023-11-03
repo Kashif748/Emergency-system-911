@@ -8,7 +8,7 @@
     <button
       pButton
       [loading]="blocking$ | async"
-      [disabled]="(!activityStatus.editable) || selectedCells.length == 0"
+      [disabled]="!activityStatus.editable || selectedCells.length == 0"
       label="{{ 'ACTIONS.SAVE' | translate }}"
       (click)="save()"
       icon="pi pi-save"
@@ -16,7 +16,7 @@
   </ng-container>
 </div>
 
-<div *ngIf="state$ | async as state" class="row mt-5">
+<div class="row mt-5">
   <div class="col-12">
     <ng-container>
       <ng-container *ngIf="loading$ | async; else tableTemplate">
