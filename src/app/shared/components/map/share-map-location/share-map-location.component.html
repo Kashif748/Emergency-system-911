@@ -1,0 +1,34 @@
+<div class="card card-custom" [dir]="dir$ | async" style="overflow: hidden">
+  <div class="card-header p-2">
+    <div class="card-title">
+      <span>{{ "INCIDENTS.SHARE_LOCATION_GOOGLE_MAPS" | translate }}</span>
+    </div>
+    <div class="card-toolbar">
+      <button (click)="dialogRef.close()" class="btn btn-icon btn-sm btn-light-primary">
+        <i class="ki ki-close icon-nm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body px-3">
+    <div class="spinner-container m-auto p-10" *ngIf="isLoading; else locationContainer">
+      <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+    </div>
+    <ng-template #locationContainer>
+      <form>
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label> {{ "INCIDENTS.URL" | translate }} </mat-label>
+          <input matInput [value]="locationUrl" [readonly]="true" />
+          <button class="text-primary" mat-icon-button matSuffix aria-label="copy" (click)="copyUrlClick()">
+            <mat-icon>file_copy</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </ng-template>
+  </div>
+  <div class="card-footer p-5 d-flex justify-content-between">
+
+    <button type="button" mat-dialog-close class="btn btn-primary font-weight-bold">
+      {{ "general.close" | translate }}
+    </button>
+  </div>
+</div>
