@@ -110,6 +110,8 @@ export class BrowseOrgDetailState {
     { dispatch, setState, getState }: StateContext<BrowseOrgDetailModel>,
     { payload }: BrowseOrgDetailAction.GetOrgHierarchy
   ) {
+    const pageRequesta = getState();
+
     setState(
       patch<BrowseOrgDetailModel>({
         pageRequest: patch<PageRequestModel>({
