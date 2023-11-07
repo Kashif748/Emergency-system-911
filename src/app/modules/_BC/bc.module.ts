@@ -34,6 +34,8 @@ import { NgxsModule } from '@ngxs/store';
 import { BrowseBCState } from './states/browse-bc.state';
 import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.directive';
 import { BadgeModule } from 'primeng/badge';
+import {CdateModule} from "@shared/sh-pipes/cdate.pipe";
+import {ToggleButtonModule} from "primeng/togglebutton";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -84,6 +86,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     PrivilegesDirectiveModule,
     BadgeModule,
+    CdateModule,
+    ToggleButtonModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

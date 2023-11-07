@@ -1634,7 +1634,8 @@
         },
         "SUCCESS": {
           "TITLE": "Success",
-          "MESSAGE": "Process completed successfully."
+          "MESSAGE": "Process completed successfully.",
+          "CMESSAGE": "In process of copying previous BC Lists"
         },
         "ERROR": {
           "TITLE": "Error",

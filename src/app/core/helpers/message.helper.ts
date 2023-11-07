@@ -16,7 +16,18 @@ export class MessageHelper {
         param?.summary ?? this.translate.instant('SHARED.DIALOG.SUCCESS.TITLE'),
       detail:
         param?.detail ??
-        this.translate.instant('SHARED.DIALOG.SUCCESS.MESSAGE'),
+          this.translate.instant('SHARED.DIALOG.SUCCESS.MESSAGE'),
+    });
+  }
+
+  cSuccess(param?: { summary?: string; detail?: string }) {
+    this.messageService.add({
+      severity: 'success',
+      summary:
+        param?.summary ?? this.translate.instant('SHARED.DIALOG.SUCCESS.TITLE'),
+      detail:
+        param?.detail ??
+          this.translate.instant('SHARED.DIALOG.SUCCESS.CMESSAGE'),
     });
   }
 
