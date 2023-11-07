@@ -218,7 +218,7 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
       resourceDesignation: [null, [Validators.required]],
       primaryEmpName: [null, [Validators.required]],
       secondaryEmp1Name: [null, [Validators.required]],
-      secondaryEmp2Name: [null, [Validators.required]],
+      secondaryEmp2Name: [null],
       hours: this.formBuilder.array([]),
     });
     this.opened$?.pipe(
