@@ -10,6 +10,7 @@ import { TranslationService } from '../../i18n/translation.service';
 import { FEELS, REASONS } from '../../survey/keys-data';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import { ICategory } from '../../reporting/model/incidents-report';
 
 @Component({
   selector: 'app-surveys-list-report',
@@ -22,7 +23,8 @@ export class SurveysListReportComponent implements OnInit {
     fromDate: [''],
     toDate: [''],
     incident: [''],
-    orgId: ['']
+    orgId: [''],
+    category: [''],
   });
   // Variables
   feels = FEELS;
@@ -31,6 +33,7 @@ export class SurveysListReportComponent implements OnInit {
     'createdDate',
     'incidentId',
     'incidentSubject',
+    'incidentCategory',
     'reportingVia',
     'reporterSurveyAnswers',
     'notes',
@@ -42,14 +45,14 @@ export class SurveysListReportComponent implements OnInit {
   data: any;
   dataSource: any;
   dataLength = 0;
-
+  mainCategories = [];
   constructor(
     private translationService: TranslationService,
     private cdr: ChangeDetectorRef,
     public dialog: MatDialog,
     private surveyService: SurveysManagementService,
     private fb: FormBuilder,
-    private langFacade: ILangFacade,
+    private langFacade: ILangFacade
   ) {
     this.paginationState = {
       pageIndex: 0,
@@ -63,12 +66,16 @@ export class SurveysListReportComponent implements OnInit {
     this.surveyService.getAllSurveysReport(this.paginationState);
     this.lang = this.translationService.getSelectedLanguage();
     let commonData = JSON.parse(localStorage.getItem('commonData'));
-    commonData = commonData.currentOrgDetails.id;
+
+    this.mainCategories = commonData?.incidentCategories?.filter(
+      (cat: ICategory) => cat.parent === null
+    );
     this.filtersForm.setValue({
       fromDate: [''],
       toDate: [''],
       incident: [''],
-      orgId: commonData
+      category: [''],
+      orgId: commonData.currentOrgDetails.id,
     });
     this.surveyService.onSurveysListReport
       .pipe(
@@ -85,30 +92,66 @@ export class SurveysListReportComponent implements OnInit {
           this.data = data;
           this.dataLength = this.data.length;
           if (this.data.length > 0) {
-            let CommunicationOfficerEfficiencyBool, SpeedResponseIncidentBool, EaseReportingProceduresBool;
+            let CommunicationOfficerEfficiencyBool,
+              SpeedResponseIncidentBool,
+              EaseReportingProceduresBool;
             for (let i = 0; i < this.data.length; i++) {
               CommunicationOfficerEfficiencyBool = false;
               SpeedResponseIncidentBool = false;
               EaseReportingProceduresBool = false;
-              for (let j = 0; j < this.data[i].incidentSurveyValues.length; j++) {
+              for (
+                let j = 0;
+                j < this.data[i].incidentSurveyValues.length;
+                j++
+              ) {
                 if (this.data[i].incidentSurveyValues[j].surveyConfig.id == 1) {
                   CommunicationOfficerEfficiencyBool = true;
-                  if(this.lang == 'en'){ this.data[i].CommunicationOfficerEfficiency = this.data[i].incidentSurveyValues[j].surveyType.nameEn; }
-                  else{ this.data[i].CommunicationOfficerEfficiency = this.data[i].incidentSurveyValues[j].surveyType.nameAr; }
-                  this.data[i].CommunicationOfficerEfficiencyIcon = this.data[i].incidentSurveyValues[j].surveyType.icon;
-                } else { if (CommunicationOfficerEfficiencyBool == false) { this.data[i].CommunicationOfficerEfficiency = ''; } }
+                  if (this.lang == 'en') {
+                    this.data[i].CommunicationOfficerEfficiency =
+                      this.data[i].incidentSurveyValues[j].surveyType.nameEn;
+                  } else {
+                    this.data[i].CommunicationOfficerEfficiency =
+                      this.data[i].incidentSurveyValues[j].surveyType.nameAr;
+                  }
+                  this.data[i].CommunicationOfficerEfficiencyIcon =
+                    this.data[i].incidentSurveyValues[j].surveyType.icon;
+                } else {
+                  if (CommunicationOfficerEfficiencyBool == false) {
+                    this.data[i].CommunicationOfficerEfficiency = '';
+                  }
+                }
                 if (this.data[i].incidentSurveyValues[j].surveyConfig.id == 2) {
                   SpeedResponseIncidentBool = true;
-                  if(this.lang == 'en'){ this.data[i].SpeedResponseIncident = this.data[i].incidentSurveyValues[j].surveyType.nameEn; }
-                  else{ this.data[i].SpeedResponseIncident = this.data[i].incidentSurveyValues[j].surveyType.nameAr; }
-                  this.data[i].SpeedResponseIncidentIcon = this.data[i].incidentSurveyValues[j].surveyType.icon; 
-                } else { if (SpeedResponseIncidentBool == false) { this.data[i].SpeedResponseIncident = ''; } }
+                  if (this.lang == 'en') {
+                    this.data[i].SpeedResponseIncident =
+                      this.data[i].incidentSurveyValues[j].surveyType.nameEn;
+                  } else {
+                    this.data[i].SpeedResponseIncident =
+                      this.data[i].incidentSurveyValues[j].surveyType.nameAr;
+                  }
+                  this.data[i].SpeedResponseIncidentIcon =
+                    this.data[i].incidentSurveyValues[j].surveyType.icon;
+                } else {
+                  if (SpeedResponseIncidentBool == false) {
+                    this.data[i].SpeedResponseIncident = '';
+                  }
+                }
                 if (this.data[i].incidentSurveyValues[j].surveyConfig.id == 3) {
                   EaseReportingProceduresBool = true;
-                  if(this.lang == 'en'){ this.data[i].EaseReportingProcedures = this.data[i].incidentSurveyValues[j].surveyType.nameEn; }
-                  else{ this.data[i].EaseReportingProcedures = this.data[i].incidentSurveyValues[j].surveyType.nameAr; }
-                  this.data[i].EaseReportingProceduresIcon = this.data[i].incidentSurveyValues[j].surveyType.icon;
-                } else { if (EaseReportingProceduresBool == false) { this.data[i].EaseReportingProcedures = ''; } }
+                  if (this.lang == 'en') {
+                    this.data[i].EaseReportingProcedures =
+                      this.data[i].incidentSurveyValues[j].surveyType.nameEn;
+                  } else {
+                    this.data[i].EaseReportingProcedures =
+                      this.data[i].incidentSurveyValues[j].surveyType.nameAr;
+                  }
+                  this.data[i].EaseReportingProceduresIcon =
+                    this.data[i].incidentSurveyValues[j].surveyType.icon;
+                } else {
+                  if (EaseReportingProceduresBool == false) {
+                    this.data[i].EaseReportingProcedures = '';
+                  }
+                }
               }
             }
             this.dataSource = new MatTableDataSource(this.data);
@@ -141,6 +184,7 @@ export class SurveysListReportComponent implements OnInit {
       fromDate: [''],
       toDate: [''],
       incident: [''],
+      category :['']
     });
   }
 
@@ -154,14 +198,16 @@ export class SurveysListReportComponent implements OnInit {
   proccesDate() {
     const filterForm = this.filtersForm.value;
     if (this.filtersForm.get('fromDate').value != '') {
-      filterForm['fromDate'] = DateTimeUtil.format(new Date(
-        this.filtersForm.get('fromDate').value
-      ), DateTimeUtil.DATE_FORMAT);
+      filterForm['fromDate'] = DateTimeUtil.format(
+        new Date(this.filtersForm.get('fromDate').value),
+        DateTimeUtil.DATE_FORMAT
+      );
     }
     if (this.filtersForm.get('toDate').value != '') {
-      filterForm['toDate'] = DateTimeUtil.format( new Date(
-        this.filtersForm.get('toDate').value
-      ), DateTimeUtil.DATE_FORMAT);
+      filterForm['toDate'] = DateTimeUtil.format(
+        new Date(this.filtersForm.get('toDate').value),
+        DateTimeUtil.DATE_FORMAT
+      );
     }
     if (filterForm['toDate'] == '1970-01-01') {
       filterForm['toDate'] = '';
@@ -192,5 +238,4 @@ export class SurveysListReportComponent implements OnInit {
     this.downloading = false;
     this.cdr.detectChanges();
   }
-
 }
