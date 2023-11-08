@@ -1,17 +1,24 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ApiHelper} from '@core/helpers/api.helper';
-import {MessageHelper} from '@core/helpers/message.helper';
-import {PageRequestModel} from '@core/models/page-request.model';
-import {TextUtils} from '@core/utils';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
-import {iif, patch} from '@ngxs/store/operators';
-import {BrowseBiaAppAction} from "./browse-bia-app.action";
-import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
-import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
-import {EMPTY, throwError} from "rxjs";
-import {catchError, tap} from "rxjs/operators";
-import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiHelper } from '@core/helpers/api.helper';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { PageRequestModel } from '@core/models/page-request.model';
+import { TextUtils } from '@core/utils';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { iif, patch } from '@ngxs/store/operators';
+import { BrowseBiaAppAction } from './browse-bia-app.action';
+import { BiaAction } from '@core/states/bia-apps/bia-apps.action';
+import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
+import { EMPTY, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { ResourceAnalysisAction } from '@core/states/impact-analysis/resource-analysis.action';
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -35,7 +42,7 @@ export const BROWSE_BIA_APP_UI_STATE_TOKEN =
       'divisionName',
       'cycle',
       'analysisCyclePercentage',
-      'state'
+      'state',
     ],
     view: 'TABLE',
   },
@@ -205,8 +212,9 @@ export class BrowseBiaAppState {
         dispatch([
           new BrowseBiaAppAction.LoadBia({
             pageRequest: undefined,
-            cycleId: payload.cycle
+            cycleId: payload.cycle,
           }),
+          new BrowseBiaAppAction.LoadCycles({ page: 0, size: 100 }),
           new BrowseBiaAppAction.ToggleDialog({}),
         ]);
       }),
@@ -260,12 +268,12 @@ export class BrowseBiaAppState {
     cancelUncompleted: true,
   })
   updateCycle(
-    {getState}: StateContext<BrowseBiaAppStateModel>,
+    { getState }: StateContext<BrowseBiaAppStateModel>,
     { payload }: BrowseBiaAppAction.UpdateCycle
   ) {
     this.router.navigate([], {
       queryParams: {
-        _cycle: payload.cycle
+        _cycle: payload.cycle,
       },
       queryParamsHandling: 'merge',
     });
@@ -278,9 +286,10 @@ export class BrowseBiaAppState {
     return dispatch(new ResourceAnalysisAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(
-          [new BrowseBiaAppAction.LoadBia(),
-            new BrowseBiaAppAction.ToggleDialog({})]);
+        dispatch([
+          new BrowseBiaAppAction.LoadBia(),
+          new BrowseBiaAppAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         if (err.status === 409) {
