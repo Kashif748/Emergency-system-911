@@ -17,6 +17,8 @@ import {
   PageBcVersions,
 } from 'src/app/api/models';
 import { BcVersionsControllerService } from 'src/app/api/services';
+import {StaffStateModel} from "@core/states/bc-resources/staff/staff.state";
+import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 
 export enum VERSION_STATUSES {
   CREATED = 1,
@@ -135,7 +137,7 @@ export class BCState {
       })
     );
     return this.bC
-      .insertOne1({
+      .insertOne2({
         body: payload,
       })
       .pipe(
@@ -174,7 +176,7 @@ export class BCState {
         loading: true,
       })
     );
-    return this.bC.getOne({ id: payload.id }).pipe(
+    return this.bC.getOne1({ id: payload.id }).pipe(
       tap((bc) => {
         setState(
           patch<BCStateModel>({
@@ -226,5 +228,28 @@ export class BCState {
           );
         })
       );
+  }
+  @Action(BCAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<BCStateModel>,
+    { payload }: BCAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<BCStateModel>({
+        loading: true,
+      })
+    );
+    return this.bC.deleteById1({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<BCStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
   }
 }
