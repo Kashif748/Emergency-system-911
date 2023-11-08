@@ -22,9 +22,9 @@
 
 
                 <div class="p-field p-col-6 p-md-3">
-                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['incidentId']"
-                    placeholder="{{ 'SHARED.INCIDENT_ID' | translate }}"
-                    (keyup)="updateFilter({incidentId: $event.target.value}, $event)">
+                  <input type="text" pInputText [ngModel]="state.pageRequest.filters['serial']"
+                    placeholder="{{ 'SHARED.INCIDENT_SERIAL' | translate }}"
+                    (keyup)="updateFilter({serial: $event.target.value}, $event)">
                 </div>
 
                 <div class="p-field p-col-6 p-md-3">

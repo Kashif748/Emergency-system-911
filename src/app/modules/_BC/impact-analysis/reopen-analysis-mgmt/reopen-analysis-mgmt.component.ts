@@ -96,7 +96,23 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
       actionId: action?.actionId,
       orgHierarchyId: this.orgHierarchyId,
     };
-    this.store.dispatch(new BrowseImpactAnalysisAction.UpdateBulkTransaction(Status));
+    this.store.dispatch(new BrowseImpactAnalysisAction.UpdateBulkTransaction(Status)).pipe(
+      take(1),
+      tap(() => {
+        this.store.dispatch(new BrowseImpactAnalysisAction.LoadAnalysisStatusInfo(
+          { orgHierarchyId: this.orgHierarchyId, cycleId: this.cycleId }))
+          .pipe(
+            switchMap(() => this.store.select(ImpactAnalysisState.loadAnalysisStatus)),
+            takeUntil(this.destroy$),
+            take(1),
+            filter((p) => !!p),
+            tap((status) => {
+              this.store.dispatch(new ImapactAnalysisAction.LoadStatusBasedOnStatusId(
+                { id:  status.id}));
+            })
+          ).subscribe();
+      })
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -111,8 +127,25 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
       queryParamsHandling: "merge" });
   }
   checkPermissoon(action) {
-    const privilige = this.privilegesService.checkActionPrivilege('PRIV_APPROVE_ACTIVITY_ANALYSIS');
-    if (action.id === 5) {
+    const corPrivilige = this.privilegesService.checkActionPrivileges(['PRIV_PERFORM_ACTIVITY_ANALYSIS']);
+    if (corPrivilige) {
+      if (action.actionId === 1 || action.actionId === 2) {
+        return true;
+      } else {return false; }
+    }
+    const spPrivilige = this.privilegesService.checkActionPrivileges(['PRIV_REVIEW_ACTIVITY_ANALYSIS']);
+    if (spPrivilige) {
+      if (action.actionId === 3 || action.actionId === 4) {
+        return true;
+      } else {return false; }
+    }
+    const ManagerPrivilige = this.privilegesService.checkActionPrivileges(['PRIV_APPROVE_ACTIVITY_ANALYSIS']);
+    if (ManagerPrivilige) {
+      if (action.actionId === 5 || action.actionId === 6 ) {
+        return true;
+      } else {return false; }
+    }
+    /*if (action.id === 5) {
       if (privilige) {
         return true;
       } else {
@@ -120,6 +153,6 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
       }
     } else {
       return true;
-    }
+    }*/
   }
 }

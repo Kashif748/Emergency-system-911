@@ -36,13 +36,10 @@ import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.dire
 import { BadgeModule } from 'primeng/badge';
 import {CdateModule} from "@shared/sh-pipes/cdate.pipe";
 import {ToggleButtonModule} from "primeng/togglebutton";
+import { BrowseOrgDetailState } from './bc-lists/org-detail/states/browse-orgDetail.state';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(
-    http,
-    'assets/i18n/bc/',
-    '.json'
-  );
+  return new TranslateHttpLoader(http, 'assets/i18n/bc/', '.json');
 }
 
 @NgModule({
@@ -50,7 +47,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   imports: [
     CommonModule,
     BCRoutingModule,
-    NgxsModule.forFeature([BrowseBCState]),
+    NgxsModule.forFeature([BrowseBCState, BrowseOrgDetailState]),
     TranslateModule.forChild({
       extend: true,
       loader: {
