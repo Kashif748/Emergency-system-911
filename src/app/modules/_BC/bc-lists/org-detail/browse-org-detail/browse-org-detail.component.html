@@ -42,7 +42,7 @@
       </div>
 
       <!-- employee  -->
-      <div class="p-field p-col-12 p-md-6 mt-4">
+      <div class="p-field p-col-12 p-md-4 mt-4">
         <span class="p-float-label">
           <p-inputNumber
             formControlName="employeeNumbers"
@@ -57,7 +57,7 @@
         </span>
       </div>
       <!--  activities -->
-      <div class="p-field p-col-12 p-md-6 mt-4">
+      <div class="p-field p-col-12 p-md-4 mt-4">
         <span class="p-float-label">
           <p-inputNumber
             formControlName="operationNumbers"
@@ -68,6 +68,21 @@
           >
           </p-inputNumber>
           <label>{{ "ACTIVITIES" | translate }} </label>
+        </span>
+      </div>
+
+      <!-- compliance Percentage  -->
+      <div class="p-field p-col-12 p-md-4 mt-4">
+        <span class="p-float-label">
+          <p-inputNumber
+            formControlName="nationalCompliance"
+            inputId="minmax"
+            mode="decimal"
+            [min]="0"
+          >
+          </p-inputNumber>
+
+          <label>{{ "COMPLIANCE_PERCENTAGE" | translate }} </label>
         </span>
       </div>
     </form>
