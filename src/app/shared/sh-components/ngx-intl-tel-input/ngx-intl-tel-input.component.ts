@@ -370,6 +370,7 @@ export class NgxIntlTelInputComponent implements OnInit, OnChanges {
     if ([undefined, null, ''].includes(obj)) {
       this.init();
       this.phoneNumber = obj;
+      this.class = '';
       return;
     }
     this.phoneNumber = obj;
