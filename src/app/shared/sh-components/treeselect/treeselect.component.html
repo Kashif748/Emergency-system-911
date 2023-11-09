@@ -1,11 +1,17 @@
-<div #container [ngClass]="containerClass()" (click)="onClick($event)" class="h-100">
+<div #container [ngClass]="{
+  'p-treeselect-chip': display === 'chip',
+  'p-disabled': disabled,
+  'p-focus': focused,
+  'p-treeselect-clearable': showClear && !disabled}" (click)="onClick($event)"
+  class="h-100 p-treeselect p-component p-inputwrapper {{styleClass}}">
   <div class="p-hidden-accessible">
     <input #focusInput type="text" role="listbox" [attr.id]="inputId" readonly [disabled]="disabled" (focus)="onFocus()"
       (blur)="onBlur()" (keydown)="onKeyDown($event)" [attr.tabindex]="tabindex" aria-haspopup="true"
       [attr.aria-expanded]="overlayVisible" [attr.aria-labelledby]="ariaLabelledBy" />
   </div>
   <div class="p-treeselect-label-container">
-    <div [ngClass]="labelClass()">
+    <div class="p-treeselect-label"
+      [ngClass]="{'p-placeholder': label === placeholder, 'p-treeselect-label-empty': !placeholder && emptyValue}">
       <ng-container *ngIf="valueTemplate; else defaultValueTemplate">
         <ng-container *ngTemplateOutlet="
             valueTemplate;
@@ -24,8 +30,13 @@
             placeholder || 'empty'
             }}</ng-container>
         </ng-template>
+
       </ng-template>
     </div>
+
+
+    <i class="p-treeselect-clear-icon pi pi-times" (click)="clear($event)"
+      *ngIf="value != null && showClear && !disabled"></i>
   </div>
   <div class="p-treeselect-trigger">
     <span class="p-treeselect-trigger-icon pi pi-chevron-down"></span>
@@ -48,9 +59,7 @@
         [selection]="value" [metaKeySelection]="metaKeySelection" (onNodeExpand)="nodeExpand($event)"
         (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="onSelect($event)" (onNodeUnselect)="onUnselect($event)"
         [filter]="filter" [filterBy]="filterBy" [propagateSelectionDown]="propagateSelectionDown"
-        (onFilter)="doFilter($event)"
-        [loading]="loading"
-        [propagateSelectionUp]="propagateSelectionUp">
+        (onFilter)="doFilter($event)" [loading]="loading" [propagateSelectionUp]="propagateSelectionUp">
         <ng-template let-node pTemplate="default">
           {{node | translateObj : 'label'}}
         </ng-template>

@@ -1,4 +1,4 @@
-<header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
+<header class="p-d-flex p-jc-between p-ai-center p-4 pb-8">
   <ng-container *ngIf="position$ | async as position">
     <button
       *ngIf="smallScreen"
@@ -17,105 +17,125 @@
   </ng-container>
   <div class="d-block d-sm-flex p-ai-center text-center">
     <app-breadcrumb></app-breadcrumb>
-    <p-dropdown
-      [options]="versions$ | async"
-      [(ngModel)]="selectedVersion"
-      placeholder="{{ 'VERSION' | translate }}"
-      dataKey="id"
-      styleClass="min-w-180px"
-      (onChange)="setValueGlobally($event.value)"
-      [dropdownIcon]="
-        (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
-      "
-    >
-      <ng-template pTemplate="selectedItem">
-        <ng-container>
-          <span>
-            {{ selectedVersion | translateObj }}
-          </span>
-          <span>
-            <p-badge
-              value="{{ selectedVersion?.status | translateObj }}"
-              styleClass="version-badge"
-            >
-            </p-badge>
-          </span>
-        </ng-container>
-      </ng-template>
-      <ng-template let-version pTemplate="item">
-        <div>{{ version | translateObj }}</div>
-      </ng-template>
-      <ng-template pTemplate="empty">
-        <ng-container *ngIf="loading$ | async; else elseTemplate">
-          {{ "ACTIONS.LOADING" | translate }}
-        </ng-container>
-        <ng-template #elseTemplate>
-          {{ "NO_DATA" | translate }}
-        </ng-template>
-      </ng-template>
-    </p-dropdown>
-  </div>
-  <div>
-    <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
-      <button
-        pButton
-        *ngIf="selectedVersion?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
-        pRipple
-        type="button"
-        label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
-        icon="pi pi-replay"
-        [loading]="blocking$ | async"
-        [disabled]="loading$ | async"
-        (click)="changeStatues(VERSION_STATUSES?.CREATED)"
-        class="p-button-danger p-button-text mx-2"
-      ></button>
-    </ng-container>
-
-    <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
-      <button
-        pButton
-        *ngIf="selectedVersion?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
-        pRipple
-        class="p-button-raised mx-2"
-        type="button"
-        [loading]="blocking$ | async"
-        [disabled]="loading$ | async"
-        (click)="changeStatues(VERSION_STATUSES?.APPROVED)"
-        label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
-        icon="pi pi-check"
-      ></button>
-    </ng-container>
-
-    <ng-container *checkPrivileges="'PRIV_CR_BC_VER'">
-      <button
-        pButton
-        pRipple
-        type="button"
-        *ngIf="
-          selectedVersion?.status?.id === VERSION_STATUSES?.CREATED ||
-          selectedVersion?.status?.id === VERSION_STATUSES?.NEEDS_MODIFICATIONS
-        "
-        label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
-        icon="pi pi-send"
-        [loading]="blocking$ | async"
-        [disabled]="loading$ | async"
-        (click)="changeStatues(VERSION_STATUSES?.UNDER_APPROVAL)"
-        class="p-button-outlined mx-2"
-      ></button>
-    </ng-container>
-
-    <button
-      pButton
-      pRipple
-      type="button"
-      *checkPrivileges="'PRIV_CR_BC_VER'"
-      label="{{ smallScreen ? '' : ('VERSIONS_SETTINGS' | translate) }}"
-      icon="pi pi-cog"
-      class="p-button-warning mx-2"
-      (click)="toggleDialog()"
-    ></button>
   </div>
 </header>
+
+<div class="border-top mb-4">
+  <div class="col-12 my-4">
+    <div class="p-d-flex p-jc-start p-ai-center">
+      <div class="p-inputgroup w-350px">
+        <p-dropdown
+          [options]="versions$ | async"
+          [(ngModel)]="selectedVersion"
+          class="w-100"
+          placeholder="{{ 'VERSION' | translate }}"
+          dataKey="id"
+          (onChange)="setValueGlobally($event.value)"
+          [dropdownIcon]="
+            (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'
+          "
+          styleClass="w-100"
+        >
+          <ng-template pTemplate="selectedItem">
+            <ng-container>
+              <div class="d-flex">
+                <span>
+                  {{ selectedVersion | translateObj }}
+                </span>
+                <div class="flex-grow-1"></div>
+                <p-badge value="{{ selectedVersion?.status | translateObj }}">
+                </p-badge>
+              </div>
+            </ng-container>
+          </ng-template>
+
+          <ng-template let-version pTemplate="item">
+            <div class="d-flex">
+              <span>
+                {{ version | translateObj }}
+              </span>
+              <div class="flex-grow-1"></div>
+              <p-badge value="{{ version?.status | translateObj }}"> </p-badge>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="empty">
+            <ng-container *ngIf="loading$ | async; else elseTemplate">
+              {{ "ACTIONS.LOADING" | translate }}
+            </ng-container>
+            <ng-template #elseTemplate>
+              {{ "NO_DATA" | translate }}
+            </ng-template>
+          </ng-template>
+        </p-dropdown>
+        <button
+          type="button"
+          pButton
+          pRipple
+          icon="pi pi-cog"
+          class="p-button-warning"
+          title="{{ 'VERSIONS_SETTINGS' | translate }}"
+          *checkPrivileges="'PRIV_CR_BC_VER'"
+          (click)="toggleDialog()"
+        ></button>
+      </div>
+      <div class="flex-grow-1"></div>
+      <div class="d-flex p-ai-center flex-none">
+        <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
+          <button
+            pButton
+            *ngIf="
+              selectedVersion?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL
+            "
+            pRipple
+            type="button"
+            label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
+            icon="pi pi-replay"
+            [loading]="blocking$ | async"
+            [disabled]="loading$ | async"
+            (click)="changeStatues(VERSION_STATUSES?.CREATED)"
+            class="p-button-outlined p-button-danger mx-2"
+          ></button>
+        </ng-container>
+
+        <ng-container *checkPrivileges="'PRIV_APRV_BC_VER'">
+          <button
+            pButton
+            *ngIf="
+              selectedVersion?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL
+            "
+            pRipple
+            class="p-button-outlined"
+            type="button"
+            [loading]="blocking$ | async"
+            [disabled]="loading$ | async"
+            (click)="changeStatues(VERSION_STATUSES?.APPROVED)"
+            label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
+            icon="pi pi-check"
+          ></button>
+        </ng-container>
+
+        <ng-container *checkPrivileges="'PRIV_CR_BC_VER'">
+          <button
+            pButton
+            pRipple
+            type="button"
+            *ngIf="
+              selectedVersion?.status?.id === VERSION_STATUSES?.CREATED ||
+              selectedVersion?.status?.id ===
+                VERSION_STATUSES?.NEEDS_MODIFICATIONS
+            "
+            label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
+            icon="pi pi-send"
+            [loading]="blocking$ | async"
+            [disabled]="loading$ | async"
+            (click)="changeStatues(VERSION_STATUSES?.UNDER_APPROVAL)"
+            class="p-button-outlined"
+          ></button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
 
 <section [class]="smallScreen ? 'py-6' : 'p-3'">
   <div
@@ -139,7 +159,7 @@
       <p-panelMenu [model]="items"> </p-panelMenu>
     </p-sidebar>
 
-    <div class="p-shadow-6 rounded px-6 w-100">
+    <div class="p-shadow-6 rounded px-6 col-md-9">
       <router-outlet></router-outlet>
     </div>
   </div>

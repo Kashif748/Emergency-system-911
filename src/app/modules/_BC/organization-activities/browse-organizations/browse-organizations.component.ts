@@ -206,6 +206,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
+        this.orgHir =[];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,
@@ -241,7 +242,7 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     console.log(this.orgHir);
   }
   filterOrgHir(event) {
-    this.auditLoadOrgPage$.next(event.filter);
+    this.auditLoadOrgPage$.next(event);
   }
   nodeExpand(node: TreeNode) {
     if (node.children.length === 0) {
@@ -291,11 +292,13 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
             .filter((id) => ![undefined, null].includes(id));
           break;
         case 'orgHierarchyId':
-          filter['orgHierarchyId'] = {
-            id: filter['orgHierarchyId']?.key,
-            labelEn: filter['orgHierarchyId'].data.nameEn,
-            labelAr: filter['orgHierarchyId'].data.nameAr,
-          };
+          filter['orgHierarchyId'] = filter['orgHierarchyId']?.key
+            ? {
+                id: filter['orgHierarchyId']?.key,
+                labelEn: filter['orgHierarchyId']?.data?.nameEn,
+                labelAr: filter['orgHierarchyId']?.data?.nameAr,
+              }
+            : undefined;
           break;
         default:
           break;

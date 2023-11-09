@@ -45,6 +45,7 @@ import { MessageHelper } from '@core/helpers/message.helper';
 import { IAuthService } from '@core/services/auth.service';
 import { HttpResponse } from '@angular/common/http';
 import { AttachmentsService } from 'src/app/_metronic/core/services/attachments.service';
+import {TaskStatus} from "../../../../api/models";
 
 @Component({
   selector: 'app-situation-dialog',
@@ -76,6 +77,11 @@ export class SituationDialogComponent
   }
 
   totalRecords: number;
+
+  @Select(CommonDataState.incidentCategories)
+  public categories$: Observable<any[]>;
+
+  public filterCategories$: Observable<any[]>;
 
   @Select(CommonDataState.newsTypes)
   public newsTypes$: Observable<any[]>;
@@ -138,6 +144,7 @@ export class SituationDialogComponent
             type: t?.newsType,
             theme: t?.themeType,
           });
+          this.patchValue(t);
         })
       )
       .subscribe(() => {
@@ -260,13 +267,29 @@ export class SituationDialogComponent
       })
     );
   }
-
+  patchValue(t) {
+    const incidentCategories = t.mainIncCategory.map(category => ({
+      id: category.category.id,
+      nameAr: category.category.nameAr,
+      nameEn: category.category.nameEn,
+      serialNumber: category.id,
+    }));
+    this.form.patchValue({
+      mainIncCategory: incidentCategories
+    });
+  }
   ngOnInit(): void {
     this.buildForm();
     this.formDialog$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === '_form_dialog')
     );
-
+    this.filterCategories$ = this.categories$.pipe(
+      //map(category => category.filter(cat => cat.parent === null))  // task status is 8 for filter delete option
+      map(categories => {
+        const filteredCategories = categories.filter(cat => cat.parent === null);
+        filteredCategories.sort((a, b) => a.serial - b.serial);
+        return filteredCategories;
+      }));
     this.store
       .dispatch(
         new SituationsAction.GetAlertnessLevel({
@@ -309,6 +332,7 @@ export class SituationDialogComponent
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
       type: [null, [Validators.required]],
+      mainIncCategory: [null, [Validators.required]],
       theme: [null],
       alertnessLevel: [null],
       startDate: [null, [Validators.required]],
@@ -337,6 +361,13 @@ export class SituationDialogComponent
       theme: situation.theme?.id,
     };
 
+    const transformedCategory = situation.mainIncCategory.map(item => ({
+      category: {
+        id: item.id
+      }
+    }));
+
+    situation.mainIncCategory = transformedCategory
     if (this.editMode) {
       if (this.editAttachmentType) {
         await this.attachPlanComponent?.upload(this._situationId, false);

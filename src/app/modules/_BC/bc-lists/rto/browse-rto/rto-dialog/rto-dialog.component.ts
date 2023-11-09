@@ -10,6 +10,9 @@ import { ActivatedRoute } from '@angular/router';
 import { IAuthService } from '@core/services/auth.service';
 import { RtoAction, RtoState } from '@core/states';
 import { GenericValidators } from '@shared/validators/generic-validators';
+import {MenuItem} from "primeng/api";
+import {TranslateService} from "@ngx-translate/core";
+import {BrowseUsersAction} from "../../../../../_user-mgmt/states/browse-users.action";
 
 @Component({
   selector: 'app-rto-dialog',
@@ -17,6 +20,9 @@ import { GenericValidators } from '@shared/validators/generic-validators';
   styleUrls: ['./rto-dialog.component.scss'],
 })
 export class RtoDialogComponent implements OnInit, OnDestroy {
+  public color = '#ffffff';
+  public colorOptions = ['#FF0017', '#FFBB3A', '#FFFC4C', '#89CF60', '#FFFFFF'];
+
   opened$: Observable<boolean>;
   viewOnly$: Observable<boolean>;
 
@@ -27,7 +33,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   @Input()
-  shouldDisable :boolean
+  shouldDisable: boolean;
   public version: number;
 
   _rtoId: number;
@@ -57,6 +63,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...rto,
           });
+          this.setColor(rto.color);
         })
       )
       .subscribe();
@@ -67,7 +74,8 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private store: Store,
     private route: ActivatedRoute,
-    private auth: IAuthService
+    private auth: IAuthService,
+    private translate: TranslateService,
   ) {
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -110,6 +118,7 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       descriptionEn: [null, [Validators.required, GenericValidators.english]],
       descriptionAr: [null, [Validators.required, GenericValidators.arabic]],
+      color: [null, [Validators.required]],
       isActive: [true],
       isCritical: [false],
       versionId: this.version,
@@ -141,6 +150,23 @@ export class RtoDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  setColor(color: string) {
+    this.color = color;
+    this.form.patchValue({
+      color: color,
+    });
+  }
+  onValueChange(value: string): void {
+    this.form.patchValue({
+      color: value,
+    });
+  }
+  isValidColorCode(value: string): boolean {
+    return this.colorOptions.includes(value);
+  }
+  export(types: 'EXCEL') {
+    this.store.dispatch(new BrowseRtoAction.Export({ type: types, versionId: this.version}));
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

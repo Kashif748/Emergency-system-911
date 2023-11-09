@@ -6,11 +6,17 @@
     label="{{ 'ACTIONS.ADD' | translate }}"
     icon="pi pi-plus"
     (click)="openDialog()"
+    style="margin-inline-end: 10px;"
   ></button>
+  <button pButton label="{{'ACTIONS.EXPORT' | translate}}"
+          icon="pi pi-external-link"
+          (click)="export('EXCEL')">
+  </button>
 </div>
 
 <p-dialog
-  [visible]="opened$ | async" (visibleChange)="close()"
+  [visible]="opened$ | async"
+  (visibleChange)="close()"
   [modal]="true"
   [style]="{ width: '55vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
@@ -22,20 +28,52 @@
   <ng-template pTemplate="header">
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'RTO_LIST.EDIT_RTO' | translate}}
-
+        {{ "RTO_LIST.EDIT_RTO" | translate }}
       </ng-container>
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'RTO_LIST.ADD_NEW_RTO' | translate}}
+        {{ "RTO_LIST.ADD_NEW_RTO" | translate }}
       </ng-container>
 
       <ng-container *ngIf="viewOnly$ | async">
-        {{'RTO_LIST.TITLE_RTO' | translate}}
+        {{ "RTO_LIST.TITLE_RTO" | translate }}
       </ng-container>
     </h3>
   </ng-template>
 
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
+
+
+    <div class="p-field p-col-12 p-md-6">
+      <span class="p-float-label">
+        <input type="text" formControlName="criticalityAr" pInputText />
+        <label>
+          {{ "RTO_LIST.CRITICALITY_AR" | translate }}
+          <strong class="required-asterisk"> * </strong>
+        </label>
+      </span>
+
+      <ng-container
+        *ngIf="
+          form.controls['criticalityAr'].touched &&
+          !form.controls['criticalityAr'].valid &&
+          form.controls['criticalityAr'].dirty
+        "
+      >
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['criticalityAr'].hasError('required')"
+        >
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['criticalityAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
+      </ng-container>
+    </div>
+
     <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
         <input type="text" formControlName="criticalityEn" pInputText />
@@ -68,29 +106,29 @@
 
     <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="criticalityAr" pInputText />
+        <input type="text" formControlName="nameAr" pInputText />
         <label>
-          {{ "RTO_LIST.CRITICALITY_AR" | translate }}
+          {{ "RTO_LIST.RTO_AR" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
 
       <ng-container
         *ngIf="
-          form.controls['criticalityAr'].touched &&
-          !form.controls['criticalityAr'].valid &&
-          form.controls['criticalityAr'].dirty
+          form.controls['nameAr'].touched &&
+          !form.controls['nameAr'].valid &&
+          form.controls['nameAr'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['criticalityAr'].hasError('required')"
+          *ngIf="form.controls['nameAr'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['criticalityAr'].hasError('arabic')"
+          *ngIf="form.controls['nameAr'].hasError('arabic')"
         >
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
@@ -129,29 +167,36 @@
 
     <div class="p-field p-col-12 p-md-6">
       <span class="p-float-label">
-        <input type="text" formControlName="nameAr" pInputText />
-        <label>
-          {{ "RTO_LIST.RTO_AR" | translate }}
+        <textarea
+          pInputText
+          type="text"
+          formControlName="descriptionAr"
+          rows="5"
+        ></textarea>
+        <!--<input type="text" formControlName="descriptionAr" >-->
+        <label
+          >{{ "RTO_LIST.DESC_AR" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
 
       <ng-container
         *ngIf="
-          form.controls['nameAr'].touched &&
-          !form.controls['nameAr'].valid &&
-          form.controls['nameAr'].dirty
+          form.controls['descriptionAr'].touched &&
+          !form.controls['descriptionAr'].valid &&
+          form.controls['descriptionAr'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('required')"
+          *ngIf="form.controls['descriptionAr'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
+
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['nameAr'].hasError('arabic')"
+          *ngIf="form.controls['descriptionAr'].hasError('arabic')"
         >
           {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
         </p>
@@ -196,63 +241,137 @@
       </ng-container>
     </div>
 
-    <div class="p-field p-col-12 p-md-6">
+    <div class="p-field p-col-12 p-md-6" *ngIf="!(viewOnly$ | async)">
       <span class="p-float-label">
-        <textarea
-          pInputText
-          type="text"
-          formControlName="descriptionAr"
-          rows="5"
-        ></textarea>
-        <!--<input type="text" formControlName="descriptionAr" >-->
-        <label
-        >{{ "RTO_LIST.DESC_AR" | translate }}
+        <p-dropdown
+          [options]="colorOptions"
+          [autoDisplayFirst]="false"
+          formControlName="color"
+          [showClear]="true"
+          appendTo="body"
+        >
+          <ng-template let-option pTemplate="selectedItem">
+            <div class="d-flex flex-column flex-grow-1 w-100">
+              <div class="d-flex justify-content-between">
+                <span class="mb-1 text-size-sm">
+                  {{ option }}
+                </span>
+                <span
+                  style="height: auto; width: 30px"
+                  [style.background-color]="option"
+                  [style.border]="option"
+                  class="label label-inline label-outline-primary py-0"
+                >
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <div class="d-flex flex-column flex-grow-1 w-100">
+              <div class="d-flex justify-content-between">
+                <span class="mb-1 text-size-sm">
+                  {{ option }}
+                </span>
+                <span
+                  style="height: auto; width: 30px"
+                  [style.background-color]="option"
+                  [style.border]="option"
+                  class="label label-inline label-outline-primary py-0"
+                >
+                </span>
+              </div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+        <label>
+          {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
-
       <ng-container
         *ngIf="
-          form.controls['descriptionAr'].touched &&
-          !form.controls['descriptionAr'].valid &&
-          form.controls['descriptionAr'].dirty
+          form.controls['color'].touched &&
+          !form.controls['color'].valid &&
+          form.controls['color'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['descriptionAr'].hasError('required')"
+          *ngIf="form.controls['color'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
-
+      </ng-container>
+      <ng-container>
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['descriptionAr'].hasError('arabic')"
+          *ngIf="
+            form.controls['color'].value &&
+            !isValidColorCode(form.controls['color'].value)
+          "
         >
-          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+          {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
       </ng-container>
     </div>
 
-    <div class="p-col-12" [ngClass]="{ 'p-md-6': (editMode || (viewOnly$ | async))}">
+    <span class="p-float-label color-field p-md-6" *ngIf="viewOnly$ | async">
+      <input
+        id="colorInput"
+        type="text"
+        [value]="color"
+        formControlName="color"
+        pInputText
+      />
+      <p-colorPicker
+        disabled="true"
+        appendTo="body"
+        [(ngModel)]="color"
+        [ngModelOptions]="{ standalone: true }"
+        [inputId]="'colorInput'"
+      ></p-colorPicker>
+      <label>
+        {{ "IMP_LEVEL_WORKING.COLOR" | translate }}
+        <strong class="required-asterisk"> * </strong>
+      </label>
+    </span>
+    <div class="p-col-6"></div>
+    <div
+      class="p-col-12"
+      [ngClass]="{ 'p-md-6': editMode || (viewOnly$ | async) }"
+    >
       <p-divider align="center">
         <div class="p-d-inline-flex p-ai-center">
           <div class="p-field p-col-12 p-md-12">
-            <p-toggleButton formControlName="isCritical" onLabel="{{ 'RTO_LIST.CRITICAL' | translate }}"
-                            offLabel="{{ 'RTO_LIST.NONCRITICAL' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
-                            iconPos="right"></p-toggleButton>
+            <p-toggleButton
+              formControlName="isCritical"
+              onLabel="{{ 'RTO_LIST.CRITICAL' | translate }}"
+              offLabel="{{ 'RTO_LIST.NONCRITICAL' | translate }}"
+              [onIcon]="'pi pi-check'"
+              offIcon="pi pi-times"
+              iconPos="right"
+            ></p-toggleButton>
           </div>
         </div>
       </p-divider>
     </div>
 
-    <div class="p-col-12" [ngClass]="{ 'p-md-6': (editMode || (viewOnly$ | async))}" *ngIf="editMode || (viewOnly$ | async)">
+    <div
+      class="p-col-12"
+      [ngClass]="{ 'p-md-6': editMode || (viewOnly$ | async) }"
+      *ngIf="editMode || (viewOnly$ | async)"
+    >
       <p-divider align="center">
         <div class="p-d-inline-flex p-ai-center">
           <div class="p-field p-col-12 p-md-12">
-            <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
-                            offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
-                            iconPos="right"></p-toggleButton>
+            <p-toggleButton
+              formControlName="isActive"
+              onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+              offLabel="{{ 'ACTIONS.INACTIVE' | translate }}"
+              [onIcon]="'pi pi-check'"
+              offIcon="pi pi-times"
+              iconPos="right"
+            ></p-toggleButton>
           </div>
         </div>
       </p-divider>

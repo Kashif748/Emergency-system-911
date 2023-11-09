@@ -1,19 +1,10 @@
-import { ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { isObject } from 'lodash';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilKeyChanged,
-  skip,
-  skipWhile,
-  tap,
-} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
+import {debounceTime, skipWhile, tap,} from 'rxjs/operators';
 
-import { DashboardService } from '../dashboard.service';
-import { data } from '../random-data';
+import {DashboardService} from '../dashboard.service';
+import {data} from '../random-data';
 
 @Component({
   selector: 'app-widget1',
@@ -41,12 +32,13 @@ export class Widget1Component implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let sub = this._dashboardService.statisticsChange$
+    let sub = combineLatest([this._dashboardService.statisticsChange$, this._dashboardService.bcStatisticsChange$])
       .pipe(
-        skipWhile((res) => !res),
-        tap((data) => {
+        skipWhile(([stats, bcStats]) => !stats),
+        tap(([stats, bcStats]) => {
           this.checkChanges(this.statistics, this._dashboardService.statistics);
-          this.statistics = this._dashboardService.statistics;
+          this.statistics = { ...this._dashboardService.statistics, ...bcStats};
+
           if (this.statistics['delayedTasks'] >= 0) {
             this.statistics[
               'delayedTasks'

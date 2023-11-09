@@ -1,17 +1,19 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { GenericValidators } from '@shared/validators/generic-validators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Dialog } from 'primeng/dialog';
-import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
-import { ActivityEmployeesAction } from '@core/states/activity-analysis/employees/employees.action';
-import { ActivityEmployeesState } from '@core/states/activity-analysis/employees/employees.state';
-import { BrowseActivityEmployeesAction } from '../../states/browse-employees.action';
-import { FormUtils } from '@core/utils';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
-import { BcActivityEmployees } from 'src/app/api/models';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {Dialog} from 'primeng/dialog';
+import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {Select, Store} from '@ngxs/store';
+import {ActivityEmployeesAction} from '@core/states/activity-analysis/employees/employees.action';
+import {ActivityEmployeesState} from '@core/states/activity-analysis/employees/employees.state';
+import {BrowseActivityEmployeesAction} from '../../states/browse-employees.action';
+import {FormUtils} from '@core/utils';
+import {ActivityAnalysisState} from '@core/states/activity-analysis/activity-analysis.state';
+import {BcActivityEmployees} from 'src/app/api/models';
+import {RegxConst} from '@core/constant/RegxConst';
+import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-employees-dialog',
@@ -30,8 +32,14 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
 
   _employeeId: number;
 
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
   get editMode() {
     return this._employeeId !== undefined && this._employeeId !== null;
+  }
+  public get asDialog() {
+    return this.route.component !== EmployeesDialogComponent;
   }
   set employeeId(v: number) {
     this._employeeId = v;
@@ -75,6 +83,14 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.buildForm();
+    this.opened$ = this.route.queryParams.pipe(
+      map((params) => params['_dialog'] === 'opened'),
+      tap(()=> {
+        // this.buildForm()
+        this.form.reset()
+        this.form.updateValueAndValidity()
+      } )
+    );
   }
   ngAfterViewInit(): void {
     this.employeesTypes = [
@@ -89,20 +105,28 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
         value: false,
       },
     ];
-    this.opened$ = this.route.queryParams.pipe(
-      map((params) => params['_dialog'] === 'opened')
-    );
   }
   toggleDialog(id?: number) {
     this.store.dispatch(new BrowseActivityEmployeesAction.ToggleDialog({ id }));
+  }
+  close() {
+    this.store.dispatch(new BrowseActivityEmployeesAction.ToggleDialog({}));
+  }
+  clear() {
+    const employeeId = this._employeeId;
+    this.employeeId = null;
+    this.employeeId = employeeId;
   }
   buildForm() {
     this.form = this.formBuilder.group({
       employeeNameAr: [null, [Validators.required, GenericValidators.arabic]],
       employeeNameEn: [null, [Validators.required, GenericValidators.english]],
-      isActive: true,
-      mobileNumber: [null],
-      phoneNumber: [null],
+      email: [
+        null,
+        [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
+      ],
+      mobileNumber: ['', [Validators.required]],
+      phoneNumber: ['', [Validators.required]],
       secondNumber: [],
       isPrimary: false,
     });
@@ -125,6 +149,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
       ...this.form.getRawValue(),
       mobileNumber: this.form.get('mobileNumber')?.value?.number,
       phoneNumber: this.form.get('phoneNumber')?.value?.number,
+      secondNumber: this.form.get('secondNumber')?.value?.number,
       id: this._employeeId,
       activity: {
         id: activityAnalysis?.activity?.id,
@@ -133,6 +158,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
       cycle: {
         id: cycle.id,
       },
+      isActive: true,
     };
 
     if (this.editMode) {

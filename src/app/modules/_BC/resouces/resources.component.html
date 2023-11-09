@@ -1,0 +1,184 @@
+<ng-container *ngIf="state$ | async">
+  <ng-container *ngIf="cycle$ | async as cycle">
+    <section
+      *ngIf="resourceAnalysis$ | async as resourceAnalysis"
+      class="d-flex flex-column p-6 position-relative"
+      [dir]="dir$ | async"
+    >
+      <p-toolbar>
+        <div class="p-toolbar-group-left">
+          <div class="p-col p-d-flex">
+            <button pButton [icon]="icon$ | async" (click)="back()">
+            </button>
+          </div>
+          <h2 class="m-0">
+            {{ resourceAnalysis?.orgHierarchy | translateObj}} -
+            {{ resourceAnalysis?.cycle | translateObj }}
+          </h2>
+        </div>
+        <ng-container *ngIf="resourceAnalysis.status.editable">
+          <div
+            *ngIf="resourceAnalysis.status.actions"
+            class="p-toolbar-group-right"
+            style="gap: 10px"
+          >
+            <ng-container *ngFor="let action of resourceAnalysis.status.actions">
+              <p-button
+                *ngIf="checkPermissoon(action)"
+                [loading]="blocking$ | async"
+                label="{{ action | translateObj }}"
+                [styleClass]="action?.cssClass"
+                (click)="changeStatus(resourceAnalysis?.id, action)"
+              ></p-button>
+            </ng-container>
+          </div>
+        </ng-container>
+      </p-toolbar>
+      <div class="d-flex p-5 sub-header p-jc-around">
+        <div class="d-flex flex-column">
+          <span class="mb-3">{{ "ORG_ARTCH" | translate }}</span>
+          <span class="font-weight-bold text-primary">
+            {{ resourceAnalysis?.orgHierarchy | translateObj }}</span
+          >
+        </div>
+        <div class="d-flex flex-column">
+          <span class="mb-3"> {{ "createdBy" | translate }}</span>
+          <span class="font-weight-bold text-primary">{{resourceAnalysis.createdBy | translateObj : 'FirstName'}}&nbsp;{{resourceAnalysis.createdBy | translateObj : 'LastName'}}</span>
+        </div>
+        <div class="d-flex flex-column">
+          <span class="mb-3"> {{ "STATUS" | translate }}</span>
+          <span class="font-weight-bold text-primary">
+            {{ resourceAnalysis?.status | translateObj }}
+          </span>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="row p-4 col-12">
+        <div class="p-md-3 p-col-6">
+          <p-card
+            styleClass="shadow-none border h-100"
+          >
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'REMOTELY' | translate }}</span>
+                <p-badge
+                  [value]="resourceAnalysis.staffRemotely"
+                  styleClass="version-badge"
+                >
+                </p-badge>
+                <i class="pi pi-info-circle"></i>
+              </div>
+
+            </ng-template>
+          </p-card>
+        </div>
+        <div class="p-md-3 p-col-6">
+          <p-card
+            styleClass="shadow-none border h-100"
+          >
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'PERSON' | translate }}</span>
+                <p-badge
+                  [value]="resourceAnalysis.staffOnSite"
+                  styleClass="version-badge"
+                >
+                </p-badge>
+                <i class="pi pi-info-circle"></i>
+              </div>
+
+            </ng-template>
+          </p-card>
+        </div>
+        <div class="p-md-3 p-col-6">
+          <p-card
+            styleClass="shadow-none border h-100"
+          >
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'NON_VITAL' | translate }}</span>
+                <p-badge
+                  value="-"
+                  styleClass="version-badge"
+                >
+                </p-badge>
+                <i class="pi pi-info-circle"></i>
+              </div>
+
+            </ng-template>
+          </p-card>
+        </div>
+        <div class="p-md-3 p-col-6">
+          <p-card
+            styleClass="shadow-none border h-100"
+          >
+            <ng-template pTemplate="header">
+              <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+                <span class="font-weight-bold">{{ 'VITAL' | translate }}</span>
+                <p-badge
+                  value="-"
+                  styleClass="version-badge"
+                >
+                </p-badge>
+                <i class="pi pi-info-circle"></i>
+              </div>
+
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+      <section class="mt-2">
+        <p-tabView class="p-md-12"
+          [activeIndex]="tabIndex$ | async"
+          (activeIndexChange)="changeTab($event)"
+        >
+          <p-tabPanel class="p-md-6"
+            header="{{ item.label + '.TAB_LABEL' | translate }}"
+            *ngFor="let item of tabs"
+          >
+          </p-tabPanel>
+        </p-tabView>
+        <router-outlet></router-outlet>
+      </section>
+    </section>
+  </ng-container>
+</ng-container>
+
+<!--  notes dialog -->
+
+<p-dialog [(visible)]="displayNote" [style]="{ width: '40vw' }" [modal]="true" [baseZIndex]="10000">
+  <ng-template pTemplate="header">
+    {{ "NOTES.NOTES" | translate }}
+  </ng-template>
+  <div class="p-grid mt-5">
+    <div class="p-field p-col-12">
+    <span class="p-float-label">
+      <textarea
+        class="w-100"
+        pInputText
+        type="text"
+        [(ngModel)]="notes"
+        placeholder="{{ 'NOTES.NOTES' | translate }}"
+        rows="5"
+      ></textarea>
+      <!--<label>{{ "NOTES.NOTES" | translate }}</label>-->
+    </span>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="p-col text-center">
+      <div class="text-center">
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [loading]="blocking$ | async"
+          [disabled]="notes === ''"
+          (click)="applyStatus()"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

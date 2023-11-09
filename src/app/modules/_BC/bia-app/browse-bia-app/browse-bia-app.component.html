@@ -1,0 +1,241 @@
+<div class="container-fluid">
+  <header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
+    <div class="d-block d-sm-flex p-ai-center text-center">
+      <app-breadcrumb></app-breadcrumb>
+      <p-dropdown
+        [autoDisplayFirst]="false"
+        [options]="sortAnalysisCycles$ | async"
+        dataKey="id"
+        optionValue="id"
+        styleClass="version min-w-180px"
+        [(ngModel)]="selectedCycle"
+        (ngModelChange)="setCycleId($event)"
+        placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
+      >
+        <ng-template let-item pTemplate="selectedItem">
+          {{ item | translateObj }}
+        </ng-template>
+
+        <ng-template let-item pTemplate="item">
+          {{ item | translateObj }}
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div class="ml-dir-auto d-flex">
+      <app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
+    </div>
+  </header>
+  <div class="mx-4 my-10">
+    <div class="row" *ngIf="state$ | async as state">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12 position-relative">
+            <p-fieldset
+              [toggleable]="true"
+              styleClass="px-3 py-2 search-section"
+              legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+              [collapsed]="!(hasFilters$ | async)"
+            >
+              <div class="p-fluid p-grid">
+                <div class="p-field p-col-4 p-md-2">
+                  <p-dropdown
+                    [ngModel]="
+                      state.pageRequest.filters['activityAnalysisStatusId']
+                    "
+                    (ngModelChange)="
+                      updateFilter({ activityAnalysisStatusId: $event }, $event)
+                    "
+                    [options]="activityStatuses$ | async"
+                    [autoDisplayFirst]="false"
+                    [showClear]="true"
+                    dataKey="id"
+                    optionValue="id"
+                    placeholder="{{ 'STATE' | translate }}"
+                  >
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj }}
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+
+                <div class="p-field p-col-4 p-md-2">
+                  <p-treeSelect
+                    [options]="orgHir"
+                    [filterBy]="'data.nameAr,data.nameEn,data.code'"
+                    selectionMode="single"
+                    [ngModel]="state.pageRequest.filters['orgHierarchyId']"
+                    (ngModelChange)="
+                      updateFilter({ orgHierarchyId: $event }, $event)
+                    "
+                    [loading]="loadingOrgHir$ | async"
+                    (onNodeExpand)="nodeExpand($event?.node)"
+                    placeholder="{{ 'DIVISION' | translate }}"
+                    appendTo="body"
+                  >
+                    <ng-template let-option let-placeholder pTemplate="header">
+                      <div class="w-100 p-2">
+                        <span class="p-input-icon-left w-100">
+                          <i class="pi pi-search"></i>
+                          <input
+                            (keyup)="filterOrgHir($event.target.value)"
+                            type="text"
+                            pInputText
+                            class="w-100"
+                          />
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template let-option let-placeholder pTemplate="value">
+                      {{
+                        option
+                          ? (option | translateObj : "label")
+                          : ("DIVISION" | translate)
+                      }}
+                    </ng-template>
+                  </p-treeSelect>
+                </div>
+
+                <div class="p-col p-d-flex">
+                  <div class="ml-dir-auto"></div>
+                  <div class="mx-1">
+                    <button
+                      pButton
+                      type="button"
+                      label="{{ 'ACTIONS.CLEAR' | translate }}"
+                      icon="pi pi-times"
+                      class="p-button-outlined"
+                      (click)="clear()"
+                    ></button>
+                  </div>
+                  <div class="mx-1">
+                    <button
+                      pButton
+                      label="{{ 'ACTIONS.SEARCH' | translate }}"
+                      icon="pi pi-search"
+                      (click)="search()"
+                    ></button>
+                  </div>
+                </div>
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="col-12 mt-3">
+            <p-toolbar>
+              <div class="p-toolbar-group-left">
+                <div class="p-1 w-100 w-md-200px">
+                  <p-multiSelect
+                    [options]="columns"
+                    defaultLabel="Select Columns"
+                    optionLabel="name"
+                    styleClass="w-100"
+                    [ngModel]="state.columns"
+                    [optionValue]="'code'"
+                    optionDisabled="disabled"
+                    (onChange)="changeColumns($event)"
+                  >
+                    <ng-template let-options pTemplate="selectedItems">
+                      <ng-container *ngIf="options?.length > 0">
+                        {{
+                          options?.length +
+                            " " +
+                            ("SHARED.SELCTED_ITEM" | translate)
+                        }}
+                      </ng-container>
+                      <ng-container *ngIf="!options || options.length === 0">
+                        {{ "SHARED.SELECT_SHOWING_FIELDS" | translate }}
+                      </ng-container>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      {{ option.name | translate }}
+                    </ng-template>
+                  </p-multiSelect>
+                </div>
+                <div class="p-1 w-100 w-md-225px">
+                  <div class="p-inputgroup">
+                    <p-dropdown
+                      [options]="sortableColumns"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [ngModel]="state?.pageRequest?.sortField"
+                      placeholder="{{
+                        'SHARED.SELECT_SORTING_FIELD' | translate
+                      }}"
+                      optionLabel="name"
+                      optionValue="code"
+                      styleClass="w-100 h-100"
+                      class="w-100 h-100"
+                      (onChange)="sort($event)"
+                    >
+                      <ng-template let-option pTemplate="selectedItem">
+                        {{ option.name | translate }}
+                      </ng-template>
+                      <ng-template let-option pTemplate="item">
+                        {{ option.name | translate }}
+                      </ng-template>
+                    </p-dropdown>
+                    <div class="p-inputgroup-addon p-0">
+                      <p-toggleButton
+                        class="w-100 h-100"
+                        [onIcon]="'pi pi-sort-amount-up'"
+                        [ngModel]="state?.pageRequest?.sortOrder === 'desc'"
+                        offIcon="pi pi-sort-amount-down-alt"
+                        iconPos="right"
+                        styleClass="w-100 h-100"
+                        (onChange)="order($event)"
+                      ></p-toggleButton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-toolbar>
+          </div>
+          <!--<div class="col-6">
+            <div style="display: flex; justify-content: space-between">
+              <p-divider [align]="'left'" styleClass="bg-transparent">
+                <p-selectButton
+                  [options]="[
+                    { icon: 'pi pi-bars', view: 'TABLE' },
+                    { icon: 'pi pi-th-large', view: 'CARDS' }
+                  ]"
+                  optionLabel="icon"
+                  optionValue="view"
+                  [ngModel]="state.view"
+                  (onChange)="changeView($event.value)"
+                >
+                  <ng-template let-item>
+                    <i [class]="item.icon"></i>
+                  </ng-template>
+                </p-selectButton>
+              </p-divider>
+            </div>
+          </div>-->
+          <!--<div class="col-6 mt-3">
+            <div class="w-100 d-flex flex-wrap mx-1 px-6">
+              <div class="ml-dir-auto d-flex">
+                <button
+                  pButton
+                  label="{{ 'ACTIONS.ADD' | translate }}"
+                  icon="pi pi-plus"
+                  (click)="openDialog()"
+                ></button>
+              </div>
+            </div>
+          </div>-->
+        </div>
+        <app-content-bia-app
+          [view]="state.view"
+          [loading]="loading$ | async"
+          [page]="page$ | async"
+          [columns]="state.columns"
+          [pageRequest]="state?.pageRequest"
+          [totalRecords]="totalRecords$ | async"
+          (onPageChange)="loadPage($event)"
+        ></app-content-bia-app>
+      </div>
+    </div>
+  </div>
+</div>

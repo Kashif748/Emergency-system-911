@@ -16,10 +16,14 @@ import {
 } from 'src/app/api/models';
 import { BcActivityLocationsControllerService } from 'src/app/api/services';
 import { ActivityLocationsAction } from './locations.action';
+import {ActivityEmployeesAction} from "@core/states/activity-analysis/employees/employees.action";
+import {ActivityEmployeesStateModel} from "@core/states/activity-analysis/employees/employees.state";
 
 export interface ActivityLocationsStateModel {
   page: PageBcActivityLocations;
   activityLocation: BcActivityLocations;
+  idsList: number[];
+
   loading: boolean;
   blocking: boolean;
 }
@@ -39,6 +43,11 @@ export class ActivityLocationsState {
   ) {}
 
   /* ************************ SELECTORS ******************** */
+  @Selector([ActivityLocationsState])
+  static idsList(state: ActivityLocationsStateModel) {
+    return state?.idsList;
+  }
+
   @Selector([ActivityLocationsState])
   static page(state: ActivityLocationsStateModel): BcActivityLocations[] {
     return state?.page?.content;
@@ -76,14 +85,14 @@ export class ActivityLocationsState {
       })
     );
     return this.activityLocations
-      .search13({
+      .search22({
         isActive: true,
         cycleId: payload.cycleId,
         activityId: payload.activityId,
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort,
+          sort: payload.sort ? payload.sort : ['id', 'desc'],
         },
         // request: payload.filters,
       })
@@ -113,6 +122,34 @@ export class ActivityLocationsState {
         })
       );
   }
+  @Action(ActivityLocationsAction.loadIdsList, { cancelUncompleted: true })
+  loadIdsList(
+    { setState }: StateContext<ActivityLocationsStateModel>,
+    { payload }: ActivityLocationsAction.loadIdsList
+  ) {
+    return this.activityLocations
+      .list9({
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<ActivityLocationsStateModel>({
+              idsList: res.result,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<ActivityLocationsStateModel>({
+              idsList: [],
+            })
+          );
+          return EMPTY;
+        })
+      );
+  }
 
   @Action(ActivityLocationsAction.Create)
   create(
@@ -126,7 +163,7 @@ export class ActivityLocationsState {
     );
 
     return this.activityLocations
-      .insertOne20({
+      .insertOne31({
         body: { ...payload },
       })
       .pipe(
@@ -151,7 +188,7 @@ export class ActivityLocationsState {
     );
 
     return this.activityLocations
-      .update100({
+      .update111({
         body: { ...payload },
       })
       .pipe(
@@ -183,7 +220,7 @@ export class ActivityLocationsState {
         blocking: true,
       })
     );
-    return this.activityLocations.getOne20({ id: payload.id }).pipe(
+    return this.activityLocations.getOne31({ id: payload.id }).pipe(
       tap((activityLocations) => {
         setState(
           patch<ActivityLocationsStateModel>({
@@ -195,6 +232,29 @@ export class ActivityLocationsState {
         setState(
           patch<ActivityLocationsStateModel>({
             blocking: false,
+          })
+        );
+      })
+    );
+  }
+  @Action(ActivityLocationsAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<ActivityLocationsStateModel>,
+    { payload }: ActivityLocationsAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ActivityLocationsStateModel>({
+        loading: true,
+      })
+    );
+    return this.activityLocations.deleteById32({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<ActivityLocationsStateModel>({
+            loading: false,
           })
         );
       })

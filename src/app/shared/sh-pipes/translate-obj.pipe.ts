@@ -18,10 +18,10 @@ export class TranslateObjPipe implements PipeTransform {
       let result = '';
       props.forEach((prop) => {
         result +=
-          value[prop + lang[0].toUpperCase() + lang.slice(1)] ??
-          value[prop + lang.toUpperCase()] ??
-          value[prop] ??
-          '' + ' ';
+          (value[prop + lang[0].toUpperCase() + lang.slice(1)] ??
+            value[prop + lang.toUpperCase()] ??
+            value[prop] ??
+            '') + ' ';
       });
       return result;
     }

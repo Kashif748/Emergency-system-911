@@ -29,6 +29,18 @@ export namespace ActivityAnalysisAction {
       }
     ) {}
   }
+  export class GetActivityAnalysisStatus {
+    static readonly type = '[ActivityAnalysis] Get Activity Status';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 
   export class GetCycle {
     static readonly type = '[ActivityAnalysis] Get Cycle';

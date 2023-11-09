@@ -15,16 +15,17 @@
   "IMPACT_COMPLETION": "نسبة انجاز التأثيرات",
   "COMPLETED": "منجز",
   "IN_PROGRESS": "قيد الاجراء",
-  "POINT_FAILURE": "نقطة الفشل الوحيدة",
+  "POINT_FAILURE": "نقطة الفشل الوحيدة للنشاط",
 
   "RECOVERY": {
     "TAB_LABEL": "الاسترجاع",
     "RECOVERY_DETAILS": "بيانات استرجاع النشاط",
     "CAPACITY": "القدرة",
     "ACTIVITY_PRIORITY": "تسلسل استرجاع النشاط",
-    "SPOF": "نقطة الفشل الوحيدة",
+    "SPOF": "نقطة الفشل الوحيدة للنشاط",
     "SKILLS": "المهارات",
-    "REMOTELY": "بالامكان انجازه عن بعد"
+    "REMOTELY": "بالامكان انجازه عن بعد",
+    "RTO": "زمن التعافي الأمثل"
   },
   "SYSTEMS": {
     "TAB_LABEL": "الأنظمة",
@@ -33,9 +34,15 @@
     "SYSTEM_NAME": "اسم النظام",
     "COL1": "إسم النظام",
     "SYSTEM": "النظام",
-    "MANAGEMENT": "الادارة المالكة"
+    "MANAGEMENT": "الادارة المالكة",
+    "ADD_SYSTEM": "إضافة نظام ",
+
+    "NAME_EN": "الاسم (انجليزي)",
+    "NAME_AR": "الاسم (عربي)",
+    "OWNER_DEPT": "الادارة المالكة للنظام"
   },
   "EMPLOYEES": {
+    "EDIT_NEW": "تحرير الموظف",
     "TAB_LABEL": "الموظفون",
     "ADD_NEW": "إضافة موظف جديد",
     "TITLE": "الموظفون الحيويون / البدلاء",
@@ -58,28 +65,39 @@
     "LIMIT": "حدود الاعتمادية",
     "SECTION": "القسم المرتبط",
     "ACTIVIE_DEPT": "اعتمادية النشاط",
-    "ACTIVIE_NAME":"اسم النشاط",
+    "ACTIVIE_NAME": "اسم النشاط",
     "ASSOCIATED_MANG": "الإدارة المرتبطة",
     "TITLE": "اعتمادية النشاط",
 
     "DETAILS": "تفاصيل الاعتمادية",
-    "DEPENDENCY_INTERNAL": "داخل المؤسسة ",
-    "DEPENDENCY_ORG": "داخل الإدارة ",
+    "DEPENDENCY_INTERNAL": "داخل الإدارة ",
+    "DEPENDENCY_ORG": "داخل المؤسسة",
     "DEPENDENCY_EXTERNAL": "خارج المؤسسة",
     "NO_DEPENDENCY": " لا يوجد اعتمادية ",
     "NO_DPEEND_CONFIREM": "هل أنت متأكد من هذا الإجراء؟"
   },
   "LOCATIONS": {
     "TAB_LABEL": "المواقع",
-
+    "ADD_LOCATION": "إضافة موقع",
     "SITE": "اختيار موقع جديد",
+    "CHOOSE_LOCATION": "اختيار موقع جديد",
     "NAME": "اسم الموقع",
     "LOCATION": "موقع",
     "REGION": "المنطقة",
     "TITLE": "مواقع انجاز النشاط",
     "COL1": "نوع الموقع",
     "COL2": "إسم الموقع",
-    "COL3": "المنطقة"
+    "COL3": "المنطقة",
+    "DIALOG": {
+      "LOCATION_INFO": "بيانات الموقع",
+      "GEO_INFO": "تفاصيل الجغرافية",
+      "NAME_EN": "الاسم (انجليزي)",
+      "NAME_AR": "الاسم (عربي)",
+      "LOC_TYPE": "نوع الموقع",
+      "LONGI": "خط الطول",
+      "LATI": "خط العرض",
+      "CHOOSE_LOCATION": "اختر الموقع"
+    }
   },
   "IMPACT_MATRIX": {
     "TAB_LABEL": "مصفوفة التأثيرات",
@@ -93,5 +111,22 @@
     "HEADER": "المراحل و الملاحظات الخاصة بنموذج التحليل",
     "UPDATE_STAGES": "مراحل التحديث",
     "NOTES": " الملاحظات"
+  },
+  "SUMMARY": {
+    "TAB_LABEL": "تقرير النشاط",
+    "CYCLE": "دورة التحليل",
+    "TITLE": "ملخص النشاط",
+    "ACTIVITY": " اسم النشاط",
+    "CRITICALITY": "مستوى الأهمية",
+    "CAPACITY": "القدرة",
+    "DIVISION": "الإدارة",
+    "RECOVERYPRIORITYSEQUENCE": "تسلسل استرجاع الأنشطة",
+    "ROWNUMBER": "",
+    "RTO": "زمن التعافي الأمثل",
+    "SECTION": "القسم",
+    "SECTOR": "القطاع",
+    "CRITICAL": "حيوي",
+    "NOT_CRITICAL": "غير حيوي",
+    "ALL": "الكل"
   }
 }

@@ -20,6 +20,17 @@ export class MessageHelper {
     });
   }
 
+  cError(param?: { summary?: string; detail?: string }) {
+    this.messageService.add({
+      severity: 'error',
+      summary:
+        param?.summary ?? this.translate.instant('SHARED.DIALOG.ERROR.TITLE'),
+      detail:
+        param?.detail ??
+          this.translate.instant('SHARED.DIALOG.ERROR.CMESSAGE'),
+    })
+  }
+
   error(param?: {
     summary?: string;
     detail?: string;
@@ -61,6 +72,25 @@ export class MessageHelper {
   confirm(param: {
     summary: 'SHARED.DIALOG.ARE_YOU_SURE';
     detail: 'SHARED.DIALOG.ACTIVATE.MESSAGE';
+    yesCommand?: () => void;
+    noCommand?: () => void;
+  }) {
+    this.messageService.add({
+      key: 'confirm_dialog',
+      sticky: true,
+      severity: 'warn',
+      summary: param.summary,
+      detail: param.detail,
+      data: {
+        yesCommand: param.yesCommand ?? this.closeConfirm,
+        noCommand: param.noCommand ?? this.closeConfirm,
+      },
+    });
+  }
+
+  delete(param: {
+    summary: 'SHARED.DIALOG.DELETE.TITLE';
+    detail: 'SHARED.DIALOG.DELETE.MESSAGE';
     yesCommand?: () => void;
     noCommand?: () => void;
   }) {

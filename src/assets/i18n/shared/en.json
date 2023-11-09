@@ -335,7 +335,15 @@
       "COMPLETED_INCIDENTS": "Completed Incidents (today)",
       "INCOMING_LATE_TASK": "Incoming/Late Tasks",
       "TASK": "Task",
-      "INCIDENT": "Incident"
+      "INCIDENT": "Incident",
+      "NATIONAL_PERCENTAGE": "National Standard Compliance Percentage",
+      "CURRENT_CYCLE": "Current Analysis Cycle",
+      "CRITICAL_ACTIVITY": "Number - Percentage of Critical Activities",
+      "CRITICAL_EMPLOY": "Number of Critical Employees",
+      "CRITICAL_SYSTEM":"Number of Critical Systems",
+      "ORG_ARTCH": "Organization Hierarchy",
+      "ANALYSIS_CRCLE": "Analysis Cycle",
+      "TITTLE_SECTION":"Business Continuity Section - Contact Details"
     },
     "AUTH": {
       "GENERAL": {
@@ -497,6 +505,9 @@
         }
       },
       "INCIDENTS": "Incidents",
+      "SIMILAR_INCIDENTS": "Similar Incidents",
+      "SIMILAR_INCIDENTS_MSG": "There is {{count}} similar incidents",
+      "LINK": "link",
       "REPORTER": "Location Shared By Reporter",
       "TEAM_LOCATION": "Team Location",
       "OPEN_TASKS": "Open Tasks",
@@ -1601,6 +1612,9 @@
       "CREATE": "Create",
       "CREATE_NEW": "Create New",
       "DIALOG": {
+        "UPDATE": {
+          "MESSAGE": "Are you sure you want to update?"
+        },
         "YES": "Yes",
         "NO": "No",
         "ARE_YOU_SURE": "Are you sure?",
@@ -1624,7 +1638,8 @@
         },
         "ERROR": {
           "TITLE": "Error",
-          "MESSAGE": "Something went wrong."
+          "MESSAGE": "Something went wrong.",
+          "CMESSAGE": "Resources already exist for current division and analysis cycle."
         },
         "WARN": {
           "TITLE": "Warning"

@@ -23,7 +23,8 @@
     "ACTIVITY_PRIORITY": "Activity Priority",
     "SPOF": "Single Point of Failure (SPOF)",
     "SKILLS": "Skills",
-    "REMOTELY": "Can be done remotely"
+    "REMOTELY": "Can be done remotely",
+    "RTO":"Rto"
   },
   "SYSTEMS": {
     "TAB_LABEL": "Systems",
@@ -32,11 +33,16 @@
     "SYSTEM_NAME": "System name",
     "COL1": "System name",
     "SYSTEM": "System",
-    "MANAGEMENT": "Owner management"
+    "MANAGEMENT": "Owner management",
+    "ADD_SYSTEM": "Add System",
+    "OWNER_DEPT": "Owner Department",
+    "NAME_EN": "Name (English)",
+    "NAME_AR": "Name (Arabic)"
   },
   "EMPLOYEES": {
     "TAB_LABEL": "Employees",
     "ADD_NEW": "Add a new employee",
+    "EDIT_NEW": "Edit Employee",
     "TITLE": "Vital staff/alternates",
     "NAME_AR": "Employee Name (Arabic)",
     "NAME_EN": "Employee Name (English)",
@@ -58,7 +64,7 @@
     "SECTION": "Related Section",
     "ACTIVIE_DEPT": "Activity dependency",
     "VENDORS": "Vendors",
-    "ACTIVIE_NAME":"Activity Name",
+    "ACTIVIE_NAME": "Activity Name",
 
     "ASSOCIATED_MANG": "Associated management",
     "TITLE": "Activity reliability",
@@ -72,15 +78,27 @@
   },
   "LOCATIONS": {
     "TAB_LABEL": "Locations",
+    "ADD_LOCATION": "Add Location",
 
     "SITE": "Choose a new site",
-    "NAME": "Web site name",
+    "CHOOSE_LOCATION": "Choose a new location",
+    "NAME": "Location Name",
     "LOCATION": "Location",
     "REGION": "Region",
     "TITLE": "Activity sites",
     "COL1": "Location type",
-    "COL2": "Web site name",
-    "COL3": "Region"
+    "COL2": "Location Name",
+    "COL3": "Region",
+    "DIALOG": {
+      "LOCATION_INFO": "Location Info",
+      "GEO_INFO": "Geographic Details",
+      "NAME_EN": "Name (English)",
+      "NAME_AR": "Name (Arabic)",
+      "LOC_TYPE": "Location Type",
+      "LONGI": "Longitude",
+      "LATI": "Latitude",
+      "CHOOSE_LOCATION": "Choose Location"
+    }
   },
   "IMPACT_MATRIX": {
     "TAB_LABEL": "Impact Matrix",
@@ -94,5 +112,23 @@
     "HEADER": "Updates and notes for acticity anlysis",
     "UPDATE_STAGES": "Updates Stages",
     "NOTES": " Notes"
+  },
+  "SUMMARY": {
+    "TAB_LABEL": "Activity Report",
+    "CYCLE":"Analysis Cycle",
+
+    "TITLE":"Activity Summary",
+    "ACTIVITY": "Activity Name",
+    "CAPACITY": "Capacity",
+    "CRITICALITY": "Criticality",
+    "DIVISION": "Division",
+    "RECOVERYPRIORITYSEQUENCE": "Recovery Priority Sequence",
+    "ROWNUMBER": "",
+    "RTO": "Rto",
+    "SECTION": "Section",
+    "SECTOR": "Sector",
+    "CRITICAL": "Critical",
+    "NOT_CRITICAL": "Not critical",
+    "ALL": "All"
   }
 }

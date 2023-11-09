@@ -1,4 +1,5 @@
-import { BcActivityAnalysisDto, BcCycles } from 'src/app/api/models';
+import {BcActivityAnalysisDto, BcCycles} from 'src/app/api/models';
+import {BcAnalysisBulkTransactionDto} from "../../../api/models/bc-analysis-bulk-transaction-dto";
 
 export namespace ImapactAnalysisAction {
   export class LoadPage {
@@ -39,6 +40,20 @@ export namespace ImapactAnalysisAction {
     ) {}
   }
 
+  export class LoadStatusBasedOnStatusId {
+    static readonly type = '[ImapactAnalysisAction] Get StatusBasedOnStatusId';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id: number;
+      }
+    ) {}
+  }
+
+
   export class LoadCycles {
     static readonly type = '[ImapactAnalysisAction] Load Cycles';
 
@@ -52,6 +67,21 @@ export namespace ImapactAnalysisAction {
       }
     ) {}
   }
+
+  export class LoadAnalysisStatusInfo {
+    static readonly type = '[ImapactAnalysisAction] Load AnalysisStatusInfo';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        orgHierarchyId: number;
+        cycleId: number;
+      }
+    ) {}
+  }
+
   export class GetCycle {
     static readonly type = '[ImapactAnalysisAction] Get Cycle';
     /**
@@ -78,5 +108,13 @@ export namespace ImapactAnalysisAction {
      *
      */
     constructor(public payload: BcActivityAnalysisDto[]) {}
+  }
+
+  export class UpdateBulkTransaction {
+    static readonly type = '[ImapactAnalysisAction] Update BulkTransaction';
+    /**
+     *
+     */
+    constructor(public payload: BcAnalysisBulkTransactionDto) {}
   }
 }

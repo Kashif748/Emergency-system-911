@@ -1,0 +1,6 @@
+<div *ngIf="state$ | async as state">
+<app-other-content [loading]="loading$ | async" [page]="page$ | async"
+                   [columns]="state.columns" [totalRecords]="totalRecords$ | async"
+                   [pageRequest]="state?.pageRequest"
+                   (onPageChange)="loadPage($event)"></app-other-content>
+</div>

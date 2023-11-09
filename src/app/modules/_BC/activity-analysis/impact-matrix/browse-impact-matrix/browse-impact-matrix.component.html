@@ -4,17 +4,19 @@
       "IMPACT_MATRIX.HEADER" | translate
     }}</span>
   </h3>
-  {{ blocking$ | async }}
-  <p-button
-    [disabled]="selectedCells.length == 0"
-    [loading]="blocking$ | async"
-    label="{{ 'ACTIONS.SAVE' | translate }}"
-    (click)="save()"
-    icon="pi pi-save"
-  ></p-button>
+  <ng-container *ngIf="activityStatus$ | async as activityStatus">
+    <button
+      pButton
+      [loading]="blocking$ | async"
+      [disabled]="!activityStatus.editable || selectedCells.length == 0"
+      label="{{ 'ACTIONS.SAVE' | translate }}"
+      (click)="save()"
+      icon="pi pi-save"
+    ></button>
+  </ng-container>
 </div>
 
-<div *ngIf="state$ | async as state" class="row mt-5">
+<div class="row mt-5">
   <div class="col-12">
     <ng-container>
       <ng-container *ngIf="loading$ | async; else tableTemplate">
@@ -137,19 +139,21 @@
       <p-accordionTab>
         <ng-template pTemplate="header">
           <div class="d-flex p-jc-between w-100">
-          <span class="text-info">{{
-            item | translateObj : "name"
-          }}</span>
+            <span class="text-info">{{ item | translateObj : "name" }}</span>
             <span
               class="d-block w-20px h-20px rounded-circle"
               [ngStyle]="{
-              'background-color': item?.colorCode
-            }"
+                'background-color': item?.colorCode
+              }"
             ></span>
           </div>
         </ng-template>
-        <div class="p-5" *ngIf="display ">
-          {{ MatrixDescription(item.id) ? (dialogDescription | translateObj : 'desc') : ''}}
+        <div class="p-5" *ngIf="display">
+          {{
+            MatrixDescription(item.id)
+              ? (dialogDescription | translateObj : "desc")
+              : ""
+          }}
         </div>
       </p-accordionTab>
     </ng-container>

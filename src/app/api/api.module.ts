@@ -98,10 +98,21 @@ import { CircularCcControllerService } from './services/circular-cc-controller.s
 import { CircularControllerService } from './services/circular-controller.service';
 import { CircularStatusControllerService } from './services/circular-status-controller.service';
 import { ConfidentialtyControllerService } from './services/confidentialty-controller.service';
+import { BcWorkLogTypesControllerService } from './services/bc-work-log-types-controller.service';
 import { BcVersionsControllerService } from './services/bc-versions-controller.service';
 import { BcVersionsStatusControllerService } from './services/bc-versions-status-controller.service';
 import { BcSystemsControllerService } from './services/bc-systems-controller.service';
 import { BcrtoControllerService } from './services/bcrto-controller.service';
+import { BcResourcesStaffReqControllerService } from './services/bc-resources-staff-req-controller.service';
+import { BcResourcesRemoteWorkControllerService } from './services/bc-resources-remote-work-controller.service';
+import { BcResourcesRecordsControllerService } from './services/bc-resources-records-controller.service';
+import { BcResourcesNonItInfrastructureControllerService } from './services/bc-resources-non-it-infrastructure-controller.service';
+import { BcResourcesMinPersonnelReqControllerService } from './services/bc-resources-min-personnel-req-controller.service';
+import { BcResourcesMinLicenseReqControllerService } from './services/bc-resources-min-license-req-controller.service';
+import { BcResourcesItInfrastructureControllerService } from './services/bc-resources-it-infrastructure-controller.service';
+import { BcResourcesDesignationControllerService } from './services/bc-resources-designation-controller.service';
+import { BcResourcesControllerService } from './services/bc-resources-controller.service';
+import { BcResourcesAppAndSoftwareControllerService } from './services/bc-resources-app-and-software-controller.service';
 import { BcPartnersControllerService } from './services/bc-partners-controller.service';
 import { BcOrgHierarchyControllerService } from './services/bc-org-hierarchy-controller.service';
 import { BcOrgHierarchyTypeControllerService } from './services/bc-org-hierarchy-type-controller.service';
@@ -114,6 +125,7 @@ import { BcImpactTypeControllerService } from './services/bc-impact-type-control
 import { BcImpactLevelControllerService } from './services/bc-impact-level-controller.service';
 import { BcCyclesControllerService } from './services/bc-cycles-controller.service';
 import { BcCycleStatusControllerService } from './services/bc-cycle-status-controller.service';
+import { BcAnalysisControllerService } from './services/bc-analysis-controller.service';
 import { BcActivityFrequenciesControllerService } from './services/bc-activity-frequencies-controller.service';
 import { BcActivityDependencyExternalControllerService } from './services/bc-activity-dependency-external-controller.service';
 import { BcActivityDependencyOrgControllerService } from './services/bc-activity-dependency-org-controller.service';
@@ -268,10 +280,21 @@ import { MigrationControllerService } from './services/migration-controller.serv
     CircularControllerService,
     CircularStatusControllerService,
     ConfidentialtyControllerService,
+    BcWorkLogTypesControllerService,
     BcVersionsControllerService,
     BcVersionsStatusControllerService,
     BcSystemsControllerService,
     BcrtoControllerService,
+    BcResourcesStaffReqControllerService,
+    BcResourcesRemoteWorkControllerService,
+    BcResourcesRecordsControllerService,
+    BcResourcesNonItInfrastructureControllerService,
+    BcResourcesMinPersonnelReqControllerService,
+    BcResourcesMinLicenseReqControllerService,
+    BcResourcesItInfrastructureControllerService,
+    BcResourcesDesignationControllerService,
+    BcResourcesControllerService,
+    BcResourcesAppAndSoftwareControllerService,
     BcPartnersControllerService,
     BcOrgHierarchyControllerService,
     BcOrgHierarchyTypeControllerService,
@@ -284,6 +307,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     BcImpactLevelControllerService,
     BcCyclesControllerService,
     BcCycleStatusControllerService,
+    BcAnalysisControllerService,
     BcActivityFrequenciesControllerService,
     BcActivityDependencyExternalControllerService,
     BcActivityDependencyOrgControllerService,
@@ -335,7 +359,8 @@ import { MigrationControllerService } from './services/migration-controller.serv
     AdcmcCategoryControllerService,
     TagControllerService,
     MigrationControllerService,
-    ApiConfiguration
+    ApiConfiguration,
+    BcAnalysisControllerService
   ],
 })
 export class ApiModule {

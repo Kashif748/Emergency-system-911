@@ -28,9 +28,12 @@ import { TreeSelectModule } from '@shared/sh-components/treeselect/treeselect.co
 import { NgxsModule } from '@ngxs/store';
 import { BrowseSystemsState } from './states/browse-systems.state';
 import { ToolbarModule } from 'primeng/toolbar';
-import {PrivilegesDirectiveModule} from "@shared/sh-directives/privileges.directive";
-import {BlockUIModule} from "primeng/blockui";
-import {ProgressSpinnerModule} from "primeng/progressspinner";
+import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.directive';
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { FieldsetModule } from 'primeng/fieldset';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -66,10 +69,13 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     TranslateObjModule,
     MultiSelectModule,
     SharedBreadcrumbModule,
+    ToggleButtonModule,
     TreeSelectModule,
     PrivilegesDirectiveModule,
     BlockUIModule,
+    FieldsetModule,
     ProgressSpinnerModule,
+    TagModule,
     NgxsModule.forFeature([BrowseSystemsState]),
     TranslateModule.forChild({
       extend: true,
@@ -82,5 +88,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     }),
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  exports: [SystemDialogComponent],
 })
 export class SystemModule {}

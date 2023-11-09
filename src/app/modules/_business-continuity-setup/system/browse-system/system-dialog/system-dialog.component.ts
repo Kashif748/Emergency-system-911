@@ -1,21 +1,40 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Select, Store} from '@ngxs/store';
-import {OrgDetailAction, OrgDetailState} from '@core/states';
-import {Observable, Subject} from 'rxjs';
-import {BcSystems} from 'src/app/api/models/bc-systems';
-import {TreeNode} from 'primeng/api';
-import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
-import {auditTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {FormUtils} from '@core/utils';
-import {BrowseSystemsAction} from '../../states/browse-systems.action';
-import {SystemsState} from '@core/states/bc-setup/systems/systems.state';
-import {SystemsAction} from '@core/states/bc-setup/systems/systems.action';
-import {GenericValidators} from '@shared/validators/generic-validators';
-import {Dialog} from "primeng/dialog";
-import {BcOrgHierarchyProjection} from 'src/app/api/models/bc-org-hierarchy-projection';
-import {TreeHelper} from "@core/helpers/tree.helper";
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { OrgDetailAction, OrgDetailState } from '@core/states';
+import { Observable, Subject } from 'rxjs';
+import { BcSystems } from 'src/app/api/models/bc-systems';
+import { TreeNode } from 'primeng/api';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import {
+  auditTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { FormUtils } from '@core/utils';
+import { BrowseSystemsAction } from '../../states/browse-systems.action';
+import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
+import { SystemsAction } from '@core/states/bc-setup/systems/systems.action';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { Dialog } from 'primeng/dialog';
+import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import { TreeHelper } from '@core/helpers/tree.helper';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-system-dialog',
@@ -23,7 +42,10 @@ import {TreeHelper} from "@core/helpers/tree.helper";
   styleUrls: ['./system-dialog.component.scss'],
 })
 export class SystemDialogComponent implements OnInit, OnDestroy {
-  @ViewChild(Dialog) dialog: Dialog;
+  @Input() asDialog: boolean = true;
+  @Output() onClose = new EventEmitter<boolean>();
+  @ViewChild(Dialog)
+  dialog: Dialog;
   isOpened$: Observable<boolean>;
   public orgHir: TreeNode[] = [];
   private auditLoadOrgPage$ = new Subject<string>();
@@ -39,9 +61,6 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
   _systemId: number;
   private defaultFormValue: { [key: string]: any } = {};
 
-  public get asDialog() {
-    return this.route.component !== SystemDialogComponent;
-  }
   get editMode() {
     return this._systemId !== undefined && this._systemId !== null;
   }
@@ -51,6 +70,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     this._systemId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -64,6 +84,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
             ...system,
           });
           this.patchvalue(system);
+          this.defaultFormValue = system;
         })
       )
       .subscribe();
@@ -77,6 +98,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     private router: Router,
     protected cdr: ChangeDetectorRef,
     private treeHelper: TreeHelper,
+    private translateService: TranslateService
   ) {
     this.route.queryParams
       .pipe(
@@ -104,9 +126,9 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
   patchvalue(system) {
     this.form.patchValue({
       orgHierarchy: {
-        id: system.orgHierarchy.id,
+        key: system.orgHierarchy.id,
         label: this.translateObj.transform(system.orgHierarchy),
-      }
+      },
     });
   }
 
@@ -120,12 +142,6 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
     ]);
 
-    /*this.orgHir$ = this.store.select(OrgDetailState.orgHir).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      map((data) => this.setTree(data)),
-      tap(console.log)
-    );*/
     this.store
       .select(OrgDetailState.orgHirSearch)
       .pipe(
@@ -137,6 +153,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
+        this.orgHir =[];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,
@@ -148,7 +165,7 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
   }
 
   filterOrgHir(event) {
-    this.auditLoadOrgPage$.next(event.filter);
+    this.auditLoadOrgPage$.next(event);
   }
   nodeExpand(node: TreeNode) {
     if (node.children.length === 0) {
@@ -169,13 +186,10 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
-      orgHierarchy: [null],
+      orgHierarchy: [null, [Validators.required]],
       isActive: true,
       id: null,
     });
-    this.defaultFormValue = {
-      ...this.defaultFormValue,
-    };
   }
   submit() {
     if (!this.form.valid) {
@@ -197,7 +211,16 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     if (this.editMode) {
       this.store.dispatch(new BrowseSystemsAction.UpdateSystem(biaSystem));
     } else {
-      this.store.dispatch(new BrowseSystemsAction.CreateSystem(biaSystem));
+      this.store
+        .dispatch(new BrowseSystemsAction.CreateSystem(biaSystem))
+        .toPromise()
+        .then(() => {
+          if (this.dialog) {
+            this.store.dispatch(new BrowseSystemsAction.ToggleDialog({}));
+          } else {
+            this.onClose.emit(true);
+          }
+        });
     }
   }
 
@@ -223,7 +246,6 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    console.log(this.orgHir);
   }
 
   ngOnDestroy(): void {
@@ -241,9 +263,9 @@ export class SystemDialogComponent implements OnInit, OnDestroy {
     }
   }
   clear() {
-    this.store.dispatch(new SystemsAction.GetSystem({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
+    this.patchvalue(this.defaultFormValue);
     this.cdr.detectChanges();
   }
 }

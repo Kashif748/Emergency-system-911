@@ -9,7 +9,7 @@ import {
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from 'primeng/api';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { TABS } from './tabs.const';
 import { Router } from '@angular/router';
@@ -17,7 +17,6 @@ import { Select, Store } from '@ngxs/store';
 import { BrowseBCAction } from '../states/browse-bc.action';
 import { BCAction, BCState } from '@core/states';
 import { BcVersions } from '../../../api/models/bc-versions';
-import { BrowseBCState } from '../states/browse-bc.state';
 import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
 
 @Component({
@@ -25,7 +24,7 @@ import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
   templateUrl: './bc-lists.component.html',
   styleUrls: ['./bc-lists.component.scss'],
 })
-export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BcListsComponent implements OnInit, OnDestroy {
   items: MenuItem[] = [];
   activeItem: MenuItem;
   sidebar = false;
@@ -44,7 +43,6 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
   @Select(BCState.blocking)
   public blocking$: Observable<boolean>;
 
-  @Select(BCState.versions)
   public versions$: Observable<BcVersions[]>;
 
   private destroy$ = new Subject();
@@ -62,6 +60,7 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
   ngOnInit() {
+    this.store.dispatch(new BrowseBCAction.LoadPage());
     this.store
       .select(BCState.selectedVersion)
       .pipe(
@@ -70,6 +69,16 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
         tap((version) => (this.selectedVersion = version))
       )
       .subscribe();
+
+    this.versions$ = this.store.select(BCState.versions).pipe(
+      takeUntil(this.destroy$),
+      filter((p) => !!p),
+      map((versions) =>
+        versions.filter(
+          (version) => version.status?.id !== VERSION_STATUSES.ARCHIVED
+        )
+      )
+    );
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -82,13 +91,19 @@ export class BcListsComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       )
       .subscribe();
+
+    this.translate.currentLoader
+      .getTranslation(this.translate.currentLang)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((p) => !!p),
+        tap((t) => {
+          this.items = this.prepareMenu(TABS);
+        })
+      )
+      .subscribe();
   }
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.items = this.prepareMenu(TABS);
-      this.cdr.detectChanges();
-    }, 1000);
-  }
+
   prepareMenu(items: MenuItem[]): MenuItem[] {
     return items.map((tab) => {
       if (tab?.separator) return tab;

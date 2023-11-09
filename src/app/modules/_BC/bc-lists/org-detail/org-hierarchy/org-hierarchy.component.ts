@@ -30,8 +30,6 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
   @Select(OrgDetailState.org)
   public org$: Observable<OrgStructure>;
 
-  public state$: Observable<BrowseOrgDetailModel>;
-
   private auditLoadPage$ = new Subject<string>();
 
   private destroy$ = new Subject();
@@ -56,21 +54,14 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.state$ = this.store.select(BrowseOrgDetailState.state).pipe(
-      takeUntil(this.destroy$),
-      filter((s) => !!s),
-      take(1),
-      tap(() => {
-        this.loadPage(null, true);
-        this.store.dispatch([
-          new BrowseOrgDetailAction.GetOrgDetail({ id: this.loggedinUserId }),
-          new BrowseOrgDetailAction.GetOrgHierarchyTypes({
-            page: 0,
-            size: 20,
-          }),
-        ]);
-      })
-    );
+    this.loadPage(null, true);
+    this.store.dispatch([
+      new BrowseOrgDetailAction.GetOrgDetail({ id: this.loggedinUserId }),
+      new BrowseOrgDetailAction.GetOrgHierarchyTypes({
+        page: 0,
+        size: 20,
+      }),
+    ]);
     this.auditLoadPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
@@ -94,11 +85,10 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
       }
       return;
     }
+
     const branch = this.treeHelper.orgHir2TreeNode(_searchResponses);
     const parentId = _searchResponses[0].parentId;
     const parentNode = this.treeHelper.findOrgHirById(this.orgHir, parentId);
-    // console.log(parentId ,parentNode);
-
     if (parentNode && parentId) {
       parentNode.children = [...branch, ...parentNode.children];
     } else {
@@ -140,6 +130,7 @@ export class OrgHierarchyComponent implements OnInit, OnDestroy {
     console.log(search);
 
     if (direct) {
+      this.orgHir = [];
       this.store.dispatch(
         new BrowseOrgDetailAction.GetOrgHierarchy({
           pageRequest: { first: 0, rows: 100 },

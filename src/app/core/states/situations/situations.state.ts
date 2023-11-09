@@ -37,6 +37,7 @@ export interface SituationsStateModel {
   alertnessLevelPage: PageAlertnessLevel;
   loading: boolean;
   attachmentLoading: boolean;
+  exportLoading: boolean;
   statisticsLoading: boolean;
   blocking: boolean;
 }
@@ -99,6 +100,11 @@ export class SituationsState {
   @Selector([SituationsState])
   static loading(state: SituationsStateModel) {
     return state?.loading;
+  }
+
+  @Selector([SituationsState])
+  static exportLoading(state: SituationsStateModel) {
+    return state?.exportLoading;
   }
 
   @Selector([SituationsState])
@@ -441,13 +447,19 @@ export class SituationsState {
 
   @Action(SituationsAction.Export, { cancelUncompleted: true })
   export(
-    {}: StateContext<SituationsStateModel>,
+    {setState}: StateContext<SituationsStateModel>,
     { payload }: SituationsAction.Export
   ) {
+    setState(
+      patch<SituationsStateModel>({
+        exportLoading: true,
+      })
+    );
     return this.situationsService
       .generate1({
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
         situationId: payload.situationId,
+        poi: payload.poi,
       })
       .pipe(
         tap((res: any) => {
@@ -461,6 +473,11 @@ export class SituationsState {
           this.urlHelper.downloadBlob(
             newBlob,
             `SITUATIONS - ${new Date().toISOString().split('.')[0]}`
+          );
+          setState(
+            patch<SituationsStateModel>({
+              exportLoading: false,
+            })
           );
         })
       );

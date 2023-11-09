@@ -19,6 +19,7 @@ export class UserDropdownInnerComponent implements OnInit {
   @Input("dir") dir: Direction;
   @Input() isMobileView = false;
 
+  userDetails: any;
 
   extrasUserDropdownStyle: "light" | "dark" = "light";
   user$: Observable<any>;
@@ -34,9 +35,14 @@ export class UserDropdownInnerComponent implements OnInit {
     this.extrasUserDropdownStyle = this.layout.getProp(
       "extras.user.dropdown.style"
     );
+    console.log(this.isMobileView);
 
     this.user$ = this.storageService.getState<any>("commonData").pipe(
-      map((d) => d?.currentUserDetails),
+      map((d) => {
+        this.userDetails = d?.currentUserDetails
+        console.log(d?.currentUserDetails);
+        return (d?.currentUserDetails);
+      }),
       distinctUntilChanged(),
       tap((user) => {
         this.profileImgUUID$ = this.userService.userFiles(user?.id, "19").pipe(

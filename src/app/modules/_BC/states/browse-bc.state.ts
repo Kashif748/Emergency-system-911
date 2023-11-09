@@ -124,11 +124,12 @@ export class BrowseBCState {
     { dispatch }: StateContext<BrowseBCStateModel>,
     { payload }: BrowseBCAction.GetVersion
   ) {
-    return dispatch(
+    return dispatch([
+      new BrowseBCAction.LoadPage(),
       new BCAction.GetVersion({
         id: payload.versionId,
-      })
-    ).pipe(
+      }),
+    ]).pipe(
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;

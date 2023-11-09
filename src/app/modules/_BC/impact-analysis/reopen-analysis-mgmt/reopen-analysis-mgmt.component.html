@@ -1,0 +1,131 @@
+<div class="container-fluid">
+  <header class="p-d-flex p-jc-between p-ai-center pl-4">
+    <div class="d-block d-sm-flex p-ai-center text-center">
+      <div class="p-col p-d-flex">
+        <button pButton [icon]="icon$ | async" (click)="back()">
+        </button>
+      </div>
+      <h3 class="card-title align-items-start flex-column m-0">
+          <span class="card-label font-weight-bolder">
+            {{'BUSINESS_IMPACT_ANALYSIS' | translate}}</span>
+      </h3>
+    </div>
+    <div>
+      <div class="p-toolbar-group-right">
+        <button
+          *checkPrivileges="['PRIV_PERFORM_ACTIVITY_ANALYSIS','PRIV_APPROVE_ACTIVITY_ANALYSIS' , 'PRIV_REVIEW_ACTIVITY_ANALYSIS']"
+          [disabled]="!(shouldDisable$ | async)"
+          pButton
+          label="{{ 'ACTIONS.SEND' | translate }}"
+          icon="pi pi-send"
+          (click)="toggleDialog()"
+        ></button>
+      </div>
+    </div>
+  </header>
+  <div class="">
+    <div class="row">
+      <div class="mx-4 my-10 col-12">
+        <app-browse-impact-analysis></app-browse-impact-analysis>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- as a dialog -->
+<p-dialog
+  #dialog
+  [visible]="opened$ | async"
+  [modal]="true"
+  (visibleChange)="close()"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <ng-template [ngTemplateOutlet]="header"></ng-template>
+  </ng-template>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+  <ng-template pTemplate="footer">
+    <ng-template [ngTemplateOutlet]="footer"></ng-template>
+  </ng-template>
+</p-dialog>
+
+<!-- templates header -->
+<ng-template #header>
+  <div class="d-flex">
+    <h3>
+      <span>{{ "SHARED.DIALOG.UPDATE.MESSAGE" | translate }}</span>
+    </h3>
+  </div>
+</ng-template>
+
+<!-- templates content -->
+<ng-template #content>
+  <div class="w-100 pt-2">
+
+    <div class="row p-4 col-12">
+      <div class="p-md-6 p-col-6">
+        <p-card
+          styleClass="shadow-none border h-100"
+        >
+          <ng-template pTemplate="header">
+            <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+              <span class="font-weight-bold">{{ 'RES' | translate }}</span>
+              <p-badge
+                [value]="resourceTotalRecords$ | async"
+                styleClass="version-badge"
+              >
+              </p-badge>
+              <i class="pi pi-info-circle"></i>
+            </div>
+
+          </ng-template>
+        </p-card>
+      </div>
+
+      <div class="p-md-6 p-col-6">
+        <p-card
+          styleClass="shadow-none border h-100"
+        >
+          <ng-template pTemplate="header">
+            <div class="p-4 d-flex p-jc-between border-bottom align-items-center">
+              <span class="font-weight-bold">{{ 'ORG_ACT' | translate }}</span>
+              <p-badge
+                [value]="totalRecords$ | async"
+                styleClass="version-badge"
+              >
+              </p-badge>
+              <i class="pi pi-info-circle"></i>
+            </div>
+
+          </ng-template>
+        </p-card>
+      </div>
+      <div class="p-md-12 p-col-12 d-flex justify-content-between gap" *ngIf="statusbasedOnId$ | async as status">
+        <ng-container *ngFor="let action of status.actions">
+          <p-button
+            *ngIf="checkPermissoon(action)"
+            label="{{ action | translateObj : 'actionName'}}"
+            [styleClass]="action?.cssClass"
+            [loading]="blocking$ | async"
+            (click)="bulkUpdate(action)"
+          ></p-button>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+<!--footer-->
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+
+  </div>
+</ng-template>

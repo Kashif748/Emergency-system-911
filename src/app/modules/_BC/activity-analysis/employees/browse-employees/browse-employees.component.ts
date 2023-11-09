@@ -10,9 +10,10 @@ import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { BcActivityEmployees } from 'src/app/api/models';
+import { ActivityAnalysisStatusAction, BcActivityEmployees } from 'src/app/api/models';
 import { BrowseActivityEmployeesAction } from '../states/browse-employees.action';
 import { BrowseActivityEmployeesState } from '../states/browse-employees.state';
+import {BrowseStaffAction} from "../../../resouces/staff-requirement/states/browse-staff.action";
 
 @Component({
   selector: 'app-browse-employees',
@@ -30,6 +31,9 @@ export class BrowseEmployeesComponent implements OnInit, OnDestroy {
 
   @Select(BrowseActivityEmployeesState.state)
   public state$: Observable<ActivityEmployeesStateModel>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   private destroy$ = new Subject();
 
@@ -57,8 +61,8 @@ export class BrowseEmployeesComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
     this.page$ = this.store.select(ActivityEmployeesState.page).pipe(
@@ -75,11 +79,26 @@ export class BrowseEmployeesComponent implements OnInit, OnDestroy {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...userActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              },
             ],
           };
         })
       )
     );
+  }
+  delete(id) {
+    this.store
+      .dispatch(new BrowseActivityEmployeesAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
 
   openDialog(id?: number) {

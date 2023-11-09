@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { TranslateService } from '@ngx-translate/core';
-import { Store } from '@ngxs/store';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
-import { BcActivitySystems } from 'src/app/api/models';
-import { SYSTEMS } from '../../../tempData.conts';
-import { BrowseActivitySystemsAction } from '../../states/browse-systems.action';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {TranslateService} from '@ngx-translate/core';
+import {Select, Store} from '@ngxs/store';
+import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
+import {ActivityAnalysisStatusAction, BcActivitySystems,} from 'src/app/api/models';
+import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-content-systems',
@@ -15,6 +15,10 @@ import { BrowseActivitySystemsAction } from '../../states/browse-systems.action'
   styleUrls: ['./content-systems.component.scss'],
 })
 export class ContentSystemsComponent implements OnInit {
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
   @Input()
   loading: boolean;
   @Input()
@@ -25,6 +29,9 @@ export class ContentSystemsComponent implements OnInit {
   totalRecords: number;
   @Input()
   pageRequest: PageRequestModel;
+
+  @Input()
+  activityStatus: ActivityAnalysisStatusAction;
 
   @Output()
   onPageChange = new EventEmitter<LazyLoadEvent>();

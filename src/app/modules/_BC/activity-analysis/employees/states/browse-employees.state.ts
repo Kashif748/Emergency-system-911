@@ -19,6 +19,9 @@ import { BrowseActivityAnalysisState } from '../../states/browse-activity-analys
 import { ActivityEmployeesAction } from '@core/states/activity-analysis/employees/employees.action';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
+import {BrowseStaffStateModel} from "../../../resouces/staff-requirement/states/browse-staff.state";
+import {BrowseStaffAction} from "../../../resouces/staff-requirement/states/browse-staff.action";
+import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 
 export interface BrowseActivityEmployeesStateModel {
   pageRequest: PageRequestModel;
@@ -160,5 +163,20 @@ export class BrowseActivityEmployeesState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseActivityEmployeesAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseActivityEmployeesStateModel>,
+    { payload }: BrowseActivityEmployeesAction.Delete
+  ) {
+    return dispatch(new ActivityEmployeesAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

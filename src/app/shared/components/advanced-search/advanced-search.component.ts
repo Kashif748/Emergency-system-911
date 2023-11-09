@@ -26,7 +26,9 @@ import {
 } from './advancedSearch.model';
 import {environment} from "../../../../environments/environment";
 import {IncidentsService} from "../../../_metronic/core/services/incidents.service";
-import {tap} from "rxjs/operators";
+import {map, takeUntil, tap} from "rxjs/operators";
+import {ActivatedRoute} from "@angular/router";
+import {Subject} from "rxjs";
 
 export interface DataOptions {
   formControlName: string;
@@ -56,11 +58,13 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
   minDate: any;
   maxDate: any;
   endDate: any;
+  fromDate: any;
+  toDate: any;
   createdDate: any;
   advncedFilterForm: FormGroup;
   advancedSearchFields = AdvancedSearchFieldsEnum;
   isExpiredFilterOptions = isExpiredFilterOption;
-
+  destroy$ = new Subject();
   constructor(
     public directionality: Directionality,
     private _fb: FormBuilder,
@@ -71,7 +75,23 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
     private translationService: TranslationService,
     private cdr: ChangeDetectorRef,
     protected incidentService: IncidentsService,
-  ) {}
+    private route: ActivatedRoute,
+  ) {
+    this.route.queryParams.pipe(
+      map((params) => params['startDate']),
+      takeUntil(this.destroy$)
+    )
+      .subscribe((mode) => {
+        this.fromDate = mode;
+      });
+    this.route.queryParams.pipe(
+      map((params) => params['endDate']),
+      takeUntil(this.destroy$)
+    )
+      .subscribe((mode) => {
+        this.toDate = mode;
+      });
+  }
 
   ngOnInit(): void {
     this.lang = this.translationService.getSelectedLanguage();
@@ -90,8 +110,13 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
       });
     const date = new Date().setDate(1);
     if (this.incidentReport) {
-      this.advncedFilterForm.get('fromDate').setValue(new Date(date));
-      this.advncedFilterForm.get('toDate').setValue(new Date());
+      if (this.fromDate && this.toDate) {
+        this.advncedFilterForm.get('fromDate').setValue(new Date(this.fromDate));
+        this.advncedFilterForm.get('toDate').setValue(new Date(this.toDate));
+      } else {
+        this.advncedFilterForm.get('fromDate').setValue(new Date(date));
+        this.advncedFilterForm.get('toDate').setValue(new Date());
+      }
       this.flattenValues();
       this.filterChanged$.emit(this.advncedFilterForm.value);
     }
@@ -132,6 +157,7 @@ export class AdvancedSearchComponent implements OnInit, OnChanges {
       this.store.dispatch(
         UpdateFilter({ filter: this.advncedFilterForm.value })
       );
+      this.dialogRef.close(this.advncedFilterForm.value);
     }
   }
 

@@ -36,7 +36,7 @@ export const TABS: MenuItem[] = [
     label: 'ACTIVETY_FREQUENCY',
     icon: 'flaticon2-refresh',
     state: {
-      routerLink: 'activey-frquency',
+      routerLink: 'activity-frequency',
       requiredVersion: false,
     },
   },
@@ -84,7 +84,7 @@ export const TABS: MenuItem[] = [
     label: 'RECVOVER_PRIORITIES',
     icon: 'pi pi-sort-amount-up',
     state: {
-      routerLink: 'activey-priority',
+      routerLink: 'activity-priority',
       requiredVersion: true,
     },
   },

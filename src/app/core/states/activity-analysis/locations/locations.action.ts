@@ -18,6 +18,18 @@ export namespace ActivityLocationsAction {
       }
     ) {}
   }
+  export class loadIdsList {
+    static readonly type = '[BcActivityLocations] load Ids List';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        cycleId: number;
+        activityId :number
+      }
+    ) {}
+  }
 
   export class Create {
     static readonly type = '[BcActivityLocations] Create';
@@ -36,6 +48,17 @@ export namespace ActivityLocationsAction {
 
   export class GetLocation {
     static readonly type = '[BcActivityLocations] Get Location';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
+  export class Delete {
+    static readonly type = '[BcActivityLocations] Delete System';
     /**
      *
      */

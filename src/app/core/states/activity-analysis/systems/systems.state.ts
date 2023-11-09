@@ -17,6 +17,7 @@ import { ActivitySystemsAction } from './systems.action';
 export interface ActivitySystemsStateModel {
   page: PageBcActivitySystems;
   activitySystem: BcActivitySystems;
+  idsList: number[];
   loading: boolean;
   blocking: boolean;
 }
@@ -35,6 +36,11 @@ export class ActivitySystemsState {
   constructor(private activitySystem: BcActivitySystemsControllerService) {}
 
   /* ************************ SELECTORS ******************** */
+  @Selector([ActivitySystemsState])
+  static idsList(state: ActivitySystemsStateModel) {
+    return state?.idsList;
+  }
+
   @Selector([ActivitySystemsState])
   static page(state: ActivitySystemsStateModel): BcActivitySystems[] {
     return state?.page?.content;
@@ -72,14 +78,14 @@ export class ActivitySystemsState {
       })
     );
     return this.activitySystem
-      .search12({
+      .search21({
         isActive: true,
         cycleId: payload.cycleId,
         activityId: payload.activityId,
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort,
+          sort: payload.sort ? payload.sort : ['id', 'desc'],
         },
         // request: payload.filters,
       })
@@ -109,6 +115,34 @@ export class ActivitySystemsState {
         })
       );
   }
+  @Action(ActivitySystemsAction.loadIdsList, { cancelUncompleted: true })
+  loadIdsList(
+    { setState }: StateContext<ActivitySystemsStateModel>,
+    { payload }: ActivitySystemsAction.loadIdsList
+  ) {
+    return this.activitySystem
+      .list8({
+        cycleId: payload.cycleId,
+        activityId: payload.activityId,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<ActivitySystemsStateModel>({
+              idsList: res.result,
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<ActivitySystemsStateModel>({
+              idsList: [],
+            })
+          );
+          return EMPTY;
+        })
+      );
+  }
 
   @Action(ActivitySystemsAction.Create)
   create(
@@ -122,7 +156,7 @@ export class ActivitySystemsState {
     );
 
     return this.activitySystem
-      .insertOne19({
+      .insertOne30({
         body: payload,
       })
       .pipe(
@@ -147,7 +181,7 @@ export class ActivitySystemsState {
     );
 
     return this.activitySystem
-      .update99({
+      .update110({
         body: { ...payload },
       })
       .pipe(
@@ -179,7 +213,7 @@ export class ActivitySystemsState {
         blocking: true,
       })
     );
-    return this.activitySystem.getOne19({ id: payload.id }).pipe(
+    return this.activitySystem.getOne30({ id: payload.id }).pipe(
       tap((activitySystem) => {
         setState(
           patch<ActivitySystemsStateModel>({
@@ -209,7 +243,7 @@ export class ActivitySystemsState {
         loading: true,
       })
     );
-    return this.activitySystem.deleteById19({ id: payload.id }).pipe(
+    return this.activitySystem.deleteById31({ id: payload.id }).pipe(
       tap((activitySystem) => {
         setState(
           patch<ActivitySystemsStateModel>({

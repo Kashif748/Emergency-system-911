@@ -658,7 +658,7 @@
                         </div>
                         <div class="spacer"></div>
                         <!--end::Text-->
-                        <ng-container *appPrivileges="'PRV_ED_INC'">
+                        <ng-container *appPrivileges="'PRIV_ESC_INC'">
                           <button
                             *ngIf="canEdit"
                             class="mx-3 btn btn-sm btn-clean btn-icon mr-1 resp"
@@ -944,7 +944,7 @@
                   </button>
                 </div>
                 <app-map
-                  *ngIf="showMapComponent"
+                  *ngIf="showMapComponent && currentTab === 5"
                   [config]="{
                     mapType: 'incident',
                     zoomModel: {
@@ -968,6 +968,7 @@
               class="w-100"
             >
               <app-files-list
+                *ngIf="currentTab === 6"
                 [recordId]="incidentId"
                 [tagId]="INCIDENT_TAG_ID"
                 [foreignHelperId]=""
@@ -1013,6 +1014,7 @@
 
                     <form [formGroup]="form">
                       <app-assets-info
+                        *ngIf="currentTab === 8"
                         #assetEl
                         class="h-75"
                         [incidentId]="incidentId"

@@ -1,11 +1,11 @@
 /* tslint:disable */
 /* eslint-disable */
-import { PrimaryOrgs } from './primary-orgs';
+import { Header } from './header';
 export interface MainCategoryStatisticsResponse {
+  header?: Array<Header>;
   incidentMainCategoryNameAr?: string;
   incidentMainCategoryNameEn?: string;
   mainCategoryId?: number;
-  primaryOrgs?: Array<PrimaryOrgs>;
   total?: number;
 }
 

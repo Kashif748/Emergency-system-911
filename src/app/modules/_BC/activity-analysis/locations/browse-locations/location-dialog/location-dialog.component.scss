@@ -1,0 +1,27 @@
+:host ::ng-deep {
+  .p-sidebar-header {
+    position: absolute;
+    z-index: 10;
+    :lang(ar) & {
+      left: 0;
+    }
+    :lang(en) & {
+      right: 0;
+    }
+  }
+
+  .p-sidebar-content {
+    height: 100%;
+  }
+  .row-disabled {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    cursor: auto !important;
+    .p-tabview .p-tabview-panels {
+      height: 97%;
+      overflow-y: auto;
+      .p-tabview-panel {
+        height: 97%;
+      }
+    }
+  }
+}

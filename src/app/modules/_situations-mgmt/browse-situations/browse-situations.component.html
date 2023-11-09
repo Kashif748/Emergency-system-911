@@ -1,9 +1,10 @@
-<app-situation-dialog [loading]="loading$ | async" ></app-situation-dialog>
+<app-situation-dialog [loading]="loading$ | async"></app-situation-dialog>
 <div class="container-fluid">
   <app-breadcrumb></app-breadcrumb>
   <div
     *ngIf="activeSituation$ | async as activeSituation"
     class="active-situation"
+    (click)="redirectToDashboard(activeSituation.id)"
   >
     <div
       class="w-100 rounded my-2 py-4 bg-white cursor-pointer hoverable border"
@@ -13,7 +14,9 @@
           ? 'golden'
           : activeSituation.themeType?.id === 1
           ? 'silver'
-          : 'bronze')">
+          : 'bronze')
+      "
+    >
       <div
         class="w-100 mx-auto my-1 d-flex position-relative px-4 border-left-dir-6px"
       >
@@ -33,23 +36,25 @@
                   pTooltip="{{ 'SITUATIONS.ALERTNESS_LEVEL' | translate }}"
                   appendTo="body"
                   tooltipPosition="top"
-                  [styleClass]="activeSituation.themeType?.id === 0
+                  [styleClass]="
+                    activeSituation.themeType?.id === 0
                       ? 'golden'
                       : activeSituation.themeType?.id === 1
                       ? 'silver'
                       : activeSituation.themeType?.id === 2
                       ? 'bronze'
-                      : 'white'">
-                  {{ activeSituation.alertnessLevel | translateObj : 'name' }}
+                      : 'white'
+                  "
+                >
+                  {{ activeSituation.alertnessLevel | translateObj : "name" }}
                 </p-tag>
               </div>
-              <div class="p-col-12 d-flex mt-0" >
+              <div class="p-col-12 d-flex mt-0">
                 <p class="m-0">
                   {{ "SITUATIONS.START_DATE" | translate }}
                   <p-tag
                     dir="ltr"
-                    value=" {{
-                      activeSituation.startDate | cdate}}"
+                    value=" {{ activeSituation.startDate | cdate }}"
                   ></p-tag>
                 </p>
 
@@ -58,9 +63,7 @@
                   {{ "SITUATIONS.END_DATE" | translate }}
                   <p-tag
                     dir="ltr"
-                    value="{{
-                      activeSituation.endDate | cdate
-                    }}"
+                    value="{{ activeSituation.endDate | cdate }}"
                   ></p-tag>
                 </p>
               </div>

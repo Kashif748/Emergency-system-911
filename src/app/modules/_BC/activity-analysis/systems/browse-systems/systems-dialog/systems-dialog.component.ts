@@ -1,18 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { BcActivitySystems, BcSystems } from 'src/app/api/models';
-import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
-import {
-  BrowseActivitySystemsState,
-  BrowseActivitySystemsStateModel,
-} from '../../states/browse-systems.state';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
-import { BrowseActivitySystemsAction } from '../../states/browse-systems.action';
-import { SystemsAction } from '@core/states/bc-setup/systems/systems.action';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Select, Store} from '@ngxs/store';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {BcActivitySystems, BcSystems} from 'src/app/api/models';
+import {ActivitySystemsState} from '@core/states/activity-analysis/systems/systems.state';
+import {BrowseActivitySystemsState, BrowseActivitySystemsStateModel,} from '../../states/browse-systems.state';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {SystemsState} from '@core/states/bc-setup/systems/systems.state';
+import {BrowseActivitySystemsAction} from '../../states/browse-systems.action';
+import {SystemsAction} from '@core/states/bc-setup/systems/systems.action';
+import {ActivityAnalysisState} from '@core/states/activity-analysis/activity-analysis.state';
+import {ActivitySystemsAction} from '@core/states/activity-analysis/systems/systems.action';
+import {TranslateService} from '@ngx-translate/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
   selector: 'app-systems-dialog',
@@ -23,6 +25,9 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   public page$: Observable<BcSystems[]>;
 
   public opened$: Observable<boolean>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   @Select(SystemsState.totalRecords)
   public totalRecords$: Observable<number>;
@@ -36,8 +41,11 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   @Select(BrowseActivitySystemsState.state)
   public state$: Observable<BrowseActivitySystemsStateModel>;
 
-  public selectedBCSystem: BcSystems;
+  display = false;
+  private auditLoadPage$ = new Subject<string>();
+  form: FormGroup;
 
+  public selectedBCSystem: BcSystems;
   public columns = [
     { name: 'ACTIVITY_NAME', code: 'userName', disabled: true },
     {
@@ -85,7 +93,12 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   }
 
   destroy$ = new Subject();
-  constructor(private route: ActivatedRoute, private store: Store) {
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store,
+    private translate: TranslateService,
+    private formBuilder: FormBuilder
+  ) {
     this.route.queryParams
       .pipe(
         map((params) => params['_id']),
@@ -97,27 +110,79 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened'),
       tap((opened) => {
         if (opened) {
           this.loadPage();
+          this.selectedBCSystem = null;
+          const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+          const activityAnalysis = this.store.selectSnapshot(
+            ActivityAnalysisState.activityAnalysis
+          );
+          this.store.dispatch(
+            new ActivitySystemsAction.loadIdsList({
+              cycleId: cycle.id,
+              activityId: activityAnalysis.activity.id,
+            })
+          );
         }
       })
     );
-    this.page$ = this.store
-    .select(SystemsState.page)
-    .pipe(filter((p) => !!p),
-    );
-  }
 
-  public loadPage() {
-    this.store.dispatch(
-      new SystemsAction.LoadPage({
-        page: 0,
-        size: 50,
+    this.page$ = combineLatest([
+      this.store.select(ActivitySystemsState.idsList),
+      this.store.select(SystemsState.page),
+    ]).pipe(
+      filter(([ids, systems]) => !!ids && !!systems),
+      map(([ids, systems]) => {
+        this.selectedBCSystem = null;
+        let tableRows = systems.map((activity) => {
+          let tableRow = {
+            ...activity,
+            selected: false,
+          };
+          if (ids && ids.includes(activity.id)) {
+            tableRow.selected = true;
+            // this.selectedActivities.push(tableRow);
+          }
+          return tableRow;
+        });
+        console.log(this.selectedBCSystem);
+        return tableRows;
       })
     );
+
+    this.auditLoadPage$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((search: string) => {
+        console.log(this.translate.currentLang);
+        this.loadPage(search, true);
+      });
+  }
+
+  buildForm() {
+    this.form = this.formBuilder.group({
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
+      orgHierarchy: [null, [Validators.required]],
+      isActive: true,
+      id: null,
+    });
+  }
+  public loadPage(search?: string, direct = false) {
+    if (direct) {
+      this.store.dispatch(
+        new SystemsAction.LoadPage({
+          page: 0,
+          size: 10,
+          filters: { name: search },
+        })
+      );
+      return;
+    }
+    this.auditLoadPage$.next(search);
   }
   submit() {
     if (!this.selectedBCSystem) {
@@ -143,6 +208,10 @@ export class SystemsDialogComponent implements OnInit, OnDestroy {
   }
   toggleDialog(id?: number) {
     this.store.dispatch(new BrowseActivitySystemsAction.ToggleDialog({ id }));
+  }
+  closeCreateDialog() {
+    this.display = false;
+    this.loadPage();
   }
   ngOnDestroy(): void {
     this.destroy$.next();

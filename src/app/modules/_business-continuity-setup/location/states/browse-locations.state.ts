@@ -13,13 +13,9 @@ import { MessageHelper } from '@core/helpers/message.helper';
 import { iif, patch } from '@ngxs/store/operators';
 import { BrowseLocationsAction } from './browse-locations.action';
 import { ApiHelper } from '@core/helpers/api.helper';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { LocationsAction } from '@core/states/bc-setup/locations/locations.action';
-import {BrowseVenderAction} from "../../vender/states/browse-vender.action";
-import {VenderAction} from "@core/states/bc-setup/venders/vender.action";
-import {BrowseVenderStateModel} from "../../vender/states/browse-vender.state";
 
 export interface BrowseLocationsStateModel {
   pageRequest: PageRequestModel;
@@ -52,8 +48,7 @@ export class BrowseLocationsState {
     private messageHelper: MessageHelper,
     private router: Router,
     private apiHelper: ApiHelper,
-    private route: ActivatedRoute,
-    private store: Store
+    private route: ActivatedRoute
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -127,10 +122,7 @@ export class BrowseLocationsState {
     return dispatch(new LocationsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([
-          new BrowseLocationsAction.LoadLocations(),
-          new BrowseLocationsAction.ToggleDialog({}),
-        ]);
+        dispatch([new BrowseLocationsAction.LoadLocations()]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -147,14 +139,14 @@ export class BrowseLocationsState {
     return dispatch(new LocationsAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseLocationsAction.LoadLocations());
+        dispatch([
+          new BrowseLocationsAction.LoadLocations(),
+          new BrowseLocationsAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-      finalize(() => {
-        dispatch(new BrowseLocationsAction.ToggleDialog({}));
       })
     );
   }
@@ -166,7 +158,6 @@ export class BrowseLocationsState {
   ) {
     return dispatch(new LocationsAction.GetLocation(payload));
   }
-
 
   @Action(BrowseLocationsAction.UpdateFilter, { cancelUncompleted: true })
   updateFilter(
@@ -190,7 +181,7 @@ export class BrowseLocationsState {
   }
   @Action(BrowseLocationsAction.ToggleDialog, { cancelUncompleted: true })
   openDialog(
-    { dispatch }: StateContext<BrowseLocationsStateModel>,
+    {}: StateContext<BrowseLocationsStateModel>,
     { payload }: BrowseLocationsAction.ToggleDialog
   ) {
     this.router.navigate([], {
@@ -231,6 +222,22 @@ export class BrowseLocationsState {
     setState(
       patch<BrowseLocationsStateModel>({
         columns: payload.columns,
+      })
+    );
+  }
+  @Action(BrowseLocationsAction.DeleteLocation)
+  deleteLocation(
+    { dispatch }: StateContext<BrowseLocationsStateModel>,
+    { payload }: BrowseLocationsAction.DeleteLocation
+  ) {
+    return dispatch(new LocationsAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseLocationsAction.LoadLocations());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
       })
     );
   }

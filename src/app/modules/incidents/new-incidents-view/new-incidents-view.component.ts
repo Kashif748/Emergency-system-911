@@ -35,7 +35,7 @@ import {
   debounceTime,
   takeUntil,
   tap,
-  switchMap,
+  switchMap, mergeMap,
 } from 'rxjs/operators';
 import { ICategory } from '../../reporting/model/incidents-report';
 import { EmailListComponent } from '../email-list/email-list.component';
@@ -360,25 +360,54 @@ export class NewIncidentsViewComponent
       this.map.mapView?.graphics?.removeAll();
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
-    forkJoin({
-      data: this.incidentsService.getAllWithFilters(
+    /*combineLatest([
+      this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         { status: INCIDENT_STATUS.IN_PROCESSING, ...this.advancedSearchFilter },
         { active: 'incidentDate', direction: 'desc' }
       ),
-      dashboardData: this.incidentsService.getIncidentDashboardStatistics(
+      this.incidentsService.getIncidentDashboardStatistics(
         DashboardModules.INCIDENTS,
         { status: INCIDENT_STATUS.IN_PROCESSING, ...this.advancedSearchFilter }
       ),
-    }).subscribe(({ data, dashboardData }) => {
+    ]).subscribe(([ data, dashboardData ]) => {
+      this.isLoading$.next(false);
+
+
       this.data = data.result.content;
       this.paginationConfig.totalItems = data.result.totalElements;
       this.dashboardData = dashboardData as IncidentStatistics;
       // this.getAssignedCities();
       // this.getAssignedIncidentsCategories();
-      this.isLoading$.next(false);
+
       this.cdr.detectChanges();
-    });
+    });*/
+    this.incidentsService
+      .getAllWithFilters(
+        this.paginationConfig.currentPage - 1 || 0,
+        { status: INCIDENT_STATUS.IN_PROCESSING, ...this.advancedSearchFilter },
+        { active: 'incidentDate', direction: 'desc' }
+      )
+      .pipe(
+        mergeMap(data => {
+          this.isLoading$.next(false); // Update loading state as soon as data is received
+
+          this.data = data.result.content;
+          this.paginationConfig.totalItems = data.result.totalElements;
+
+          return this.incidentsService.getIncidentDashboardStatistics(
+            DashboardModules.INCIDENTS,
+            { status: INCIDENT_STATUS.IN_PROCESSING, ...this.advancedSearchFilter }
+          );
+        })
+      )
+      .subscribe(dashboardData => {
+        this.dashboardData = dashboardData as IncidentStatistics;
+        // this.getAssignedCities();
+        // this.getAssignedIncidentsCategories();
+
+        this.cdr.detectChanges();
+      });
   }
 
   getFilterQuery() {
@@ -492,7 +521,7 @@ export class NewIncidentsViewComponent
       this.map.mapView?.graphics?.removeAll();
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
-    forkJoin({
+    /*forkJoin({
       data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         { status: INCIDENT_STATUS.REJECTED, ...this.advancedSearchFilter },
@@ -510,7 +539,36 @@ export class NewIncidentsViewComponent
       // this.getAssignedIncidentsCategories();
       this.isLoading$.next(false);
       this.cdr.detectChanges();
-    });
+    });*/
+
+
+
+    this.incidentsService
+      .getAllWithFilters(
+        this.paginationConfig.currentPage - 1 || 0,
+        { status: INCIDENT_STATUS.REJECTED, ...this.advancedSearchFilter },
+        { active: 'incidentDate', direction: 'desc' }
+      )
+      .pipe(
+        mergeMap(data => {
+          this.isLoading$.next(false); // Update loading state as soon as data is received
+
+          this.data = data.result.content;
+          this.paginationConfig.totalItems = data.result.totalElements;
+
+          return this.incidentsService.getIncidentDashboardStatistics(
+            DashboardModules.INCIDENTS,
+            { status: INCIDENT_STATUS.REJECTED, ...this.advancedSearchFilter }
+          );
+        })
+      )
+      .subscribe(dashboardData => {
+        this.dashboardData = dashboardData as IncidentStatistics;
+        // this.getAssignedCities();
+        // this.getAssignedIncidentsCategories();
+
+        this.cdr.detectChanges();
+      });
   }
   async loadCompletedIncidents() {
     this.currentView = IncidentViewsEnum.COMPLETED_INCIDENTS;
@@ -541,7 +599,7 @@ export class NewIncidentsViewComponent
       this.map.mapView?.graphics?.removeAll();
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
-    forkJoin({
+    /*forkJoin({
       data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         { status: INCIDENT_STATUS.DONE, ...this.advancedSearchFilter },
@@ -559,7 +617,34 @@ export class NewIncidentsViewComponent
       // this.getAssignedIncidentsCategories();
       this.isLoading$.next(false);
       this.cdr.detectChanges();
-    });
+    });*/
+
+    this.incidentsService
+      .getAllWithFilters(
+        this.paginationConfig.currentPage - 1 || 0,
+        { status: INCIDENT_STATUS.DONE, ...this.advancedSearchFilter },
+        { active: 'incidentDate', direction: 'desc' }
+      )
+      .pipe(
+        mergeMap(data => {
+          this.isLoading$.next(false); // Update loading state as soon as data is received
+
+          this.data = data.result.content;
+          this.paginationConfig.totalItems = data.result.totalElements;
+
+          return this.incidentsService.getIncidentDashboardStatistics(
+            DashboardModules.INCIDENTS,
+            { status: INCIDENT_STATUS.DONE, ...this.advancedSearchFilter }
+          );
+        })
+      )
+      .subscribe(dashboardData => {
+        this.dashboardData = dashboardData as IncidentStatistics;
+        // this.getAssignedCities();
+        // this.getAssignedIncidentsCategories();
+
+        this.cdr.detectChanges();
+      });
   }
 
   viewChange(value) {
@@ -594,7 +679,7 @@ export class NewIncidentsViewComponent
     //this.selectedDisplayedCols = [...this.incidentDisplayedColumns];
 
     this.isLoading$.next(true);
-    forkJoin({
+    /*forkJoin({
       data: this.inquiryService.getInquiriesByPage(
         this.advancedSearchFilter,
         this.paginationConfig.currentPage - 1 || 0
@@ -611,7 +696,33 @@ export class NewIncidentsViewComponent
       // isSorting ? data.result.number
       // : data.result.number + 1;
       this.cdr.detectChanges();
-    });
+    });*/
+
+    this.inquiryService
+      .getInquiriesByPage(
+        this.advancedSearchFilter,
+        this.paginationConfig.currentPage - 1 || 0
+      )
+      .pipe(
+        mergeMap(data => {
+          this.isLoading$.next(false); // Update loading state as soon as data is received
+
+          this.data = data.result.content;
+          this.paginationConfig.totalItems = data.result.totalElements;
+
+          return this.incidentsService.getIncidentDashboardStatistics(
+            DashboardModules.INQUIRIES,
+            this.advancedSearchFilter
+          );
+        })
+      )
+      .subscribe(dashboardData => {
+        this.dashboardData = dashboardData as IncidentStatistics;
+        // this.getAssignedCities();
+        // this.getAssignedIncidentsCategories();
+
+        this.cdr.detectChanges();
+      });
   }
 
   setTableDisplyedColumns(source: DisplayedColumn[]) {
@@ -773,7 +884,7 @@ export class NewIncidentsViewComponent
       this.map.mapView?.graphics?.removeAll();
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
-    forkJoin({
+   /* forkJoin({
       data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         this.advancedSearchFilter,
@@ -794,7 +905,36 @@ export class NewIncidentsViewComponent
       // this.getAssignedCities();
       // this.getAssignedIncidentsCategories();
       this.isLoading$.next(false);
-    });
+    });*/
+
+    this.incidentsService.getAllWithFilters(
+      this.paginationConfig.currentPage - 1 || 0,
+      this.advancedSearchFilter,
+      {
+        active: 'incidentDate',
+        direction: 'desc',
+      }
+    )
+      .pipe(
+        mergeMap(data => {
+          this.isLoading$.next(false); // Update loading state as soon as data is received
+
+          this.data = data.result.content;
+          this.paginationConfig.totalItems = data.result.totalElements;
+
+          return this.incidentsService.getIncidentDashboardStatistics(
+            DashboardModules.INCIDENTS,
+            this.advancedSearchFilter
+          );
+        })
+      )
+      .subscribe(dashboardData => {
+        this.dashboardData = dashboardData as IncidentStatistics;
+        // this.getAssignedCities();
+        // this.getAssignedIncidentsCategories();
+
+        this.cdr.detectChanges();
+      });
   }
 
   changeView(tabIndex: IncidentViewsEnum) {

@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ILangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent } from 'primeng/api';
+import {LazyLoadEvent, MenuItem} from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { filter, takeUntil, tap } from 'rxjs/operators';
-import { BcActivitySystems } from 'src/app/api/models';
+import {filter, map, takeUntil, tap} from 'rxjs/operators';
+import { ActivityAnalysisStatusAction, BcActivitySystems } from 'src/app/api/models';
 import { BrowseActivitySystemsAction } from '../states/browse-systems.action';
 import {
   BrowseActivitySystemsState,
@@ -30,9 +31,12 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
   @Select(BrowseActivitySystemsState.state)
   public state$: Observable<BrowseActivitySystemsStateModel>;
 
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
   private destroy$ = new Subject();
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private langFacade: ILangFacade, private translate: TranslateService,) {}
 
   ngOnInit(): void {
     combineLatest([
@@ -47,9 +51,42 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
+    const userActions = [
+      {
+        label: this.translate.instant('ACTIONS.EDIT'),
+        icon: 'pi pi-pencil',
+      },
+      {
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
+      },
+    ] as MenuItem[];
+
     this.page$ = this.store.select(ActivitySystemsState.page).pipe(
       filter((p) => !!p),
-      tap(console.log)
+      map((page) =>
+        page?.map((u) => {
+          return {
+            ...u,
+            actions: [
+              {
+                ...userActions[0],
+                command: () => {
+                  this.openDialog(u.id);
+                },
+                disabled: !u.isActive,
+              },
+              {
+                ...userActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              }
+            ],
+          };
+        })
+      )
     );
   }
 
@@ -72,7 +109,7 @@ export class BrowseSystemsComponent implements OnInit, OnDestroy {
       })
     );
   }
-  deleteSystem(id) {
+  delete(id) {
     this.store
       .dispatch(new BrowseActivitySystemsAction.Delete({ id }))
       .toPromise()

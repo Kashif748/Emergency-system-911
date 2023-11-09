@@ -88,13 +88,16 @@
       }
     }
   }
-
-  header .p-dropdown {
-    background-color: var(--blue-500);
-    .p-dropdown-label,
-    .p-dropdown-trigger-icon {
-      // padding: 0 12px;
-      color: white;
-    }
+  .min-w-315px {
+    min-width: 315px !important;
   }
+
+  // header .p-dropdown {
+  //   background-color: var(--blue-500);
+  //   .p-dropdown-label,
+  //   .p-dropdown-trigger-icon {
+  //     // padding: 0 12px;
+  //     color: white;
+  //   }
+  // }
 }

@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 import { patch } from '@ngxs/store/operators';
 import { finalize, tap } from 'rxjs/operators';
 import { OrgStructure } from '../../../../api/models/org-structure';
-import { OrgDetailAction } from '@core/states/bc/org-details/org-detail.action';
+import {OrgDetailAction} from '@core/states/bc/org-details/org-detail.action';
 import { OrgStructureControllerService } from '../../../../api/services/org-structure-controller.service';
 import {
   BcOrgHierarchyControllerService,
@@ -25,10 +25,13 @@ import {
 } from 'src/app/api/models';
 import { PageBcOrgHierarchyProjection } from 'src/app/api/models/page-bc-org-hierarchy-projection';
 import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
+import {PageBcOrgHierarchyProjectionWithOutCoordinators} from "../../../../api/models/page-bc-org-hierarchy-projection-with-out-coordinators";
+import {BcOrgHierarchyProjectionWithOutCoordinators} from "../../../../api/models/bc-org-hierarchy-projection-with-out-coordinators";
 
 export interface OrgDetailStateModel {
   orgHir: PageBcOrgHierarchyProjection;
   orgHirSearch: PageBcOrgHierarchy;
+  orgHirParent: PageBcOrgHierarchyProjectionWithOutCoordinators;
   orgHirTypes: PageBcOrgHierarchyType;
   org: OrgStructure;
   loading: boolean;
@@ -54,6 +57,11 @@ export class OrgDetailState {
   @Selector([OrgDetailState])
   static org(state: OrgDetailStateModel) {
     return state?.org;
+  }
+
+  @Selector([OrgDetailState])
+  static orgHirParent(state: OrgDetailStateModel): BcOrgHierarchyProjectionWithOutCoordinators[] {
+    return state?.orgHirParent.content;
   }
 
   @Selector([OrgDetailState])
@@ -95,7 +103,7 @@ export class OrgDetailState {
     );
 
     return this.orgHir
-      .search9({
+      .search16({
         isActive: true,
         pageable: {
           page: payload.page,
@@ -167,6 +175,46 @@ export class OrgDetailState {
       );
   }
 
+  @Action(OrgDetailAction.GetOrgHierarchyParent, { cancelUncompleted: true })
+  getOrgHierarchyParent(
+    { setState }: StateContext<OrgDetailStateModel>,
+    { payload }: OrgDetailAction.GetOrgHierarchyParent
+  ) {
+    setState(
+      patch<OrgDetailStateModel>({
+        blocking: true,
+        loading: true,
+      })
+    );
+
+    return this.orgHir
+      .topLevelParentHierarchy({
+        pageable: {
+          page: payload.page,
+          size: payload.size,
+          sort: payload.sort,
+        },
+        id: payload?.id,
+      })
+      .pipe(
+        tap((orgHirSearch) => {
+          setState(
+            patch<OrgDetailStateModel>({
+              orgHirParent: orgHirSearch.result,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<OrgDetailStateModel>({
+              blocking: false,
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
   @Action(OrgDetailAction.GetOrgHierarchyNode, { cancelUncompleted: true })
   GetOrgHierarchyNode(
     { setState }: StateContext<OrgDetailStateModel>,
@@ -177,7 +225,7 @@ export class OrgDetailState {
         blocking: true,
       })
     );
-    return this.orgHir.getOne5(payload).pipe(
+    return this.orgHir.getOne16(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -197,7 +245,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.insertOne6({ body: payload }).pipe(
+    return this.orgHir.insertOne17({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -217,7 +265,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.update85({ body: payload }).pipe(
+    return this.orgHir.update96({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -238,7 +286,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.deleteById4(payload).pipe(
+    return this.orgHir.deleteById16(payload).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -261,7 +309,7 @@ export class OrgDetailState {
     );
 
     return this.orgHirTypes
-      .getAll14({
+      .getAll13({
         isActive: true,
         pageable: {
           page: payload.page,

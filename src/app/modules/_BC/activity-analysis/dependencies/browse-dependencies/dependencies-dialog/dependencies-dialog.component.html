@@ -32,13 +32,6 @@
   </div>
 
   <span class="flex-grow-1"></span>
-  <a
-    queryParamsHandling="merge"
-    pRipple
-    pButton
-    icon="pi pi-link"
-    class="p-button-rounded p-button-text p-button-plain"
-  ></a>
 </ng-template>
 
 <!-- templates content -->
@@ -96,12 +89,11 @@
           </ng-container>
         </div>
       </ng-container>
+      <!-- orgHir   -->
       <ng-template #elseTemplate>
-        <!-- orgHir   -->
         <div class="p-field p-col-4 p-md-6">
           <p-treeSelect
             [options]="orgHir"
-            [filter]="true"
             [filterBy]="'data.nameAr,data.nameEn,data.code'"
             selectionMode="single"
             formControlName="orgHierarchy"
@@ -109,9 +101,21 @@
             placeholder="{{ 'DEPENDENCIES.ASSOCIATED_MANG' | translate }}"
             appendTo="body"
             [loading]="loading$ | async"
-            (onFilter)="filterOrgHir($event)"
             (onNodeExpand)="nodeExpand($event?.node)"
           >
+            <ng-template let-option let-placeholder pTemplate="header">
+              <div class="w-100 p-2">
+                <span class="p-input-icon-left w-100">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (keyup)="filterOrgHir($event.target.value)"
+                    type="text"
+                    pInputText
+                    class="w-100"
+                  />
+                </span>
+              </div>
+            </ng-template>
             <ng-template let-option let-placeholder pTemplate="value">
               {{
                 option
@@ -137,7 +141,7 @@
         </div>
       </ng-template>
 
-      <!-- activies -->
+      <!-- activies (select) -->
       <div
         *ngIf="dependType == DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL"
         class="p-field p-col-12 p-md-6"
@@ -240,13 +244,16 @@
 
     <div class="p-col text-center">
       <div class="text-center">
-        <button
-          (click)="submit()"
-          [loading]="blocking$ | async"
-          pButton
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-        ></button>
+        <ng-container *ngIf="activityStatus$ | async as activityStatus">
+          <button
+            (click)="submit()"
+            [disabled]="!activityStatus.editable || !this.form"
+            [loading]="blocking$ | async"
+            pButton
+            label="{{ 'ACTIONS.SAVE' | translate }}"
+            icon="pi pi-save"
+          ></button>
+        </ng-container>
       </div>
     </div>
   </div>

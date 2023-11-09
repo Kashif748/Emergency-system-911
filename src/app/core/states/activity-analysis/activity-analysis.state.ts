@@ -21,21 +21,15 @@ import {
   BcCyclesControllerService,
 } from 'src/app/api/services';
 import { ActivityAnalysisAction } from './activity-analysis.action';
+import { ActivityAnalysisStatusAction } from 'src/app/api/models/activity-analysis-status-action';
 
-export enum ACTIVITY_STATUSES {
-  DRAFT = 1,
-  UNDER_REVIEW,
-  REVIEWED,
-  UNDER_APPROVAL,
-  APPROVED,
-  ACTIVE,
-  EXPIRED,
-}
 export interface ActivityAnalysisStateModel {
   page: PageBcActivityAnalysis;
   activityAnalysis: BcActivityAnalysis;
+  activityStatus: ActivityAnalysisStatusAction;
   cycle: BcCycles;
   loading: boolean;
+  loadingStatus: boolean;
   blocking: boolean;
 }
 
@@ -66,6 +60,10 @@ export class ActivityAnalysisState {
   static activityAnalysis(state: ActivityAnalysisStateModel) {
     return state?.activityAnalysis;
   }
+  @Selector([ActivityAnalysisState])
+  static activityStatus(state: ActivityAnalysisStateModel) {
+    return state?.activityStatus;
+  }
 
   @Selector([ActivityAnalysisState])
   static cycle(state: ActivityAnalysisStateModel) {
@@ -75,6 +73,10 @@ export class ActivityAnalysisState {
   @Selector([ActivityAnalysisState])
   static loading(state: ActivityAnalysisStateModel) {
     return state?.loading;
+  }
+  @Selector([ActivityAnalysisState])
+  static loadingStatus(state: ActivityAnalysisStateModel) {
+    return state?.loadingStatus;
   }
 
   @Selector([ActivityAnalysisState])
@@ -89,7 +91,7 @@ export class ActivityAnalysisState {
     { payload }: ActivityAnalysisAction.LoadPage
   ) {
     return this.activitiesAnalysisController
-      .search20({
+      .search27({
         pageable: {
           page: payload?.page,
           size: payload?.size,
@@ -130,10 +132,10 @@ export class ActivityAnalysisState {
     }
     setState(
       patch<ActivityAnalysisStateModel>({
-        blocking: true,
+        loading: true,
       })
     );
-    return this.activitiesAnalysisController.getOne24({ id: payload.id }).pipe(
+    return this.activitiesAnalysisController.getOne34({ id: payload.id }).pipe(
       tap((bc) => {
         setState(
           patch<ActivityAnalysisStateModel>({
@@ -144,11 +146,51 @@ export class ActivityAnalysisState {
       finalize(() => {
         setState(
           patch<ActivityAnalysisStateModel>({
-            blocking: false,
+            loading: false,
           })
         );
       })
     );
+  }
+
+  @Action(ActivityAnalysisAction.GetActivityAnalysisStatus, {
+    cancelUncompleted: true,
+  })
+  GetActivityAnalysisStatus(
+    { setState }: StateContext<ActivityAnalysisStateModel>,
+    { payload }: ActivityAnalysisAction.GetActivityAnalysis
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      setState(
+        patch<ActivityAnalysisStateModel>({
+          activityAnalysis: undefined,
+        })
+      );
+      return;
+    }
+    setState(
+      patch<ActivityAnalysisStateModel>({
+        loadingStatus: true,
+      })
+    );
+    return this.activitiesAnalysisController
+      .getOneByIdContainingActions({ id: payload.id })
+      .pipe(
+        tap((bc) => {
+          setState(
+            patch<ActivityAnalysisStateModel>({
+              activityStatus: bc.result?.status,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ActivityAnalysisStateModel>({
+              loadingStatus: false,
+            })
+          );
+        })
+      );
   }
 
   @Action(ActivityAnalysisAction.GetCycle, { cancelUncompleted: true })
@@ -206,7 +248,7 @@ export class ActivityAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.update105({ body: payload }).pipe(
+    return this.activitiesAnalysisController.update115({ body: payload }).pipe(
       map((response) => response.result),
       tap((activityAnalysis) => {
         setState(
@@ -236,14 +278,14 @@ export class ActivityAnalysisState {
       })
     );
     return this.activitiesAnalysisController
-      .changeStatus({ body: payload })
+      .changeStatus1({ body: payload })
       .pipe(
         tap((res) => {
           console.log(res);
 
           // setState(
           //   patch<ActivityAnalysisStateModel>({
-          //     activityAnalysis,
+          //     activityStatus : res,
           //   })
           // );
         }),

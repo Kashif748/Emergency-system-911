@@ -7,6 +7,7 @@ import {
   StateContext,
   StateToken,
   Store,
+  createSelector,
 } from '@ngxs/store';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import {
@@ -37,18 +38,22 @@ import { TextUtils } from '@core/utils';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 export interface UserStateModel {
-  page: PageUserAndRoleProjection;
-  user: User & UserInappAuthentication & UserMiddlewareAuth;
-  ranks: Ranks[];
-  groupMapUser: UserAndRoleProjection[];
-  loading: boolean;
-  blocking: boolean;
-  users: UserAndRoleProjection[];
+  page?: PageUserAndRoleProjection;
+  user?: User & UserInappAuthentication & UserMiddlewareAuth;
+  ranks?: Ranks[];
+  groupMapUser?: UserAndRoleProjection[];
+  loading?: boolean;
+  blocking?: boolean;
+  users?: UserAndRoleProjection[];
+  usersIsolated: { [key: string]: UserAndRoleProjection[] };
 }
 
 const USER_STATE_TOKEN = new StateToken<UserStateModel>('user');
 
-@State<UserStateModel>({ name: USER_STATE_TOKEN })
+@State<UserStateModel>({
+  name: USER_STATE_TOKEN,
+  defaults: { usersIsolated: {} },
+})
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
 export class UserState {
@@ -74,6 +79,12 @@ export class UserState {
   @Selector([UserState])
   static users(state: UserStateModel) {
     return state?.users;
+  }
+
+  static usersIsolated(key: string) {
+    return createSelector([UserState], (state: UserStateModel) => {
+      return state.usersIsolated[key];
+    });
   }
 
   @Selector([UserState])
@@ -162,7 +173,6 @@ export class UserState {
       );
   }
 
-
   @Action(UserAction.LoadUsers, { cancelUncompleted: true })
   loadUsers(
     { setState }: StateContext<UserStateModel>,
@@ -179,11 +189,21 @@ export class UserState {
       })
       .pipe(
         tap(({ result: { content: list } }) => {
-          setState(
-            patch<UserStateModel>({
-              users: list,
-            })
-          );
+          if (payload.isolatedKey) {
+            setState(
+              patch<UserStateModel>({
+                usersIsolated: {
+                  [payload.isolatedKey]: list,
+                },
+              })
+            );
+          } else {
+            setState(
+              patch<UserStateModel>({
+                users: list,
+              })
+            );
+          }
         })
       );
   }

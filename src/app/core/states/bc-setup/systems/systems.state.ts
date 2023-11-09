@@ -76,14 +76,18 @@ export class SystemsState {
     );
 
     return this.systemsService
-      .getAll11({
+      .getAll10({
         isActive: true,
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort,
+          sort: payload.sort ? payload.sort : ['id', 'desc'],
         },
-        // request: payload.filters,
+        orgHierarchyId:
+          payload?.filters?.orgHierarchyId
+            ?.map((node) => node.key)
+            ?.join(',') || '',
+        name: payload.filters?.name ,
       })
       .pipe(
         tap((res) => {
@@ -123,7 +127,7 @@ export class SystemsState {
       })
     );
     return this.systemsService
-      .insertOne2({
+      .insertOne3({
         body: payload,
       })
       .pipe(
@@ -149,7 +153,7 @@ export class SystemsState {
     );
 
     return this.systemsService
-      .update81({
+      .update82({
         body: payload,
       })
       .pipe(
@@ -168,7 +172,7 @@ export class SystemsState {
     { setState }: StateContext<SystemsStateModel>,
     { payload }: SystemsAction.Delete
   ) {
-    return this.systemsService.deleteById2({ id: payload.id });
+    return this.systemsService.deleteById3({ id: payload.id });
   }
   @Action(SystemsAction.GetSystem, { cancelUncompleted: true })
   getLocation(
@@ -188,7 +192,7 @@ export class SystemsState {
         blocking: true,
       })
     );
-    return this.systemsService.getOne2({ id: payload.id }).pipe(
+    return this.systemsService.getOne3({ id: payload.id }).pipe(
       tap((system) => {
         setState(
           patch<SystemsStateModel>({

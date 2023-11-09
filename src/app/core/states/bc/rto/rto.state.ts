@@ -1,20 +1,14 @@
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-  Store,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { patch } from '@ngxs/store/operators';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { Bcrto } from '../../../../api/models/bcrto';
-import { BcrtoControllerService } from '../../../../api/services/bcrto-controller.service';
-import { PageBcrto } from '../../../../api/models/page-bcrto';
-import { RtoAction } from '@core/states';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {patch} from '@ngxs/store/operators';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
+import {Bcrto} from '../../../../api/models/bcrto';
+import {BcrtoControllerService} from '../../../../api/services/bcrto-controller.service';
+import {PageBcrto} from '../../../../api/models/page-bcrto';
+import {RtoAction} from '@core/states';
+import {ILangFacade} from "@core/facades/lang.facade";
+import {UrlHelperService} from "@core/services/url-helper.service";
 
 export interface RtoStateModel {
   page: PageBcrto;
@@ -32,7 +26,8 @@ export class RtoState {
   /**
    *
    */
-  constructor(private rto: BcrtoControllerService, private store: Store) {}
+  constructor(private rto: BcrtoControllerService, private store: Store,
+              private langFacade: ILangFacade, private urlHelper: UrlHelperService) {}
 
   /* ************************ SELECTORS ******************** */
   @Selector([RtoState])
@@ -75,7 +70,7 @@ export class RtoState {
       })
     );
     return this.rto
-      .getAll12({
+      .getAll11({
         isActive: true,
         versionId: payload.versionId,
         pageable: {
@@ -122,7 +117,7 @@ export class RtoState {
       })
     );
     return this.rto
-      .insertOne3({
+      .insertOne4({
         body: payload,
       })
       .pipe(
@@ -147,7 +142,7 @@ export class RtoState {
       })
     );
     return this.rto
-      .update82({
+      .update83({
         body: payload,
       })
       .pipe(
@@ -179,7 +174,7 @@ export class RtoState {
         blocking: true,
       })
     );
-    return this.rto.getOne3({ id: payload.id }).pipe(
+    return this.rto.getOne4({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<RtoStateModel>({
@@ -195,5 +190,31 @@ export class RtoState {
         );
       })
     );
+  }
+
+  @Action(RtoAction.Export, { cancelUncompleted: true })
+  export({}: StateContext<RtoStateModel>, { payload }: RtoAction.Export) {
+    return this.rto
+      .exportAsAspose({
+        as: payload.type,
+        lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
+        isActive: true,
+        versionId: payload.versionId,
+      })
+      .pipe(
+        tap((res: any) => {
+          const newBlob = new Blob([res], {
+            type: `application/${
+              payload.type === 'PDF'
+                ? 'pdf'
+                : 'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              }`,
+          });
+          this.urlHelper.downloadBlob(
+            newBlob,
+            `RTO-LIST - ${new Date().toISOString().split('.')[0]}`
+          );
+        })
+      );
   }
 }

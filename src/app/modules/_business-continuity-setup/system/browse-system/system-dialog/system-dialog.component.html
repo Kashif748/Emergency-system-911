@@ -1,4 +1,5 @@
-<div class="p-toolbar-group-right">
+<!-- as a dialog -->
+<div *ngIf="asDialog" class="p-toolbar-group-right">
   <button
     *checkPrivileges="'PRIV_CR_BC_RESOURCE'"
     pButton
@@ -7,11 +8,19 @@
     (click)="openDialog()"
   ></button>
 </div>
-
-<!-- as a dialog -->
-<p-dialog *ngIf="asDialog;else page" #dialog [visible]="isOpened$ | async" [modal]="true" (visibleChange)="close()"
-          [style]="{width: '55vw'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true"
-          [baseZIndex]="10000" [draggable]="true" [resizable]="false">
+<p-dialog
+  *ngIf="asDialog; else page"
+  #dialog
+  [visible]="isOpened$ | async"
+  [modal]="true"
+  (visibleChange)="close()"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="true"
+  [resizable]="false"
+>
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
@@ -22,16 +31,14 @@
 </p-dialog>
 <!-- as a page -->
 <ng-template #page>
-  <div class="container-fluid h-100">
-
+  <div class="d-flex flex-column h-100">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
     <div class="row">
-      <div class="col-12" style="height: 76vh;">
+      <div class="col-12">
         <ng-template [ngTemplateOutlet]="content"></ng-template>
       </div>
     </div>
-    <div class="row h-30px">
-    </div>
+    <div class="row flex-grow-1"></div>
     <div class="row">
       <div class="col-12">
         <ng-template [ngTemplateOutlet]="footer"></ng-template>
@@ -45,33 +52,28 @@
   <div class="d-flex">
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'SYSTEMS.EDIT_SYSTEM' | translate}}
-        <span class="label label-lg label-light-success label-inline">
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
+        {{ "SYSTEMS.EDIT_SYSTEM" | translate }}
       </ng-container>
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'SYSTEMS.ADD_SYSTEM' | translate}}
-        <span class="label label-lg label-light-primary label-inline">
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
+        {{ "SYSTEMS.ADD_SYSTEM" | translate }}
       </ng-container>
       <ng-container *ngIf="viewOnly$ | async">
-        {{'SYSTEMS.VIEW_SYSTEM' | translate}}
+        {{ "SYSTEMS.VIEW_SYSTEM" | translate }}
       </ng-container>
     </h3>
+    <div class="mx-2" *ngIf="!(viewOnly$ | async)">
+      <p-tag>
+        {{
+          (editMode ? "ACTIONS.UPDATE_ITEM" : "ACTIONS.NEW_ITEM") | translate
+        }}
+      </p-tag>
+    </div>
   </div>
-
-  <span class="flex-grow-1"></span>
-  <a *ngIf="asDialog" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
-     class="p-button-rounded p-button-text p-button-plain"></a>
 </ng-template>
-
 
 <!-- templates content -->
 <ng-template #content>
-
-  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')     }">
+  <div class="w-100 pt-2">
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
@@ -80,9 +82,9 @@
       <!-- Name Ar -->
       <div class="p-field p-col-6">
         <span class="p-float-label">
-          <input type="text" formControlName="nameAr" pInputText/>
+          <input type="text" formControlName="nameAr" pInputText />
           <label
-          >{{ "SYSTEMS.NAME_AR" | translate }}
+            >{{ "SYSTEMS.NAME_AR" | translate }}
             <strong class="required-asterisk"> * </strong>
           </label>
         </span>
@@ -100,14 +102,21 @@
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
+
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['nameAr'].hasError('arabic')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+          </p>
         </ng-container>
       </div>
       <!-- En Name -->
       <div class="p-field p-col-6">
         <span class="p-float-label">
-          <input type="text" formControlName="nameEn" pInputText/>
+          <input type="text" formControlName="nameEn" pInputText />
           <label
-          >{{ "SYSTEMS.NAME_EN" | translate }}
+            >{{ "SYSTEMS.NAME_EN" | translate }}
             <strong class="required-asterisk"> * </strong>
           </label>
         </span>
@@ -125,33 +134,22 @@
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['nameEn'].hasError('english')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+          </p>
         </ng-container>
       </div>
 
       <!-- Ownser Dept -->
       <div class="p-field p-col-12">
-       <!-- <p-treeSelect
-          [options]="orgHir$ | async"
-          [filter]="true"
-          [filterBy]="'data.nameAr,data.nameEn,data.code'"
-          selectionMode="single"
-          formControlName="orgHierarchy"
-          placeholder="{{ 'SYSTEMS.OWNER_DEPT' | translate }}"
-          appendTo="body"
-        >
-          <ng-template let-option let-placeholder pTemplate="value">
-            {{ option ? (option | translateObj : "label") : "SYSTEMS.OWNER_DEPT" | translate }}
-          </ng-template>
-        </p-treeSelect>-->
-
-
         <span class="p-float-label">
           <p-treeSelect
             [options]="orgHir"
             display="chip"
             [metaKeySelection]="false"
-            [filter]="true"
-            [filterBy]="'data.nameAr,data.nameEn,data.code'"
             selectionMode="single"
             formControlName="orgHierarchy"
             [loading]="loadingOrgHir$ | async"
@@ -161,8 +159,27 @@
             [propagateSelectionDown]="false"
             [propagateSelectionUp]="false"
           >
+            <ng-template let-option let-placeholder pTemplate="header">
+              <div class="w-100 p-2">
+                <span class="p-input-icon-left w-100">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (keyup)="filterOrgHir($event.target.value)"
+                    type="text"
+                    pInputText
+                    class="w-100"
+                  />
+                </span>
+              </div>
+            </ng-template>
             <ng-template let-option let-placeholder pTemplate="value">
-              {{ option ? (option | translateObj : "label") : "SYSTEMS.OWNER_DEPT" | translate }}
+              <ng-container *ngIf="option; else elseTemplate">
+                {{ option | translateObj : "label" }}
+              </ng-container>
+              <ng-template #elseTemplate>
+                {{ "SYSTEMS.OWNER_DEPT" | translate }}
+                <strong class="required-asterisk"> * </strong>
+              </ng-template>
             </ng-template>
           </p-treeSelect>
         </span>
@@ -184,27 +201,39 @@
       </div>
     </form>
   </div>
-
 </ng-template>
 
 <!--footer-->
 <ng-template #footer>
   <div class="p-col p-d-flex">
-    <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()"
-            label="{{'ACTIONS.CLOSE' | translate }}"></button>
+    <button
+      *ngIf="asDialog"
+      pButton
+      icon="pi pi-times"
+      (click)="close()"
+      label="{{ 'ACTIONS.CLOSE' | translate }}"
+    ></button>
     <div class="ml-dir-auto"></div>
-
 
     <ng-container *ngIf="!(viewOnly$ | async)">
       <div class="mx-1">
-        <button pButton type="button" [loading]="blocking$ | async" (click)="clear()" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
-                class="p-button-outlined" ></button>
+        <button
+          pButton
+          type="button"
+          [loading]="blocking$ | async"
+          (click)="clear()"
+          label="{{ 'ACTIONS.CLEAR' | translate }}"
+          icon="pi pi-replay"
+          class="p-button-outlined"
+        ></button>
       </div>
       <div class="mx-1">
-        <button pButton label="{{ 'ACTIONS.SAVE' | translate }}"
-                icon="pi pi-save"
-                [loading]="blocking$ | async"
-                (click)="submit()"
+        <button
+          pButton
+          label="{{ 'ACTIONS.SAVE' | translate }}"
+          icon="pi pi-save"
+          [loading]="blocking$ | async"
+          (click)="submit()"
         ></button>
       </div>
     </ng-container>

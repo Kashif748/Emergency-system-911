@@ -1,11 +1,13 @@
 {
-  "BUSINESS_IMPACT_ANALYSIS": "Business Impact Analysis",
+  "BUSINESS_IMPACT_ANALYSIS": "Business Impact Analysis - Analysis Details",
   "NEW_ANALYSIS_CYCLIE": "New Analysis Cycle",
   "DEPARTMENT": "Department",
   "SELECT_CYCLE_MSG": "Please select cycle to continue",
-
+  "ORG_ACT": "Activities",
+  "RES": "Resources",
   "SECTOR": "Sector",
   "SECTION": "Section",
+  "CREATED_BY": "Created By",
   "ORG_ACTIVITIES": "Organization Activities",
   "NEW_ACTIVITY": "Add Activity",
   "RES_REQ": "Resources Requirements",
@@ -19,9 +21,11 @@
   "ADD_ACTIVITY_ACTION": "  Add Activities Analysis  ",
   "ORG_ARTCH": "Organization Hierarchy",
   "START_ANALYSIS": "Analyze Activity ",
-
+  "START_RESOURC_ANALYSIS": "Analyze Resources",
+  "CYCLE_NAME": "Cycle Name",
   "ACTIVITY_DIALOG": {
     "ADD_NEW_ACTIVITY": "Add New Activity",
+    "VIEW_ACTIVITY": "View Activity Analysis",
     "ACTIVITY_DETAILS": "Activity Details",
     "NAME_AR": "Name (Arabic)",
     "NAME_EN": "Name (English)",
@@ -39,5 +43,54 @@
     "NAME": "Analysis Cycle Name",
     "NAME_BC": "BC Lists Version",
     "DATE": "Cycle Entry Due DATE"
+  },
+  "RESOURCES": {
+    "ADD_RESOURCE": "Add Resources",
+    "DIVISION": "Division Name",
+    "CYCLE": "Analysis Cycle",
+    "ONSITE_STAFF": "Staff Needed On-Site",
+    "OFFSITE_STAFF": "Staff Needed Remotely",
+    "STATUS": "Status",
+    "DIALOG": {
+      "ADD": "Add New Resource"
+    }
+  },
+  "SYSTEMS": {
+    "TITLE": "Technology systems to perform the activity or process",
+    "COL1": "System name"
+  },
+  "RECOVERY": {
+    "TAB_LABEL": "Recovery",
+    "CAPACITY": "Capacity",
+    "ACTIVITY_PRIORITY": "Activity Priority",
+    "SPOF": "Single Point of Failure (SPOF)",
+    "SKILLS": "Skills",
+    "REMOTELY": "Can be done remotely",
+    "YES": "Yes",
+    "NO": "No"
+  },
+  "EMPLOYEES": {
+    "TAB_LABEL": "Primary & Secondary Employees",
+    "NAME":"Name",
+    "SECONDARY": "Secondary",
+    "PRI": "Primary",
+    "PRIMARY": "Primary/Secondary"
+  },
+  "LOCATIONS": {
+    "TAB_LABEL": "Locations",
+    "COL2": "Location Name"
+  },
+  "DEPENDENCIES": {
+    "TAB_LABEL": "Dependencies Outside",
+    "DETAILS": "Dependency details",
+    "VENDER": "Vender/Partner",
+    "TAB_INSIDE": "Dependencies Inside Organization",
+    "SECTOR":"Sector",
+    "ACTIVITY":"Activity",
+    "TAB_DEPT":"Dependencies Inside Department"
+  },
+  "IMPACT_MATRIX": {
+    "TAB_LABEL": "Impact Matrix",
+    "TABLE_CELL": " Impact Types / Time Period"
   }
 }

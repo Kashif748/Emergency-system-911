@@ -25,7 +25,7 @@ export interface BrowseSystemsStateModel {
 }
 
 export const BROWSE_SYSTEMS_UI_STATE_TOKEN =
-  new StateToken<BrowseSystemsStateModel>('browse_systems');
+  new StateToken<BrowseSystemsStateModel>('bc_setup_browse_systems');
 
 @State<BrowseSystemsStateModel>({
   name: BROWSE_SYSTEMS_UI_STATE_TOKEN,
@@ -79,7 +79,7 @@ export class BrowseSystemsState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        // filters: this.filters(pageRequest),
+        filters: pageRequest.filters,
       })
     );
   }
@@ -93,10 +93,7 @@ export class BrowseSystemsState {
     return dispatch(new SystemsAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([
-          new BrowseSystemsAction.LoadSystems(),
-          new BrowseSystemsAction.ToggleDialog({}),
-        ]);
+        dispatch([new BrowseSystemsAction.LoadSystems()]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -224,6 +221,31 @@ export class BrowseSystemsState {
     setState(
       patch<BrowseSystemsStateModel>({
         view: payload.view,
+      })
+    );
+  }
+
+  @Action(BrowseSystemsAction.SortSystems)
+  sortLocation(
+    { setState, dispatch, getState }: StateContext<BrowseSystemsStateModel>,
+    { payload }: BrowseSystemsAction.SortSystems
+  ) {
+    setState(
+      patch<BrowseSystemsStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new SystemsAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: pageRequest.filters,
       })
     );
   }

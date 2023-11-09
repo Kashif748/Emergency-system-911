@@ -199,10 +199,10 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       ],
       orgStructure: [{ key: orgId }, [Validators.required]],
       expireDate: [null],
-      email: [
-        null,
-        [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
-      ],
+        email: [
+          null,
+          [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
+        ],
 
       firstNameEn: [null, [Validators.required, GenericValidators.english]],
       middleNameEn: ['', [GenericValidators.english]],

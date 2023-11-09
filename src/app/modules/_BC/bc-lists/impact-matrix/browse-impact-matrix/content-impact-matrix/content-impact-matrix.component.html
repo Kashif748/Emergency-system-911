@@ -13,6 +13,11 @@
             <th style="width: 0"></th>
             <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
+                #
+              </div>
+            </th>
+            <th class="min-w-100px max-w-150px">
+              <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
@@ -42,7 +47,7 @@
               </div>
             </th>
 
-            <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+            <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>
@@ -50,7 +55,10 @@
             <td class="flag-td">
               <div class="bg-secondary"></div>
             </td>
-            <td class="min-w-100px max-w-150px">   <!--*ngIf="columns?.includes('userName')"-->
+            <td class="min-w-100px max-w-150px">
+              <p-skeleton></p-skeleton>
+            </td>
+            <td class="min-w-100px max-w-150px">
               <p-skeleton></p-skeleton>
             </td>
             <td class="min-w-100px max-w-150px">
@@ -100,6 +108,11 @@
             <th></th>
             <th class="min-w-100px max-w-150px">
               <div class="p-d-flex p-jc-between p-ai-center">
+                #
+              </div>
+            </th>
+            <th class="min-w-100px max-w-150px">
+              <div class="p-d-flex p-jc-between p-ai-center">
                 {{ "IMPACT_ANALYSIS.IMPACT_TYPES" | translate }}
               </div>
             </th>
@@ -111,7 +124,7 @@
               </th>
             </ng-container>
 
-            <th style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+            <th *checkPrivileges="'PRIV_ED_BC_LISTS'" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-columns="columns">
@@ -123,6 +136,12 @@
                   'bg-warning': !item.isActive
                 }"
               ></div>
+            </td>
+
+            <td class="min-w-100px max-w-150px" (click)="openView(item.bcImpactTypes.id)">
+              <div>
+                {{ item.id }}
+              </div>
             </td>
 
             <td class="min-w-100px max-w-150px" (click)="openView(item.bcImpactTypes.id)">
@@ -145,7 +164,7 @@
               </ng-container>
             </ng-container>
 
-            <td>
+            <td *checkPrivileges="'PRIV_ED_BC_LISTS'">
               <button
                 [disabled]="disableButton$ |async"
                 pButton
@@ -154,7 +173,7 @@
                 icon="pi pi-ellipsis-v"
                 class="p-button-rounded p-button-text my-auto p-button-plain"
                 (click)="menu.toggle($event)"
-                *checkPrivileges="'PRIV_ED_BC_LISTS'"
+
               ></button>
               <p-menu
                 #menu

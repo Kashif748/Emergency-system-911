@@ -1,22 +1,16 @@
-import { PageRequestModel } from '@core/models/page-request.model';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { TextUtils } from '@core/utils';
-import { iif, patch } from '@ngxs/store/operators';
-import { BrowseImpactAnalysisAction } from './browse-impact-analysis.action';
-import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
-import { catchError, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {TextUtils} from '@core/utils';
+import {iif, patch} from '@ngxs/store/operators';
+import {BrowseImpactAnalysisAction} from './browse-impact-analysis.action';
+import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
+import {BrowseResourceAnalysisAction} from "./browse-resource-analysis.action";
 
 export interface BrowseImpactAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -68,14 +62,18 @@ export class BrowseImpactAnalysisState {
 
   @Selector([BrowseImpactAnalysisState])
   static hasFilters(state: BrowseImpactAnalysisStateModel): boolean {
-    return (
-      Object.keys(state.pageRequest.filters).filter(
+    const filters = state.pageRequest.filters;
+    return !('orgHierarchyId' in filters && 'cycleId' in filters) ||
+      (Object.keys(filters).filter(
         (k) =>
           k !== 'active' &&
-          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+          k !== 'orgHierarchyId' &&
+          k !== 'cycleId' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(filters[k])
       ).length > 0
-    );
+      );
   }
+
 
   /* ********************** ACTIONS ************************* */
   @Action(BrowseImpactAnalysisAction.LoadPage)
@@ -103,7 +101,33 @@ export class BrowseImpactAnalysisState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
-          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.key,
+          orgHierarchyId: pageRequest?.filters?.orgHierarchyId?.id,
+        },
+      })
+    );
+  }
+  @Action(BrowseImpactAnalysisAction.Sort)
+  sort(
+    { setState, dispatch, getState }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.Sort
+  ) {
+    setState(
+      patch<BrowseImpactAnalysisStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new ImapactAnalysisAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
         },
       })
     );
@@ -126,6 +150,19 @@ export class BrowseImpactAnalysisState {
       new ImapactAnalysisAction.LoadCycles({
         page: payload?.page,
         size: payload.size,
+      })
+    );
+  }
+
+  @Action(BrowseImpactAnalysisAction.LoadAnalysisStatusInfo)
+  loadAnalysisStatusInfo(
+    { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.LoadAnalysisStatusInfo
+  ) {
+    return dispatch(
+      new ImapactAnalysisAction.LoadAnalysisStatusInfo({
+        orgHierarchyId: payload.orgHierarchyId,
+        cycleId: payload.cycleId,
       })
     );
   }
@@ -170,7 +207,7 @@ export class BrowseImpactAnalysisState {
   }
   @Action(BrowseImpactAnalysisAction.UpdateFilter, { cancelUncompleted: true })
   updateFilter(
-    { setState }: StateContext<BrowseImpactAnalysisStateModel>,
+    { setState}: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.UpdateFilter
   ) {
     setState(
@@ -179,12 +216,35 @@ export class BrowseImpactAnalysisState {
           first: 0,
           filters: iif(
             payload.clear === true,
-            {},
+            {
+              orgHierarchyId: (v) => v,
+              cycleId: (v) => v,
+            },
             patch({
               ...payload,
             })
           ),
         }),
+      })
+    );
+  }
+
+  @Action(BrowseImpactAnalysisAction.UpdateBulkTransaction)
+  updatebulk(
+    { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.UpdateBulkTransaction
+  ) {
+    return dispatch(new ImapactAnalysisAction.UpdateBulkTransaction(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch([new BrowseImpactAnalysisAction.LoadPage(), new BrowseResourceAnalysisAction.LoadPage()]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
       })
     );
   }
@@ -203,7 +263,25 @@ export class BrowseImpactAnalysisState {
             ? undefined
             : payload?.dialog,
         _id: payload.id,
+        _cycleId: payload.cycle,
         _mode: undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  @Action(BrowseImpactAnalysisAction.UpdateRoute, {
+    cancelUncompleted: true,
+  })
+  updateRoute(
+    {getState}: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.UpdateRoute
+  ) {
+    const currentState = getState();
+    this.router.navigate([], {
+      queryParams: {
+        _division: currentState.pageRequest.filters.orgHierarchyId.id,
+        _cycle: currentState.pageRequest.filters.cycleId.id,
       },
       queryParamsHandling: 'merge',
     });
@@ -219,5 +297,23 @@ export class BrowseImpactAnalysisState {
         columns: payload.columns,
       })
     );
+  }
+  @Action(BrowseImpactAnalysisAction.OpenView, { cancelUncompleted: true })
+  openView(
+    {}: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.OpenView
+  ) {
+    this.router.navigate([], {
+      queryParams: {
+        _dialog:
+          this.route.snapshot.queryParams['_dialog'] == 'opened'
+            ? undefined
+            : 'activities',
+        _id: payload.id,
+        _cycleId: payload.cycle,
+        _mode: 'viewonly',
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

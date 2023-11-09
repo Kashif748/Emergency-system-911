@@ -1,34 +1,32 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
-import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { BcActivityLocations, BcLocations } from 'src/app/api/models';
-import { BrowseLocationsState } from 'src/app/modules/_business-continuity-setup/location/states/browse-locations.state';
-import { BrowseLocationsStateModel } from '../../states/browse-locations.state';
-import {
-  auditTime,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
-import { LazyLoadEvent } from 'primeng/api';
-import { BrowseActivityLocationsAction } from '../../states/browse-locations.action';
-import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
-import { BrowseActivityAnalysisState } from '../../../states/browse-activity-analysis.state';
-import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {LocationsState} from '@core/states/bc-setup/locations/locations.state';
+import {Select, Store} from '@ngxs/store';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {BcActivityLocations, BcLocations} from 'src/app/api/models';
+import {BrowseLocationsState} from 'src/app/modules/_business-continuity-setup/location/states/browse-locations.state';
+import {BrowseLocationsStateModel} from '../../states/browse-locations.state';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {BrowseActivityLocationsAction} from '../../states/browse-locations.action';
+import {ActivityLocationsState} from '@core/states/activity-analysis/locations/locations.state';
+import {ActivityAnalysisState} from '@core/states/activity-analysis/activity-analysis.state';
+import {ActivityLocationsAction} from '@core/states/activity-analysis/locations/locations.action';
+import {LocationDialogComponent} from 'src/app/modules/_business-continuity-setup/location/browse-location/location-dialog/location-dialog.component';
+import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activity-analysis-status-action";
 
 @Component({
-  selector: 'app-location-dialog',
+  selector: 'app-locations-dialog',
   templateUrl: './location-dialog.component.html',
   styleUrls: ['./location-dialog.component.scss'],
 })
-export class LocationDialogComponent implements OnInit, OnDestroy {
+export class ActivityLocationDialogComponent implements OnInit, OnDestroy {
+  @ViewChild(LocationDialogComponent) newLocCompoenent: LocationDialogComponent;
+
   public page$: Observable<BcLocations[]>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   public opened$: Observable<boolean>;
 
@@ -47,6 +45,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   public selectedBCLocations: BcLocations;
 
   private auditLoadPage$ = new Subject<string>();
+  display = false;
 
   currentLocation: BcActivityLocations;
   _locationId: number;
@@ -107,6 +106,17 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       tap((opened) => {
         if (opened) {
           this.loadPage('', true);
+          this.selectedBCLocations = null;
+          const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
+          const activityAnalysis = this.store.selectSnapshot(
+            ActivityAnalysisState.activityAnalysis
+          );
+          this.store.dispatch(
+            new ActivityLocationsAction.loadIdsList({
+              cycleId: cycle.id,
+              activityId: activityAnalysis.activity.id,
+            })
+          );
         }
       })
     );
@@ -123,6 +133,34 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     this.page$ = this.store
       .select(LocationsState.page)
       .pipe(filter((p) => !!p));
+    this.page$ = combineLatest([
+      this.store.select(ActivityLocationsState.idsList),
+      this.store.select(LocationsState.page),
+    ]).pipe(
+      filter(([ids, systems]) => !!ids && !!systems),
+      map(([ids, systems]) => {
+        this.selectedBCLocations = null;
+        let tableRows = systems.map((activity) => {
+          let tableRow = {
+            ...activity,
+            selected: false,
+          };
+          if (ids && ids.includes(activity.id)) {
+            tableRow.selected = true;
+            // this.selectedActivities.push(tableRow);
+          }
+          return tableRow;
+        });
+        console.log(this.selectedBCLocations);
+        return tableRows;
+      })
+    );
+  }
+  openNewLocDialog() {
+    this.display = true;
+    setTimeout(() => {
+      this.newLocCompoenent.initMap();
+    }, 1000);
   }
   toggleDialog(id?: number) {
     this.store.dispatch(new BrowseActivityLocationsAction.ToggleDialog({ id }));
@@ -164,6 +202,10 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       return;
     }
     this.auditLoadPage$.next(search);
+  }
+  closeCreateDialog() {
+    this.display = false;
+    this.loadPage();
   }
   ngOnDestroy(): void {
     this.destroy$.next();

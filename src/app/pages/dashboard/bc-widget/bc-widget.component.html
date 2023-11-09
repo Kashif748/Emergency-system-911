@@ -1,0 +1,64 @@
+<div class="col-lg-12 col-md-4 col-sm-6 item pt-0 pb-4 px-2">
+  <div class="card card-custom m-0 shadow-sm h-100">
+    <div class="container my-4" style="height: 255px; overflow-y: auto">
+      <span class="card-title font-weight-bolder m-0 d-block number">
+        {{'DASHBOARD.TITTLE_SECTION' | translate}}
+      </span>
+      <ng-container >
+        <ng-container *ngFor="let section of sections?.bcSectiondetails">
+          <div class="col-md-4 border m-auto" *ngIf="section.parentId === null" style="width: 320px;">
+
+            <div class="row">
+              <div class="py-0 px-2">
+                <img class="mt-6 p-1 avatar align-self-end" src="./assets/media/users/default.jpg"
+                     alt="..." />
+              </div>
+              <div class="px-6 d-flex flex-column">
+                <span class="px-2 card-title font-weight-bolder m-0 d-block number">{{section | translateObj: 'name'}}</span>
+                <span class="px-2">{{section | translateObj: 'designation'}}</span>
+                <a>
+                  <p-chip label="{{ section.email }}" icon="pi pi-envelope"
+                          styleClass="bg-transparent text-muted"></p-chip>
+                </a>
+                <a>
+                  <p-chip label="{{ section.phoneNumber }}" icon="pi pi-phone"
+                          styleClass="bg-transparent text-muted"></p-chip>
+                </a>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <div class="row">
+        <ng-container *ngIf="sections?.bcSectiondetails?.length > 0" >
+          <ng-container  *ngFor="let section of sections.bcSectiondetails; let i = index">
+            <div class="col-md-4 mt-2" *ngIf="section.parentId != null">
+            <div class="col-md-10 border m-auto">
+
+              <div class="row">
+                <div class="py-0 px-2">
+                  <img class="mt-6 p-1 avatar align-self-end" src="./assets/media/users/default.jpg"
+                       alt="..."/>
+                </div>
+                <div class="px-4 d-flex flex-column">
+                  <span class="px-2 card-title font-weight-bolder m-0 d-block number">{{section | translateObj: 'name'}}</span>
+                  <span class="px-2">{{section | translateObj: 'designation'}}</span>
+                  <a>
+                    <p-chip label="{{ section.email }}" icon="pi pi-envelope"
+                            styleClass="bg-transparent text-muted"></p-chip>
+                  </a>
+                  <a >
+                    <p-chip label="{{ section.phoneNumber }}" icon="pi pi-phone"
+                            styleClass="bg-transparent text-muted"></p-chip>
+                  </a>
+                </div>
+              </div>
+            </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>

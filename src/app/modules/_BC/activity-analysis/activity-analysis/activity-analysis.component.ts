@@ -1,17 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
-import {
-  ActivityAnalysisState,
-  ACTIVITY_STATUSES,
-} from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { BcActivityAnalysis, BcCycles } from 'src/app/api/models';
+import { filter, map, skip, takeUntil, tap } from 'rxjs/operators';
+import { BcActivityAnalysis, BcCycles, Bcrto } from 'src/app/api/models';
+import { ActivityAnalysisStatusAction } from 'src/app/api/models/activity-analysis-status-action';
 import { BcActivityAnalysisChangeStatusDto } from 'src/app/api/models/bc-activity-analysis-change-status-dto';
 import { BrowseActivityAnalysisAction } from '../states/browse-activity-analysis.action';
-import { BrowseActivityAnalysisState, BrowseActivityAnalysisStateModel } from '../states/browse-activity-analysis.state';
+import {
+  BrowseActivityAnalysisState,
+  BrowseActivityAnalysisStateModel,
+} from '../states/browse-activity-analysis.state';
 import { TABS } from '../tempData.conts';
 
 @Component({
@@ -20,35 +23,38 @@ import { TABS } from '../tempData.conts';
   styleUrls: ['./activity-analysis.component.scss'],
 })
 export class ActivityAnalysisComponent implements OnInit, OnDestroy {
-  ACTIVITY_STATUSES = ACTIVITY_STATUSES;
-  @Select(BrowseActivityAnalysisState.state)
-  public state$: Observable<BrowseActivityAnalysisStateModel>;
-
   @Select(ActivityAnalysisState.activityAnalysis)
   public activityAnalysis$: Observable<BcActivityAnalysis>;
 
-  @Select(ActivityAnalysisState.cycle)
-  public cycle$: Observable<BcCycles>;
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
 
   @Select(BrowseActivityAnalysisState.tabIndex)
   public tabIndex$: Observable<BcCycles>;
 
-
   @Select(ActivityAnalysisState.blocking)
   public blocking$: Observable<boolean>;
 
+  @Select(ActivityImpactMatrixState.loading)
+  public loadingImpactAnalysisRes$: Observable<boolean>;
 
   @Select(BrowseActivityAnalysisState.impactTotal)
   public impactTotal$: Observable<number>;
 
-  tabs = TABS;
+  public impactAnalysisRes$: Observable<Bcrto>;
 
+  tabs = TABS;
+  displayNote = false;
+  notes: FormControl;
+  newStatus: BcActivityAnalysisChangeStatusDto;
   public dir$ = this.lang.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
   );
 
   public icon$ = this.lang.vm$.pipe(
-    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'))
+    map(({ ActiveLang: { key } }) =>
+      key === 'ar' ? 'pi pi-arrow-right' : 'pi pi-arrow-left'
+    )
   );
 
   private destroy$ = new Subject();
@@ -70,6 +76,9 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
             new BrowseActivityAnalysisAction.GetActivityAnalysis({
               id: params['_activity'],
             }),
+            new BrowseActivityAnalysisAction.GetActivityAnalysisStatus({
+              id: params['_activity'],
+            }),
             new BrowseActivityAnalysisAction.GetCycle({
               id: params['_cycle'],
             }),
@@ -82,7 +91,12 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.impactAnalysisRes$ = this.store
+      .select(BrowseActivityAnalysisState.impactAnalysisRes)
+      .pipe(skip(1));
+    this.notes = new FormControl('', Validators.required);
+  }
   changeTab(index: number) {
     this.store
       .dispatch([
@@ -100,19 +114,42 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
         );
       });
   }
-  changeStatus(id, status: ACTIVITY_STATUSES) {
-    const newStatus: BcActivityAnalysisChangeStatusDto = {
+  changeStatus(id, action) {
+    this.newStatus = {
       activityAnalysisId: id,
-      statusId: status,
+      actionId: action?.id,
       notes: '',
     };
-    this.store.dispatch([
-      new BrowseActivityAnalysisAction.ChangeStatus(newStatus),
-    ]);
+    if (action.requiresNote) {
+      this.displayNote = true;
+      return;
+    } else {
+      this.applyStatus();
+    }
   }
-
+  applyStatus() {
+    this.newStatus = {
+      ...this.newStatus,
+      notes: this.notes.value,
+    };
+    this.store
+      .dispatch([new BrowseActivityAnalysisAction.ChangeStatus(this.newStatus)])
+      .toPromise()
+      .then(() => {
+        this.displayNote = false;
+      });
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  back() {
+    this.router.navigate(['/bc/impact-analysis'], {
+      queryParams: {
+        _activity: undefined,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

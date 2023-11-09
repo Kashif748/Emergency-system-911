@@ -33,6 +33,14 @@ export namespace BrowseImpactMatrixAction {
     ) {}
   }
 
+  export class Export {
+    static readonly type = '[BrowseImpactMatrix] Export';
+    /**
+     *
+     */
+    constructor(public payload: { type: 'PDF' | 'EXCEL', versionId: number }) {}
+  }
+
   export class ToggleDialog {
     static readonly type = '[BrowseImpactMatrix] Toggle Dialog';
     /**

@@ -136,6 +136,9 @@ export class TreeselectComponent implements AfterContentInit {
 
   @Output() onNodeSelect: EventEmitter<any> = new EventEmitter();
 
+  @Input() showClear: boolean;
+  @Input() styleClass: string;
+
   valueTemplate: TemplateRef<any>;
 
   headerTemplate: TemplateRef<any>;
@@ -276,6 +279,10 @@ export class TreeselectComponent implements AfterContentInit {
       default:
         break;
     }
+  }
+
+  clear(event: Event) {
+    this.onSelectionChange(null);
   }
 
   show() {
@@ -571,23 +578,6 @@ export class TreeselectComponent implements AfterContentInit {
       // ZIndexUtils.clear(this.overlayEl);
       this.overlayEl = null;
     }
-  }
-
-  containerClass() {
-    return {
-      'p-treeselect p-component p-inputwrapper': true,
-      'p-treeselect-chip': this.display === 'chip',
-      'p-disabled': this.disabled,
-      'p-focus': this.focused,
-    };
-  }
-
-  labelClass() {
-    return {
-      'p-treeselect-label': true,
-      'p-placeholder': this.label === this.placeholder,
-      'p-treeselect-label-empty': !this.placeholder && this.emptyValue,
-    };
   }
 
   get emptyMessageText() {

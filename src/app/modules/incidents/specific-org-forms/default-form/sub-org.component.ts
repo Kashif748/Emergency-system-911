@@ -22,6 +22,7 @@ import { AppCommonDataService } from '@core/services/app-common-data.service';
 import { Directionality } from '@angular/cdk/bidi';
 import { Store } from '@ngrx/store';
 import {ShareLocationService} from "../../../share-location/shareLocation.service";
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sub-org',
@@ -72,7 +73,9 @@ export class SubOrgComponent
     protected dialogService: DialogService,
     public directionality: Directionality,
     protected store: Store,
-    protected shareLocationService: ShareLocationService
+    protected shareLocationService: ShareLocationService,
+    public dialog: MatDialog
+
   ) {
     super(
       router,
@@ -96,7 +99,8 @@ export class SubOrgComponent
       dialogService,
       directionality,
       store,
-      shareLocationService
+      shareLocationService,
+      dialog
     );
   }
 }

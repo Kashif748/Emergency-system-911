@@ -1,6 +1,7 @@
 import {
+  ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -31,6 +32,7 @@ import {
 } from '../states/browse-situations.state';
 import {BrowseGroupsAction} from "../../_team-mgmt/states/browse-groups.action";
 import {ILangFacade} from "@core/facades/lang.facade";
+import {TabView} from "primeng/tabview";
 
 @Component({
   selector: 'app-situation-dashboard',
@@ -39,6 +41,8 @@ import {ILangFacade} from "@core/facades/lang.facade";
 })
 export class SituationDashboardComponent implements OnInit, OnDestroy {
   @ViewChild('outer') outer: ElementRef<HTMLLinkElement>;
+  @ViewChild(TabView) tabv: TabView;
+
   public chartOptions: any;
   situationsDialog$: Observable<boolean>;
 
@@ -49,6 +53,9 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   @Select(SituationsState.loading)
   public loading$: Observable<boolean>;
 
+  @Select(SituationsState.exportLoading)
+  public exportLoading$: Observable<boolean>
+
   @Select(SituationsState.statisticsLoading)
   public statisticsLoading$: Observable<boolean>;
 
@@ -57,6 +64,9 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
 
   situationModel;
   situation$: Observable<SituationProjection>;
+
+  @Input()
+  activeTab: number = 0;
 
   public columns = ['id', 'name', 'newsType'];
   public statistics$: Observable<any>;
@@ -88,6 +98,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     private commonService: CommonService,
     private router: Router,
     private langFacade: ILangFacade,
+    private cdr: ChangeDetectorRef,
   ) {
     // status chart
     this.chartOptions = {
@@ -186,12 +197,10 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
     this.page$ = this.store
       .select(SituationsState.page)
       .pipe(filter((p) => !!p));
-
     this.statistics$ = this.store.select(SituationsState.statistics).pipe(
       filter((p) => !!p),
       map((s) => this.prepareStatistics(s))
     );
-
     this.chartReport$ = this.store.select(SituationsState.chartReport).pipe(
       filter((p) => !!p),
       tap((data) => {
@@ -216,7 +225,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   }
   public getStatistics(situationId: number) {
     this.store.dispatch(
-      new BrowseSituationsAction.GetStatistics({ situationId })
+      new BrowseSituationsAction.GetStatistics({ situationId, poi: this.activeTab === 0 ? 'by_location' : 'by_org'})
     );
   }
   public getChartReport(situationId: number) {
@@ -270,7 +279,7 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
 
     if (statistics.mainCategory?.length > 0) {
       table['value'] = statistics.mainCategory;
-      table['columns'] = statistics.mainCategory[0].primaryOrgs;
+      table['columns'] = statistics.mainCategory[0].header;
     }
     if (statistics.recoveryRate) {
       table['recoveryRate'] = statistics.recoveryRate.map(
@@ -328,9 +337,30 @@ export class SituationDashboardComponent implements OnInit, OnDestroy {
   }
 
   export() {
-    this.store.dispatch(new BrowseSituationsAction.Export({ type: 'PDF', situationId: this._situationId }));
+    this.store.dispatch(new BrowseSituationsAction.Export({ type: 'PDF', situationId: this._situationId ,
+      poi: this.activeTab === 0 ? 'by_location' : 'by_org'}));
   }
   back() {
       this.router.navigate(['..'], { relativeTo: this.route });
+  }
+  tab(index: number) {
+    switch (index) {
+      case 0:
+        this.getStatistics(this._situationId)
+        this.statistics$ = this.store.select(SituationsState.statistics).pipe(
+          filter((p) => !!p),
+          map((s) => this.prepareStatistics(s))
+        );
+        break;
+      case 1:
+        this.getStatistics(this._situationId)
+        this.statistics$ = this.store.select(SituationsState.statistics).pipe(
+          filter((p) => !!p),
+          map((s) => this.prepareStatistics(s)));
+        this.cdr.detectChanges()
+        break;
+      default:
+        break;
+    }
   }
 }

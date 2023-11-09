@@ -1,0 +1,10 @@
+::ng-deep {
+  .mat-dialog-container {
+    padding: 10px !important;
+  }
+}
+:host {
+  .mat-row:hover:not(.md-header-row) {
+    background: unset !important;
+  }
+}

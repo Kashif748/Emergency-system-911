@@ -11,8 +11,9 @@ import { Select, Store } from '@ngxs/store';
 import { TranslateService } from '@ngx-translate/core';
 import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 import { BrowseActivityLocationsState } from '../states/browse-locations.state';
-import { BcActivityLocations } from 'src/app/api/models';
+import { ActivityAnalysisStatusAction, BcActivityLocations } from 'src/app/api/models';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import {BrowseActivityEmployeesAction} from "../../employees/states/browse-employees.action";
 
 @Component({
   selector: 'app-browse-locations',
@@ -30,6 +31,10 @@ export class BrowseLocationsComponent implements OnInit {
 
   @Select(BrowseActivityLocationsState.state)
   public state$: Observable<BrowseActivityLocationsState>;
+
+  @Select(ActivityAnalysisState.activityStatus)
+  public activityStatus$: Observable<ActivityAnalysisStatusAction>;
+
 
   private destroy$ = new Subject();
 
@@ -57,8 +62,8 @@ export class BrowseLocationsComponent implements OnInit {
         icon: 'pi pi-pencil',
       },
       {
-        label: this.translate.instant('ACTIONS.ACTIVATE'),
-        icon: 'pi pi-check-square',
+        label: this.translate.instant('ACTIONS.DELETE'),
+        icon: 'pi pi pi-trash',
       },
     ] as MenuItem[];
     this.page$ = this.store.select(ActivityLocationsState.page).pipe(
@@ -75,11 +80,27 @@ export class BrowseLocationsComponent implements OnInit {
                 },
                 disabled: !u.isActive,
               },
+              {
+                ...userActions[1],
+                command: () => {
+                  this.delete(u.id);
+                },
+                disabled: !u.isActive,
+              }
             ],
           };
         })
       )
     );
+  }
+
+  delete(id) {
+    this.store
+      .dispatch(new BrowseActivityLocationsAction.Delete({ id }))
+      .toPromise()
+      .then(() => {
+        this.loadPage();
+      });
   }
 
   openDialog(id?: number) {

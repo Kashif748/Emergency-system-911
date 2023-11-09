@@ -95,6 +95,7 @@ import {
 } from '@angular/material/dialog';
 import { ReminderFormComponent } from './view-incidents/incident-reminder/reminder-form/reminder-form.component';
 import { IncidentReminderComponent } from './view-incidents/incident-reminder/incident-reminder.component';
+import { SimilarPopupComponent } from './specific-org-forms/similar-popup/similar-popup.component';
 
 @NgModule({
   declarations: [
@@ -151,6 +152,7 @@ import { IncidentReminderComponent } from './view-incidents/incident-reminder/in
     InquiryTableComponent,
     NewIncidentsViewComponent,
     ReminderFormComponent,
+    SimilarPopupComponent,
   ],
   imports: [
     CommonModule,

@@ -2,10 +2,12 @@ import {
   ChangeDetectorRef,
   Component,
   ComponentFactoryResolver,
+  EventEmitter,
   Injector,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -16,19 +18,24 @@ import { Dialog } from 'primeng/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { MapComponent } from '@shared/sh-components/map/map.component';
 import { MapViewType } from '@shared/components/map/utils/MapViewType';
-import {LocationTypeAction, LocationTypeState, VenderAction} from '@core/states';
+import { LocationTypeAction, LocationTypeState } from '@core/states';
 import { Select, Store } from '@ngxs/store';
 import { FormUtils } from '@core/utils';
 import { Observable, Subject } from 'rxjs';
 import { BcLocationTypes } from 'src/app/api/models';
 import { BrowseLocationsAction } from '../../states/browse-locations.action';
-import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  auditTime,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { LocationsState } from '@core/states/bc-setup/locations/locations.state';
 import { IAuthService } from '@core/services/auth.service';
 import { AddressSearchResultModel } from '@shared/sh-components/map/utils/map.models';
-import {SystemsState} from "@core/states/bc-setup/systems/systems.state";
-import {LocationsAction} from "@core/states/bc-setup/locations/locations.action";
-import {TranslateService} from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-location-dialog',
@@ -36,6 +43,8 @@ import {TranslateService} from "@ngx-translate/core";
   styleUrls: ['./location-dialog.component.scss'],
 })
 export class LocationDialogComponent implements OnInit, OnDestroy {
+  @Input() asDialog: boolean = true;
+  @Output() onClose = new EventEmitter<boolean>();
   @Select(LocationTypeState.page)
   public locationTypes$: Observable<BcLocationTypes[]>;
 
@@ -45,11 +54,9 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   blocking$: Observable<boolean>;
 
   @ViewChild(Dialog) dialog: Dialog;
-  public get asDialog() {
-    return this.route.component !== LocationDialogComponent;
-  }
 
   private defaultFormValue: { [key: string]: any } = {};
+  private auditLoadTypes$ = new Subject<string>();
 
   @ViewChild('mapContainer', { read: ViewContainerRef })
   mapContainer: ViewContainerRef;
@@ -77,6 +84,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     this._locationId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -89,6 +97,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...location,
           });
+          this.defaultFormValue = location;
         })
       )
       .subscribe();
@@ -102,7 +111,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
     private store: Store,
     private cfr: ComponentFactoryResolver,
     private auth: IAuthService,
-    private translate: TranslateService,
+    private translate: TranslateService
   ) {
     this.route.queryParams
       .pipe(
@@ -129,11 +138,42 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(new LocationTypeAction.LoadPage({ page: 0, size: 50 }));
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
     this.buildForm();
+    if (!this.dialog) {
+      this.initMap();
+    }
+
+    this.auditLoadTypes$
+      .pipe(takeUntil(this.destroy$), auditTime(1000))
+      .subscribe((searchText) => {
+        this.store.dispatch(
+          new LocationTypeAction.LoadPage({
+            filters: { searchText },
+            page: 0,
+            size: 50,
+          })
+        );
+      });
   }
+
+  loadTypes(searchText?: string, direct = false, id?: number) {
+    if (direct) {
+      this.store.dispatch(
+        new LocationTypeAction.LoadPage({
+          filters: { searchText },
+          page: 0,
+          size: 50,
+        })
+      );
+      return;
+    }
+    this.auditLoadTypes$.next(searchText);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -145,8 +185,6 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   }
 
   initMap() {
-    console.log(this.mapContainer);
-
     setTimeout(() => {
       this.mapContainer?.clear();
       this.mapComponent = undefined;
@@ -165,17 +203,12 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       latitude: [null, [Validators.required]],
       isActive: true,
     });
-    this.defaultFormValue = {
-      ...this.defaultFormValue,
-    };
   }
   close() {
     this.store.dispatch(new BrowseLocationsAction.ToggleDialog({}));
   }
 
   submit() {
-    console.log(this.form.value);
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -189,15 +222,23 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
       orgStructure: {
         id: this.loggedinUserId,
       },
+      district: null,
     };
-
-    console.log(location);
 
     if (this.editMode) {
       location.id = this._locationId;
       this.store.dispatch(new BrowseLocationsAction.UpdateLocation(location));
     } else {
-      this.store.dispatch(new BrowseLocationsAction.CreateLocation(location));
+      this.store
+        .dispatch(new BrowseLocationsAction.CreateLocation(location))
+        .toPromise()
+        .then(() => {
+          if (this.dialog) {
+            this.store.dispatch(new BrowseLocationsAction.ToggleDialog({}));
+          } else {
+            this.onClose.emit(true);
+          }
+        });
     }
   }
 
@@ -223,22 +264,20 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
         Address: '',
       };
     }
-    instance.title = this.translate.instant('LOCATIONS.LOCATION_TITLE'),
-    instance.config = {
-      mapType: MapViewType.REPORTER,
-      showSaveButton: false,
-      viewOnly: false,
-      pointLocation: addressPointLocation,
-      // zoomModel: {
-      //   referenceId: locationObj?.id,
-      //   featureName: MapActionType.ASSET_POINT,
-      // },
-      showLayers: false,
-    };
+    (instance.title = this.translate.instant('LOCATIONS.LOCATION_TITLE')),
+      (instance.config = {
+        mapType: MapViewType.REPORTER,
+        showSaveButton: false,
+        viewOnly: this.editMode,
+        pointLocation: addressPointLocation,
+        // zoomModel: {
+        //   referenceId: locationObj?.id,
+        //   featureName: MapActionType.ASSET_POINT,
+        // },
+        showLayers: false,
+      });
 
     instance.OnSaveMap.subscribe((response) => {
-      console.log(response);
-
       if (response) {
         this.form.patchValue({
           ...this.form.value,
@@ -246,7 +285,10 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
           latitude: response?.pointCoordinates?.latitude,
           sector: response?.locationInfo.COMMUNITYID,
           zone: response?.locationInfo.DISTRICTID,
-          district: response?.locationInfo.DISTRICTARA,
+          district:
+            this.translate.currentLang == 'ar'
+              ? response?.locationInfo.DISTRICTARA
+              : response?.locationInfo.DISTRICTNAMEENG,
         });
       }
       cdr.detectChanges();
@@ -257,7 +299,7 @@ export class LocationDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.store.dispatch(new LocationsAction.GetLocation({}));
+    this.initMap();
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();

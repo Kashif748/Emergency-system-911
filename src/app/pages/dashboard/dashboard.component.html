@@ -1,22 +1,104 @@
 <div class="container-fluid">
+  <div class="mb-3 border-bottom">
+    <div class="row">
+      <div
+        class="d-flex flex-column flex-md-row p-jc-between w-100 p-ai-center"
+      >
+        <app-breadcrumbs></app-breadcrumbs>
+        <div
+          class="ml-dir-auto d-flex flex-column flex-md-row"
+          *appPrivileges="'PRIV_VW_ORG_ACTIVITY'"
+        >
+          <div class="p-field p-col">
+            <p-treeSelect
+              [options]="orgHir"
+              [style]="{ width: '100%' }"
+              selectionMode="single"
+              [loading]="loadingOrgHir$ | async"
+              (onNodeExpand)="nodeExpand($event?.node)"
+              placeholder="{{ 'DASHBOARD.ORG_ARTCH' | translate }}"
+              appendTo="body"
+              [(ngModel)]="selectedHie"
+              (ngModelChange)="onHieChange($event)"
+            >
+              <ng-template let-option let-placeholder pTemplate="header">
+                <div class="w-100 p-2">
+                  <span class="p-input-icon-left w-100">
+                    <i class="pi pi-search"></i>
+                    <input
+                      (keyup)="filterOrgHir($event.target.value)"
+                      type="text"
+                      pInputText
+                      class="w-100"
+                    />
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template let-option let-placeholder pTemplate="value">
+                {{
+                  option
+                    ? (option | translateObj : "label")
+                    : ("DASHBOARD.ORG_ARTCH" | translate)
+                }}
+              </ng-template>
+            </p-treeSelect>
+          </div>
+          <div class="p-field p-col">
+            <p-dropdown
+              [autoDisplayFirst]="false"
+              [options]="sortCycles$ | async"
+              dataKey="id"
+              optionValue="id"
+              placeholder="{{ 'DASHBOARD.ANALYSIS_CRCLE' | translate }}"
+              [(ngModel)]="selectedCycle"
+              (ngModelChange)="onCycleChange($event)"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item | translateObj }}
+              </ng-template>
+
+              <ng-template let-item pTemplate="item">
+                {{ item | translateObj }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="py-4 border-bottom">
+  <app-breadcrumbs></app-breadcrumbs>
+  </div>-->
   <div class="row pb-20">
     <div class="header-state mb-2 col-lg-2 col-md-12">
       <div class="row shadow-0">
-        <div class="col-lg-12 col-md-4 col-sm-6 p-0 ">
+        <div class="col-lg-12 col-md-4 col-sm-6 p-0">
           <app-widget1></app-widget1>
         </div>
       </div>
     </div>
     <div class="col-lg-10 col-md-12">
       <div class="row">
-        <div class="col-12 mb-8">
-          <div class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm">
-            <div class="card-body  p-0 h-100">
-              <app-map [config]="{ viewOnly: true }" [dashboardMode]="true"></app-map>
+        <div class="col-12 col-md-12">
+          <app-bc-widget *appPrivileges="'PRIV_VW_BC_LISTS'"></app-bc-widget>
+        </div>
+        <div
+          class="col-12 mb-8"
+          *appPrivileges="['PRIV_VW_INC', 'PRIV_VW_GRP_INC', 'PRIV_VW_INT_INC']"
+        >
+          <div
+            class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm"
+          >
+            <div class="card-body p-0 h-100">
+              <app-map
+                [config]="{ viewOnly: true }"
+                [dashboardMode]="true"
+              ></app-map>
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="height:fit-content">
+        <div class="col-md-4" style="height: fit-content">
           <app-widget2 [widgets]="inProgressIncidnts"></app-widget2>
         </div>
         <div class="col-md-8">
@@ -26,6 +108,5 @@
     </div>
   </div>
 </div>
-
 
 <app-news-bar></app-news-bar>

@@ -8,7 +8,7 @@ export namespace BrowseImpactLevelAction {
     /**
      *
      */
-    constructor(public payload?: { pageRequest: PageRequestModel , versionId: number }) {}
+    constructor(public payload?: { pageRequest?: PageRequestModel , versionId: number }) {}
   }
 
   export class CreateImpactLevel {

@@ -72,8 +72,7 @@
 
         <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
           <div class="p-field p-col-12 p-md-4" [ngClass]="{'p-md-6': editMode}">
-            <div class="p-inputgroup">
-
+            <div [ngClass]="{'p-inputgroup': viewOnly}">
               <span class="p-float-label">
                 <p-dropdown #incidentId [options]="incidents$ | async" [autoDisplayFirst]="false"
                   formControlName="incidentId" [filter]="true" (onFilter)="loadIncidents($event?.filter)" dataKey="id"
@@ -120,8 +119,9 @@
 
           <div class="p-field p-col-12 p-md-6" *ngIf="editMode">
             <span class="p-float-label" [ngClass]="{'outline-primary rounded-sm': !closedStatus && viewOnly}">
-              <p-dropdown [options]="filterStatuses$ | async" [autoDisplayFirst]="false" [showClear]="false" dataKey="id"
-                appendTo="body" formControlName="statusId" (onChange)="viewOnly && updateStatus($event.value)">
+              <p-dropdown [options]="filterStatuses$ | async" [autoDisplayFirst]="false" [showClear]="false"
+                dataKey="id" appendTo="body" formControlName="statusId"
+                (onChange)="viewOnly && updateStatus($event.value)" optionDisabled="disabled">
                 <ng-template let-item pTemplate="selectedItem">
                   {{ item | translateObj }}
                 </ng-template>

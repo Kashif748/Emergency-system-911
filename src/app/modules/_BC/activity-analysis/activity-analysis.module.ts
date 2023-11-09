@@ -17,6 +17,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
 import { ActivityAnalysisComponent } from './activity-analysis/activity-analysis.component';
+import { DialogModule } from 'primeng/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SkeletonModule } from 'primeng/skeleton';
+import { BrowseActivityImpactMatrixState } from './impact-matrix/states/browse-impact-matrix.state';
+
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -69,10 +74,11 @@ const routes: Routes = [
           import('./recovery/recovery.module').then((m) => m.RecoveryModule),
       },
       {
-        path: 'notes',
+        path: 'worklogs',
         loadChildren: () =>
-          import('./notes/notes.module').then((m) => m.NotesModule),
+          import('./worklogs/worklogs.module').then((m) => m.WorklogsModule),
       },
+
     ],
   },
 ];
@@ -82,6 +88,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    ReactiveFormsModule,
     ToolbarModule,
     ButtonModule,
     CardModule,
@@ -95,12 +102,15 @@ const routes: Routes = [
       },
       isolate: true,
     }),
-    NgxsModule.forFeature([BrowseActivityAnalysisState]),
+    NgxsModule.forFeature([BrowseActivityAnalysisState ,BrowseActivityImpactMatrixState]),
+    FormsModule,
     DividerModule,
     ProgressBarModule,
     TranslateObjModule,
+    DialogModule,
     AvatarModule,
     BlockUIModule,
+    SkeletonModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
