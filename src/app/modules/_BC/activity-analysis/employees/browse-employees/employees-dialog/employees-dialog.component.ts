@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {GenericValidators} from '@shared/validators/generic-validators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
@@ -20,7 +20,7 @@ import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activit
   templateUrl: './employees-dialog.component.html',
   styleUrls: ['./employees-dialog.component.scss'],
 })
-export class EmployeesDialogComponent implements OnInit, OnDestroy {
+export class EmployeesDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   employeesTypes = [];
   opened$: Observable<boolean>;
 
@@ -44,6 +44,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
   set employeeId(v: number) {
     this._employeeId = v;
     this.buildForm();
+    this.form.reset();
     if (v === undefined || v === null) {
       return;
     }
@@ -85,11 +86,6 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
     this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened'),
-      tap(()=> {
-        // this.buildForm()
-        this.form.reset()
-        this.form.updateValueAndValidity()
-      } )
     );
   }
   ngAfterViewInit(): void {
@@ -113,6 +109,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseActivityEmployeesAction.ToggleDialog({}));
   }
   clear() {
+    this.form.reset();
     const employeeId = this._employeeId;
     this.employeeId = null;
     this.employeeId = employeeId;

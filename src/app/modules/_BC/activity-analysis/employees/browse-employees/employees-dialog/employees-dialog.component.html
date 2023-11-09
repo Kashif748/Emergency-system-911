@@ -71,7 +71,7 @@
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
-    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <form *ngIf="form" [formGroup]="form" class="p-fluid p-grid mt-5">
       <!-- AR Name -->
 
       <div class="p-field p-col-12 p-md-6">
@@ -95,6 +95,12 @@
             *ngIf="form.controls['employeeNameAr'].hasError('required')"
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['employeeNameAr'].hasError('arabic')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
           </p>
         </ng-container>
       </div>
@@ -120,6 +126,12 @@
             *ngIf="form.controls['employeeNameEn'].hasError('required')"
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['employeeNameEn'].hasError('english')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
           </p>
         </ng-container>
       </div>
