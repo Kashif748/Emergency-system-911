@@ -19,7 +19,6 @@ import { BrowseVenderAction } from '../../states/browse-vender.action';
 import { FormUtils } from '@core/utils/form.utils';
 import { VenderState } from '@core/states/bc-setup/venders/vender.state';
 import { VenderAction } from '@core/states';
-import { PrivilegesService } from '@core/services/privileges.service';
 
 @Component({
   selector: 'app-vender-dialog',
@@ -56,7 +55,7 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
   @Input()
   set venderId(v: number) {
     this._venderId = v;
-    this.buildForm();
+    this.form.reset();
     if (v === undefined || v === null) {
       this.defaultFormValue = null;
       return;
@@ -85,18 +84,12 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
     protected incidentService: IncidentsService,
     private route: ActivatedRoute,
     private store: Store,
-    private router: Router,
-    private privilegesService: PrivilegesService
+    private router: Router
   ) {
-    this.route.queryParams
-      .pipe(
-        map((params) => params['_id']),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((id) => {
-        this.venderId = id;
-      });
     this.viewOnly$ = this.route.queryParams.pipe(
+      tap(({ _id }) => {
+        this.venderId = _id;
+      }),
       map((params) => params['_mode'] === 'viewonly'),
       tap((v) => {
         if (this.form) {
