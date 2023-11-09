@@ -139,6 +139,7 @@ export class SurveysManagementService {
           happiness: filterForm?.happiness ?? '',
           reason: filterForm?.reason ?? '',
           incidentId: filterForm?.incident ?? '',
+          incidentCategoryId: filterForm?.category ?? '',
         },
 
         responseType: 'blob' as any,
@@ -216,7 +217,7 @@ export class SurveysManagementService {
             fromDate: filterForm?.fromDate ?? '',
             toDate: filterForm?.toDate ?? '',
             incidentId: filterForm?.incident ?? '',
-            incidentCategoryId: filterForm?.category ?? '',
+            // incidentCategoryId: filterForm?.category ?? '',
             sort: `${sort?.active ?? ''},${
               sort?.direction ?? 'createdDate,desc'
             }`,
@@ -256,6 +257,7 @@ export class SurveysManagementService {
           fromDate: filterForm?.fromDate ?? '',
           toDate: filterForm?.toDate ?? '',
           incidentId: filterForm?.incident ?? '',
+          // incidentCategoryId: filterForm?.category ?? '',
         },
 
         responseType: 'blob' as any,
