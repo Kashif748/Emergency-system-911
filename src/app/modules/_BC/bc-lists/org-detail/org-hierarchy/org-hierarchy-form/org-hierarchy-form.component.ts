@@ -45,6 +45,7 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
   private auditLoadUsers$ = new Subject<{
     search?: string;
     selectorKey?: string;
+    type?: string;
   }>();
 
   form: FormGroup;
@@ -106,17 +107,18 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
         })
       );
 
-    this.loadUsers(undefined, true, 'coordinator');
+    // this.loadUsers(undefined, true, 'coordinator');
 
     this.auditLoadUsers$
       .pipe(takeUntil(this.destroy$), auditTime(1000))
-      .subscribe(({ search, selectorKey }) => {
+      .subscribe(({ search, selectorKey, type}) => {
         this.store.dispatch(
           new UserAction.LoadUsers({
             search,
             page: 0,
             size: 15,
             isolatedKey: selectorKey,
+            code: type === 'manager' ? type : type === 'cord' ? 'cord' : ''
           })
         );
       });
@@ -177,7 +179,7 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadUsers(search?: string, direct = false, selectorKey?: string) {
+  loadUsers(search?: string, direct = false, selectorKey?: string, type?) {
     if (direct) {
       this.store.dispatch(
         new UserAction.LoadUsers({
@@ -185,10 +187,11 @@ export class OrgHierarchyFormComponent implements OnInit, OnDestroy {
           page: 0,
           size: 15,
           isolatedKey: selectorKey,
+          code: type === 'manager' ? type : type === 'cord' ? 'cord' : ''
         })
       );
       return;
     }
-    this.auditLoadUsers$.next({ search, selectorKey });
+    this.auditLoadUsers$.next({ search, selectorKey, type});
   }
 }

@@ -328,12 +328,14 @@ export class UserProfileControllerService extends BaseService {
    */
   getAllForOrg$Response(params: {
     name?: string;
+    code?: string;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageUserAndRoleProjection>> {
 
     const rb = new RequestBuilder(this.rootUrl, UserProfileControllerService.GetAllForOrgPath, 'get');
     if (params) {
       rb.query('name', params.name, {});
+      rb.query('code', params.code, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -356,6 +358,7 @@ export class UserProfileControllerService extends BaseService {
    */
   getAllForOrg(params: {
     name?: string;
+    code?: string;
     pageable: Pageable;
   }): Observable<RestApiResponsePageUserAndRoleProjection> {
 
