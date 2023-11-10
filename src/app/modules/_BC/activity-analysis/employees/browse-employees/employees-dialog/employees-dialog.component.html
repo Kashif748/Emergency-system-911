@@ -46,13 +46,13 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <ng-container *ngIf="editMode">
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
         {{ "EMPLOYEES.EDIT_NEW" | translate }}
         <span class="label label-lg label-light-success label-inline">
         {{ "ACTIONS.UPDATE_ITEM" | translate }}
       </span>
       </ng-container>
-      <ng-container *ngIf="!editMode">
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
         {{ "EMPLOYEES.ADD_NEW" | translate }}
         <span class="label label-lg label-light-primary label-inline">
         {{ "ACTIONS.NEW_ITEM" | translate }}
@@ -71,7 +71,7 @@
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
-    <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <form *ngIf="form" [formGroup]="form" class="p-fluid p-grid mt-5">
       <!-- AR Name -->
 
       <div class="p-field p-col-12 p-md-6">
@@ -95,6 +95,12 @@
             *ngIf="form.controls['employeeNameAr'].hasError('required')"
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['employeeNameAr'].hasError('arabic')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
           </p>
         </ng-container>
       </div>
@@ -121,6 +127,12 @@
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['employeeNameEn'].hasError('english')"
+          >
+            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+          </p>
         </ng-container>
       </div>
 
@@ -133,7 +145,7 @@
             formControlName="phoneNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
-            [phoneType]="'FIXED_LINE'"
+            phoneType="FIXED_LINE"
           >
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -174,7 +186,7 @@
             formControlName="mobileNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
-            [phoneType]="'MOBILE'"
+            phoneType="MOBILE"
           >
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -217,7 +229,7 @@
             formControlName="secondNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
-            [phoneType]="'FIXED_LINE_OR_MOBILE'"
+            phoneType="FIXED_LINE_OR_MOBILE"
           >
           </ngx-intl-tel-input>
           <label>{{ "EMPLOYEES.OTHER_PHONE" | translate }} </label>
