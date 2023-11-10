@@ -46,13 +46,13 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <ng-container *ngIf="editMode">
+      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
         {{ "EMPLOYEES.EDIT_NEW" | translate }}
         <span class="label label-lg label-light-success label-inline">
         {{ "ACTIONS.UPDATE_ITEM" | translate }}
       </span>
       </ng-container>
-      <ng-container *ngIf="!editMode">
+      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
         {{ "EMPLOYEES.ADD_NEW" | translate }}
         <span class="label label-lg label-light-primary label-inline">
         {{ "ACTIONS.NEW_ITEM" | translate }}
@@ -145,7 +145,7 @@
             formControlName="phoneNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
-            [phoneType]="'FIXED_LINE'"
+            phoneType="FIXED_LINE"
           >
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -186,7 +186,7 @@
             formControlName="mobileNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
-            [phoneType]="'MOBILE'"
+            phoneType="MOBILE"
           >
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -229,7 +229,7 @@
             formControlName="secondNumber"
             [enablePlaceholder]="false"
             [enableAutoCountrySelect]="true"
-            [phoneType]="'FIXED_LINE_OR_MOBILE'"
+            phoneType="FIXED_LINE_OR_MOBILE"
           >
           </ngx-intl-tel-input>
           <label>{{ "EMPLOYEES.OTHER_PHONE" | translate }} </label>
