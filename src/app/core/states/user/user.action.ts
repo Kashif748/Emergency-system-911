@@ -29,6 +29,7 @@ export namespace UserAction {
     constructor(
       public payload: {
         search?: string;
+        code?: string;
         sort?: string[];
         page: number;
         size: number;
