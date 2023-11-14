@@ -175,7 +175,7 @@ export class BrowseTasksComponent implements OnInit {
       });
 
     this.filterStatuses$ = this.statuses$.pipe(
-      map(statuses => statuses.filter(status => status.id !== 8))
+      map((statuses) => statuses.filter((status) => status.id !== 8))
     );
 
     this.page$ = this.store.select(TaskState.page).pipe(filter((p) => !!p));
@@ -206,7 +206,8 @@ export class BrowseTasksComponent implements OnInit {
   }
 
   loadOrgs() {
-    this.store.dispatch(new OrgAction.LoadOrgs({}));
+    const currentOrg = this.store.selectSnapshot(CommonDataState.currentOrg);
+    this.store.dispatch(new OrgAction.LoadOrgs({ orgId: currentOrg?.id }));
   }
   search() {
     this.store.dispatch([
