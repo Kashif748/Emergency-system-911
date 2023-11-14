@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, of, Subject} from "rxjs";
 import {Select, Store} from "@ngxs/store";
 import {LazyLoadEvent, MenuItem, TreeNode} from "primeng/api";
@@ -19,6 +19,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {OrgDetailAction, OrgDetailState} from "@core/states";
 import {BcOrgHierarchyProjection} from "../../../../api/models/bc-org-hierarchy-projection";
 import { cloneDeep } from "lodash";
+import {BrowseBCAction} from "../../states/browse-bc.action";
+import {VERSION_STATUSES} from "@core/states/bc/bc/bc.state";
+import {BrowseUsersAction} from "../../../_user-mgmt/states/browse-users.action";
 
 @Component({
   selector: 'app-browse-bia-app',
@@ -30,6 +33,9 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
 
   @Select(ImpactAnalysisState.cycles)
   public cycles$: Observable<BcCycles[]>;
+
+  @Select(BiaAppsState.blocking)
+  public blocking$: Observable<boolean>;
 
   @Select(BrowseBiaAppState.state)
   public state$: Observable<BrowseBiaAppStateModel>;
@@ -51,8 +57,12 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   @Select(ImpactAnalysisState.activityStatuses)
   public activityStatuses$: Observable<BcAnalysisStatus[]>;
 
+  public smallScreen: boolean;
+
+  VERSION_STATUSES = VERSION_STATUSES;
   private auditLoadOrgPage$ = new Subject<string>();
   selectedCycle: any;
+  sidebar = false;
   public orgHir: TreeNode[] = [];
   public orgHireracy: TreeNode[] = [];
   private destroy$ = new Subject();
@@ -96,9 +106,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private treeHelper: TreeHelper,
-    private privilegesService: PrivilegesService,
-    private router: Router,
-    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
   ) {
     this.langFacade.vm$
       .pipe
@@ -120,11 +128,13 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
         takeUntil(this.destroy$),
-        filter((c) => c.matches)
+        map((c) => c.matches),
+        tap((c) => {
+          this.smallScreen = c;
+          c ? (this.sidebar = false) : (this.sidebar = true);
+        })
       )
-      .subscribe(() => {
-        this.changeView('CARDS');
-      });
+      .subscribe();
     this.store.dispatch([
       new BrowseBiaAppAction.LoadCycles({ page: 0, size: 100 }),
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 })
@@ -148,6 +158,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       if (cycles.length > 0) {
         const sortedCycles = [...cycles];
         this.selectedCycle = sortedCycles[0].id;
+        this.cdr.detectChanges();
       }
     });
     this.store
@@ -356,5 +367,16 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         })
       );
     }
+  }
+  changeStatues(status: VERSION_STATUSES) {
+    this.store.dispatch(
+      new BrowseBCAction.ChangeStatus({
+        versionId: this.selectedCycle,
+        statusId: status,
+      })
+    );
+  }
+  openDialog(id?: number, cycle?: string) {
+    this.store.dispatch(new BrowseBiaAppAction.ToggleDialog({ dialog: cycle}));
   }
 }
