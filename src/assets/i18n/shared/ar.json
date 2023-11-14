@@ -537,7 +537,7 @@
         }
       },
       "SIMILAR_INCIDENTS" :"بلاغات مشابهة",
-      "SIMILAR_INCIDENTS_MSG" :"يوجد بالفعل {{count}} بلاغ مطابق",
+      "SIMILAR_INCIDENTS_MSG" :"يوجد {{count}} بلاغ مطابق",
       "LINK":"الرابط",
       "ALL": "الكل",
       "LATE": "متأخر",

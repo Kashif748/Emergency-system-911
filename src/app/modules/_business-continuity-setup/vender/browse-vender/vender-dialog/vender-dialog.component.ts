@@ -55,7 +55,7 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
   @Input()
   set venderId(v: number) {
     this._venderId = v;
-    this.form.reset();
+    this.form?.reset();
     if (v === undefined || v === null) {
       this.defaultFormValue = null;
       return;
