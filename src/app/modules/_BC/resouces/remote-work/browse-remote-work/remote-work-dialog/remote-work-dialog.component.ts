@@ -84,6 +84,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
     this._remoteWorkId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -106,6 +107,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...remoteWork,
           });
+          this.defaultFormValue = remoteWork;
           this.patchValue(remoteWork);
         })
       )
@@ -306,7 +308,6 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.store.dispatch(new OrgActivityAction.GetOrgActivities({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();

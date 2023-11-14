@@ -8,7 +8,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {BrowseStaffAction} from "../../states/browse-staff.action";
 import {Select, Store} from "@ngxs/store";
 import {Dialog} from "primeng/dialog";
-import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
 import {IAuthService} from "@core/services/auth.service";
 import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
 import {LazyLoadEvent} from "primeng/api";
@@ -72,6 +71,7 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
     this._staffId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -88,6 +88,7 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
             ...staff,
           });
           this.patchValue(staff);
+          this.defaultFormValue = staff;
         })
       )
       .subscribe();
@@ -300,13 +301,13 @@ export class StaffReqDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.store.dispatch(new StaffAction.GetStaff({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
-    const hoursArray = this.defaultFormValue.value.hours;
+    const hoursArray = JSON.parse(this.defaultFormValue.minPersonnelRequired).minPersonnelReq;
     for (let i = 0; i < hoursArray.length; i++) {
       const hourControl = hoursArray.at(i) as FormGroup;
-      (this.form.get('hours') as FormArray).controls[i].get('label').setValue(hourControl['label']);
+      (this.form.get('hours') as FormArray).controls[i].get('label').setValue(hourControl['key']);
+      (this.form.get('hours') as FormArray).controls[i].get('hour').setValue(hourControl['value']);
     }
     this.cdr.detectChanges();
   }

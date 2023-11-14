@@ -65,4 +65,24 @@ export namespace BrowseBCAction {
      */
     constructor(public payload: { versionId: number }) {}
   }
+  export class Sort {
+    static readonly type =
+      '[BrowseBusinessContinuity] Sort version List';
+
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc' }) {}
+  }
+  export class Delete {
+    static readonly type = '[BrowseBusinessContinuity] Delete Version';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

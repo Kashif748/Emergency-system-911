@@ -9,10 +9,8 @@ import {filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
 import {BrowseInfraAction} from "../../states/browse-infra.action";
 import {GenericValidators} from "@shared/validators/generic-validators";
 import {Dialog} from "primeng/dialog";
-import {VenderState} from "@core/states/bc-setup/venders/vender.state";
 import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
 import {InfraAction} from "@core/states/bc-resources/infra-req/infra.action";
-import {BrowseRemoteWorkAction} from "../../../remote-work/states/browse-remote-work.action";
 import {FormUtils} from "@core/utils/form.utils";
 import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
 import {BcResources} from "../../../../../../api/models/bc-resources";
@@ -57,6 +55,7 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
     this._infraId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -70,7 +69,7 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...infra,
           });
-          // this.patchValues(record);
+          this.defaultFormValue = infra;
         })
       )
       .subscribe();
@@ -139,7 +138,6 @@ export class InfraDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.store.dispatch(new InfraAction.GetInfra({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();

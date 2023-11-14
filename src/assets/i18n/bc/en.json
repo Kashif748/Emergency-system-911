@@ -20,6 +20,15 @@
   "IMPACTS": "Impacts",
   "ACTION": "ACTION",
   "ADD": "Add",
+  "VERSION_LIST": {
+    "NAME_AR":"Name Ar",
+    "NAME_EN":"Name En",
+    "STATUS":"Status",
+    "CREATED_BY":"Created By",
+    "CREATED_ON":"Created On",
+    "UPDATED_BY":"Updated By",
+    "UPDATED_ON":"Updated On"
+  },
   "IMPACT_LEVELS": {
     "LEVEL": "Level",
     "TAB_LABEL": "Impacts Levels",
@@ -50,6 +59,7 @@
   "ORG_NAME_EN": "Organization Name (English)",
   "DESC": "Description",
   "EMPLOYEES": "Total Employees Number",
+  "COMPLIANCE_PERCENTAGE": "National Standard Compliance Percentage",
   "ACTIVITIES": " Organization Activities Number",
   "RTO_LIST": {
     "TITLE_RTO": "View RTO",
@@ -116,7 +126,7 @@
       "DEPT_MGMT": "Department Manager",
       "FIRST_BUSI_COORDINATOR": "First Business Continuity Coordinator",
       "SECOND_BUSI_COORDINATOR": "Second Business Continuity Coordinator",
-      "COORDINATOR" : "Business Continuity Coordinators"
+      "COORDINATOR": "Business Continuity Coordinators"
     },
     "SECTION": {
       "USER_DATA": "User Data",

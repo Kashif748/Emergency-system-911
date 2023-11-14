@@ -50,6 +50,7 @@ export class OtherDialogComponent implements OnInit, OnDestroy {
     this._otherId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -63,6 +64,7 @@ export class OtherDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...other,
           });
+          this.defaultFormValue = other;
         })
       )
       .subscribe();
@@ -128,7 +130,6 @@ export class OtherDialogComponent implements OnInit, OnDestroy {
     }
   }
   clear() {
-    this.store.dispatch(new OtherAction.GetOther({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();
