@@ -239,7 +239,7 @@
               </td>
               <td *ngIf="columns?.includes('leader')" (click)="item.isActive && openView(item.id)">
                 <ng-container *ngFor="let user of item.users; let i = index">
-                  {{user?.type === 1 && lang === 'en' ? user.user.firstNameEn : user?.type === 1 && lang === 'ar' ? user.user.firstNameAr : ''}}
+                  {{user?.type === 1 ? (user.user | translateObj : 'firstName') + ' ' + (user.user | translateObj : 'lastName') : ''}}
                 </ng-container>
               </td>
 
