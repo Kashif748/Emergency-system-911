@@ -14,7 +14,10 @@
   [visible]="opened$ | async"
   (visibleChange)="close()"
   [modal]="true"
-  [style]="{'width': editMode ? '100%' : '55vw', 'height': editMode ? '100%' : 'auto'}"
+  [style]="{
+    width: editMode ? '100%' : '55vw',
+    height: editMode ? '100%' : 'auto'
+  }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
   [maximizable]="true"
   [baseZIndex]="10000"
@@ -35,14 +38,14 @@
   <div class="d-flex">
     <h3>
       <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'ACTIVITY_DIALOG.VIEW_ACTIVITY' | translate}}
+        {{ "ACTIVITY_DIALOG.VIEW_ACTIVITY" | translate }}
       </ng-container>
       <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'ADD_NEW_ACTIVITY' | translate}}
+        {{ "ADD_NEW_ACTIVITY" | translate }}
       </ng-container>
 
       <ng-container *ngIf="viewOnly$ | async">
-        {{'RTO_LIST.TITLE_RTO' | translate}}
+        {{ "RTO_LIST.TITLE_RTO" | translate }}
       </ng-container>
     </h3>
   </div>
@@ -51,20 +54,46 @@
 </ng-template>
 
 <!-- templates content -->
-<ng-template #content >
+<ng-template #content>
   <div *ngIf="!editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-400px">
     <p-blockUI>
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
 
     <div class="row p-4">
-     <!-- <h3
-        *ngIf="!selectedCycle"
-        class="col-12 pt-10 pb-3 font-weight-bold text-center"
-      >
-        {{ "SELECT_CYCLE_MSG" | translate }}
-      </h3>-->
-      <!-- Cycle -->
+      <div class="p-field p-col-12 p-md-6">
+        <span class="p-float-label">
+          <p-treeSelect
+            [options]="orgHir"
+            selectionMode="single"
+            [ngModel]="selectedOrgHir"
+            (ngModelChange)="selectDivision($event)"
+            appendTo="body"
+            [loading]="loading$ | async"
+            (onNodeExpand)="nodeExpand($event?.node)"
+            placeholder="{{ 'RESOURCES.DIVISION' | translate }}"
+            styleClass="w-100"
+          >
+            <ng-template let-option let-placeholder pTemplate="header">
+              <div class="w-100 p-2">
+                <span class="p-input-icon-left w-100">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (keyup)="filterOrgHir($event.target.value)"
+                    type="text"
+                    pInputText
+                    class="w-100"
+                  />
+                </span>
+              </div>
+            </ng-template>
+            <ng-template let-option let-placeholder pTemplate="value">
+              {{ option | translateObj : "label" }}
+            </ng-template>
+          </p-treeSelect>
+          <label>{{ "RESOURCES.DIVISION" | translate }} </label>
+        </span>
+      </div>
       <div class="p-field p-col-6 mx-auto">
         <p-dropdown
           [autoDisplayFirst]="false"
@@ -84,7 +113,7 @@
           </ng-template>
         </p-dropdown>
       </div>
-      <div class="p-field p-col-6">
+      <div class="p-field p-col-12">
         <div class="p-inputgroup">
           <span class="p-float-label">
             <input
@@ -242,48 +271,77 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="row">
-        <div class="m-2 p-field p-col-6 p-md-4">
-          <span class="p-float-label">
-            <input disabled class="p-col-10" type="text" pInputText [value]="recoveryPageData?.activity.orgHierarchy | translateObj : 'name'">
-            <label>
-              {{ "ORG_ARTCH" | translate }}
-            </label>
-          </span>
-        </div>
+          <div class="m-2 p-field p-col-6 p-md-4">
+            <span class="p-float-label">
+              <input
+                disabled
+                class="p-col-10"
+                type="text"
+                pInputText
+                [value]="
+                  recoveryPageData?.activity.orgHierarchy
+                    | translateObj : 'name'
+                "
+              />
+              <label>
+                {{ "ORG_ARTCH" | translate }}
+              </label>
+            </span>
+          </div>
 
-        <div class="m-2 p-field p-col-6 p-md-3">
-          <span class="p-float-label">
-            <input disabled class="p-col-10" type="text" pInputText
-                   [value]="recoveryPageData?.activity | translateObj: 'name'"/>
-            <label>
-              {{ "ACTIVITY_NAME" | translate }}
-            </label>
-          </span>
-        </div>
+          <div class="m-2 p-field p-col-6 p-md-3">
+            <span class="p-float-label">
+              <input
+                disabled
+                class="p-col-10"
+                type="text"
+                pInputText
+                [value]="recoveryPageData?.activity | translateObj : 'name'"
+              />
+              <label>
+                {{ "ACTIVITY_NAME" | translate }}
+              </label>
+            </span>
+          </div>
 
-        <div class="m-2 p-field p-col-6 p-md-2">
-          <span class="p-float-label">
-            <input disabled class="p-col-10" type="text" pInputText [value]="recoveryPageData?.createdBy | translateObj:['FirstName',' ', 'LastName']"/>
-            <label>
-              {{ "CREATED_BY" | translate }}
-            </label>
-          </span>
-        </div>
+          <div class="m-2 p-field p-col-6 p-md-2">
+            <span class="p-float-label">
+              <input
+                disabled
+                class="p-col-10"
+                type="text"
+                pInputText
+                [value]="
+                  recoveryPageData?.createdBy
+                    | translateObj : ['FirstName', ' ', 'LastName']
+                "
+              />
+              <label>
+                {{ "CREATED_BY" | translate }}
+              </label>
+            </span>
+          </div>
 
-        <div class="m-2 p-field p-col-6 p-md-2">
-          <span class="p-float-label">
-            <input disabled class="p-col-10" type="text" pInputText [value]="recoveryPageData?.status | translateObj : 'name'"/>
-            <label>
-              {{ "STATUS" | translate }}
-            </label>
-          </span>
-        </div>
+          <div class="m-2 p-field p-col-6 p-md-2">
+            <span class="p-float-label">
+              <input
+                disabled
+                class="p-col-10"
+                type="text"
+                pInputText
+                [value]="recoveryPageData?.status | translateObj : 'name'"
+              />
+              <label>
+                {{ "STATUS" | translate }}
+              </label>
+            </span>
+          </div>
         </div>
       </div>
 
       <!--Impact Matrix table-->
 
-      <div class="col-md-8 col-sm-12 " *ngIf="editMode && !(viewOnly$ | async)">
+      <div class="col-md-8 col-sm-12" *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="impactMatrixLoading; else tableTemplate">
             <p-table [value]="[].constructor(6)">
@@ -327,7 +385,10 @@
             >
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header" let-columns>
@@ -353,14 +414,14 @@
                 <tr class="read-only-row">
                   <td class="min-w-150px">
                     <span class="px-3">
-                  {{ rowData?.impactType | translateObj }}
-                </span>
+                      {{ rowData?.impactType | translateObj }}
+                    </span>
                   </td>
                   <td
                     class="min-w-150px"
                     *ngFor="let cell of rowData?.bcRto; let i = index"
                   >
-                    {{cell.value?.bcImpactLevels | translateObj}}
+                    {{ cell.value?.bcImpactLevels | translateObj }}
                   </td>
                 </tr>
               </ng-template>
@@ -378,9 +439,8 @@
         </div>
       </div>
 
-
       <!--recovery table-->
-      <div class="col-md-4 col-sm-12 " *ngIf="editMode && !(viewOnly$ | async)">
+      <div class="col-md-4 col-sm-12" *ngIf="editMode && !(viewOnly$ | async)">
         <div class="card card-height">
           <ng-container *ngIf="recoveryLoading; else tableTemplate">
             <p-table [value]="[].constructor(5)">
@@ -390,8 +450,7 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="header">
-                <tr>
-                </tr>
+                <tr></tr>
               </ng-template>
               <ng-template pTemplate="body" let-item>
                 <tr class="cursor-pointer hoverable">
@@ -424,24 +483,42 @@
             </p-table>
             <div class="vertical-table">
               <div class="vertical-row border-bottom">
-                <div class="vertical-header">{{ "RECOVERY.ACTIVITY_PRIORITY" | translate }}</div>
-                <div class="vertical-data">{{recoveryPageData.recoveryPriority | translateObj}}</div>
+                <div class="vertical-header">
+                  {{ "RECOVERY.ACTIVITY_PRIORITY" | translate }}
+                </div>
+                <div class="vertical-data">
+                  {{ recoveryPageData.recoveryPriority | translateObj }}
+                </div>
               </div>
               <div class="vertical-row border-bottom">
-                <div class="vertical-header">{{ "RECOVERY.CAPACITY" | translate }}</div>
-                <div class="vertical-data">{{recoveryPageData.capacity}}</div>
+                <div class="vertical-header">
+                  {{ "RECOVERY.CAPACITY" | translate }}
+                </div>
+                <div class="vertical-data">{{ recoveryPageData.capacity }}</div>
               </div>
               <div class="vertical-row border-bottom">
-                <div class="vertical-header">{{ "RECOVERY.SPOF" | translate }}</div>
-                <div class="vertical-data">{{recoveryPageData.spof}}</div>
+                <div class="vertical-header">
+                  {{ "RECOVERY.SPOF" | translate }}
+                </div>
+                <div class="vertical-data">{{ recoveryPageData.spof }}</div>
               </div>
               <div class="vertical-row border-bottom">
-                <div class="vertical-header">{{ "RECOVERY.SKILLS" | translate }}</div>
-                <div class="vertical-data">{{recoveryPageData.skills}}</div>
+                <div class="vertical-header">
+                  {{ "RECOVERY.SKILLS" | translate }}
+                </div>
+                <div class="vertical-data">{{ recoveryPageData.skills }}</div>
               </div>
               <div class="vertical-row border-bottom">
-                <div class="vertical-header">{{ "RECOVERY.REMOTELY" | translate }}</div>
-                <div class="vertical-data">{{recoveryPageData.remote ? ("RECOVERY.YES" | translate) : ("RECOVERY.NO" | translate)}}</div>
+                <div class="vertical-header">
+                  {{ "RECOVERY.REMOTELY" | translate }}
+                </div>
+                <div class="vertical-data">
+                  {{
+                    recoveryPageData.remote
+                      ? ("RECOVERY.YES" | translate)
+                      : ("RECOVERY.NO" | translate)
+                  }}
+                </div>
               </div>
               <!-- Add more rows as needed -->
             </div>
@@ -526,10 +603,7 @@
         </div>
       </div>
     </div>
-
   </div>
-
-
 
   <div *ngIf="editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-200px">
     <p-blockUI>
@@ -538,7 +612,7 @@
 
     <div class="row">
       <!--system table-->
-      <div class="mt-2 col-md-4 col-sm-6 ">
+      <div class="mt-2 col-md-4 col-sm-6">
         <div class="card card-height">
           <ng-container *ngIf="systemLoading; else tableTemplate">
             <p-table [value]="[].constructor(5)">
@@ -580,7 +654,10 @@
               </ng-template>
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header">
@@ -597,7 +674,6 @@
                   <td class="min-w-200px max-w-300px">
                     {{ item.system | translateObj }}
                   </td>
-
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage">
@@ -614,7 +690,10 @@
         </div>
       </div>
       <!--Employee tab-->
-      <div class="mt-2 col-md-4 col-sm-6" *ngIf="editMode && !(viewOnly$ | async)">
+      <div
+        class="mt-2 col-md-4 col-sm-6"
+        *ngIf="editMode && !(viewOnly$ | async)"
+      >
         <div class="card card-height">
           <ng-container *ngIf="employLoading; else tableTemplate">
             <p-table [value]="[].constructor(5)">
@@ -659,7 +738,10 @@
               </ng-template>
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header">
@@ -679,12 +761,15 @@
               <ng-template pTemplate="body" let-item>
                 <tr class="read-only-row">
                   <td class="min-w-200px max-w-300px">
-                    {{ item | translateObj : 'employeeName'}}
+                    {{ item | translateObj : "employeeName" }}
                   </td>
                   <td class="min-w-200px max-w-300px">
-                    {{ item.isPrimary ? ("EMPLOYEES.PRI" | translate) : ("EMPLOYEES.SECONDARY" | translate)}}
+                    {{
+                      item.isPrimary
+                        ? ("EMPLOYEES.PRI" | translate)
+                        : ("EMPLOYEES.SECONDARY" | translate)
+                    }}
                   </td>
-
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage">
@@ -702,7 +787,10 @@
       </div>
 
       <!--Location tab-->
-      <div class="mt-2 col-md-4 col-sm-6" *ngIf="editMode && !(viewOnly$ | async)">
+      <div
+        class="mt-2 col-md-4 col-sm-6"
+        *ngIf="editMode && !(viewOnly$ | async)"
+      >
         <div class="card card-height">
           <ng-container *ngIf="locationLoading; else tableTemplate">
             <p-table [value]="[].constructor(5)">
@@ -747,7 +835,10 @@
               </ng-template>
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header">
@@ -762,7 +853,7 @@
               <ng-template pTemplate="body" let-item>
                 <tr class="read-only-row">
                   <td class="min-w-200px max-w-300px">
-                    {{ item.location | translateObj}}
+                    {{ item.location | translateObj }}
                   </td>
                 </tr>
               </ng-template>
@@ -783,7 +874,10 @@
 
     <div class="row">
       <!--department insisde table-->
-      <div class="mt-4 col-md-4 col-sm-6 " *ngIf="editMode && !(viewOnly$ | async)">
+      <div
+        class="mt-4 col-md-4 col-sm-6"
+        *ngIf="editMode && !(viewOnly$ | async)"
+      >
         <div class="card card-height">
           <ng-container *ngIf="deptInsideLoading; else tableTemplate">
             <p-table [value]="[].constructor(5)">
@@ -793,8 +887,7 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="header">
-                <tr>
-                </tr>
+                <tr></tr>
               </ng-template>
               <ng-template pTemplate="body" let-item>
                 <tr class="cursor-pointer hoverable">
@@ -820,7 +913,10 @@
               </ng-template>
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header">
@@ -845,10 +941,10 @@
               <ng-template pTemplate="body" let-item>
                 <tr class="read-only-row">
                   <td class="min-w-200px max-w-300px">
-                    {{ item.orgHierarchy | translateObj : 'name'}}
+                    {{ item.orgHierarchy | translateObj : "name" }}
                   </td>
                   <td class="min-w-100px max-w-300px">
-                    {{ item.activity | translateObj : 'name' }}
+                    {{ item.activity | translateObj : "name" }}
                   </td>
                   <td class="min-w-150px max-w-300px">
                     {{ item.dependencyDetails }}
@@ -869,7 +965,10 @@
         </div>
       </div>
       <!--dependency inside tab-->
-      <div class="mt-4 col-md-4 col-sm-6 " *ngIf="editMode && !(viewOnly$ | async)">
+      <div
+        class="mt-4 col-md-4 col-sm-6"
+        *ngIf="editMode && !(viewOnly$ | async)"
+      >
         <div class="card card-height">
           <ng-container *ngIf="departInsideLoading; else tableTemplate">
             <p-table [value]="[].constructor(5)">
@@ -879,8 +978,7 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="header">
-                <tr>
-                </tr>
+                <tr></tr>
               </ng-template>
               <ng-template pTemplate="body" let-item>
                 <tr class="cursor-pointer hoverable">
@@ -909,7 +1007,10 @@
               </ng-template>
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header">
@@ -934,15 +1035,14 @@
               <ng-template pTemplate="body" let-item>
                 <tr class="read-only-row">
                   <td class="min-w-200px max-w-300px">
-                    {{ item.orgHierarchy | translateObj : 'name'}}
+                    {{ item.orgHierarchy | translateObj : "name" }}
                   </td>
                   <td class="min-w-100px max-w-300px">
-                    {{ item.activity | translateObj: 'name' }}
+                    {{ item.activity | translateObj : "name" }}
                   </td>
                   <td class="min-w-150px max-w-300px">
-                    {{ item.dependencyDetails}}
+                    {{ item.dependencyDetails }}
                   </td>
-
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage">
@@ -960,7 +1060,10 @@
       </div>
 
       <!--vender tab-->
-      <div class="mt-4 col-md-4 col-sm-6" *ngIf="editMode && !(viewOnly$ | async)">
+      <div
+        class="mt-4 col-md-4 col-sm-6"
+        *ngIf="editMode && !(viewOnly$ | async)"
+      >
         <div class="card card-height">
           <ng-container *ngIf="venderLoading; else tableTemplate">
             <p-table [value]="[].constructor(5)">
@@ -970,8 +1073,7 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="header">
-                <tr>
-                </tr>
+                <tr></tr>
               </ng-template>
               <ng-template pTemplate="body" let-item>
                 <tr class="cursor-pointer hoverable">
@@ -1000,7 +1102,10 @@
               </ng-template>
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  <col
+                    *ngFor="let col of columns"
+                    [style.width]="'col.width'"
+                  />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header">
@@ -1020,10 +1125,10 @@
               <ng-template pTemplate="body" let-item>
                 <tr class="read-only-row">
                   <td class="min-w-200px max-w-300px">
-                    {{ item.partner | translateObj : 'name'}}
+                    {{ item.partner | translateObj : "name" }}
                   </td>
                   <td class="min-w-100px max-w-300px">
-                    {{ item.dependencyDetails}}
+                    {{ item.dependencyDetails }}
                   </td>
                 </tr>
               </ng-template>
@@ -1041,10 +1146,7 @@
         </div>
       </div>
     </div>
-
   </div>
-
-
 </ng-template>
 
 <!--footer-->
@@ -1053,7 +1155,7 @@
     <div class="ml-dir-auto"></div>
 
     <div class="p-col text-center" *ngIf="!editMode && !(viewOnly$ | async)">
-      <div class="text-center" >
+      <div class="text-center">
         <button
           [disabled]="!selectedActivities"
           pButton

@@ -424,7 +424,10 @@
         </div>
       </div>
       <div class="ml-dir-auto d-flex">
-        <app-activities-dialog></app-activities-dialog>
+        <app-activities-dialog
+          [orgHir]="orgHireracy"
+          [selectedOrgHir]="state.pageRequest.filters['orgHierarchyId']"
+        ></app-activities-dialog>
       </div>
     </p-toolbar>
   </div>
