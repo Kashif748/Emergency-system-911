@@ -30,6 +30,7 @@ export namespace OrgActivityAction {
     constructor(
       public payload: {
         cycleId: number;
+        orgHierarchyId: number
       }
     ) {}
   }
