@@ -1,40 +1,62 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {ILangFacade} from '@core/facades/lang.facade';
-import {combineLatest, Observable, Subject} from 'rxjs';
-import {BcActivities, BcActivityAnalysis, BcActivityAnalysisDto, BcCycles,} from 'src/app/api/models';
-import {Select, Store} from '@ngxs/store';
-import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
-import {BrowseImpactAnalysisAction} from '../../../states/browse-impact-analysis.action';
-import {auditTime, filter, map, take, takeUntil, tap} from 'rxjs/operators';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import {
+  BcActivities,
+  BcActivityAnalysis,
+  BcActivityAnalysisDto,
+  BcCycles,
+  BcOrgHierarchy,
+} from 'src/app/api/models';
+import { Select, Store } from '@ngxs/store';
+import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import { BrowseImpactAnalysisAction } from '../../../states/browse-impact-analysis.action';
+import { auditTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import {
   ImpactLevelAction,
   ImpactMatrixAction,
   ImpactMatrixState,
   OrgActivityAction,
   OrgActivityState,
+  OrgDetailAction,
+  OrgDetailState,
   RtoAction,
-  RtoState
+  RtoState,
 } from '@core/states';
-import {ActivitySystemsAction} from "@core/states/activity-analysis/systems/systems.action";
-import {ActivitySystemsState} from "@core/states/activity-analysis/systems/systems.state";
-import {BcActivityEmployees, BcActivityLocations, BcActivitySystems, Bcrto} from "../../../../../../api/models";
-import {ActivityAnalysisState} from "@core/states/activity-analysis/activity-analysis.state";
-import {ActivityEmployeesState} from "@core/states/activity-analysis/employees/employees.state";
-import {ActivityEmployeesAction} from "@core/states/activity-analysis/employees/employees.action";
-import {ActivityAnalysisAction} from "@core/states/activity-analysis/activity-analysis.action";
-import {ActivityLocationsAction} from "@core/states/activity-analysis/locations/locations.action";
-import {ActivityLocationsState} from "@core/states/activity-analysis/locations/locations.state";
-import {Dialog} from "primeng/dialog";
-import {BcActivityDependencyExternal} from "../../../../../../api/models/bc-activity-dependency-external";
-import {BcActivityDependencyInternal} from "../../../../../../api/models/bc-activity-dependency-internal";
-import {BcActivityDependencyOrg} from "../../../../../../api/models/bc-activity-dependency-org";
-import {ActivityDependenciesAction} from "@core/states/activity-analysis/dependencies/dependencies.action";
-import {ActivityDependenciesState} from "@core/states/activity-analysis/dependencies/dependencies.state";
-import {BrowseActivityAnalysisAction} from "../../../../activity-analysis/states/browse-activity-analysis.action";
-import {ActivityImpactMatrixState} from "@core/states/activity-analysis/impact-matrix/impact-matrix.state";
-import {ActivityImapctMatrixAction} from "@core/states/activity-analysis/impact-matrix/impact-matrix.action";
-import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
+import { ActivitySystemsAction } from '@core/states/activity-analysis/systems/systems.action';
+import { ActivitySystemsState } from '@core/states/activity-analysis/systems/systems.state';
+import {
+  BcActivityEmployees,
+  BcActivityLocations,
+  BcActivitySystems,
+  Bcrto,
+} from '../../../../../../api/models';
+import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
+import { ActivityEmployeesState } from '@core/states/activity-analysis/employees/employees.state';
+import { ActivityEmployeesAction } from '@core/states/activity-analysis/employees/employees.action';
+import { ActivityAnalysisAction } from '@core/states/activity-analysis/activity-analysis.action';
+import { ActivityLocationsAction } from '@core/states/activity-analysis/locations/locations.action';
+import { ActivityLocationsState } from '@core/states/activity-analysis/locations/locations.state';
+import { Dialog } from 'primeng/dialog';
+import { BcActivityDependencyExternal } from '../../../../../../api/models/bc-activity-dependency-external';
+import { BcActivityDependencyInternal } from '../../../../../../api/models/bc-activity-dependency-internal';
+import { BcActivityDependencyOrg } from '../../../../../../api/models/bc-activity-dependency-org';
+import { ActivityDependenciesAction } from '@core/states/activity-analysis/dependencies/dependencies.action';
+import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
+import { BrowseActivityAnalysisAction } from '../../../../activity-analysis/states/browse-activity-analysis.action';
+import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
+import { ActivityImapctMatrixAction } from '@core/states/activity-analysis/impact-matrix/impact-matrix.action';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import { TreeNode } from 'primeng/api';
+import { FormControl } from '@angular/forms';
 
 interface tableRow {
   activity: BcActivities;
@@ -46,6 +68,11 @@ interface tableRow {
   styleUrls: ['./activities-dialog.component.scss'],
 })
 export class ActivitiesDialogComponent implements OnInit, OnDestroy {
+  @Input()
+  orgHir: TreeNode[];
+  @Input()
+  selectedOrgHir: BcOrgHierarchy;
+
   page$: Observable<any[]>;
   @ViewChild(Dialog) dialog: Dialog;
   public systemPage$: Observable<BcActivitySystems[]>;
@@ -71,6 +98,9 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   @Select(OrgActivityState.loading)
   public loading$: Observable<boolean>;
 
+  @Select(OrgDetailState.loading)
+  public loadingOrgHir$: Observable<boolean>;
+
   public rtosPage$: Observable<Bcrto[]>;
   public tableValue$: Observable<any[]>;
 
@@ -93,13 +123,13 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   _analysisId: number;
   _cycleID: number;
   _cycle: number;
+  private auditLoadOrgPage$ = new Subject<string>();
+
   get editMode() {
     return this._analysisId !== undefined && this._analysisId !== null;
   }
   get viewOnly() {
-    return (
-      this.route.snapshot.queryParams['_mode'] === 'viewonly'
-    );
+    return this.route.snapshot.queryParams['_mode'] === 'viewonly';
   }
 
   public get asDialog() {
@@ -114,11 +144,11 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   set analysisId(v: number) {
     this.cycles$
       .pipe(
-        filter(cycles => !!cycles),
+        filter((cycles) => !!cycles),
         take(1)
       )
-      .subscribe(cycles => {
-        this.selectedCycle = cycles.find(cycle => cycle.id == this._cycle);
+      .subscribe((cycles) => {
+        this.selectedCycle = cycles.find((cycle) => cycle.id == this._cycle);
       });
     this.selectCycle('', this._cycle);
     this._analysisId = v;
@@ -136,35 +166,76 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     this.departInsideLoading = true;
 
     this.store
-      .dispatch([new ActivityAnalysisAction.GetActivityAnalysis({id: v}),
-        new ActivityAnalysisAction.GetCycle({id: this._cycleID})])
+      .dispatch([
+        new ActivityAnalysisAction.GetActivityAnalysis({ id: v }),
+        new ActivityAnalysisAction.GetCycle({ id: this._cycleID }),
+      ])
       .pipe(
         takeUntil(this.destroy$),
         take(1),
         tap((v) => {
-          const activityID = this.store.selectSnapshot(ActivityAnalysisState.activityAnalysis);
+          const activityID = this.store.selectSnapshot(
+            ActivityAnalysisState.activityAnalysis
+          );
           const cycle = this.store.selectSnapshot(ActivityAnalysisState.cycle);
           this.store.dispatch([
             new ActivityImapctMatrixAction.LoadPage({
-              page: 0, size: 10, cycleId: this._cycleID, activityId: activityID?.activity.id}),
+              page: 0,
+              size: 10,
+              cycleId: this._cycleID,
+              activityId: activityID?.activity.id,
+            }),
             new ImpactMatrixAction.LoadPage({
-              page: 0, size: 10, versionId: cycle?.versionId}),
+              page: 0,
+              size: 10,
+              versionId: cycle?.versionId,
+            }),
             new ImpactLevelAction.LoadPage({
-              page: 0, size: 10, versionId: cycle?.versionId}),
+              page: 0,
+              size: 10,
+              versionId: cycle?.versionId,
+            }),
             new RtoAction.LoadPage({
-              page: 0, size: 10, versionId: cycle?.versionId}),
+              page: 0,
+              size: 10,
+              versionId: cycle?.versionId,
+            }),
             new ActivitySystemsAction.LoadPage({
-              page: 0, size: 10, activityId: activityID?.activity.id, cycleId: this._cycleID}),
+              page: 0,
+              size: 10,
+              activityId: activityID?.activity.id,
+              cycleId: this._cycleID,
+            }),
             new ActivityEmployeesAction.LoadPage({
-              page: 0, size: 10, activityId: activityID?.activity.id, cycleId: this._cycleID}),
+              page: 0,
+              size: 10,
+              activityId: activityID?.activity.id,
+              cycleId: this._cycleID,
+            }),
             new ActivityLocationsAction.LoadPage({
-              page: 0, size: 10, activityId: activityID?.activity.id, cycleId: this._cycleID}),
+              page: 0,
+              size: 10,
+              activityId: activityID?.activity.id,
+              cycleId: this._cycleID,
+            }),
             new ActivityDependenciesAction.LoadDependencyExternal({
-              page: 0, size: 10, activityId: activityID?.activity.id, cycleId: this._cycleID}),
+              page: 0,
+              size: 10,
+              activityId: activityID?.activity.id,
+              cycleId: this._cycleID,
+            }),
             new ActivityDependenciesAction.LoadDependencyInternal({
-              page: 0, size: 10, activityId: activityID?.activity.id, cycleId: this._cycleID}),
+              page: 0,
+              size: 10,
+              activityId: activityID?.activity.id,
+              cycleId: this._cycleID,
+            }),
             new ActivityDependenciesAction.LoadDependencyOrg({
-              page: 0, size: 10, activityId: activityID?.activity.id, cycleId: this._cycleID})
+              page: 0,
+              size: 10,
+              activityId: activityID?.activity.id,
+              cycleId: this._cycleID,
+            }),
           ]);
 
           this.rtosPage$ = this.store.select(RtoState.page).pipe(
@@ -209,7 +280,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
                   row.bcRto.push({
                     bcImpactLevelId: bcImpactLevelId,
                     bcRtoId: rto?.id,
-                    value: rowValue
+                    value: rowValue,
                   });
                 });
 
@@ -224,38 +295,35 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
               );
               return table;
             })
-          )
-
-          this.systemPage$ = this.store.select(ActivitySystemsState.page).pipe(
-            filter((p) => !!p),
           );
+
+          this.systemPage$ = this.store
+            .select(ActivitySystemsState.page)
+            .pipe(filter((p) => !!p));
           this.store
-            .select(ActivityAnalysisState.activityAnalysis).pipe(
+            .select(ActivityAnalysisState.activityAnalysis)
+            .pipe(
               filter((p) => !!p),
               take(1)
-            ).subscribe((data) => {
+            )
+            .subscribe((data) => {
               this.recoveryPageData = data;
             });
           this.employeePage$ = this.store
-            .select(ActivityEmployeesState.page).pipe(
-              filter((p) => !!p),
-            );
+            .select(ActivityEmployeesState.page)
+            .pipe(filter((p) => !!p));
           this.locationPage$ = this.store
-            .select(ActivityLocationsState.page).pipe(
-              filter((p) => !!p),
-            );
+            .select(ActivityLocationsState.page)
+            .pipe(filter((p) => !!p));
           this.venderPage$ = this.store
-            .select(ActivityDependenciesState.activityDependencyExternal).pipe(
-              filter((p) => !!p),
-            );
+            .select(ActivityDependenciesState.activityDependencyExternal)
+            .pipe(filter((p) => !!p));
           this.dependencyInternalPage$ = this.store
-            .select(ActivityDependenciesState.activityDependencyInternal).pipe(
-              filter((p) => !!p),
-            );
+            .select(ActivityDependenciesState.activityDependencyInternal)
+            .pipe(filter((p) => !!p));
           this.orgInternalPage$ = this.store
-            .select(ActivityDependenciesState.activityDependencyOrg).pipe(
-              filter((p) => !!p),
-            );
+            .select(ActivityDependenciesState.activityDependencyOrg)
+            .pipe(filter((p) => !!p));
         })
       )
       .subscribe((v) => {
@@ -275,25 +343,22 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     private lang: ILangFacade,
     private store: Store,
     private cdr: ChangeDetectorRef,
-    private translateObj: TranslateObjPipe,
-  ) {
-    this.route.queryParams
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((params) => {
-        this._cycle = params['_cycle'];
-        this._cycleID = params['_cycleId'];
-        this.analysisId = params['_id'];
-      });
-  }
+    private translateObj: TranslateObjPipe
+  ) {}
 
   ngOnInit(): void {
     this.opened$ = this.route.queryParams.pipe(
-      map((params) => params['_dialog'] === 'activities' ),
-      tap(() => {
-        this.selectedActivities = [];
+      map((params) => {
+        const opened = params['_dialog'] === 'activities';
+        if (opened) {
+          this.selectedActivities = [];
+          this._cycle = params['_cycle'];
+          this._cycleID = params['_cycleId'];
+          this.analysisId = params['_id'];
+        }
+        return opened;
       })
     );
-
 
     this.loadPage('', true);
     this.page$ = combineLatest([
@@ -302,7 +367,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     ]).pipe(
       map(([ids, activities]) => {
         this.selectedActivities = [];
-        let tableRows = activities.map((activity) => {
+        let tableRows = activities?.map((activity) => {
           let tableRow = {
             ...activity,
             selected: false,
@@ -370,12 +435,43 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
   }
 
-  changeSelect(event) {
+  filterOrgHir(event) {
+    this.auditLoadOrgPage$.next(event);
   }
+  nodeExpand(node: TreeNode) {
+    if (node.children.length === 0) {
+      this.store.dispatch(
+        new OrgDetailAction.GetOrgHierarchySearch({
+          page: 0,
+          size: 100,
+          parentId: parseInt(node?.key),
+        })
+      );
+    }
+  }
+  changeSelect(event) {}
   selectCycle(event?, cycleId?) {
-    if (event) {this.selectedCycle = event?.value}
+    if (event) {
+      this.selectedCycle = event?.value;
+    }
     this.store.dispatch(
-      new OrgActivityAction.loadIdsList({ cycleId: this.selectedCycle?.id ? this.selectedCycle.id : cycleId })
+      new OrgActivityAction.loadIdsList({
+        cycleId: this.selectedCycle?.id ? this.selectedCycle.id : cycleId,
+        orgHierarchyId: this.selectedOrgHir?.id,
+      })
+    );
+  }
+  selectDivision(event: TreeNode) {
+    if (event) {
+      this.selectDivision = event?.data;
+    }
+    // console.log(event);
+
+    this.store.dispatch(
+      new OrgActivityAction.loadIdsList({
+        cycleId: this.selectedCycle?.id,
+        orgHierarchyId: event?.data?.id,
+      })
     );
   }
 
@@ -383,5 +479,5 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  setImpactType( test1, test3){}
+  setImpactType(test1, test3) {}
 }
