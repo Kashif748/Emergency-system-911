@@ -1,5 +1,7 @@
+
+
 <!-- as a dialog -->
-<p-dialog #dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="close()" [style]="{ width: '55vw' }"
+<p-dialog #dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="close()" [style]="{ width: '65vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
   [resizable]="false">
   <ng-template pTemplate="header">
@@ -118,7 +120,7 @@
     </form>
   </div>
 
-  <div class="col-12 my-3">
+  <div class="col-12 my-3" *ngIf="state$ | async as state">
     <p-toolbar>
       <div class="p-toolbar-group-left">
         <div class="p-1 w-100 w-md-225px">
@@ -177,12 +179,12 @@
           <p-table [value]="[].constructor(10)">
             <ng-template pTemplate="header">
               <tr>
-                <th class="min-w-170px">
+                <th class="min-w-100px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "DIALOG.NAME_AR" | translate }}
                   </div>
                 </th>
-                <th class="min-w-170px max-w-300px">
+                <th class="min-w-100px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "DIALOG.NAME_EN" | translate }}
                   </div>
@@ -248,7 +250,7 @@
         <ng-template #tableTemplate>
           <p-table
             totalRecords="10"
-            [value]="versions$ | async"
+            [value]="cycles"
             dataKey="id"
             [autoLayout]="true">
             <ng-template pTemplate="colgroup" let-columns>
@@ -258,12 +260,12 @@
             </ng-template>
             <ng-template pTemplate="header">
               <tr>
-                <th class="min-w-170px">
+                <th class="min-w-100px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "DIALOG.NAME_AR" | translate }}
                   </div>
                 </th>
-                <th class="min-w-170px max-w-300px">
+                <th class="min-w-100px max-w-300px">
                   <div class="p-d-flex p-jc-between p-ai-center">
                     {{ "DIALOG.NAME_EN" | translate }}
                   </div>
@@ -302,16 +304,20 @@
             </ng-template>
             <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
               <tr>
-                <td
-                  class="min-w-200px max-w-250px"
-                >
+                <td class="min-w-100px max-w-250px">
                   {{ item.nameAr }}
                 </td>
 
-                <td
-                  class="min-w-200px max-w-250px"
-                >
+                <td class="min-w-100px max-w-250px">
                   {{ item.nameEn }}
+                </td>
+
+                <td class="min-w-100px max-w-200px">
+                  {{ item.status | translateObj : "name" }}
+                </td>
+
+                <td class="min-w-100px max-w-200px">
+                  {{ item.status | translateObj : "name" }}
                 </td>
 
                 <td class="min-w-100px max-w-200px">
@@ -329,7 +335,7 @@
                 <td>
                   <button
                     *checkPrivileges="'PRIV_ED_BC_VER'"
-                    (click)="deleteVersion(item.id)"
+                    (click)="deleteCycle(item.id)"
                     pButton
                     pRipple
                     type="button"

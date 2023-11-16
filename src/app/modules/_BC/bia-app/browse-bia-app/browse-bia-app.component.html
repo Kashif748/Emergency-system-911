@@ -98,6 +98,9 @@
           <ng-container *checkPrivileges="'PRIV_ED_BC_VER'">
             <button
               pButton
+              *ngIf="selectedCycle === VERSION_STATUSES?.CREATED ||
+              selectedCycle ===
+                VERSION_STATUSES?.NEEDS_MODIFICATIONS"
               pRipple
               type="button"
               label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
@@ -333,4 +336,4 @@
   </div>
 </div>
 
-<app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
+<app-new-cycle-dialog [cycle]="selectedCycle" [cycles]="sortAnalysisCycles$ | async"></app-new-cycle-dialog>

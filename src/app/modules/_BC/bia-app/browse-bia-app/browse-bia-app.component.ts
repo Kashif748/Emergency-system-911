@@ -309,6 +309,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   }
 
   setCycleId(value: BcCycles) {
+    console.log(this.selectedCycle);
     this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
       cycle: value}))
     this.loadPage(null, value);

@@ -2,7 +2,7 @@ import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} fro
 import {finalize, map, tap} from 'rxjs/operators';
 import {patch} from '@ngxs/store/operators';
 import {Injectable} from '@angular/core';
-import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, PageBcActivityAnalysis, PageBcCycles,} from 'src/app/api/models';
+import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, PageBcActivityAnalysis, PageBcCycles} from 'src/app/api/models';
 import {
   BcAcitivityAnalysisStatusControllerService,
   BcActivitiesControllerService,
@@ -147,7 +147,7 @@ export class ImpactAnalysisState {
     { payload }: ImapactAnalysisAction.LoadCycles
   ) {
     return this.cyclesController
-      .getAll22({
+      .getAll20({
         isActive: true,
         pageable: {
           page: payload?.page,
@@ -320,7 +320,7 @@ export class ImpactAnalysisState {
         blocking: true,
       })
     );
-    return this.cyclesController.getOne13({ id: payload.id }).pipe(
+    return this.cyclesController.getOne24({ id: payload.id }).pipe(
       map((response) => response.result),
       tap((cycle) => {
         setState(
@@ -350,7 +350,7 @@ export class ImpactAnalysisState {
     );
 
     return this.cyclesController
-      .insertOne13({
+      .insertOne24({
         body: { ...payload },
       })
       .pipe(
