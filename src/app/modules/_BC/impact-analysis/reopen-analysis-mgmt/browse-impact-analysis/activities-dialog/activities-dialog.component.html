@@ -264,10 +264,6 @@
   </div>
 
   <div *ngIf="editMode && !(viewOnly$ | async)" class="w-100 pt-2 min-h-200px">
-    <p-blockUI [blocked]="impactMatrixLoading">
-      <p-progressSpinner></p-progressSpinner>
-    </p-blockUI>
-
     <div class="row">
       <div class="col-sm-12">
         <div class="row">

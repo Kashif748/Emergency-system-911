@@ -72,14 +72,6 @@
   </div>
 
   <span class="flex-grow-1"></span>
-<!--  <a
-    *ngIf="asDialog"
-    queryParamsHandling="merge"
-    pRipple
-    pButton
-    icon="pi pi-link"
-    class="p-button-rounded p-button-text p-button-plain"
-  ></a>-->
 </ng-template>
 
 
@@ -156,81 +148,30 @@
         </p-divider>
       </div>
       <ng-container formArrayName="hours">
-      <div *ngFor="let field of getControls(); let i = index" [formGroupName]="i" class="p-field p-col-12 p-md-4">
-    <span class="p-float-label">
-      <input
-        type="number"
-        formControlName="hour"
-        pInputText
-      />
-      <label>
-        {{ field.get('label').value }}
-        <strong class="required-asterisk"> * </strong>
-      </label>
-    </span>
+        <div *ngFor="let field of getControls(); let i = index" [formGroupName]="i" class="p-field p-col-12 p-md-4">
+          <span class="p-float-label">
+             <input
+              type="text"
+              formControlName="hour"
+               pInputText
+              pattern="[0-9]*"
+              />
+            <label>
+              {{ field.get('label').value }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
 
-        <ng-container *ngIf="field.get('hour').touched && field.get('hour').invalid && field.get('hour').dirty">
-          <p class="p-error mb-0" *ngIf="field.get('hour').hasError('required')">
-            {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-          </p>
-        </ng-container>
-      </div>
-  </ng-container>
-
-      <!--<div class="p-field p-col-12 p-md-4">
-      <span class="p-float-label">
-        <input type="number" formControlName="day_more" pInputText/>
-        <label>
-          {{ "STAFF_REQ.DIALOG.HOURS_DAY" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-
-        <ng-container
-          *ngIf="form.controls['day_more'].touched && !form.controls['day_more'].valid &&
-          form.controls['day_more'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['day_more'].hasError('required')">
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-        </ng-container>
-      </div>
-
-      <div class="p-field p-col-12 p-md-4">
-      <span class="p-float-label">
-        <input type="number" formControlName="hour1" pInputText/>
-        <label>
-          {{ "STAFF_REQ.DIALOG.HOURS_0_24" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-
-        <ng-container
-          *ngIf="form.controls['hour1'].touched && !form.controls['hour1'].valid &&
-          form.controls['hour1'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['hour1'].hasError('required')">
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-        </ng-container>
-      </div>
-
-      <div class="p-field p-col-12 p-md-4">
-      <span class="p-float-label">
-        <input type="number" formControlName="hour2" pInputText/>
-        <label>
-          {{ "STAFF_REQ.DIALOG.HOURS_0_8" | translate }}
-          <strong class="required-asterisk"> * </strong>
-        </label>
-      </span>
-
-        <ng-container
-          *ngIf="form.controls['hour2'].touched && !form.controls['hour2'].valid &&
-          form.controls['hour2'].dirty">
-          <p class="p-error mb-0" *ngIf="form.controls['hour2'].hasError('required')">
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-        </ng-container>
-      </div>-->
-
+          <ng-container *ngIf="field.get('hour').touched && field.get('hour').invalid && field.get('hour').dirty">
+            <p class="p-error mb-0" *ngIf="field.get('hour').hasError('required')">
+              {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+            </p>
+            <p class="p-error mb-0" *ngIf="field.get('hour').hasError('pattern')">
+              {{ 'VALIDATION_MSG.INCORRECT_VALUE' | translate }}
+            </p>
+          </ng-container>
+        </div>
+      </ng-container>
       <div class="p-col-12">
         <p-divider align="left">
           <div class="p-d-inline-flex p-ai-center">

@@ -191,7 +191,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     return this.formBuilder.group({
       id: formFields.id,
       label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
-      hour: [null, [Validators.required, Validators.min(0)]],
+      hour: [null, [Validators.pattern('^[0-9]*$')]],
     });
   }
 
