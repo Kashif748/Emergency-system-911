@@ -4,15 +4,14 @@ import {GenericValidators} from '@shared/validators/generic-validators';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {Select, Store} from '@ngxs/store';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
 import {FormUtils} from '@core/utils';
 import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
 import {BcVersions} from 'src/app/api/models';
 import {BCAction, BCState} from '@core/states';
 import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
 import {BrowseBiaAppAction} from "../../states/browse-bia-app.action";
-import {BrowseBCState, BrowseBCStateModel} from "../../../states/browse-bc.state";
 import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../../states/browse-bia-app.state";
 import {BrowseBCAction} from "../../../states/browse-bc.action";
 import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
@@ -28,6 +27,9 @@ export class NewCycleDialogComponent implements OnInit {
 
   @Select(BrowseBiaAppState.state)
   public state$: Observable<BrowseBiaAppStateModel>;
+
+  @Select(ImpactAnalysisState.totalCycleRecords)
+  public totalRecords$: Observable<number>;
 
   opened$: Observable<boolean>;
 
@@ -48,29 +50,51 @@ export class NewCycleDialogComponent implements OnInit {
 
   public sortableColumns = [
     {
-      name: 'VERSION_LIST.NAME_AR',
+      name: 'DIALOG.NAME_AR',
       code: 'nameAr',
     },
     {
-      name: 'VERSION_LIST.NAME_EN',
+      name: 'DIALOG.NAME_EN',
       code: 'nameEn',
     },
-    { name: 'VERSION_LIST.CREATED_ON', code: 'createdOn' },
+    { name: 'DIALOG.LIST', code: 'bcVersions' },
+    { name: 'DIALOG.STATUS', code: 'status' },
+    { name: 'DIALOG.CREATED_ON', code: 'createdOn' },
   ];
 
   public get minDate() {
     return new Date();
   }
+
+  destroy$ = new Subject();
+
+  @Input()
+  set cycleId(v: number) {
+    this.buildForm();
+    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 , statusId : VERSION_STATUSES.APPROVED}));
+    if (v === undefined || v === null) {
+      return;
+    }
+  }
+
   form: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private translate: TranslateService,
     private route: ActivatedRoute,
     private store: Store
-  ) {}
+  ) {
+    this.route.queryParams
+      .pipe(
+        map((params) => params['_dialog'] === 'new_cycle'),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((id) => {
+        this.cycleId = 0;
+      });
+  }
 
   ngOnInit(): void {
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 , statusId : VERSION_STATUSES.APPROVED}));
     this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'new_cycle')
@@ -111,17 +135,17 @@ export class NewCycleDialogComponent implements OnInit {
   }
   sort(event) {
     this.store.dispatch(
-      new BrowseBCAction.Sort({ field: event.value })
+      new BrowseBiaAppAction.SortCycle({ field: event.value })
     );
   }
   order(event) {
     this.store.dispatch(
-      new BrowseBCAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseBiaAppAction.SortCycle({ order: event.checked ? 'desc' : 'asc' })
     );
   }
   deleteCycle(id) {
     this.store
-      .dispatch(new BrowseBCAction.Delete({ id }))
+      .dispatch(new BrowseBiaAppAction.Delete({ id }))
       .toPromise()
       .then(() => {
         this.loadPage();

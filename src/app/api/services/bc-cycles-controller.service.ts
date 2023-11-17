@@ -259,4 +259,53 @@ export class BcCyclesControllerService extends BaseService {
     );
   }
 
+  /**
+   * Path part for operation manageBcCycleStatus
+   */
+  static readonly ManageBcCycleStatusPath = '/v1/bc/cycles/manage/status';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `manageBcCycleStatus()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  manageBcCycleStatus$Response(params: {
+    cycleId: number;
+    statusId: number;
+  }): Observable<StrictHttpResponse<RestApiResponseBcCycles>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.ManageBcCycleStatusPath, 'get');
+    if (params) {
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('statusId', params.statusId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBcCycles>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `manageBcCycleStatus$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  manageBcCycleStatus(params: {
+    cycleId: number;
+    statusId: number;
+  }): Observable<RestApiResponseBcCycles> {
+
+    return this.manageBcCycleStatus$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcCycles>) => r.body as RestApiResponseBcCycles)
+    );
+  }
+
 }

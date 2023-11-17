@@ -14,6 +14,7 @@
 </p-dialog>
 
 <!-- templates header -->
+
 <ng-template #header>
   <div class="d-flex">
     <h3>
@@ -29,6 +30,7 @@
 
 <!-- templates content -->
 <ng-template #content>
+  <ng-container *ngIf="state$ | async as state">
   <div class="w-100 pt-2">
     <form [formGroup]="form" class="p-fluid p-grid mt-5">
       <!-- Name Ar -->
@@ -120,7 +122,7 @@
     </form>
   </div>
 
-  <div class="col-12 my-3" *ngIf="state$ | async as state">
+  <div class="col-12 my-3">
     <p-toolbar>
       <div class="p-toolbar-group-left">
         <div class="p-1 w-100 w-md-225px">
@@ -158,15 +160,6 @@
           </div>
         </div>
       </div>
-   <!--   <div class="ml-dir-auto d-flex">
-        <button
-          *checkPrivileges="'PRIV_ED_BC_VER'"
-          pButton
-          label="{{ 'ADD_VERSION' | translate }}"
-          [icon]="showVersionForm ? 'pi pi-minus' : 'pi pi-plus'"
-          (click)="showVersionForm = !showVersionForm"
-        ></button>
-      </div>-->
     </p-toolbar>
   </div>
 
@@ -217,7 +210,7 @@
                   </div>
                 </th>
 
-                <th *checkPrivileges="'PRIV_ED_BC_VER'" style="width: 92px">
+                <th *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'" style="width: 92px">
                   {{ "ACTIONS.ACTIONS" | translate }}
                 </th>
               </tr>
@@ -225,6 +218,12 @@
             <ng-template pTemplate="body" let-item>
               <tr class="cursor-pointer hoverable">
 
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
                 <td>
                   <p-skeleton></p-skeleton>
                 </td>
@@ -297,7 +296,7 @@
                     {{ "DIALOG.CREATED_ON" | translate }}
                   </div>
                 </th>
-                <th *checkPrivileges="'PRIV_ED_BC_VER'" style="width: 92px">
+                <th *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'" style="width: 92px">
                   {{ "ACTIONS.ACTIONS" | translate }}
                 </th>
               </tr>
@@ -313,11 +312,11 @@
                 </td>
 
                 <td class="min-w-100px max-w-200px">
-                  {{ item.status | translateObj : "name" }}
+                  {{ item.bcVersions | translateObj : "name" }}
                 </td>
 
                 <td class="min-w-100px max-w-200px">
-                  {{ item.status | translateObj : "name" }}
+                  {{ item.dueDate | cdate }}
                 </td>
 
                 <td class="min-w-100px max-w-200px">
@@ -334,7 +333,7 @@
 
                 <td>
                   <button
-                    *checkPrivileges="'PRIV_ED_BC_VER'"
+                    *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'"
                     (click)="deleteCycle(item.id)"
                     pButton
                     pRipple
@@ -372,7 +371,7 @@
     </div>
   </div>
 
-
+  </ng-container>
 </ng-template>
 
 <!--footer-->

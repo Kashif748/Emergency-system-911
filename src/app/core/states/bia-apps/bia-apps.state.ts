@@ -7,6 +7,7 @@ import {BcAnalysisControllerService} from "../../../api/services/bc-analysis-con
 import {PageBcAnalysisByOrgHierarchyResponse} from "../../../api/models/page-bc-analysis-by-org-hierarchy-response";
 import {BcAnalysisByOrgHierarchyResponse} from "../../../api/models/bc-analysis-by-org-hierarchy-response";
 import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
+import {BcCyclesControllerService} from "../../../api/services";
 
 export interface BiaStateModel {
   page: PageBcAnalysisByOrgHierarchyResponse;
@@ -27,6 +28,7 @@ export class BiaAppsState {
    */
   constructor(
     private bia: BcAnalysisControllerService,
+    private cycle: BcCyclesControllerService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -102,5 +104,28 @@ export class BiaAppsState {
           );
         })
       );
+  }
+  @Action(BiaAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<BiaStateModel>,
+    { payload }: BiaAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<BiaStateModel>({
+        loading: true,
+      })
+    );
+    return this.cycle.deleteById25({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<BiaStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
   }
 }
