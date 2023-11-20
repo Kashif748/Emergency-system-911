@@ -224,7 +224,7 @@ export class ResourceAnalysisState {
         blocking: true,
       })
     );
-    return this.cyclesController.getOne13({ id: payload.id }).pipe(
+    return this.cyclesController.getOne24({ id: payload.id }).pipe(
       map((response) => response.result),
       tap((cycle) => {
         setState(

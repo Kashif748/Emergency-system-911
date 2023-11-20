@@ -2,7 +2,7 @@ import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} fro
 import {finalize, map, tap} from 'rxjs/operators';
 import {patch} from '@ngxs/store/operators';
 import {Injectable} from '@angular/core';
-import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, PageBcActivityAnalysis, PageBcCycles,} from 'src/app/api/models';
+import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, PageBcActivityAnalysis, PageBcCycles} from 'src/app/api/models';
 import {
   BcAcitivityAnalysisStatusControllerService,
   BcActivitiesControllerService,
@@ -13,6 +13,7 @@ import {ImapactAnalysisAction} from './impact-analysis.action';
 import {BcAnalysisControllerService} from "../../../api/services/bc-analysis-controller.service";
 import {BcAnalysisStatusDetails} from "../../../api/models/bc-analysis-status-details";
 import {RtoStateModel} from "@core/states/bc/rto/rto.state";
+import {BcCycleStatus} from "../../../api/models/bc-cycle-status";
 
 export interface ImpactAnalysisStateModel {
   activityAnalysisPage: PageBcActivityAnalysis;
@@ -68,6 +69,11 @@ export class ImpactAnalysisState {
   }
 
   @Selector([ImpactAnalysisState])
+  static cycleStatus(state: ImpactAnalysisStateModel) {
+    return state?.cycle.status;
+  }
+
+  @Selector([ImpactAnalysisState])
   static isBCAnalysisStatusSimiliar(state: ImpactAnalysisStateModel) {
     return state?.loadAnalysisStatus.isBCAnalysisStatusSimiliar;
   }
@@ -85,6 +91,11 @@ export class ImpactAnalysisState {
   @Selector([ImpactAnalysisState])
   static cycles(state: ImpactAnalysisStateModel) {
     return state?.cyclesPage.content;
+  }
+
+  @Selector([ImpactAnalysisState])
+  static totalCycleRecords(state: ImpactAnalysisStateModel) {
+    return state?.cyclesPage?.totalElements;
   }
 
   @Selector([ImpactAnalysisState])
@@ -146,12 +157,14 @@ export class ImpactAnalysisState {
     { setState }: StateContext<ImpactAnalysisStateModel>,
     { payload }: ImapactAnalysisAction.LoadCycles
   ) {
+    const validSortKeys = ['nameAr', 'nameEn', 'bcVersions', 'status', 'createdOn'];
     return this.cyclesController
-      .getAll22({
+      .getAll20({
         isActive: true,
         pageable: {
           page: payload?.page,
           size: payload?.size,
+          sort: payload?.sort
         },
       })
       .pipe(
@@ -320,7 +333,7 @@ export class ImpactAnalysisState {
         blocking: true,
       })
     );
-    return this.cyclesController.getOne13({ id: payload.id }).pipe(
+    return this.cyclesController.getOne24({ id: payload.id }).pipe(
       map((response) => response.result),
       tap((cycle) => {
         setState(
@@ -350,7 +363,7 @@ export class ImpactAnalysisState {
     );
 
     return this.cyclesController
-      .insertOne13({
+      .insertOne24({
         body: { ...payload },
       })
       .pipe(
@@ -380,6 +393,41 @@ export class ImpactAnalysisState {
         body: payload,
       })
       .pipe(
+        finalize(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+  @Action(ImapactAnalysisAction.CycleStatus, { cancelUncompleted: true })
+  getCycleStatus(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload }: ImapactAnalysisAction.CycleStatus
+  ) {
+    if (payload.cycleId === undefined || payload.cycleId === null) {
+      return;
+    }
+    setState(
+      patch<ImpactAnalysisStateModel>({
+        blocking: true,
+      })
+    );
+    return this.cyclesController
+      .manageBcCycleStatus({
+        cycleId: payload.cycleId,
+        statusId: payload.statusId,
+      })
+      .pipe(
+        tap((status) => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              cycle: status.result,
+            })
+          );
+        }),
         finalize(() => {
           setState(
             patch<ImpactAnalysisStateModel>({

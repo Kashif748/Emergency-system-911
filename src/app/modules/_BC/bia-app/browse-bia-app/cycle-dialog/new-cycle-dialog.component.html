@@ -1,10 +1,7 @@
-<div class="p-toolbar-group-right">
-  <button *checkPrivileges="'PRIV_CR_ANALYSIS_CYCLE'" pButton label="{{ 'NEW_ANALYSIS_CYCLIE' | translate }}"
-    icon="pi pi-plus" (click)="toggleDialog()"></button>
-</div>
+
 
 <!-- as a dialog -->
-<p-dialog #dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="close()" [style]="{ width: '55vw' }"
+<p-dialog #dialog [visible]="opened$ | async" [modal]="true" (visibleChange)="close()" [style]="{ width: '65vw' }"
   [breakpoints]="{ '960px': '75vw', '640px': '100vw' }" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
   [resizable]="false">
   <ng-template pTemplate="header">
@@ -17,6 +14,7 @@
 </p-dialog>
 
 <!-- templates header -->
+
 <ng-template #header>
   <div class="d-flex">
     <h3>
@@ -32,6 +30,7 @@
 
 <!-- templates content -->
 <ng-template #content>
+  <ng-container *ngIf="state$ | async as state">
   <div class="w-100 pt-2">
     <form [formGroup]="form" class="p-fluid p-grid mt-5">
       <!-- Name Ar -->
@@ -122,15 +121,265 @@
       </div>
     </form>
   </div>
+
+  <div class="col-12 my-3">
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        <div class="p-1 w-100 w-md-225px">
+          <div class="p-inputgroup">
+            <p-dropdown
+              [options]="sortableColumns"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              [ngModel]="state?.pageRequest?.sortField"
+              placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate }}"
+              optionLabel="name"
+              optionValue="code"
+              styleClass="w-100 h-100"
+              class="w-100 h-100"
+              (onChange)="sort($event)"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                {{ option.name | translate }}
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.name | translate }}
+              </ng-template>
+            </p-dropdown>
+            <div class="p-inputgroup-addon p-0">
+              <p-toggleButton
+                class="w-100 h-100"
+                [onIcon]="'pi pi-sort-amount-up'"
+                [ngModel]="state?.pageRequest?.sortOrder === 'desc'"
+                offIcon="pi pi-sort-amount-down-alt"
+                iconPos="right"
+                styleClass="w-100 h-100"
+                (onChange)="order($event)"
+              ></p-toggleButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-toolbar>
+  </div>
+
+  <!--table-->
+
+  <div class="row">
+    <div class="col-12">
+      <ng-container>
+        <ng-container *ngIf="loading$ | async; else tableTemplate">
+          <p-table [value]="[].constructor(10)">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="min-w-100px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.NAME_AR" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.NAME_EN" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.LIST" | translate }}
+                  </div>
+                </th>
+
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.CYCLE_ENTRY_DATE" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.STATUS" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.CREATED_BY" | translate }}
+                  </div>
+                </th>
+
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.CREATED_ON" | translate }}
+                  </div>
+                </th>
+
+                <th *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'" style="width: 92px">
+                  {{ "ACTIONS.ACTIONS" | translate }}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+              <tr class="cursor-pointer hoverable">
+
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+                <td>
+                  <p-skeleton></p-skeleton>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+        <ng-template #tableTemplate>
+          <p-table
+            totalRecords="10"
+            [value]="cycles"
+            dataKey="id"
+            [autoLayout]="true">
+            <ng-template pTemplate="colgroup" let-columns>
+              <colgroup>
+                <col *ngFor="let col of columns" [style.width]="'col.width'" />
+              </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="min-w-100px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.NAME_AR" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.NAME_EN" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.LIST" | translate }}
+                  </div>
+                </th>
+
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.CYCLE_ENTRY_DATE" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.STATUS" | translate }}
+                  </div>
+                </th>
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.CREATED_BY" | translate }}
+                  </div>
+                </th>
+
+                <th class="min-w-100px max-w-300px">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{ "DIALOG.CREATED_ON" | translate }}
+                  </div>
+                </th>
+                <th *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'" style="width: 92px">
+                  {{ "ACTIONS.ACTIONS" | translate }}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+              <tr>
+                <td class="min-w-100px max-w-250px">
+                  {{ item.nameAr }}
+                </td>
+
+                <td class="min-w-100px max-w-250px">
+                  {{ item.nameEn }}
+                </td>
+
+                <td class="min-w-100px max-w-200px">
+                  {{ item.bcVersions | translateObj : "name" }}
+                </td>
+
+                <td class="min-w-100px max-w-200px">
+                  {{ item.dueDate | cdate }}
+                </td>
+
+                <td class="min-w-100px max-w-200px">
+                  {{ item.status | translateObj : "name" }}
+                </td>
+
+                <td class="min-w-100px max-w-200px">
+                  {{ item.createdBy | translateObj : "name" }}
+                </td>
+
+                <td class="min-w-100px max-w-200px">
+                  {{ item.createdOn | cdate }}
+                </td>
+
+                <td>
+                  <button
+                    *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'"
+                    (click)="deleteCycle(item.id)"
+                    pButton
+                    pRipple
+                    type="button"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger p-button-text"
+                  ></button>
+                </td>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="100%">
+                  <div class="w-100">
+                    <nodata-table></nodata-table>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-template>
+      </ng-container>
+
+      <p-paginator
+        #pg
+        [first]="state?.pageRequest?.first"
+        [rows]="state?.pageRequest?.rows"
+        [totalRecords]="totalRecords$ | async"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
+        (onPageChange)="loadPage($event)">
+      </p-paginator>
+    </div>
+  </div>
+
+  </ng-container>
 </ng-template>
 
 <!--footer-->
 <ng-template #footer>
   <div class="p-col p-d-flex">
-    <button [loading]="blocking$ | async" [disabled]="form.invalid" (click)="submit()" pButton
-      label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
-
-    <div class="ml-dir-auto"></div>
     <button (click)="toggleDialog()" pButton icon="pi pi-times" label="{{ 'ACTIONS.CLOSE' | translate }}"></button>
+    <div class="ml-dir-auto"></div>
+    <button [loading]="blocking$ | async" [disabled]="form.invalid" (click)="submit()" pButton
+            label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
   </div>
 </ng-template>

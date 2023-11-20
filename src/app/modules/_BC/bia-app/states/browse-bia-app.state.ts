@@ -1,24 +1,18 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { TextUtils } from '@core/utils';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { iif, patch } from '@ngxs/store/operators';
-import { BrowseBiaAppAction } from './browse-bia-app.action';
-import { BiaAction } from '@core/states/bia-apps/bia-apps.action';
-import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
-import { EMPTY, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { ResourceAnalysisAction } from '@core/states/impact-analysis/resource-analysis.action';
+import {Injectable} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {TextUtils} from '@core/utils';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {iif, patch} from '@ngxs/store/operators';
+import {BrowseBiaAppAction} from './browse-bia-app.action';
+import {BiaAction} from '@core/states/bia-apps/bia-apps.action';
+import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
+import {EMPTY, throwError} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {ResourceAnalysisAction} from '@core/states/impact-analysis/resource-analysis.action';
+import {BrowseBCStateModel} from "../../states/browse-bc.state";
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -126,7 +120,7 @@ export class BrowseBiaAppState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
-        cycleId: payload.cycle,
+        cycleId: payload?.cycle['id'],
         filters: {
           ...pageRequest.filters,
           orgHierarchyId: pageRequest.filters.orgHierarchyId?.id,
@@ -313,6 +307,72 @@ export class BrowseBiaAppState {
           new BrowseBiaAppAction.LoadBia(),
           new BrowseBiaAppAction.ToggleDialog({}),
         ]);
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+  @Action(BrowseBiaAppAction.SortCycle)
+  sortCycle(
+    { setState, dispatch, getState }: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.SortCycle
+  ) {
+    setState(
+      patch<BrowseBiaAppStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new ImapactAnalysisAction.LoadCycles({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+      })
+    );
+  }
+  @Action(BrowseBiaAppAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.Delete
+  ) {
+    return dispatch(new BiaAction.Delete(payload)).pipe(
+      tap(() => {
+        dispatch(
+          new ImapactAnalysisAction.LoadCycles()
+        );
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(BrowseBiaAppAction.ChangeCycleStatus)
+  ChangeStatus(
+    { dispatch }: StateContext<BrowseBCStateModel>,
+    { payload }: BrowseBiaAppAction.ChangeCycleStatus
+  ) {
+    return dispatch(
+      new ImapactAnalysisAction.CycleStatus({
+        cycleId: payload.cycleId,
+        statusId: payload.statusId,
+      })
+    ).pipe(
+      tap(() => {
+        dispatch([
+          new ImapactAnalysisAction.LoadCycles(),
+          new ImapactAnalysisAction.GetCycle({ id: payload.cycleId })]
+        );
+        this.messageHelper.success();
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

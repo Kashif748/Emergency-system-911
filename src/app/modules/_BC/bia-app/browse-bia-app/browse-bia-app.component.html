@@ -1,31 +1,127 @@
 <div class="container-fluid">
-  <header class="p-d-flex p-jc-between p-ai-center p-4 pb-8 border-bottom">
+  <header class="p-d-flex p-jc-between p-ai-center p-4">
     <div class="d-block d-sm-flex p-ai-center text-center">
       <app-breadcrumb></app-breadcrumb>
-      <p-dropdown
-        [autoDisplayFirst]="false"
-        [options]="sortAnalysisCycles$ | async"
-        dataKey="id"
-        optionValue="id"
-        styleClass="version min-w-180px"
-        [(ngModel)]="selectedCycle"
-        (ngModelChange)="setCycleId($event)"
-        placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
-      >
-        <ng-template let-item pTemplate="selectedItem">
-          {{ item | translateObj }}
-        </ng-template>
-
-        <ng-template let-item pTemplate="item">
-          {{ item | translateObj }}
-        </ng-template>
-      </p-dropdown>
-    </div>
-    <div class="ml-dir-auto d-flex">
-      <app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>
     </div>
   </header>
-  <div class="mx-4 my-10">
+
+  <div class="border-top mb-2">
+    <div class="col-12 my-4">
+      <div class="p-d-flex p-jc-start p-ai-center">
+        <div class="p-inputgroup w-400px">
+          <p-dropdown
+            [options]="sortAnalysisCycles$ | async"
+            [(ngModel)]="selectedCycle"
+            class="w-100"
+
+            placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
+            dataKey="id"
+            (ngModelChange)="setCycleId($event)"
+            [dropdownIcon]="
+            (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'"
+            styleClass="w-100"
+          >
+            <ng-template let-item pTemplate="selectedItem">
+              <ng-container>
+                <div class="d-flex">
+                <span>
+                  {{ item | translateObj }}
+                </span>
+                  <div class="flex-grow-1"></div>
+                  <p-badge value="{{ item?.status | translateObj }}">
+                  </p-badge>
+                </div>
+              </ng-container>
+            </ng-template>
+
+            <ng-template let-cycle pTemplate="item">
+              <div class="d-flex">
+              <span>
+                {{ cycle | translateObj }}
+              </span>
+                <div class="flex-grow-1"></div>
+                <p-badge value="{{ cycle?.status | translateObj }}"> </p-badge>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="empty">
+              <ng-container *ngIf="loading$ | async; else elseTemplate">
+                {{ "ACTIONS.LOADING" | translate }}
+              </ng-container>
+              <ng-template #elseTemplate>
+                {{ "NO_DATA" | translate }}
+              </ng-template>
+            </ng-template>
+          </p-dropdown>
+          <button
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-cog"
+            class="p-button-warning"
+            title="{{ 'VERSIONS_SETTINGS' | translate }}"
+            *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'"
+            (click)="openDialog(null, 'new_cycle')"
+          ></button>
+        </div>
+        <div class="flex-grow-1"></div>
+        <div class="d-flex p-ai-center flex-none">
+          <ng-container *checkPrivileges="'PRIV_APPROVE_ANALYSIS_CYCLE'">
+            <button
+              pButton
+              *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
+              pRipple
+              type="button"
+              label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
+              icon="pi pi-replay"
+              [loading]="blocking$ | async"
+              [disabled]="loading$ | async"
+              (click)="changeStatues(VERSION_STATUSES?.CREATED)"
+              class="p-button-outlined p-button-danger mx-2"
+            ></button>
+          </ng-container>
+
+          <ng-container *checkPrivileges="'PRIV_APPROVE_ANALYSIS_CYCLE'">
+            <button
+              pButton
+              *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
+              pRipple
+              class="p-button-outlined"
+              type="button"
+              [loading]="blocking$ | async"
+              [disabled]="loading$ | async"
+              (click)="changeStatues(VERSION_STATUSES?.APPROVED)"
+              label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
+              icon="pi pi-check"
+            ></button>
+          </ng-container>
+
+          <ng-container *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'">
+            <button
+              pButton
+              *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.CREATED ||
+              selectedCycle?.status?.id ===
+                VERSION_STATUSES?.NEEDS_MODIFICATIONS"
+              pRipple
+              type="button"
+              label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
+              icon="pi pi-send"
+              [loading]="blocking$ | async"
+              [disabled]="loading$ | async"
+              (click)="changeStatues(VERSION_STATUSES?.UNDER_APPROVAL)"
+              class="p-button-outlined"
+            ></button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="mx-4 my-5">
     <div class="row" *ngIf="state$ | async as state">
       <div class="col-12">
         <div class="row">
@@ -239,3 +335,5 @@
     </div>
   </div>
 </div>
+
+<app-new-cycle-dialog [cycle]="selectedCycle" [cycles]="sortAnalysisCycles$ | async"></app-new-cycle-dialog>
