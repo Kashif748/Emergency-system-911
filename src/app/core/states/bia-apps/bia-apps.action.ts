@@ -1,4 +1,3 @@
-
 export namespace BiaAction {
   export class LoadPage {
     static readonly type = '[biaApps] Load Page';
@@ -16,5 +15,16 @@ export namespace BiaAction {
       }
     ) {
     }
+  }
+  export class Delete {
+    static readonly type = '[biaApps] Delete Cycle';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
   }
 }

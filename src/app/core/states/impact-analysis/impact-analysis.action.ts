@@ -1,5 +1,6 @@
 import {BcActivityAnalysisDto, BcCycles} from 'src/app/api/models';
 import {BcAnalysisBulkTransactionDto} from "../../../api/models/bc-analysis-bulk-transaction-dto";
+import {VERSION_STATUSES} from "@core/states/bc/bc/bc.state";
 
 export namespace ImapactAnalysisAction {
   export class LoadPage {
@@ -61,9 +62,10 @@ export namespace ImapactAnalysisAction {
      *
      */
     constructor(
-      public payload: {
-        page: number;
-        size: number;
+      public payload?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
       }
     ) {}
   }
@@ -116,5 +118,19 @@ export namespace ImapactAnalysisAction {
      *
      */
     constructor(public payload: BcAnalysisBulkTransactionDto) {}
+  }
+  export class CycleStatus {
+    static readonly type = '[ImapactAnalysisAction] Change Cycle Status';
+
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        cycleId: number,
+        statusId: VERSION_STATUSES
+      }
+    ) {
+    }
   }
 }

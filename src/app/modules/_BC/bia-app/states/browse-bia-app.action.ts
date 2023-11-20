@@ -2,6 +2,7 @@ import {PageRequestModel} from '@core/models/page-request.model';
 import {BcActivities} from "../../../../api/models/bc-activities";
 import {BcActivityAnalysisDto, BcCycles} from "../../../../api/models";
 import {BcResources} from "../../../../api/models/bc-resources";
+import {VERSION_STATUSES} from "@core/states/bc/bc/bc.state";
 
 export namespace BrowseBiaAppAction {
   export class LoadBia{
@@ -65,7 +66,7 @@ export namespace BrowseBiaAppAction {
     constructor(public payload: BcActivities) {}
   }
   export class LoadCycles {
-    static readonly type = '[BrowseBiaApp] Load Bia Cycles';
+    static readonly type = '[BrowseBiaApp] Load Cycles';
 
     /**
      *
@@ -132,5 +133,34 @@ export namespace BrowseBiaAppAction {
      *
      */
     constructor(public payload: BcActivityAnalysisDto[]) {}
+  }
+  export class Delete {
+    static readonly type = '[BrowseBiaApp] Delete Cycle';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
+
+  export class ChangeCycleStatus {
+    static readonly type = '[BrowseBiaApp] Change Cycle Status';
+
+    /**
+     *
+     */
+    constructor(
+      public payload?: { cycleId: number; statusId: VERSION_STATUSES }
+    ) {}
+  }
+  export class SortCycle {
+    static readonly type = '[BrowseBiaApp] Sort Cycle';
+    /**
+     *
+     */
+    constructor(public payload: { field?: string; order?: 'asc' | 'desc', cycle?: number }) {}
   }
 }

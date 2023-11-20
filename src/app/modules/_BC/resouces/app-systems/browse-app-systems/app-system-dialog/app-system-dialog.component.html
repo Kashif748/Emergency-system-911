@@ -67,14 +67,6 @@
   </div>
 
   <span class="flex-grow-1"></span>
-  <!--<a
-    *ngIf="asDialog"
-    queryParamsHandling="merge"
-    pRipple
-    pButton
-    icon="pi pi-link"
-    class="p-button-rounded p-button-text p-button-plain"
-  ></a>-->
 </ng-template>
 
 
@@ -221,9 +213,10 @@
         <div *ngFor="let field of getControls(); let i = index" [formGroupName]="i" class="p-field p-col-12 p-md-4">
     <span class="p-float-label">
       <input
-        type="number"
+        type="text"
         formControlName="hour"
         pInputText
+        pattern="[0-9]*"
       />
       <label>
         {{ field.get('label').value }}
@@ -234,6 +227,9 @@
           <ng-container *ngIf="field.get('hour').touched && field.get('hour').invalid && field.get('hour').dirty">
             <p class="p-error mb-0" *ngIf="field.get('hour').hasError('required')">
               {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+            </p>
+            <p class="p-error mb-0" *ngIf="field.get('hour').hasError('pattern')">
+              {{ 'VALIDATION_MSG.INCORRECT_VALUE' | translate }}
             </p>
           </ng-container>
         </div>
