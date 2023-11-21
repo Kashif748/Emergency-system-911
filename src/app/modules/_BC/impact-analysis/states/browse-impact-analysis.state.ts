@@ -1,20 +1,44 @@
-import {PageRequestModel} from '@core/models/page-request.model';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
-import {Injectable} from '@angular/core';
-import {MessageHelper} from '@core/helpers/message.helper';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ApiHelper} from '@core/helpers/api.helper';
-import {TextUtils} from '@core/utils';
-import {iif, patch} from '@ngxs/store/operators';
-import {BrowseImpactAnalysisAction} from './browse-impact-analysis.action';
-import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {EMPTY} from 'rxjs';
-import {BrowseResourceAnalysisAction} from "./browse-resource-analysis.action";
+import { PageRequestModel } from '@core/models/page-request.model';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiHelper } from '@core/helpers/api.helper';
+import { TextUtils } from '@core/utils';
+import { iif, patch } from '@ngxs/store/operators';
+import { BrowseImpactAnalysisAction } from './browse-impact-analysis.action';
+import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
+import {
+  catchError,
+  concatMap,
+  delay,
+  filter,
+  finalize,
+  map,
+  tap,
+} from 'rxjs/operators';
+import { EMPTY, from } from 'rxjs';
+import { BrowseResourceAnalysisAction } from './browse-resource-analysis.action';
+import { BcActivityAnalysisRequest } from 'src/app/api/models/bc-activity-analysis-request';
+import { BcActivityAnalysis } from 'src/app/api/models';
 
 export interface BrowseImpactAnalysisStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
+  progressbar: {
+    value: number;
+    length: number;
+    success: any[];
+    failed: any[];
+    currentId: number;
+  };
   view: 'TABLE' | 'CARDS';
 }
 
@@ -37,6 +61,14 @@ export const BROWSE_IMPACT_ANALYSIS_UI_STATE_TOKEN =
       'priorityLevel',
       'status',
     ],
+    progressbar: {
+      length: 0,
+      value: 0,
+      success: [],
+      failed: [],
+      currentId: null,
+    },
+
     view: 'TABLE',
   },
 })
@@ -59,23 +91,41 @@ export class BrowseImpactAnalysisState {
   ): BrowseImpactAnalysisStateModel {
     return state;
   }
+  @Selector([BrowseImpactAnalysisState])
+  static progressbar(state: any): BrowseImpactAnalysisStateModel {
+    return state.progressbar;
+  }
 
   @Selector([BrowseImpactAnalysisState])
   static hasFilters(state: BrowseImpactAnalysisStateModel): boolean {
     const filters = state.pageRequest.filters;
-    return !('orgHierarchyId' in filters && 'cycleId' in filters) ||
-      (Object.keys(filters).filter(
+    return (
+      !('orgHierarchyId' in filters && 'cycleId' in filters) ||
+      Object.keys(filters).filter(
         (k) =>
           k !== 'active' &&
           k !== 'orgHierarchyId' &&
           k !== 'cycleId' &&
           !TextUtils.IsEmptyOrWhiteSpaces(filters[k])
       ).length > 0
-      );
+    );
   }
 
-
   /* ********************** ACTIONS ************************* */
+  @Action(BrowseImpactAnalysisAction.Reset)
+  Reset({ setState }: StateContext<BrowseImpactAnalysisStateModel>) {
+    setState(
+      patch<BrowseImpactAnalysisStateModel>({
+        progressbar: {
+          length: 0,
+          value: 0,
+          success: [],
+          failed: [],
+          currentId: null,
+        },
+      })
+    );
+  }
   @Action(BrowseImpactAnalysisAction.LoadPage)
   LoadPage(
     {
@@ -108,7 +158,11 @@ export class BrowseImpactAnalysisState {
   }
   @Action(BrowseImpactAnalysisAction.Sort)
   sort(
-    { setState, dispatch, getState }: StateContext<BrowseImpactAnalysisStateModel>,
+    {
+      setState,
+      dispatch,
+      getState,
+    }: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.Sort
   ) {
     setState(
@@ -192,12 +246,8 @@ export class BrowseImpactAnalysisState {
     { payload }: BrowseImpactAnalysisAction.SetCycleActivities
   ) {
     return dispatch(new ImapactAnalysisAction.SetCycleActivities(payload)).pipe(
-      tap(() => {
+      tap((res) => {
         this.messageHelper.success();
-        dispatch([
-          new BrowseImpactAnalysisAction.LoadPage(),
-          new BrowseImpactAnalysisAction.ToggleDialog({}),
-        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -205,9 +255,79 @@ export class BrowseImpactAnalysisState {
       })
     );
   }
+  @Action(BrowseImpactAnalysisAction.duplicateActivities)
+  duplicateActivities(
+    {
+      dispatch,
+      setState,
+      getState,
+    }: StateContext<BrowseImpactAnalysisStateModel>,
+    { payload }: BrowseImpactAnalysisAction.duplicateActivities
+  ) {
+    setState(
+      patch<BrowseImpactAnalysisStateModel>({
+        progressbar: patch({
+          length: payload.length,
+        }),
+      })
+    );
+    // Use the concatMap operator to make requests sequentially for duplicate each activity
+
+    const duplicateActiviesObservable = from(payload);
+
+    return duplicateActiviesObservable.pipe(
+      concatMap((item: BcActivityAnalysis, index) => {
+        // current loading activity
+        setState(
+          patch<BrowseImpactAnalysisStateModel>({
+            progressbar: patch({
+              currentId: item.activity.id,
+            }),
+          })
+        );
+        // duplicate action
+        return dispatch(
+          new ImapactAnalysisAction.duplicateActivities({
+            activityAnalysisId: item.id,
+          })
+        ).pipe(
+          map(() => ({ item, index })),
+          // catch failed activities to show on UI usinf failed array
+          catchError((error) => {
+            setState(
+              patch<BrowseImpactAnalysisStateModel>({
+                progressbar: patch({
+                  currentId: null,
+                  failed: [...getState().progressbar.failed, item.activity.id],
+                }),
+              })
+            );
+            return EMPTY;
+          })
+        );
+      }),
+      // update progress value and success dupication calls
+      tap(({ item, index }) =>
+        setState(
+          patch<BrowseImpactAnalysisStateModel>({
+            progressbar: patch({
+              value: ((index + 1) * 100) / payload?.length,
+              currentId: null,
+              success: [...getState().progressbar.success, item.activity.id],
+            }),
+          })
+        )
+      ),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
+  }
+
   @Action(BrowseImpactAnalysisAction.UpdateFilter, { cancelUncompleted: true })
   updateFilter(
-    { setState}: StateContext<BrowseImpactAnalysisStateModel>,
+    { setState }: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.UpdateFilter
   ) {
     setState(
@@ -234,10 +354,15 @@ export class BrowseImpactAnalysisState {
     { dispatch }: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.UpdateBulkTransaction
   ) {
-    return dispatch(new ImapactAnalysisAction.UpdateBulkTransaction(payload)).pipe(
+    return dispatch(
+      new ImapactAnalysisAction.UpdateBulkTransaction(payload)
+    ).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch([new BrowseImpactAnalysisAction.LoadPage(), new BrowseResourceAnalysisAction.LoadPage()]);
+        dispatch([
+          new BrowseImpactAnalysisAction.LoadPage(),
+          new BrowseResourceAnalysisAction.LoadPage(),
+        ]);
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -274,7 +399,7 @@ export class BrowseImpactAnalysisState {
     cancelUncompleted: true,
   })
   updateRoute(
-    {getState}: StateContext<BrowseImpactAnalysisStateModel>,
+    { getState }: StateContext<BrowseImpactAnalysisStateModel>,
     { payload }: BrowseImpactAnalysisAction.UpdateRoute
   ) {
     const currentState = getState();

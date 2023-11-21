@@ -44,6 +44,8 @@ import {TabViewModule} from "primeng/tabview";
 import {BrowseResourceAnalysisState} from "./states/browse-resource-analysis.state";
 import {BadgeModule} from "primeng/badge";
 import {CardModule} from "primeng/card";
+import { ProgressBarModule } from 'primeng/progressbar';
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -86,6 +88,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ToggleButtonModule,
     FieldsetModule,
     TableModule,
+    TagModule,
     TranslateObjModule,
     CalendarModule,
     SharedBreadcrumbModule,
@@ -96,6 +99,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     CheckboxModule,
     PrivilegesDirectiveModule,
     TabViewModule,
+    ProgressBarModule,
     InputTextModule,
     BadgeModule,
     CardModule

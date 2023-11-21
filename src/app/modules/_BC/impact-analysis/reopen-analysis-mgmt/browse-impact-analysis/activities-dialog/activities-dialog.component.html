@@ -60,7 +60,7 @@
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
 
-    <div class="row p-4">
+    <div *ngIf="!showDuplicateRes" class="row p-4">
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
           <p-treeSelect
@@ -95,23 +95,26 @@
         </span>
       </div>
       <div class="p-field p-col-6 mx-auto">
-        <p-dropdown
-          [autoDisplayFirst]="false"
-          [options]="cycles$ | async"
-          [ngModel]="selectedCycle"
-          (onChange)="selectCycle($event)"
-          dataKey="id"
-          styleClass="w-100"
-          placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
-        >
-          <ng-template let-item pTemplate="selectedItem">
-            {{ item | translateObj }}
-          </ng-template>
+        <span class="p-float-label">
+          <p-dropdown
+            [autoDisplayFirst]="false"
+            [options]="cycles$ | async"
+            [ngModel]="selectedCycle"
+            (onChange)="selectCycle($event)"
+            dataKey="id"
+            styleClass="w-100"
+            placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
+          >
+            <ng-template let-item pTemplate="selectedItem">
+              {{ item | translateObj }}
+            </ng-template>
 
-          <ng-template let-item pTemplate="item">
-            {{ item | translateObj }}
-          </ng-template>
-        </p-dropdown>
+            <ng-template let-item pTemplate="item">
+              {{ item | translateObj }}
+            </ng-template>
+          </p-dropdown>
+          <label for="dropdown">{{ "ANALYSIS_CRCLE" | translate }}</label>
+        </span>
       </div>
       <div class="p-field p-col-12">
         <div class="p-inputgroup">
@@ -151,6 +154,11 @@
                       {{ "ORG_ARTCH" | translate }}
                     </div>
                   </th>
+                  <!-- <th class="max-w-100px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DUPLICATE" | translate }}
+                    </div>
+                  </th> -->
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-item>
@@ -167,6 +175,9 @@
                   <td>
                     <p-skeleton></p-skeleton>
                   </td>
+                  <!-- <td>
+                    <p-skeleton></p-skeleton>
+                  </td> -->
                 </tr>
               </ng-template>
             </p-table>
@@ -174,11 +185,10 @@
           <ng-template #tableTemplate>
             <p-table
               totalRecords="8"
-              [value]="page$ | async"
+              *ngIf="page$ | async as page"
+              [value]="page"
               dataKey="id"
               [autoLayout]="true"
-              selectionMode="multiple"
-              [(selection)]="selectedActivities"
               [rowHover]="true"
             >
               <ng-template pTemplate="colgroup" let-columns>
@@ -192,7 +202,7 @@
               <ng-template pTemplate="header">
                 <tr>
                   <th style="width: 2.25em">
-                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    <p-checkbox value="false" (onChange)="selectAll(page)"></p-checkbox>
                   </th>
                   <th class="min-w-200px max-w-300px">
                     <div class="p-d-flex p-jc-between p-ai-center">
@@ -210,21 +220,43 @@
                       {{ "ORG_ARTCH" | translate }}
                     </div>
                   </th>
+                  <!-- <th class="max-w-100px">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{ "DUPLICATE" | translate }}
+                    </div>
+                  </th> -->
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-item let-rowData>
                 <tr
+                  (click)="activityClicked(rowData)"
                   [pSelectableRow]="rowData"
                   [ngClass]="{
-                    'row-disabled': rowData.selected
+                    'row-disabled': rowData.disabled,
+                    'row-selected': rowData.selected
                   }"
                 >
-                  <td>
-                    <!-- <p-checkbox
-                      [ngModel]="rowData.selected"
-                      [readonly]="rowData.selected"
-                      binary="true"
-                    ></p-checkbox> -->
+                  <td class="max-w-50px">
+                    <ng-container *ngIf="progressbar$ | async as progressbar">
+                      <i
+                        *ngIf="
+                          rowData.selected &&
+                          progressbar.currentId == rowData.id
+                        "
+                        class="pi pi-spin pi-spinner text-primary"
+                        style="font-size: 1.5rem"
+                      ></i>
+                      <i
+                        *ngIf="progressbar.success?.includes(rowData.id)"
+                        class="pi pi-check-circle text-success"
+                        style="font-size: 1.5rem"
+                      ></i>
+                      <i
+                        *ngIf="progressbar.failed?.includes(rowData.id)"
+                        class="pi pi-exclamation-circle text-danger"
+                        style="font-size: 1.5rem"
+                      ></i>
+                    </ng-container>
                   </td>
                   <td class="min-w-200px max-w-300px">
                     {{ item | translateObj }}
@@ -236,6 +268,13 @@
                   <td class="min-w-200px max-w-300px">
                     {{ item?.orgHierarchy | translateObj }}
                   </td>
+                  <!-- <td>
+                    <p-inputSwitch
+                      [ngModel]="rowData.dublicated"
+                      [disabled]="rowData.disabled"
+                      (click)="$event.stopPropagation()"
+                    ></p-inputSwitch>
+                  </td> -->
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage">
@@ -253,6 +292,7 @@
 
         <p-paginator
           #pg
+          (onPageChange)="loadPage($event)"
           [totalRecords]="totalRecords$ | async"
           [rowsPerPageOptions]="[10, 20, 50]"
           [showCurrentPageReport]="true"
@@ -1147,11 +1187,42 @@
 
 <!--footer-->
 <ng-template #footer>
-  <div class="p-col p-d-flex">
-    <div class="ml-dir-auto"></div>
+  <ng-container *ngIf="progressbar$ | async as progressbar">
+    <div
+      *ngIf="showDuplicateRes"
+      class="alert alert-custom alert-light-primary fade show m-0 p-3 w-100"
+      role="alert"
+    >
+      <div class="alert-text">
+        {{ "DUPLICATE_ALERT" | translate }}
+        <p-tag severity="success" styleClass="mx-2">{{
+          "SUCCESS" | translate : { success: progressbar.success?.length }
+        }}</p-tag>
+        <p-tag severity="danger" styleClass="mx-2">
+          {{ "FAILED" | translate : { failed: progressbar.failed?.length } }}
+        </p-tag>
+      </div>
+      <div class="alert-close">
+        <button
+          (click)="toggleDialog()"
+          pButton
+          icon="pi pi-times"
+          label="{{ 'ACTIONS.CLOSE' | translate }}"
+        ></button>
+      </div>
+    </div>
+    <div
+      *ngIf="!showDuplicateRes && !editMode && !(viewOnly$ | async)"
+      class="p-col p-d-flex flex-column border-top px-4"
+    >
+      <p-checkbox
+        [(ngModel)]="withDuplication"
+        [binary]="true"
+        label="{{ 'DUPLICATE_MSG' | translate }}"
+        styleClass="my-2"
+      ></p-checkbox>
 
-    <div class="p-col text-center" *ngIf="!editMode && !(viewOnly$ | async)">
-      <div class="text-center">
+      <div class="d-flex pt-3">
         <button
           [disabled]="!selectedActivities"
           pButton
@@ -1159,8 +1230,17 @@
           (click)="submit()"
           label="{{ 'ACTIONS.SAVE' | translate }}"
           icon="pi pi-save"
+          class="m-0"
+        ></button>
+        <div class="ml-dir-auto"></div>
+        <button
+          (click)="toggleDialog()"
+          pButton
+          class="p-button-outlined"
+          icon="pi pi-times"
+          label="{{ 'ACTIONS.CLOSE' | translate }}"
         ></button>
       </div>
     </div>
-  </div>
+  </ng-container>
 </ng-template>
