@@ -1,6 +1,10 @@
 import { PageRequestModel } from '@core/models/page-request.model';
-import { BcActivityAnalysisDto, BcCycles } from 'src/app/api/models';
-import {BcAnalysisBulkTransactionDto} from "../../../../api/models/bc-analysis-bulk-transaction-dto";
+import {
+  BcActivityAnalysis,
+  BcActivityAnalysisDto,
+  BcCycles,
+} from 'src/app/api/models';
+import { BcAnalysisBulkTransactionDto } from '../../../../api/models/bc-analysis-bulk-transaction-dto';
 
 export namespace BrowseImpactAnalysisAction {
   export class LoadPage {
@@ -11,6 +15,16 @@ export namespace BrowseImpactAnalysisAction {
      *
      */
     constructor(public payload?: { pageRequest: PageRequestModel }) {}
+  }
+
+  export class Reset {
+    static readonly type =
+      '[BrowseImpactAnalysisAction] Reset Activity Analysis';
+
+    /**
+     *
+     */
+    constructor() {}
   }
 
   export class LoadActivitiesStatuses {
@@ -38,7 +52,8 @@ export namespace BrowseImpactAnalysisAction {
   }
 
   export class LoadAnalysisStatusInfo {
-    static readonly type = '[BrowseImpactAnalysisAction] Load AnalysisStatusInfo';
+    static readonly type =
+      '[BrowseImpactAnalysisAction] Load AnalysisStatusInfo';
 
     /**
      *
@@ -65,6 +80,13 @@ export namespace BrowseImpactAnalysisAction {
      *
      */
     constructor(public payload: BcActivityAnalysisDto[]) {}
+  }
+  export class duplicateActivities {
+    static readonly type = '[BrowseImpactAnalysisAction] duplicate Activites';
+    /**
+     *
+     */
+    constructor(public payload: BcActivityAnalysis[]) {}
   }
 
   export class Sort {
@@ -107,7 +129,9 @@ export namespace BrowseImpactAnalysisAction {
     /**
      *
      */
-    constructor(public payload: { dialog?: string; id?: number; cycle?: number }) {}
+    constructor(
+      public payload: { dialog?: string; id?: number; cycle?: number }
+    ) {}
   }
 
   export class UpdateRoute {
@@ -125,7 +149,7 @@ export namespace BrowseImpactAnalysisAction {
     /**
      *
      */
-    constructor(public payload: { id: number, cycle: number}) {}
+    constructor(public payload: { id: number; cycle: number }) {}
   }
 
   export class UpdateBulkTransaction {
