@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { combineLatest, Observable, Subject } from 'rxjs';
+import { combineLatest, from, Observable, Subject } from 'rxjs';
 import {
   BcActivities,
   BcActivityAnalysis,
@@ -19,7 +19,15 @@ import {
 import { Select, Store } from '@ngxs/store';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { BrowseImpactAnalysisAction } from '../../../states/browse-impact-analysis.action';
-import { auditTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  auditTime,
+  concatMap,
+  filter,
+  map,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import {
   ImpactLevelAction,
   ImpactMatrixAction,
@@ -55,8 +63,9 @@ import { BrowseActivityAnalysisAction } from '../../../../activity-analysis/stat
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
 import { ActivityImapctMatrixAction } from '@core/states/activity-analysis/impact-matrix/impact-matrix.action';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { TreeNode } from 'primeng/api';
+import { LazyLoadEvent, TreeNode } from 'primeng/api';
 import { FormControl } from '@angular/forms';
+import { BrowseImpactAnalysisState } from '../../../states/browse-impact-analysis.state';
 
 interface tableRow {
   activity: BcActivities;
@@ -101,6 +110,9 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
 
+  @Select(BrowseImpactAnalysisState.progressbar)
+  public progressbar$: Observable<any>;
+
   public rtosPage$: Observable<Bcrto[]>;
   public tableValue$: Observable<any[]>;
 
@@ -117,6 +129,8 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   public venderLoading = true;
   public deptInsideLoading = true;
   public departInsideLoading = true;
+  public withDuplication = true;
+  public showDuplicateRes = false;
 
   public name = '';
   private auditLoadPage$ = new Subject<string>();
@@ -360,7 +374,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.loadPage('', true);
+    this.loadPage(null, '', true);
     this.page$ = combineLatest([
       this.store.select(OrgActivityState.idsList),
       this.store.select(OrgActivityState.page),
@@ -370,15 +384,15 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
         let tableRows = activities?.map((activity) => {
           let tableRow = {
             ...activity,
+            disabled: false,
             selected: false,
+            dublicated: false,
           };
           if (ids && ids.includes(activity.id)) {
-            tableRow.selected = true;
-            // this.selectedActivities.push(tableRow);
+            tableRow.disabled = true;
           }
           return tableRow;
         });
-        console.log(this.selectedActivities);
         return tableRows;
       })
     );
@@ -395,25 +409,43 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
         );
       });
   }
-  submit() {
+  async submit() {
     if (!this.selectedActivities || !this.selectedCycle) {
       return;
     }
     let activities: BcActivityAnalysisDto[];
-    activities = this.selectedActivities
-      .filter((activity) => !activity.selected)
-      .map((activity) => {
-        return {
-          activityId: activity.id,
-          cycleId: this.selectedCycle?.id,
-        };
-      });
+    activities = this.selectedActivities.map((activity) => {
+      return {
+        activityId: activity.id,
+        cycleId: this.selectedCycle?.id,
+      };
+    });
 
-    this.store.dispatch(
-      new BrowseImpactAnalysisAction.SetCycleActivities(activities)
-    );
+    await this.store
+      .dispatch(new BrowseImpactAnalysisAction.SetCycleActivities(activities))
+      .toPromise();
+
+    if (this.withDuplication) {
+      const createdActivies = this.store.selectSnapshot(
+        ImpactAnalysisState.selectedActivityAnalysis
+      );
+      console.log(createdActivies);
+
+      await this.store
+        .dispatch(
+          new BrowseImpactAnalysisAction.duplicateActivities(createdActivies)
+        )
+        .toPromise();
+      this.showDuplicateRes = true;
+    } else {
+      this.store.dispatch([new BrowseImpactAnalysisAction.ToggleDialog({})]);
+      this.showDuplicateRes = false;
+    }
+    this.store.dispatch([new BrowseImpactAnalysisAction.LoadPage()]);
   }
-  loadPage(search?: string, direct = false) {
+
+  loadPage(page: LazyLoadEvent, search?: string, direct = false) {
+    this.showDuplicateRes = false;
     if (direct) {
       this.store.dispatch(
         new OrgActivityAction.LoadPage({
@@ -426,10 +458,30 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     }
     this.auditLoadPage$.next(search);
   }
+  activityClicked(row) {
+    if (row.disabled) return;
+    row.selected = !row.selected;
+    row.dublicated = row.selected; //default value for dublicate will be true whenever user select the row
+    if (row.selected) {
+      this.selectedActivities.push(row);
+    } else {
+      this.selectedActivities = this.selectedActivities.filter(
+        (activity) => activity?.id !== row?.id
+      );
+    }
+  }
+  selectAll(page) {
+    page.forEach((activiy) => this.activityClicked(activiy));
+  }
+
   toggleDialog() {
     this.store.dispatch(
       new BrowseImpactAnalysisAction.ToggleDialog({ dialog: 'activities' })
     );
+    if (this.withDuplication) {
+      this.showDuplicateRes= false;
+      this.store.dispatch(new BrowseImpactAnalysisAction.Reset());
+    }
   }
   close() {
     this.store.dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
@@ -449,24 +501,24 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
       );
     }
   }
-  changeSelect(event) {}
+
   selectCycle(event?, cycleId?) {
     if (event) {
       this.selectedCycle = event?.value;
     }
-    this.store.dispatch(
-      new OrgActivityAction.loadIdsList({
-        cycleId: this.selectedCycle?.id ? this.selectedCycle.id : cycleId,
-        orgHierarchyId: this.selectedOrgHir?.id,
-      })
-    );
+    setTimeout(() => {
+      this.store.dispatch(
+        new OrgActivityAction.loadIdsList({
+          cycleId: this.selectedCycle?.id ? this.selectedCycle.id : cycleId,
+          orgHierarchyId: this.selectedOrgHir?.id,
+        })
+      );
+    }, 3000);
   }
   selectDivision(event: TreeNode) {
     if (event) {
       this.selectDivision = event?.data;
     }
-    // console.log(event);
-
     this.store.dispatch(
       new OrgActivityAction.loadIdsList({
         cycleId: this.selectedCycle?.id,
@@ -479,5 +531,4 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  setImpactType(test1, test3) {}
 }

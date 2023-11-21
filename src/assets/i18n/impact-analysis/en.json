@@ -20,6 +20,11 @@
   "ADD_NEW_ACTIVITY": "Select Cycle Activities",
   "ADD_ACTIVITY_ACTION": "  Add Activities Analysis  ",
   "ORG_ARTCH": "Organization Hierarchy",
+  "DUPLICATE": "Duplicate",
+  "DUPLICATE_MSG": "Copy activity information from the previous analysis cycle",
+  "DUPLICATE_ALERT": "Copying activity information done.",
+  "SUCCESS": "Success {{success}}",
+  "FAILED": "Failed {{failed}}",
   "START_ANALYSIS": "Analyze Activity ",
   "START_RESOURC_ANALYSIS": "Analyze Resources",
   "CYCLE_NAME": "Cycle Name",
@@ -71,7 +76,7 @@
   },
   "EMPLOYEES": {
     "TAB_LABEL": "Primary & Secondary Employees",
-    "NAME":"Name",
+    "NAME": "Name",
     "SECONDARY": "Secondary",
     "PRI": "Primary",
     "PRIMARY": "Primary/Secondary"
@@ -85,9 +90,9 @@
     "DETAILS": "Dependency details",
     "VENDER": "Vender/Partner",
     "TAB_INSIDE": "Dependencies Inside Organization",
-    "SECTOR":"Sector",
-    "ACTIVITY":"Activity",
-    "TAB_DEPT":"Dependencies Inside Department"
+    "SECTOR": "Sector",
+    "ACTIVITY": "Activity",
+    "TAB_DEPT": "Dependencies Inside Department"
   },
   "IMPACT_MATRIX": {
     "TAB_LABEL": "Impact Matrix",

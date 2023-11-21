@@ -85,18 +85,18 @@ import { ActivityLocationsState } from '@core/states/activity-analysis/locations
 import { ActivityDependenciesState } from '@core/states/activity-analysis/dependencies/dependencies.state';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { NgxsStoragePluginModule } from './_async-storage/storage.module';
-import {VenderState} from "@core/states/bc-setup/venders/vender.state";
+import { VenderState } from '@core/states/bc-setup/venders/vender.state';
 import { SystemsState } from '@core/states/bc-setup/systems/systems.state';
 import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/worklogs.state';
-import {RemoteWorkState} from "@core/states/bc-resources/remote-work/remote-work.state";
-import {RecordsState} from "@core/states/bc-resources/records/records.state";
-import {AppSystemState} from "@core/states/bc-resources/app-system/app-system.state";
-import {InfraState} from "@core/states/bc-resources/infra-req/infra.state";
-import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
-import {StaffState} from "@core/states/bc-resources/staff/staff.state";
-import {OtherState} from "@core/states/bc-resources/other/other.state";
-import {ResourceWorklogsState} from "@core/states/bc-resources/worklogs/resourceWorklogs.state";
-import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
+import { RemoteWorkState } from '@core/states/bc-resources/remote-work/remote-work.state';
+import { RecordsState } from '@core/states/bc-resources/records/records.state';
+import { AppSystemState } from '@core/states/bc-resources/app-system/app-system.state';
+import { InfraState } from '@core/states/bc-resources/infra-req/infra.state';
+import { ResourceAnalysisState } from '@core/states/impact-analysis/resource-analysis.state';
+import { StaffState } from '@core/states/bc-resources/staff/staff.state';
+import { OtherState } from '@core/states/bc-resources/other/other.state';
+import { ResourceWorklogsState } from '@core/states/bc-resources/worklogs/resourceWorklogs.state';
+import { BiaAppsState } from '@core/states/bia-apps/bia-apps.state';
 import { AnalysisSummaryState } from '@core/states/activity-analysis/analysis-summary/analysis-summary.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -193,7 +193,7 @@ export function getHighlightLanguages() {
         OtherState,
         ResourceWorklogsState,
         BiaAppsState,
-        AnalysisSummaryState
+        AnalysisSummaryState,
       ],
       {
         developmentMode: !environment.production,
@@ -209,7 +209,7 @@ export function getHighlightLanguages() {
           'browse_groups',
           'browse_bc',
           'browse_activity_analysis',
-          'browse_impact_analysis',
+          // 'browse_impact_analysis',
           'browse_org_activities',
           'browse_vender',
           'browse_remote_work',
@@ -220,7 +220,7 @@ export function getHighlightLanguages() {
           'browse_staff',
           'browse_other',
           'browse_resource_worklogs',
-          'browse_bia_app'
+          'browse_bia_app',
         ],
       },
       ['common_data']
