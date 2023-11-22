@@ -1,15 +1,7 @@
 <!-- as a dialog -->
-<p-dialog
-  [visible]="opened$ | async"
-  (visibleChange)="toggleDialog()"
-  [modal]="true"
-  [style]="{ width: '55vw' }"
-  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="true"
-  [resizable]="false"
->
+<p-dialog [visible]="opened$ | async" (visibleChange)="toggleDialog()" [modal]="true" [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }" [maximizable]="true" [baseZIndex]="10000" [draggable]="true"
+  [resizable]="false">
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
@@ -43,24 +35,15 @@
 
     <form [formGroup]="form" class="p-fluid p-grid mt-5">
       <!-- external ?? vendors : orgHir -->
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           dependType == DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL;
           else elseTemplate
-        "
-      >
+        ">
         <!-- Vendors -->
         <div class="p-field p-col-12 p-md-6">
           <span class="p-float-label">
-            <p-dropdown
-              [autoDisplayFirst]="false"
-              [options]="vendors$ | async"
-              [filter]="true"
-              filterBy="nameAr,nameEn"
-              formControlName="partner"
-              [showClear]="true"
-              appendTo="body"
-            >
+            <p-dropdown [autoDisplayFirst]="false" [options]="vendors$ | async" [filter]="true" filterBy="nameAr,nameEn"
+              formControlName="partner" [showClear]="true" appendTo="body">
               <ng-template let-option pTemplate="selectedItem">
                 {{ option | translateObj }}
               </ng-template>
@@ -73,17 +56,12 @@
               <strong class="required-asterisk"> * </strong>
             </label>
           </span>
-          <ng-container
-            *ngIf="
+          <ng-container *ngIf="
               form.controls['partner'].touched &&
               !form.controls['partner'].valid &&
               form.controls['partner'].dirty
-            "
-          >
-            <p
-              class="p-error mb-0"
-              *ngIf="form.controls['partner'].hasError('required')"
-            >
+            ">
+            <p class="p-error mb-0" *ngIf="form.controls['partner'].hasError('required')">
               {{ "VALIDATION_MSG.REQUIRED" | translate }}
             </p>
           </ng-container>
@@ -92,49 +70,39 @@
       <!-- orgHir   -->
       <ng-template #elseTemplate>
         <div class="p-field p-col-4 p-md-6">
-          <p-treeSelect
-            [options]="orgHir"
-            [filterBy]="'data.nameAr,data.nameEn,data.code'"
-            selectionMode="single"
-            formControlName="orgHierarchy"
-            (onNodeSelect)="loadActivities($event?.node)"
-            placeholder="{{ 'DEPENDENCIES.ASSOCIATED_MANG' | translate }}"
-            appendTo="body"
-            [loading]="loading$ | async"
-            (onNodeExpand)="nodeExpand($event?.node)"
-          >
-            <ng-template let-option let-placeholder pTemplate="header">
-              <div class="w-100 p-2">
-                <span class="p-input-icon-left w-100">
-                  <i class="pi pi-search"></i>
-                  <input
-                    (keyup)="filterOrgHir($event.target.value)"
-                    type="text"
-                    pInputText
-                    class="w-100"
-                  />
-                </span>
-              </div>
-            </ng-template>
-            <ng-template let-option let-placeholder pTemplate="value">
-              {{
+          <span class="p-float-label">
+
+            <p-treeSelect [options]="orgHir" [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single"
+              formControlName="orgHierarchy" (onNodeSelect)="loadActivities($event?.node)" appendTo="body"
+              [loading]="loading$ | async" (onNodeExpand)="nodeExpand($event?.node)">
+              <ng-template let-option let-placeholder pTemplate="header">
+                <div class="w-100 p-2">
+                  <span class="p-input-icon-left w-100">
+                    <i class="pi pi-search"></i>
+                    <input (keyup)="filterOrgHir($event.target.value)" type="text" pInputText class="w-100" />
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template let-option let-placeholder pTemplate="value">
+                {{
                 option
-                  ? (option | translateObj : "label")
-                  : ("DEPENDENCIES.ASSOCIATED_MANG" | translate)
-              }}
-            </ng-template>
-          </p-treeSelect>
-          <ng-container
-            *ngIf="
+                ? (option | translateObj : "label")
+                : ("DEPENDENCIES.ASSOCIATED_MANG" | translate)
+                }}
+              </ng-template>
+            </p-treeSelect>
+            <label>
+              {{ "DEPENDENCIES.ASSOCIATED_MANG" | translate }}
+              <strong class="required-asterisk" *ngIf="form?.controls['orgHierarchy']?.hasError('required')"> *
+              </strong>
+            </label>
+          </span>
+          <ng-container *ngIf="
               form.controls['orgHierarchy'].touched &&
               !form.controls['orgHierarchy'].valid &&
               form.controls['orgHierarchy'].dirty
-            "
-          >
-            <p
-              class="p-error mb-0"
-              *ngIf="form.controls['orgHierarchy'].hasError('required')"
-            >
+            ">
+            <p class="p-error mb-0" *ngIf="form.controls['orgHierarchy'].hasError('required')">
               {{ "VALIDATION_MSG.REQUIRED" | translate }}
             </p>
           </ng-container>
@@ -142,21 +110,10 @@
       </ng-template>
 
       <!-- activies (select) -->
-      <div
-        *ngIf="dependType == DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL"
-        class="p-field p-col-12 p-md-6"
-      >
+      <div *ngIf="dependType == DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL" class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
-          <p-dropdown
-            [autoDisplayFirst]="false"
-            formControlName="relatedActivity"
-            [options]="activies$ | async"
-            [filter]="true"
-            filterBy="nameAr,nameEn"
-            dataKey="id"
-            [showClear]="true"
-            appendTo="body"
-          >
+          <p-dropdown [autoDisplayFirst]="false" formControlName="relatedActivity" [options]="activies$ | async"
+            [filter]="true" filterBy="nameAr,nameEn" dataKey="id" [showClear]="true" appendTo="body">
             <ng-template let-option pTemplate="selectedItem">
               {{ option | translateObj }}
             </ng-template>
@@ -169,66 +126,45 @@
             <strong class="required-asterisk"> * </strong>
           </label>
         </span>
-        <ng-container
-          *ngIf="
+        <ng-container *ngIf="
             form.controls['relatedActivity'].touched &&
             !form.controls['relatedActivity'].valid &&
             form.controls['relatedActivity'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['relatedActivity'].hasError('required')"
-          >
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['relatedActivity'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
         </ng-container>
       </div>
       <!-- activity name  -->
-      <div
-        *ngIf="dependType == DEPENDENCIES_TYPES.DEPENDENCY_ORG"
-        class="p-field p-col-12 p-md-6"
-      >
+      <div *ngIf="dependType == DEPENDENCIES_TYPES.DEPENDENCY_ORG" class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
           <input type="text" formControlName="activityName" pInputText />
           <label>
             {{ "DEPENDENCIES.ACTIVIE_NAME" | translate }}
+            <strong class="required-asterisk"> * </strong>
           </label>
         </span>
       </div>
       <!-- DETAILS -->
       <div class="p-field p-col-12 p-md-12">
         <span class="p-float-label">
-          <textarea
-            pInputText
-            type="text"
-            formControlName="dependencyDetails"
-            rows="5"
-          ></textarea>
-          <label
-            >{{ "DEPENDENCIES.DETAILS" | translate }}
+          <textarea pInputText type="text" formControlName="dependencyDetails" rows="5"></textarea>
+          <label>{{ "DEPENDENCIES.DETAILS" | translate }}
             <strong class="required-asterisk"> * </strong>
           </label>
         </span>
 
-        <ng-container
-          *ngIf="
+        <ng-container *ngIf="
             form.controls['dependencyDetails'].touched &&
             !form.controls['dependencyDetails'].valid &&
             form.controls['dependencyDetails'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['dependencyDetails'].hasError('required')"
-          >
+          ">
+          <p class="p-error mb-0" *ngIf="form.controls['dependencyDetails'].hasError('required')">
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
 
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['dependencyDetails'].hasError('english')"
-          >
+          <p class="p-error mb-0" *ngIf="form.controls['dependencyDetails'].hasError('english')">
             {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
           </p>
         </ng-container>
@@ -245,14 +181,8 @@
     <div class="p-col text-center">
       <div class="text-center">
         <ng-container *ngIf="activityStatus$ | async as activityStatus">
-          <button
-            (click)="submit()"
-            [disabled]="!activityStatus.editable || !this.form"
-            [loading]="blocking$ | async"
-            pButton
-            label="{{ 'ACTIONS.SAVE' | translate }}"
-            icon="pi pi-save"
-          ></button>
+          <button (click)="submit()" [disabled]="!activityStatus.editable || !this.form" [loading]="blocking$ | async"
+            pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"></button>
         </ng-container>
       </div>
     </div>
