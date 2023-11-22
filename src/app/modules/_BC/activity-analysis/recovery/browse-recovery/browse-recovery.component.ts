@@ -8,13 +8,11 @@ import {
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { FormUtils } from '@core/utils';
 import { Select, Store } from '@ngxs/store';
-import { GenericValidators } from '@shared/validators/generic-validators';
 import { Observable, Subject } from 'rxjs';
-import { filter, skip, takeUntil, tap } from 'rxjs/operators';
-import { BcActivities, Bcrto } from 'src/app/api/models';
+import { filter, takeUntil, tap } from 'rxjs/operators';
+import { Bcrto } from 'src/app/api/models';
 import { BrowseActivityAnalysisAction } from '../../states/browse-activity-analysis.action';
-import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
-import {ActivityAnalysisStatusAction} from "../../../../../api/models/activity-analysis-status-action";
+import { ActivityAnalysisStatusAction } from '../../../../../api/models/activity-analysis-status-action';
 
 @Component({
   selector: 'app-browse-recovery',
@@ -56,16 +54,6 @@ export class BrowseRecoveryComponent implements OnInit, OnDestroy {
         })
       );
     }
-
-    this.impactAnalysisRes$ = this.store
-      .select(BrowseActivityAnalysisState.impactAnalysisRes)
-      .pipe(
-        tap((rto) => {
-          console.log(rto);
-
-          this.form.get('rto').setValue(rto);
-        })
-      );
 
     this.store
       .select(ActivityAnalysisState.activityAnalysis)
