@@ -1,16 +1,11 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ImpactMatrixState, RtoState } from '@core/states';
 import { ActivityAnalysisState } from '@core/states/activity-analysis/activity-analysis.state';
 import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact-matrix/impact-matrix.state';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import {
   BcActivityImpactMatrixDetailsDto,
   BcImpactLevel,
@@ -21,14 +16,13 @@ import {
 } from 'src/app/api/models';
 import { BrowseActivityAnalysisAction } from '../../states/browse-activity-analysis.action';
 import { BrowseActivityImpactMatrixAction } from '../states/browse-impact-matrix.action';
-import {
-  BrowseActivityImpactMatrixState,
-} from '../states/browse-impact-matrix.state';
+import { BrowseActivityImpactMatrixState } from '../states/browse-impact-matrix.state';
 import { BcImpactTypes } from '../../../../../api/models/bc-impact-types';
 import { ImpactLevelState } from '@core/states/bc/impact-level/impact-level.state';
 import { BcImpactLevelMatrixDto } from '../../../../../api/models/bc-impact-level-matrix-dto';
 import { BcImpactMatrixDto } from '../../../../../api/models';
 import { ActivityAnalysisStatusAction } from '../../../../../api/models/activity-analysis-status-action';
+import { BrowseActivityAnalysisState } from '../../states/browse-activity-analysis.state';
 
 @Component({
   selector: 'app-browse-impact-matrix',
@@ -268,7 +262,7 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
     if (secondLevel) {
       tragetRto = rtos.find((rto) => rto.id === secondLevel.id);
     } else if (rtos.length >= 1) {
-      tragetRto = rtos[0];
+      tragetRto = rtos[rtos.length - 1];
     }
 
     this.store.dispatch(
@@ -297,6 +291,13 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
       .then(() => {
         this.loadPage();
       });
+    // rto
+    const rto = this.store.selectSnapshot(
+      BrowseActivityAnalysisState.impactAnalysisRes
+    );
+    this.store.dispatch(
+      new BrowseActivityAnalysisAction.Update({ ...activityAnalysis, rto })
+    );
   }
   ngOnDestroy(): void {
     this.destroy$.next();
