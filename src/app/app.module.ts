@@ -208,7 +208,7 @@ export function getHighlightLanguages() {
           'browse_tasks',
           'browse_groups',
           'browse_bc',
-          'browse_activity_analysis',
+          // 'browse_activity_analysis',
           // 'browse_impact_analysis',
           'browse_org_activities',
           'browse_vender',
