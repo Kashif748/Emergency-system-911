@@ -109,7 +109,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       // map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
       ()
       .subscribe((res) => {
-        if (res['key'] == 'ar') {
+        if (res.ActiveLang?.key == 'ar') {
           this.sortableColumns[0].code = 'orgHierarchy.nameAr';
           this.sortableColumns[1].code = 'status.nameAr';
         } else {
