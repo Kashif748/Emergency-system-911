@@ -78,7 +78,10 @@
             formControlName="nationalCompliance"
             inputId="minmax"
             mode="decimal"
+            [max]="100"
             [min]="0"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="3"
           >
           </p-inputNumber>
 
