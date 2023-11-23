@@ -4,7 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { TranslateService } from '@ngx-translate/core';
 
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
-import {  filter, map, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import {
   BrowseImpactMatrixState,
   BrowseImpactMatrixStateModel,
@@ -54,9 +54,11 @@ export class BrowseImpactMatrixComponent implements OnInit, OnDestroy {
         filter((p) => !!p)
       )
       .subscribe((version) => {
-        this.versionId = version;
-        this.loadPage();
-        this.loadImpactTypePage();
+        if (version != this.versionId) {
+          this.versionId = version;
+          this.loadPage();
+          this.loadImpactTypePage();
+        }
       });
     const userActions = [
       {

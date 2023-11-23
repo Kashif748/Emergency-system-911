@@ -114,7 +114,6 @@ export class BrowseBCState {
     return dispatch(new BCAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.cSuccess();
-        dispatch(new BrowseBCAction.LoadPage());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

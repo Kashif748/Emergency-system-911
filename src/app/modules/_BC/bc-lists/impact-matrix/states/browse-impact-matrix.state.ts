@@ -189,6 +189,7 @@ export class BrowseImpactMatrixState {
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
         versionId: payload.versionId,
+        isActive: true
       })
     );
   }
