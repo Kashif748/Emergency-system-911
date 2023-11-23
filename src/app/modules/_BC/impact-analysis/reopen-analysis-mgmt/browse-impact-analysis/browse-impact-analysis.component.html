@@ -327,10 +327,15 @@
         </div>
       </div>
       <div class="ml-dir-auto d-flex">
-        <app-resource-dialog
-          [orgHir]="orgHireracy"
-          [cycles]="cycles$ | async"
-        ></app-resource-dialog>
+        <button
+          *checkPrivileges="'PRIV_PERFORM_ACTIVITY_ANALYSIS'"
+          pButton
+          label="{{ 'RESOURCES.ADD_RESOURCE' | translate }}"
+          icon="pi pi-plus"
+          [disabled]="alreadyFoundResource"
+          (click)="createResource($event)"
+        ></button>
+        <p-confirmPopup></p-confirmPopup>
       </div>
     </p-toolbar>
   </div>

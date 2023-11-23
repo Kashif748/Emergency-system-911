@@ -141,7 +141,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       tap(() => {
         this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
           cycle: this.selectedCycle?.id}));
-        this.loadPage(null, this.selectedCycle?.id);
+        this.loadPage(null, this.selectedCycle);
       })
     ).subscribe();
     this.sortAnalysisCycles$ = this.cycles$.pipe(
@@ -299,7 +299,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
-        cycleId: cycle ? cycle : this.selectedCycle,
+        cycleId: cycle ? cycle.id : this.selectedCycle.id,
       })
     );
   }
@@ -309,7 +309,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
     this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
       cycle: value?.id}))
-    this.loadPage(null, value?.id);
+    this.loadPage(null, value);
   }
 
 

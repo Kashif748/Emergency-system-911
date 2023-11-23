@@ -55,6 +55,7 @@
     "CYCLE": "Analysis Cycle",
     "ONSITE_STAFF": "Staff Needed On-Site",
     "OFFSITE_STAFF": "Staff Needed Remotely",
+    "CONFIREM":"New resource will be added for selected division and cycle",
     "STATUS": "Status",
     "DIALOG": {
       "ADD": "Add New Resource"
