@@ -1,19 +1,27 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {ILangFacade} from '@core/facades/lang.facade';
-import {IAuthService} from '@core/services/auth.service';
-import {BCState} from '@core/states';
-import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
-import {FormUtils} from '@core/utils';
-import {Select, Store} from '@ngxs/store';
-import {GenericValidators} from '@shared/validators/generic-validators';
-import {Observable, Subject} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {BcVersions} from 'src/app/api/models';
-import {BrowseBCAction} from '../states/browse-bc.action';
-import {BrowseBCState, BrowseBCStateModel} from '../states/browse-bc.state';
-import {LazyLoadEvent} from "primeng/api";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { IAuthService } from '@core/services/auth.service';
+import { BCState } from '@core/states';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
+import { FormUtils } from '@core/utils';
+import { Select, Store } from '@ngxs/store';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { Observable, Subject } from 'rxjs';
+import {
+  filter,
+  map,
+  pairwise,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { BcVersions } from 'src/app/api/models';
+import { BrowseBCAction } from '../states/browse-bc.action';
+import { BrowseBCState, BrowseBCStateModel } from '../states/browse-bc.state';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-bc',
@@ -65,11 +73,18 @@ export class BCComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder
   ) {
     this.route.queryParams
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((params) => {
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params) => params['_version']),
+        pairwise(),
+        filter(
+          ([previousValue, currentValue]) => currentValue !== previousValue
+        )
+      )
+      .subscribe(([previousValue, currentValue]) => {
         this.store.dispatch(
           new BrowseBCAction.GetVersion({
-            versionId: params['_version'],
+            versionId: currentValue,
           })
         );
       });
@@ -106,7 +121,6 @@ export class BCComponent implements OnInit, OnDestroy {
         })
       )
     );
-
   }
   createForm() {
     this.form = this.formBuilder.group({
@@ -164,9 +178,7 @@ export class BCComponent implements OnInit, OnDestroy {
   }
 
   sort(event) {
-    this.store.dispatch(
-      new BrowseBCAction.Sort({ field: event.value })
-    );
+    this.store.dispatch(new BrowseBCAction.Sort({ field: event.value }));
   }
   order(event) {
     this.store.dispatch(

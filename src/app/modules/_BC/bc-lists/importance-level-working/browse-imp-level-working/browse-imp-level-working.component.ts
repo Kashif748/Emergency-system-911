@@ -45,17 +45,18 @@ export class BrowseImpLevelWorkingComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-
     this.route.queryParams
-    .pipe(
-      takeUntil(this.destroy$),
-      map((params) => params['_version']),
-      filter((p) => !!p)
-    )
-    .subscribe((version) => {
-      this.versionId = version;
-      this.loadPage();
-    });
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params) => params['_version']),
+        filter((p) => !!p)
+      )
+      .subscribe((version) => {
+        if (version != this.versionId) {
+          this.versionId = version;
+          this.loadPage();
+        }
+      });
     const userActions = [
       {
         label: this.translate.instant('ACTIONS.EDIT'),
@@ -117,7 +118,6 @@ export class BrowseImpLevelWorkingComponent implements OnInit, OnDestroy {
           rows: event?.rows,
         },
         versionId: this.versionId,
-
       })
     );
   }
