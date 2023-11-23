@@ -34,22 +34,25 @@ export class BrowseImpactLevelComponent implements OnInit, OnDestroy {
   public versionId: number;
 
   private destroy$ = new Subject();
-  constructor(private store: Store,
+  constructor(
+    private store: Store,
     private route: ActivatedRoute,
-    private lang: ILangFacade) {}
+    private lang: ILangFacade
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams
-    .pipe(
-      takeUntil(this.destroy$),
-      map((params) => params['_version']),
-      filter((p) => !!p)
-    )
-    .subscribe((version) => {
-      this.versionId = version;
-      this.loadPage();
-    });
-
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params) => params['_version']),
+        filter((p) => !!p)
+      )
+      .subscribe((version) => {
+        if (version != this.versionId) {
+          this.versionId = version;
+          this.loadPage();
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -64,7 +67,6 @@ export class BrowseImpactLevelComponent implements OnInit, OnDestroy {
           rows: event?.rows,
         },
         versionId: this.versionId,
-
       })
     );
   }

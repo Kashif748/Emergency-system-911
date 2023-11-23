@@ -52,8 +52,10 @@ export class BrowseRtoComponent implements OnInit, OnDestroy {
         filter((p) => !!p)
       )
       .subscribe((version) => {
-        this.versionId = version;
-        this.loadPage();
+        if (version != this.versionId) {
+          this.versionId = version;
+          this.loadPage();
+        }
       });
 
     const userActions = [
