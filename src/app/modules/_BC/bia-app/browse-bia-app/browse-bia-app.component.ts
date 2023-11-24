@@ -76,8 +76,8 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   ] as MenuItem[];
 
   public sortableColumns = [
-    { name: 'DIVISION', code: 'orgHierarchy' },
-    { name: 'STATE', code: 'status' },
+    { name: 'DIVISION', code: '' },
+    { name: 'STATE', code: '' },
   ];
 
   public columns = [
@@ -110,11 +110,11 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       ()
       .subscribe((res) => {
         if (res.ActiveLang?.key == 'ar') {
-          this.sortableColumns[0].code = 'orgHierarchy.nameAr';
-          this.sortableColumns[1].code = 'status.nameAr';
+          this.sortableColumns[0].code = 'org_hir_name_ar';
+          this.sortableColumns[1].code = 'status_name_ar';
         } else {
-          this.sortableColumns[0].code = 'orgHierarchy.nameEn';
-          this.sortableColumns[1].code = 'status.nameEn';
+          this.sortableColumns[0].code = 'org_hir_name_en';
+          this.sortableColumns[1].code = 'status_name_en';
         }
       });
   }
