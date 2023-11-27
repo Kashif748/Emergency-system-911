@@ -340,10 +340,10 @@
       "CURRENT_CYCLE": "Current Analysis Cycle",
       "CRITICAL_ACTIVITY": "Number - Percentage of Critical Activities",
       "CRITICAL_EMPLOY": "Number of Critical Employees",
-      "CRITICAL_SYSTEM":"Number of Critical Systems",
+      "CRITICAL_SYSTEM": "Number of Critical Systems",
       "ORG_ARTCH": "Organization Hierarchy",
       "ANALYSIS_CRCLE": "Analysis Cycle",
-      "TITTLE_SECTION":"Business Continuity Section - Contact Details"
+      "TITTLE_SECTION": "Business Continuity Section - Contact Details"
     },
     "AUTH": {
       "GENERAL": {
@@ -1635,13 +1635,11 @@
         },
         "SUCCESS": {
           "TITLE": "Success",
-          "MESSAGE": "Process completed successfully.",
-          "CMESSAGE": "In process of copying previous BC Lists"
+          "MESSAGE": "Process completed successfully."
         },
         "ERROR": {
           "TITLE": "Error",
-          "MESSAGE": "Something went wrong.",
-          "CMESSAGE": "Resources already exist for current division and analysis cycle."
+          "MESSAGE": "Something went wrong."
         },
         "WARN": {
           "TITLE": "Warning"
