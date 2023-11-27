@@ -1,16 +1,23 @@
-import {PageRequestModel} from '@core/models/page-request.model';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
-import {Injectable} from '@angular/core';
-import {MessageHelper} from '@core/helpers/message.helper';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ApiHelper} from '@core/helpers/api.helper';
-import {TextUtils} from '@core/utils';
-import {iif, patch} from '@ngxs/store/operators';
-import {BrowseResourceAnalysisAction} from "./browse-resource-analysis.action";
-import {throwError} from "rxjs";
-import {BrowseOrganizationAction} from "../../organization-activities/states/browse-organization.action";
-import {catchError, finalize, tap} from "rxjs/operators";
-import {ResourceAnalysisAction} from "@core/states/impact-analysis/resource-analysis.action";
+import { PageRequestModel } from '@core/models/page-request.model';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiHelper } from '@core/helpers/api.helper';
+import { TextUtils } from '@core/utils';
+import { iif, patch } from '@ngxs/store/operators';
+import { BrowseResourceAnalysisAction } from './browse-resource-analysis.action';
+import { throwError } from 'rxjs';
+import { BrowseOrganizationAction } from '../../organization-activities/states/browse-organization.action';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { ResourceAnalysisAction } from '@core/states/impact-analysis/resource-analysis.action';
 
 export interface BrowseReourceAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -62,15 +69,16 @@ export class BrowseResourceAnalysisState {
   @Selector([BrowseResourceAnalysisState])
   static hasFilters(state: BrowseReourceAnalysisStateModel): boolean {
     const filters = state.pageRequest.filters;
-    return !('orgHierarchyId' in filters && 'cycleId' in filters) ||
-      (Object.keys(filters).filter(
-          (k) =>
-            k !== 'active' &&
-            k !== 'orgHierarchyId' &&
-            k !== 'cycleId' &&
-            !TextUtils.IsEmptyOrWhiteSpaces(filters[k])
-        ).length > 0
-      );
+    return (
+      !('orgHierarchyId' in filters && 'cycleId' in filters) ||
+      Object.keys(filters).filter(
+        (k) =>
+          k !== 'active' &&
+          k !== 'orgHierarchyId' &&
+          k !== 'cycleId' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(filters[k])
+      ).length > 0
+    );
   }
 
   /* ********************** ACTIONS ************************* */
@@ -108,7 +116,11 @@ export class BrowseResourceAnalysisState {
 
   @Action(BrowseResourceAnalysisAction.Sort)
   sortResource(
-    { setState, dispatch, getState }: StateContext<BrowseReourceAnalysisStateModel>,
+    {
+      setState,
+      dispatch,
+      getState,
+    }: StateContext<BrowseReourceAnalysisStateModel>,
     { payload }: BrowseResourceAnalysisAction.Sort
   ) {
     setState(
@@ -142,16 +154,13 @@ export class BrowseResourceAnalysisState {
     return dispatch(new ResourceAnalysisAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(
-          [new BrowseResourceAnalysisAction.LoadPage(),
-            new BrowseResourceAnalysisAction.ToggleDialog({})]);
+        dispatch([
+          new BrowseResourceAnalysisAction.LoadPage(),
+          new BrowseResourceAnalysisAction.ToggleDialog({}),
+        ]);
       }),
       catchError((err) => {
-        if (err.status === 409) {
-          this.messageHelper.cError();
-        } else {
-          this.messageHelper.error({ error: err });
-        }
+        this.messageHelper.error({ error: err });
         return throwError(err);
       })
     );
@@ -177,7 +186,9 @@ export class BrowseResourceAnalysisState {
     );
   }
 
-  @Action(BrowseResourceAnalysisAction.UpdateFilter, { cancelUncompleted: true })
+  @Action(BrowseResourceAnalysisAction.UpdateFilter, {
+    cancelUncompleted: true,
+  })
   updateFilter(
     { setState, getState }: StateContext<BrowseReourceAnalysisStateModel>,
     { payload }: BrowseResourceAnalysisAction.UpdateFilter

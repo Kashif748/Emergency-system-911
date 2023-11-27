@@ -272,29 +272,7 @@ export class BrowseBiaAppState {
       queryParamsHandling: 'merge',
     });
   }
-  @Action(BrowseBiaAppAction.CreateResourceAnalysis)
-  createResource(
-    { dispatch }: StateContext<BrowseBiaAppStateModel>,
-    { payload }: BrowseBiaAppAction.CreateResourceAnalysis
-  ) {
-    return dispatch(new ResourceAnalysisAction.Create(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        dispatch([
-          new BrowseBiaAppAction.LoadBia(),
-          new BrowseBiaAppAction.ToggleDialog({}),
-        ]);
-      }),
-      catchError((err) => {
-        if (err.status === 409) {
-          this.messageHelper.cError();
-        } else {
-          this.messageHelper.error({ error: err });
-        }
-        return throwError(err);
-      })
-    );
-  }
+
   @Action(BrowseBiaAppAction.SetCycleActivities)
   SetCycleActivities(
     { dispatch, getState }: StateContext<BrowseBiaAppStateModel>,
