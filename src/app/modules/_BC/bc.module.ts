@@ -34,9 +34,12 @@ import { NgxsModule } from '@ngxs/store';
 import { BrowseBCState } from './states/browse-bc.state';
 import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.directive';
 import { BadgeModule } from 'primeng/badge';
-import {CdateModule} from "@shared/sh-pipes/cdate.pipe";
-import {ToggleButtonModule} from "primeng/togglebutton";
+import { CdateModule } from '@shared/sh-pipes/cdate.pipe';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 import { BrowseOrgDetailState } from './bc-lists/org-detail/states/browse-orgDetail.state';
+import { BlockUIModule } from 'primeng/blockui';
+import { BlockableDivModule } from '@shared/sh-components/blockable-div/blockable-div.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/bc/', '.json');
@@ -84,7 +87,10 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     PrivilegesDirectiveModule,
     BadgeModule,
     CdateModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    BlockUIModule,
+    BlockableDivModule,
+    ProgressBarModule,
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

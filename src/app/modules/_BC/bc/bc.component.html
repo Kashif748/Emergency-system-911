@@ -1,15 +1,9 @@
 <ng-container *ngIf="state$ | async as state">
   <router-outlet></router-outlet>
 
-  <p-dialog
-    [visible]="dialogOpened$ | async"
-    (visibleChange)="toggleDialog()"
-    [modal]="true"
-    [style]="{ width: '60vw', background: 'white' }"
-    styleClass="min-h-300px"
-    [breakpoints]="{ '960px': '40vw', '640px': '100vw' }"
-    [baseZIndex]="10000"
-  >
+  <p-dialog [visible]="dialogOpened$ | async" (visibleChange)="toggleDialog()" [modal]="true"
+    [style]="{ width: '60vw', background: 'white' }" styleClass="min-h-300px"
+    [breakpoints]="{ '960px': '40vw', '640px': '100vw' }" [baseZIndex]="10000">
     <ng-template pTemplate="header">
       <div class="d-block d-sm-flex p-ai-center text-center">
         <h3>
@@ -17,312 +11,259 @@
         </h3>
       </div>
     </ng-template>
-    <div class="col-12 my-3">
-      <p-toolbar>
-        <div class="p-toolbar-group-left">
-          <div class="p-1 w-100 w-md-225px">
-            <div class="p-inputgroup">
-              <p-dropdown
-                [options]="sortableColumns"
-                [autoDisplayFirst]="false"
-                [showClear]="true"
-                [ngModel]="state?.pageRequest?.sortField"
-                placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate }}"
-                optionLabel="name"
-                optionValue="code"
-                styleClass="w-100 h-100"
-                class="w-100 h-100"
-                (onChange)="sort($event)"
-              >
-                <ng-template let-option pTemplate="selectedItem">
-                  {{ option.name | translate }}
-                </ng-template>
-                <ng-template let-option pTemplate="item">
-                  {{ option.name | translate }}
-                </ng-template>
-              </p-dropdown>
-              <div class="p-inputgroup-addon p-0">
-                <p-toggleButton
-                  class="w-100 h-100"
-                  [onIcon]="'pi pi-sort-amount-up'"
-                  [ngModel]="state?.pageRequest?.sortOrder === 'desc'"
-                  offIcon="pi pi-sort-amount-down-alt"
-                  iconPos="right"
-                  styleClass="w-100 h-100"
-                  (onChange)="order($event)"
-                ></p-toggleButton>
+    <p-blockable-div #dialogbody>
+      <div class="col-12 my-3">
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <div class="p-1 w-100 w-md-225px">
+              <div class="p-inputgroup">
+                <p-dropdown [options]="sortableColumns" [autoDisplayFirst]="false" [showClear]="true"
+                  [ngModel]="state?.pageRequest?.sortField"
+                  placeholder="{{ 'SHARED.SELECT_SORTING_FIELD' | translate }}" optionLabel="name" optionValue="code"
+                  styleClass="w-100 h-100" class="w-100 h-100" (onChange)="sort($event)">
+                  <ng-template let-option pTemplate="selectedItem">
+                    {{ option.name | translate }}
+                  </ng-template>
+                  <ng-template let-option pTemplate="item">
+                    {{ option.name | translate }}
+                  </ng-template>
+                </p-dropdown>
+                <div class="p-inputgroup-addon p-0">
+                  <p-toggleButton class="w-100 h-100" [onIcon]="'pi pi-sort-amount-up'"
+                    [ngModel]="state?.pageRequest?.sortOrder === 'desc'" offIcon="pi pi-sort-amount-down-alt"
+                    iconPos="right" styleClass="w-100 h-100" (onChange)="order($event)"></p-toggleButton>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="ml-dir-auto d-flex">
-          <button
-            *checkPrivileges="'PRIV_ED_BC_VER'"
-            pButton
-            label="{{ 'ADD_VERSION' | translate }}"
-            [icon]="showVersionForm ? 'pi pi-minus' : 'pi pi-plus'"
-            (click)="showVersionForm = !showVersionForm"
-          ></button>
-        </div>
-      </p-toolbar>
-    </div>
-    <form
-      [formGroup]="form"
-      class="p-fluid p-grid mt-5 col-12"
-      *ngIf="showVersionForm"
-    >
-      <!-- version AR -->
-      <div class="p-field p-col-6 p-md-6">
-        <span class="p-float-label">
-          <input type="text" formControlName="nameAr" pInputText />
-          <label>
-            {{ "VERSION_AR" | translate }}
-            <strong class="required-asterisk"> * </strong>
-          </label>
-        </span>
-        <ng-container
-          *ngIf="
+          <div class="ml-dir-auto d-flex">
+            <button *checkPrivileges="'PRIV_ED_BC_VER'" pButton label="{{ 'ADD_VERSION' | translate }}"
+              [icon]="showVersionForm ? 'pi pi-minus' : 'pi pi-plus'"
+              (click)="showVersionForm = !showVersionForm"></button>
+          </div>
+        </p-toolbar>
+      </div>
+      <form [formGroup]="form" class="p-fluid p-grid mt-5 col-12" *ngIf="showVersionForm">
+        <!-- version AR -->
+        <div class="p-field p-col-6 p-md-6">
+          <span class="p-float-label">
+            <input type="text" formControlName="nameAr" pInputText />
+            <label>
+              {{ "VERSION_AR" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container *ngIf="
             form.controls['nameAr'].touched &&
             !form.controls['nameAr'].valid &&
             form.controls['nameAr'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameAr'].hasError('required')"
-          >
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameAr'].hasError('arabic')"
-          >
-            {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
-          </p>
-        </ng-container>
-      </div>
+          ">
+            <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
+              {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+            </p>
+          </ng-container>
+        </div>
 
-      <!-- version EN -->
-      <div class="p-field p-col-6 p-md-6">
-        <span class="p-float-label">
-          <input type="text" formControlName="nameEn" pInputText />
-          <label>
-            {{ "VERSION_EN" | translate }}
-            <strong class="required-asterisk"> * </strong>
-          </label>
-        </span>
-        <ng-container
-          *ngIf="
+        <!-- version EN -->
+        <div class="p-field p-col-6 p-md-6">
+          <span class="p-float-label">
+            <input type="text" formControlName="nameEn" pInputText />
+            <label>
+              {{ "VERSION_EN" | translate }}
+              <strong class="required-asterisk"> * </strong>
+            </label>
+          </span>
+          <ng-container *ngIf="
             form.controls['nameEn'].touched &&
             !form.controls['nameEn'].valid &&
             form.controls['nameEn'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameEn'].hasError('required')"
-          >
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['nameEn'].hasError('english')"
-          >
-            {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
-          </p>
-        </ng-container>
-      </div>
-    </form>
-    <div  *ngIf="showVersionForm" class="p-col p-d-flex p-jc-center">
-      <div class="mx-1">
-        <button
-          pButton
-          *checkPrivileges="'PRIV_ED_BC_VER'"
-          label="{{ 'ACTIONS.SAVE' | translate }}"
-          icon="pi pi-save"
-          [loading]="blocking$ | async"
-          [disabled]="form.invalid"
-          (click)="submit()"
-        ></button>
-      </div>
-    </div>
-
-     <!--table-->
-
-    <div class="row">
-      <div class="col-12">
-        <ng-container>
-          <ng-container *ngIf="loading$ | async; else tableTemplate">
-            <p-table [value]="[].constructor(10)">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th class="min-w-170px">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "VERSION_LIST.NAME_AR" | translate }}
-                    </div>
-                  </th>
-                  <th class="min-w-170px max-w-300px">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "VERSION_LIST.NAME_EN" | translate }}
-                    </div>
-                  </th>
-                  <th class="min-w-100px max-w-300px">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "VERSION_LIST.STATUS" | translate }}
-                    </div>
-                  </th>
-
-                  <th class="min-w-100px max-w-300px">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "VERSION_LIST.CREATED_BY" | translate }}
-                    </div>
-                  </th>
-
-                  <th class="min-w-100px max-w-300px">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "VERSION_LIST.CREATED_ON" | translate }}
-                    </div>
-                  </th>
-
-                  <th *checkPrivileges="'PRIV_ED_BC_VER'" style="width: 92px">
-                    {{ "ACTIONS.ACTIONS" | translate }}
-                  </th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-item>
-                <tr class="cursor-pointer hoverable">
-
-                  <td>
-                    <p-skeleton></p-skeleton>
-                  </td>
-                  <td>
-                    <p-skeleton></p-skeleton>
-                  </td>
-                  <td>
-                    <p-skeleton></p-skeleton>
-                  </td>
-                  <td>
-                    <p-skeleton></p-skeleton>
-                  </td>
-                  <td>
-                    <p-skeleton></p-skeleton>
-                  </td>
-                  <td>
-                    <p-skeleton></p-skeleton>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
+          ">
+            <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
+              {{ "VALIDATION_MSG.REQUIRED" | translate }}
+            </p>
+            <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
+              {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
+            </p>
           </ng-container>
-          <ng-template #tableTemplate>
-            <p-table
-              totalRecords="10"
-              [value]="versions$ | async"
-              dataKey="id"
-              [autoLayout]="true">
-              <ng-template pTemplate="colgroup" let-columns>
-                <colgroup>
-                  <col *ngFor="let col of columns" [style.width]="'col.width'" />
-                </colgroup>
-              </ng-template>
-              <ng-template pTemplate="header">
-                <tr>
-                  <th class="min-w-170px max-w-250px">
-                    <div class="p-d-flex p-ai-center">
-                      {{ "VERSION_LIST.NAME_AR" | translate }}
-                    </div>
-                  </th>
-                  <th class="min-w-170px max-w-300px">
-                    <div class="p-d-flex p-ai-center">
-                      {{ "VERSION_LIST.NAME_EN" | translate }}
-                    </div>
-                  </th>
-                  <th class="min-w-100px max-w-300px">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "VERSION_LIST.STATUS" | translate }}
-                    </div>
-                  </th>
-
-                  <th class="min-w-100px max-w-300px">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                      {{ "VERSION_LIST.CREATED_BY" | translate }}
-                    </div>
-                  </th>
-
-                  <th class="min-w-100px max-w-300px">
-                    <div class="p-d-flex p-ai-center">
-                      {{ "VERSION_LIST.CREATED_ON" | translate }}
-                    </div>
-                  </th>
-                  <th *checkPrivileges="'PRIV_ED_BC_VER'" style="width: 92px">
-                    {{ "ACTIONS.ACTIONS" | translate }}
-                  </th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-                <tr>
-                  <td
-                    class="min-w-200px max-w-250px"
-                  >
-                    {{ item.nameAr }}
-                  </td>
-
-                  <td
-                    class="min-w-200px max-w-250px"
-                  >
-                    {{ item.nameEn }}
-                  </td>
-
-                  <td class="min-w-100px max-w-200px">
-                    {{ item.status | translateObj : "name" }}
-                  </td>
-
-                  <td class="min-w-100px max-w-200px">
-                    {{ item.createdBy | translateObj : "name" }}
-                  </td>
-
-                  <td class="min-w-100px max-w-200px">
-                    {{ item.createdOn | cdate }}
-                  </td>
-
-                  <td>
-                    <button
-                      *checkPrivileges="'PRIV_ED_BC_VER'"
-                      (click)="deleteVersion(item.id)"
-                      pButton
-                      pRipple
-                      type="button"
-                      icon="pi pi-trash"
-                      class="p-button-rounded p-button-danger p-button-text"
-                    ></button>
-                  </td>
-
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="100%">
-                    <div class="w-100">
-                      <nodata-table></nodata-table>
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </ng-template>
-        </ng-container>
-
-       <p-paginator
-          #pg
-          [first]="state?.pageRequest?.first"
-          [rows]="state?.pageRequest?.rows"
-          [totalRecords]="totalRecords$ | async"
-          [rowsPerPageOptions]="[10, 20, 50]"
-          [showCurrentPageReport]="true"
-          currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}"
-          (onPageChange)="loadPage($event)">
-        </p-paginator>
+        </div>
+      </form>
+      <div *ngIf="showVersionForm" class="p-col p-d-flex p-jc-center">
+        <div class="mx-1">
+          <button pButton *checkPrivileges="'PRIV_ED_BC_VER'" label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save"
+            [loading]="blocking$ | async" [disabled]="form.invalid" (click)="submit()"></button>
+        </div>
       </div>
-    </div>
+
+      <!--table-->
+
+      <div class="row">
+        <div class="col-12">
+          <ng-container>
+            <ng-container *ngIf="loading$ | async; else tableTemplate">
+              <p-table [value]="[].constructor(10)">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th class="min-w-170px">
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "VERSION_LIST.NAME_AR" | translate }}
+                      </div>
+                    </th>
+                    <th class="min-w-170px max-w-300px">
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "VERSION_LIST.NAME_EN" | translate }}
+                      </div>
+                    </th>
+                    <th class="min-w-100px max-w-300px">
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "VERSION_LIST.STATUS" | translate }}
+                      </div>
+                    </th>
+
+                    <th class="min-w-100px max-w-300px">
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "VERSION_LIST.CREATED_BY" | translate }}
+                      </div>
+                    </th>
+
+                    <th class="min-w-100px max-w-300px">
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "VERSION_LIST.CREATED_ON" | translate }}
+                      </div>
+                    </th>
+
+                    <th *checkPrivileges="'PRIV_ED_BC_VER'" style="width: 92px">
+                      {{ "ACTIONS.ACTIONS" | translate }}
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr class="cursor-pointer hoverable">
+
+                    <td>
+                      <p-skeleton></p-skeleton>
+                    </td>
+                    <td>
+                      <p-skeleton></p-skeleton>
+                    </td>
+                    <td>
+                      <p-skeleton></p-skeleton>
+                    </td>
+                    <td>
+                      <p-skeleton></p-skeleton>
+                    </td>
+                    <td>
+                      <p-skeleton></p-skeleton>
+                    </td>
+                    <td>
+                      <p-skeleton></p-skeleton>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </ng-container>
+            <ng-template #tableTemplate>
+              <p-table totalRecords="10" [value]="versions$ | async" dataKey="id" [autoLayout]="true">
+                <ng-template pTemplate="colgroup" let-columns>
+                  <colgroup>
+                    <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                  </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th class="min-w-170px max-w-250px">
+                      <div class="p-d-flex p-ai-center">
+                        {{ "VERSION_LIST.NAME_AR" | translate }}
+                      </div>
+                    </th>
+                    <th class="min-w-170px max-w-300px">
+                      <div class="p-d-flex p-ai-center">
+                        {{ "VERSION_LIST.NAME_EN" | translate }}
+                      </div>
+                    </th>
+                    <th class="min-w-100px max-w-300px">
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "VERSION_LIST.STATUS" | translate }}
+                      </div>
+                    </th>
+
+                    <th class="min-w-100px max-w-300px">
+                      <div class="p-d-flex p-jc-between p-ai-center">
+                        {{ "VERSION_LIST.CREATED_BY" | translate }}
+                      </div>
+                    </th>
+
+                    <th class="min-w-100px max-w-300px">
+                      <div class="p-d-flex p-ai-center">
+                        {{ "VERSION_LIST.CREATED_ON" | translate }}
+                      </div>
+                    </th>
+                    <th *checkPrivileges="'PRIV_ED_BC_VER'" style="width: 92px">
+                      {{ "ACTIONS.ACTIONS" | translate }}
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                  <tr>
+                    <td class="min-w-200px max-w-250px">
+                      {{ item.nameAr }}
+                    </td>
+
+                    <td class="min-w-200px max-w-250px">
+                      {{ item.nameEn }}
+                    </td>
+
+                    <td class="min-w-100px max-w-200px">
+                      {{ item.status | translateObj : "name" }}
+                    </td>
+
+                    <td class="min-w-100px max-w-200px">
+                      {{ item.createdBy | translateObj : "name" }}
+                    </td>
+
+                    <td class="min-w-100px max-w-200px">
+                      {{ item.createdOn | cdate }}
+                    </td>
+
+                    <td>
+                      <button *checkPrivileges="'PRIV_ED_BC_VER'" (click)="deleteVersion(item.id)" pButton pRipple
+                        type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text"></button>
+                    </td>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="100%">
+                      <div class="w-100">
+                        <nodata-table></nodata-table>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </ng-template>
+          </ng-container>
+
+          <p-paginator #pg [first]="state?.pageRequest?.first" [rows]="state?.pageRequest?.rows"
+            [totalRecords]="totalRecords$ | async" [rowsPerPageOptions]="[10, 20, 50]" [showCurrentPageReport]="true"
+            currentPageReportTemplate="{{ 'SHARED.PAGE_REPORT' | translate }}" (onPageChange)="loadPage($event)">
+          </p-paginator>
+        </div>
+      </div>
+    </p-blockable-div>
+
+    <p-blockUI [target]="dialogbody" [blocked]="blocking$ | async">
+      <div class="text-center">
+        <i class="pi pi-clone" style="font-size: 3rem"></i>
+        <br />
+        <h3 class="mt-3 mb-2">{{'BC_COPYING_MESSAGE' | translate}}</h3>
+        <p-progressBar mode="indeterminate" [style]="{'height': '6px','min-width': '300px'}"></p-progressBar>
+      </div>
+    </p-blockUI>
   </p-dialog>
+
 </ng-container>

@@ -16,6 +16,7 @@ import { EMPTY } from 'rxjs';
 import { BCAction } from '@core/states/bc/bc/bc.action';
 import { ApiHelper } from '@core/helpers/api.helper';
 import { iif, patch } from '@ngxs/store/operators';
+import { TranslateService } from '@ngx-translate/core';
 export interface BrowseBCStateModel {
   pageRequest: PageRequestModel;
   currentTab: string;
@@ -45,7 +46,8 @@ export class BrowseBCState {
     private messageHelper: MessageHelper,
     private router: Router,
     private route: ActivatedRoute,
-    private apiHelper: ApiHelper
+    private apiHelper: ApiHelper,
+    private translate: TranslateService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -113,7 +115,7 @@ export class BrowseBCState {
   ) {
     return dispatch(new BCAction.Create(payload)).pipe(
       tap(() => {
-        this.messageHelper.cSuccess();
+        this.messageHelper.success();
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });

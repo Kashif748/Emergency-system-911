@@ -120,13 +120,7 @@ export namespace BrowseBiaAppAction {
      */
     constructor(public payload: { [key: string]: any }) {}
   }
-  export class CreateResourceAnalysis {
-    static readonly type = '[BrowseBiaApp] Create ResourceAnalysis';
-    /**
-     *
-     */
-    constructor(public payload: BcResources) {}
-  }
+
   export class SetCycleActivities {
     static readonly type = '[BrowseBiaApp] Set Cycle Activites';
     /**
