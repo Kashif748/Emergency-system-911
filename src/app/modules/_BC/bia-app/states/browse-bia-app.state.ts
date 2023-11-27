@@ -1,18 +1,24 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ApiHelper} from '@core/helpers/api.helper';
-import {MessageHelper} from '@core/helpers/message.helper';
-import {PageRequestModel} from '@core/models/page-request.model';
-import {TextUtils} from '@core/utils';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
-import {iif, patch} from '@ngxs/store/operators';
-import {BrowseBiaAppAction} from './browse-bia-app.action';
-import {BiaAction} from '@core/states/bia-apps/bia-apps.action';
-import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
-import {EMPTY, throwError} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {ResourceAnalysisAction} from '@core/states/impact-analysis/resource-analysis.action';
-import {BrowseBCStateModel} from "../../states/browse-bc.state";
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiHelper } from '@core/helpers/api.helper';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { PageRequestModel } from '@core/models/page-request.model';
+import { TextUtils } from '@core/utils';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { iif, patch } from '@ngxs/store/operators';
+import { BrowseBiaAppAction } from './browse-bia-app.action';
+import { BiaAction } from '@core/states/bia-apps/bia-apps.action';
+import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
+import { EMPTY } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { BrowseBCStateModel } from '../../states/browse-bc.state';
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -197,7 +203,7 @@ export class BrowseBiaAppState {
 
   @Action(BrowseBiaAppAction.CreateCycle)
   CreateCycle(
-    { dispatch, getState }: StateContext<BrowseBiaAppStateModel>,
+    { dispatch }: StateContext<BrowseBiaAppStateModel>,
     { payload }: BrowseBiaAppAction.CreateCycle
   ) {
     return dispatch(new ImapactAnalysisAction.CreateCycle(payload.form)).pipe(
@@ -322,9 +328,7 @@ export class BrowseBiaAppState {
   ) {
     return dispatch(new BiaAction.Delete(payload)).pipe(
       tap(() => {
-        dispatch(
-          new ImapactAnalysisAction.LoadCycles()
-        );
+        dispatch(new ImapactAnalysisAction.LoadCycles());
         this.messageHelper.success();
       }),
       catchError((err) => {
@@ -348,8 +352,8 @@ export class BrowseBiaAppState {
       tap(() => {
         dispatch([
           new ImapactAnalysisAction.LoadCycles(),
-          new ImapactAnalysisAction.GetCycle({ id: payload.cycleId })]
-        );
+          new ImapactAnalysisAction.GetCycle({ id: payload.cycleId }),
+        ]);
         this.messageHelper.success();
       }),
       catchError((err) => {

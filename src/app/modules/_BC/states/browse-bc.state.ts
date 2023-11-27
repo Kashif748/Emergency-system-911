@@ -117,10 +117,8 @@ export class BrowseBCState {
       tap(() => {
         this.messageHelper.success();
       }),
-      catchError(() => {
-        this.messageHelper.error({
-          detail: this.translate.instant('BC_COPYING_ERROR_MESSAGE'),
-        });
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
         return EMPTY;
       })
     );

@@ -55,7 +55,7 @@
     "CYCLE": "Analysis Cycle",
     "ONSITE_STAFF": "Staff Needed On-Site",
     "OFFSITE_STAFF": "Staff Needed Remotely",
-    "CONFIREM":"New resource will be added for selected division and cycle",
+    "CONFIREM": "New resource will be added for selected division and cycle",
     "STATUS": "Status",
     "DIALOG": {
       "ADD": "Add New Resource"
@@ -98,5 +98,6 @@
   "IMPACT_MATRIX": {
     "TAB_LABEL": "Impact Matrix",
     "TABLE_CELL": " Impact Types / Time Period"
-  }
+  },
+  "BC_COPYING_ERROR_MESSAGE": "Resources already exist for current division and analysis cycle."
 }

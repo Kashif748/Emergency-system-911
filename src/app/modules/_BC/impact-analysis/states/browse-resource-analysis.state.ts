@@ -18,6 +18,7 @@ import { throwError } from 'rxjs';
 import { BrowseOrganizationAction } from '../../organization-activities/states/browse-organization.action';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { ResourceAnalysisAction } from '@core/states/impact-analysis/resource-analysis.action';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface BrowseReourceAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -56,7 +57,8 @@ export class BrowseResourceAnalysisState {
     private apiHelper: ApiHelper,
     private messageHelper: MessageHelper,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
   /* ************************ SELECTORS ******************** */
   @Selector([BrowseResourceAnalysisState])
@@ -160,7 +162,13 @@ export class BrowseResourceAnalysisState {
         ]);
       }),
       catchError((err) => {
-        this.messageHelper.error({ error: err });
+        if (err.status === 409) {
+          this.messageHelper.error({
+            detail: this.translate.instant('BC_COPYING_ERROR_MESSAGE'),
+          });
+        } else {
+          this.messageHelper.error({ error: err });
+        }
         return throwError(err);
       })
     );

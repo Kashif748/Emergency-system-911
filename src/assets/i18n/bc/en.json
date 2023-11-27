@@ -133,6 +133,5 @@
       "SECTION_HEAD": "Section Head"
     }
   },
-  "BC_COPYING_MESSAGE": "In process of copying previous BC Lists",
-  "BC_COPYING_ERROR_MESSAGE": "Resources already exist for current division and analysis cycle."
+  "BC_COPYING_MESSAGE": "In process of copying previous BC Lists"
 }
