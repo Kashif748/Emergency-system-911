@@ -24,21 +24,21 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById16
+   * Path part for operation deleteById28
    */
-  static readonly DeleteById16Path = '/v1/bc/activity/vendor-dependency/delete/{id}';
+  static readonly DeleteById28Path = '/v1/bc/activity/vendor-dependency/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById16()` instead.
+   * To access only the response body, use `deleteById28()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById16$Response(params: {
+  deleteById28$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.DeleteById16Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.DeleteById28Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,39 +56,39 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById16$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById28$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById16(params: {
+  deleteById28(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById16$Response(params).pipe(
+    return this.deleteById28$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll24
+   * Path part for operation getAll23
    */
-  static readonly GetAll24Path = '/v1/bc/activity/vendor-dependency';
+  static readonly GetAll23Path = '/v1/bc/activity/vendor-dependency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll24()` instead.
+   * To access only the response body, use `getAll23()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll24$Response(params: {
+  getAll23$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityDependencyExternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.GetAll24Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.GetAll23Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -108,39 +108,39 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll24$Response()` instead.
+   * To access the full response (for headers, for example), `getAll23$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll24(params: {
+  getAll23(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityDependencyExternal> {
 
-    return this.getAll24$Response(params).pipe(
+    return this.getAll23$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityDependencyExternal>) => r.body as RestApiResponsePageBcActivityDependencyExternal)
     );
   }
 
   /**
-   * Path part for operation update96
+   * Path part for operation update107
    */
-  static readonly Update96Path = '/v1/bc/activity/vendor-dependency';
+  static readonly Update107Path = '/v1/bc/activity/vendor-dependency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update96()` instead.
+   * To access only the response body, use `update107()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update96$Response(params: {
+  update107$Response(params: {
     body: BcActivityDependencyExternal
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.Update96Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.Update107Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -158,35 +158,35 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update96$Response()` instead.
+   * To access the full response (for headers, for example), `update107$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update96(params: {
+  update107(params: {
     body: BcActivityDependencyExternal
   }): Observable<RestApiResponseBcActivityDependencyExternal> {
 
-    return this.update96$Response(params).pipe(
+    return this.update107$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>) => r.body as RestApiResponseBcActivityDependencyExternal)
     );
   }
 
   /**
-   * Path part for operation insertOne16
+   * Path part for operation insertOne27
    */
-  static readonly InsertOne16Path = '/v1/bc/activity/vendor-dependency';
+  static readonly InsertOne27Path = '/v1/bc/activity/vendor-dependency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne16()` instead.
+   * To access only the response body, use `insertOne27()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne16$Response(params: {
+  insertOne27$Response(params: {
     body: BcActivityDependencyExternal
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.InsertOne16Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.InsertOne27Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -204,35 +204,35 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne16$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne27$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne16(params: {
+  insertOne27(params: {
     body: BcActivityDependencyExternal
   }): Observable<RestApiResponseBcActivityDependencyExternal> {
 
-    return this.insertOne16$Response(params).pipe(
+    return this.insertOne27$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>) => r.body as RestApiResponseBcActivityDependencyExternal)
     );
   }
 
   /**
-   * Path part for operation getOne16
+   * Path part for operation getOne27
    */
-  static readonly GetOne16Path = '/v1/bc/activity/vendor-dependency/{id}';
+  static readonly GetOne27Path = '/v1/bc/activity/vendor-dependency/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne16()` instead.
+   * To access only the response body, use `getOne27()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne16$Response(params: {
+  getOne27$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.GetOne16Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.GetOne27Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -250,31 +250,31 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne16$Response()` instead.
+   * To access the full response (for headers, for example), `getOne27$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne16(params: {
+  getOne27(params: {
     id: number;
   }): Observable<RestApiResponseBcActivityDependencyExternal> {
 
-    return this.getOne16$Response(params).pipe(
+    return this.getOne27$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>) => r.body as RestApiResponseBcActivityDependencyExternal)
     );
   }
 
   /**
-   * Path part for operation search10
+   * Path part for operation search18
    */
-  static readonly Search10Path = '/v1/bc/activity/vendor-dependency/search';
+  static readonly Search18Path = '/v1/bc/activity/vendor-dependency/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search10()` instead.
+   * To access only the response body, use `search18()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search10$Response(params: {
+  search18$Response(params: {
     activityId: number;
     cycleId: number;
     isActive?: boolean;
@@ -282,7 +282,7 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityDependencyExternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.Search10Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.Search18Path, 'get');
     if (params) {
       rb.query('activityId', params.activityId, {});
       rb.query('cycleId', params.cycleId, {});
@@ -304,11 +304,11 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search10$Response()` instead.
+   * To access the full response (for headers, for example), `search18$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search10(params: {
+  search18(params: {
     activityId: number;
     cycleId: number;
     isActive?: boolean;
@@ -316,7 +316,7 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityDependencyExternal> {
 
-    return this.search10$Response(params).pipe(
+    return this.search18$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityDependencyExternal>) => r.body as RestApiResponsePageBcActivityDependencyExternal)
     );
   }

@@ -24,6 +24,55 @@ export class BcCyclesControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation manageBcCycleStatus
+   */
+  static readonly ManageBcCycleStatusPath = '/v1/bc/cycles/manage/status/{cycleId}/{statusId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `manageBcCycleStatus()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  manageBcCycleStatus$Response(params: {
+    cycleId: number;
+    statusId: number;
+  }): Observable<StrictHttpResponse<RestApiResponseBcCycles>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.ManageBcCycleStatusPath, 'put');
+    if (params) {
+      rb.path('cycleId', params.cycleId, {});
+      rb.path('statusId', params.statusId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBcCycles>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `manageBcCycleStatus$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  manageBcCycleStatus(params: {
+    cycleId: number;
+    statusId: number;
+  }): Observable<RestApiResponseBcCycles> {
+
+    return this.manageBcCycleStatus$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcCycles>) => r.body as RestApiResponseBcCycles)
+    );
+  }
+
+  /**
    * Path part for operation deleteById25
    */
   static readonly DeleteById25Path = '/v1/bc/cycles/delete/{id}';
@@ -260,25 +309,25 @@ export class BcCyclesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation manageBcCycleStatus
+   * Path part for operation getAllByStatusAndIsActive
    */
-  static readonly ManageBcCycleStatusPath = '/v1/bc/cycles/manage/status';
+  static readonly GetAllByStatusAndIsActivePath = '/v1/bc/cycles/filterByStatusAndVersion/{versionId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `manageBcCycleStatus()` instead.
+   * To access only the response body, use `getAllByStatusAndIsActive()` instead.
    *
    * This method doesn't expect any request body.
    */
-  manageBcCycleStatus$Response(params: {
-    cycleId: number;
-    statusId: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBcCycles>> {
+  getAllByStatusAndIsActive$Response(params: {
+    versionId: number;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcCycles>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.ManageBcCycleStatusPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.GetAllByStatusAndIsActivePath, 'get');
     if (params) {
-      rb.query('cycleId', params.cycleId, {});
-      rb.query('statusId', params.statusId, {});
+      rb.path('versionId', params.versionId, {});
+      rb.query('pageable', params.pageable, {});
     }
 
     return this.http.request(rb.build({
@@ -287,24 +336,24 @@ export class BcCyclesControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcCycles>;
+        return r as StrictHttpResponse<RestApiResponsePageBcCycles>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `manageBcCycleStatus$Response()` instead.
+   * To access the full response (for headers, for example), `getAllByStatusAndIsActive$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  manageBcCycleStatus(params: {
-    cycleId: number;
-    statusId: number;
-  }): Observable<RestApiResponseBcCycles> {
+  getAllByStatusAndIsActive(params: {
+    versionId: number;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcCycles> {
 
-    return this.manageBcCycleStatus$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcCycles>) => r.body as RestApiResponseBcCycles)
+    return this.getAllByStatusAndIsActive$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcCycles>) => r.body as RestApiResponsePageBcCycles)
     );
   }
 

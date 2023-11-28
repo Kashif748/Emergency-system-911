@@ -12,6 +12,7 @@ import { UserPreferencesControllerService } from './services/user-preferences-co
 import { OrgStructureControllerService } from './services/org-structure-controller.service';
 import { TaskControllerService } from './services/task-controller.service';
 import { TaskWorkLogControllerService } from './services/task-work-log-controller.service';
+import { TagsControllerService } from './services/tags-controller.service';
 import { SystemEventControllerService } from './services/system-event-controller.service';
 import { SuggestionStatusControllerService } from './services/suggestion-status-controller.service';
 import { SuggestionControllerService } from './services/suggestion-controller.service';
@@ -154,6 +155,8 @@ import { MailControllerService } from './services/mail-controller.service';
 import { IncidentSurveyControllerService } from './services/incident-survey-controller.service';
 import { IncidentReporterLocationControllerService } from './services/incident-reporter-location-controller.service';
 import { UaePassControllerService } from './services/uae-pass-controller.service';
+import { ManualTaskForAdafasaService } from './services/manual-task-for-adafasa.service';
+import { InformationSharingControllerService } from './services/information-sharing-controller.service';
 import { IncidentSurveyConfigControllerService } from './services/incident-survey-config-controller.service';
 import { UserSessionAuditControllerService } from './services/user-session-audit-controller.service';
 import { UsersStatisticsReportControllerService } from './services/users-statistics-report-controller.service';
@@ -173,6 +176,8 @@ import { DohControllerService } from './services/doh-controller.service';
 import { DashboardControllerService } from './services/dashboard-controller.service';
 import { TradeLicenseControllerService } from './services/trade-license-controller.service';
 import { CommonControllerService } from './services/common-controller.service';
+import { BcDashboardControllerService } from './services/bc-dashboard-controller.service';
+import { AdcmcReportControllerService } from './services/adcmc-report-controller.service';
 import { BcActivityAnalysisWorkflowControllerService } from './services/bc-activity-analysis-workflow-controller.service';
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
@@ -194,6 +199,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     OrgStructureControllerService,
     TaskControllerService,
     TaskWorkLogControllerService,
+    TagsControllerService,
     SystemEventControllerService,
     SuggestionStatusControllerService,
     SuggestionControllerService,
@@ -336,6 +342,8 @@ import { MigrationControllerService } from './services/migration-controller.serv
     IncidentSurveyControllerService,
     IncidentReporterLocationControllerService,
     UaePassControllerService,
+    ManualTaskForAdafasaService,
+    InformationSharingControllerService,
     IncidentSurveyConfigControllerService,
     UserSessionAuditControllerService,
     UsersStatisticsReportControllerService,
@@ -355,12 +363,13 @@ import { MigrationControllerService } from './services/migration-controller.serv
     DashboardControllerService,
     TradeLicenseControllerService,
     CommonControllerService,
+    BcDashboardControllerService,
+    AdcmcReportControllerService,
     BcActivityAnalysisWorkflowControllerService,
     AdcmcCategoryControllerService,
     TagControllerService,
     MigrationControllerService,
-    ApiConfiguration,
-    BcAnalysisControllerService
+    ApiConfiguration
   ],
 })
 export class ApiModule {
@@ -376,7 +385,7 @@ export class ApiModule {
     }
   }
 
-  constructor(
+  constructor( 
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

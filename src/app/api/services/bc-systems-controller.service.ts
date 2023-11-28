@@ -82,7 +82,7 @@ export class BcSystemsControllerService extends BaseService {
    */
   getAll10$Response(params: {
     isActive?: boolean;
-    orgHierarchyId?: number;
+    orgHierarchyId?: Array<number>;
     name?: string;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcSystems>> {
@@ -114,7 +114,7 @@ export class BcSystemsControllerService extends BaseService {
    */
   getAll10(params: {
     isActive?: boolean;
-    orgHierarchyId?: number;
+    orgHierarchyId?: Array<number>;
     name?: string;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcSystems> {
@@ -275,7 +275,7 @@ export class BcSystemsControllerService extends BaseService {
    */
   searchByCurrentAndParentOrgIds$Response(params: {
     isActive: boolean;
-    orgHierarchyId?: number;
+    orgHierarchyId?: Array<number>;
     name?: string;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcSystems>> {
@@ -307,7 +307,7 @@ export class BcSystemsControllerService extends BaseService {
    */
   searchByCurrentAndParentOrgIds(params: {
     isActive: boolean;
-    orgHierarchyId?: number;
+    orgHierarchyId?: Array<number>;
     name?: string;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcSystems> {

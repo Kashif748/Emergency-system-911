@@ -1,10 +1,12 @@
 /* tslint:disable */
 /* eslint-disable */
 import { IEntity } from './i-entity';
+import { IncidentTag } from './incident-tag';
 import { OrgStructureMinimumProjection } from './org-structure-minimum-projection';
 import { UserDetailsWithoutPhotoOrgProjection } from './user-details-without-photo-org-projection';
 import { UserWithoutPhotoMinimunProjection } from './user-without-photo-minimun-projection';
 export interface IncidentProjectionMinimum {
+  adafsaId?: number;
   center?: number;
   centerCategory?: IEntity;
   city?: IEntity;
@@ -22,6 +24,7 @@ export interface IncidentProjectionMinimum {
   incidentDate?: string;
   incidentParentCategory?: IEntity;
   incidentRiskImpact?: IEntity;
+  incidentTags?: Array<IncidentTag>;
   isExpiry?: boolean;
   isInternal?: boolean;
   kpi?: IEntity;

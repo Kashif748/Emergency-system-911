@@ -23,20 +23,20 @@ export class LibraryCategoriesService extends BaseService {
   }
 
   /**
-   * Path part for operation findActiveList2
+   * Path part for operation findActiveList3
    */
-  static readonly FindActiveList2Path = '/v1/library/categories';
+  static readonly FindActiveList3Path = '/v1/library/categories';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findActiveList2()` instead.
+   * To access only the response body, use `findActiveList3()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActiveList2$Response(params?: {
+  findActiveList3$Response(params?: {
   }): Observable<StrictHttpResponse<RestApiResponseListLibraryCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, LibraryCategoriesService.FindActiveList2Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, LibraryCategoriesService.FindActiveList3Path, 'get');
     if (params) {
     }
 
@@ -53,14 +53,14 @@ export class LibraryCategoriesService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `findActiveList2$Response()` instead.
+   * To access the full response (for headers, for example), `findActiveList3$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActiveList2(params?: {
+  findActiveList3(params?: {
   }): Observable<RestApiResponseListLibraryCategory> {
 
-    return this.findActiveList2$Response(params).pipe(
+    return this.findActiveList3$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListLibraryCategory>) => r.body as RestApiResponseListLibraryCategory)
     );
   }

@@ -84,7 +84,7 @@ export class ActivityPrioritySeqState {
     );
 
     return this.activityPrioritySeq
-      .getAll16({
+      .getAll14({
         isActive: true,
         versionId: payload.versionId,
         pageable: {
@@ -131,7 +131,7 @@ export class ActivityPrioritySeqState {
       })
     );
     return this.activityPrioritySeq
-      .insertOne7({
+      .insertOne18({
         body: payload,
       })
       .pipe(
@@ -156,7 +156,7 @@ export class ActivityPrioritySeqState {
       })
     );
     return this.activityPrioritySeq
-      .update86({
+      .update97({
         body: payload,
       })
       .pipe(
@@ -190,7 +190,7 @@ export class ActivityPrioritySeqState {
         blocking: true,
       })
     );
-    return this.activityPrioritySeq.getOne7({ id: payload.id }).pipe(
+    return this.activityPrioritySeq.getOne18({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<ActivityPrioritySeqStateModel>({

@@ -14,5 +14,6 @@ export interface BcActivities {
   nameEn?: string;
   orgHierarchy?: BcOrgHierarchy;
   orgStructure?: OrgStructure;
+  sequenceNumber?: number;
 }
 

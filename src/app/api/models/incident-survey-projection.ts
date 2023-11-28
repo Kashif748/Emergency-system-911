@@ -1,11 +1,11 @@
 /* tslint:disable */
 /* eslint-disable */
-import { IncidentIdSubjectProjection } from './incident-id-subject-projection';
+import { IncidentWithIncidentCategoryProjection } from './incident-with-incident-category-projection';
 export interface IncidentSurveyProjection {
   createdDate?: string;
   happiness?: number;
   id?: number;
-  incident?: IncidentIdSubjectProjection;
+  incident?: IncidentWithIncidentCategoryProjection;
   other?: string;
   reason?: number;
 }

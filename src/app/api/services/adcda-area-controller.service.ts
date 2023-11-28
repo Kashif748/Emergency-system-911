@@ -70,21 +70,21 @@ export class AdcdaAreaControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update114
+   * Path part for operation update125
    */
-  static readonly Update114Path = '/v1/adcda-area';
+  static readonly Update125Path = '/v1/adcda-area';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update114()` instead.
+   * To access only the response body, use `update125()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update114$Response(params: {
+  update125$Response(params: {
     body: AdcdaArea
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaArea>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaAreaControllerService.Update114Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaAreaControllerService.Update125Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,15 +102,15 @@ export class AdcdaAreaControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update114$Response()` instead.
+   * To access the full response (for headers, for example), `update125$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update114(params: {
+  update125(params: {
     body: AdcdaArea
   }): Observable<RestApiResponseAdcdaArea> {
 
-    return this.update114$Response(params).pipe(
+    return this.update125$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaArea>) => r.body as RestApiResponseAdcdaArea)
     );
   }

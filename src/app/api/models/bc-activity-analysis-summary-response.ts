@@ -1,15 +1,15 @@
 /* tslint:disable */
 /* eslint-disable */
-import { IdNameResponse } from './id-name-response';
+import { NameResponse } from './name-response';
 export interface BcActivityAnalysisSummaryResponse {
-  activity?: IdNameResponse;
+  activity?: NameResponse;
   capacity?: string;
-  criticality?: IdNameResponse;
-  division?: IdNameResponse;
-  recoveryPrioritySequence?: IdNameResponse;
+  criticality?: NameResponse;
+  division?: NameResponse;
+  recoveryPrioritySequence?: NameResponse;
   rowNumber?: number;
-  rto?: IdNameResponse;
-  section?: IdNameResponse;
-  sector?: IdNameResponse;
+  rto?: NameResponse;
+  section?: NameResponse;
+  sector?: NameResponse;
 }
 

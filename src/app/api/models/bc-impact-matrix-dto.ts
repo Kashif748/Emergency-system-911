@@ -5,5 +5,6 @@ import { BcImpactTypes } from './bc-impact-types';
 export interface BcImpactMatrixDto {
   bcImpactLevelMatrixDtoList?: Array<BcImpactLevelMatrixDto>;
   bcImpactTypes?: BcImpactTypes;
+  id?: number;
 }
 

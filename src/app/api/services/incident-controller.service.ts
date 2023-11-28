@@ -906,6 +906,7 @@ export class IncidentControllerService extends BaseService {
     status?: Array<IncidentStatus>;
     isKpiExpired?: boolean;
     filter: IncidentSearchFilters;
+    tagId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageIncidentInfoWithOrgsProjection>> {
 
@@ -916,6 +917,7 @@ export class IncidentControllerService extends BaseService {
       rb.query('status', params.status, {});
       rb.query('isKpiExpired', params.isKpiExpired, {});
       rb.query('filter', params.filter, {});
+      rb.query('tagId', params.tagId, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -942,6 +944,7 @@ export class IncidentControllerService extends BaseService {
     status?: Array<IncidentStatus>;
     isKpiExpired?: boolean;
     filter: IncidentSearchFilters;
+    tagId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageIncidentInfoWithOrgsProjection> {
 

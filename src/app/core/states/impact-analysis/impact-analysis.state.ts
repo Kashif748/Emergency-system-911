@@ -277,7 +277,7 @@ export class ImpactAnalysisState {
     { setState }: StateContext<ImpactAnalysisStateModel>,
     {}: ImapactAnalysisAction.LoadActivitiesStatuses
   ) {
-    return this.statusController.list8().pipe(
+    return this.statusController.list10().pipe(
       tap((bc) => {
         setState(
           patch<ImpactAnalysisStateModel>({
@@ -296,7 +296,7 @@ export class ImpactAnalysisState {
     { payload }: ImapactAnalysisAction.LoadStatusBasedOnStatusId
   ) {
     return this.statusController
-      .getOne37({
+      .getOne36({
         id: payload.id,
       })
       .pipe(
