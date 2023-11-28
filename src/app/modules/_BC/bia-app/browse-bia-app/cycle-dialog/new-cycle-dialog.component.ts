@@ -1,22 +1,26 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {GenericValidators} from '@shared/validators/generic-validators';
-import {TranslateService} from '@ngx-translate/core';
-import {ActivatedRoute} from '@angular/router';
-import {Select, Store} from '@ngxs/store';
-import {Observable, Subject} from 'rxjs';
-import {map, takeUntil} from 'rxjs/operators';
-import {FormUtils} from '@core/utils';
-import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
-import {BcVersions} from 'src/app/api/models';
-import {BCAction, BCState} from '@core/states';
-import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
-import {BrowseBiaAppAction} from "../../states/browse-bia-app.action";
-import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../../states/browse-bia-app.state";
-import {BrowseBCAction} from "../../../states/browse-bc.action";
-import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
-import {LazyLoadEvent} from "primeng/api";
-import {BcCycles} from "../../../../../api/models/bc-cycles";
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
+import { FormUtils } from '@core/utils';
+import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import { BcCycleStatus, BcVersions } from 'src/app/api/models';
+import { BCAction, BCState, BiaAction } from '@core/states';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
+import { BrowseBiaAppAction } from '../../states/browse-bia-app.action';
+import {
+  BrowseBiaAppState,
+  BrowseBiaAppStateModel,
+} from '../../states/browse-bia-app.state';
+import { BrowseBCAction } from '../../../states/browse-bc.action';
+import { BiaAppsState } from '@core/states/bia-apps/bia-apps.state';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { BcCycles } from '../../../../../api/models/bc-cycles';
+import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
 
 @Component({
   selector: 'app-new-cycle-dialog',
@@ -24,7 +28,6 @@ import {BcCycles} from "../../../../../api/models/bc-cycles";
   styleUrls: ['./new-cycle-dialog.component.scss'],
 })
 export class NewCycleDialogComponent implements OnInit {
-
   @Select(BrowseBiaAppState.state)
   public state$: Observable<BrowseBiaAppStateModel>;
 
@@ -45,8 +48,7 @@ export class NewCycleDialogComponent implements OnInit {
   @Input()
   cycle: number;
 
-  @Input()
-  cycles: BcCycles[];
+  selectedCycle: BcCycles = {};
 
   public sortableColumns = [
     {
@@ -61,6 +63,11 @@ export class NewCycleDialogComponent implements OnInit {
     { name: 'DIALOG.STATUS', code: 'status' },
     { name: 'DIALOG.CREATED_ON', code: 'createdOn' },
   ];
+  @Select(ImpactAnalysisState.cycles)
+  cycles$: Observable<({ actions: MenuItem[] } & BcCycles)[]>;
+
+  @Select(BiaAppsState.statuses)
+  statuses$: Observable<BcCycleStatus[]>;
 
   public get minDate() {
     return new Date();
@@ -71,7 +78,13 @@ export class NewCycleDialogComponent implements OnInit {
   @Input()
   set cycleId(v: number) {
     this.buildForm();
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 , statusId : VERSION_STATUSES.APPROVED}));
+    this.store.dispatch(
+      new BCAction.LoadPage({
+        page: 0,
+        size: 30,
+        statusId: VERSION_STATUSES.APPROVED,
+      })
+    );
     if (v === undefined || v === null) {
       return;
     }
@@ -92,6 +105,28 @@ export class NewCycleDialogComponent implements OnInit {
       .subscribe((id) => {
         this.cycleId = 0;
       });
+
+    // this.cycles$ = this.store.select(ImpactAnalysisState.cycles).pipe(
+    //   filter((cycles) => !!cycles),
+    //   map((cycles) =>
+    //     cycles.map((c) => {
+    //       return {
+    //         ...c,
+    //         actions: [
+    //           {
+    //             label: this.translate.instant('ACTIONS.EDIT'),
+    //             icon: 'pi pi-pencil',
+    //             command: () => {},
+    //           },
+    //           // {
+    //           //   label: this.translate.instant('ACTIONS.ACTIVATE'),
+    //           //   icon: 'pi pi-check-square',
+    //           // },
+    //         ] as MenuItem[],
+    //       };
+    //     })
+    //   )
+    // );
   }
 
   ngOnInit(): void {
@@ -99,6 +134,7 @@ export class NewCycleDialogComponent implements OnInit {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'new_cycle')
     );
+    this.store.dispatch(new BiaAction.LoadStatuses());
   }
   toggleDialog() {
     this.store.dispatch(
@@ -131,7 +167,9 @@ export class NewCycleDialogComponent implements OnInit {
     const cycleForm = {
       ...this.form.value,
     };
-    this.store.dispatch(new BrowseBiaAppAction.CreateCycle({form: cycleForm, cycle: this.cycle}));
+    this.store.dispatch(
+      new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle })
+    );
   }
   sort(event) {
     this.store.dispatch(
@@ -140,7 +178,9 @@ export class NewCycleDialogComponent implements OnInit {
   }
   order(event) {
     this.store.dispatch(
-      new BrowseBiaAppAction.SortCycle({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseBiaAppAction.SortCycle({
+        order: event.checked ? 'desc' : 'asc',
+      })
     );
   }
   deleteCycle(id) {
@@ -161,5 +201,18 @@ export class NewCycleDialogComponent implements OnInit {
         },
       })
     );
+  }
+
+  onRowEditInit(cycle: BcCycles) {
+    this.selectedCycle = JSON.parse(JSON.stringify(cycle));
+  }
+
+  onRowEditSave(cycle: BcCycles) {
+    this.store.dispatch(
+      new ImapactAnalysisAction.UpdateCycle({
+        ...this.selectedCycle,
+      })
+    );
+    this.selectedCycle = {};
   }
 }

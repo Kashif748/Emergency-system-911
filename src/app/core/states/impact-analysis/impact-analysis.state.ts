@@ -7,7 +7,7 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { delay, finalize, map, tap } from 'rxjs/operators';
-import { patch } from '@ngxs/store/operators';
+import { patch, updateItem } from '@ngxs/store/operators';
 import { Injectable } from '@angular/core';
 import {
   BcActivityAnalysis,
@@ -196,7 +196,10 @@ export class ImpactAnalysisState {
         tap((bc) => {
           setState(
             patch<ImpactAnalysisStateModel>({
-              cyclesPage: bc.result,
+              cyclesPage: {
+                ...bc.result,
+                content: bc.result?.content?.sort((a, b) => b.id - a.id),
+              },
             })
           );
         }),
@@ -504,5 +507,38 @@ export class ImpactAnalysisState {
           );
         })
       );
+  }
+
+  @Action(ImapactAnalysisAction.UpdateCycle, { cancelUncompleted: true })
+  Update(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload }: ImapactAnalysisAction.UpdateCycle
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ImpactAnalysisStateModel>({
+        loading: true,
+      })
+    );
+    return this.cyclesController.update104({ body: payload }).pipe(
+      tap(() => {
+        setState(
+          patch<ImpactAnalysisStateModel>({
+            cyclesPage: patch<PageBcCycles>({
+              content: updateItem((c) => c.id == payload.id, payload),
+            }),
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<ImpactAnalysisStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
   }
 }
