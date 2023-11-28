@@ -41,6 +41,7 @@ export class ControllerViewComponent
     'id',
     'Name Ar',
     'Name En',
+    "Module",
     'plotNumber',
     'Organization',
     'Color',

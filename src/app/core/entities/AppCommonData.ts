@@ -441,6 +441,14 @@ export interface Reason {
   nameEn: string;
 }
 
+export interface Tag {
+  id: number;
+  isActive: boolean;
+  module: 'INCIDENT' | 'INQUIRY';
+  nameAr: string;
+  nameEn: string;
+}
+
 export interface AppCommonData {
   cities: City[];
   emergencyLevels: EmergencyLevel[];
@@ -480,5 +488,5 @@ export interface AppCommonData {
   newsTypes: NewsType[];
   libraryAccessTypes: LibraryAccessType[];
   reasons: Reason[];
+  tags: Tag[];
 }
-
