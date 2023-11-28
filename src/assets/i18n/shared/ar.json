@@ -1392,7 +1392,11 @@
       "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
       "PUSH_NOTIFICATION": "تنبيهات البرنامج",
       "WORKLOG": "نموذج سجل المهمة/البلاغ",
-      "alertnessLevel": "مستويات الاستعداد"
+      "alertnessLevel": "مستويات الاستعداد",
+      "tags": "الوسوم",
+      "MODULE":"الموديول",
+      "INCIDENT":"بلاغ",
+      "INQUIRY":"استفسار"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",

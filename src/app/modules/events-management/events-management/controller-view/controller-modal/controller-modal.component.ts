@@ -28,7 +28,7 @@ export class ControllerModalComponent implements OnInit {
   filterOrgsList: any = [];
   localRisks: [] = [];
   model: any;
-
+  tagModuls = ['INCIDENT', 'INQUIRY'];
   constructor(
     private formBuilder: FormBuilder,
     private eventsManagementService: EventsManagementService,
@@ -92,6 +92,12 @@ export class ControllerModalComponent implements OnInit {
         break;
       case 'assetsCategory':
         controls['assetsMainCategory'] = [{}, Validators.required];
+        break;
+      case 'tags':
+        controls['module'] = [{}, Validators.required];
+        controls['orgStructure'] = {
+          id: this.commonService.getCommonData()?.currentOrgDetails?.id,
+        };
         break;
       default:
         break;
@@ -166,15 +172,23 @@ export class ControllerModalComponent implements OnInit {
           this.formGroup.value.orgId = this.formGroup?.value?.orgId?.id;
           delete this.formGroup?.value?.order;
         }
+        let formValue = {
+          ...this.formGroup.value,
+          nameAR: this.formGroup.value.nameAr,
+          nameEN: this.formGroup.value.nameEn,
+        };
+        if (this.controllerName == 'tags') {
+          formValue = {
+            nameAr: formValue.nameAr,
+            nameEn: formValue.nameEn,
+            id: formValue.id,
+            isActive: formValue.isActive,
+            module: formValue.module,
+            orgStructure: formValue.orgStructure,
+          };
+        }
         this.eventsManagementService
-          .createReportingVia(
-            {
-              ...this.formGroup.value,
-              nameAR: this.formGroup.value.nameAr,
-              nameEN: this.formGroup.value.nameEn,
-            },
-            this.data['controllerName']
-          )
+          .createReportingVia(formValue, this.data['controllerName'])
           .then((ok) => {
             this.dialogRef.close();
           });
@@ -205,15 +219,24 @@ export class ControllerModalComponent implements OnInit {
           this.formGroup.value.orgId = this.formGroup?.value?.orgId?.id;
           delete this.formGroup?.value?.order;
         }
+        let formValue = {
+          ...this.formGroup.value,
+          nameAR: this.formGroup.value.nameAr,
+          nameEN: this.formGroup.value.nameEn,
+        };
+        if (this.controllerName == 'tags') {
+          formValue = {
+            nameAr: formValue.nameAr,
+            nameEn: formValue.nameEn,
+            id: formValue.id,
+            isActive: formValue.isActive,
+            module: formValue.module,
+            orgStructure: formValue.orgStructure,
+          };
+        }
+
         this.eventsManagementService
-          .updateReportVia(
-            {
-              ...this.formGroup.value,
-              nameAR: this.formGroup.value.nameAr,
-              nameEN: this.formGroup.value.nameEn,
-            },
-            this.data['controllerName']
-          )
+          .updateReportVia(formValue, this.data['controllerName'])
           .then((ok) => {
             this.dialogRef.close();
           });

@@ -21,6 +21,14 @@ export const commonDataItem = [
     hidden: true,
     endPoint: 'incident-statuses',
   },
+  {
+    key: 'tags',
+    icon: 'Shopping/Price1',
+    type: 'commonPublic',
+    customTemplate: false,
+    hidden: false,
+    endPoint: 'tags',
+  },
 
   {
     key: 'reasons',
