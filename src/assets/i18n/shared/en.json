@@ -1356,14 +1356,17 @@
       "TITLE_AR": "Title Ar",
       "BODY_En": "Body En",
       "BODY_Ar": "Body Ar",
-      "NAME": "Name",
       "NAME_En": "Name En",
       "NAME_Ar": "Name Ar",
       "SMS_NOTIFICATION": "SMS Notification",
       "PUSH_NOTIFICATION": "Push Notification",
       "WORKLOG": "Worklog Templates",
       "COPY_CLIPBOARD": "Copy to clipboard",
-      "alertnessLevel": "Alertness Levels"
+      "alertnessLevel": "Alertness Levels",
+      "tags": "Tags",
+      "MODULE":"Module",
+      "INCIDENT":"Incident",
+      "INQUIRY":"Inquiry"
     },
     "NEWS": {
       "NEWS": "News",
