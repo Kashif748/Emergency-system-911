@@ -510,7 +510,7 @@ export class ImpactAnalysisState {
   }
 
   @Action(ImapactAnalysisAction.UpdateCycle, { cancelUncompleted: true })
-  Update(
+  updateCycle(
     { setState }: StateContext<ImpactAnalysisStateModel>,
     { payload }: ImapactAnalysisAction.UpdateCycle
   ) {
@@ -522,23 +522,67 @@ export class ImpactAnalysisState {
         loading: true,
       })
     );
-    return this.cyclesController.update104({ body: payload }).pipe(
-      tap(() => {
-        setState(
-          patch<ImpactAnalysisStateModel>({
-            cyclesPage: patch<PageBcCycles>({
-              content: updateItem((c) => c.id == payload.id, payload),
-            }),
-          })
-        );
-      }),
-      finalize(() => {
-        setState(
-          patch<ImpactAnalysisStateModel>({
-            loading: false,
-          })
-        );
+    return this.cyclesController
+      .update104({
+        body: {
+          ...payload,
+        },
+      })
+      .pipe(
+        tap(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              cyclesPage: patch<PageBcCycles>({
+                content: updateItem((c) => c.id == payload.id, payload),
+              }),
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(ImapactAnalysisAction.UpdateCycleStatus, { cancelUncompleted: true })
+  updateCycleStatus(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload }: ImapactAnalysisAction.UpdateCycleStatus
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ImpactAnalysisStateModel>({
+        loading: true,
       })
     );
+    return this.cyclesController
+      .manageBcCycleStatus({
+        cycleId: payload.id,
+        statusId: payload.status?.id,
+      })
+      .pipe(
+        tap(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              cyclesPage: patch<PageBcCycles>({
+                content: updateItem((c) => c.id == payload.id, payload),
+              }),
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              loading: false,
+            })
+          );
+        })
+      );
   }
 }

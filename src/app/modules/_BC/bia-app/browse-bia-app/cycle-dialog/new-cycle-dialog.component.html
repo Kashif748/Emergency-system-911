@@ -280,42 +280,49 @@
               <ng-template pTemplate="body" let-item let-editing="editing" let-rowIndex="rowIndex">
                 <tr [pEditableRow]="item">
                   <td class="min-w-100px max-w-250px">
-                    {{ item.nameAr }}
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="selectedCycle.nameAr">
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ item.nameAr }}
+                      </ng-template>
+                    </p-cellEditor>
                   </td>
 
                   <td class="min-w-100px max-w-250px">
-                    {{ item.nameEn }}
-                  </td>
-
-                  <td class="min-w-100px max-w-200px">
-                    {{ item.bcVersions | translateObj : "name" }}
-                  </td>
-
-                  <td class="min-w-100px max-w-200px">
-                    {{ item.dueDate | cdate }}
-                  </td>
-
-                  <td class="min-w-100px max-w-200px">
                     <p-cellEditor>
                       <ng-template pTemplate="input">
-                        <p-dropdown [options]="statuses$ | async" [(ngModel)]="selectedCycle.status" dataKey="id"
-                          appendTo="body" [style]="{'width':'100%'}">
-                          <ng-template let-option pTemplate="selectedItem">
-                            {{ option | translateObj }}
-                          </ng-template>
-
-                          <ng-template let-option pTemplate="item">
-                            {{ option | translateObj }}
-                          </ng-template></p-dropdown>
+                        <input pInputText type="text" [(ngModel)]="selectedCycle.nameEn">
                       </ng-template>
                       <ng-template pTemplate="output">
-                        {{ item.status | translateObj : "name" }}
+                        {{ item.nameEn }}
                       </ng-template>
                     </p-cellEditor>
                   </td>
 
                   <td class="min-w-100px max-w-200px">
-                    {{ item.createdBy | translateObj : "name" }}
+                    {{ item.bcVersions | translateObj}}
+                  </td>
+
+                  <td class="min-w-100px max-w-200px">
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <p-calendar [(ngModel)]="selectedCycle.dueDate" [minDate]="selectedCycle.dueDate"
+                          [showIcon]="true" showButtonBar="true" [showTime]="true" appendTo="body"></p-calendar>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ item.dueDate | cdate }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+
+                  <td class="min-w-100px max-w-200px">
+                    {{ item.status | translateObj }}
+                  </td>
+
+                  <td class="min-w-100px max-w-200px">
+                    {{ item.createdBy | translateObj}}
                   </td>
 
                   <td class="min-w-100px max-w-200px">
@@ -323,12 +330,48 @@
                   </td>
 
 
-                  <td *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'">
-                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                      (click)="onRowEditInit(item)" class="p-button-rounded p-button-text"></button>
+                  <td>
+                    <ng-container>
+                      <button [ngClass]="{'d-none': editing}" pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                        class="p-button-rounded p-button-text my-auto p-button-plain"
+                        (click)="menu.toggle($event)"></button>
+                      <p-menu #menu appendTo="body" [popup]="true" [model]="[{
+                        label: ('ACTIONS.EDIT' | translate),
+                        icon: 'pi pi-pencil',
+                        command: menuCommandBtn(initEditBtn, item),
+                        visible: privilege.checkActionPrivileges('PRIV_ED_ANALYSIS_CYCLE'),
+                        disabled: ([VERSION_STATUSES.APPROVED, VERSION_STATUSES.ARCHIVED]).includes(item?.status?.id)
+                      }, {
+                        label: ('ACTIONS.DELETE' | translate),
+                        icon: 'pi pi-trash',
+                        command: deleteCycle(item.id),
+                        visible: privilege.checkActionPrivileges('PRIV_ED_ANALYSIS_CYCLE')
+                      }, {
+                        label: ('RETURN_MOD' | translate),
+                        icon: 'pi pi-replay',
+                        command: changeStatues(item.id, VERSION_STATUSES.CREATED),
+                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL 
+                          && privilege.checkActionPrivileges('PRIV_APPROVE_ANALYSIS_CYCLE')
+                      }, {
+                        label: ('APPROVED' | translate),
+                        icon: 'pi pi-check',
+                        command: changeStatues(item.id, VERSION_STATUSES.APPROVED),
+                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL 
+                          && privilege.checkActionPrivileges('PRIV_APPROVE_ANALYSIS_CYCLE')
+                      }, {
+                        label: ('SEND_APPROVAL' | translate),
+                        icon: 'pi pi-send',
+                        command: changeStatues(item.id, VERSION_STATUSES.UNDER_APPROVAL),
+                        visible: (item?.status?.id === VERSION_STATUSES.CREATED ||
+                          item?.status?.id === VERSION_STATUSES.NEEDS_MODIFICATIONS) 
+                          && privilege.checkActionPrivileges('PRIV_ED_ANALYSIS_CYCLE')
+                      }]"></p-menu>
+                    </ng-container>
+
+                    <button #initEditBtn pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                      (click)="onRowEditInit(item)" class="p-button-rounded p-button-text d-none"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                      (click)="onRowEditSave(item)"
-                      class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                      (click)="onRowEditSave(item)" class="p-button-rounded p-button-text p-button-success"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
                       class="p-button-rounded p-button-text p-button-danger"></button>
                   </td>

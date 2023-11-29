@@ -22,6 +22,7 @@ import { BrowseBCStateModel } from '../../states/browse-bc.state';
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
+  cyclePageRequest?: PageRequestModel;
   columns: string[];
   view: 'TABLE' | 'CARDS';
 }
@@ -36,6 +37,11 @@ export const BROWSE_BIA_APP_UI_STATE_TOKEN =
       filters: {},
       first: 0,
       rows: 10,
+    },
+    cyclePageRequest: {
+      filters: {},
+      first: 0,
+      rows: 50,
     },
     columns: [
       'application',
@@ -145,13 +151,39 @@ export class BrowseBiaAppState {
 
   @Action(BrowseBiaAppAction.LoadCycles)
   LoadCycles(
-    { dispatch }: StateContext<BrowseBiaAppStateModel>,
+    { dispatch, getState, setState }: StateContext<BrowseBiaAppStateModel>,
     { payload }: BrowseBiaAppAction.LoadCycles
   ) {
+    setState(
+      patch<BrowseBiaAppStateModel>({
+        cyclePageRequest: iif(
+          (v) => !!v,
+          patch({
+            first: iif(
+              (_) => !!payload?.pageRequest,
+              payload?.pageRequest?.first
+            ),
+            rows: iif(
+              (_) => !!payload?.pageRequest,
+              payload?.pageRequest?.rows
+            ),
+          }),
+          {
+            first: 0,
+            rows: 50,
+          }
+        ),
+      })
+    );
+    const pageRequest = getState().cyclePageRequest;
     return dispatch(
       new ImapactAnalysisAction.LoadCycles({
-        page: payload?.page,
-        size: payload.size,
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+        },
       })
     );
   }
@@ -214,7 +246,7 @@ export class BrowseBiaAppState {
             pageRequest: undefined,
             cycleId: payload.cycle,
           }),
-          new BrowseBiaAppAction.LoadCycles({ page: 0, size: 100 }),
+          new BrowseBiaAppAction.LoadCycles({}),
           new BrowseBiaAppAction.ToggleDialog({}),
         ]);
       }),

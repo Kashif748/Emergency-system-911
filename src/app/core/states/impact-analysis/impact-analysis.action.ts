@@ -63,8 +63,9 @@ export namespace ImapactAnalysisAction {
      */
     constructor(
       public payload?: {
-        page?: number;
-        size?: number;
+        filters?: { [key: string]: any };
+        page: number;
+        size: number;
         sort?: string[];
       }
     ) {}
@@ -98,6 +99,13 @@ export namespace ImapactAnalysisAction {
 
   export class UpdateCycle {
     static readonly type = '[ImapactAnalysisAction] Update Cycle';
+    /**
+     *
+     */
+    constructor(public payload: BcCycles) {}
+  }
+  export class UpdateCycleStatus {
+    static readonly type = '[ImapactAnalysisAction] Update Cycle Status';
     /**
      *
      */
