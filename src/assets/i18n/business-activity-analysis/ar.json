@@ -117,7 +117,7 @@
     "CYCLE": "دورة التحليل",
     "TITLE": "ملخص النشاط",
     "ACTIVITY": " اسم النشاط",
-    "CRITICALITY": "مستوى الأهمية",
+    "CRITICALITY": "الحيوية",
     "CAPACITY": "القدرة",
     "DIVISION": "الإدارة",
     "RECOVERYPRIORITYSEQUENCE": "تسلسل استرجاع الأنشطة",
@@ -125,6 +125,16 @@
     "RTO": "زمن التعافي الأمثل",
     "SECTION": "القسم",
     "SECTOR": "القطاع",
+    "CRITICAL": "حيوي",
+    "NOT_CRITICAL": "غير حيوي",
+    "ALL": "الكل"
+  },
+  "SYSTEMS_REPORT": {
+    "TAB_LABEL": "تقرير النشاط",
+    "NAME": "اسم النظام ",
+    "ACTIVITIES": "الأنشطة",
+    "CRITICALITY": "الحيوية",
+    "DIVISIONS": "الإدارات",
     "CRITICAL": "حيوي",
     "NOT_CRITICAL": "غير حيوي",
     "ALL": "الكل"
