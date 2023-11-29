@@ -105,6 +105,14 @@
     font-family: "Tajawal" ;
   }
 }
+.p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
+  border-radius: 30px;
+}
+.p-fieldset .p-fieldset-legend {
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 30px;
+}
 @import "~intl-tel-input/build/css/intlTelInput.css";
 // primeng
 @import "primeng";

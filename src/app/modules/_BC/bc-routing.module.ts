@@ -101,6 +101,23 @@ const routes: Routes = [
             (m) => m.AnalysisSummaryModule
           ),
       },
+      {
+        path: 'systems-report',
+        // canLoad: [PrivilegeGuard],
+        // data: {
+        //   permission: [
+        //     'PRIV_VW_ACTIVITY_ANALYSIS',
+        //     'PRIV_PERFORM_ACTIVITY_ANALYSIS',
+        //     'PRIV_REVIEW_ACTIVITY_ANALYSIS',
+        //     'PRIV_APPROVE_ACTIVITY_ANALYSIS',
+        //   ],
+        //   type: 'or',
+        // },
+        loadChildren: () =>
+          import('./reports/systems-report/systems-report.module').then(
+            (m) => m.SystemsReportModule
+          ),
+      },
     ],
   },
 ];

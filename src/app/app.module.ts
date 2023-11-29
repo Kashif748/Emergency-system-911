@@ -98,6 +98,7 @@ import { OtherState } from '@core/states/bc-resources/other/other.state';
 import { ResourceWorklogsState } from '@core/states/bc-resources/worklogs/resourceWorklogs.state';
 import { BiaAppsState } from '@core/states/bia-apps/bia-apps.state';
 import { AnalysisSummaryState } from '@core/states/activity-analysis/analysis-summary/analysis-summary.state';
+import { SystemsReportState } from '@core/states/bc-reports/systems-report/systems-report.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -194,6 +195,7 @@ export function getHighlightLanguages() {
         ResourceWorklogsState,
         BiaAppsState,
         AnalysisSummaryState,
+        SystemsReportState
       ],
       {
         developmentMode: !environment.production,
