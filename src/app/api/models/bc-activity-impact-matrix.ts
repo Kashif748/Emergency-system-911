@@ -12,6 +12,7 @@ export interface BcActivityImpactMatrix {
   cycle: BcCycles;
   id?: number;
   isActive?: boolean;
+  referenceId?: number;
   rto?: Bcrto;
 }
 

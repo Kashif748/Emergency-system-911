@@ -4,7 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {LocationsState} from '@core/states/bc-setup/locations/locations.state';
 import {Select, Store} from '@ngxs/store';
 import {combineLatest, Observable, Subject} from 'rxjs';
-import {BcActivityLocations, BcLocations} from 'src/app/api/models';
+import {BcActivityLocations, BcLocations, BcLocationsProjection} from 'src/app/api/models';
 import {BrowseLocationsState} from 'src/app/modules/_business-continuity-setup/location/states/browse-locations.state';
 import {BrowseLocationsStateModel} from '../../states/browse-locations.state';
 import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
@@ -23,7 +23,7 @@ import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activit
 export class ActivityLocationDialogComponent implements OnInit, OnDestroy {
   @ViewChild(LocationDialogComponent) newLocCompoenent: LocationDialogComponent;
 
-  public page$: Observable<BcLocations[]>;
+  public page$: Observable<BcLocationsProjection[]>;
 
   @Select(ActivityAnalysisState.activityStatus)
   public activityStatus$: Observable<ActivityAnalysisStatusAction>;

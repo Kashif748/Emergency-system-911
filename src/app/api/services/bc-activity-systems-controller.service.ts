@@ -13,6 +13,7 @@ import { BcActivitySystems } from '../models/bc-activity-systems';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseBcActivitySystems } from '../models/rest-api-response-bc-activity-systems';
 import { RestApiResponsePageBcActivitySystems } from '../models/rest-api-response-page-bc-activity-systems';
+import { RestApiResponsePageBcActivitySystemsSummaryResponse } from '../models/rest-api-response-page-bc-activity-systems-summary-response';
 import { RestApiResponseSetLong } from '../models/rest-api-response-set-long';
 
 @Injectable()
@@ -265,6 +266,61 @@ export class BcActivitySystemsControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation summary1
+   */
+  static readonly Summary1Path = '/v1/bc/activity-systems/summary';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `summary1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary1$Response(params: {
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcActivitySystemsSummaryResponse>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivitySystemsControllerService.Summary1Path, 'get');
+    if (params) {
+      rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('isCritical', params.isCritical, {});
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageBcActivitySystemsSummaryResponse>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `summary1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary1(params: {
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcActivitySystemsSummaryResponse> {
+
+    return this.summary1$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcActivitySystemsSummaryResponse>) => r.body as RestApiResponsePageBcActivitySystemsSummaryResponse)
+    );
+  }
+
+  /**
    * Path part for operation search21
    */
   static readonly Search21Path = '/v1/bc/activity-systems/search';
@@ -365,6 +421,64 @@ export class BcActivitySystemsControllerService extends BaseService {
 
     return this.list8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseSetLong>) => r.body as RestApiResponseSetLong)
+    );
+  }
+
+  /**
+   * Path part for operation export9
+   */
+  static readonly Export9Path = '/v1/bc/activity-systems/export';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `export9()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  export9$Response(params: {
+    as: 'PDF' | 'EXCEL';
+    lang: boolean;
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+  }): Observable<StrictHttpResponse<any>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivitySystemsControllerService.Export9Path, 'get');
+    if (params) {
+      rb.query('as', params.as, {});
+      rb.query('lang', params.lang, {});
+      rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('isCritical', params.isCritical, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<any>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `export9$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  export9(params: {
+    as: 'PDF' | 'EXCEL';
+    lang: boolean;
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+  }): Observable<any> {
+
+    return this.export9$Response(params).pipe(
+      map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }
 

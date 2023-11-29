@@ -13,6 +13,7 @@ import { BcActivityEmployees } from '../models/bc-activity-employees';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseBcActivityEmployees } from '../models/rest-api-response-bc-activity-employees';
 import { RestApiResponsePageBcActivityEmployees } from '../models/rest-api-response-page-bc-activity-employees';
+import { RestApiResponsePageBcActivityEmployeesSummaryResponse } from '../models/rest-api-response-page-bc-activity-employees-summary-response';
 
 @Injectable()
 export class BcActivityEmployeesControllerService extends BaseService {
@@ -24,21 +25,21 @@ export class BcActivityEmployeesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById32
+   * Path part for operation deleteById33
    */
-  static readonly DeleteById32Path = '/v1/bc/activity-employees/delete/{id}';
+  static readonly DeleteById33Path = '/v1/bc/activity-employees/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById32()` instead.
+   * To access only the response body, use `deleteById33()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById32$Response(params: {
+  deleteById33$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.DeleteById32Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.DeleteById33Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,15 +57,15 @@ export class BcActivityEmployeesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById32$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById33$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById32(params: {
+  deleteById33(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById32$Response(params).pipe(
+    return this.deleteById33$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
@@ -264,6 +265,61 @@ export class BcActivityEmployeesControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation summary2
+   */
+  static readonly Summary2Path = '/v1/bc/activity-employees/summary';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `summary2()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary2$Response(params: {
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityEmployeesSummaryResponse>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.Summary2Path, 'get');
+    if (params) {
+      rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('isCritical', params.isCritical, {});
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageBcActivityEmployeesSummaryResponse>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `summary2$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary2(params: {
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcActivityEmployeesSummaryResponse> {
+
+    return this.summary2$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcActivityEmployeesSummaryResponse>) => r.body as RestApiResponsePageBcActivityEmployeesSummaryResponse)
+    );
+  }
+
+  /**
    * Path part for operation search24
    */
   static readonly Search24Path = '/v1/bc/activity-employees/search';
@@ -315,6 +371,64 @@ export class BcActivityEmployeesControllerService extends BaseService {
 
     return this.search24$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityEmployees>) => r.body as RestApiResponsePageBcActivityEmployees)
+    );
+  }
+
+  /**
+   * Path part for operation export10
+   */
+  static readonly Export10Path = '/v1/bc/activity-employees/export';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `export10()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  export10$Response(params: {
+    as: 'PDF' | 'EXCEL';
+    lang: boolean;
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+  }): Observable<StrictHttpResponse<any>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.Export10Path, 'get');
+    if (params) {
+      rb.query('as', params.as, {});
+      rb.query('lang', params.lang, {});
+      rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('isCritical', params.isCritical, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<any>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `export10$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  export10(params: {
+    as: 'PDF' | 'EXCEL';
+    lang: boolean;
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+  }): Observable<any> {
+
+    return this.export10$Response(params).pipe(
+      map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }
 

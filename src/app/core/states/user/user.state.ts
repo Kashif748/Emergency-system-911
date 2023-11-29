@@ -335,7 +335,7 @@ export class UserState {
     { setState }: StateContext<UserStateModel>,
     {}: UserAction.GetRanks
   ) {
-    return this.rankService.findActiveList1({}).pipe(
+    return this.rankService.findActiveList2({}).pipe(
       tap((res) => {
         setState(
           patch<UserStateModel>({

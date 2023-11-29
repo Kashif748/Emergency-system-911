@@ -4,11 +4,13 @@ import { IEntity } from './i-entity';
 import { IdNameProjection } from './id-name-projection';
 import { IncidentGroupProjection } from './incident-group-projection';
 import { IncidentOrgProjection } from './incident-org-projection';
+import { IncidentTag } from './incident-tag';
 import { OrgStructureMinimumProjection } from './org-structure-minimum-projection';
 import { TotalTasks } from './total-tasks';
 import { UserDetailsWithoutPhotoOrgProjection } from './user-details-without-photo-org-projection';
 import { UserWithoutPhotoMinimunProjection } from './user-without-photo-minimun-projection';
 export interface IncidentInfoWithOrgsProjection {
+  adafsaId?: number;
   center?: number;
   centerCategory?: IEntity;
   city?: IEntity;
@@ -28,6 +30,7 @@ export interface IncidentInfoWithOrgsProjection {
   incidentOrgs?: Array<IncidentOrgProjection>;
   incidentParentCategory?: IdNameProjection;
   incidentRiskImpact?: IEntity;
+  incidentTags?: Array<IncidentTag>;
   isExpiry?: boolean;
   isInternal?: boolean;
   kpi?: IEntity;

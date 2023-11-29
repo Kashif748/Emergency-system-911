@@ -350,6 +350,7 @@ export class IncidentSurveyControllerService extends BaseService {
     reason?: number;
     happiness?: number;
     incidentId?: number;
+    incidentCategoryId?: number;
     fromDate?: string;
     toDate?: string;
     pageable: Pageable;
@@ -360,6 +361,7 @@ export class IncidentSurveyControllerService extends BaseService {
       rb.query('reason', params.reason, {});
       rb.query('happiness', params.happiness, {});
       rb.query('incidentId', params.incidentId, {});
+      rb.query('incidentCategoryId', params.incidentCategoryId, {});
       rb.query('fromDate', params.fromDate, {});
       rb.query('toDate', params.toDate, {});
       rb.query('pageable', params.pageable, {});
@@ -386,6 +388,7 @@ export class IncidentSurveyControllerService extends BaseService {
     reason?: number;
     happiness?: number;
     incidentId?: number;
+    incidentCategoryId?: number;
     fromDate?: string;
     toDate?: string;
     pageable: Pageable;

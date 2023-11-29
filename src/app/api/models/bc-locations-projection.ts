@@ -13,5 +13,6 @@ export interface BcLocationsProjection {
   nameAr?: string;
   nameEn?: string;
   orgStructure?: IdNameProjection;
+  sequenceNumber?: number;
 }
 

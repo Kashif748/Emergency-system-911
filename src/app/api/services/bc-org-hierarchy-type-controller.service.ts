@@ -24,21 +24,21 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById16
+   * Path part for operation deleteById17
    */
-  static readonly DeleteById16Path = '/v1/bc/org-hir-type/delete/{id}';
+  static readonly DeleteById17Path = '/v1/bc/org-hir-type/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById16()` instead.
+   * To access only the response body, use `deleteById17()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById16$Response(params: {
+  deleteById17$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.DeleteById16Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyTypeControllerService.DeleteById17Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,15 +56,15 @@ export class BcOrgHierarchyTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById16$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById17$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById16(params: {
+  deleteById17(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById16$Response(params).pipe(
+    return this.deleteById17$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

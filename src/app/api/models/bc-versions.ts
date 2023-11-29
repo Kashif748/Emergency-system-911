@@ -13,6 +13,7 @@ export interface BcVersions {
   nameAr?: string;
   nameEn?: string;
   orgStructure: OrgStructure;
+  referenceId?: number;
   status?: BcVersionsStatus;
   updatedBy?: (User | UserInappAuthentication | UserMiddlewareAuth);
   updatedOn?: string;

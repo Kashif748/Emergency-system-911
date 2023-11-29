@@ -78,7 +78,7 @@ export class ImpactLevelState {
     );
 
     return this.impactLevel
-      .getAll21({
+      .getAll19({
         versionId: payload.versionId,
         isActive: payload.isActive,
         pageable: {
@@ -127,7 +127,7 @@ export class ImpactLevelState {
     );
 
     return this.impactLevel
-      .insertOne12({
+      .insertOne23({
         body: payload,
       })
       .pipe(
@@ -152,7 +152,7 @@ export class ImpactLevelState {
     );
 
     return this.impactLevel
-      .update92({
+      .update103({
         body: payload,
       })
       .pipe(
@@ -184,7 +184,7 @@ export class ImpactLevelState {
         blocking: true,
       })
     );
-    return this.impactLevel.getOne12({ id: payload.id }).pipe(
+    return this.impactLevel.getOne23({ id: payload.id }).pipe(
       tap((impactLevel) => {
         setState(
           patch<ImpactLevelStateModel>({

@@ -22,21 +22,21 @@ export class SendSmsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation sendSms
+   * Path part for operation sendSms1
    */
-  static readonly SendSmsPath = '/v1/sendSMS';
+  static readonly SendSms1Path = '/v1/sendSMS';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `sendSms()` instead.
+   * To access only the response body, use `sendSms1()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  sendSms$Response(params: {
+  sendSms1$Response(params: {
     body: SendSmsRequest
   }): Observable<StrictHttpResponse<RestApiResponseObject>> {
 
-    const rb = new RequestBuilder(this.rootUrl, SendSmsControllerService.SendSmsPath, 'post');
+    const rb = new RequestBuilder(this.rootUrl, SendSmsControllerService.SendSms1Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -54,15 +54,15 @@ export class SendSmsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `sendSms$Response()` instead.
+   * To access the full response (for headers, for example), `sendSms1$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  sendSms(params: {
+  sendSms1(params: {
     body: SendSmsRequest
   }): Observable<RestApiResponseObject> {
 
-    return this.sendSms$Response(params).pipe(
+    return this.sendSms1$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseObject>) => r.body as RestApiResponseObject)
     );
   }

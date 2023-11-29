@@ -1,28 +1,39 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, of, Subject} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {LazyLoadEvent, MenuItem, TreeNode} from "primeng/api";
-import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
-import {TreeHelper} from "@core/helpers/tree.helper";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {TranslateService} from "@ngx-translate/core";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {BrowseBiaAppAction} from "../states/browse-bia-app.action";
-import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../states/browse-bia-app.state";
-import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
-import {BcAnalysisByOrgHierarchyResponse} from "../../../../api/models/bc-analysis-by-org-hierarchy-response";
-import {BcAnalysisStatus, BcCycles} from "../../../../api/models";
-import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.state";
-import {OrgDetailAction, OrgDetailState} from "@core/states";
-import {BcOrgHierarchyProjection} from "../../../../api/models/bc-org-hierarchy-projection";
-import {cloneDeep} from "lodash";
-import {VERSION_STATUSES} from "@core/states/bc/bc/bc.state";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { LazyLoadEvent, MenuItem, TreeNode } from 'primeng/api';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import { TreeHelper } from '@core/helpers/tree.helper';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { TranslateService } from '@ngx-translate/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {
+  auditTime,
+  filter,
+  map,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { BrowseBiaAppAction } from '../states/browse-bia-app.action';
+import {
+  BrowseBiaAppState,
+  BrowseBiaAppStateModel,
+} from '../states/browse-bia-app.state';
+import { BiaAppsState } from '@core/states/bia-apps/bia-apps.state';
+import { BcAnalysisByOrgHierarchyResponse } from '../../../../api/models/bc-analysis-by-org-hierarchy-response';
+import { BcAnalysisStatus, BcCycles } from '../../../../api/models';
+import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import { OrgDetailAction, OrgDetailState } from '@core/states';
+import { BcOrgHierarchyProjection } from '../../../../api/models/bc-org-hierarchy-projection';
+import { cloneDeep } from 'lodash';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
 
 @Component({
   selector: 'app-browse-bia-app',
   templateUrl: './browse-bia-app.component.html',
-  styleUrls: ['./browse-bia-app.component.scss']
+  styleUrls: ['./browse-bia-app.component.scss'],
 })
 export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   public page$: Observable<BcAnalysisByOrgHierarchyResponse[]>;
@@ -44,8 +55,6 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
 
   @Select(BrowseBiaAppState.hasFilters)
   public hasFilters$: Observable<boolean>;
-
-  public sortAnalysisCycles$: Observable<any[]>;
 
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -102,7 +111,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private treeHelper: TreeHelper,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {
     this.langFacade.vm$
       .pipe
@@ -131,32 +140,30 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
-    this.store.dispatch([
-      new BrowseBiaAppAction.LoadCycles({ page: 0, size: 100 }),
-      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 })
-    ]).pipe(
-      takeUntil(this.destroy$),
-      take(1),
-      filter((p) => !!p),
-      tap(() => {
-        this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
-          cycle: this.selectedCycle?.id}));
-        this.loadPage(null, this.selectedCycle);
-      })
-    ).subscribe();
-    this.sortAnalysisCycles$ = this.cycles$.pipe(
-      filter((cycles) => !!cycles),
-      switchMap((cycles) => {
-        return of([...cycles].sort((a, b) => b.id - a.id));
-      })
-    );
-    this.sortAnalysisCycles$.subscribe(cycles => {
-      if (cycles.length > 0) {
-        const sortedCycles = [...cycles];
-        this.selectedCycle = sortedCycles[0];
-        this.cdr.detectChanges();
-      }
-    });
+    this.store
+      .dispatch([
+        new BrowseBiaAppAction.LoadCycles({}),
+        new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
+      ])
+      .pipe(
+        switchMap(() => this.cycles$),
+        takeUntil(this.destroy$),
+        filter((cycles) => !!cycles),
+        tap((cycles) => {
+          if (cycles.length > 0) {
+            this.selectedCycle = cycles[0];
+            this.cdr.detectChanges();
+          }
+          this.store.dispatch(
+            new BrowseBiaAppAction.UpdateCycle({
+              cycle: this.selectedCycle?.id,
+            })
+          );
+          this.loadPage(null, this.selectedCycle);
+        })
+      )
+      .subscribe();
+
     this.store
       .select(OrgDetailState.orgHirSearch)
       .pipe(
@@ -168,7 +175,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
-        this.orgHir =[];
+        this.orgHir = [];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,
@@ -205,17 +212,21 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   }
 
   search() {
-    this.store.dispatch(new BrowseBiaAppAction.LoadBia({
-      pageRequest: undefined,
-      cycleId: this.selectedCycle
-    }));
+    this.store.dispatch(
+      new BrowseBiaAppAction.LoadBia({
+        pageRequest: undefined,
+        cycleId: this.selectedCycle,
+      })
+    );
   }
 
   clear() {
     this.store.dispatch([
       new BrowseBiaAppAction.UpdateFilter({ clear: true }),
-      new BrowseBiaAppAction.LoadBia({ pageRequest: undefined,
-        cycleId: this.selectedCycle}),
+      new BrowseBiaAppAction.LoadBia({
+        pageRequest: undefined,
+        cycleId: this.selectedCycle,
+      }),
     ]);
   }
 
@@ -271,14 +282,18 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
 
   sort(event) {
     this.store.dispatch(
-      new BrowseBiaAppAction.SortBia({ field: event.value, cycle: this.selectedCycle})
+      new BrowseBiaAppAction.SortBia({
+        field: event.value,
+        cycle: this.selectedCycle,
+      })
     );
   }
 
   order(event) {
     this.store.dispatch(
       new BrowseBiaAppAction.SortBia({
-        order: event.checked ? 'desc' : 'asc', cycle: this.selectedCycle
+        order: event.checked ? 'desc' : 'asc',
+        cycle: this.selectedCycle,
       })
     );
   }
@@ -299,7 +314,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
-        cycleId: cycle ? cycle.id : this.selectedCycle.id,
+        cycleId: cycle ? cycle?.id : this.selectedCycle?.id,
       })
     );
   }
@@ -307,11 +322,13 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   setCycleId(value: BcCycles) {
     console.log(this.selectedCycle);
     this.cdr.detectChanges();
-    this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
-      cycle: value?.id}))
+    this.store.dispatch(
+      new BrowseBiaAppAction.UpdateCycle({
+        cycle: value?.id,
+      })
+    );
     this.loadPage(null, value);
   }
-
 
   public setTree(searchResponses: BcOrgHierarchyProjection[]) {
     if (searchResponses.length == 0) {
@@ -375,6 +392,6 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     );
   }
   openDialog(id?: number, cycle?: string) {
-    this.store.dispatch(new BrowseBiaAppAction.ToggleDialog({ dialog: cycle}));
+    this.store.dispatch(new BrowseBiaAppAction.ToggleDialog({ dialog: cycle }));
   }
 }

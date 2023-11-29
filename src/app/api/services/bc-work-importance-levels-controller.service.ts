@@ -24,21 +24,21 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById9
+   * Path part for operation deleteById21
    */
-  static readonly DeleteById9Path = '/v1/bc/levelsOfAvailability/delete/{id}';
+  static readonly DeleteById21Path = '/v1/bc/levelsOfAvailability/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById9()` instead.
+   * To access only the response body, use `deleteById21()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById9$Response(params: {
+  deleteById21$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.DeleteById9Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.DeleteById21Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,37 +56,37 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById9$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById21$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById9(params: {
+  deleteById21(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById9$Response(params).pipe(
+    return this.deleteById21$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll19
+   * Path part for operation getAll17
    */
-  static readonly GetAll19Path = '/v1/bc/levelsOfAvailability';
+  static readonly GetAll17Path = '/v1/bc/levelsOfAvailability';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll19()` instead.
+   * To access only the response body, use `getAll17()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll19$Response(params: {
+  getAll17$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcWorkImportanceLevels>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.GetAll19Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.GetAll17Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll19$Response()` instead.
+   * To access the full response (for headers, for example), `getAll17$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll19(params: {
+  getAll17(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcWorkImportanceLevels> {
 
-    return this.getAll19$Response(params).pipe(
+    return this.getAll17$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcWorkImportanceLevels>) => r.body as RestApiResponsePageBcWorkImportanceLevels)
     );
   }
 
   /**
-   * Path part for operation update89
+   * Path part for operation update100
    */
-  static readonly Update89Path = '/v1/bc/levelsOfAvailability';
+  static readonly Update100Path = '/v1/bc/levelsOfAvailability';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update89()` instead.
+   * To access only the response body, use `update100()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update89$Response(params: {
+  update100$Response(params: {
     body: BcWorkImportanceLevels
   }): Observable<StrictHttpResponse<RestApiResponseBcWorkImportanceLevels>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.Update89Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.Update100Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update89$Response()` instead.
+   * To access the full response (for headers, for example), `update100$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update89(params: {
+  update100(params: {
     body: BcWorkImportanceLevels
   }): Observable<RestApiResponseBcWorkImportanceLevels> {
 
-    return this.update89$Response(params).pipe(
+    return this.update100$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcWorkImportanceLevels>) => r.body as RestApiResponseBcWorkImportanceLevels)
     );
   }
 
   /**
-   * Path part for operation insertOne10
+   * Path part for operation insertOne21
    */
-  static readonly InsertOne10Path = '/v1/bc/levelsOfAvailability';
+  static readonly InsertOne21Path = '/v1/bc/levelsOfAvailability';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne10()` instead.
+   * To access only the response body, use `insertOne21()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne10$Response(params: {
+  insertOne21$Response(params: {
     body: BcWorkImportanceLevels
   }): Observable<StrictHttpResponse<RestApiResponseBcWorkImportanceLevels>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.InsertOne10Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.InsertOne21Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,35 +200,35 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne10$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne21$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne10(params: {
+  insertOne21(params: {
     body: BcWorkImportanceLevels
   }): Observable<RestApiResponseBcWorkImportanceLevels> {
 
-    return this.insertOne10$Response(params).pipe(
+    return this.insertOne21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcWorkImportanceLevels>) => r.body as RestApiResponseBcWorkImportanceLevels)
     );
   }
 
   /**
-   * Path part for operation getOne10
+   * Path part for operation getOne21
    */
-  static readonly GetOne10Path = '/v1/bc/levelsOfAvailability/{id}';
+  static readonly GetOne21Path = '/v1/bc/levelsOfAvailability/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne10()` instead.
+   * To access only the response body, use `getOne21()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne10$Response(params: {
+  getOne21$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcWorkImportanceLevels>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.GetOne10Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcWorkImportanceLevelsControllerService.GetOne21Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcWorkImportanceLevelsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne10$Response()` instead.
+   * To access the full response (for headers, for example), `getOne21$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne10(params: {
+  getOne21(params: {
     id: number;
   }): Observable<RestApiResponseBcWorkImportanceLevels> {
 
-    return this.getOne10$Response(params).pipe(
+    return this.getOne21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcWorkImportanceLevels>) => r.body as RestApiResponseBcWorkImportanceLevels)
     );
   }

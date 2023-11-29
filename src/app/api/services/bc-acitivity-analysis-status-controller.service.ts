@@ -23,23 +23,23 @@ export class BcAcitivityAnalysisStatusControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById34
+   * Path part for operation deleteById35
    */
-  static readonly DeleteById34Path = '/v1/bc/activity-analysis/status/delete/{id}';
+  static readonly DeleteById35Path = '/v1/bc/activity-analysis/status/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById34()` instead.
+   * To access only the response body, use `deleteById35()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  deleteById34$Response(params: {
+  deleteById35$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcAcitivityAnalysisStatusControllerService.DeleteById34Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcAcitivityAnalysisStatusControllerService.DeleteById35Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -57,36 +57,36 @@ export class BcAcitivityAnalysisStatusControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById34$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById35$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  deleteById34(params: {
+  deleteById35(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById34$Response(params).pipe(
+    return this.deleteById35$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation list8
+   * Path part for operation list10
    */
-  static readonly List8Path = '/v1/bc/activity-analysis/status';
+  static readonly List10Path = '/v1/bc/activity-analysis/status';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `list8()` instead.
+   * To access only the response body, use `list10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  list8$Response(params?: {
+  list10$Response(params?: {
   }): Observable<StrictHttpResponse<RestApiResponseListBcAnalysisStatus>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcAcitivityAnalysisStatusControllerService.List8Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcAcitivityAnalysisStatusControllerService.List10Path, 'get');
     if (params) {
     }
 
@@ -103,14 +103,14 @@ export class BcAcitivityAnalysisStatusControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `list8$Response()` instead.
+   * To access the full response (for headers, for example), `list10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  list8(params?: {
+  list10(params?: {
   }): Observable<RestApiResponseListBcAnalysisStatus> {
 
-    return this.list8$Response(params).pipe(
+    return this.list10$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListBcAnalysisStatus>) => r.body as RestApiResponseListBcAnalysisStatus)
     );
   }
@@ -216,21 +216,21 @@ export class BcAcitivityAnalysisStatusControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getOne37
+   * Path part for operation getOne36
    */
-  static readonly GetOne37Path = '/v1/bc/activity-analysis/status/{id}';
+  static readonly GetOne36Path = '/v1/bc/activity-analysis/status/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne37()` instead.
+   * To access only the response body, use `getOne36()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne37$Response(params: {
+  getOne36$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcAnalysisStatus>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcAcitivityAnalysisStatusControllerService.GetOne37Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcAcitivityAnalysisStatusControllerService.GetOne36Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -248,15 +248,15 @@ export class BcAcitivityAnalysisStatusControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne37$Response()` instead.
+   * To access the full response (for headers, for example), `getOne36$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne37(params: {
+  getOne36(params: {
     id: number;
   }): Observable<RestApiResponseBcAnalysisStatus> {
 
-    return this.getOne37$Response(params).pipe(
+    return this.getOne36$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcAnalysisStatus>) => r.body as RestApiResponseBcAnalysisStatus)
     );
   }

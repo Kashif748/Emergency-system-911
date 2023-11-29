@@ -23,20 +23,20 @@ export class RanksControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation findActiveList1
+   * Path part for operation findActiveList2
    */
-  static readonly FindActiveList1Path = '/v1/ranks';
+  static readonly FindActiveList2Path = '/v1/ranks';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findActiveList1()` instead.
+   * To access only the response body, use `findActiveList2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActiveList1$Response(params?: {
+  findActiveList2$Response(params?: {
   }): Observable<StrictHttpResponse<RestApiResponseListRanks>> {
 
-    const rb = new RequestBuilder(this.rootUrl, RanksControllerService.FindActiveList1Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, RanksControllerService.FindActiveList2Path, 'get');
     if (params) {
     }
 
@@ -53,14 +53,14 @@ export class RanksControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `findActiveList1$Response()` instead.
+   * To access the full response (for headers, for example), `findActiveList2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActiveList1(params?: {
+  findActiveList2(params?: {
   }): Observable<RestApiResponseListRanks> {
 
-    return this.findActiveList1$Response(params).pipe(
+    return this.findActiveList2$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListRanks>) => r.body as RestApiResponseListRanks)
     );
   }

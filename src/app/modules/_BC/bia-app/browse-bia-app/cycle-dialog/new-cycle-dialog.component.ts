@@ -1,22 +1,28 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {GenericValidators} from '@shared/validators/generic-validators';
-import {TranslateService} from '@ngx-translate/core';
-import {ActivatedRoute} from '@angular/router';
-import {Select, Store} from '@ngxs/store';
-import {Observable, Subject} from 'rxjs';
-import {map, takeUntil} from 'rxjs/operators';
-import {FormUtils} from '@core/utils';
-import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
-import {BcVersions} from 'src/app/api/models';
-import {BCAction, BCState} from '@core/states';
-import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
-import {BrowseBiaAppAction} from "../../states/browse-bia-app.action";
-import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../../states/browse-bia-app.state";
-import {BrowseBCAction} from "../../../states/browse-bc.action";
-import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
-import {LazyLoadEvent} from "primeng/api";
-import {BcCycles} from "../../../../../api/models/bc-cycles";
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GenericValidators } from '@shared/validators/generic-validators';
+import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
+import { FormUtils } from '@core/utils';
+import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import { BcCycleStatus, BcVersions } from 'src/app/api/models';
+import { BCAction, BCState, BiaAction } from '@core/states';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
+import { BrowseBiaAppAction } from '../../states/browse-bia-app.action';
+import {
+  BrowseBiaAppState,
+  BrowseBiaAppStateModel,
+} from '../../states/browse-bia-app.state';
+import { BrowseBCAction } from '../../../states/browse-bc.action';
+import { BiaAppsState } from '@core/states/bia-apps/bia-apps.state';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
+import { BcCycles } from '../../../../../api/models/bc-cycles';
+import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
+import { PrivilegesService } from '@core/services/privileges.service';
+import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-new-cycle-dialog',
@@ -24,6 +30,7 @@ import {BcCycles} from "../../../../../api/models/bc-cycles";
   styleUrls: ['./new-cycle-dialog.component.scss'],
 })
 export class NewCycleDialogComponent implements OnInit {
+  VERSION_STATUSES = VERSION_STATUSES;
 
   @Select(BrowseBiaAppState.state)
   public state$: Observable<BrowseBiaAppStateModel>;
@@ -45,8 +52,7 @@ export class NewCycleDialogComponent implements OnInit {
   @Input()
   cycle: number;
 
-  @Input()
-  cycles: BcCycles[];
+  selectedCycle: BcCycles = {};
 
   public sortableColumns = [
     {
@@ -61,6 +67,11 @@ export class NewCycleDialogComponent implements OnInit {
     { name: 'DIALOG.STATUS', code: 'status' },
     { name: 'DIALOG.CREATED_ON', code: 'createdOn' },
   ];
+  @Select(ImpactAnalysisState.cycles)
+  cycles$: Observable<({ actions: MenuItem[] } & BcCycles)[]>;
+
+  @Select(BiaAppsState.statuses)
+  statuses$: Observable<BcCycleStatus[]>;
 
   public get minDate() {
     return new Date();
@@ -68,30 +79,17 @@ export class NewCycleDialogComponent implements OnInit {
 
   destroy$ = new Subject();
 
-  @Input()
-  set cycleId(v: number) {
-    this.buildForm();
-    this.store.dispatch(new BCAction.LoadPage({ page: 0, size: 30 , statusId : VERSION_STATUSES.APPROVED}));
-    if (v === undefined || v === null) {
-      return;
-    }
-  }
-
   form: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private translate: TranslateService,
     private route: ActivatedRoute,
-    private store: Store
-  ) {
-    this.route.queryParams
-      .pipe(
-        map((params) => params['_dialog'] === 'new_cycle'),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((id) => {
-        this.cycleId = 0;
-      });
+    private store: Store,
+    public privilege: PrivilegesService
+  ) {}
+
+  menuCommandBtn(btn, item) {
+    return () => btn.click(item);
   }
 
   ngOnInit(): void {
@@ -99,6 +97,7 @@ export class NewCycleDialogComponent implements OnInit {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'new_cycle')
     );
+    this.store.dispatch(new BiaAction.LoadStatuses());
   }
   toggleDialog() {
     this.store.dispatch(
@@ -131,7 +130,9 @@ export class NewCycleDialogComponent implements OnInit {
     const cycleForm = {
       ...this.form.value,
     };
-    this.store.dispatch(new BrowseBiaAppAction.CreateCycle({form: cycleForm, cycle: this.cycle}));
+    this.store.dispatch(
+      new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle })
+    );
   }
   sort(event) {
     this.store.dispatch(
@@ -140,26 +141,54 @@ export class NewCycleDialogComponent implements OnInit {
   }
   order(event) {
     this.store.dispatch(
-      new BrowseBiaAppAction.SortCycle({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseBiaAppAction.SortCycle({
+        order: event.checked ? 'desc' : 'asc',
+      })
     );
   }
   deleteCycle(id) {
-    this.store
-      .dispatch(new BrowseBiaAppAction.Delete({ id }))
-      .toPromise()
-      .then(() => {
-        this.loadPage();
-      });
+    return () =>
+      this.store
+        .dispatch(new BrowseBiaAppAction.Delete({ id }))
+        .toPromise()
+        .then(() => {
+          this.loadPage();
+        });
+  }
+
+  changeStatues(id, status: VERSION_STATUSES) {
+    return () =>
+      this.store.dispatch(
+        new BrowseBiaAppAction.ChangeCycleStatus({
+          cycleId: id,
+          statusId: status,
+        })
+      );
   }
 
   public loadPage(event?: LazyLoadEvent) {
+    new BrowseBiaAppAction.LoadCycles({}),
+      this.store.dispatch(
+        new BrowseBCAction.LoadPage({
+          pageRequest: {
+            first: event?.first,
+            rows: event?.rows,
+          },
+        })
+      );
+  }
+
+  onRowEditInit(cycle: BcCycles) {
+    this.selectedCycle = JSON.parse(JSON.stringify(cycle));
+    this.selectedCycle.dueDate = DateTimeUtil.getDateInGMTFormat(cycle.dueDate);
+  }
+
+  onRowEditSave(cycle: BcCycles) {
     this.store.dispatch(
-      new BrowseBCAction.LoadPage({
-        pageRequest: {
-          first: event?.first,
-          rows: event?.rows,
-        },
+      new ImapactAnalysisAction.UpdateCycle({
+        ...this.selectedCycle,
       })
     );
+    this.selectedCycle = {};
   }
 }

@@ -15,6 +15,7 @@ import { RestApiResponseListUserMinimunProjection } from '../models/rest-api-res
 import { RestApiResponseListUserModulePrivilegeProjection } from '../models/rest-api-response-list-user-module-privilege-projection';
 import { RestApiResponseListUserWithoutPhotoMinimunProjection } from '../models/rest-api-response-list-user-without-photo-minimun-projection';
 import { RestApiResponseObject } from '../models/rest-api-response-object';
+import { RestApiResponsePageObject } from '../models/rest-api-response-page-object';
 import { RestApiResponsePageUserAndRoleProjection } from '../models/rest-api-response-page-user-and-role-projection';
 import { RestApiResponseResponse } from '../models/rest-api-response-response';
 import { RestApiResponseUser } from '../models/rest-api-response-user';
@@ -330,7 +331,7 @@ export class UserProfileControllerService extends BaseService {
     name?: string;
     code?: string;
     pageable: Pageable;
-  }): Observable<StrictHttpResponse<RestApiResponsePageUserAndRoleProjection>> {
+  }): Observable<StrictHttpResponse<RestApiResponsePageObject>> {
 
     const rb = new RequestBuilder(this.rootUrl, UserProfileControllerService.GetAllForOrgPath, 'get');
     if (params) {
@@ -345,7 +346,7 @@ export class UserProfileControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponsePageUserAndRoleProjection>;
+        return r as StrictHttpResponse<RestApiResponsePageObject>;
       })
     );
   }
@@ -360,10 +361,10 @@ export class UserProfileControllerService extends BaseService {
     name?: string;
     code?: string;
     pageable: Pageable;
-  }): Observable<RestApiResponsePageUserAndRoleProjection> {
+  }): Observable<RestApiResponsePageObject> {
 
     return this.getAllForOrg$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponsePageUserAndRoleProjection>) => r.body as RestApiResponsePageUserAndRoleProjection)
+      map((r: StrictHttpResponse<RestApiResponsePageObject>) => r.body as RestApiResponsePageObject)
     );
   }
 

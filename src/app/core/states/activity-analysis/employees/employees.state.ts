@@ -215,7 +215,7 @@ export class ActivityEmployeesState {
         loading: true,
       })
     );
-    return this.activityEmployees.deleteById32({ id: payload.id }).pipe(
+    return this.activityEmployees.deleteById33({ id: payload.id }).pipe(
       tap((v) => {
         setState(
           patch<ActivityEmployeesStateModel>({

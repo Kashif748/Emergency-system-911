@@ -69,7 +69,7 @@ export class ActivityImpactMatrixState {
       })
     );
     return this.activityImpactMatrix
-      .search14({
+      .search23({
         cycleId: payload.cycleId,
         activityId: payload.activityId,
         pageable: {
@@ -118,7 +118,7 @@ export class ActivityImpactMatrixState {
     );
 
     return this.activityImpactMatrix
-      .insertOne21({
+      .insertOne32({
         body: { ...payload },
       })
       .pipe(

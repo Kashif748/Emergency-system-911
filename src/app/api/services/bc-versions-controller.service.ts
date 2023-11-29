@@ -24,6 +24,55 @@ export class BcVersionsControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation manageVersionStatus
+   */
+  static readonly ManageVersionStatusPath = '/v1/bc/version/manage/status/{versionId}/{statusId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `manageVersionStatus()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  manageVersionStatus$Response(params: {
+    versionId: number;
+    statusId: number;
+  }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.ManageVersionStatusPath, 'put');
+    if (params) {
+      rb.path('versionId', params.versionId, {});
+      rb.path('statusId', params.statusId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBcVersions>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `manageVersionStatus$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  manageVersionStatus(params: {
+    versionId: number;
+    statusId: number;
+  }): Observable<RestApiResponseBcVersions> {
+
+    return this.manageVersionStatus$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
+    );
+  }
+
+  /**
    * Path part for operation deleteById1
    */
   static readonly DeleteById1Path = '/v1/bc/version/delete/{id}';
@@ -258,55 +307,6 @@ export class BcVersionsControllerService extends BaseService {
   }): Observable<RestApiResponseBcVersions> {
 
     return this.getOne1$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
-    );
-  }
-
-  /**
-   * Path part for operation manageVersionStatus
-   */
-  static readonly ManageVersionStatusPath = '/v1/bc/version/manage/status';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `manageVersionStatus()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  manageVersionStatus$Response(params: {
-    versionId: number;
-    statusId: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.ManageVersionStatusPath, 'get');
-    if (params) {
-      rb.query('versionId', params.versionId, {});
-      rb.query('statusId', params.statusId, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcVersions>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `manageVersionStatus$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  manageVersionStatus(params: {
-    versionId: number;
-    statusId: number;
-  }): Observable<RestApiResponseBcVersions> {
-
-    return this.manageVersionStatus$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
     );
   }

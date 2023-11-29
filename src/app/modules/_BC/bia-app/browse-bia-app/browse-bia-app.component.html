@@ -9,24 +9,16 @@
     <div class="col-12 my-4">
       <div class="p-d-flex p-jc-start p-ai-center">
         <div class="p-inputgroup w-400px">
-          <p-dropdown
-            [options]="sortAnalysisCycles$ | async"
-            [(ngModel)]="selectedCycle"
-            class="w-100"
-
-            placeholder="{{ 'ANALYSIS_CRCLE' | translate }}"
-            dataKey="id"
-            (ngModelChange)="setCycleId($event)"
+          <p-dropdown [options]="cycles$ | async" [(ngModel)]="selectedCycle" class="w-100"
+            placeholder="{{ 'ANALYSIS_CRCLE' | translate }}" dataKey="id" (ngModelChange)="setCycleId($event)"
             [dropdownIcon]="
-            (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'"
-            styleClass="w-100"
-          >
+            (loading$ | async) ? 'pi pi-spinner pi-spin' : 'pi pi-chevron-down'" styleClass="w-100">
             <ng-template let-item pTemplate="selectedItem">
               <ng-container>
                 <div class="d-flex">
-                <span>
-                  {{ item | translateObj }}
-                </span>
+                  <span>
+                    {{ item | translateObj }}
+                  </span>
                   <div class="flex-grow-1"></div>
                   <p-badge value="{{ item?.status | translateObj }}">
                   </p-badge>
@@ -36,9 +28,9 @@
 
             <ng-template let-cycle pTemplate="item">
               <div class="d-flex">
-              <span>
-                {{ cycle | translateObj }}
-              </span>
+                <span>
+                  {{ cycle | translateObj }}
+                </span>
                 <div class="flex-grow-1"></div>
                 <p-badge value="{{ cycle?.status | translateObj }}"> </p-badge>
               </div>
@@ -52,64 +44,34 @@
               </ng-template>
             </ng-template>
           </p-dropdown>
-          <button
-            type="button"
-            pButton
-            pRipple
-            icon="pi pi-cog"
-            class="p-button-warning"
-            title="{{ 'VERSIONS_SETTINGS' | translate }}"
-            *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'"
-            (click)="openDialog(null, 'new_cycle')"
-          ></button>
+          <button type="button" pButton pRipple icon="pi pi-cog" class="p-button-warning"
+            title="{{ 'VERSIONS_SETTINGS' | translate }}" *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'"
+            (click)="openDialog(null, 'new_cycle')"></button>
         </div>
         <div class="flex-grow-1"></div>
         <div class="d-flex p-ai-center flex-none">
           <ng-container *checkPrivileges="'PRIV_APPROVE_ANALYSIS_CYCLE'">
-            <button
-              pButton
-              *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
-              pRipple
-              type="button"
-              label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}"
-              icon="pi pi-replay"
-              [loading]="blocking$ | async"
-              [disabled]="loading$ | async"
+            <button pButton *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL" pRipple type="button"
+              label="{{ smallScreen ? '' : ('RETURN_MOD' | translate) }}" icon="pi pi-replay"
+              [loading]="blocking$ | async" [disabled]="loading$ | async"
               (click)="changeStatues(VERSION_STATUSES?.CREATED)"
-              class="p-button-outlined p-button-danger mx-2"
-            ></button>
+              class="p-button-outlined p-button-danger mx-2"></button>
           </ng-container>
 
           <ng-container *checkPrivileges="'PRIV_APPROVE_ANALYSIS_CYCLE'">
-            <button
-              pButton
-              *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL"
-              pRipple
-              class="p-button-outlined"
-              type="button"
-              [loading]="blocking$ | async"
-              [disabled]="loading$ | async"
+            <button pButton *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.UNDER_APPROVAL" pRipple
+              class="p-button-outlined" type="button" [loading]="blocking$ | async" [disabled]="loading$ | async"
               (click)="changeStatues(VERSION_STATUSES?.APPROVED)"
-              label="{{ smallScreen ? '' : ('APPROVED' | translate) }}"
-              icon="pi pi-check"
-            ></button>
+              label="{{ smallScreen ? '' : ('APPROVED' | translate) }}" icon="pi pi-check"></button>
           </ng-container>
 
           <ng-container *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'">
-            <button
-              pButton
-              *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.CREATED ||
+            <button pButton *ngIf="selectedCycle?.status?.id === VERSION_STATUSES?.CREATED ||
               selectedCycle?.status?.id ===
-                VERSION_STATUSES?.NEEDS_MODIFICATIONS"
-              pRipple
-              type="button"
-              label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}"
-              icon="pi pi-send"
-              [loading]="blocking$ | async"
-              [disabled]="loading$ | async"
-              (click)="changeStatues(VERSION_STATUSES?.UNDER_APPROVAL)"
-              class="p-button-outlined"
-            ></button>
+                VERSION_STATUSES?.NEEDS_MODIFICATIONS" pRipple type="button"
+              label="{{ smallScreen ? '' : ('SEND_APPROVAL' | translate) }}" icon="pi pi-send"
+              [loading]="blocking$ | async" [disabled]="loading$ | async"
+              (click)="changeStatues(VERSION_STATUSES?.UNDER_APPROVAL)" class="p-button-outlined"></button>
           </ng-container>
         </div>
       </div>
@@ -126,28 +88,16 @@
       <div class="col-12">
         <div class="row">
           <div class="col-12 position-relative">
-            <p-fieldset
-              [toggleable]="true"
-              styleClass="px-3 py-2 search-section"
-              legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
-              [collapsed]="!(hasFilters$ | async)"
-            >
+            <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
+              legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}" [collapsed]="!(hasFilters$ | async)">
               <div class="p-fluid p-grid">
                 <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown
-                    [ngModel]="
+                  <p-dropdown [ngModel]="
                       state.pageRequest.filters['activityAnalysisStatusId']
-                    "
-                    (ngModelChange)="
+                    " (ngModelChange)="
                       updateFilter({ activityAnalysisStatusId: $event }, $event)
-                    "
-                    [options]="activityStatuses$ | async"
-                    [autoDisplayFirst]="false"
-                    [showClear]="true"
-                    dataKey="id"
-                    optionValue="id"
-                    placeholder="{{ 'STATE' | translate }}"
-                  >
+                    " [options]="activityStatuses$ | async" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
+                    optionValue="id" placeholder="{{ 'STATE' | translate }}">
                     <ng-template let-item pTemplate="selectedItem">
                       {{ item | translateObj }}
                     </ng-template>
@@ -159,37 +109,24 @@
                 </div>
 
                 <div class="p-field p-col-4 p-md-2">
-                  <p-treeSelect
-                    [options]="orgHir"
-                    [filterBy]="'data.nameAr,data.nameEn,data.code'"
-                    selectionMode="single"
-                    [ngModel]="state.pageRequest.filters['orgHierarchyId']"
-                    (ngModelChange)="
+                  <p-treeSelect [options]="orgHir" [filterBy]="'data.nameAr,data.nameEn,data.code'"
+                    selectionMode="single" [ngModel]="state.pageRequest.filters['orgHierarchyId']" (ngModelChange)="
                       updateFilter({ orgHierarchyId: $event }, $event)
-                    "
-                    [loading]="loadingOrgHir$ | async"
-                    (onNodeExpand)="nodeExpand($event?.node)"
-                    placeholder="{{ 'DIVISION' | translate }}"
-                    appendTo="body"
-                  >
+                    " [loading]="loadingOrgHir$ | async" (onNodeExpand)="nodeExpand($event?.node)"
+                    placeholder="{{ 'DIVISION' | translate }}" appendTo="body">
                     <ng-template let-option let-placeholder pTemplate="header">
                       <div class="w-100 p-2">
                         <span class="p-input-icon-left w-100">
                           <i class="pi pi-search"></i>
-                          <input
-                            (keyup)="filterOrgHir($event.target.value)"
-                            type="text"
-                            pInputText
-                            class="w-100"
-                          />
+                          <input (keyup)="filterOrgHir($event.target.value)" type="text" pInputText class="w-100" />
                         </span>
                       </div>
                     </ng-template>
                     <ng-template let-option let-placeholder pTemplate="value">
                       {{
-                        option
-                          ? (option | translateObj : "label")
-                          : ("DIVISION" | translate)
+                      option
+                      ? (option | translateObj : "label")
+                      : ("DIVISION" | translate)
                       }}
                     </ng-template>
                   </p-treeSelect>
@@ -198,22 +135,12 @@
                 <div class="p-col p-d-flex">
                   <div class="ml-dir-auto"></div>
                   <div class="mx-1">
-                    <button
-                      pButton
-                      type="button"
-                      label="{{ 'ACTIONS.CLEAR' | translate }}"
-                      icon="pi pi-times"
-                      class="p-button-outlined"
-                      (click)="clear()"
-                    ></button>
+                    <button pButton type="button" label="{{ 'ACTIONS.CLEAR' | translate }}" icon="pi pi-times"
+                      class="p-button-outlined" (click)="clear()"></button>
                   </div>
                   <div class="mx-1">
-                    <button
-                      pButton
-                      label="{{ 'ACTIONS.SEARCH' | translate }}"
-                      icon="pi pi-search"
-                      (click)="search()"
-                    ></button>
+                    <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search"
+                      (click)="search()"></button>
                   </div>
                 </div>
               </div>
@@ -223,22 +150,15 @@
             <p-toolbar>
               <div class="p-toolbar-group-left">
                 <div class="p-1 w-100 w-md-200px">
-                  <p-multiSelect
-                    [options]="columns"
-                    defaultLabel="Select Columns"
-                    optionLabel="name"
-                    styleClass="w-100"
-                    [ngModel]="state.columns"
-                    [optionValue]="'code'"
-                    optionDisabled="disabled"
-                    (onChange)="changeColumns($event)"
-                  >
+                  <p-multiSelect [options]="columns" defaultLabel="Select Columns" optionLabel="name" styleClass="w-100"
+                    [ngModel]="state.columns" [optionValue]="'code'" optionDisabled="disabled"
+                    (onChange)="changeColumns($event)">
                     <ng-template let-options pTemplate="selectedItems">
                       <ng-container *ngIf="options?.length > 0">
                         {{
-                          options?.length +
-                            " " +
-                            ("SHARED.SELCTED_ITEM" | translate)
+                        options?.length +
+                        " " +
+                        ("SHARED.SELCTED_ITEM" | translate)
                         }}
                       </ng-container>
                       <ng-container *ngIf="!options || options.length === 0">
@@ -252,20 +172,11 @@
                 </div>
                 <div class="p-1 w-100 w-md-225px">
                   <div class="p-inputgroup">
-                    <p-dropdown
-                      [options]="sortableColumns"
-                      [showClear]="true"
-                      [autoDisplayFirst]="false"
-                      [ngModel]="state?.pageRequest?.sortField"
-                      placeholder="{{
+                    <p-dropdown [options]="sortableColumns" [showClear]="true" [autoDisplayFirst]="false"
+                      [ngModel]="state?.pageRequest?.sortField" placeholder="{{
                         'SHARED.SELECT_SORTING_FIELD' | translate
-                      }}"
-                      optionLabel="name"
-                      optionValue="code"
-                      styleClass="w-100 h-100"
-                      class="w-100 h-100"
-                      (onChange)="sort($event)"
-                    >
+                      }}" optionLabel="name" optionValue="code" styleClass="w-100 h-100" class="w-100 h-100"
+                      (onChange)="sort($event)">
                       <ng-template let-option pTemplate="selectedItem">
                         {{ option.name | translate }}
                       </ng-template>
@@ -274,15 +185,9 @@
                       </ng-template>
                     </p-dropdown>
                     <div class="p-inputgroup-addon p-0">
-                      <p-toggleButton
-                        class="w-100 h-100"
-                        [onIcon]="'pi pi-sort-amount-up'"
-                        [ngModel]="state?.pageRequest?.sortOrder === 'desc'"
-                        offIcon="pi pi-sort-amount-down-alt"
-                        iconPos="right"
-                        styleClass="w-100 h-100"
-                        (onChange)="order($event)"
-                      ></p-toggleButton>
+                      <p-toggleButton class="w-100 h-100" [onIcon]="'pi pi-sort-amount-up'"
+                        [ngModel]="state?.pageRequest?.sortOrder === 'desc'" offIcon="pi pi-sort-amount-down-alt"
+                        iconPos="right" styleClass="w-100 h-100" (onChange)="order($event)"></p-toggleButton>
                     </div>
                   </div>
                 </div>
@@ -322,18 +227,12 @@
             </div>
           </div>-->
         </div>
-        <app-content-bia-app
-          [view]="state.view"
-          [loading]="loading$ | async"
-          [page]="page$ | async"
-          [columns]="state.columns"
-          [pageRequest]="state?.pageRequest"
-          [totalRecords]="totalRecords$ | async"
-          (onPageChange)="loadPage($event)"
-        ></app-content-bia-app>
+        <app-content-bia-app [view]="state.view" [loading]="loading$ | async" [page]="page$ | async"
+          [columns]="state.columns" [pageRequest]="state?.pageRequest" [totalRecords]="totalRecords$ | async"
+          (onPageChange)="loadPage($event)"></app-content-bia-app>
       </div>
     </div>
   </div>
 </div>
 
-<app-new-cycle-dialog [cycle]="selectedCycle" [cycles]="sortAnalysisCycles$ | async"></app-new-cycle-dialog>
+<app-new-cycle-dialog [cycle]="selectedCycle"></app-new-cycle-dialog>

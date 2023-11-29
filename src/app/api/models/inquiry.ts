@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+import { InquiryTag } from './inquiry-tag';
 import { OrgStructure } from './org-structure';
 import { ReportingVia } from './reporting-via';
 import { User } from './user';
@@ -10,6 +11,7 @@ export interface Inquiry {
   callDurationInMinutes?: number;
   createdDate?: string;
   id?: number;
+  inquiryTags?: Array<InquiryTag>;
   isActive?: boolean;
   orgStructure?: OrgStructure;
   reportedByMobile: number;

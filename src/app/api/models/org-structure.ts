@@ -31,6 +31,7 @@ export interface OrgStructure {
   mobno?: string;
   nameAr: string;
   nameEn: string;
+  nationalCompliance?: number;
   newsId?: number;
   officialEmail?: string;
   operationNumbers?: number;
