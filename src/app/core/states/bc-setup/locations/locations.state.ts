@@ -1,14 +1,26 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken, Store,} from '@ngxs/store';
-import {Injectable} from '@angular/core';
-import {patch} from '@ngxs/store/operators';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {EMPTY} from 'rxjs';
-import {BcLocations, PageBcLocations} from 'src/app/api/models';
-import {BcLocationsControllerService} from 'src/app/api/services';
-import {LocationsAction} from './locations.action';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { patch } from '@ngxs/store/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import {
+  BcLocations,
+  PageBcLocations,
+  PageBcLocationsProjection,
+} from 'src/app/api/models';
+import { BcLocationsControllerService } from 'src/app/api/services';
+import { LocationsAction } from './locations.action';
 
 export interface LocationsStateModel {
-  page: PageBcLocations;
+  page: PageBcLocationsProjection;
   location: BcLocations;
   loading: boolean;
   blocking: boolean;
@@ -67,7 +79,7 @@ export class LocationsState {
     );
 
     return this.locationService
-      .search8({
+      .search17({
         isActive: true,
         name: payload.filters?.name ?? '',
         locationTypeId: payload.filters?.locationTypeId ?? '',
@@ -116,7 +128,7 @@ export class LocationsState {
       })
     );
     return this.locationService
-      .insertOne8({
+      .insertOne19({
         body: payload,
       })
       .pipe(
@@ -135,7 +147,7 @@ export class LocationsState {
     { setState }: StateContext<LocationsStateModel>,
     { payload }: LocationsAction.Delete
   ) {
-    return this.locationService.deleteById7({ id: payload.id });
+    return this.locationService.deleteById19({ id: payload.id });
   }
 
   @Action(LocationsAction.Update)
@@ -150,7 +162,7 @@ export class LocationsState {
     );
 
     return this.locationService
-      .update87({
+      .update98({
         body: payload,
       })
       .pipe(
@@ -182,7 +194,7 @@ export class LocationsState {
         blocking: true,
       })
     );
-    return this.locationService.getOne8({ id: payload.id }).pipe(
+    return this.locationService.getOne19({ id: payload.id }).pipe(
       tap((location) => {
         setState(
           patch<LocationsStateModel>({

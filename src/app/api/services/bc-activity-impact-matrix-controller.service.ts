@@ -26,25 +26,25 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll30
+   * Path part for operation getAll28
    */
-  static readonly GetAll30Path = '/v1/bc/activity-impact-matrix';
+  static readonly GetAll28Path = '/v1/bc/activity-impact-matrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll30()` instead.
+   * To access only the response body, use `getAll28()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll30$Response(params: {
+  getAll28$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityImpactMatrix>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.GetAll30Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.GetAll28Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -64,19 +64,19 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll30$Response()` instead.
+   * To access the full response (for headers, for example), `getAll28$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll30(params: {
+  getAll28(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityImpactMatrix> {
 
-    return this.getAll30$Response(params).pipe(
+    return this.getAll28$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityImpactMatrix>) => r.body as RestApiResponsePageBcActivityImpactMatrix)
     );
   }
@@ -128,21 +128,21 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation insertOne21
+   * Path part for operation insertOne32
    */
-  static readonly InsertOne21Path = '/v1/bc/activity-impact-matrix';
+  static readonly InsertOne32Path = '/v1/bc/activity-impact-matrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne21()` instead.
+   * To access only the response body, use `insertOne32()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne21$Response(params: {
+  insertOne32$Response(params: {
     body: BcActivityImpactMatrix
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityImpactMatrix>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.InsertOne21Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.InsertOne32Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -160,35 +160,35 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne21$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne32$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne21(params: {
+  insertOne32(params: {
     body: BcActivityImpactMatrix
   }): Observable<RestApiResponseBcActivityImpactMatrix> {
 
-    return this.insertOne21$Response(params).pipe(
+    return this.insertOne32$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityImpactMatrix>) => r.body as RestApiResponseBcActivityImpactMatrix)
     );
   }
 
   /**
-   * Path part for operation getOne21
+   * Path part for operation getOne32
    */
-  static readonly GetOne21Path = '/v1/bc/activity-impact-matrix/{id}';
+  static readonly GetOne32Path = '/v1/bc/activity-impact-matrix/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne21()` instead.
+   * To access only the response body, use `getOne32()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne21$Response(params: {
+  getOne32$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityImpactMatrix>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.GetOne21Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.GetOne32Path, 'get');
     if (params) {
       rb.query('id', params.id, {});
     }
@@ -206,37 +206,37 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne21$Response()` instead.
+   * To access the full response (for headers, for example), `getOne32$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne21(params: {
+  getOne32(params: {
     id: number;
   }): Observable<RestApiResponseBcActivityImpactMatrix> {
 
-    return this.getOne21$Response(params).pipe(
+    return this.getOne32$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityImpactMatrix>) => r.body as RestApiResponseBcActivityImpactMatrix)
     );
   }
 
   /**
-   * Path part for operation search14
+   * Path part for operation search23
    */
-  static readonly Search14Path = '/v1/bc/activity-impact-matrix/search';
+  static readonly Search23Path = '/v1/bc/activity-impact-matrix/search';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `search14()` instead.
+   * To access only the response body, use `search23()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search14$Response(params: {
+  search23$Response(params: {
     activityId: number;
     cycleId: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityImpactMatrixResponse>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.Search14Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.Search23Path, 'get');
     if (params) {
       rb.query('activityId', params.activityId, {});
       rb.query('cycleId', params.cycleId, {});
@@ -256,17 +256,17 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `search14$Response()` instead.
+   * To access the full response (for headers, for example), `search23$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  search14(params: {
+  search23(params: {
     activityId: number;
     cycleId: number;
     pageable: Pageable;
   }): Observable<RestApiResponseBcActivityImpactMatrixResponse> {
 
-    return this.search14$Response(params).pipe(
+    return this.search23$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityImpactMatrixResponse>) => r.body as RestApiResponseBcActivityImpactMatrixResponse)
     );
   }

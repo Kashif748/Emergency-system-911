@@ -5,6 +5,7 @@ export interface BcImpactTypes {
   isActive?: boolean;
   nameAr?: string;
   nameEn?: string;
+  referenceId?: number;
   versionId?: number;
 }
 

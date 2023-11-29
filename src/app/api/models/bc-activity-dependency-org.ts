@@ -6,8 +6,7 @@ import { BcOrgHierarchy } from './bc-org-hierarchy';
 export interface BcActivityDependencyOrg {
   activity: BcActivities;
   activityName?: string;
-  createdBy: number;
-  createdOn: string;
+  createdOn?: string;
   cycle: BcCycles;
   dependencyDetails?: string;
   id?: number;
@@ -15,5 +14,6 @@ export interface BcActivityDependencyOrg {
   isFound: boolean;
   orderSeq?: number;
   orgHierarchy?: BcOrgHierarchy;
+  referenceId?: number;
 }
 

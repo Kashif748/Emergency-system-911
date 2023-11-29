@@ -7,5 +7,6 @@ export interface BcActivityFrequencies {
   nameAr?: string;
   nameEn?: string;
   orgStructure?: OrgStructure;
+  sequenceNumber?: number;
 }
 

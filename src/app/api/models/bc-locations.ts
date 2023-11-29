@@ -17,6 +17,7 @@ export interface BcLocations {
   nameEn?: string;
   orgStructure?: OrgStructure;
   sector?: number;
+  sequenceNumber?: number;
   zone?: number;
 }
 

@@ -117,21 +117,21 @@ export class AlertnessLevelControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update109
+   * Path part for operation update120
    */
-  static readonly Update109Path = '/v1/alertness-level';
+  static readonly Update120Path = '/v1/alertness-level';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update109()` instead.
+   * To access only the response body, use `update120()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update109$Response(params: {
+  update120$Response(params: {
     body: AlertnessLevel
   }): Observable<StrictHttpResponse<RestApiResponseAlertnessLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AlertnessLevelControllerService.Update109Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AlertnessLevelControllerService.Update120Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -149,15 +149,15 @@ export class AlertnessLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update109$Response()` instead.
+   * To access the full response (for headers, for example), `update120$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update109(params: {
+  update120(params: {
     body: AlertnessLevel
   }): Observable<RestApiResponseAlertnessLevel> {
 
-    return this.update109$Response(params).pipe(
+    return this.update120$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAlertnessLevel>) => r.body as RestApiResponseAlertnessLevel)
     );
   }
@@ -209,21 +209,21 @@ export class AlertnessLevelControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getById12
+   * Path part for operation getById13
    */
-  static readonly GetById12Path = '/v1/alertness-level/{id}';
+  static readonly GetById13Path = '/v1/alertness-level/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById12()` instead.
+   * To access only the response body, use `getById13()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById12$Response(params: {
+  getById13$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseAlertnessLevel>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AlertnessLevelControllerService.GetById12Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AlertnessLevelControllerService.GetById13Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -241,15 +241,15 @@ export class AlertnessLevelControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById12$Response()` instead.
+   * To access the full response (for headers, for example), `getById13$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById12(params: {
+  getById13(params: {
     id: number;
   }): Observable<RestApiResponseAlertnessLevel> {
 
-    return this.getById12$Response(params).pipe(
+    return this.getById13$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAlertnessLevel>) => r.body as RestApiResponseAlertnessLevel)
     );
   }

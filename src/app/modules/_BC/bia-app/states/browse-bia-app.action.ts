@@ -1,16 +1,18 @@
-import {PageRequestModel} from '@core/models/page-request.model';
-import {BcActivities} from "../../../../api/models/bc-activities";
-import {BcActivityAnalysisDto, BcCycles} from "../../../../api/models";
-import {BcResources} from "../../../../api/models/bc-resources";
-import {VERSION_STATUSES} from "@core/states/bc/bc/bc.state";
+import { PageRequestModel } from '@core/models/page-request.model';
+import { BcActivities } from '../../../../api/models/bc-activities';
+import { BcActivityAnalysisDto, BcCycles } from '../../../../api/models';
+import { BcResources } from '../../../../api/models/bc-resources';
+import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
 
 export namespace BrowseBiaAppAction {
-  export class LoadBia{
+  export class LoadBia {
     static readonly type = '[BrowseBiaApp] Load Bia';
     /**
      *
      */
-    constructor(public payload?: { pageRequest?: PageRequestModel, cycleId?: number }) {}
+    constructor(
+      public payload?: { pageRequest?: PageRequestModel; cycleId?: number }
+    ) {}
   }
 
   export class SortBia {
@@ -18,7 +20,9 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload: { field?: string; order?: 'asc' | 'desc', cycle?: number }) {}
+    constructor(
+      public payload: { field?: string; order?: 'asc' | 'desc'; cycle?: number }
+    ) {}
   }
 
   export class ChangeColumns {
@@ -71,17 +75,11 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(
-      public payload: {
-        page: number;
-        size: number;
-      }
-    ) {}
+    constructor(public payload?: { pageRequest?: PageRequestModel }) {}
   }
 
   export class LoadActivitiesStatuses {
-    static readonly type =
-      '[BrowseBiaApp] Load Activities Statuses';
+    static readonly type = '[BrowseBiaApp] Load Activities Statuses';
 
     /**
      *
@@ -95,7 +93,9 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload: { dialog?: string; id?: number; cycle?: number }) {}
+    constructor(
+      public payload: { dialog?: string; id?: number; cycle?: number }
+    ) {}
   }
 
   export class OpenView {
@@ -110,7 +110,7 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload: {form: BcCycles, cycle: number}) {}
+    constructor(public payload: { form: BcCycles; cycle: number }) {}
   }
   export class UpdateCycle {
     static readonly type = '[BrowseBiaApp] Update Cycle';
@@ -155,6 +155,8 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload: { field?: string; order?: 'asc' | 'desc', cycle?: number }) {}
+    constructor(
+      public payload: { field?: string; order?: 'asc' | 'desc'; cycle?: number }
+    ) {}
   }
 }

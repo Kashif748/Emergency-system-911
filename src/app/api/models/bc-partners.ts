@@ -21,6 +21,7 @@ export interface BcPartners {
   scontactNameEn?: string;
   scontactPhoneNum?: string;
   scontactSecNum?: string;
+  sequenceNumber?: number;
   services?: string;
   sla?: string;
 }

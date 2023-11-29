@@ -23,6 +23,7 @@ export interface OrgStructureProjection {
   managerId?: number;
   nameAr?: string;
   nameEn?: string;
+  nationalCompliance?: number;
   parent?: IEntity;
   representativeGroupId?: number;
   sector?: IEntity;

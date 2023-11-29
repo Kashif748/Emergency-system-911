@@ -30,6 +30,7 @@ export interface OrgStructureDetails {
   municipalityCode?: string;
   nameAr: string;
   nameEn: string;
+  nationalCompliance?: number;
   officialEmail?: string;
   operationNumbers?: number;
   parentOrg?: OrgStructure;

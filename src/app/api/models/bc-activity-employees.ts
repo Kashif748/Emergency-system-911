@@ -14,6 +14,8 @@ export interface BcActivityEmployees {
   mobileNumber?: string;
   orderSequence?: number;
   phoneNumber?: string;
+  referenceId?: number;
   secondNumber?: string;
+  sequenceNumber?: number;
 }
 

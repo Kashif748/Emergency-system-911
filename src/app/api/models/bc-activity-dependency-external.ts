@@ -5,8 +5,7 @@ import { BcCycles } from './bc-cycles';
 import { BcPartners } from './bc-partners';
 export interface BcActivityDependencyExternal {
   activity: BcActivities;
-  createdBy: number;
-  createdOn: string;
+  createdOn?: string;
   cycle: BcCycles;
   dependencyDetails?: string;
   id?: number;
@@ -14,5 +13,6 @@ export interface BcActivityDependencyExternal {
   isFound: boolean;
   orderSeq?: number;
   partner?: BcPartners;
+  referenceId?: number;
 }
 

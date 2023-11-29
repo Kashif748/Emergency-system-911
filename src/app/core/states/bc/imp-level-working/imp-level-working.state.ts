@@ -78,7 +78,7 @@ export class ImpLevelWorkingState {
       })
     );
     return this.impLevelWorking
-      .getAll19({
+      .getAll17({
         isActive: true,
         versionId: payload.versionId,
         pageable: {
@@ -127,7 +127,7 @@ export class ImpLevelWorkingState {
     );
 
     return this.impLevelWorking
-      .insertOne10({
+      .insertOne21({
         body: payload,
       })
       .pipe(
@@ -153,7 +153,7 @@ export class ImpLevelWorkingState {
     );
 
     return this.impLevelWorking
-      .update89({
+      .update100({
         body: payload,
       })
       .pipe(
@@ -185,7 +185,7 @@ export class ImpLevelWorkingState {
         blocking: true,
       })
     );
-    return this.impLevelWorking.getOne10({ id: payload.id }).pipe(
+    return this.impLevelWorking.getOne21({ id: payload.id }).pipe(
       tap((rto) => {
         setState(
           patch<ImpLevelWorkingStateModel>({

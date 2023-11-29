@@ -24,21 +24,21 @@ export class BcLocationTypeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById8
+   * Path part for operation deleteById20
    */
-  static readonly DeleteById8Path = '/v1/bc/locationType/delete/{id}';
+  static readonly DeleteById20Path = '/v1/bc/locationType/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById8()` instead.
+   * To access only the response body, use `deleteById20()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById8$Response(params: {
+  deleteById20$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.DeleteById8Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.DeleteById20Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,37 +56,37 @@ export class BcLocationTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById8$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById20$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById8(params: {
+  deleteById20(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById8$Response(params).pipe(
+    return this.deleteById20$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAll18
+   * Path part for operation getAll16
    */
-  static readonly GetAll18Path = '/v1/bc/locationType';
+  static readonly GetAll16Path = '/v1/bc/locationType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll18()` instead.
+   * To access only the response body, use `getAll16()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll18$Response(params: {
+  getAll16$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcLocationTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.GetAll18Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.GetAll16Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcLocationTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll18$Response()` instead.
+   * To access the full response (for headers, for example), `getAll16$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll18(params: {
+  getAll16(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcLocationTypes> {
 
-    return this.getAll18$Response(params).pipe(
+    return this.getAll16$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcLocationTypes>) => r.body as RestApiResponsePageBcLocationTypes)
     );
   }
 
   /**
-   * Path part for operation update88
+   * Path part for operation update99
    */
-  static readonly Update88Path = '/v1/bc/locationType';
+  static readonly Update99Path = '/v1/bc/locationType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update88()` instead.
+   * To access only the response body, use `update99()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update88$Response(params: {
+  update99$Response(params: {
     body: BcLocationTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcLocationTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.Update88Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.Update99Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,35 +154,35 @@ export class BcLocationTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update88$Response()` instead.
+   * To access the full response (for headers, for example), `update99$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update88(params: {
+  update99(params: {
     body: BcLocationTypes
   }): Observable<RestApiResponseBcLocationTypes> {
 
-    return this.update88$Response(params).pipe(
+    return this.update99$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcLocationTypes>) => r.body as RestApiResponseBcLocationTypes)
     );
   }
 
   /**
-   * Path part for operation insertOne9
+   * Path part for operation insertOne20
    */
-  static readonly InsertOne9Path = '/v1/bc/locationType';
+  static readonly InsertOne20Path = '/v1/bc/locationType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne9()` instead.
+   * To access only the response body, use `insertOne20()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne9$Response(params: {
+  insertOne20$Response(params: {
     body: BcLocationTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcLocationTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.InsertOne9Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.InsertOne20Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -200,35 +200,35 @@ export class BcLocationTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne9$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne20$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne9(params: {
+  insertOne20(params: {
     body: BcLocationTypes
   }): Observable<RestApiResponseBcLocationTypes> {
 
-    return this.insertOne9$Response(params).pipe(
+    return this.insertOne20$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcLocationTypes>) => r.body as RestApiResponseBcLocationTypes)
     );
   }
 
   /**
-   * Path part for operation getOne9
+   * Path part for operation getOne20
    */
-  static readonly GetOne9Path = '/v1/bc/locationType/{id}';
+  static readonly GetOne20Path = '/v1/bc/locationType/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne9()` instead.
+   * To access only the response body, use `getOne20()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne9$Response(params: {
+  getOne20$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcLocationTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.GetOne9Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcLocationTypeControllerService.GetOne20Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -246,15 +246,15 @@ export class BcLocationTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne9$Response()` instead.
+   * To access the full response (for headers, for example), `getOne20$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne9(params: {
+  getOne20(params: {
     id: number;
   }): Observable<RestApiResponseBcLocationTypes> {
 
-    return this.getOne9$Response(params).pipe(
+    return this.getOne20$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcLocationTypes>) => r.body as RestApiResponseBcLocationTypes)
     );
   }

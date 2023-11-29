@@ -7,7 +7,7 @@ import {
   StateToken,
 } from '@ngxs/store';
 import { delay, finalize, map, tap } from 'rxjs/operators';
-import { patch } from '@ngxs/store/operators';
+import { patch, updateItem } from '@ngxs/store/operators';
 import { Injectable } from '@angular/core';
 import {
   BcActivityAnalysis,
@@ -196,7 +196,10 @@ export class ImpactAnalysisState {
         tap((bc) => {
           setState(
             patch<ImpactAnalysisStateModel>({
-              cyclesPage: bc.result,
+              cyclesPage: {
+                ...bc.result,
+                content: bc.result?.content?.sort((a, b) => b.id - a.id),
+              },
             })
           );
         }),
@@ -274,7 +277,7 @@ export class ImpactAnalysisState {
     { setState }: StateContext<ImpactAnalysisStateModel>,
     {}: ImapactAnalysisAction.LoadActivitiesStatuses
   ) {
-    return this.statusController.list8().pipe(
+    return this.statusController.list10().pipe(
       tap((bc) => {
         setState(
           patch<ImpactAnalysisStateModel>({
@@ -293,7 +296,7 @@ export class ImpactAnalysisState {
     { payload }: ImapactAnalysisAction.LoadStatusBasedOnStatusId
   ) {
     return this.statusController
-      .getOne37({
+      .getOne36({
         id: payload.id,
       })
       .pipe(
@@ -500,6 +503,83 @@ export class ImpactAnalysisState {
           setState(
             patch<ImpactAnalysisStateModel>({
               blocking: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(ImapactAnalysisAction.UpdateCycle, { cancelUncompleted: true })
+  updateCycle(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload }: ImapactAnalysisAction.UpdateCycle
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ImpactAnalysisStateModel>({
+        loading: true,
+      })
+    );
+    return this.cyclesController
+      .update104({
+        body: {
+          ...payload,
+        },
+      })
+      .pipe(
+        tap(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              cyclesPage: patch<PageBcCycles>({
+                content: updateItem((c) => c.id == payload.id, payload),
+              }),
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              loading: false,
+            })
+          );
+        })
+      );
+  }
+
+  @Action(ImapactAnalysisAction.UpdateCycleStatus, { cancelUncompleted: true })
+  updateCycleStatus(
+    { setState }: StateContext<ImpactAnalysisStateModel>,
+    { payload }: ImapactAnalysisAction.UpdateCycleStatus
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<ImpactAnalysisStateModel>({
+        loading: true,
+      })
+    );
+    return this.cyclesController
+      .manageBcCycleStatus({
+        cycleId: payload.id,
+        statusId: payload.status?.id,
+      })
+      .pipe(
+        tap(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              cyclesPage: patch<PageBcCycles>({
+                content: updateItem((c) => c.id == payload.id, payload),
+              }),
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<ImpactAnalysisStateModel>({
+              loading: false,
             })
           );
         })

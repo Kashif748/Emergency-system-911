@@ -23,21 +23,21 @@ export class IncidentCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation findActiveList3
+   * Path part for operation findActiveList4
    */
-  static readonly FindActiveList3Path = '/v1/incident-categories';
+  static readonly FindActiveList4Path = '/v1/incident-categories';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findActiveList3()` instead.
+   * To access only the response body, use `findActiveList4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActiveList3$Response(params?: {
+  findActiveList4$Response(params?: {
     enableChatBoot?: boolean;
   }): Observable<StrictHttpResponse<RestApiResponseListIncidentCategoryProjaction>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentCategoryControllerService.FindActiveList3Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, IncidentCategoryControllerService.FindActiveList4Path, 'get');
     if (params) {
       rb.query('enableChatBoot', params.enableChatBoot, {});
     }
@@ -55,15 +55,15 @@ export class IncidentCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `findActiveList3$Response()` instead.
+   * To access the full response (for headers, for example), `findActiveList4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActiveList3(params?: {
+  findActiveList4(params?: {
     enableChatBoot?: boolean;
   }): Observable<RestApiResponseListIncidentCategoryProjaction> {
 
-    return this.findActiveList3$Response(params).pipe(
+    return this.findActiveList4$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListIncidentCategoryProjaction>) => r.body as RestApiResponseListIncidentCategoryProjaction)
     );
   }

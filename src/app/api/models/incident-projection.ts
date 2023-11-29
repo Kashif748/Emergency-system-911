@@ -7,11 +7,13 @@ import { IncidentGroupProjection } from './incident-group-projection';
 import { IncidentHospitalProjection } from './incident-hospital-projection';
 import { IncidentOrgProjection } from './incident-org-projection';
 import { IncidentReasonProjection } from './incident-reason-projection';
+import { IncidentTag } from './incident-tag';
 import { IncidentsChallengesReq } from './incidents-challenges-req';
 import { OrgStructureMinimumProjection } from './org-structure-minimum-projection';
 import { UserDetailsWithoutPhotoOrgProjection } from './user-details-without-photo-org-projection';
 import { UserWithoutPhotoMinimunProjection } from './user-without-photo-minimun-projection';
 export interface IncidentProjection {
+  adafsaId?: number;
   center?: number;
   centerCategory?: IEntity;
   city?: IEntity;
@@ -34,6 +36,7 @@ export interface IncidentProjection {
   incidentParentCategory?: IdNameProjection;
   incidentReasons?: Array<IncidentReasonProjection>;
   incidentRiskImpact?: IEntity;
+  incidentTags?: Array<IncidentTag>;
   incidentsChallengesReqs?: Array<IncidentsChallengesReq>;
   isExpiry?: boolean;
   isInternal?: boolean;
