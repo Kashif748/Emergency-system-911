@@ -125,7 +125,7 @@
                       </ng-container>
                     </ng-template>
                     <ng-template let-option pTemplate="item">
-                      {{ "SYSTEMS_REPORT." + option.name | translate }}
+                      {{ "SUMMARY." + option.name | translate }}
                     </ng-template>
                   </p-multiSelect>
                 </div>
@@ -146,10 +146,10 @@
                       (onChange)="sort($event)"
                     >
                       <ng-template let-option pTemplate="selectedItem">
-                        {{ "SYSTEMS_REPORT." + option.name | translate }}
+                        {{ "SUMMARY." + option.name | translate }}
                       </ng-template>
                       <ng-template let-option pTemplate="item">
-                        {{ "SYSTEMS_REPORT." + option.name | translate }}
+                        {{ "SUMMARY." + option.name | translate }}
                       </ng-template>
                     </p-dropdown>
                     <div class="p-inputgroup-addon p-0">
@@ -230,14 +230,14 @@
             </div>
           </div>
         </div>
-        <app-systems-report-content
+        <app-vendors-report-content
           [loading]="loading$ | async"
           [page]="page$ | async"
           [columns]="state.columns"
           [pageRequest]="state?.pageRequest"
           [totalRecords]="totalRecords$ | async"
           (onPageChange)="loadPage($event)"
-        ></app-systems-report-content>
+        ></app-vendors-report-content>
       </div>
     </div>
   </div>

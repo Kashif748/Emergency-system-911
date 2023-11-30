@@ -90,9 +90,6 @@ const routes: Routes = [
         data: {
           permission: [
             'PRIV_VW_ACTIVITY_ANALYSIS',
-            'PRIV_PERFORM_ACTIVITY_ANALYSIS',
-            'PRIV_REVIEW_ACTIVITY_ANALYSIS',
-            'PRIV_APPROVE_ACTIVITY_ANALYSIS',
           ],
           type: 'or',
         },
@@ -103,19 +100,24 @@ const routes: Routes = [
       },
       {
         path: 'systems-report',
-        // canLoad: [PrivilegeGuard],
-        // data: {
-        //   permission: [
-        //     'PRIV_VW_ACTIVITY_ANALYSIS',
-        //     'PRIV_PERFORM_ACTIVITY_ANALYSIS',
-        //     'PRIV_REVIEW_ACTIVITY_ANALYSIS',
-        //     'PRIV_APPROVE_ACTIVITY_ANALYSIS',
-        //   ],
-        //   type: 'or',
-        // },
+        canLoad: [PrivilegeGuard],
+        data: {
+          permission: ['PRIV_VW_ACTIVITY_ANALYSIS'],
+        },
         loadChildren: () =>
           import('./reports/systems-report/systems-report.module').then(
             (m) => m.SystemsReportModule
+          ),
+      },
+      {
+        path: 'vendors-report',
+        canLoad: [PrivilegeGuard],
+        data: {
+          permission: ['PRIV_VW_ACTIVITY_ANALYSIS'],
+        },
+        loadChildren: () =>
+          import('./reports/vendors-report/vendors-report.module').then(
+            (m) => m.VendorsReportModule
           ),
       },
     ],
