@@ -24,7 +24,7 @@
     "SPOF": "Single Point of Failure (SPOF)",
     "SKILLS": "Skills",
     "REMOTELY": "Can be done remotely",
-    "RTO":"Rto"
+    "RTO": "Rto"
   },
   "SYSTEMS": {
     "TAB_LABEL": "Systems",
@@ -115,9 +115,9 @@
   },
   "SUMMARY": {
     "TAB_LABEL": "Activity Report",
-    "CYCLE":"Analysis Cycle",
+    "CYCLE": "Analysis Cycle",
 
-    "TITLE":"Activity Summary",
+    "TITLE": "Activity Summary",
     "ACTIVITY": "Activity Name",
     "CAPACITY": "Capacity",
     "CRITICALITY": "Criticality",
@@ -127,6 +127,17 @@
     "RTO": "Rto",
     "SECTION": "Section",
     "SECTOR": "Sector",
+    "CRITICAL": "Critical",
+    "NOT_CRITICAL": "Not critical",
+    "ALL": "All"
+  },
+  "SYSTEMS_REPORT": {
+    "CYCLE": "Analysis Cycle",
+
+    "NAME": "System Name",
+    "ACTIVITIES": "Activities",
+    "CRITICALITY": "Criticality",
+    "DIVISIONS": "Divisions",
     "CRITICAL": "Critical",
     "NOT_CRITICAL": "Not critical",
     "ALL": "All"
