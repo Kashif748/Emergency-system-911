@@ -15,8 +15,8 @@
 
       > tr > td {
         border-width: 1px 0px !important;
-        padding-top: 1.6rem;
-        padding-bottom: 1.6rem;
+
+        padding: 1rem 0.5rem;
       }
 
       > tr > td:first-child:not([colspan="100%"]).flag-td {
