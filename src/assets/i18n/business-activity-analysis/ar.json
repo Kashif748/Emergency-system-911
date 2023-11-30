@@ -127,9 +127,16 @@
     "SECTOR": "القطاع",
     "CRITICAL": "حيوي",
     "NOT_CRITICAL": "غير حيوي",
-    "ALL": "الكل"
+    "ALL": "الكل",
+    "VENDOR": "اسم المورد",
+    "CONTACT_PERSON": "الموظف المخول بالتواصل",
+    "SUPPLIES": "الخدمات / المواد",
+    "PRIMARY_CONTACT": "جهة الاتصال الاساسية",
+    "SECONDARY_CONTACT": "جهة الاتصال الثانوية",
+    "VENDORS_REPORT": " تقرير مزودي الخدمة"
   },
   "SYSTEMS_REPORT": {
+    "REPORT": "تقرير الأنظمة",
     "TAB_LABEL": "تقرير النشاط",
     "NAME": "اسم النظام ",
     "ACTIVITIES": "الأنشطة",

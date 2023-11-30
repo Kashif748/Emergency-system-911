@@ -11,77 +11,77 @@ import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { patch } from '@ngxs/store/operators';
 
-import { BcActivitySystemsControllerService } from 'src/app/api/services';
-import { SystemsReportAction } from './systems-report.action';
+import { BcPartnersControllerService } from 'src/app/api/services';
+import { VendorsReportAction } from './vendors-report.action';
 import { BcActivityAnalysisSummaryResponse } from 'src/app/api/models/bc-activity-analysis-summary-response';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { UrlHelperService } from '@core/services/url-helper.service';
-import { PageBcActivitySystemsSummaryResponse } from 'src/app/api/models/page-bc-activity-systems-summary-response';
+import { PageBcPartnersSummaryResponse } from 'src/app/api/models';
 
-export interface SystemsReportStateModel {
-  page: PageBcActivitySystemsSummaryResponse;
+export interface VendorsReportStateModel {
+  page: PageBcPartnersSummaryResponse;
   loading: boolean;
   blocking: boolean;
   exporting?: boolean;
 }
 
-const SYSTEMS_REPORT_STATE_TOKEN = new StateToken<SystemsReportStateModel>(
-  'systems_report'
+const VENDORS_REPORT_STATE_TOKEN = new StateToken<VendorsReportStateModel>(
+  'vendors_report'
 );
 
-@State<SystemsReportStateModel>({ name: SYSTEMS_REPORT_STATE_TOKEN })
+@State<VendorsReportStateModel>({ name: VENDORS_REPORT_STATE_TOKEN })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
-export class SystemsReportState {
+export class VendorsReportState {
   /**
    *
    */
   constructor(
-    private activitySystemsController: BcActivitySystemsControllerService,
+    private partnersControllerService: BcPartnersControllerService,
     private langFacade: ILangFacade,
     private urlHelper: UrlHelperService
   ) {}
 
   /* ************************ SELECTORS ******************** */
-  @Selector([SystemsReportState])
+  @Selector([VendorsReportState])
   static page(
-    state: SystemsReportStateModel
+    state: VendorsReportStateModel
   ): BcActivityAnalysisSummaryResponse[] {
     return state?.page?.content;
   }
 
-  @Selector([SystemsReportState])
-  static totalRecords(state: SystemsReportStateModel) {
+  @Selector([VendorsReportState])
+  static totalRecords(state: VendorsReportStateModel) {
     return state?.page?.totalElements;
   }
 
-  @Selector([SystemsReportState])
-  static loading(state: SystemsReportStateModel) {
+  @Selector([VendorsReportState])
+  static loading(state: VendorsReportStateModel) {
     return state?.loading;
   }
 
-  @Selector([SystemsReportState])
-  static blocking(state: SystemsReportStateModel) {
+  @Selector([VendorsReportState])
+  static blocking(state: VendorsReportStateModel) {
     return state?.blocking;
   }
-  @Selector([SystemsReportState])
-  static exporting(state: SystemsReportStateModel) {
+  @Selector([VendorsReportState])
+  static exporting(state: VendorsReportStateModel) {
     return state?.exporting;
   }
 
   /* ********************** ACTIONS ************************* */
-  @Action(SystemsReportAction.LoadPage, { cancelUncompleted: true })
+  @Action(VendorsReportAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    { setState }: StateContext<SystemsReportStateModel>,
-    { payload }: SystemsReportAction.LoadPage
+    { setState }: StateContext<VendorsReportStateModel>,
+    { payload }: VendorsReportAction.LoadPage
   ) {
     setState(
-      patch<SystemsReportStateModel>({
+      patch<VendorsReportStateModel>({
         loading: true,
       })
     );
-    return this.activitySystemsController
-      .summary1({
+    return this.partnersControllerService
+      .summary({
         ...payload.filters,
         cycleId: payload.filters['cycleId'],
 
@@ -94,7 +94,7 @@ export class SystemsReportState {
       .pipe(
         tap((res) => {
           setState(
-            patch<SystemsReportStateModel>({
+            patch<VendorsReportStateModel>({
               page: res.result,
               loading: false,
             })
@@ -102,7 +102,7 @@ export class SystemsReportState {
         }),
         catchError(() => {
           setState(
-            patch<SystemsReportStateModel>({
+            patch<VendorsReportStateModel>({
               page: { content: [], totalElements: 0 },
             })
           );
@@ -110,7 +110,7 @@ export class SystemsReportState {
         }),
         finalize(() => {
           setState(
-            patch<SystemsReportStateModel>({
+            patch<VendorsReportStateModel>({
               loading: false,
             })
           );
@@ -118,18 +118,18 @@ export class SystemsReportState {
       );
   }
 
-  @Action(SystemsReportAction.Export, { cancelUncompleted: true })
+  @Action(VendorsReportAction.Export, { cancelUncompleted: true })
   export(
-    { setState }: StateContext<SystemsReportStateModel>,
-    { payload }: SystemsReportAction.Export
+    { setState }: StateContext<VendorsReportStateModel>,
+    { payload }: VendorsReportAction.Export
   ) {
     setState(
-      patch<SystemsReportStateModel>({
+      patch<VendorsReportStateModel>({
         exporting: true,
       })
     );
-    return this.activitySystemsController
-      .export9({
+    return this.partnersControllerService
+      .export7({
         as: payload.type,
         cycleId: payload.filters['cycleId'],
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
@@ -146,12 +146,12 @@ export class SystemsReportState {
           });
           this.urlHelper.downloadBlob(
             newBlob,
-            `Systems Report - ${new Date().toISOString().split('.')[0]}`
+            `Vendors Report - ${new Date().toISOString().split('.')[0]}`
           );
         }),
         finalize(() => {
           setState(
-            patch<SystemsReportStateModel>({
+            patch<VendorsReportStateModel>({
               exporting: false,
             })
           );

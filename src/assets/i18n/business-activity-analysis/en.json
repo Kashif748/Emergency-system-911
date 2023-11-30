@@ -129,11 +129,17 @@
     "SECTOR": "Sector",
     "CRITICAL": "Critical",
     "NOT_CRITICAL": "Not critical",
-    "ALL": "All"
+    "ALL": "All",
+    "VENDOR": "Vendor Name",
+    "CONTACT_PERSON": "Primary Contact",
+    "SUPPLIES": "Supplies / Services Provided",
+    "PRIMARY_CONTACT": "Primary Contact",
+    "SECONDARY_CONTACT": "Secondary Contact",
+    "VENDORS_REPORT": "Vendors Report"
   },
   "SYSTEMS_REPORT": {
+    "REPORT": "Systems Report",
     "CYCLE": "Analysis Cycle",
-
     "NAME": "System Name",
     "ACTIVITIES": "Activities",
     "CRITICALITY": "Criticality",
