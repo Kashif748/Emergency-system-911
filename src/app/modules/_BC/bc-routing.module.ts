@@ -120,6 +120,17 @@ const routes: Routes = [
             (m) => m.VendorsReportModule
           ),
       },
+      {
+        path: 'employees-report',
+        canLoad: [PrivilegeGuard],
+        data: {
+          permission: ['PRIV_VW_ACTIVITY_ANALYSIS'],
+        },
+        loadChildren: () =>
+          import('./reports/employees-report/employees-report.module').then(
+            (m) => m.EmployeesReportModule
+          ),
+      },
     ],
   },
 ];
