@@ -1,0 +1,244 @@
+<div class="container-fluid">
+  <app-breadcrumb></app-breadcrumb>
+  <div class="mx-4 my-10">
+    <div class="row" *ngIf="state$ | async as state">
+      <div class="col-12">
+        <div class="row">
+          <!--advance search-->
+          <div class="col-12 position-relative">
+            <p-fieldset
+              [toggleable]="true"
+              styleClass="px-3 py-2 search-section"
+              legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
+              [collapsed]="true"
+            >
+              <div class="p-fluid p-grid">
+                <!-- Org Hir -->
+
+                <div class="p-field p-col-4 p-md-2">
+                  <p-treeSelect
+                    [options]="orgHir"
+                    [filterBy]="'data.nameAr,data.nameEn,data.code'"
+                    selectionMode="single"
+                    [ngModel]="state.pageRequest.filters['orgHierarchyId']"
+                    (ngModelChange)="
+                      updateFilter({ orgHierarchyId: $event }, $event)
+                    "
+                    [loading]="loadingOrgHir$ | async"
+                    (onNodeExpand)="nodeExpand($event?.node)"
+                    placeholder="{{ 'ORG_ARTCH' | translate }}"
+                    appendTo="body"
+                    [showClear]="true"
+                  >
+                    <ng-template let-option let-placeholder pTemplate="header">
+                      <div class="w-100 p-2">
+                        <span class="p-input-icon-left w-100">
+                          <i class="pi pi-search"></i>
+                          <input
+                            (keyup)="filterOrgHir($event.target.value)"
+                            type="text"
+                            pInputText
+                            class="w-100"
+                          />
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template let-option let-placeholder pTemplate="value">
+                      {{
+                        option
+                          ? (option | translateObj : "label")
+                          : ("ORG_ARTCH" | translate)
+                      }}
+                    </ng-template>
+                  </p-treeSelect>
+                </div>
+                <!-- Cycle -->
+                <div class="p-field p-col-4 p-md-2">
+                  <p-dropdown
+                    [ngModel]="state.pageRequest.filters['cycleId']"
+                    (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
+                    [autoDisplayFirst]="false"
+                    [options]="cycles$ | async"
+                    [showClear]="false"
+                    dataKey="id"
+                    optionValue="id"
+                    placeholder="{{ 'SUMMARY.CYCLE' | translate }}"
+                  >
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj }}
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+
+                <div class="p-col p-d-flex">
+                  <div class="ml-dir-auto"></div>
+                  <div class="mx-1">
+                    <button
+                      pButton
+                      type="button"
+                      label="{{ 'ACTIONS.CLEAR' | translate }}"
+                      icon="pi pi-times"
+                      class="p-button-outlined"
+                      (click)="clear()"
+                    ></button>
+                  </div>
+                  <div class="mx-1">
+                    <button
+                      pButton
+                      label="{{ 'ACTIONS.SEARCH' | translate }}"
+                      icon="pi pi-search"
+                      (click)="search()"
+                    ></button>
+                  </div>
+                </div>
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="col-12 mt-3">
+            <p-toolbar>
+              <div class="p-toolbar-group-left">
+                <div class="p-1 w-100 w-md-200px">
+                  <p-multiSelect
+                    [options]="selectedColumns"
+                    defaultLabel="Select Columns"
+                    [ngModel]="state.columns"
+                    optionLabel="name"
+                    styleClass="w-100"
+                    [optionValue]="'code'"
+                    optionDisabled="disabled"
+                    (onChange)="changeColumns($event)"
+                  >
+                    <ng-template let-options pTemplate="selectedItems">
+                      <ng-container *ngIf="options?.length > 0">
+                        {{
+                          options?.length +
+                            " " +
+                            ("SHARED.SELCTED_ITEM" | translate)
+                        }}
+                      </ng-container>
+                      <ng-container *ngIf="!options || options.length === 0">
+                        {{ "SHARED.SELECT_SHOWING_FIELDS" | translate }}
+                      </ng-container>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      {{   option.name | translate }}
+                    </ng-template>
+                  </p-multiSelect>
+                </div>
+                <div class="p-1 w-100 w-md-225px">
+                  <div class="p-inputgroup">
+                    <p-dropdown
+                      [options]="sortableColumns"
+                      [autoDisplayFirst]="false"
+                      [showClear]="true"
+                      [ngModel]="state.pageRequest?.sortField"
+                      placeholder="{{
+                        'SHARED.SELECT_SORTING_FIELD' | translate
+                      }}"
+                      optionLabel="name"
+                      optionValue="code"
+                      styleClass="w-100 h-100"
+                      class="w-100 h-100"
+                      (onChange)="sort($event)"
+                    >
+                      <ng-template let-option pTemplate="selectedItem">
+                        {{   option.name | translate }}
+                      </ng-template>
+                      <ng-template let-option pTemplate="item">
+                        {{  option.name | translate }}
+                      </ng-template>
+                    </p-dropdown>
+                    <div class="p-inputgroup-addon p-0">
+                      <p-toggleButton
+                        class="w-100 h-100"
+                        [onIcon]="'pi pi-sort-amount-up'"
+                        [ngModel]="state?.pageRequest?.sortOrder === 'desc'"
+                        offIcon="pi pi-sort-amount-down-alt"
+                        iconPos="right"
+                        styleClass="w-100 h-100"
+                        (onChange)="order($event)"
+                      >
+                      </p-toggleButton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-toolbar-group-right">
+                <p-splitButton
+                  label="{{ 'ACTIONS.EXPORT' | translate }}"
+                  icon="pi pi-external-link"
+                  [model]="[
+                    {
+                      label: 'ACTIONS.EXPORT_TO_XLSX' | translate,
+                      icon: 'pi pi-file-excel',
+                      command: exportExcel
+                    },
+                    {
+                      label: 'ACTIONS.EXPORT_TO_PDF' | translate,
+                      icon: 'pi pi-file-pdf',
+                      command: exportPdf
+                    }
+                  ]"
+                  (onClick)="export('EXCEL')"
+                  [disabled]="exporting$ | async"
+                ></p-splitButton>
+              </div>
+            </p-toolbar>
+          </div>
+
+          <div class="col-12 mt-3">
+            <div class="w-100 d-flex flex-wrap mx-1 px-6">
+              <div class="my-auto">
+                <button
+                  pButton
+                  type="button"
+                  class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-help"
+                  [ngClass]="{
+                    active: state.pageRequest.filters['isCritical'] === true
+                  }"
+                  (click)="updateFilter({ isCritical: true }, $event); search()"
+                  label="{{ 'SUMMARY.CRITICAL' | translate }}"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  class="p-tag w-95px mx-2 px-2 py-1 text-center p-button-rounded p-button-secondary p-button-sm text-white"
+                  [ngClass]="{
+                    active: state.pageRequest.filters['isCritical'] === false
+                  }"
+                  (click)="
+                    updateFilter({ isCritical: false }, $event); search()
+                  "
+                  label="{{ 'SUMMARY.NOT_CRITICAL' | translate }}"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  class="p-tag w-95px mx-2 px-2 py-1 text-center p-button-rounded p-button-info p-button-sm text-white"
+                  [ngClass]="{
+                    active: state.pageRequest.filters['isCritical'] == null
+                  }"
+                  (click)="updateFilter({ isCritical: null }, $event); search()"
+                  label="{{ 'SUMMARY.ALL' | translate }}"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-employees-report-content
+          [loading]="loading$ | async"
+          [page]="page$ | async"
+          [columns]="state.columns"
+          [pageRequest]="state?.pageRequest"
+          [totalRecords]="totalRecords$ | async"
+          (onPageChange)="loadPage($event)"
+        ></app-employees-report-content>
+      </div>
+    </div>
+  </div>
+</div>
