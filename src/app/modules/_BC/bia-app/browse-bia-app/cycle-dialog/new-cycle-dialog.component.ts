@@ -97,7 +97,13 @@ export class NewCycleDialogComponent implements OnInit {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'new_cycle')
     );
-    this.store.dispatch(new BiaAction.LoadStatuses());
+
+    this.store.dispatch([
+      new BiaAction.LoadStatuses(),
+      new BrowseBCAction.LoadPage({
+        statusId: 3,
+      }),
+    ]);
   }
   toggleDialog() {
     this.store.dispatch(
@@ -167,15 +173,14 @@ export class NewCycleDialogComponent implements OnInit {
   }
 
   public loadPage(event?: LazyLoadEvent) {
-    new BrowseBiaAppAction.LoadCycles({}),
-      this.store.dispatch(
-        new BrowseBCAction.LoadPage({
-          pageRequest: {
-            first: event?.first,
-            rows: event?.rows,
-          },
-        })
-      );
+    this.store.dispatch([
+      new BrowseBiaAppAction.LoadCycles({
+        pageRequest: {
+          first: event?.first,
+          rows: event?.rows,
+        },
+      }),
+    ]);
   }
 
   onRowEditInit(cycle: BcCycles) {
