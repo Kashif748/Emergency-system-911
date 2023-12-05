@@ -148,6 +148,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(() => this.cycles$),
         takeUntil(this.destroy$),
+        take(1),
         filter((cycles) => !!cycles),
         tap((cycles) => {
           if (cycles.length > 0) {

@@ -77,6 +77,7 @@ export class BrowseBCState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        statusId:payload?.statusId
       })
     );
   }
