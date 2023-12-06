@@ -66,48 +66,16 @@
         </p-dropdown>
       </div>
     </div>
-    <!-- <p-toolbar>
-      <div class="p-toolbar-group-left">
-        <div class="p-dropdown-container d-flex">
-          <h4 class="card-title align-items-start m-2">
-            <span class="card-label font-weight-bolder">
-              {{'RESOURCES.DIVISION' | translate}}</span>
-          </h4>
 
-          <p-treeSelect [options]="orgHir" [filter]="true" [filterBy]="'data.nameAr,data.nameEn,data.code'"
-            selectionMode="single" [ngModel]="state.pageRequest.filters['orgHierarchyId']" (ngModelChange)="
-                      updateFilter({ orgHierarchyId: $event }, $event)
-                    " [loading]="loadingOrgHir$ | async" (onFilter)="filterOrgHir($event)"
-            (onNodeExpand)="nodeExpand($event?.node)" placeholder="{{ 'ORG_ARTCH' | translate }}" appendTo="body">
-            <ng-template let-option let-placeholder pTemplate="value">
-              {{
-              option
-              ? (option | translateObj : "label")
-              : ("ORG_ARTCH" | translate)
-              }}
-            </ng-template>
-          </p-treeSelect>
-        </div>
-      </div>
-      <div class="ml-dir-auto ">
-        <div class="p-dropdown-container d-flex">
-          <h4 class="card-title align-items-start m-2">
-            <span class="card-label font-weight-bolder">
-              {{'CYCLE_NAME' | translate}}</span>
-          </h4>
-          <p-dropdown [ngModel]="state?.pageRequest?.filters['cycleId']"
-            (ngModelChange)="updateFilter({ cycleId: $event }, $event)" [autoDisplayFirst]="false"
-            [options]="cycles$ | async" [showClear]="true" dataKey="id" placeholder="{{ 'CYCLE_NAME' | translate }}">
-            <ng-template let-item pTemplate="selectedItem">
-              {{ item | translateObj }}
-            </ng-template>
-            <ng-template let-item pTemplate="item">
-              {{ item | translateObj }}
-            </ng-template>
-          </p-dropdown>
-        </div>
-      </div>
-    </p-toolbar> -->
+  </div>
+  <div class="alert alert-custom alert-light-warning fade show mt-2 mb-3" role="alert" *ngIf="cycleStatus && closeAlertBox">
+    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+    <div class="alert-text" [innerHTML]="'WARNING_ERROR_MESSAGE' | translate"></div>
+    <div class="alert-close">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+        <span aria-hidden="true"><i class="ki ki-close"></i></span>
+      </button>
+    </div>
   </div>
   <div class="mt-4 col-12 position-relative">
     <p-fieldset
@@ -332,7 +300,7 @@
           pButton
           label="{{ 'RESOURCES.ADD_RESOURCE' | translate }}"
           icon="pi pi-plus"
-          [disabled]="alreadyFoundResource"
+          [disabled]="alreadyFoundResource || cycleStatus"
           (click)="createResource($event)"
         ></button>
         <p-confirmPopup></p-confirmPopup>
@@ -432,6 +400,7 @@
         <app-activities-dialog
           [orgHir]="orgHireracy"
           [selectedOrgHir]="state.pageRequest.filters['orgHierarchyId']"
+          [cycleStatus]="cycleStatus"
         ></app-activities-dialog>
       </div>
     </p-toolbar>

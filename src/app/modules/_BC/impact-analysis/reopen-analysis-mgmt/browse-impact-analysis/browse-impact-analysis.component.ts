@@ -47,6 +47,7 @@ import { ResourceAnalysisState } from '@core/states/impact-analysis/resource-ana
 import { BrowseResourceAnalysisAction } from '../../states/browse-resource-analysis.action';
 import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
 import { cloneDeep } from 'lodash';
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -111,6 +112,8 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   orgHierarchyId: number;
   cycleId: number;
   alreadyFoundResource: boolean = false;
+  cycleStatus: boolean = false;
+  closeAlertBox: boolean = true;
 
   public sortableColumns = [
     {
@@ -177,7 +180,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     private treeHelper: TreeHelper,
     private router: Router,
     private route: ActivatedRoute,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
   ) {
     this.lang.vm$.pipe().subscribe((res) => {
       if (res['key'] == 'ar') {
@@ -271,6 +274,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
               take(1),
               map((cycles) => cycles.find((cycle) => cycle.id == this.cycleId)),
               tap((foundCycle) => {
+                this.cycleStatus = foundCycle.status.id !== 3;
                 this.updateFilter({ cycleId: foundCycle });
               })
             )
@@ -484,6 +488,8 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));
 
     if (click) {
+      this.cycleStatus = filter['cycleId'] && filter['cycleId'].status.id !== 3;
+      this.closeAlertBox = this.cycleStatus;
       this.store.dispatch(new BrowseImpactAnalysisAction.UpdateRoute(filter));
       this.search();
       this.checkStatus(filter);
@@ -637,5 +643,8 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  closeAlert() {
+    this.closeAlertBox = false;
   }
 }
