@@ -114,6 +114,7 @@ export class NewIncidentsViewComponent
     { formControlName: AdvancedSearchFieldsEnum.REPORTING_VIA },
     { formControlName: AdvancedSearchFieldsEnum.RESPONSIBLE_ORG },
     { formControlName: AdvancedSearchFieldsEnum.STATUS },
+    { formControlName: AdvancedSearchFieldsEnum.TAG },
   ];
   dashboardData: IncidentStatistics = {
     incidents: null,
@@ -352,6 +353,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.RESPONSIBLE_ORG },
       { formControlName: AdvancedSearchFieldsEnum.LEADING_ORG },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
 
     this.isLoading$.next(true);
@@ -514,6 +516,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
       { formControlName: AdvancedSearchFieldsEnum.LEADING_ORG },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
     this.selectedDisplayedCols = [...this.incidentDisplayedColumns];
     if (this.mapView) {
@@ -592,6 +595,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
       { formControlName: AdvancedSearchFieldsEnum.LEADING_ORG },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
     this.selectedDisplayedCols = [...this.incidentDisplayedColumns];
     if (this.mapView) {
@@ -675,6 +679,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
     //this.selectedDisplayedCols = [...this.incidentDisplayedColumns];
 
@@ -1076,7 +1081,11 @@ export class NewIncidentsViewComponent
       children: this.commonData?.interimIncidentStatuses,
     };
 
-    this.advancedSearchDataList = [priorities, reportingVias, status];
+    const tags: DataOptions = {
+      formControlName: AdvancedSearchFieldsEnum.TAG,
+      children: this.commonData?.tags,
+    };
+    this.advancedSearchDataList = [priorities, reportingVias, status ,tags];
   }
 
   pageChanged($event: number) {
