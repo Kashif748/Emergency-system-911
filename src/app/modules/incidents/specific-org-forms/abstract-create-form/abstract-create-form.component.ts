@@ -110,6 +110,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   status: any[];
   centerCat: any;
   incSubCategoriesCenter: any[];
+  tags: any[];
   Porg: any[] = [];
   incidents: any;
   stas: any;
@@ -168,6 +169,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     // prevent load incident data if id related to inquiry component.
     this.lang = this.translationService.getSelectedLanguage();
     this.commonData = this.appCommonDataService.getCommonData();
+    this.tags = this.commonData?.tags;
     // get data from url
     this.incidentId = this.route.snapshot.params['id'];
     this.interimId = this.route.snapshot.params['interimId'];
@@ -211,6 +213,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
                   ),
                   reportedByMobile: rMobile,
                   locationUrl: this.incidents.location,
+                  tags :  data.result.tags.map(tagObj=> tagObj.tag.id)
                 });
 
                 if (this.incidents.org) {
@@ -284,6 +287,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
               this.inputLoadedDistricts();
               this.formGroup.patchValue({
                 getLocationFromReporter: data.result.getLocationFromReporter,
+                incidentTags :  data.result.incidentTags.map(tagObj=> tagObj.tag.id)
               });
               const obj = new Incident(data.result);
 
@@ -525,6 +529,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
       incidentDistrict: [null, [Validators.required]],
       incidentCommunity: [null],
       incidentCells: [null],
+      incidentTags: [],
       incidentHospitals: [null],
       primaryOrg: [null, [Validators.required]],
       incidentReasons: [null],
@@ -545,6 +550,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
       locationUrl: [''],
       locationInDegrees: [''],
       getLocationFromReporter: [false],
+
     });
     if (this.commonData.currentUserDetails.id) {
       this.formGroup.patchValue({
