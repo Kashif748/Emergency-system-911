@@ -19,6 +19,7 @@ import {
   BcCyclesControllerService,
 } from '../../../api/services';
 import { BcCycleStatus } from 'src/app/api/models';
+import {ILangFacade} from "@core/facades/lang.facade";
 
 export interface BiaStateModel {
   page: PageBcAnalysisByOrgHierarchyResponse;
@@ -40,7 +41,8 @@ export class BiaAppsState {
   constructor(
     private bia: BcAnalysisControllerService,
     private cycle: BcCyclesControllerService,
-    private cycleStatusService: BcCycleStatusControllerService
+    private cycleStatusService: BcCycleStatusControllerService,
+    private langFacade: ILangFacade,
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -117,7 +119,7 @@ export class BiaAppsState {
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort ? payload.sort : ['rowNumber', 'desc'],
+          sort: payload.sort ? payload.sort : this.langFacade.stateSanpshot.ActiveLang.key == 'ar' ? ['org_hir_name_ar', 'desc'] : ['org_hir_name_en', 'desc'],
         },
       })
       .pipe(
