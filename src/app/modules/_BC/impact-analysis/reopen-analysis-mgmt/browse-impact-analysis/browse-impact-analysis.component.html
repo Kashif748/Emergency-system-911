@@ -70,7 +70,7 @@
   </div>
   <div class="alert alert-custom alert-light-warning fade show mt-2 mb-3" role="alert" *ngIf="cycleStatus && closeAlertBox">
     <div class="alert-icon"><i class="flaticon-warning"></i></div>
-    <div class="alert-text"[innerHTML]="getTranslatedMessage('WARNING_ERROR_MESSAGE')"></div>
+    <div class="alert-text" [innerHTML]="'WARNING_ERROR_MESSAGE' | translate"></div>
     <div class="alert-close">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
         <span aria-hidden="true"><i class="ki ki-close"></i></span>

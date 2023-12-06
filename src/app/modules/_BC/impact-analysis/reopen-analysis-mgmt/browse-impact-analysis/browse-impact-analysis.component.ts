@@ -181,8 +181,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
-    private translateService: TranslateService,
-    private sanitizer: DomSanitizer
   ) {
     this.lang.vm$.pipe().subscribe((res) => {
       if (res['key'] == 'ar') {
@@ -648,9 +646,5 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   }
   closeAlert() {
     this.closeAlertBox = false;
-  }
-  getTranslatedMessage(key: string): SafeHtml {
-    const translation = this.translateService.instant(key);
-    return this.sanitizer.bypassSecurityTrustHtml(translation);
   }
 }
