@@ -283,21 +283,21 @@
                 *ngIf="columns?.includes('primary_contact')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.pcontactMobileNumber | translateObj }}
+                {{ item.pcontactMobileNumber }}
               </td>
               <!-- secondary_contact -->
               <td
                 *ngIf="columns?.includes('secondary_contact')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.scontactMobileNumber | translateObj }}
+                {{ item.scontactMobileNumber }}
               </td>
               <!-- criticality -->
               <td
                 *ngIf="columns?.includes('criticality')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.criticality | translateObj }}
+                {{ item.critical | translateObj }}
               </td>
             </tr>
           </ng-template>

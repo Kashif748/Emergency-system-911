@@ -302,28 +302,28 @@
                 *ngIf="columns?.includes('mobile')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.mobileNumber | translateObj }}
+                {{ item.mobileNumber }}
               </td>
               <!-- alternative -->
               <td
                 *ngIf="columns?.includes('alternative')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.alternateNumber | translateObj }}
+                {{ item.alternateNumber }}
               </td>
                <!-- email -->
                <td
                *ngIf="columns?.includes('email')"
                class="min-w-200px max-w-300px"
              >
-               {{ item.email | translateObj }}
+               {{ item.email }}
              </td>
               <!-- criticality -->
               <td
                 *ngIf="columns?.includes('criticality')"
                 class="min-w-200px max-w-300px"
               >
-                {{ item.criticality | translateObj }}
+                {{ item.critical | translateObj }}
               </td>
             </tr>
           </ng-template>
