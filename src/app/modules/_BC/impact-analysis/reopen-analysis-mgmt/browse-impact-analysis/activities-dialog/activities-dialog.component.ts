@@ -81,6 +81,8 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
   orgHir: TreeNode[];
   @Input()
   selectedOrgHir: BcOrgHierarchy;
+  @Input()
+  cycleStatus: boolean;
 
   page$: Observable<any[]>;
   @ViewChild(Dialog) dialog: Dialog;

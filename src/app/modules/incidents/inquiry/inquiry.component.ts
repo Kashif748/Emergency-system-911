@@ -42,6 +42,7 @@ export class InquiryComponent implements OnInit, OnChanges {
   incidentDurationInSeconds = 0;
   // Variables
   reportingVia: any[] = [];
+  tags: any[];
   commonData: AppCommonData;
   lang = 'en';
   isLoading = false;
@@ -83,6 +84,7 @@ export class InquiryComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.lang = this.translationService.getSelectedLanguage();
     this.commonData = this.appCommonService.getCommonData();
+    this.tags = this.commonData?.tags;
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 20, 0, 1);
     this.maxDate = new Date(currentYear + 1, 11, 31);
@@ -120,7 +122,7 @@ export class InquiryComponent implements OnInit, OnChanges {
   createForm() {
     this.formGroup = this.formBuilder.group({
       id: [0],
-      reportingVia: [4 , [Validators.required]],
+      reportingVia: [4, [Validators.required]],
       reporterName: [null, Validators.required],
       reportedByMobile: [''],
       reporterEmail: ['', [Validators.email]],
@@ -131,6 +133,7 @@ export class InquiryComponent implements OnInit, OnChanges {
       orgStructure: [null, Validators.required],
       user: [null, Validators.required],
       createdDate: [new Date(), Validators.required],
+      inquiryTags: [],
     });
     this.checkReportingViewValidation();
     if (this.commonData.currentUserDetails.id) {
@@ -228,6 +231,9 @@ export class InquiryComponent implements OnInit, OnChanges {
         }
         this.formGroup.patchValue({
           ...result,
+          incidentTags: result.result.incidentTags.map(
+            (tagObj) => tagObj.tag.id
+          ),
           createdDate: this.customDatePipe.transform(
             result['createdDate'],
             false
@@ -304,6 +310,16 @@ export class InquiryComponent implements OnInit, OnChanges {
       id: this.formGroup.value.reportingVia,
       label: 'ReportingVia',
     };
+    body.inquiryTags.forEach((t) => {
+      const tag = {
+        id: 0,
+        inquiry: {
+          id: this.inquiryId,
+        },
+
+        tag: { id: t },
+      };
+    });
     if (body.id == 0) {
       // remove id from sent request
       delete body.id;
