@@ -310,6 +310,7 @@ export class RemoteWorkDialogComponent implements OnInit, OnDestroy {
   clear() {
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
+    this.patchValue(this.defaultFormValue);
     this.cdr.detectChanges();
   }
 
