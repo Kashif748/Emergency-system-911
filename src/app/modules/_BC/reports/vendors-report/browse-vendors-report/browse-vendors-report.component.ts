@@ -198,6 +198,18 @@ export class BrowseVendorsReportComponent implements OnInit {
   clear() {
     this.store.dispatch([
       new BrowseVendorsReportAction.UpdateFilter({ clear: true }),
+    ]);
+    this.cycles$
+      .pipe(
+        filter((cycles) => cycles?.length > 0),
+        map((cycles) => cycles[0]),
+        tap((cycle) => {
+          this.updateFilter({ cycleId: cycle.id });
+          this.search();
+        })
+      )
+      .subscribe();
+    this.store.dispatch([
       new BrowseVendorsReportAction.LoadVendorsReport(),
     ]);
   }

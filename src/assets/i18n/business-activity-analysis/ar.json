@@ -132,8 +132,8 @@
     "VENDOR": "اسم المورد",
     "CONTACT_PERSON": "الموظف المخول بالتواصل",
     "SUPPLIES": "الخدمات / المواد",
-    "PRIMARY_CONTACT": "جهة الاتصال الاساسية",
-    "SECONDARY_CONTACT": "جهة الاتصال الثانوية",
+    "PRIMARY_CONTACT": "رقم جهة الاتصال الاساسية",
+    "SECONDARY_CONTACT": "رقم جهة الاتصال الثانوية",
     "VENDORS_REPORT": " تقرير مزودي الخدمة"
   },
   "SYSTEMS_REPORT": {
