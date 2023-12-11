@@ -205,7 +205,6 @@ export class BrowseVendorsReportComponent implements OnInit {
         map((cycles) => cycles[0]),
         tap((cycle) => {
           this.updateFilter({ cycleId: cycle.id });
-          this.search();
         })
       )
       .subscribe();
