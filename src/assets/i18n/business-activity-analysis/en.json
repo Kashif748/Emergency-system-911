@@ -134,8 +134,8 @@
     "VENDOR": "Vendor Name",
     "CONTACT_PERSON": "Primary Contact",
     "SUPPLIES": "Supplies / Services Provided",
-    "PRIMARY_CONTACT": "Primary Contact",
-    "SECONDARY_CONTACT": "Secondary Contact",
+    "PRIMARY_CONTACT": "Primary Contact Number",
+    "SECONDARY_CONTACT": "Secondary Contact Number",
     "VENDORS_REPORT": "Vendors Report"
   },
   "SYSTEMS_REPORT": {
