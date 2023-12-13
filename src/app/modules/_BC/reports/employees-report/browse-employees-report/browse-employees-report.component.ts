@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TreeHelper } from '@core/helpers/tree.helper';
 import { OrgDetailAction, OrgDetailState } from '@core/states';
@@ -9,7 +9,7 @@ import { Select, Store } from '@ngxs/store';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { LazyLoadEvent, TreeNode } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, auditTime, filter, map, tap } from 'rxjs/operators';
+import {takeUntil, auditTime, filter, map, tap, take} from 'rxjs/operators';
 import {
   BcCycles,
   BcOrgHierarchyProjection,
@@ -20,13 +20,14 @@ import {
   BrowseEmployeesReportState,
   BrowseEmployeesReportStateModel,
 } from '../states/browse-employees-report.state';
+import {BrowseOrganizationState} from "../../../organization-activities/states/browse-organization.state";
 
 @Component({
   selector: 'app-browse-employees-report',
   templateUrl: './browse-employees-report.component.html',
   styleUrls: ['./browse-employees-report.component.scss'],
 })
-export class BrowseEmployeesReportComponent implements OnInit {
+export class BrowseEmployeesReportComponent implements OnInit, OnDestroy {
   public page$: Observable<BcPartnersSummaryResponse[]>;
 
   @Select(EmployeesReportState.totalRecords)
@@ -41,6 +42,9 @@ export class BrowseEmployeesReportComponent implements OnInit {
   @Select(BrowseEmployeesReportState.state)
   public state$: Observable<BrowseEmployeesReportStateModel>;
 
+  @Select(BrowseEmployeesReportState.hasFilters)
+  public hasFilters$: Observable<boolean>;
+
   // filters
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -48,7 +52,7 @@ export class BrowseEmployeesReportComponent implements OnInit {
   public orgHir: TreeNode[] = [];
 
   @Select(ImpactAnalysisState.cycles)
-  public cycles$: Observable<BcCycles[]>;
+  public cyclesForEmployeeReport$: Observable<BcCycles[]>;
 
   private destroy$ = new Subject();
 
@@ -97,13 +101,6 @@ export class BrowseEmployeesReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.state$
-      .pipe(
-        tap((state) => {
-          console.log(state);
-        })
-      )
-      .subscribe();
     this.store.dispatch([
       new ImapactAnalysisAction.LoadCycles({
         page: 0,
@@ -112,8 +109,9 @@ export class BrowseEmployeesReportComponent implements OnInit {
       }),
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
     ]);
-    this.cycles$
+    this.cyclesForEmployeeReport$
       .pipe(
+        take(1),
         filter((cycles) => cycles?.length > 0),
         map((cycles) => cycles[0]),
         tap((cycle) => {
@@ -200,7 +198,7 @@ export class BrowseEmployeesReportComponent implements OnInit {
     this.store.dispatch([
       new BrowseEmployeesReportAction.UpdateFilter({ clear: true }),
     ]);
-    this.cycles$
+    this.cyclesForEmployeeReport$
       .pipe(
         filter((cycles) => cycles?.length > 0),
         map((cycles) => cycles[0]),

@@ -13,6 +13,8 @@ import { iif, patch } from '@ngxs/store/operators';
 import { ApiHelper } from '@core/helpers/api.helper';
 import { BrowseSystemsReportAction } from './browse-systems-report.action';
 import { SystemsReportAction } from '@core/states/bc-reports/systems-report/systems-report.action';
+import {BrowseEmployeesReportState, BrowseEmployeesReportStateModel} from "../../employees-report/states/browse-employees-report.state";
+import {TextUtils} from "@core/utils";
 
 export interface BrowseSystemsReportStateModel {
   pageRequest: PageRequestModel;
@@ -53,6 +55,16 @@ export class BrowseSystemsReportState {
     return state;
   }
 
+  @Selector([BrowseSystemsReportState])
+  static hasFilters(state: BrowseSystemsReportStateModel): boolean {
+    return (
+      Object.keys(state.pageRequest.filters).filter(
+        (k) =>
+          k !== 'type' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+      ).length > 0
+    );
+  }
   /* ********************** ACTIONS ************************* */
 
   @Action(BrowseSystemsReportAction.LoadSystemsReport)
