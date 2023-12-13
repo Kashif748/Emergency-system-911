@@ -86,12 +86,12 @@ export class BrowseEmployeesReportComponent implements OnInit {
         this.sortableColumns[0].code = 'sectorAr';
         this.sortableColumns[1].code = 'divisionAr';
         this.sortableColumns[2].code = 'sectionAr';
-        this.sortableColumns[3].code = 'employee.nameAr';
+        this.sortableColumns[3].code = 'employeeNameAr';
       } else {
         this.sortableColumns[0].code = 'sectorAr';
         this.sortableColumns[1].code = 'divisionAr';
         this.sortableColumns[2].code = 'sectionAr';
-        this.sortableColumns[3].code = 'employee.nameEn';
+        this.sortableColumns[3].code = 'employeeNameEn';
       }
     });
   }

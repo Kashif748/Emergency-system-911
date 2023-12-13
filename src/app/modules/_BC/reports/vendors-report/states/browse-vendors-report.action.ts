@@ -36,7 +36,7 @@ export namespace BrowseVendorsReportAction {
     constructor(public payload: { clear?: boolean; [key: string]: any }) {}
   }
   export class Sort {
-    static readonly type = '[BrowseAnalysisSummaryAction] Sort ';
+    static readonly type = '[BrowseVendorsReportAction] Sort ';
     /**
      *
      */
