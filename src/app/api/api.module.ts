@@ -32,6 +32,7 @@ import { PushNotificationActionControllerService } from './services/push-notific
 import { PriorityControllerService } from './services/priority-controller.service';
 import { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
 import { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
+import { OrgMapGisLayerControllerService } from './services/org-map-gis-layer-controller.service';
 import { OperationalReportControllerService } from './services/operational-report-controller.service';
 import { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
 import { NotificationControllerService } from './services/notification-controller.service';
@@ -182,6 +183,7 @@ import { BcActivityAnalysisWorkflowControllerService } from './services/bc-activ
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
+import { GroupContractControllerService } from './services/group-contract-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -219,6 +221,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     PriorityControllerService,
     ExternalPhonebookControllerService,
     OrgQuickLinkControllerService,
+    OrgMapGisLayerControllerService,
     OperationalReportControllerService,
     OperationalReportStatusControllerService,
     NotificationControllerService,
@@ -257,6 +260,7 @@ import { MigrationControllerService } from './services/migration-controller.serv
     GroupCentersControllerService,
     ManageGroupsService,
     GroupLocationGeometryControllerService,
+    GroupContractControllerService,
     SchedulerControllerService,
     AvayaControllerService,
     ExerciseControllerService,
@@ -385,7 +389,7 @@ export class ApiModule {
     }
   }
 
-  constructor( 
+  constructor(
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

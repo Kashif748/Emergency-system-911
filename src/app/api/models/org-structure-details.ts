@@ -26,6 +26,7 @@ export interface OrgStructureDetails {
   loginOtp?: boolean;
   loginUaePass?: boolean;
   managerId?: number;
+  mapGisLayer?: string;
   mobno?: string;
   municipalityCode?: string;
   nameAr: string;
