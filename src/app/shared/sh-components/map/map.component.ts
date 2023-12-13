@@ -2004,7 +2004,7 @@ export class MapComponent
       </div></div></div>`;
     }
     if (isLangAr) {
-      title = `      
+      title = `
 <div class="row directionAr">
        <a class="btn btn-primary custom-btnAr" href="${
          location.origin
@@ -2042,28 +2042,28 @@ export class MapComponent
         )}:</th>
         <td>{NAME}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.CREATION_DATE'
         )}:</th>
         <td>${create_Date}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.CLOSE_DATE'
         )}:</th>
         <td>${close_Date}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.PRIORITY'
         )}:</th>
         <td>{PRIORITY}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.MAIN_CATEGORY'

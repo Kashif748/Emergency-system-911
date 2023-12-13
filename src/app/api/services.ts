@@ -26,6 +26,7 @@ export { PushNotificationActionControllerService } from './services/push-notific
 export { PriorityControllerService } from './services/priority-controller.service';
 export { ExternalPhonebookControllerService } from './services/external-phonebook-controller.service';
 export { OrgQuickLinkControllerService } from './services/org-quick-link-controller.service';
+export { OrgMapGisLayerControllerService } from './services/org-map-gis-layer-controller.service';
 export { OperationalReportControllerService } from './services/operational-report-controller.service';
 export { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
 export { NotificationControllerService } from './services/notification-controller.service';

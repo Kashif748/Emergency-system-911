@@ -101,6 +101,7 @@ import { AnalysisSummaryState } from '@core/states/activity-analysis/analysis-su
 import { SystemsReportState } from '@core/states/bc-reports/systems-report/systems-report.state';
 import { VendorsReportState } from '@core/states/bc-reports/vendors-report/vendors-report.state';
 import { EmployeesReportState } from '@core/states/bc-reports/employees-report/employees-report.state';
+import { GisState } from '@core/states/gis/gis.state';
 // export function TranslateHttpLoaderFactory(http: HttpClient) {
 //   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 // }
@@ -158,6 +159,7 @@ export function getHighlightLanguages() {
         OrgState,
         TaskState,
         GroupState,
+        GisState,
         CenterState,
         IncidentLocInfoState,
         IncidentState,
