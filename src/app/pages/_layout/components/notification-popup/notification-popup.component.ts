@@ -41,9 +41,14 @@ export class NotificationPopupComponent implements OnInit {
   }
   markAsRead(id) {
     this.notificationService.markAsRead(id);
+    this.notifCount$.subscribe(count => {
+      if (count === 0) {
+        this.display = false;
+      }});
   }
   makeAllAsRead() {
     this.notificationService.markAllAsRead();
+    this.display = false;
   }
 
   redirect(item) {
@@ -56,8 +61,7 @@ export class NotificationPopupComponent implements OnInit {
       if (item.read == 'false' || item.read == false) {
         this.markAsRead(item.id);
       }
-      // this.myDrop.toggle();
-      this.router.navigate([item.routing]);
+      window.open(item.routing, '_blank');
     }
   }
   close() {
