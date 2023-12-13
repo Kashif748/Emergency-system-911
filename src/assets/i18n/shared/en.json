@@ -1392,6 +1392,7 @@
     },
     "NOTIFICATIONS": {
       "NOTIFICATIONS": "Notifications",
+      "IMP_NOTIFICATIONS": "Important Notifications",
       "NEW": "New"
     },
     "PRIVATE_POSITION": {
