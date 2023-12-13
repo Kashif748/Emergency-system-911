@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {NotifService} from "@core/api/services/notif.service";
 import {isEmpty} from 'lodash';
 import {Router} from "@angular/router";
@@ -11,11 +11,12 @@ import {TranslationService} from "../../../../modules/i18n/translation.service";
   templateUrl: './notification-popup.component.html',
   styleUrls: ['./notification-popup.component.scss']
 })
-export class NotificationPopupComponent implements OnInit {
+export class NotificationPopupComponent implements OnInit, OnDestroy {
   notification$: Observable<any>;
   lang = 'en';
   display;
   notifCount$: Observable<any>;
+  private destroy$ = new Subject();
   constructor(
     private translationService: TranslationService,
     private translate: TranslateService,
@@ -30,13 +31,8 @@ export class NotificationPopupComponent implements OnInit {
     this.notificationService.getNotifications().subscribe();
 
     this.notificationService.popup$.subscribe(popup => {
-      if (popup) {
-        this.display = true;
-      } else {
-        this.display = false;
-      }
+      this.display = !!popup;
     });
-
 
   }
   markAsRead(id) {
@@ -66,5 +62,10 @@ export class NotificationPopupComponent implements OnInit {
   }
   close() {
     this.display = false;
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+    this.destroy$.unsubscribe();
   }
 }
