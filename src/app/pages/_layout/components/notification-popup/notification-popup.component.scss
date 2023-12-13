@@ -1,0 +1,41 @@
+.notifier {
+  position: relative;
+  display: inline-block;
+}
+
+.bell {
+  font-size: 26px;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.bell:hover {
+  color: #ef476f;
+}
+
+.badge {
+  position: absolute !important;
+  top: -10px;
+  left: 20px;
+  padding: 0 5px;
+  font-size: 10px;
+  line-height: 22px;
+  height: 22px;
+  background: #ef476f;
+  color: #fff;
+  border-radius: 11px;
+  white-space: nowrap;
+}
+
+.notifier.green .badge {
+  background: #06d6a0;
+}
+
+.notifier.green .bell:hover {
+  color: #06d6a0;
+}
+
+.notifier.new .badge {
+  animation: pulse 2s ease-out;
+  animation-iteration-count: infinite;
+}
