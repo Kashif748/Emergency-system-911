@@ -1,6 +1,16 @@
-<p-dialog *ngIf="asDialog;else page" #dialog [visible]="opened$ | async" (visibleChange)="close()" [modal]="true" [style]="{width: '55vw'}"
-          [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
-          [resizable]="false">
+<p-dialog
+  *ngIf="asDialog; else page"
+  #dialog
+  [visible]="opened$ | async"
+  (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
   <ng-template pTemplate="header">
     <ng-template [ngTemplateOutlet]="header"></ng-template>
   </ng-template>
@@ -13,15 +23,13 @@
 <!-- as a page -->
 <ng-template #page>
   <div class="container-fluid h-100">
-
     <ng-template [ngTemplateOutlet]="header"></ng-template>
     <div class="row">
-      <div class="col-12" style="height: 76vh;">
+      <div class="col-12" style="height: 76vh">
         <ng-template [ngTemplateOutlet]="content"></ng-template>
       </div>
     </div>
-    <div class="row h-150px">
-    </div>
+    <div class="row h-150px"></div>
     <div class="row">
       <div class="col-12">
         <ng-template [ngTemplateOutlet]="footer"></ng-template>
@@ -31,106 +39,168 @@
 </ng-template>
 
 <!-- templates -->
-  <ng-template #header>
-    <h3>
-      <ng-container *ngIf="editMode && !(viewOnly$ | async)">
-        {{'GROUP.EDIT_GROUP' | translate}}
-
-      </ng-container>
-      <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
-        {{'GROUP.ADD' | translate}}
-      </ng-container>
-      <ng-container *ngIf="viewOnly$ | async">
-        {{'GROUP.VIEW_GROUP' | translate}}
-      </ng-container>
-    </h3>
-    <span class="flex-grow-1"></span>
-    <a *ngIf="asDialog" [routerLink]="['teams']" queryParamsHandling="merge" pRipple pButton icon="pi pi-link"
-       class="p-button-rounded p-button-text p-button-plain"></a>
-  </ng-template>
+<ng-template #header>
+  <h3>
+    <ng-container *ngIf="editMode && !(viewOnly$ | async)">
+      {{ "GROUP.EDIT_GROUP" | translate }}
+    </ng-container>
+    <ng-container *ngIf="!editMode && !(viewOnly$ | async)">
+      {{ "GROUP.ADD" | translate }}
+    </ng-container>
+    <ng-container *ngIf="viewOnly$ | async">
+      {{ "GROUP.VIEW_GROUP" | translate }}
+    </ng-container>
+  </h3>
+  <span class="flex-grow-1"></span>
+  <a
+    *ngIf="asDialog"
+    [routerLink]="['teams']"
+    queryParamsHandling="merge"
+    pRipple
+    pButton
+    icon="pi pi-link"
+    class="p-button-rounded p-button-text p-button-plain"
+  ></a>
+</ng-template>
 
 <ng-template #content>
-  <div class="w-100 pt-2" [ngStyle]="{'height': !asDialog ? '100%' : (dialog?.maximized ? '100%' :'65vh')}">
+  <div
+    class="w-100 pt-2"
+    [ngStyle]="{
+      height: !asDialog ? '100%' : dialog?.maximized ? '100%' : '65vh'
+    }"
+  >
     <p-blockUI [target]="tabv" [blocked]="blocking$ | async">
-      <p-progressSpinner ></p-progressSpinner>
+      <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
-    <p-tabView #tabv [(activeIndex)]="activeTab" (activeIndexChange)="tab($event)">
-
-      <p-tabPanel id="viewGroup" header="{{'GROUP.GROUP_INFO' | translate }}" *checkPrivileges="['PRIV_VW_MNG_GRP','PRIV_VW_GRP']">
+    <p-tabView
+      #tabv
+      [(activeIndex)]="activeTab"
+      (activeIndexChange)="tab($event)"
+    >
+      <p-tabPanel
+        id="viewGroup"
+        header="{{ 'GROUP.GROUP_INFO' | translate }}"
+        *checkPrivileges="['PRIV_VW_MNG_GRP', 'PRIV_VW_GRP']"
+      >
         <ng-template pTemplate="content">
-          <form [formGroup]="form" class="p-fluid p-grid mt-4" autocomplete="off">
-
+          <form
+            [formGroup]="form"
+            class="p-fluid p-grid mt-4"
+            autocomplete="off"
+          >
             <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-
-                <p-treeSelect [options]="orgsTree" display="comma" [filter]="true"
-                              [filterBy]="'data.nameAr,data.nameEn,data.code'" selectionMode="single" formControlName="orgStructure"
-                              appendTo="body" [disabled]="viewOnly$ | async">
+                <p-treeSelect
+                  [options]="orgsTree"
+                  display="comma"
+                  [filter]="true"
+                  [filterBy]="'data.nameAr,data.nameEn,data.code'"
+                  selectionMode="single"
+                  formControlName="orgStructure"
+                  appendTo="body"
+                  [disabled]="viewOnly$ | async"
+                >
                   <ng-template let-option pTemplate="value">
-                    {{ option | translateObj : 'label' }}
+                    {{ option | translateObj : "label" }}
                   </ng-template>
                 </p-treeSelect>
                 <label>
-                  {{'SHARED.ORG' | translate}}
+                  {{ "SHARED.ORG" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
               <ng-container
-                *ngIf="form.controls['orgStructure'].touched && !form.controls['orgStructure'].valid && form.controls['orgStructure'].dirty">
-                <p class="p-error mb-0" *ngIf="form.controls['orgStructure'].hasError('required')">
+                *ngIf="
+                  form.controls['orgStructure'].touched &&
+                  !form.controls['orgStructure'].valid &&
+                  form.controls['orgStructure'].dirty
+                "
+              >
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['orgStructure'].hasError('required')"
+                >
                   {{ "VALIDATION_MSG.REQUIRED" | translate }}
                 </p>
               </ng-container>
             </div>
 
             <div class="p-field p-col-12 p-md-6">
-
               <span class="p-float-label">
-                <p-dropdown [options]="users$ | async" [filter]="true" filterBy="nameAr,nameEn" #selectedManager
-                            (onShow)="loadUsers(selectedManager.filterValue, true)" [virtualScroll]="true"
-                            formControlName="userStructure" [autoDisplayFirst]="false" [showClear]="true" dataKey="id"
-                            display="chip" appendTo="body" (onFilter)="loadUsers($event?.filter)"
-                            optionDisabled="false">
-
+                <p-dropdown
+                  [options]="users$ | async"
+                  [filter]="true"
+                  filterBy="nameAr,nameEn"
+                  #selectedManager
+                  (onShow)="loadUsers(selectedManager.filterValue, true)"
+                  [virtualScroll]="true"
+                  formControlName="userStructure"
+                  [autoDisplayFirst]="false"
+                  [showClear]="true"
+                  dataKey="id"
+                  display="chip"
+                  appendTo="body"
+                  (onFilter)="loadUsers($event?.filter)"
+                  optionDisabled="false"
+                >
                   <ng-template let-option pTemplate="selectedItem">
-                      {{ option | translateObj : 'name'  }}
-                    </ng-template>
+                    {{ option | translateObj : "name" }}
+                  </ng-template>
                   <ng-template let-option pTemplate="item">
-                    <div *ngIf="lang == 'ar'" class="d-flex flex-column flex-grow-1 w-100"
-                         [class]="selectedManager.disabled ? 'text-muted' : 'text-dark'">
+                    <div
+                      *ngIf="lang == 'ar'"
+                      class="d-flex flex-column flex-grow-1 w-100"
+                      [class]="
+                        selectedManager.disabled ? 'text-muted' : 'text-dark'
+                      "
+                    >
                       <div class="d-flex w-100">
                         <span class="mb-1 text-size-sm">
                           {{ option.nameAr }}
                         </span>
                         <span class="spacer"></span>
-                        <span class="label label-inline label-outline-primary py-0">
+                        <span
+                          class="label label-inline label-outline-primary py-0"
+                        >
                           {{ option?.orgStructure?.nameAr }}
                         </span>
                       </div>
 
                       <span class="font-size-sm">
-                        <span *ngFor="let item of option.roles"
-                              class="label label-inline font-weight-lighter mr-1 mb-1 py-0">
+                        <span
+                          *ngFor="let item of option.roles"
+                          class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
+                        >
                           {{ item.nameAr }}
                         </span>
                       </span>
                     </div>
 
-                    <div *ngIf="lang == 'en'" class="d-flex flex-column flex-grow-1 w-100"
-                         [class]="selectedManager.disabled ? 'text-muted' : 'text-dark'">
+                    <div
+                      *ngIf="lang == 'en'"
+                      class="d-flex flex-column flex-grow-1 w-100"
+                      [class]="
+                        selectedManager.disabled ? 'text-muted' : 'text-dark'
+                      "
+                    >
                       <div class="d-flex w-100">
                         <span class="mb-1 text-size-sm">
                           {{ option.nameEn }}
                         </span>
                         <span class="spacer"></span>
-                        <span class="label label-inline label-outline-primary py-0">
+                        <span
+                          class="label label-inline label-outline-primary py-0"
+                        >
                           {{ option?.orgStructure?.nameEn }}
                         </span>
                       </div>
 
                       <span class="font-size-sm">
-                        <span *ngFor="let item of option.roles"
-                              class="label label-inline font-weight-lighter mr-1 mb-1 py-0">
+                        <span
+                          *ngFor="let item of option.roles"
+                          class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
+                        >
                           {{ item.nameEn }}
                         </span>
                       </span>
@@ -138,16 +208,23 @@
                   </ng-template>
                 </p-dropdown>
 
-
                 <label>
-                  {{'GROUP.selectManager' | translate}}
+                  {{ "GROUP.selectManager" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
 
               <ng-container
-                *ngIf="form.controls['userStructure'].touched && !form.controls['userStructure'].valid && form.controls['userStructure'].dirty">
-                <p class="p-error mb-0" *ngIf="form.controls['userStructure'].hasError('required')">
+                *ngIf="
+                  form.controls['userStructure'].touched &&
+                  !form.controls['userStructure'].valid &&
+                  form.controls['userStructure'].dirty
+                "
+              >
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['userStructure'].hasError('required')"
+                >
                   {{ "VALIDATION_MSG.REQUIRED" | translate }}
                 </p>
               </ng-container>
@@ -166,40 +243,63 @@
 
             <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <input type="text" formControlName="nameAr" pInputText >
+                <input type="text" formControlName="nameAr" pInputText />
                 <label>
-                  {{ 'GROUP.NAME_AR' | translate }}
+                  {{ "GROUP.NAME_AR" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
               <ng-container
-                *ngIf="form.controls['nameAr'].touched && !form.controls['nameAr'].valid && form.controls['nameAr'].dirty">
-                <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('required')">
-                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                *ngIf="
+                  form.controls['nameAr'].touched &&
+                  !form.controls['nameAr'].valid &&
+                  form.controls['nameAr'].dirty
+                "
+              >
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['nameAr'].hasError('required')"
+                >
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
                 </p>
 
-                <p class="p-error mb-0" *ngIf="form.controls['nameAr'].hasError('arabic')">
-                  {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['nameAr'].hasError('arabic')"
+                >
+                  {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
                 </p>
               </ng-container>
             </div>
 
-            <div class="p-field p-col-12 p-md-6" >
-              <span class="p-float-label" >
-                <input type="text" formControlName="nameEn" pInputText>
-                <label>{{ 'GROUP.NAME_EN' | translate }}
+            <div class="p-field p-col-12 p-md-6">
+              <span class="p-float-label">
+                <input type="text" formControlName="nameEn" pInputText />
+                <label
+                  >{{ "GROUP.NAME_EN" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
 
               <ng-container
-                *ngIf="form.controls['nameAr'].touched && !form.controls['nameEn'].valid && form.controls['nameEn'].dirty">
-                <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('required')">
-                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                *ngIf="
+                  form.controls['nameAr'].touched &&
+                  !form.controls['nameEn'].valid &&
+                  form.controls['nameEn'].dirty
+                "
+              >
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['nameEn'].hasError('required')"
+                >
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
                 </p>
 
-                <p class="p-error mb-0" *ngIf="form.controls['nameEn'].hasError('english')">
-                  {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['nameEn'].hasError('english')"
+                >
+                  {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
                 </p>
               </ng-container>
             </div>
@@ -213,19 +313,31 @@
                   rows="5"
                 ></textarea>
                 <!--<input type="text" formControlName="descAr" >-->
-                <label>{{ 'GROUP.DESCRIPTION_AR' | translate }}
+                <label
+                  >{{ "GROUP.DESCRIPTION_AR" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
 
               <ng-container
-                *ngIf="form.controls['descAr'].touched && !form.controls['descAr'].valid && form.controls['descAr'].dirty">
-                <p class="p-error mb-0" *ngIf="form.controls['descAr'].hasError('required')">
-                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                *ngIf="
+                  form.controls['descAr'].touched &&
+                  !form.controls['descAr'].valid &&
+                  form.controls['descAr'].dirty
+                "
+              >
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['descAr'].hasError('required')"
+                >
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
                 </p>
 
-                <p class="p-error mb-0" *ngIf="form.controls['descAr'].hasError('arabic')">
-                  {{ 'VALIDATION_MSG.MUST_BE_IN_ARABIC' | translate }}
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['descAr'].hasError('arabic')"
+                >
+                  {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
                 </p>
               </ng-container>
             </div>
@@ -239,19 +351,31 @@
                   rows="5"
                 ></textarea>
                 <!--                <input type="text" formControlName="descEn" pInputText>-->
-                <label>{{ 'GROUP.DESCRIPTION_EN' | translate }}
+                <label
+                  >{{ "GROUP.DESCRIPTION_EN" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
 
               <ng-container
-                *ngIf="form.controls['descEn'].touched && !form.controls['descEn'].valid && form.controls['descEn'].dirty">
-                <p class="p-error mb-0" *ngIf="form.controls['descEn'].hasError('required')">
-                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
+                *ngIf="
+                  form.controls['descEn'].touched &&
+                  !form.controls['descEn'].valid &&
+                  form.controls['descEn'].dirty
+                "
+              >
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['descEn'].hasError('required')"
+                >
+                  {{ "VALIDATION_MSG.REQUIRED" | translate }}
                 </p>
 
-                <p class="p-error mb-0" *ngIf="form.controls['descEn'].hasError('english')">
-                  {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
+                <p
+                  class="p-error mb-0"
+                  *ngIf="form.controls['descEn'].hasError('english')"
+                >
+                  {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
                 </p>
               </ng-container>
             </div>
@@ -265,8 +389,7 @@
                   rows="5"
                 ></textarea>
                 <!--                <input type="text" formControlName="descEn" pInputText>-->
-                <label>{{ 'GROUP.SHIFT_SCHEDULE' | translate }}
-                </label>
+                <label>{{ "GROUP.SHIFT_SCHEDULE" | translate }} </label>
               </span>
 
               <!--<ng-container
@@ -282,129 +405,201 @@
             </div>
 
             <div class="p-col-12">
-
               <p-divider align="center">
                 <div class="p-d-inline-flex p-ai-center">
-                  <div class="p-field p-col-12 p-md-12" *checkPrivileges="'PRIV_UP_GRP'">
-                    <p-toggleButton formControlName="isActive" onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
-                                    offLabel="{{ 'ACTIONS.INACTIVE' | translate }}" [onIcon]="'pi pi-check'" offIcon="pi pi-times"
-                                    iconPos="right"></p-toggleButton>
+                  <div
+                    class="p-field p-col-12 p-md-12"
+                    *checkPrivileges="'PRIV_UP_GRP'"
+                  >
+                    <p-toggleButton
+                      formControlName="isActive"
+                      onLabel="{{ 'ACTIONS.ACTIVE' | translate }}"
+                      offLabel="{{ 'ACTIONS.INACTIVE' | translate }}"
+                      [onIcon]="'pi pi-check'"
+                      offIcon="pi pi-times"
+                      iconPos="right"
+                    ></p-toggleButton>
                   </div>
                 </div>
               </p-divider>
             </div>
-
           </form>
         </ng-template>
       </p-tabPanel>
-      <p-tabPanel header="{{'SIDEBAR.USERS' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="['PRIV_VW_MNG_GRP','PRIV_VW_GRP']">
+      <p-tabPanel
+        header="{{ 'SIDEBAR.USERS' | translate }}"
+        [disabled]="!editMode || !isUserActive"
+        *checkPrivileges="['PRIV_VW_MNG_GRP', 'PRIV_VW_GRP']"
+      >
         <ng-template pTemplate="content">
-          <form [formGroup]="userGroupForm" class="p-fluid mt-4" autocomplete="off">
+          <form
+            [formGroup]="userGroupForm"
+            class="p-fluid mt-4"
+            autocomplete="off"
+          >
             <div class="p-field p-col-12 p-md-9" *ngIf="!(viewOnly$ | async)">
               <span class="p-float-label">
-                <p-multiSelect [options]="users$ | async" [filter]="true" filterBy="nameEn,nameAr" #users
-                               formControlName="usersIds" dataKey="id" display="chip" appendTo="body"
-                               optionDisabled="disabled" inputId="users" displaySelectedLabel = "true"
-                               (onFilter)="loadUsers($event?.filter)" [showToggleAll]="false"
-                                resetFilterOnHide="true" (onPanelHide)="loadUsers(users.filterValue, true)"
-                               (onShow)="loadUsers(users.filterValue, true)">
+                <p-multiSelect
+                  [options]="users$ | async"
+                  [filter]="true"
+                  filterBy="nameEn,nameAr"
+                  #users
+                  formControlName="usersIds"
+                  dataKey="id"
+                  display="chip"
+                  appendTo="body"
+                  optionDisabled="disabled"
+                  inputId="users"
+                  displaySelectedLabel="true"
+                  (onFilter)="loadUsers($event?.filter)"
+                  [showToggleAll]="false"
+                  resetFilterOnHide="true"
+                  (onPanelHide)="loadUsers(users.filterValue, true)"
+                  (onShow)="loadUsers(users.filterValue, true)"
+                >
                   <ng-template let-options pTemplate="selectedItems">
                     <ng-container *ngFor="let option of options">
                       <div class="p-multiselect-token">
                         <span class="p-multiselect-token-label">
-                          {{ option | translateObj : 'firstName' }} {{ option | translateObj : 'lastName' }}
+                          {{ option | translateObj : "firstName" }}
+                          {{ option | translateObj : "lastName" }}
                         </span>
-                        <span class="p-multiselect-token-icon pi pi-times-circle" (click)="removeChip(option, $event)"></span>
+                        <span
+                          class="p-multiselect-token-icon pi pi-times-circle"
+                          (click)="removeChip(option, $event)"
+                        ></span>
                       </div>
                     </ng-container>
                     <ng-container *ngIf="!options || options.length === 0">
-                      {{'GROUP.groupsMembers' | translate}}
+                      {{ "GROUP.groupsMembers" | translate }}
                     </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
-                    <div *ngIf="lang == 'ar'" class="d-flex flex-column flex-grow-1 w-100"
-                         [class]="option.type === 1 ? 'text-muted' : 'text-dark'">
+                    <div
+                      *ngIf="lang == 'ar'"
+                      class="d-flex flex-column flex-grow-1 w-100"
+                      [class]="option.type === 1 ? 'text-muted' : 'text-dark'"
+                    >
                       <div>
-                          <div class="d-flex w-100">
-                            <span class="mb-1 text-size-sm">
-                              {{ option.nameAr }}
-                            </span>
-                            <span class="spacer"></span>
-                            <span class="label label-inline label-outline-primary py-0">
-                              {{ option?.orgStructure?.nameAr }}
-                            </span>
-                          </div>
-
-                          <span class="font-size-sm">
-                            <span *ngFor="let item of option.roles"
-                                  class="label label-inline font-weight-lighter mr-1 mb-1 py-0">
-                              {{ item.nameAr }}
-                            </span>
+                        <div class="d-flex w-100">
+                          <span class="mb-1 text-size-sm">
+                            {{ option.nameAr }}
+                          </span>
+                          <span class="spacer"></span>
+                          <span
+                            class="label label-inline label-outline-primary py-0"
+                          >
+                            {{ option?.orgStructure?.nameAr }}
                           </span>
                         </div>
+
+                        <span class="font-size-sm">
+                          <span
+                            *ngFor="let item of option.roles"
+                            class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
+                          >
+                            {{ item.nameAr }}
+                          </span>
+                        </span>
+                      </div>
                     </div>
 
-                    <div *ngIf="lang == 'en'" class="d-flex flex-column flex-grow-1 w-100"
-                         [class]="option.type === 1 ? 'text-muted' : 'text-dark'">
-                      <div >
-                          <div class="d-flex w-100" [class]="option.type === 1 ? 'text-muted' : 'text-dark'">
-                            <span class="mb-1 text-size-sm">
-                              {{ option.nameEn }}
-                            </span>
-                            <span class="spacer"></span>
-                            <span class="label label-inline label-outline-primary py-0">
-                              {{ option?.orgStructure?.nameEn }}
-                            </span>
-                          </div>
-
-                          <span class="font-size-sm" [class]="option.type === 1 ? 'text-muted' : 'text-dark'">
-                            <span *ngFor="let item of option.roles"
-                                  class="label label-inline font-weight-lighter mr-1 mb-1 py-0">
-                              {{ item.nameEn }}
-                            </span>
+                    <div
+                      *ngIf="lang == 'en'"
+                      class="d-flex flex-column flex-grow-1 w-100"
+                      [class]="option.type === 1 ? 'text-muted' : 'text-dark'"
+                    >
+                      <div>
+                        <div
+                          class="d-flex w-100"
+                          [class]="
+                            option.type === 1 ? 'text-muted' : 'text-dark'
+                          "
+                        >
+                          <span class="mb-1 text-size-sm">
+                            {{ option.nameEn }}
+                          </span>
+                          <span class="spacer"></span>
+                          <span
+                            class="label label-inline label-outline-primary py-0"
+                          >
+                            {{ option?.orgStructure?.nameEn }}
                           </span>
                         </div>
+
+                        <span
+                          class="font-size-sm"
+                          [class]="
+                            option.type === 1 ? 'text-muted' : 'text-dark'
+                          "
+                        >
+                          <span
+                            *ngFor="let item of option.roles"
+                            class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
+                          >
+                            {{ item.nameEn }}
+                          </span>
+                        </span>
+                      </div>
                     </div>
                   </ng-template>
                 </p-multiSelect>
                 <label>
-                  {{'GROUP.groupsMembers' | translate}}
+                  {{ "GROUP.groupsMembers" | translate }}
                 </label>
               </span>
               <ng-container
-                *ngIf="userGroupForm.controls['usersIds'].touched && !userGroupForm.controls['usersIds'].valid && userGroupForm.controls['usersIds'].dirty">
-                <p class="p-error mb-0" *ngIf="userGroupForm.controls['usersIds'].hasError('required')">
+                *ngIf="
+                  userGroupForm.controls['usersIds'].touched &&
+                  !userGroupForm.controls['usersIds'].valid &&
+                  userGroupForm.controls['usersIds'].dirty
+                "
+              >
+                <p
+                  class="p-error mb-0"
+                  *ngIf="
+                    userGroupForm.controls['usersIds'].hasError('required')
+                  "
+                >
                   {{ "VALIDATION_MSG.REQUIRED" | translate }}
                 </p>
               </ng-container>
-
             </div>
             <div *ngIf="viewOnly$ | async">
               <div class="col-md-12">
                 <h3>{{ "GROUP.MEMBERS" | translate }}</h3>
-                  <div class="row">
-                    <div class="p-md-6 p-col-12 info-item p-1" *ngFor="let userObj of users">
-                      <!--begin::Item-->
-                      <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
-                        <!--begin::Symbol-->
-                        <div class="symbol symbol-40 mx-5">
-                                  <span class="">
-                                    <span
-                                      [inlineSVG]="'./assets/media/svg/icons/General/User.svg'"
-                                      class="svg-icon svg-icon-lg svg-icon-primary"
-                                    ></span>
-                                  </span></div>
+                <div class="row">
+                  <div
+                    class="p-md-6 p-col-12 info-item p-1"
+                    *ngFor="let userObj of users"
+                  >
+                    <!--begin::Item-->
+                    <div
+                      class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                    >
+                      <!--begin::Symbol-->
+                      <div class="symbol symbol-40 mx-5">
+                        <span class="">
+                          <span
+                            [inlineSVG]="
+                              './assets/media/svg/icons/General/User.svg'
+                            "
+                            class="svg-icon svg-icon-lg svg-icon-primary"
+                          ></span>
+                        </span>
+                      </div>
                       <!--end::Symbol-->
                       <!--begin::Text-->
                       <div class="d-flex flex-column font-weight-bold">
-                                  <span class="text-muted">
-                                    <p
-                                      class="text-dark-75 font-weight-bolder mb-1 font-size-lg">
-                                      {{ userObj?.user | translateObj: "firstName" }}
-                                      {{ "" }}
-                                      {{ userObj?.user | translateObj: "lastName" }}
-                                    </p>
-                                  </span>
+                        <span class="text-muted">
+                          <p
+                            class="text-dark-75 font-weight-bolder mb-1 font-size-lg"
+                          >
+                            {{ userObj?.user | translateObj : "firstName" }}
+                            {{ "" }}
+                            {{ userObj?.user | translateObj : "lastName" }}
+                          </p>
+                        </span>
                         <a class="mb-1 user-phone text-size-sm">
                           {{ userObj?.user?.mobile }}
                         </a>
@@ -413,14 +608,17 @@
                         </a>
                         <span
                           class="text-dark mb-1 text-size-md font-weight-500 label label-rounded label-inline"
-                          [ngClass]="{'label-success': userObj.type == userTypes.MANAGER,
-                                    'label-light-primary': userObj.type.MEMBER}">
-                                      {{
-                                        userObj.type == userTypes.MANAGER
-                                          ? ("SHARED.MANAGER" | translate)
-                                          : ("SHARED.MEMBER" | translate)
-                                      }}
-                                  </span>
+                          [ngClass]="{
+                            'label-success': userObj.type == userTypes.MANAGER,
+                            'label-light-primary': userObj.type.MEMBER
+                          }"
+                        >
+                          {{
+                            userObj.type == userTypes.MANAGER
+                              ? ("SHARED.MANAGER" | translate)
+                              : ("SHARED.MEMBER" | translate)
+                          }}
+                        </span>
                       </div>
                       <!--end::Text-->
                     </div>
@@ -432,19 +630,36 @@
         </ng-template>
       </p-tabPanel>
 
-
-      <p-tabPanel header="{{'GROUP.IncindentsCatTitle' | translate }}" [disabled]="!editMode || !isUserActive" *checkPrivileges="['PRIV_VW_MNG_GRP','PRIV_VW_GRP']">
+      <p-tabPanel
+        header="{{ 'GROUP.IncindentsCatTitle' | translate }}"
+        [disabled]="!editMode || !isUserActive"
+        *checkPrivileges="['PRIV_VW_MNG_GRP', 'PRIV_VW_GRP']"
+      >
         <ng-template pTemplate="content">
-          <div class="d-flex flex-column flex-grow-1 my-1" *ngIf="!(viewOnly$ | async)">
-            <p class="text-warning  font-size-lg mb-1">
-              {{ 'GROUP.WARNING_NOTE' | translate }}
+          <div
+            class="d-flex flex-column flex-grow-1 my-1"
+            *ngIf="!(viewOnly$ | async)"
+          >
+            <p class="text-warning font-size-lg mb-1">
+              {{ "GROUP.WARNING_NOTE" | translate }}
             </p>
           </div>
-          <form [formGroup]="incidentCategory" class="p-fluid p-grid mt-4" autocomplete="off">
+          <form
+            [formGroup]="incidentCategory"
+            class="p-fluid p-grid mt-4"
+            autocomplete="off"
+          >
             <div class="p-field p-col-12 p-md-12" *ngIf="!(viewOnly$ | async)">
               <span class="p-float-label">
-                <p-multiSelect [options]="incidentCategories$" [filter]="true" filterBy="name,roleName"
-                               formControlName="incidentCategory" dataKey="id" display="chip" appendTo="body">
+                <p-multiSelect
+                  [options]="incidentCategories$"
+                  [filter]="true"
+                  filterBy="name,roleName"
+                  formControlName="incidentCategory"
+                  dataKey="id"
+                  display="chip"
+                  appendTo="body"
+                >
                   <ng-template let-options pTemplate="selectedItems">
                     <ng-container *ngFor="let option of options">
                       <div class="p-multiselect-token">
@@ -454,7 +669,7 @@
                       </div>
                     </ng-container>
                     <ng-container *ngIf="!options || options.length === 0">
-                      {{'INCIDENTS.MAIN_CAT' | translate}}
+                      {{ "INCIDENTS.MAIN_CAT" | translate }}
                     </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
@@ -462,30 +677,48 @@
                   </ng-template>
                 </p-multiSelect>
                 <label>
-                  {{'INCIDENTS.MAIN_CAT' | translate}}
+                  {{ "INCIDENTS.MAIN_CAT" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
 
-                 <ng-container
-                   *ngIf="incidentCategory.controls['incidentCategory'].touched && !incidentCategory.controls['incidentCategory'].valid && incidentCategory.controls['incidentCategory'].dirty">
-                    <p class="p-error mb-0" *ngIf="incidentCategory.controls['incidentCategory'].hasError('required')">
-                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
-                    </p>
-                  </ng-container>
+                <ng-container
+                  *ngIf="
+                    incidentCategory.controls['incidentCategory'].touched &&
+                    !incidentCategory.controls['incidentCategory'].valid &&
+                    incidentCategory.controls['incidentCategory'].dirty
+                  "
+                >
+                  <p
+                    class="p-error mb-0"
+                    *ngIf="
+                      incidentCategory.controls['incidentCategory'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                  </p>
+                </ng-container>
               </span>
             </div>
 
             <div class="p-field p-col-12 p-md-12" *ngIf="viewOnly$ | async">
               <div class="col-md-12 col-sm-12 info-item p-3">
                 <!--begin::Item-->
-                <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
+                <div
+                  class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                >
                   <!--begin::Symbol-->
                   <div class="symbol symbol-40 mx-5">
-                      <span class="">
-                        <span [inlineSVG]="'./assets/media/svg/icons/Layout/Layout-grid.svg'"
-                              class="svg-icon svg-icon-lg svg-icon-primary">
-                        </span>
+                    <span class="">
+                      <span
+                        [inlineSVG]="
+                          './assets/media/svg/icons/Layout/Layout-grid.svg'
+                        "
+                        class="svg-icon svg-icon-lg svg-icon-primary"
+                      >
                       </span>
+                    </span>
                   </div>
                   <!--end::Symbol-->
 
@@ -495,252 +728,482 @@
                       {{ "GROUP.INCIDENT_CATEGORIES" | translate }}
                     </a>
                     <span *ngIf="selectedCat" class="text-muted">
-                        <div class="mr-4 alert alert-danger" style="display: inline-block"
-                             *ngFor="let categ of selectedCat">
-                          {{ categ | translateObj: "name"}}
-                        </div>
-                      </span>
+                      <div
+                        class="mr-4 alert alert-danger"
+                        style="display: inline-block"
+                        *ngFor="let categ of selectedCat"
+                      >
+                        {{ categ | translateObj : "name" }}
+                      </div>
+                    </span>
                     <span *ngIf="categories" class="text-muted">
-                        <div class="mr-4 alert alert-danger" style="display: inline-block"
-                             *ngFor="let categ of categories">
-                          {{ categ | translateObj: "name"}}
-                        </div>
-                      </span>
+                      <div
+                        class="mr-4 alert alert-danger"
+                        style="display: inline-block"
+                        *ngFor="let categ of categories"
+                      >
+                        {{ categ | translateObj : "name" }}
+                      </div>
+                    </span>
                   </div>
                   <!--end::Text-->
                 </div>
               </div>
             </div>
           </form>
-          <form [formGroup]="groupZoneIncidentCategory" class="p-fluid p-grid mt-4" autocomplete="off">
-            <div *ngIf="!(viewOnly$ | async)" class="p-md-8 p-fluid p-grid row">
-              <div class="p-col-12 p-md-7">
-                <label class="p-inputlabel mt-3">{{'GROUP.CHOOSE_APPROACH' | translate }}</label>
-              </div>
-              <div class="p-col-12 p-md-5">
-                <p-toggleButton formControlName="mapAndList" onLabel="{{ 'GROUP.MAP' | translate }}" offLabel="{{ 'GROUP.SELECT' | translate }}" [onIcon]="'pi pi-map-marker'"
-                                offIcon="pi pi-list"
-                                (onChange)="clearCenterDistrict()"
-                                iconPos="right"></p-toggleButton>
+          <form
+            [formGroup]="groupZoneIncidentCategory"
+            class="p-fluid"
+            autocomplete="off"
+          >
+            <div *ngIf="!(viewOnly$ | async)" class="col-12">
+              <label class="p-inputlabel mt-3 mb-1">{{
+                "GROUP.CHOOSE_APPROACH" | translate
+              }}</label>
+              <div class="p-col-12">
+                <p-selectButton
+                  formControlName="mapAndList"
+                  [options]="inputOptions"
+                  optionLabel="name"
+                  (onChange)="clearCenterDistrict()"
+                >
+                  <ng-template let-item>
+                    {{ "GROUP." + item | translate }}
+                  </ng-template>
+                </p-selectButton>
+
+                <!-- <p-toggleButton
+                  onLabel="{{ 'GROUP.MAP' | translate }}"
+                  offLabel="{{ 'GROUP.SELECT' | translate }}"
+                  [onIcon]="'pi pi-map-marker'"
+                  offIcon="pi pi-list"
+                  (onChange)="clearCenterDistrict()"
+                  iconPos="right"
+                ></p-toggleButton> -->
               </div>
             </div>
 
-            <p-divider align="center" class="p-md-12 p-col-12"></p-divider>
-
-            <div class="p-field p-col-12 p-md-12" *ngIf="!checkMap && viewOnly$ | async">
-              <div class="col-md-12 col-sm-12 info-item p-3">
-                <!--begin::Item-->
-                <div class="d-flex w-100 h-100 align-items-center border rounded mb-10">
-                  <!--begin::Symbol-->
-                  <div class="symbol symbol-40 mx-5">
-                      <span class="">
-                        <span [inlineSVG]="'./assets/media/svg/icons/Map/Marker1.svg'"
-                              class="svg-icon svg-icon-lg svg-icon-primary">
-                        </span>
-                      </span>
-                  </div>
-                  <!--end::Symbol-->
-
-                  <!--begin::Text-->
-                  <div class="d-flex flex-column font-weight-bold">
-                    <a class="text-dark mb-1 text-size-sm">
-                      {{ "GROUP.INCIDENT_LOCATION" | translate }}
-                    </a>
-                    <span *ngIf="selectedCenter" class="text-muted">
-                          <span *ngFor="let center of selectedCenter">
-                            <div class="mr-4 alert alert-primary" style="display: inline-block">
-                                {{ center.center | translateObj: "name" }}
-                            </div>
-                            <div *ngFor="let zone of selectedZonesEdit" [ngClass]="zone.center === center.center.id ? 'mr-4 alert alert-primary': ''" style="display: inline-block; color: #3699ff !important; background-color: #d7ebff !important; border: none">
-                              <div *ngIf= "zone.center === center.center.id" >
-                                {{ zone | translateObj: "name" }}
-                              </div>
-                            </div><br/>
+            <ng-container
+              [ngSwitch]="groupZoneIncidentCategory.get('mapAndList').value"
+            >
+              <!--  SELECT DEOPDOWNS -->
+              <div *ngSwitchCase="'SELECT'">
+                <div
+                  class="p-field p-col-12 p-md-12"
+                  *ngIf="!checkMap && viewOnly$ | async"
+                >
+                  <div class="col-md-12 col-sm-12 info-item p-3">
+                    <!--begin::Item-->
+                    <div
+                      class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                    >
+                      <!--begin::Symbol-->
+                      <div class="symbol symbol-40 mx-5">
+                        <span class="">
+                          <span
+                            [inlineSVG]="
+                              './assets/media/svg/icons/Map/Marker1.svg'
+                            "
+                            class="svg-icon svg-icon-lg svg-icon-primary"
+                          >
                           </span>
                         </span>
-                  </div>
-                  <!--end::Text-->
-                </div>
-              </div>
-            </div>
+                      </div>
+                      <!--end::Symbol-->
 
-            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap && !(viewOnly$ | async)">
-              <span class="p-float-label">
-                <p-multiSelect [options]="areaItems" [filter]="true" filterBy="nameEn,nameAr"
-                               formControlName="centerList" dataKey="center.id" display="chip" tabindex="0" appendTo="body"
-                               (onChange)="loadDistrictList($event)">
-                  <ng-template let-options pTemplate="selectedItems">
-                    <ng-container *ngFor="let option of options">
-                      <div class="p-multiselect-token">
-                        <span class="p-multiselect-token-label">
-                          {{ option.center | translateObj : 'name'}}
+                      <!--begin::Text-->
+                      <div class="d-flex flex-column font-weight-bold">
+                        <a class="text-dark mb-1 text-size-sm">
+                          {{ "GROUP.INCIDENT_LOCATION" | translate }}
+                        </a>
+                        <span *ngIf="selectedCenter" class="text-muted">
+                          <span *ngFor="let center of selectedCenter">
+                            <div
+                              class="mr-4 alert alert-primary"
+                              style="display: inline-block"
+                            >
+                              {{ center.center | translateObj : "name" }}
+                            </div>
+                            <div
+                              *ngFor="let zone of selectedZonesEdit"
+                              [ngClass]="
+                                zone.center === center.center.id
+                                  ? 'mr-4 alert alert-primary'
+                                  : ''
+                              "
+                              style="
+                                display: inline-block;
+                                color: #3699ff !important;
+                                background-color: #d7ebff !important;
+                                border: none;
+                              "
+                            >
+                              <div *ngIf="zone.center === center.center.id">
+                                {{ zone | translateObj : "name" }}
+                              </div>
+                            </div>
+                            <br />
+                          </span>
                         </span>
                       </div>
-                    </ng-container>
-                    <ng-container *ngIf="!options || options.length === 0">
-                      {{'INCIDENTS.CENTER' | translate}}
-                    </ng-container>
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option.center | translateObj : 'name' }}
-                  </ng-template>
-                </p-multiSelect>
-                <label>
-                  {{'INCIDENTS.CENTER' | translate}}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-
-                 <ng-container
-                   *ngIf="groupZoneIncidentCategory.controls['centerList'].touched && !groupZoneIncidentCategory.controls['centerList'].valid && groupZoneIncidentCategory.controls['centerList'].dirty">
-                    <p class="p-error mb-0" *ngIf="groupZoneIncidentCategory.controls['centerList'].hasError('required')">
-                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
-                    </p>
-                  </ng-container>
-              </span>
-            </div>
-
-            <div class="p-field p-col-12 p-md-6" *ngIf="!checkMap && !(viewOnly$ | async)">
-              <span class="p-float-label">
-                <p-multiSelect [options]="district" [filter]="true" filterBy="nameEn,nameAr"
-                               formControlName="zoneId"  display="chip" appendTo="body"
-                               [group]="true" defaultLabel="" scrollHeight="250px" display="chip"
-                               (onChange)="onDistrictSelect($event)">
-
-                  <ng-template let-group pTemplate="group">
-                    <div class="flex align-items-center">
-                      <span>{{group | translateObj : 'name'}}</span>
+                      <!--end::Text-->
                     </div>
-                  </ng-template>
-
-                <ng-template let-selected pTemplate="selectedItems">
-                  <ng-container *ngFor="let option of selected">
-                      <div class="p-multiselect-token">
-                        <span class="p-multiselect-token-label">
-                          {{option | translateObj : 'name'}}
-                        </span>
-                      </div>
-                    </ng-container>
-                  <ng-container *ngIf="!selected || selected.length === 0">
-                      {{'INCIDENTS.DISTRICT' | translate}}
-                    </ng-container>
-                  </ng-template>
-
-
-                 <ng-template let-item pTemplate="items">
-                     {{item | translateObj : 'name'}}
-                  </ng-template>
-
-                </p-multiSelect>
-                <label>
-                  {{'INCIDENTS.DISTRICT' | translate}}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-
-                 <ng-container
-                   *ngIf="groupZoneIncidentCategory.controls['zoneId'].touched && !groupZoneIncidentCategory.controls['zoneId'].valid && groupZoneIncidentCategory.controls['zoneId'].dirty">
-                    <p class="p-error mb-0" *ngIf="groupZoneIncidentCategory.controls['zoneId'].hasError('required')">
-                      {{ "VALIDATION_MSG.REQUIRED" | translate }}
-                    </p>
-                  </ng-container>
-              </span>
-            </div>
-
-            <div class="p-field p-col-12 p-md-12"  *ngIf="checkMap && !(viewOnly$ | async)">
-              <form #locationForm="ngForm" class="form-group">
-                <div class="m-4 d-flex  align-items-center justify-content-between" *ngFor="let location of namedLocations; let i = index">
-                  <input *ngIf="location.isEditing" ngModel type="text" #name="ngModel" name="name" class="form-control" [(ngModel)]="location.name" />
-                  <span *ngIf="!location.isEditing">{{ location.name }}</span>
-                  <div class="d-flex">
-                    <button *ngIf="location.geometry == null" (click)="openLocationDialoug(i, null)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-map-marker p-mx-2"></i></button>
-                    <button *ngIf="location.geometry !== null" (click)="viewLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-eye p-mx-2"></i></button>
-                    <button *ngIf="location.isEditing" (click)="save(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"><i class="pi pi-save p-mx-2"></i></button>
-                    <ng-container *checkPrivileges="['PRIV_ED_LOC_INC_GRP']" >
-                      <button *ngIf="location.geometry !== null" (click)="updateLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-warning btn btn-sm" ><i class="pi pi-pencil p-mx-2"></i></button>
-                    </ng-container>
-                    <button [disabled]="namedLocations.length == 1" [ngClass]="{'disabled':namedLocations.length == 1}" (click)="removeLocation(i)" class=" text-center d-flex justify-content-center align-items-center mx-1 btn-danger btn btn-sm" ><i class="pi pi-trash p-mx-2"></i></button>
                   </div>
-
                 </div>
-              </form>
-              <div class="ml-dir-auto d-flex p-md-offset-9 p-md-2">
-                <button *checkPrivileges="['PRIV_ED_LOC_INC_GRP']" pButton type="button" label="{{'ACTIONS.ADD' | translate}}" icon="pi pi-plus"
-                        [loading]="blocking$ | async" (click)="addNewLocation()"></button>
+
+                <div
+                  class="p-field p-col-12 p-md-6"
+                  *ngIf="!checkMap && !(viewOnly$ | async)"
+                >
+                  <span class="p-float-label">
+                    <p-multiSelect
+                      [options]="areaItems"
+                      [filter]="true"
+                      filterBy="nameEn,nameAr"
+                      formControlName="centerList"
+                      dataKey="center.id"
+                      display="chip"
+                      tabindex="0"
+                      appendTo="body"
+                      (onChange)="loadDistrictList($event)"
+                    >
+                      <ng-template let-options pTemplate="selectedItems">
+                        <ng-container *ngFor="let option of options">
+                          <div class="p-multiselect-token">
+                            <span class="p-multiselect-token-label">
+                              {{ option.center | translateObj : "name" }}
+                            </span>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="!options || options.length === 0">
+                          {{ "INCIDENTS.CENTER" | translate }}
+                        </ng-container>
+                      </ng-template>
+                      <ng-template let-option pTemplate="item">
+                        {{ option.center | translateObj : "name" }}
+                      </ng-template>
+                    </p-multiSelect>
+                    <label>
+                      {{ "INCIDENTS.CENTER" | translate }}
+                      <strong class="required-asterisk"> * </strong>
+                    </label>
+
+                    <ng-container
+                      *ngIf="
+                        groupZoneIncidentCategory.controls['centerList']
+                          .touched &&
+                        !groupZoneIncidentCategory.controls['centerList']
+                          .valid &&
+                        groupZoneIncidentCategory.controls['centerList'].dirty
+                      "
+                    >
+                      <p
+                        class="p-error mb-0"
+                        *ngIf="
+                          groupZoneIncidentCategory.controls[
+                            'centerList'
+                          ].hasError('required')
+                        "
+                      >
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </p>
+                    </ng-container>
+                  </span>
+                </div>
+
+                <div
+                  class="p-field p-col-12 p-md-6"
+                  *ngIf="!checkMap && !(viewOnly$ | async)"
+                >
+                  <span class="p-float-label">
+                    <p-multiSelect
+                      [options]="district"
+                      [filter]="true"
+                      filterBy="nameEn,nameAr"
+                      formControlName="zoneId"
+                      display="chip"
+                      appendTo="body"
+                      [group]="true"
+                      defaultLabel=""
+                      scrollHeight="250px"
+                      display="chip"
+                      (onChange)="onDistrictSelect($event)"
+                    >
+                      <ng-template let-group pTemplate="group">
+                        <div class="flex align-items-center">
+                          <span>{{ group | translateObj : "name" }}</span>
+                        </div>
+                      </ng-template>
+
+                      <ng-template let-selected pTemplate="selectedItems">
+                        <ng-container *ngFor="let option of selected">
+                          <div class="p-multiselect-token">
+                            <span class="p-multiselect-token-label">
+                              {{ option | translateObj : "name" }}
+                            </span>
+                          </div>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="!selected || selected.length === 0"
+                        >
+                          {{ "INCIDENTS.DISTRICT" | translate }}
+                        </ng-container>
+                      </ng-template>
+
+                      <ng-template let-item pTemplate="items">
+                        {{ item | translateObj : "name" }}
+                      </ng-template>
+                    </p-multiSelect>
+                    <label>
+                      {{ "INCIDENTS.DISTRICT" | translate }}
+                      <strong class="required-asterisk"> * </strong>
+                    </label>
+
+                    <ng-container
+                      *ngIf="
+                        groupZoneIncidentCategory.controls['zoneId'].touched &&
+                        !groupZoneIncidentCategory.controls['zoneId'].valid &&
+                        groupZoneIncidentCategory.controls['zoneId'].dirty
+                      "
+                    >
+                      <p
+                        class="p-error mb-0"
+                        *ngIf="
+                          groupZoneIncidentCategory.controls['zoneId'].hasError(
+                            'required'
+                          )
+                        "
+                      >
+                        {{ "VALIDATION_MSG.REQUIRED" | translate }}
+                      </p>
+                    </ng-container>
+                  </span>
+                </div>
               </div>
-            </div>
+              <!--  MAP SEARCH- -->
+              <div *ngSwitchCase="'MAP'">
+                <ng-template [ngTemplateOutlet]="mapInput"></ng-template>
+              </div>
+              <!-- Contract NO - GIS SEARCH- -->
+              <div *ngSwitchDefault>
+                <app-group-gis
+                  (onSelectContructor)="selectContructor($event)"
+                  (onShowMap)="showContructorMap($event)"
+                ></app-group-gis>
+              </div>
+            </ng-container>
           </form>
-
-          <!-- map-->
-          <div *ngIf="checkMap && (viewOnly$ | async)">
-            <a class="text-dark mb-1 text-size-sm">
-              {{ "GROUP.INCIDENT_LOCATION" | translate }}
-            </a>
-          </div>
-          <div class="row" style="height: 40rem" *ngIf="checkMap && (viewOnly$ | async) && namedLocations.length > 0">
-            <div class="col-12">
-              <ng-container #mapContainer></ng-container>
-            </div>
-          </div>
-
         </ng-template>
       </p-tabPanel>
     </p-tabView>
   </div>
 </ng-template>
 
+<ng-template #footer>
+  <div class="p-col p-d-flex">
+    <button
+      *ngIf="!asDialog"
+      pButton
+      icon="pi pi-sign-out"
+      (click)="close()"
+      label="{{ 'ACTIONS.BACK' | translate }}"
+    ></button>
+    <button
+      *ngIf="asDialog"
+      pButton
+      icon="pi pi-times"
+      (click)="close()"
+      label="{{ 'ACTIONS.CLOSE' | translate }}"
+      class="p-button-outlined"
+    ></button>
 
-  <ng-template #footer>
-    <div class="p-col p-d-flex">
-      <button *ngIf="asDialog" pButton icon="pi pi-times" (click)="close()" label="{{'ACTIONS.CLOSE' | translate }}"></button>
-      <button *ngIf="!asDialog" pButton icon="pi pi-sign-out" (click)="close()" label="{{'ACTIONS.BACK' | translate }}"></button>
-      <div class="ml-dir-auto"></div>
-      <ng-container *ngIf="!(viewOnly$ | async)">
-        <div class="mx-1" *ngIf="loggedinUserId == _groupId">
-          <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-replay"
-                  class="p-button-outlined" [loading]="blocking$ | async" (click)="clear()"></button>
+    <div class="ml-dir-auto"></div>
+    <ng-container *ngIf="!(viewOnly$ | async)">
+      <div class="mx-1" *ngIf="loggedinUserId == _groupId">
+        <button
+          pButton
+          type="button"
+          label="{{ 'ACTIONS.CLEAR' | translate }}"
+          icon="pi pi-replay"
+          class="p-button-outlined"
+          [loading]="blocking$ | async"
+          (click)="clear()"
+        ></button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="viewOnly$ | async">
+      <div *ngIf="activeTab === 0">
+        <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP']">
+          <button
+            pButton
+            type="button"
+            label="{{ 'ACTIONS.EDIT' | translate }}"
+            icon="pi pi-pencil"
+            (click)="enableForm()"
+            class="p-button-outlined"
+            [loading]="blocking$ | async"
+            [routerLink]="['.']"
+            [queryParams]="{ _mode: 'edit' }"
+            queryParamsHandling="merge"
+          ></button>
         </div>
-      </ng-container>
-      <ng-container *ngIf="(viewOnly$ | async)">
-        <div *ngIf="activeTab === 0">
-          <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP']">
-            <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
-                    (click)="enableForm()" class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
-                    queryParamsHandling="merge"></button>
-          </div>
+      </div>
+      <div *ngIf="activeTab === 1">
+        <div class="mx-1" *checkPrivileges="['PRIV_ED_USR_GRP']">
+          <button
+            pButton
+            type="button"
+            label="{{ 'ACTIONS.EDIT' | translate }}"
+            icon="pi pi-pencil"
+            class="p-button-outlined"
+            [loading]="blocking$ | async"
+            [routerLink]="['.']"
+            [queryParams]="{ _mode: 'edit' }"
+            queryParamsHandling="merge"
+          ></button>
         </div>
-        <div *ngIf="activeTab ===1">
-          <div class="mx-1" *checkPrivileges="['PRIV_ED_USR_GRP']">
-            <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
-                    class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
-                    queryParamsHandling="merge"></button>
-          </div>
+      </div>
+      <div *ngIf="activeTab === 2">
+        <div class="mx-1" *checkPrivileges="['PRIV_ED_LOC_INC_GRP']">
+          <button
+            pButton
+            type="button"
+            label="{{ 'ACTIONS.EDIT' | translate }}"
+            icon="pi pi-pencil"
+            class="p-button-outlined"
+            [loading]="blocking$ | async"
+            [routerLink]="['.']"
+            [queryParams]="{ _mode: 'edit' }"
+            queryParamsHandling="merge"
+          ></button>
         </div>
-        <div *ngIf="activeTab === 2">
-          <div class="mx-1" *checkPrivileges="['PRIV_ED_LOC_INC_GRP']">
-            <button pButton type="button" label="{{'ACTIONS.EDIT' | translate }}" icon="pi pi-pencil"
-                    class="p-button-outlined" [loading]="blocking$ | async" [routerLink]="['.']" [queryParams]="{ _mode: 'edit' }"
-                    queryParamsHandling="merge"></button>
-          </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!(viewOnly$ | async)">
+      <div *ngIf="activeTab === 0">
+        <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP']">
+          <button
+            pButton
+            label="{{ 'ACTIONS.SAVE' | translate }}"
+            icon="pi pi-save"
+            [loading]="blocking$ | async"
+            (click)="submit()"
+          ></button>
         </div>
-      </ng-container>
-      <ng-container *ngIf="!(viewOnly$ | async)">
-        <div *ngIf="activeTab === 0">
-          <div class="mx-1" *checkPrivileges="['PRIV_UP_GRP']">
-            <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-                    (click)="submit()"></button>
-          </div>
+      </div>
+      <div *ngIf="activeTab === 1">
+        <div class="mx-1" *checkPrivileges="['PRIV_ED_USR_GRP']">
+          <button
+            pButton
+            label="{{ 'ACTIONS.SAVE' | translate }}"
+            icon="pi pi-save"
+            [loading]="blocking$ | async"
+            (click)="submit()"
+          ></button>
         </div>
-        <div *ngIf="activeTab === 1">
-          <div class="mx-1" *checkPrivileges="['PRIV_ED_USR_GRP']">
-            <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-                    (click)="submit()"></button>
-          </div>
+      </div>
+      <div *ngIf="activeTab === 2">
+        <div class="mx-1" *checkPrivileges="['PRIV_ED_LOC_INC_GRP']">
+          <button
+            pButton
+            label="{{ 'ACTIONS.SAVE' | translate }}"
+            icon="pi pi-save"
+            [loading]="blocking$ | async"
+            (click)="submit()"
+          ></button>
         </div>
-        <div *ngIf="activeTab === 2">
-          <div class="mx-1" *checkPrivileges="['PRIV_ED_LOC_INC_GRP']">
-            <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
-                    (click)="submit()"></button>
-          </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #mapInput>
+  <!-- map-->
+  <div
+    class="p-field p-col-12 p-md-12"
+    *ngIf="checkMap && !(viewOnly$ | async)"
+  >
+    <form #locationForm="ngForm" class="form-group">
+      <div
+        class="m-4 d-flex align-items-center justify-content-between"
+        *ngFor="let location of namedLocations; let i = index"
+      >
+        <input
+          *ngIf="location.isEditing"
+          ngModel
+          type="text"
+          #name="ngModel"
+          name="name"
+          class="form-control"
+          [(ngModel)]="location.name"
+        />
+        <span *ngIf="!location.isEditing">{{ location.name }}</span>
+        <div class="d-flex">
+          <button
+            *ngIf="location.geometry == null"
+            (click)="openLocationDialoug(i, null)"
+            class="text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"
+          >
+            <i class="pi pi-map-marker p-mx-2"></i>
+          </button>
+          <button
+            *ngIf="location.geometry !== null"
+            (click)="viewLocation(i)"
+            class="text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"
+          >
+            <i class="pi pi-eye p-mx-2"></i>
+          </button>
+          <button
+            *ngIf="location.isEditing"
+            (click)="save(i)"
+            class="text-center d-flex justify-content-center align-items-center mx-1 btn-secondary btn btn-sm"
+          >
+            <i class="pi pi-save p-mx-2"></i>
+          </button>
+          <ng-container *checkPrivileges="['PRIV_ED_LOC_INC_GRP']">
+            <button
+              *ngIf="location.geometry !== null"
+              (click)="updateLocation(i)"
+              class="text-center d-flex justify-content-center align-items-center mx-1 btn-warning btn btn-sm"
+            >
+              <i class="pi pi-pencil p-mx-2"></i>
+            </button>
+          </ng-container>
+          <button
+            [disabled]="namedLocations.length == 1"
+            [ngClass]="{ disabled: namedLocations.length == 1 }"
+            (click)="removeLocation(i)"
+            class="text-center d-flex justify-content-center align-items-center mx-1 btn-danger btn btn-sm"
+          >
+            <i class="pi pi-trash p-mx-2"></i>
+          </button>
         </div>
-      </ng-container>
+      </div>
+    </form>
+    <div class="ml-dir-auto d-flex p-md-offset-9 p-md-2">
+      <button
+        *checkPrivileges="['PRIV_ED_LOC_INC_GRP']"
+        pButton
+        type="button"
+        label="{{ 'ACTIONS.ADD' | translate }}"
+        icon="pi pi-plus"
+        [loading]="blocking$ | async"
+        (click)="addNewLocation()"
+      ></button>
     </div>
-  </ng-template>
+  </div>
+  <div *ngIf="checkMap && (viewOnly$ | async)">
+    <a class="text-dark mb-1 text-size-sm">
+      {{ "GROUP.INCIDENT_LOCATION" | translate }}
+    </a>
+  </div>
+  <div
+    class="row"
+    style="height: 40rem"
+    *ngIf="checkMap && (viewOnly$ | async) && namedLocations.length > 0"
+  >
+    <div class="col-12">
+      <ng-container #mapContainer></ng-container>
+    </div>
+  </div>
+</ng-template>

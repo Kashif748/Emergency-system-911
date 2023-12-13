@@ -1,6 +1,8 @@
-import {Group} from "../../../api/models/group";
-import {GroupUser} from "../../../api/models/group-user";
-import {LocationGeoAndName} from "../../../api/models/location-geo-and-name";
+import { GroupContractRequest } from 'src/app/api/models/group-contract-request';
+import { OrgMapGisLayer } from 'src/app/api/models/org-map-gis-layer';
+import { Group } from '../../../api/models/group';
+import { GroupUser } from '../../../api/models/group-user';
+import { LocationGeoAndName } from '../../../api/models/location-geo-and-name';
 
 export namespace GroupAction {
   export class LoadPage {
@@ -56,9 +58,7 @@ export namespace GroupAction {
     /**
      *
      */
-    constructor(
-      public payload: Group
-    ) {}
+    constructor(public payload: Group) {}
   }
 
   export class Delete {
@@ -66,9 +66,7 @@ export namespace GroupAction {
     /**
      *
      */
-    constructor(
-      public payload: Group
-    ) {}
+    constructor(public payload: Group) {}
   }
 
   export class CreateUser {
@@ -78,10 +76,9 @@ export namespace GroupAction {
      */
     constructor(
       public payload: {
-        groupId?: number,
-        user: GroupUser[]
+        groupId?: number;
+        user: GroupUser[];
       }
-
     ) {}
   }
 
@@ -96,7 +93,6 @@ export namespace GroupAction {
         groupId: number;
         location?: LocationGeoAndName[];
       }
-
     ) {}
   }
 
@@ -105,9 +101,7 @@ export namespace GroupAction {
     /**
      *
      */
-    constructor(
-      public payload: Group
-    ) {}
+    constructor(public payload: Group) {}
   }
 
   export class UpdateUser {
@@ -117,8 +111,8 @@ export namespace GroupAction {
      */
     constructor(
       public payload: {
-        groupId: number,
-        user: GroupUser[]
+        groupId: number;
+        user: GroupUser[];
       }
     ) {}
   }
@@ -130,8 +124,8 @@ export namespace GroupAction {
      */
     constructor(
       public payload: {
-        groupId: number,
-        user: GroupUser
+        groupId: number;
+        user: GroupUser;
       }
     ) {}
   }
@@ -161,5 +155,20 @@ export namespace GroupAction {
         sort?: string[];
       }
     ) {}
+  }
+
+  export class AddContract {
+    static readonly type = '[Group] Add Group Contract';
+    /**
+     *
+     */
+    constructor(public payload: GroupContractRequest) {}
+  }
+  export class GetContract {
+    static readonly type = '[Group] Get Group Contract';
+    /**
+     *
+     */
+    constructor(public payload: { groupId: number }) {}
   }
 }
