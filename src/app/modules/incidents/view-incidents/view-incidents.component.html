@@ -262,7 +262,7 @@
                     <!--row  -->
 
                     <!-- Incidents Category -->
-                    <div class="col-md-6 col-sm-6 info-item p-3">
+                    <div class="col-md-4 col-sm-6 info-item p-3">
                       <!--begin::Item-->
                       <div
                         class="d-flex w-100 h-100 align-items-center border rounded mb-10"
@@ -300,7 +300,7 @@
                     </div>
 
                     <!-- Incidents Sub Category  -->
-                    <div class="col-md-6 col-sm-6 info-item p-3">
+                    <div class="col-md-4 col-sm-6 info-item p-3">
                       <!--begin::Item-->
                       <div
                         class="d-flex w-100 h-100 align-items-center border rounded mb-10"
@@ -329,6 +329,42 @@
                             >
                               {{ incidentDetails?.incidentCategory | locale }}
                             </p>
+                          </span>
+                        </div>
+                        <!--end::Text-->
+                      </div>
+                    </div>
+                    <!-- Incidents Tags -->
+                    <div class="col-md-4 col-sm-6 info-item p-3">
+                      <!--begin::Item-->
+                      <div
+                        class="d-flex w-100 h-100 align-items-center border rounded mb-10"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-40 mx-5">
+                          <span class="">
+                            <span
+                              [inlineSVG]="
+                                './assets/media/svg/icons/Custome/hashtag.svg'
+                              "
+                              class="svg-icon svg-icon-lg svg-icon-primary"
+                            ></span>
+                          </span>
+                        </div>
+                        <!--end::Symbol-->
+
+                        <!--begin::Text-->
+                        <div class="d-flex flex-column font-weight-bold">
+                          <a class="text-dark mb-1 text-size-sm">
+                            {{ "INCIDENTS.TAGS" | translate }}
+                          </a>
+                          <span class="text-muted">
+                            <span
+                              *ngFor="let item of incidentDetails?.incidentTags"
+                              class="label label-light-secondary text-dark label-inline ml-1"
+                            >
+                              {{ item?.tag | propTranslator : "name" }}</span
+                            >
                           </span>
                         </div>
                         <!--end::Text-->
