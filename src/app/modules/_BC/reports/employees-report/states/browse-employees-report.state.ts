@@ -13,6 +13,8 @@ import { iif, patch } from '@ngxs/store/operators';
 import { ApiHelper } from '@core/helpers/api.helper';
 import { BrowseEmployeesReportAction } from './browse-employees-report.action';
 import { EmployeesReportAction } from '@core/states/bc-reports/employees-report/employees-report.action';
+import {BrowseOrgActivityStateModel, BrowseOrganizationState} from "../../../organization-activities/states/browse-organization.state";
+import {TextUtils} from "@core/utils";
 
 export interface BrowseEmployeesReportStateModel {
   pageRequest: PageRequestModel;
@@ -64,7 +66,16 @@ export class BrowseEmployeesReportState {
   ): BrowseEmployeesReportStateModel {
     return state;
   }
-
+  @Selector([BrowseEmployeesReportState])
+  static hasFilters(state: BrowseEmployeesReportStateModel): boolean {
+    return (
+      Object.keys(state.pageRequest.filters).filter(
+        (k) =>
+          k !== 'type' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+      ).length > 0
+    );
+  }
   /* ********************** ACTIONS ************************* */
 
   @Action(BrowseEmployeesReportAction.LoadEmployeesReport)

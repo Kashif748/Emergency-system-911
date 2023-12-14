@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TreeHelper } from '@core/helpers/tree.helper';
 import { OrgDetailAction, OrgDetailState } from '@core/states';
@@ -9,7 +9,7 @@ import { Select, Store } from '@ngxs/store';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { LazyLoadEvent, TreeNode } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, auditTime, filter, map, tap } from 'rxjs/operators';
+import {takeUntil, auditTime, filter, map, tap, take} from 'rxjs/operators';
 import {
   BcCycles,
   BcOrgHierarchyProjection,
@@ -20,13 +20,14 @@ import {
   BrowseVendorsReportState,
   BrowseVendorsReportStateModel,
 } from '../states/browse-vendors-report.state';
+import {BrowseSystemsReportState} from "../../systems-report/states/browse-systems-report.state";
 
 @Component({
   selector: 'app-browse-vendors-report',
   templateUrl: './browse-vendors-report.component.html',
   styleUrls: ['./browse-vendors-report.component.scss'],
 })
-export class BrowseVendorsReportComponent implements OnInit {
+export class BrowseVendorsReportComponent implements OnInit, OnDestroy {
   public page$: Observable<BcPartnersSummaryResponse[]>;
 
   @Select(VendorsReportState.totalRecords)
@@ -41,6 +42,8 @@ export class BrowseVendorsReportComponent implements OnInit {
   @Select(BrowseVendorsReportState.state)
   public state$: Observable<BrowseVendorsReportStateModel>;
 
+  @Select(BrowseVendorsReportState.hasFilters)
+  public hasFilters$: Observable<boolean>;
   // filters
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -48,7 +51,7 @@ export class BrowseVendorsReportComponent implements OnInit {
   public orgHir: TreeNode[] = [];
 
   @Select(ImpactAnalysisState.cycles)
-  public cycles$: Observable<BcCycles[]>;
+  public cyclesForVenderReport$: Observable<BcCycles[]>;
 
   private destroy$ = new Subject();
 
@@ -111,8 +114,9 @@ export class BrowseVendorsReportComponent implements OnInit {
       }),
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
     ]);
-    this.cycles$
+    this.cyclesForVenderReport$
       .pipe(
+        take(1),
         filter((cycles) => cycles?.length > 0),
         map((cycles) => cycles[0]),
         tap((cycle) => {
@@ -199,7 +203,7 @@ export class BrowseVendorsReportComponent implements OnInit {
     this.store.dispatch([
       new BrowseVendorsReportAction.UpdateFilter({ clear: true }),
     ]);
-    this.cycles$
+    this.cyclesForVenderReport$
       .pipe(
         filter((cycles) => cycles?.length > 0),
         map((cycles) => cycles[0]),

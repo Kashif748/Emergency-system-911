@@ -20,9 +20,20 @@ import { DashboardService } from 'src/app/pages/dashboard/dashboard.service';
 })
 export class NotifService {
   isSidebarVisible: boolean;
+  private popup: boolean;
   sidebarVisibilityChange: Subject<boolean> = new Subject<boolean>();
   isBrowserSupportFCM$: Subject<boolean> = new Subject<boolean>();
   onNewMessage$: Subject<MessagePayload> = new Subject<MessagePayload>();
+
+  private popupStore = new BehaviorSubject<boolean>(this.popup);
+  public get popup$() {
+    return this.popupStore.asObservable();
+  }
+  popupNotifications = [];
+  private popupNotifStore = new BehaviorSubject<any[]>([]);
+  public get unreadNotificationInPopup$() {
+    return this.popupNotifStore.asObservable();
+  }
 
   notifications = [];
   private notifStore = new BehaviorSubject<any[]>([]);
@@ -135,8 +146,21 @@ export class NotifService {
           this.notifications = [...notifications, ...this.notifications];
           this.notifStore.next(this.notifications);
           this.refreshCount();
+
+          const unreadNotifications = notifications.filter((notification) => !notification.read);
+          this.popupNotifications = [...unreadNotifications];
+          this.popupNotifStore.next(this.popupNotifications);
+
+          const popupValue = unreadNotifications.some((notification) => notification.popup);
+          this.setPopupValue(popupValue);
+
         })
       );
+  }
+
+  setPopupValue(popup: boolean) {
+    this.popup = popup;
+    this.popupStore.next(popup);
   }
 
   markAsRead(id) {
