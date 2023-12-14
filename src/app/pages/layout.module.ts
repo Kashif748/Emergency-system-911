@@ -29,6 +29,7 @@ import { LanguageSelectorComponent } from './_layout/components/topbar/language-
 import { SelectDialogComponent } from './_layout/components/header/header-menu/select-dialog/select-dialog.component';
 import { LogoWrapperComponent } from './_layout/components/header/logo-wrapper/logo-wrapper.component';
 import { PhonebookOffcanvasModule } from './_layout/components/phonebook-offcanvas/phonebook-offcanvas.module';
+import {NotificationPopupModule} from "./_layout/components/notification-popup/notification-popup.module";
 @NgModule({
   declarations: [
     LayoutComponent,
@@ -60,7 +61,8 @@ import { PhonebookOffcanvasModule } from './_layout/components/phonebook-offcanv
     MatSelectInfiniteScrollModule,
     ScrollingModule,
     MatFormFieldModule,
-    PhonebookOffcanvasModule
+    PhonebookOffcanvasModule,
+    NotificationPopupModule
   ],
 })
 export class LayoutModule {}
