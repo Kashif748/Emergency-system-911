@@ -5,6 +5,7 @@ import {NotifService} from "@core/api/services/notif.service";
 import {isEmpty} from 'lodash';
 import {Router} from "@angular/router";
 import {TranslationService} from "../../../../modules/i18n/translation.service";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-notification-popup',
@@ -28,16 +29,16 @@ export class NotificationPopupComponent implements OnInit, OnDestroy {
     this.lang = this.translationService.getSelectedLanguage();
     this.notifCount$ = this.notificationService.unreadCount$;
     this.notification$ = this.notificationService.unreadNotificationInPopup$;
-    this.notificationService.getNotifications().subscribe();
+    this.notificationService.getNotifications().pipe(takeUntil(this.destroy$)).subscribe();
 
-    this.notificationService.popup$.subscribe(popup => {
+    this.notificationService.popup$.pipe(takeUntil(this.destroy$)).subscribe(popup => {
       this.display = !!popup;
     });
 
   }
   markAsRead(id) {
     this.notificationService.markAsRead(id);
-    this.notifCount$.subscribe(count => {
+    this.notifCount$.pipe(takeUntil(this.destroy$)).subscribe(count => {
       if (count === 0) {
         this.display = false;
       }});
@@ -64,8 +65,7 @@ export class NotificationPopupComponent implements OnInit, OnDestroy {
     this.display = false;
   }
   ngOnDestroy(): void {
-    this.destroy$.next(true);
+    this.destroy$.next();
     this.destroy$.complete();
-    this.destroy$.unsubscribe();
   }
 }
