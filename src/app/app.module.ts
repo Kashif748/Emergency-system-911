@@ -229,6 +229,10 @@ export function getHighlightLanguages() {
           'browse_other',
           'browse_resource_worklogs',
           'browse_bia_app',
+          'browse_employees_report',
+          'browse_systems_report',
+          'browse_vendors_report',
+          'browse_analysis_summary'
         ],
       },
       ['common_data']

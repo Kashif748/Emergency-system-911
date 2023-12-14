@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TreeHelper } from '@core/helpers/tree.helper';
 import { OrgDetailAction, OrgDetailState } from '@core/states';
@@ -10,7 +10,7 @@ import { Select, Store } from '@ngxs/store';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { LazyLoadEvent, TreeNode } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, auditTime, filter, map, tap } from 'rxjs/operators';
+import {takeUntil, auditTime, filter, map, tap, take} from 'rxjs/operators';
 import { BcCycles, BcOrgHierarchyProjection } from 'src/app/api/models';
 import { BcActivitySystemsSummaryResponse } from 'src/app/api/models/bc-activity-systems-summary-response';
 import { BrowseSystemsReportAction } from '../states/browse-systems-report.action';
@@ -18,13 +18,14 @@ import {
   BrowseSystemsReportState,
   BrowseSystemsReportStateModel,
 } from '../states/browse-systems-report.state';
+import {BrowseEmployeesReportState} from "../../employees-report/states/browse-employees-report.state";
 
 @Component({
   selector: 'app-browse-systems-report',
   templateUrl: './browse-systems-report.component.html',
   styleUrls: ['./browse-systems-report.component.scss'],
 })
-export class BrowseSystemsReportComponent implements OnInit {
+export class BrowseSystemsReportComponent implements OnInit, OnDestroy {
   public page$: Observable<BcActivitySystemsSummaryResponse[]>;
 
   @Select(SystemsReportState.totalRecords)
@@ -39,6 +40,9 @@ export class BrowseSystemsReportComponent implements OnInit {
   @Select(BrowseSystemsReportState.state)
   public state$: Observable<BrowseSystemsReportStateModel>;
 
+  @Select(BrowseSystemsReportState.hasFilters)
+  public hasFilters$: Observable<boolean>;
+
   // filters
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -46,7 +50,7 @@ export class BrowseSystemsReportComponent implements OnInit {
   public orgHir: TreeNode[] = [];
 
   @Select(ImpactAnalysisState.cycles)
-  public cycles$: Observable<BcCycles[]>;
+  public cyclesForSystemReport$: Observable<BcCycles[]>;
 
   private destroy$ = new Subject();
 
@@ -95,7 +99,8 @@ export class BrowseSystemsReportComponent implements OnInit {
       }),
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
     ]);
-    this.cycles$.pipe(
+    this.cyclesForSystemReport$.pipe(
+      take(1),
       filter((cycles) => cycles?.length > 0),
       map((cycles) => cycles[0]),
       tap((cycle) => {
@@ -181,7 +186,7 @@ export class BrowseSystemsReportComponent implements OnInit {
     this.store.dispatch([
       new BrowseSystemsReportAction.UpdateFilter({ clear: true }),
     ]);
-    this.cycles$
+    this.cyclesForSystemReport$
       .pipe(
         filter((cycles) => cycles?.length > 0),
         map((cycles) => cycles[0]),

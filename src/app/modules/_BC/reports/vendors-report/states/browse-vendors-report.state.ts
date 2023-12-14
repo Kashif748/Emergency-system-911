@@ -13,6 +13,8 @@ import { iif, patch } from '@ngxs/store/operators';
 import { ApiHelper } from '@core/helpers/api.helper';
 import { BrowseVendorsReportAction } from './browse-vendors-report.action';
 import { VendorsReportAction } from '@core/states/bc-reports/vendors-report/vendors-report.action';
+import {BrowseSystemsReportState, BrowseSystemsReportStateModel} from "../../systems-report/states/browse-systems-report.state";
+import {TextUtils} from "@core/utils";
 
 export interface BrowseVendorsReportStateModel {
   pageRequest: PageRequestModel;
@@ -64,6 +66,16 @@ export class BrowseVendorsReportState {
     return state;
   }
 
+  @Selector([BrowseVendorsReportState])
+  static hasFilters(state: BrowseVendorsReportStateModel): boolean {
+    return (
+      Object.keys(state.pageRequest.filters).filter(
+        (k) =>
+          k !== 'type' &&
+          !TextUtils.IsEmptyOrWhiteSpaces(state.pageRequest.filters[k])
+      ).length > 0
+    );
+  }
   /* ********************** ACTIONS ************************* */
 
   @Action(BrowseVendorsReportAction.LoadVendorsReport)

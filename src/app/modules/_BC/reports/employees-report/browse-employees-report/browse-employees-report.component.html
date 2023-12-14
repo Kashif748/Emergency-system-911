@@ -10,7 +10,7 @@
               [toggleable]="true"
               styleClass="px-3 py-2 search-section"
               legend="{{ 'ACTIONS.ADVANCED_SEARCH' | translate }}"
-              [collapsed]="true"
+              [collapsed]="!(hasFilters$ | async)"
             >
               <div class="p-fluid p-grid">
                 <!-- Org Hir -->
@@ -58,7 +58,7 @@
                     [ngModel]="state.pageRequest.filters['cycleId']"
                     (ngModelChange)="updateFilter({ cycleId: $event }, $event)"
                     [autoDisplayFirst]="false"
-                    [options]="cycles$ | async"
+                    [options]="cyclesForEmployeeReport$ | async"
                     [showClear]="false"
                     dataKey="id"
                     optionValue="id"
