@@ -147,11 +147,11 @@ export class NotifService {
           this.notifStore.next(this.notifications);
           this.refreshCount();
 
-          const unreadNotifications = notifications.filter((notification) => !notification.read);
+          const unreadNotifications = notifications.filter((notification) => !notification.read && notification.popup === true);
           this.popupNotifications = [...unreadNotifications];
           this.popupNotifStore.next(this.popupNotifications);
 
-          const popupValue = unreadNotifications.some((notification) => notification.popup);
+          const popupValue = unreadNotifications.length > 0;
           this.setPopupValue(popupValue);
 
         })

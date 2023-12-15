@@ -9,14 +9,14 @@
           <div class="col-md-4 border m-auto" *ngIf="section.parentId === null" style="width: 320px;">
 
             <div class="row">
-              <div class="py-0 px-2">
+              <div class="col-3 py-0">
                 <img class="mt-6 p-1 avatar align-self-end" src="./assets/media/users/default.jpg"
                      alt="..." />
               </div>
-              <div class="px-6 d-flex flex-column">
+              <div class="col-9 d-flex flex-column">
                 <span class="px-2 card-title font-weight-bolder m-0 d-block number">{{section | translateObj: 'name'}}</span>
                 <span class="px-2">{{section | translateObj: 'designation'}}</span>
-                <a>
+                <a class="overflow-wrap-everywhere">
                   <p-chip label="{{ section.email }}" icon="pi pi-envelope"
                           styleClass="bg-transparent text-muted"></p-chip>
                 </a>
@@ -36,14 +36,14 @@
             <div class="col-md-10 border m-auto">
 
               <div class="row">
-                <div class="py-0 px-2">
+                <div class="col-3 py-0">
                   <img class="mt-6 p-1 avatar align-self-end" src="./assets/media/users/default.jpg"
                        alt="..."/>
                 </div>
-                <div class="px-4 d-flex flex-column">
+                <div class="col-9 d-flex flex-column">
                   <span class="px-2 card-title font-weight-bolder m-0 d-block number">{{section | translateObj: 'name'}}</span>
                   <span class="px-2">{{section | translateObj: 'designation'}}</span>
-                  <a>
+                  <a class="overflow-wrap-everywhere">
                     <p-chip label="{{ section.email }}" icon="pi pi-envelope"
                             styleClass="bg-transparent text-muted"></p-chip>
                   </a>
