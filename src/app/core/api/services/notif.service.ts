@@ -96,6 +96,7 @@ export class NotifService {
       this.dashboardService.checkLogsChanges(payload);
       setTimeout(async () => {
         await this.getNotifications().subscribe();
+        this.setPopupValue(true);
       }, 8000);
     });
   }
@@ -150,10 +151,6 @@ export class NotifService {
           const unreadNotifications = notifications.filter((notification) => !notification.read && notification.popup === true);
           this.popupNotifications = [...unreadNotifications];
           this.popupNotifStore.next(this.popupNotifications);
-
-          const popupValue = unreadNotifications.length > 0;
-          this.setPopupValue(popupValue);
-
         })
       );
   }
