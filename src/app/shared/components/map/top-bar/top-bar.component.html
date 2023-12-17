@@ -2,19 +2,33 @@
   <div class="d-flex p-3">
     <div class="spacer"></div>
     <div>
-      <ng-template #popContentLayers> Show/Hide Map Layers </ng-template>
-      <ng-template #popTitleLayers><b>Map Layers</b></ng-template>
+      <ng-template #popContentLayers>
+        <p-listbox
+          [options]="layersPage$ | async"
+          [formControl]="selectedLayer"
+          styleClass="border-0"
+          multiple="true"
+          checkbox="true"
+          [showToggleAll]="false"
+        >
+          <ng-template let-layer pTemplate="item">
+            <span class="px-2">
+              {{ layer | translateObj }}
+            </span>
+          </ng-template></p-listbox
+        >
+      </ng-template>
       <button
-        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 "
+        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4"
         placement="bottom"
         [ngbPopover]="popContentLayers"
-        [popoverTitle]="popTitleLayers"
+        [autoClose]="'outside'"
       >
-        <i class="flaticon2-down"></i>
+        <i class="pi pi-angle-down"></i>
       </button>
     </div>
     <div>
-      <div class="w-400px ">
+      <div class="w-400px">
         <input
           type="text"
           placeholder="{{ 'MAP.TOP_BAR.ADDRESS_SEARCH' | translate }}"

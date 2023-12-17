@@ -210,13 +210,21 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         })
       )
     );
+    this.cycles$.pipe(
+      takeUntil(this.destroy$),
+      filter((selectedCycle) => !!selectedCycle),
+      map((cycles) => cycles.find((cycle) => cycle.id === this.selectedCycle?.id)),
+      tap((cycle) => {
+        this.selectedCycle = cycle;
+      })
+    ).subscribe();
   }
 
   search() {
     this.store.dispatch(
       new BrowseBiaAppAction.LoadBia({
         pageRequest: undefined,
-        cycleId: this.selectedCycle,
+        cycleId: this.selectedCycle?.id,
       })
     );
   }
@@ -226,7 +234,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       new BrowseBiaAppAction.UpdateFilter({ clear: true }),
       new BrowseBiaAppAction.LoadBia({
         pageRequest: undefined,
-        cycleId: this.selectedCycle,
+        cycleId: this.selectedCycle?.id,
       }),
     ]);
   }

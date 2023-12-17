@@ -1,13 +1,14 @@
 export namespace GisAction {
   // GIS MAP ACTIONS
-  export class loadContractorsPage {
-    static readonly type = '[GIS] Load Gis Contractors Page';
+  export class LoadLayers {
+    static readonly type = '[GIS] Load Gis Layers Page';
     /**
      *
      */
     constructor(
       public payload: {
-        mapGisLayer: string;
+        page: number;
+        size: number;
       }
     ) {}
   }

@@ -32,7 +32,7 @@ export class NotificationPopupComponent implements OnInit, OnDestroy {
     this.notificationService.getNotifications().pipe(takeUntil(this.destroy$)).subscribe();
 
     this.notificationService.popup$.pipe(takeUntil(this.destroy$)).subscribe(popup => {
-      this.display = !!popup;
+      this.display = popup;
     });
 
   }

@@ -7,8 +7,21 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
+import { GisAction } from '@core/states/gis/gis.action';
+import { GisState } from '@core/states/gis/gis.state';
+import { Select, Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import {
+  filter,
+  first,
+  map,
+  pairwise,
+  skip,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
+import { OrgMapGisLayer } from 'src/app/api/models/org-map-gis-layer';
 import { MapComponent } from '../map.component';
 import { MapService } from '../services/map.service';
 import {
@@ -26,6 +39,9 @@ import {
   styleUrls: ['./top-bar.component.scss'],
 })
 export class TopBarComponent implements OnInit {
+  @Select(GisState.layersPage)
+  public layersPage$: Observable<OrgMapGisLayer[]>;
+  selectedLayer = new FormControl(null);
   /**
    *
    */
@@ -33,7 +49,8 @@ export class TopBarComponent implements OnInit {
     @Inject(forwardRef(() => MapComponent)) public map: MapComponent,
     private mapService: MapService,
     private cdr: ChangeDetectorRef,
-    private langFacade: ILangFacade
+    private langFacade: ILangFacade,
+    private store: Store
   ) {}
   public lang = 'en';
   searchControl = new FormControl();
@@ -56,6 +73,39 @@ export class TopBarComponent implements OnInit {
       filter((v) => (v as any)?.length > 2),
       switchMap((value) => this._filter(value as any))
     );
+    this.store.dispatch([
+      new GisAction.LoadLayers({
+        page: 0,
+        size: 10,
+      }),
+    ]);
+
+    this.selectedLayer.valueChanges
+      .pipe(
+        startWith([]),
+        map((value) => value as [OrgMapGisLayer]),
+        pairwise(),
+        map(([oldValue, newValue]) => {
+          if (newValue.length > oldValue.length) {
+            newValue.forEach((layer) => {
+              if (oldValue.indexOf(layer) == -1) {
+                const layerFeature = {
+                  url: `${layer.url}/${layer.layerId}`,
+                  id: layer.id,
+                  layerId: layer.layerId,
+                };
+                this.map.addLayer(layerFeature);
+              }
+            });
+          } else {
+            oldValue.forEach((layer) => {
+              if (newValue.indexOf(layer) == -1)
+                this.map.removeLayer(layer?.id);
+            });
+          }
+        })
+      )
+      .subscribe();
   }
   displayWith(value) {
     return value?.Address;
@@ -347,7 +397,7 @@ export class TopBarComponent implements OnInit {
     }
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchControl.reset();
     this.selectDControl.reset();
     this.selectMControl.reset();

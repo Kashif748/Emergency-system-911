@@ -63,7 +63,7 @@
       <button pButton icon="pi pi-times" (click)="close()"
               label="{{'ACTIONS.CLOSE' | translate }}"></button>
       <div class="ml-dir-auto"></div>
-      <div class="mx-1" *ngIf="(notifCount$ | async) > 1">
+      <div class="mx-1" *ngIf="(notification$ | async)?.length > 1">
         <button
           pButton
           label="{{ 'ACTIONS.markAllAsRead' | translate }}"
