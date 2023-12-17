@@ -227,17 +227,10 @@ export class BrowseGroupsState {
     { payload }: BrowseGroupsAction.CreateGroup
   ) {
     return dispatch(new GroupAction.Create(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        // dispatch(new BrowseGroupsAction.LoadGroups());
-      }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
       })
-      /* finalize(() => {
-         dispatch(new BrowseGroupsAction.ToggleDialog({}));
-      })*/
     );
   }
 
@@ -249,15 +242,11 @@ export class BrowseGroupsState {
     return dispatch(new GroupAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        // dispatch(new BrowseGroupsAction.LoadGroups());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
       }),
-      finalize(() => {
-        // dispatch(new BrowseGroupsAction.ToggleDialog({}));
-      })
     );
   }
 
