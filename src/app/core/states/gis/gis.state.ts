@@ -12,6 +12,7 @@ import { OrgMapGisLayerControllerService } from 'src/app/api/services';
 import { GisAction } from './gis.action';
 import { patch } from '@ngxs/store/operators';
 import { HttpClient } from '@angular/common/http';
+import { PageOrgMapGisLayer } from 'src/app/api/models/page-org-map-gis-layer';
 
 export interface GeoJSON {
   type: 'Feature';
@@ -22,6 +23,7 @@ export interface GeoJSON {
   properties: any;
 }
 export interface GisStateModel {
+  layersPage: PageOrgMapGisLayer;
   contractors: any[];
   loading: boolean;
   blocking: boolean;
@@ -54,31 +56,26 @@ export class GisState {
   static contractors(state: GisStateModel) {
     return state?.contractors;
   }
+  @Selector([GisState])
+  static layersPage(state: GisStateModel) {
+    return state?.layersPage.content;
+  }
 
   /* ********************** ACTIONS ************************* */
-  @Action(GisAction.loadContractorsPage, { cancelUncompleted: true })
-  loadLayerData(
+  @Action(GisAction.LoadLayers, { cancelUncompleted: true })
+  LoadLayers(
     { setState }: StateContext<GisStateModel>,
-    { payload }: GisAction.loadContractorsPage
+    { payload }: GisAction.LoadLayers
   ) {
-    // Query params for (DRM)
-    const params = {
-      f: 'json',
-      where: '1=1',
-      returnGeometry: 'false',
-      outFields: 'CONTRACT_NO,CONTRACTOR,OBJECTID',
-      resultRecordCount: '10',
-    };
-    return this.http
-      .get(`${payload.mapGisLayer}/query`, {
-        params: params,
+    return this.mapGisService
+      .findActivePage4({
+        pageable: payload,
       })
       .pipe(
-        filter((res) => res.hasOwnProperty('exceededTransferLimit')),
         tap((res) => {
           setState(
             patch<GisStateModel>({
-              contractors: res['features'],
+              layersPage: res.result,
             })
           );
         })

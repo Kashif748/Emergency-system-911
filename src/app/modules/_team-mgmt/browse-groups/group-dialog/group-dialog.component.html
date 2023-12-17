@@ -787,9 +787,9 @@
               [ngSwitch]="groupZoneIncidentCategory.get('mapAndList').value"
             >
               <!--  SELECT DEOPDOWNS -->
-              <div *ngSwitchCase="'SELECT'">
+              <div *ngSwitchCase="'SELECT'" class="row">
                 <div
-                  class="p-field p-col-12 p-md-12"
+                  class="p-field p-col-6 p-md-6"
                   *ngIf="!checkMap && viewOnly$ | async"
                 >
                   <div class="col-md-12 col-sm-12 info-item p-3">
@@ -852,7 +852,7 @@
                 </div>
 
                 <div
-                  class="p-field p-col-12 p-md-6"
+                  class="p-field p-col-6 p-md-6"
                   *ngIf="!checkMap && !(viewOnly$ | async)"
                 >
                   <span class="p-float-label">

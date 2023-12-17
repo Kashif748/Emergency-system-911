@@ -57,6 +57,9 @@ import { PropTranslatorPipe } from '@shared/pipes/prop-translator.pipe';
 import { AppCommonDataService } from '@core/services/app-common-data.service';
 import esri = __esri;
 import { DomSanitizer } from '@angular/platform-browser';
+import * as FeatureLayer from 'esri/layers/FeatureLayer';
+import { ListboxModule } from 'primeng/listbox';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 
 @Component({
   selector: 'app-map',
@@ -145,6 +148,8 @@ export class MapComponent
   public addTeamPolygon: () => void;
   public addReporterPoint: () => void;
   public reCenterMap: () => void;
+  public addLayer: (layer: any) => void;
+  public removeLayer: (layer: any) => void;
 
   public createQueryTask: (url: string) => __esri.QueryTask;
   public createQuery: () => __esri.Query;
@@ -819,8 +824,10 @@ export class MapComponent
         this.mapView
           .goTo(mapMarker, { animate: true, duration: 2000 })
           .then(() => {
-            this.mapView.popup.open({ features: [mapMarker] });
-            this.mapView.popup.triggerAction(0);
+            if (this.showLocInfo) {
+              this.mapView.popup.open({ features: [mapMarker] });
+              this.mapView.popup.triggerAction(0);
+            }
           });
       };
 
@@ -1681,6 +1688,18 @@ export class MapComponent
         this.mapView = new MapView(mapViewProperties);
       };
 
+      this.addLayer = (layer) => {
+        const newLayer = new FeatureLayer(layer);
+        this.map.add(newLayer);
+      };
+
+      this.removeLayer = (layerId: number) => {
+        const alreadyAdded = this.map.findLayerById(layerId?.toString());
+        if (alreadyAdded) {
+          this.map.remove(alreadyAdded);
+        }
+      };
+
       if (this.data.zoomModel?.featureName) {
         this.zoomToRequest(
           this.data.zoomModel.referenceId,
@@ -2086,7 +2105,9 @@ export class MapComponent
     FormsModule,
     CommonModule,
     NgbPopoverModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ListboxModule,
+    TranslateObjModule,
   ],
   exports: [MapComponent],
 })

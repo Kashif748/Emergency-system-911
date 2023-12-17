@@ -746,6 +746,7 @@ export class GroupDialogComponent
         mapType: MapViewType.TEAM,
         showLayers: false,
         viewOnly: true,
+        showLocInfo : true,
         polygonLocation: {
           type: 'polygon',
           polygonRings: contract.geometry?.rings,
