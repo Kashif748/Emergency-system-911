@@ -116,8 +116,8 @@
                 >
                   <div class="d-flex align-items-center">
                     <span class="text-muted">
-                      {{ worklog?.createdBy | translateObj : "FirstName" }}
-                      {{ worklog?.createdBy | translateObj : "LastName" }}
+                      {{ worklog?.createdBy | translateObj : "firstName" }}
+                      {{ worklog?.createdBy | translateObj : "lastName" }}
                     </span>
                     <div class="mr-2"></div>
                     <span class="mx-2 text-muted" [dir]="dir$ | async">
