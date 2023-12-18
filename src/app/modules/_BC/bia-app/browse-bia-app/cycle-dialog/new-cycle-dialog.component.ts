@@ -137,7 +137,7 @@ export class NewCycleDialogComponent implements OnInit {
       ...this.form.value,
     };
     this.store.dispatch(
-      new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle })
+      new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle['id'] })
     );
   }
   sort(event) {
