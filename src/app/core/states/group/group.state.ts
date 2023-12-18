@@ -571,6 +571,9 @@ export class GroupState {
         }
       });
     }
+    if (payload.selectedUsers) {
+
+    }
     return this.userService
       .getAllForOrg({
         pageable: {
@@ -585,14 +588,12 @@ export class GroupState {
           setState(
             patch<GroupStateModel>({
               groupMapUser: list.map((v) => {
-                if (manager) {
-                  if (v.id === manager['user'].id) {
-                    return { ...v, disabled: true };
-                  } else {
-                    return { ...v, disabled: false };
-                  }
+                if (payload.type === 'manager') {
+                  const isDisabled = payload.selectedUsers?.some(selectedUser => selectedUser.id === v.id) ?? false;
+                  return { ...v, disabled: isDisabled };
                 } else {
-                  return { ...v, disabled: false };
+                  const isManager = manager?.user?.id === v.id || (payload.selectedUsers && payload.selectedUsers['id'] === v.id);
+                  return { ...v, disabled: isManager };
                 }
               }),
             })

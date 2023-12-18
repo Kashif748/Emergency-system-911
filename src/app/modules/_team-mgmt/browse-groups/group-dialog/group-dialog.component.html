@@ -133,7 +133,7 @@
                   [filter]="true"
                   filterBy="nameAr,nameEn"
                   #selectedManager
-                  (onShow)="loadUsers(selectedManager.filterValue, true)"
+                  (onShow)="loadUsers(selectedManager.filterValue, true, 'manager')"
                   [virtualScroll]="true"
                   formControlName="userStructure"
                   [autoDisplayFirst]="false"
@@ -142,14 +142,13 @@
                   display="chip"
                   appendTo="body"
                   (onFilter)="loadUsers($event?.filter)"
-                  optionDisabled="false"
+                  optionDisabled="disabled">
                 >
                   <ng-template let-option pTemplate="selectedItem">
                     {{ option | translateObj : "name" }}
                   </ng-template>
                   <ng-template let-option pTemplate="item">
                     <div
-                      *ngIf="lang == 'ar'"
                       class="d-flex flex-column flex-grow-1 w-100"
                       [class]="
                         selectedManager.disabled ? 'text-muted' : 'text-dark'
@@ -157,13 +156,13 @@
                     >
                       <div class="d-flex w-100">
                         <span class="mb-1 text-size-sm">
-                          {{ option.nameAr }}
+                          {{ option | translateObj: 'name' }}
                         </span>
                         <span class="spacer"></span>
                         <span
                           class="label label-inline label-outline-primary py-0"
                         >
-                          {{ option?.orgStructure?.nameAr }}
+                          {{ option?.orgStructure | translateObj: 'name' }}
                         </span>
                       </div>
 
@@ -172,36 +171,7 @@
                           *ngFor="let item of option.roles"
                           class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
                         >
-                          {{ item.nameAr }}
-                        </span>
-                      </span>
-                    </div>
-
-                    <div
-                      *ngIf="lang == 'en'"
-                      class="d-flex flex-column flex-grow-1 w-100"
-                      [class]="
-                        selectedManager.disabled ? 'text-muted' : 'text-dark'
-                      "
-                    >
-                      <div class="d-flex w-100">
-                        <span class="mb-1 text-size-sm">
-                          {{ option.nameEn }}
-                        </span>
-                        <span class="spacer"></span>
-                        <span
-                          class="label label-inline label-outline-primary py-0"
-                        >
-                          {{ option?.orgStructure?.nameEn }}
-                        </span>
-                      </div>
-
-                      <span class="font-size-sm">
-                        <span
-                          *ngFor="let item of option.roles"
-                          class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
-                        >
-                          {{ item.nameEn }}
+                          {{ item | translateObj : 'name' }}
                         </span>
                       </span>
                     </div>
@@ -312,7 +282,6 @@
                   formControlName="descAr"
                   rows="5"
                 ></textarea>
-                <!--<input type="text" formControlName="descAr" >-->
                 <label
                   >{{ "GROUP.DESCRIPTION_AR" | translate }}
                   <strong class="required-asterisk"> * </strong>
@@ -350,7 +319,6 @@
                   formControlName="descEn"
                   rows="5"
                 ></textarea>
-                <!--                <input type="text" formControlName="descEn" pInputText>-->
                 <label
                   >{{ "GROUP.DESCRIPTION_EN" | translate }}
                   <strong class="required-asterisk"> * </strong>
@@ -388,20 +356,8 @@
                   formControlName="shiftSchedule"
                   rows="5"
                 ></textarea>
-                <!--                <input type="text" formControlName="descEn" pInputText>-->
                 <label>{{ "GROUP.SHIFT_SCHEDULE" | translate }} </label>
               </span>
-
-              <!--<ng-container
-                *ngIf="form.controls['shiftSchedule'].touched && !form.controls['shiftSchedule'].valid && form.controls['shiftSchedule'].dirty">
-                <p class="p-error mb-0" *ngIf="form.controls['shiftSchedule'].hasError('required')">
-                  {{ 'VALIDATION_MSG.REQUIRED' | translate }}
-                </p>
-
-                <p class="p-error mb-0" *ngIf="form.controls['descEn'].hasError('english')">
-                  {{ 'VALIDATION_MSG.MUST_BE_IN_ENGLISH' | translate }}
-                </p>
-              </ng-container>-->
             </div>
 
             <div class="p-col-12">
@@ -476,20 +432,19 @@
                   </ng-template>
                   <ng-template let-option pTemplate="item">
                     <div
-                      *ngIf="lang == 'ar'"
                       class="d-flex flex-column flex-grow-1 w-100"
                       [class]="option.type === 1 ? 'text-muted' : 'text-dark'"
                     >
                       <div>
                         <div class="d-flex w-100">
                           <span class="mb-1 text-size-sm">
-                            {{ option.nameAr }}
+                            {{ option | translateObj : 'name' }}
                           </span>
                           <span class="spacer"></span>
                           <span
                             class="label label-inline label-outline-primary py-0"
                           >
-                            {{ option?.orgStructure?.nameAr }}
+                            {{ option?.orgStructure | translateObj : 'name' }}
                           </span>
                         </div>
 
@@ -498,55 +453,13 @@
                             *ngFor="let item of option.roles"
                             class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
                           >
-                            {{ item.nameAr }}
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div
-                      *ngIf="lang == 'en'"
-                      class="d-flex flex-column flex-grow-1 w-100"
-                      [class]="option.type === 1 ? 'text-muted' : 'text-dark'"
-                    >
-                      <div>
-                        <div
-                          class="d-flex w-100"
-                          [class]="
-                            option.type === 1 ? 'text-muted' : 'text-dark'
-                          "
-                        >
-                          <span class="mb-1 text-size-sm">
-                            {{ option.nameEn }}
-                          </span>
-                          <span class="spacer"></span>
-                          <span
-                            class="label label-inline label-outline-primary py-0"
-                          >
-                            {{ option?.orgStructure?.nameEn }}
-                          </span>
-                        </div>
-
-                        <span
-                          class="font-size-sm"
-                          [class]="
-                            option.type === 1 ? 'text-muted' : 'text-dark'
-                          "
-                        >
-                          <span
-                            *ngFor="let item of option.roles"
-                            class="label label-inline font-weight-lighter mr-1 mb-1 py-0"
-                          >
-                            {{ item.nameEn }}
+                            {{ item | translateObj : 'name' }}
                           </span>
                         </span>
                       </div>
                     </div>
                   </ng-template>
                 </p-multiSelect>
-                <label>
-                  {{ "GROUP.groupsMembers" | translate }}
-                </label>
               </span>
               <ng-container
                 *ngIf="
