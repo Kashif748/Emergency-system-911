@@ -31,6 +31,8 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TreeModule } from 'primeng/tree';
 import { BCListsRoutingModule } from './bc-lists-routing.module';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {ConfirmationService} from "primeng/api";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
     http,
@@ -79,7 +81,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     PrivilegesDirectiveModule,
     BadgeModule,
+    ConfirmPopupModule
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  providers: [{ provide: ILangFacade, useClass: LangFacade }, ConfirmationService],
 })
 export class BcListsModule {}

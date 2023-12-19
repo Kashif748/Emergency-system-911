@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { TranslateService } from '@ngx-translate/core';
-import { MenuItem } from 'primeng/api';
+import {ConfirmationService, MenuItem} from 'primeng/api';
 import { Observable, of, Subject } from 'rxjs';
 import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { TABS } from './tabs.const';
@@ -52,7 +52,8 @@ export class BcListsComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private breakpointObserver: BreakpointObserver,
     private cdr: ChangeDetectorRef,
-    private store: Store
+    private store: Store,
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnDestroy(): void {
@@ -141,11 +142,20 @@ export class BcListsComponent implements OnInit, OnDestroy {
   }
 
   changeStatues(status: VERSION_STATUSES) {
-    this.store.dispatch(
-      new BrowseBCAction.ChangeStatus({
-        versionId: this.selectedVersion?.id,
-        statusId: status,
-      })
-    );
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translate.instant('CONFIRM'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(
+          new BrowseBCAction.ChangeStatus({
+            versionId: this.selectedVersion?.id,
+            statusId: status,
+          })
+        );
+      },
+      reject: () => {
+      },
+    });
   }
 }
