@@ -1,5 +1,5 @@
 <p-dialog
-  [visible]="display"
+  [visible]="display && (notification$ | async)?.length > 0"
   (visibleChange)="close()"
   [modal]="true"
   [style]="{ width: '55vw' }"
@@ -15,7 +15,6 @@
       </ng-container>
     </h3>
   </ng-template>
-
 
   <ng-template pTemplate="content">
     <!--begin::Nav-->

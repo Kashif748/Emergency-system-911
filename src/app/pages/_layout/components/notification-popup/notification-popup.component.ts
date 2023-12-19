@@ -32,7 +32,6 @@ export class NotificationPopupComponent implements OnInit, OnDestroy {
     this.lang = this.translationService.getSelectedLanguage();
     this.notifCount$ = this.notificationService.unreadCount$;
     this.notification$ = this.notificationService.unreadNotificationInPopup$;
-    // this.notificationService.getNotifications().pipe(takeUntil(this.destroy$)).subscribe();
     this.notificationService.popup$.pipe(takeUntil(this.destroy$)).subscribe(popup => {
       this.display = popup;
     });
