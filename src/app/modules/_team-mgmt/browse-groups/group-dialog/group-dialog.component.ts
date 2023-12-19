@@ -10,57 +10,36 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { TreeNode } from 'primeng/api';
-import {
-  DistrictNameProjection,
-  IdNameProjection,
-  OrgStructure,
-  UserAndRoleProjection,
-} from '../../../../api/models';
-import {
-  auditTime,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
-import { GroupAction, OrgAction, OrgState, TaskState } from '@core/states';
-import { Observable, Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RegxConst } from '@core/constant/RegxConst';
-import { Select, Store } from '@ngxs/store';
-import { GenericValidators } from '@shared/validators/generic-validators';
-import { FormUtils } from '@core/utils/form.utils';
-import { IAuthService } from '@core/services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BrowseGroupsAction } from '../../states/browse-groups.action';
-import { TranslationService } from '../../../i18n/translation.service';
-import { GroupState } from '@core/states/group/group.state';
-import { userType } from '../../../groups-management/group.model';
-import { CommonService } from '@core/services/common.service';
-import { CenterState } from '@core/states/service-center-area/centers/center.state';
-import { CenterAction } from '@core/states/service-center-area/centers/center.action';
-import { IncidentLocInfoState } from '@core/states/incident-location-info/incidentLocInfo.state';
-import { IncicentLocationInfoAction } from '@core/states/incident-location-info/incidentLocInfo.action';
-import {
-  AreaItem,
-  Center,
-  GeometryType,
-  GroupGeometryLocation,
-} from '../../../groups-management/group-incidents-categroies/center.model';
-import { MapViewType } from '@shared/components/map/utils/MapViewType';
-import {
-  MapConfig,
-  MapService,
-} from '@shared/components/map/services/map.service';
-import { AppCommonData } from '@core/entities/AppCommonData';
-import { MapComponent } from '@shared/sh-components/map/map.component';
-import { __await } from 'tslib';
-import { PrivilegesService } from '@core/services/privileges.service';
-import { Dialog } from 'primeng/dialog';
-import { GroupContractRequest } from 'src/app/api/models/group-contract-request';
+import {TreeNode} from 'primeng/api';
+import {DistrictNameProjection, IdNameProjection, OrgStructure, UserAndRoleProjection,} from '../../../../api/models';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {GroupAction, OrgAction, OrgState, TaskState} from '@core/states';
+import {Observable, Subject} from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {RegxConst} from '@core/constant/RegxConst';
+import {Select, Store} from '@ngxs/store';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {FormUtils} from '@core/utils/form.utils';
+import {IAuthService} from '@core/services/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BrowseGroupsAction} from '../../states/browse-groups.action';
+import {TranslationService} from '../../../i18n/translation.service';
+import {GroupState} from '@core/states/group/group.state';
+import {userType} from '../../../groups-management/group.model';
+import {CommonService} from '@core/services/common.service';
+import {CenterState} from '@core/states/service-center-area/centers/center.state';
+import {CenterAction} from '@core/states/service-center-area/centers/center.action';
+import {IncidentLocInfoState} from '@core/states/incident-location-info/incidentLocInfo.state';
+import {IncicentLocationInfoAction} from '@core/states/incident-location-info/incidentLocInfo.action';
+import {AreaItem, Center, GeometryType, GroupGeometryLocation,} from '../../../groups-management/group-incidents-categroies/center.model';
+import {MapViewType} from '@shared/components/map/utils/MapViewType';
+import {MapConfig, MapService,} from '@shared/components/map/services/map.service';
+import {AppCommonData} from '@core/entities/AppCommonData';
+import {MapComponent} from '@shared/sh-components/map/map.component';
+import {__await} from 'tslib';
+import {PrivilegesService} from '@core/services/privileges.service';
+import {Dialog} from 'primeng/dialog';
+import {GroupContractRequest} from 'src/app/api/models/group-contract-request';
 
 @Component({
   selector: 'app-group-dialog',
@@ -179,7 +158,7 @@ export class GroupDialogComponent
     if (v === undefined || v === null) {
       return;
     }
-    this.loadUsers('', true);
+    this.loadUsers('', true, 'manager');
     this.store
       .dispatch(new GroupAction.GetGroup({ id: v }))
       .pipe(
@@ -591,13 +570,17 @@ export class GroupDialogComponent
     return categories.filter((item) => item.parent != null);
   }
 
-  loadUsers(name?: string, direct = false) {
+  loadUsers(name?: string, direct = false, userType?: string) {
+    const selectedUser = this.userGroupForm?.get('usersIds').value;
+    const selectedManager = this.form?.get('userStructure').value;
     if (direct) {
       this.store.dispatch(
         new GroupAction.LoadGroupMapUserPage({
           name,
           page: 0,
           size: 15,
+          selectedUsers: userType === 'manager' ? selectedUser : selectedManager,
+          type: userType
         })
       );
       return;

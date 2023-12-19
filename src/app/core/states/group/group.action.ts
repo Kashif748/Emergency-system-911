@@ -3,6 +3,7 @@ import { OrgMapGisLayer } from 'src/app/api/models/org-map-gis-layer';
 import { Group } from '../../../api/models/group';
 import { GroupUser } from '../../../api/models/group-user';
 import { LocationGeoAndName } from '../../../api/models/location-geo-and-name';
+import {UserAndRoleProjection} from "../../../api/models";
 
 export namespace GroupAction {
   export class LoadPage {
@@ -153,6 +154,8 @@ export namespace GroupAction {
         page: number;
         size: number;
         sort?: string[];
+        selectedUsers?: UserAndRoleProjection[],
+        type?: string
       }
     ) {}
   }
