@@ -242,11 +242,11 @@ export class BrowseBiaAppState {
       tap(() => {
         this.messageHelper.success();
         dispatch([
-          new BrowseBiaAppAction.LoadCycles({}),
           new BrowseBiaAppAction.LoadBia({
             pageRequest: undefined,
             cycleId: payload.cycle,
           }),
+          new BrowseBiaAppAction.LoadCycles({}),
           new BrowseBiaAppAction.ToggleDialog({}),
         ]);
       }),
