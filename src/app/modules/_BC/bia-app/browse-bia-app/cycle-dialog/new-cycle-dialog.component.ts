@@ -1,28 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GenericValidators } from '@shared/validators/generic-validators';
-import { TranslateService } from '@ngx-translate/core';
-import { ActivatedRoute } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
-import { FormUtils } from '@core/utils';
-import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
-import { BcCycleStatus, BcVersions } from 'src/app/api/models';
-import { BCAction, BCState, BiaAction } from '@core/states';
-import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
-import { BrowseBiaAppAction } from '../../states/browse-bia-app.action';
-import {
-  BrowseBiaAppState,
-  BrowseBiaAppStateModel,
-} from '../../states/browse-bia-app.state';
-import { BrowseBCAction } from '../../../states/browse-bc.action';
-import { BiaAppsState } from '@core/states/bia-apps/bia-apps.state';
-import { LazyLoadEvent, MenuItem } from 'primeng/api';
-import { BcCycles } from '../../../../../api/models/bc-cycles';
-import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
-import { PrivilegesService } from '@core/services/privileges.service';
-import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute} from '@angular/router';
+import {Select, Store} from '@ngxs/store';
+import {Observable, Subject} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {FormUtils} from '@core/utils';
+import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
+import {BcCycleStatus, BcVersions} from 'src/app/api/models';
+import {BCState, BiaAction} from '@core/states';
+import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
+import {BrowseBiaAppAction} from '../../states/browse-bia-app.action';
+import {BrowseBiaAppState, BrowseBiaAppStateModel} from '../../states/browse-bia-app.state';
+import {BrowseBCAction} from '../../../states/browse-bc.action';
+import {BiaAppsState} from '@core/states/bia-apps/bia-apps.state';
+import {LazyLoadEvent, MenuItem} from 'primeng/api';
+import {BcCycles} from '../../../../../api/models/bc-cycles';
+import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
+import {PrivilegesService} from '@core/services/privileges.service';
+import {DateTimeUtil} from '@core/utils/DateTimeUtil';
 
 @Component({
   selector: 'app-new-cycle-dialog',
@@ -50,7 +47,7 @@ export class NewCycleDialogComponent implements OnInit {
   public versions$: Observable<BcVersions[]>;
 
   @Input()
-  cycle: number;
+  cycle: BcCycles[];
 
   selectedCycle: BcCycles = {};
 
@@ -137,7 +134,7 @@ export class NewCycleDialogComponent implements OnInit {
       ...this.form.value,
     };
     this.store.dispatch(
-      new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle })
+      new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle['id'] })
     );
   }
   sort(event) {
