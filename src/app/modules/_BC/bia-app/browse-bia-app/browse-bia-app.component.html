@@ -73,6 +73,7 @@
               [loading]="blocking$ | async" [disabled]="loading$ | async"
               (click)="changeStatues(VERSION_STATUSES?.UNDER_APPROVAL)" class="p-button-outlined"></button>
           </ng-container>
+          <p-confirmPopup></p-confirmPopup>
         </div>
       </div>
     </div>

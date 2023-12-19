@@ -24,6 +24,7 @@
     "DIVISION": "Division Name",
     "ADD_RESOURCE": "Add Resources"
   },
+  "CONFIRM": "Are you sure that you want to proceed?",
   "DIALOG": {
     "NAME_AR": "Name Ar",
     "NAME_EN": "Name En",
