@@ -302,7 +302,7 @@
           pButton
           label="{{ 'RESOURCES.ADD_RESOURCE' | translate }}"
           icon="pi pi-plus"
-          [disabled]="alreadyFoundResource || cycleStatus"
+          [disabled]="alreadyFoundResource || cycleStatus || !isResourceOnDivision"
           (click)="createResource($event)"
         ></button>
         <p-confirmPopup></p-confirmPopup>
@@ -403,6 +403,7 @@
           [orgHir]="orgHireracy"
           [selectedOrgHir]="state.pageRequest.filters['orgHierarchyId']"
           [cycleStatus]="cycleStatus"
+          [isActivityOnSection]="isActivityOnSection"
         ></app-activities-dialog>
       </div>
     </p-toolbar>
