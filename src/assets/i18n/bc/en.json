@@ -5,7 +5,7 @@
   "VERSIONS_SETTINGS": "Version Management",
   "SELECT_MSG_INFO": "No Version Selected!",
   "SELECT_MSG_ACTION": "Please select version to continue",
-
+  "CONFIRM": "Are you sure that you want to proceed?",
   "SEND_APPROVAL": "Send for Approval",
   "APPROVED": "Approve",
   "RETURN_MOD": "Return for Modification",

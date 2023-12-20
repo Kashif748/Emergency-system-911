@@ -30,6 +30,7 @@ import { SelectDialogComponent } from './_layout/components/header/header-menu/s
 import { LogoWrapperComponent } from './_layout/components/header/logo-wrapper/logo-wrapper.component';
 import { PhonebookOffcanvasModule } from './_layout/components/phonebook-offcanvas/phonebook-offcanvas.module';
 import {NotificationPopupModule} from "./_layout/components/notification-popup/notification-popup.module";
+import {AuthService} from "@core/services/auth.service";
 @NgModule({
   declarations: [
     LayoutComponent,
@@ -64,5 +65,6 @@ import {NotificationPopupModule} from "./_layout/components/notification-popup/n
     PhonebookOffcanvasModule,
     NotificationPopupModule
   ],
+  providers: [AuthService]
 })
 export class LayoutModule {}

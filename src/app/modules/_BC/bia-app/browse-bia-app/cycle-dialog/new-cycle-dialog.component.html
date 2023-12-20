@@ -350,20 +350,20 @@
                         label: ('RETURN_MOD' | translate),
                         icon: 'pi pi-replay',
                         command: changeStatues(item.id, VERSION_STATUSES.CREATED),
-                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL 
-                          && privilege.checkActionPrivileges('PRIV_APPROVE_ANALYSIS_CYCLE')
+                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL
+                          && privilege.checkActionPrivileges(['PRIV_APPROVE_ANALYSIS_CYCLE'])
                       }, {
                         label: ('APPROVED' | translate),
                         icon: 'pi pi-check',
                         command: changeStatues(item.id, VERSION_STATUSES.APPROVED),
-                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL 
-                          && privilege.checkActionPrivileges('PRIV_APPROVE_ANALYSIS_CYCLE')
+                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL
+                          && privilege.checkActionPrivileges(['PRIV_APPROVE_ANALYSIS_CYCLE'])
                       }, {
                         label: ('SEND_APPROVAL' | translate),
                         icon: 'pi pi-send',
                         command: changeStatues(item.id, VERSION_STATUSES.UNDER_APPROVAL),
                         visible: (item?.status?.id === VERSION_STATUSES.CREATED ||
-                          item?.status?.id === VERSION_STATUSES.NEEDS_MODIFICATIONS) 
+                          item?.status?.id === VERSION_STATUSES.NEEDS_MODIFICATIONS)
                           && privilege.checkActionPrivileges('PRIV_ED_ANALYSIS_CYCLE')
                       }]"></p-menu>
                     </ng-container>

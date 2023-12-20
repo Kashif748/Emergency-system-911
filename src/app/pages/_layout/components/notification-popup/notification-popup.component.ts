@@ -6,6 +6,7 @@ import {isEmpty} from 'lodash';
 import {Router} from "@angular/router";
 import {TranslationService} from "../../../../modules/i18n/translation.service";
 import {takeUntil} from "rxjs/operators";
+import {AuthService} from "@core/services/auth.service";
 
 @Component({
   selector: 'app-notification-popup',
@@ -18,22 +19,27 @@ export class NotificationPopupComponent implements OnInit, OnDestroy {
   display;
   notifCount$: Observable<any>;
   private destroy$ = new Subject();
+  isLoggedIn: boolean;
   constructor(
     private translationService: TranslationService,
     private translate: TranslateService,
     private notificationService: NotifService,
     private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.lang = this.translationService.getSelectedLanguage();
     this.notifCount$ = this.notificationService.unreadCount$;
     this.notification$ = this.notificationService.unreadNotificationInPopup$;
-    this.notificationService.getNotifications().pipe(takeUntil(this.destroy$)).subscribe();
-
     this.notificationService.popup$.pipe(takeUntil(this.destroy$)).subscribe(popup => {
       this.display = popup;
     });
+
+    this.isLoggedIn = this.authService.isAuthorized();
+    if (this.isLoggedIn) {
+      this.display = true;
+    }
 
   }
   markAsRead(id) {
