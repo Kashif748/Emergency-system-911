@@ -38,7 +38,9 @@ export const phoneNumberValidator = (control: any) => {
           control.value.countryCode
         );
         const type = phoneUtil.getNumberType(number);
-        if (phoneType && type != lpn.PhoneNumberType[phoneType]) {
+        if (phoneType &&
+          !((type === lpn.PhoneNumberType.FIXED_LINE || type === lpn.PhoneNumberType.MOBILE) && phoneType === "FIXED_LINE_OR_MOBILE") &&
+          type !== lpn.PhoneNumberType[phoneType]) {
           return error;
         }
       } catch (e) {
