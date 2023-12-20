@@ -114,6 +114,8 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   alreadyFoundResource: boolean = false;
   cycleStatus: boolean = false;
   closeAlertBox: boolean = true;
+  isResourceOnDivision: boolean = false;
+  isActivityOnSection: boolean = false;
 
   public sortableColumns = [
     {
@@ -470,6 +472,12 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.avoidSearch = false;
     }
+    if (filter['orgHierarchyId']) {
+      const hierarchyType = filter['orgHierarchyId']?.data?.bcOrgHirType?.id;
+      this.isActivityOnSection = hierarchyType === 3;
+      this.isResourceOnDivision = hierarchyType === 2;
+    }
+
     const keys = Object.keys(filter);
     if (keys.length > 0) {
       switch (keys[0]) {
