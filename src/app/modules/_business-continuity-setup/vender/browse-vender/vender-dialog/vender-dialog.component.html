@@ -325,11 +325,29 @@
       <!-- home phone -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
-          <input type="text" formControlName="pcontactSecNum" pInputText />
-          <label>
+          <ngx-intl-tel-input phoneType="FIXED_LINE_OR_MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
+                              formControlName="pcontactSecNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
+          </ngx-intl-tel-input>
+          <label class="dir-text">
             {{ "VENDERS.DIALOG.HOME_NUMBER" | translate }}
           </label>
         </span>
+        <ng-container
+          *ngIf="this.form.get('pcontactSecNum').touched &&
+            !this.form.get('pcontactSecNum').valid &&
+            this.form.get('pcontactSecNum').dirty
+          "
+        >
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="
+              this.form.get('pcontactSecNum').hasError('validatePhoneNumber')
+            "
+          >
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
       </div>
 
       <div class="p-field p-col-12 p-md-6">
@@ -461,11 +479,30 @@
       <!-- home phone -->
       <div class="p-field p-col-12 p-md-6">
         <span class="p-float-label">
-          <input type="text" formControlName="scontactSecNum" pInputText />
-          <label>
+          <ngx-intl-tel-input phoneType="FIXED_LINE_OR_MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
+                              formControlName="scontactSecNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
+          </ngx-intl-tel-input>
+          <label class="dir-text">
             {{ "VENDERS.DIALOG.HOME_NUMBER" | translate }}
           </label>
         </span>
+        <ng-container
+          *ngIf="this.form.get('scontactSecNum').touched &&
+            !this.form.get('scontactSecNum').valid &&
+            this.form.get('scontactSecNum').dirty
+          "
+        >
+          <p
+            class="dir-text"
+            class="p-error mb-0"
+            *ngIf="
+              this.form.get('scontactSecNum').hasError('validatePhoneNumber')
+            "
+          >
+            {{ "VALIDATION_MSG.MOBILE.INVALID" | translate }}
+          </p>
+        </ng-container>
+
       </div>
 
       <div class="p-field p-col-12 p-md-6">
