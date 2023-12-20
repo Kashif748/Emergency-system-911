@@ -135,6 +135,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   public addLocationToMapFunc: (ref: TaskIncidentGisData) => void;
   addressPointLocation: AddressSearchResultModel = null;
   pointInXY: string;
+  contractsNo: string;
 
   protected constructor(
     protected router: Router,
@@ -213,7 +214,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
                   ),
                   reportedByMobile: rMobile,
                   locationUrl: this.incidents.location,
-                  tags :  data.result.tags.map(tagObj=> tagObj.tag.id)
+                  tags: data.result.tags.map((tagObj) => tagObj.tag.id),
                 });
 
                 if (this.incidents.org) {
@@ -287,7 +288,9 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
               this.inputLoadedDistricts();
               this.formGroup.patchValue({
                 getLocationFromReporter: data.result.getLocationFromReporter,
-                incidentTags :  data.result.incidentTags.map(tagObj=> tagObj.tag.id)
+                incidentTags: data.result.incidentTags.map(
+                  (tagObj) => tagObj.tag.id
+                ),
               });
               const obj = new Incident(data.result);
 
@@ -435,6 +438,8 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
         closeMapAuto,
       })
       .subscribe((response) => {
+        console.log(response);
+
         if (!response) {
           return;
         }
@@ -455,6 +460,14 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
         ) {
           const { latitude, longitude, x, y } = response?.pointCoordinates;
           this.pointInXY = `POINT(${latitude} ${longitude})`;
+          if (response.locationInfo?.contractors) {
+            let contractsNos = response.locationInfo?.contractors?.map(
+              (contract) => contract?.CONTRACT_NO
+            );
+            this.contractsNo = contractsNos.join(',');
+            console.log(this.contractsNo);
+          }
+
           // this.groupService
           //   .checkPointIntersection(
           //     location,
@@ -550,7 +563,6 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
       locationUrl: [''],
       locationInDegrees: [''],
       getLocationFromReporter: [false],
-
     });
     if (this.commonData.currentUserDetails.id) {
       this.formGroup.patchValue({
@@ -1653,7 +1665,8 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
         .getCategoryZoneGroups(
           this.formGroup.value.incidentCategory,
           this.formGroup.value.incidentDistrict.zoneId,
-          this.pointInXY
+          this.pointInXY,
+          this.contractsNo
         )
         .subscribe((value) => {
           if (value) {
