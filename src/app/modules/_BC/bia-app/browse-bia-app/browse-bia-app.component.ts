@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { LazyLoadEvent, MenuItem, TreeNode } from 'primeng/api';
+import {ConfirmationService, LazyLoadEvent, MenuItem, TreeNode} from 'primeng/api';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { TreeHelper } from '@core/helpers/tree.helper';
 import { ILangFacade } from '@core/facades/lang.facade';
@@ -29,6 +29,7 @@ import { OrgDetailAction, OrgDetailState } from '@core/states';
 import { BcOrgHierarchyProjection } from '../../../../api/models/bc-org-hierarchy-projection';
 import { cloneDeep } from 'lodash';
 import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
+import {BrowseResourceAnalysisAction} from "../../impact-analysis/states/browse-resource-analysis.action";
 
 @Component({
   selector: 'app-browse-bia-app',
@@ -111,7 +112,8 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private treeHelper: TreeHelper,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
   ) {
     this.langFacade.vm$
       .pipe
@@ -393,12 +395,21 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     }
   }
   changeStatues(status: VERSION_STATUSES) {
-    this.store.dispatch(
-      new BrowseBiaAppAction.ChangeCycleStatus({
-        cycleId: this.selectedCycle?.id,
-        statusId: status,
-      })
-    );
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translate.instant('CONFIRM'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(
+          new BrowseBiaAppAction.ChangeCycleStatus({
+            cycleId: this.selectedCycle?.id,
+            statusId: status,
+          })
+        );
+      },
+      reject: () => {
+      },
+    });
   }
   openDialog(id?: number, cycle?: string) {
     this.store.dispatch(new BrowseBiaAppAction.ToggleDialog({ dialog: cycle }));

@@ -44,6 +44,8 @@ import {NewCycleDialogComponent} from "./browse-bia-app/cycle-dialog/new-cycle-d
 import {CalendarModule} from "primeng/calendar";
 import {BadgeModule} from "primeng/badge";
 import {CdateModule} from "@shared/sh-pipes/cdate.pipe";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {ConfirmationService} from "primeng/api";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/bia-app/', '.json');
@@ -98,8 +100,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     CalendarModule,
     BadgeModule,
     ToolbarModule,
-    CdateModule
+    CdateModule,
+    ConfirmPopupModule
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  providers: [{ provide: ILangFacade, useClass: LangFacade }, ConfirmationService],
 })
 export class BiaAppModule { }

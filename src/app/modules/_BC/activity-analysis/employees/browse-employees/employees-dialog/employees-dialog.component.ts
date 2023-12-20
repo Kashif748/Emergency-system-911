@@ -137,7 +137,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy, AfterViewIni
       ],
       mobileNumber: [null, [Validators.required]],
       phoneNumber: [null, [Validators.required]],
-      secondNumber: [],
+      secondNumber: [null],
       isPrimary: false,
     });
   }
