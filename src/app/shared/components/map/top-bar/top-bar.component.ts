@@ -91,7 +91,7 @@ export class TopBarComponent implements OnInit {
               if (oldValue.indexOf(layer) == -1) {
                 const layerFeature = {
                   url: `${layer.url}/${layer.layerId}`,
-                  id: layer.id,
+                  id: layer.nameEn.replace(/ /g, '_').toUpperCase(),
                   layerId: layer.layerId,
                 };
                 this.map.addLayer(layerFeature);
@@ -100,7 +100,9 @@ export class TopBarComponent implements OnInit {
           } else {
             oldValue.forEach((layer) => {
               if (newValue.indexOf(layer) == -1)
-                this.map.removeLayer(layer?.id);
+                this.map.removeLayer(
+                  layer.nameEn.replace(/ /g, '_').toUpperCase()
+                );
             });
           }
         })

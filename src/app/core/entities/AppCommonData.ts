@@ -131,6 +131,7 @@ export interface CurrentOrgDetails {
   parent: Parent;
   location?: any;
   id: number;
+  mapGisLayer: string;
 }
 
 export interface DailySummaryReportStatu {
