@@ -213,7 +213,7 @@
 
             <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <input type="text" formControlName="nameAr" pInputText />
+                <input type="text" formControlName="nameAr" pInputText/>
                 <label>
                   {{ "GROUP.NAME_AR" | translate }}
                   <strong class="required-asterisk"> * </strong>
@@ -244,9 +244,9 @@
 
             <div class="p-field p-col-12 p-md-6">
               <span class="p-float-label">
-                <input type="text" formControlName="nameEn" pInputText />
+                <input type="text" formControlName="nameEn" pInputText/>
                 <label
-                  >{{ "GROUP.NAME_EN" | translate }}
+                >{{ "GROUP.NAME_EN" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
@@ -283,7 +283,7 @@
                   rows="5"
                 ></textarea>
                 <label
-                  >{{ "GROUP.DESCRIPTION_AR" | translate }}
+                >{{ "GROUP.DESCRIPTION_AR" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
@@ -320,7 +320,7 @@
                   rows="5"
                 ></textarea>
                 <label
-                  >{{ "GROUP.DESCRIPTION_EN" | translate }}
+                >{{ "GROUP.DESCRIPTION_EN" | translate }}
                   <strong class="required-asterisk"> * </strong>
                 </label>
               </span>
@@ -583,17 +583,13 @@
                     </ng-container>
                     <ng-container *ngIf="!options || options.length === 0">
                       {{ "INCIDENTS.MAIN_CAT" | translate }}
+                      <strong class="required-asterisk"> * </strong>
                     </ng-container>
                   </ng-template>
                   <ng-template let-option pTemplate="item">
                     {{ option | translateObj }}
                   </ng-template>
                 </p-multiSelect>
-                <label>
-                  {{ "INCIDENTS.MAIN_CAT" | translate }}
-                  <strong class="required-asterisk"> * </strong>
-                </label>
-
                 <ng-container
                   *ngIf="
                     incidentCategory.controls['incidentCategory'].touched &&
@@ -601,14 +597,7 @@
                     incidentCategory.controls['incidentCategory'].dirty
                   "
                 >
-                  <p
-                    class="p-error mb-0"
-                    *ngIf="
-                      incidentCategory.controls['incidentCategory'].hasError(
-                        'required'
-                      )
-                    "
-                  >
+                  <p class="p-error mb-0" *ngIf="incidentCategory.controls['incidentCategory'].hasError('required')">
                     {{ "VALIDATION_MSG.REQUIRED" | translate }}
                   </p>
                 </ng-container>
@@ -669,10 +658,10 @@
             class="p-fluid"
             autocomplete="off"
           >
-            <div *ngIf="!(viewOnly$ | async)" class="col-12">
+            <ng-container *ngIf="!(viewOnly$ | async)">
               <label class="p-inputlabel mt-3 mb-1">{{
                 "GROUP.CHOOSE_APPROACH" | translate
-              }}</label>
+                }}</label>
               <div class="p-col-12">
                 <p-selectButton
                   formControlName="mapAndList"
@@ -694,13 +683,13 @@
                   iconPos="right"
                 ></p-toggleButton> -->
               </div>
-            </div>
+            </ng-container>
 
             <ng-container
               [ngSwitch]="groupZoneIncidentCategory.get('mapAndList').value"
             >
               <!--  SELECT DEOPDOWNS -->
-              <div *ngSwitchCase="'SELECT'" class="row">
+              <div *ngSwitchCase="'SELECT'" class="mt-4 d-flex">
                 <div
                   class="p-field p-col-6 p-md-6"
                   *ngIf="!checkMap && viewOnly$ | async"
@@ -755,7 +744,7 @@
                                 {{ zone | translateObj : "name" }}
                               </div>
                             </div>
-                            <br />
+                            <br/>
                           </span>
                         </span>
                       </div>
@@ -790,16 +779,13 @@
                         </ng-container>
                         <ng-container *ngIf="!options || options.length === 0">
                           {{ "INCIDENTS.CENTER" | translate }}
+                          <strong class="required-asterisk"> * </strong>
                         </ng-container>
                       </ng-template>
                       <ng-template let-option pTemplate="item">
                         {{ option.center | translateObj : "name" }}
                       </ng-template>
                     </p-multiSelect>
-                    <label>
-                      {{ "INCIDENTS.CENTER" | translate }}
-                      <strong class="required-asterisk"> * </strong>
-                    </label>
 
                     <ng-container
                       *ngIf="
@@ -856,10 +842,9 @@
                             </span>
                           </div>
                         </ng-container>
-                        <ng-container
-                          *ngIf="!selected || selected.length === 0"
-                        >
+                        <ng-container *ngIf="!selected || selected.length === 0">
                           {{ "INCIDENTS.DISTRICT" | translate }}
+                          <strong class="required-asterisk"> * </strong>
                         </ng-container>
                       </ng-template>
 
@@ -867,11 +852,6 @@
                         {{ item | translateObj : "name" }}
                       </ng-template>
                     </p-multiSelect>
-                    <label>
-                      {{ "INCIDENTS.DISTRICT" | translate }}
-                      <strong class="required-asterisk"> * </strong>
-                    </label>
-
                     <ng-container
                       *ngIf="
                         groupZoneIncidentCategory.controls['zoneId'].touched &&
