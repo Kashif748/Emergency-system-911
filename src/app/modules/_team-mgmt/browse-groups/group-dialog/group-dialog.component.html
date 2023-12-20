@@ -688,6 +688,7 @@
             <ng-container
               [ngSwitch]="groupZoneIncidentCategory.get('mapAndList').value"
             >
+
               <!--  SELECT DEOPDOWNS -->
               <div *ngSwitchCase="'SELECT'" class="mt-4 d-flex">
                 <div
@@ -875,6 +876,7 @@
               </div>
               <!--  MAP SEARCH- -->
               <div *ngSwitchCase="'MAP'">
+                {{groupZoneIncidentCategory.get('mapAndList').value}}
                 <ng-template [ngTemplateOutlet]="mapInput"></ng-template>
               </div>
               <!-- Contract NO - GIS SEARCH- -->
