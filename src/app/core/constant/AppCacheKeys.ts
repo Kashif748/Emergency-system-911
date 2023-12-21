@@ -15,4 +15,5 @@ export enum AppCacheKeys {
   MODULE_PRIVILEGES = 'MODULE_PRIVILEGES',
   USER_FIREBASE_TOKEN = 'USER_FIREBASE_TOKEN',
   SESSION = 'session',
+  POPUP = 'popup',
 }
