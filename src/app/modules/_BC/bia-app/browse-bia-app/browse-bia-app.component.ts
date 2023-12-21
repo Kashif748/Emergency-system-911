@@ -144,6 +144,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       .subscribe();
     this.store
       .dispatch([
+        new BrowseBiaAppAction.LoadActivitiesStatuses(),
         new BrowseBiaAppAction.LoadCycles({}),
         new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
       ])
