@@ -544,20 +544,50 @@ export class GroupDialogComponent
     const value = this.groupZoneIncidentCategory.get('mapAndList').value;
     const centerControl = this.groupZoneIncidentCategory.get('centerList');
     const zoneControl = this.groupZoneIncidentCategory.get('zoneId');
-    if (value === 'MAP') {
+    this.checkMap = value === 'MAP';
+    centerControl.clearValidators();
+    zoneControl.clearValidators();
+    centerControl.setValue(null);
+    zoneControl.setValue(null);
+    if (value === 'SELECT') {
+      centerControl.setValidators([Validators.required]);
+      zoneControl.setValidators([Validators.required]);
+    }
+    centerControl.setValue(null);
+    zoneControl.setValue(null);
+    centerControl.updateValueAndValidity();
+    zoneControl.updateValueAndValidity();
+
+
+
+    /*if (value === 'MAP' || value === 'CONTRACT_NO_SEARCH') {
       this.checkMap = true;
-      // this.groupZoneIncidentCategory.get('centerList').setValue('');
-      // this.groupZoneIncidentCategory.get('incidentCategory').setValue('');
-      // this.groupZoneIncidentCategory.get('zoneId').setValue('');
       centerControl.clearValidators();
       zoneControl.clearValidators();
-    } else {
+      this.groupZoneIncidentCategory.reset();
+    } else if (value === 'SELECT') {
       this.checkMap = false;
-      // this.namedLocations = [];
       centerControl.setValidators(Validators.required);
       zoneControl.setValidators(Validators.required);
+      this.groupZoneIncidentCategory.reset();
     }
-    console.log(value);
+
+
+    if (value === 'MAP') {
+      this.checkMap = true;
+      centerControl.clearValidators();
+      zoneControl.clearValidators();
+    } else if (value === 'SELECT') {
+      this.checkMap = false;
+      centerControl.setValidators(Validators.required);
+      zoneControl.setValidators(Validators.required);
+      this.groupZoneIncidentCategory.reset();
+    } else {
+      this.checkMap = false;
+      this.groupZoneIncidentCategory.reset();
+      centerControl.clearValidators();
+      zoneControl.clearValidators();
+    }*/
   }
 
   getChildrenCategories() {
@@ -847,6 +877,7 @@ export class GroupDialogComponent
         this.store
           .dispatch(new BrowseGroupsAction.UpdateGroup(group))
           .pipe(
+            takeUntil(this.destroy$),
             tap(() => {
               this.store.dispatch(
                 new BrowseGroupsAction.UpdateManager({
@@ -854,9 +885,7 @@ export class GroupDialogComponent
                   user: manager,
                 })
               );
-              takeUntil(this.destroy$);
-              take(1);
-            })
+            }),
           )
           .subscribe();
       } else {
@@ -929,7 +958,15 @@ export class GroupDialogComponent
         }
       }
     }
-
+    /*if (this.groupZoneIncidentCategory.dirty) {
+      if (!this.incidentCategory.valid) {
+        this.incidentCategory.markAllAsTouched();
+        FormUtils.ForEach(this.incidentCategory, (fc) => {
+          fc.markAsDirty();
+        });
+        return;
+      }
+    }*/
     switch (this.groupZoneIncidentCategory.get('mapAndList').value) {
       case 'CONTRACT_NO_SEARCH': // mapAndList option == CONTRACT GIS SEARCH
         this.contract.groupId = this._groupId;
@@ -954,25 +991,21 @@ export class GroupDialogComponent
 
       default: // default mapAndList value ==SELECT
         if (this._groupId) {
-          const centerList = this.groupZoneIncidentCategory.get('centerList');
-          const zoneId = this.groupZoneIncidentCategory.get('zoneId');
-          const incidentIds = this.incidentCategory.get('incidentCategory');
           let center;
-          if (!centerList.valid) {
-            centerList.markAsTouched();
-            centerList.markAsDirty();
-            return;
+          const controls = [
+            this.groupZoneIncidentCategory.get('centerList'),
+            this.groupZoneIncidentCategory.get('zoneId'),
+            this.incidentCategory.get('incidentCategory')
+          ];
+          let anyInvalid = false;
+          for (const control of controls) {
+            if (!control.valid) {
+              control.markAsTouched();
+              control.markAsDirty();
+              anyInvalid = true;
+            }
           }
-
-          if (!zoneId.valid) {
-            zoneId.markAsTouched();
-            zoneId.markAsDirty();
-            return;
-          }
-
-          if (!incidentIds.valid) {
-            incidentIds.markAsTouched();
-            incidentIds.markAsDirty();
+          if (anyInvalid) {
             return;
           }
 
@@ -990,37 +1023,13 @@ export class GroupDialogComponent
               center.push(item);
             });
           });
+          const action = this.editMode
+            ? new BrowseGroupsAction.UpdateIncidentLocInfo({ groupId: this._groupId, centers: center })
+            : new BrowseGroupsAction.AddIncidentLocInfo({ groupId: this._groupId, centers: center });
 
-          // console.log('centers', center);
-          if (this._groupId) {
-            if (this.editMode) {
-              this.store.dispatch(
-                new BrowseGroupsAction.UpdateIncidentLocInfo({
-                  groupId: this._groupId,
-                  centers: center,
-                })
-              );
-            } else {
-              this.store.dispatch(
-                new BrowseGroupsAction.AddIncidentLocInfo({
-                  groupId: this._groupId,
-                  centers: center,
-                })
-              );
-            }
-          }
+          this.store.dispatch(action);
         }
         break;
-    }
-
-    if (this.groupZoneIncidentCategory.dirty) {
-      if (!this.incidentCategory.valid) {
-        this.incidentCategory.markAllAsTouched();
-        FormUtils.ForEach(this.incidentCategory, (fc) => {
-          fc.markAsDirty();
-        });
-        return;
-      }
     }
   }
 
@@ -1080,6 +1089,8 @@ export class GroupDialogComponent
   close() {
     if (this.asDialog) {
       this.store.dispatch(new BrowseGroupsAction.ToggleDialog({}));
+      this.groupZoneIncidentCategory.reset();
+      this.incidentCategory.reset();
     } else {
       this.router.navigate(['..'], { relativeTo: this.route });
     }
