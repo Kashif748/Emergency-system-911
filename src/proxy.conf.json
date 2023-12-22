@@ -31,6 +31,16 @@
     "secure": false,
     "changeOrigin": true
   },
+
+  "/arcgis/rest/services/Infrastructure/DRM_Projects_Information/*": {
+    "target": "https://makani.drm.gov.ae",
+    "pathRewrite": {
+      "^/arcgis/rest/services/Infrastructure/DRM_Projects_Information": "arcgis/rest/services/Infrastructure/DRM_Projects_Information"
+    },
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
   "/arcgis/*": {
     "target": "https://onwani.abudhabi.ae",
     "pathRewrite": {

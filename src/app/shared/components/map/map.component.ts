@@ -1897,11 +1897,17 @@ export class MapComponent
       const currentOrgLayer = this.map.findLayerById(
         'CURRENT_ORG_IMAGE_LAYER'
       ) as FeatureLayer;
-      contractorsResult = await this.queryGemotry(
-        `${currentOrgLayer.url}/${currentOrgLayer.layerId}`,
-        this.mapView.graphics.getItemAt(0).geometry
-      );
-      result['contractors'] = contractorsResult.map((item) => item.attributes);
+      try {
+        contractorsResult = await this.queryGemotry(
+          `${currentOrgLayer.url}/${currentOrgLayer.layerId}`,
+          this.mapView.graphics.getItemAt(0).geometry
+        );
+        result['contractors'] = contractorsResult.map(
+          (item) => item.attributes
+        );
+      } catch (err) {
+        console.error(err);
+      }
     }
     this.OnSaveMap.emit({
       ff: this.applyFeature,
