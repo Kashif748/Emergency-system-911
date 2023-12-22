@@ -47,6 +47,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { CdateModule } from '@shared/sh-pipes/cdate.pipe';
+import { AccordionModule } from 'primeng/accordion';
+import { SidebarModule } from 'primeng/sidebar';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/impact-analysis/', '.json');
 }
@@ -109,6 +113,10 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     ProgressBarModule,
     InputTextModule,
     BadgeModule,
+    PerfectScrollbarModule,
+    CdateModule,
+    AccordionModule,
+    SidebarModule,
     CardModule,
   ],
   providers: [

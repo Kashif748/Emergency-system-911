@@ -1,5 +1,4 @@
 import * as lpn from 'google-libphonenumber';
-import { PhoneNumberType } from './enums/phone-number-type.enum';
 
 /*
 We use "control: any" instead of "control: FormControl" to silence:
@@ -28,21 +27,14 @@ export const phoneNumberValidator = (control: any) => {
       const error = { validatePhoneNumber: { valid: false } };
 
       inputBox.setCustomValidity('Invalid field.');
-
+      let phoneUtil = lpn.PhoneNumberUtil.getInstance();
       let number: lpn.PhoneNumber;
 
       try {
-        const phoneUtil = lpn.PhoneNumberUtil.getInstance();
         number = phoneUtil.parse(
           control.value.number,
           control.value.countryCode
         );
-        const type = phoneUtil.getNumberType(number);
-        if (phoneType &&
-          !((type === lpn.PhoneNumberType.FIXED_LINE || type === lpn.PhoneNumberType.MOBILE) && phoneType === "FIXED_LINE_OR_MOBILE") &&
-          type !== lpn.PhoneNumberType[phoneType]) {
-          return error;
-        }
       } catch (e) {
         if (isRequired) {
           return error;
@@ -50,16 +42,19 @@ export const phoneNumberValidator = (control: any) => {
           inputBox.setCustomValidity('');
         }
       }
-
       if (control.value) {
         // @ts-ignore
         if (!number) {
           return error;
         } else {
           if (
-            !lpn.PhoneNumberUtil.getInstance().isValidNumberForRegion(
+            !phoneUtil.isValidNumberForRegion(
               number,
               control.value.countryCode
+            ) ||
+            !phoneUtil.isPossibleNumberForType(
+              number,
+              lpn.PhoneNumberType[phoneType]
             )
           ) {
             return error;
