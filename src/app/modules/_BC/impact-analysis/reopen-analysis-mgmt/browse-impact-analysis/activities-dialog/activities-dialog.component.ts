@@ -8,22 +8,25 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { combineLatest, from, Observable, Subject } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import {
   BcActivities,
   BcActivityAnalysis,
   BcActivityAnalysisDto,
+  BcActivityAnalysisWorkLog,
+  BcActivityAnalysisWorkLogProjection,
   BcCycles,
   BcOrgHierarchy,
+  BcWorkLogTypes,
 } from 'src/app/api/models';
 import { Select, Store } from '@ngxs/store';
 import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
 import { BrowseImpactAnalysisAction } from '../../../states/browse-impact-analysis.action';
 import {
   auditTime,
-  concatMap,
   filter,
   map,
+  switchMap,
   take,
   takeUntil,
   tap,
@@ -64,8 +67,11 @@ import { ActivityImpactMatrixState } from '@core/states/activity-analysis/impact
 import { ActivityImapctMatrixAction } from '@core/states/activity-analysis/impact-matrix/impact-matrix.action';
 import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
 import { LazyLoadEvent, TreeNode } from 'primeng/api';
-import { FormControl } from '@angular/forms';
 import { BrowseImpactAnalysisState } from '../../../states/browse-impact-analysis.state';
+import { ActivityWorklogsState } from '@core/states/activity-analysis/worklogs/worklogs.state';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { ActivityWorklogsAction } from '@core/states/activity-analysis/worklogs/worklogs.action';
+import { FormControl, Validators } from '@angular/forms';
 
 interface tableRow {
   activity: BcActivities;
@@ -77,6 +83,9 @@ interface tableRow {
   styleUrls: ['./activities-dialog.component.scss'],
 })
 export class ActivitiesDialogComponent implements OnInit, OnDestroy {
+  @ViewChild(PerfectScrollbarComponent)
+  public directiveScroll: PerfectScrollbarComponent;
+
   @Input()
   orgHir: TreeNode[];
   @Input()
@@ -88,6 +97,9 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
 
   page$: Observable<any[]>;
   @ViewChild(Dialog) dialog: Dialog;
+  public dir$ = this.lang.vm$.pipe(
+    map(({ ActiveLang: { key } }) => (key === 'ar' ? 'rtl' : 'ltr'))
+  );
   public systemPage$: Observable<BcActivitySystems[]>;
   public recoveryPage$: Observable<BcActivityAnalysis>;
   public employeePage$: Observable<BcActivityEmployees[]>;
@@ -116,6 +128,16 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
 
   @Select(BrowseImpactAnalysisState.progressbar)
   public progressbar$: Observable<any>;
+
+  // Worklogs Sidebar
+  @Select(ActivityWorklogsState.activityWorklogTypes)
+  public activityWorklogTypes$: Observable<BcWorkLogTypes[]>;
+  @Select(ActivityWorklogsState.loading)
+  public worklogLoading$: Observable<boolean>;
+  public worklogPage$: Observable<BcActivityAnalysisWorkLogProjection[]>;
+  public selectedWorklogType: BcWorkLogTypes;
+  public displayWorklogSide = false;
+  note = new FormControl('', Validators.required);
 
   public rtosPage$: Observable<Bcrto[]>;
   public tableValue$: Observable<any[]>;
@@ -342,6 +364,16 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
           this.orgInternalPage$ = this.store
             .select(ActivityDependenciesState.activityDependencyOrg)
             .pipe(filter((p) => !!p));
+          this.worklogPage$ = this.store
+            .select(ActivityWorklogsState.page)
+            .pipe(
+              filter((p) => !!p),
+              tap(() =>
+                setTimeout(() => {
+                  this.scrollBottom();
+                }, 400)
+              )
+            );
         })
       )
       .subscribe((v) => {
@@ -483,7 +515,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
       new BrowseImpactAnalysisAction.ToggleDialog({ dialog: 'activities' })
     );
     if (this.withDuplication) {
-      this.showDuplicateRes= false;
+      this.showDuplicateRes = false;
       this.store.dispatch(new BrowseImpactAnalysisAction.Reset());
     }
   }
@@ -531,6 +563,73 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Worklogs
+  openWorklogSide() {
+
+    this.store.dispatch([
+      new ActivityWorklogsAction.LoadPage({
+        activityAnalysisId: this._analysisId,
+        page: 0,
+        size: 100,
+        resetPage: true,
+      }),
+      new ActivityWorklogsAction.LoadWorklogsTypes(),
+    ]);
+  }
+  async keydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.submitWorklog();
+    }
+  }
+  async submitWorklog() {
+    if (this.note.invalid) {
+      return;
+    }
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
+    let worklog: BcActivityAnalysisWorkLog = {
+      notes: this.note.value,
+      activityAnalysis: activityAnalysis,
+    };
+    this.store
+      .dispatch([new ActivityWorklogsAction.Create(worklog)])
+      .pipe(
+        switchMap(() =>
+          this.store.select(ActivityWorklogsState.activityWorklog)
+        ),
+        filter((p) => !!p),
+        tap(async (data) => {
+          this.note.reset();
+        })
+      )
+      .subscribe();
+  }
+  filterWorklogs(event) {
+    if (this.selectedWorklogType?.id == event.id) {
+      this.selectedWorklogType = null;
+    } else {
+      this.selectedWorklogType = event;
+    }
+    const activityAnalysis = this.store.selectSnapshot(
+      ActivityAnalysisState.activityAnalysis
+    );
+    this.store.dispatch(
+      new ActivityWorklogsAction.LoadPage({
+        page: 0,
+        size: 100,
+        actionTypeId: this.selectedWorklogType?.id,
+        activityAnalysisId: activityAnalysis?.id,
+        resetPage: true,
+      })
+    );
+  }
+  scrollBottom() {
+    if (!this.directiveScroll) return;
+    this.directiveScroll.directiveRef.scrollToBottom(0, 100);
+  }
+
+  // End worklogs
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
