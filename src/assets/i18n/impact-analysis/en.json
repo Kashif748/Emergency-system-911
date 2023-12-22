@@ -99,8 +99,8 @@
     "TAB_LABEL": "Impact Matrix",
     "TABLE_CELL": " Impact Types / Time Period"
   },
-  "WORKLOG_BTN": "Updates & Notes",
-  "WORKLOG_HEADER": "Updates and notes for acticity anlysis",
+  "WORKLOG_BTN": "Notes",
+  "WORKLOG_HEADER": "Notes for acticity anlysis",
   "BC_COPYING_ERROR_MESSAGE": "Resources already exist for current division and analysis cycle.",
   "WARNING_ERROR_MESSAGE": "Users are not allowed to perform activity analysis on chosen cycle. Cycle is not in <strong>Approved</strong> status."
 }
