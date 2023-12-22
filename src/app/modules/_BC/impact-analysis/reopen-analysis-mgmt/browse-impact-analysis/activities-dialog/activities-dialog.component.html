@@ -1,6 +1,6 @@
 <div class="p-toolbar-group-right">
   <button
-    [disabled]="cycleStatus || !isActivityOnSection"
+    [disabled]="cycleStatus"
     *checkPrivileges="'PRIV_PERFORM_ACTIVITY_ANALYSIS'"
     pButton
     label="{{ 'ADD_ACTIVITY_ACTION' | translate }}"
@@ -1259,20 +1259,21 @@
 </ng-template>
 
 <ng-template #worklog>
+  <div #worklogRef></div>
   <button
     pButton
     pRipple
     type="button"
-    (click)="openWorklogSide(); displayWorklogSide = true"
+    (click)="openWorklogSide()"
     label="{{ 'WORKLOG_BTN' | translate }}"
     class="p-button-outlined"
   ></button>
 
   <p-sidebar
     [(visible)]="displayWorklogSide"
-    [appendTo]="content"
     [showCloseIcon]="false"
     styleClass="w-500px "
+    [modal]="false"
     [position]="(dir$ | async) == 'ltr' ? 'left' : 'right'"
   >
     <div

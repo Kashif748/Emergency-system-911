@@ -588,7 +588,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     });
   }
 
-  startAnalysis(activity: BcActivityAnalysis) {
+    startAnalysis(activity: BcActivityAnalysis) {
     this.router.navigate(['bc/activity-analysis'], {
       queryParams: {
         _cycle: activity?.cycle?.id,

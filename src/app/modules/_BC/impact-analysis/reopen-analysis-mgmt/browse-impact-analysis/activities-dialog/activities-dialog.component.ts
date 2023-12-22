@@ -276,6 +276,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
               activityId: activityID?.activity.id,
               cycleId: this._cycleID,
             }),
+            new ActivityWorklogsAction.LoadWorklogsTypes(),
           ]);
 
           this.rtosPage$ = this.store.select(RtoState.page).pipe(
@@ -520,6 +521,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
     }
   }
   close() {
+    this.displayWorklogSide = false;
     this.store.dispatch(new BrowseImpactAnalysisAction.ToggleDialog({}));
   }
 
@@ -565,16 +567,30 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
 
   // Worklogs
   openWorklogSide() {
+    if (this.displayWorklogSide) return;
+    this.displayWorklogSide = true;
 
-    this.store.dispatch([
-      new ActivityWorklogsAction.LoadPage({
-        activityAnalysisId: this._analysisId,
-        page: 0,
-        size: 100,
-        resetPage: true,
-      }),
-      new ActivityWorklogsAction.LoadWorklogsTypes(),
-    ]);
+    this.activityWorklogTypes$
+      .pipe(
+        take(1),
+        map((worklogTypes) =>
+          worklogTypes.find((worklogType) => worklogType?.modifiable)
+        ),
+        filter((worklogType) => !!worklogType),
+        tap((worklogType) => {
+          this.selectedWorklogType = worklogType;
+          this.store.dispatch([
+            new ActivityWorklogsAction.LoadPage({
+              activityAnalysisId: this._analysisId,
+              page: 0,
+              size: 100,
+              resetPage: true,
+              actionTypeId: worklogType?.id,
+            }),
+          ]);
+        })
+      )
+      .subscribe();
   }
   async keydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
