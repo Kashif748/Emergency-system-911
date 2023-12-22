@@ -345,7 +345,8 @@ export class IncidentsService {
       .append('status', search?.status ?? '')
       .append('organization', search?.organization ?? '')
       .append('subject', search?.subject ?? '')
-      .append('id', search?.id ?? '');
+      .append('id', search?.id ?? '')
+      .append('tagIds', search?.tagIds ?? '');
 
     return this.http
       .get<any>(`${this.baseUrl}/incident-report`, {
