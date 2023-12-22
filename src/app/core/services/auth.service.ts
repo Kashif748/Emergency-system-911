@@ -256,6 +256,7 @@ export class AuthService implements IAuthService {
       AppCacheKeys.FIRST_LOGIN,
       result?.result?.firstLogin
     );
+    this.storageService.setItem(AppCacheKeys.POPUP, true);
     const redirect = this.route?.snapshot?.queryParams['_redirect'] as string;
     this.router.navigateByUrl(redirect ?? '/');
   }
@@ -295,7 +296,7 @@ export class AuthService implements IAuthService {
         AppCacheKeys.FIRST_LOGIN,
         result?.result?.firstLogin
       );
-
+      this.storageService.setItem(AppCacheKeys.POPUP, true);
       this.storageService.setItem(
         AppCacheKeys.ORG,
         this.storageService.getItem(AppCacheKeys.UAE_PASS_ORG)
