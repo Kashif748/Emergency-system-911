@@ -367,7 +367,7 @@
                           && privilege.checkActionPrivileges('PRIV_ED_ANALYSIS_CYCLE')
                       }]"></p-menu>
                     </ng-container>
-
+                    <p-confirmPopup></p-confirmPopup>
                     <button #initEditBtn pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                       (click)="onRowEditInit(item)" class="p-button-rounded p-button-text d-none"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"

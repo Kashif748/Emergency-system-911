@@ -15,7 +15,7 @@ import {BrowseBiaAppAction} from '../../states/browse-bia-app.action';
 import {BrowseBiaAppState, BrowseBiaAppStateModel} from '../../states/browse-bia-app.state';
 import {BrowseBCAction} from '../../../states/browse-bc.action';
 import {BiaAppsState} from '@core/states/bia-apps/bia-apps.state';
-import {LazyLoadEvent, MenuItem} from 'primeng/api';
+import {ConfirmationService, LazyLoadEvent, MenuItem} from 'primeng/api';
 import {BcCycles} from '../../../../../api/models/bc-cycles';
 import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
 import {PrivilegesService} from '@core/services/privileges.service';
@@ -82,7 +82,8 @@ export class NewCycleDialogComponent implements OnInit {
     private translate: TranslateService,
     private route: ActivatedRoute,
     private store: Store,
-    public privilege: PrivilegesService
+    public privilege: PrivilegesService,
+    private confirmationService: ConfirmationService,
   ) {}
 
   menuCommandBtn(btn, item) {
@@ -160,13 +161,23 @@ export class NewCycleDialogComponent implements OnInit {
   }
 
   changeStatues(id, status: VERSION_STATUSES) {
-    return () =>
-      this.store.dispatch(
-        new BrowseBiaAppAction.ChangeCycleStatus({
-          cycleId: id,
-          statusId: status,
-        })
-      );
+    return () => {
+      this.confirmationService.confirm({
+        target: event.target,
+        message: this.translate.instant('CONFIRM'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.store.dispatch(
+            new BrowseBiaAppAction.ChangeCycleStatus({
+              cycleId: id,
+              statusId: status,
+            })
+          );
+        },
+        reject: () => {
+        },
+      });
+    };
   }
 
   public loadPage(event?: LazyLoadEvent) {
