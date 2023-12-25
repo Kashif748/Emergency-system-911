@@ -47,6 +47,8 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
   // variable
   form: FormGroup;
   _venderId: number;
+  pMobileCountry = '+971';
+  sMobileCountry = '+971';
 
   get editMode() {
     return this._venderId !== undefined && this._venderId !== null;
@@ -72,6 +74,7 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
             ...vender,
           });
           this.patchValues(vender);
+          this.cdr.detectChanges();
           this.defaultFormValue = vender;
         })
       )
@@ -195,13 +198,25 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
     };
 
     vender.isCritical = vender.isCritical.id === 1 ? true : false;
-    vender.pcontactMobileNum = vender.pcontactMobileNum?.number;
-    vender.scontactMobileNum = vender.scontactMobileNum?.number;
+    vender.pcontactMobileNum = this.concatenateWithCountryCode(vender.pcontactMobileNum?.number, 'primary');
+    vender.scontactMobileNum = this.concatenateWithCountryCode(vender.scontactMobileNum?.number, 'secondary');
     vender.id = this._venderId;
     if (this.editMode) {
       this.store.dispatch(new BrowseVenderAction.UpdateVender(vender));
     } else {
       this.store.dispatch(new BrowseVenderAction.CreateVender(vender));
+    }
+  }
+  concatenateWithCountryCode(phoneNumber: string, contactType: 'primary' | 'secondary'): string {
+    const countryCode = contactType === 'primary' ? this.pMobileCountry : this.sMobileCountry;
+    return countryCode + phoneNumber;
+  }
+
+  onCountryChange(event: any, primary) {
+    if (primary) {
+      this.pMobileCountry = '+' + event.dialCode;
+    } else {
+      this.sMobileCountry = '+' + event.dialCode;
     }
   }
 }
