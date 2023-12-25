@@ -21,7 +21,9 @@ import {
 import { BcVersions } from 'src/app/api/models';
 import { BrowseBCAction } from '../states/browse-bc.action';
 import { BrowseBCState, BrowseBCStateModel } from '../states/browse-bc.state';
-import { LazyLoadEvent } from 'primeng/api';
+import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
+import {PrivilegesService} from "@core/services/privileges.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-bc',
@@ -29,6 +31,7 @@ import { LazyLoadEvent } from 'primeng/api';
   styleUrls: ['./bc.component.scss'],
 })
 export class BCComponent implements OnInit, OnDestroy {
+  VERSION_STATUSES = VERSION_STATUSES;
   @Select(BrowseBCState.state)
   public state$: Observable<BrowseBCStateModel>;
 
@@ -70,7 +73,10 @@ export class BCComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private auth: IAuthService,
     private langFacade: ILangFacade,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public privilege: PrivilegesService,
+    private translate: TranslateService,
+    private confirmationService: ConfirmationService,
   ) {
     this.route.queryParams
       .pipe(
@@ -197,11 +203,33 @@ export class BCComponent implements OnInit, OnDestroy {
   }
 
   deleteVersion(id) {
-    this.store
+    return () => {
+      this.store
       .dispatch(new BrowseBCAction.Delete({ id }))
       .toPromise()
       .then(() => {
         this.loadPage();
       });
+    };
+  }
+
+  changeStatues(id, status: VERSION_STATUSES) {
+    return () => {
+      this.confirmationService.confirm({
+        target: event.target,
+        message: this.translate.instant('CONFIRM'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.store.dispatch(
+            new BrowseBCAction.ChangeStatus({
+              versionId: id,
+              statusId: status,
+            })
+          );
+        },
+        reject: () => {
+        },
+      });
+    };
   }
 }
