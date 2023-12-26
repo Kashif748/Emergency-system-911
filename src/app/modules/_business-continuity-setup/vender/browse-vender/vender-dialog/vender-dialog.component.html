@@ -303,7 +303,7 @@
       <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
           <ngx-intl-tel-input phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['us','at','it']"
-                              [preferredCountries]="['ae']" (countryChange)="onCountryChange($event, true)"
+                              [preferredCountries]="['ae']"
             formControlName="pcontactMobileNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -455,7 +455,7 @@
       <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
           <ngx-intl-tel-input #scontactMobileNum phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['us','at','it']"
-                              [preferredCountries]="['ae']" (countryChange)="onCountryChange($event, false)"
+                              [preferredCountries]="['ae']"
             formControlName="scontactMobileNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
           </ngx-intl-tel-input>
           <label class="dir-text">
