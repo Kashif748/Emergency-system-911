@@ -302,7 +302,8 @@
       <!-- mobile -->
       <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
-          <ngx-intl-tel-input phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
+          <ngx-intl-tel-input phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['us','at','it']"
+                              [preferredCountries]="['ae']"
             formControlName="pcontactMobileNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -323,9 +324,9 @@
       </div>
 
       <!-- home phone -->
-      <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
-          <ngx-intl-tel-input phoneType="FIXED_LINE_OR_MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae','gb']"
+          <ngx-intl-tel-input phoneType="FIXED_LINE_OR_MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
                               formControlName="pcontactSecNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -453,7 +454,8 @@
       <!-- mobile -->
       <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
-          <ngx-intl-tel-input phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
+          <ngx-intl-tel-input #scontactMobileNum phoneType="MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['us','at','it']"
+                              [preferredCountries]="['ae']"
             formControlName="scontactMobileNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">
           </ngx-intl-tel-input>
           <label class="dir-text">
@@ -477,7 +479,7 @@
       </div>
 
       <!-- home phone -->
-      <div class="p-field p-col-12 p-md-6">
+      <div class="p-field p-col-12 p-md-6" dir="ltr">
         <span class="p-float-label">
           <ngx-intl-tel-input phoneType="FIXED_LINE_OR_MOBILE" cssClass="p-inputtext p-component p-text-left" [onlyCountries]="['ae']"
                               formControlName="scontactSecNum" [enablePlaceholder]="false" [enableAutoCountrySelect]="true">

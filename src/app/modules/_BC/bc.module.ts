@@ -40,6 +40,8 @@ import { BrowseOrgDetailState } from './bc-lists/org-detail/states/browse-orgDet
 import { BlockUIModule } from 'primeng/blockui';
 import { BlockableDivModule } from '@shared/sh-components/blockable-div/blockable-div.component';
 import { ProgressBarModule } from 'primeng/progressbar';
+import {ConfirmationService} from "primeng/api";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/bc/', '.json');
@@ -91,7 +93,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     BlockUIModule,
     BlockableDivModule,
     ProgressBarModule,
+    ConfirmPopupModule
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  providers: [{ provide: ILangFacade, useClass: LangFacade }, ConfirmationService],
 })
 export class BCModule {}

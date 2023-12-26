@@ -3,5 +3,6 @@
 export interface BcActivityAnalysisDto {
   activityId?: number;
   cycleId?: number;
+  orgHirId?: number;
 }
 
