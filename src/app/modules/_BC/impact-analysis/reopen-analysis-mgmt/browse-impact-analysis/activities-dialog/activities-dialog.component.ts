@@ -455,6 +455,7 @@ export class ActivitiesDialogComponent implements OnInit, OnDestroy {
       return {
         activityId: activity.id,
         cycleId: this.selectedCycle?.id,
+        orgHirId: this.selectedOrgHir?.id
       };
     });
 
