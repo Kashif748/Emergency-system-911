@@ -228,9 +228,37 @@
                     </td>
 
                     <td>
-                      <button *checkPrivileges="'PRIV_ED_BC_VER'" (click)="deleteVersion(item.id)" pButton pRipple
-                        type="button" icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger p-button-text"></button>
+                      <ng-container>
+                        <button [ngClass]="{'d-none': editing}" pButton pRipple type="button" icon="pi pi-ellipsis-v"
+                                class="p-button-rounded p-button-text my-auto p-button-plain"
+                                (click)="menu.toggle($event)"></button>
+                        <p-menu #menu appendTo="body" [popup]="true" [model]="[{
+                        label: ('ACTIONS.DELETE' | translate),
+                        icon: 'pi pi-trash',
+                        command: deleteVersion(item.id),
+                        visible: privilege.checkActionPrivileges('PRIV_ED_BC_VER')
+                      }, {
+                        label: ('RETURN_MOD' | translate),
+                        icon: 'pi pi-replay',
+                        command: changeStatues(item.id, VERSION_STATUSES.CREATED),
+                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL
+                          && privilege.checkActionPrivileges(['PRIV_APRV_BC_VER'])
+                      }, {
+                        label: ('APPROVED' | translate),
+                        icon: 'pi pi-check',
+                        command: changeStatues(item.id, VERSION_STATUSES.APPROVED),
+                        visible: item?.status?.id === VERSION_STATUSES.UNDER_APPROVAL
+                          && privilege.checkActionPrivileges(['PRIV_APRV_BC_VER'])
+                      }, {
+                        label: ('SEND_APPROVAL' | translate),
+                        icon: 'pi pi-send',
+                        command: changeStatues(item.id, VERSION_STATUSES.UNDER_APPROVAL),
+                        visible: (item?.status?.id === VERSION_STATUSES.CREATED ||
+                          item?.status?.id === VERSION_STATUSES.NEEDS_MODIFICATIONS)
+                          && privilege.checkActionPrivileges('PRIV_ED_BC_VER')
+                      }]"></p-menu>
+                      </ng-container>
+                      <p-confirmPopup></p-confirmPopup>
                     </td>
 
                   </tr>
