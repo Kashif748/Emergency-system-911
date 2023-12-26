@@ -12,7 +12,7 @@ import { GenericValidators } from '@shared/validators/generic-validators';
 import { RegxConst } from '@core/constant/RegxConst';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Dialog } from 'primeng/dialog';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { BrowseVenderAction } from '../../states/browse-vender.action';
@@ -76,7 +76,10 @@ export class VenderDialogComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((v) => {
-        this.form.updateValueAndValidity()
+        setTimeout(() => {
+          this.form.updateValueAndValidity();
+          this.cdr.detectChanges();
+        }, 1000);
       });
   }
 
