@@ -37,7 +37,7 @@ export class NewCycleDialogComponent implements OnInit {
 
   opened$: Observable<boolean>;
 
-  @Select(BiaAppsState.loading)
+  @Select(ImpactAnalysisState.loading)
   public loading$: Observable<boolean>;
 
   @Select(ImpactAnalysisState.blocking)
