@@ -216,7 +216,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     this.cycles$
       .pipe(
         takeUntil(this.destroy$),
-        filter((cycles) => !!cycles),
+        filter((cycles) => !!cycles && cycles.length > 0),
         map((cycles) =>
           cycles.find(
             (cycle) =>
