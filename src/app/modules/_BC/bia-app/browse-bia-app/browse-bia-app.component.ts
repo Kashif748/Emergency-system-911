@@ -213,14 +213,20 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         })
       )
     );
-    this.cycles$.pipe(
-      takeUntil(this.destroy$),
-      filter((selectedCycle) => !!selectedCycle),
-      map((cycles) => cycles.find((cycle) => cycle.id === this.selectedCycle?.id)),
-      tap((cycle) => {
-        this.selectedCycle = cycle;
-      })
-    ).subscribe();
+    this.cycles$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((cycles) => !!cycles && cycles.length > 0),
+        map((cycles) =>
+          cycles.find(
+            (cycle) =>
+              cycle.id === this.selectedCycle?.id &&
+              cycle.status?.id !== this.selectedCycle?.status?.id
+          ) || cycles[0]
+        ),
+        tap((cycle) => (this.selectedCycle = cycle))
+      )
+      .subscribe();
   }
 
   search() {
