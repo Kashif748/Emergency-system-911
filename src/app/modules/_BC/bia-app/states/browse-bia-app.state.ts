@@ -233,6 +233,27 @@ export class BrowseBiaAppState {
     );
   }
 
+  @Action(BrowseBiaAppAction.UpdateCycleFilter, { cancelUncompleted: true })
+  updateCycleFilter(
+    { setState }: StateContext<BrowseBiaAppStateModel>,
+    { payload }: BrowseBiaAppAction.UpdateCycleFilter
+  ) {
+    setState(
+      patch<BrowseBiaAppStateModel>({
+        cyclePageRequest: patch<PageRequestModel>({
+          first: 0,
+          filters: iif(
+            payload.clear === true,
+            {},
+            patch({
+              ...payload,
+            })
+          ),
+        }),
+      })
+    );
+  }
+
   @Action(BrowseBiaAppAction.CreateCycle)
   CreateCycle(
     { dispatch }: StateContext<BrowseBiaAppStateModel>,
@@ -337,14 +358,14 @@ export class BrowseBiaAppState {
   ) {
     setState(
       patch<BrowseBiaAppStateModel>({
-        pageRequest: patch<PageRequestModel>({
+        cyclePageRequest: patch<PageRequestModel>({
           sortOrder: iif((_) => payload.order?.length > 0, payload.order),
           sortField: iif((_) => payload.field !== undefined, payload.field),
         }),
       })
     );
 
-    const pageRequest = getState().pageRequest;
+    const pageRequest = getState().cyclePageRequest;
     return dispatch(
       new ImapactAnalysisAction.LoadCycles({
         page: this.apiHelper.page(pageRequest),

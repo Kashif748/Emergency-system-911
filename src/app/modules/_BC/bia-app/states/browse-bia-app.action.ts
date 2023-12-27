@@ -41,6 +41,14 @@ export namespace BrowseBiaAppAction {
     constructor(public payload: { clear?: boolean; [key: string]: any }) {}
   }
 
+  export class UpdateCycleFilter {
+    static readonly type = '[BrowseBiaApp] Update Cycle Filter';
+    /**
+     *
+     */
+    constructor(public payload: { clear?: boolean; [key: string]: any }) {}
+  }
+
   export class Export {
     static readonly type = '[BrowseBiaApp] Export';
     /**
