@@ -115,7 +115,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   cycleStatus: boolean = false;
   closeAlertBox: boolean = true;
   isResourceOnDivision: boolean = false;
-  isActivityOnSection: boolean = false;
 
   public sortableColumns = [
     {
@@ -423,21 +422,21 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    console.log(this.orgHir);
+   /* console.log(this.orgHir);
     this.orgHireracy = cloneDeep(this.orgHir);
     this.orgHireracy.forEach((node) => {
       this.markDisabledNodes(node);
-    });
+    });*/
   }
-  markDisabledNodes(node: TreeNode) {
+/*  markDisabledNodes(node: TreeNode) {
     if (node.children) {
       node.expanded = true;
       node.children.forEach((child) => {
         this.markDisabledNodes(child);
       });
     }
-    node.selectable = node?.data?.bcOrgHirType?.id === 2;
-  }
+    node.selectable = node?.data?.bcOrgHirType?.id === 3;
+  }*/
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
   }
@@ -474,7 +473,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     }
     if (filter['orgHierarchyId']) {
       const hierarchyType = filter['orgHierarchyId']?.data?.bcOrgHirType?.id;
-      this.isActivityOnSection = hierarchyType === 3;
       this.isResourceOnDivision = hierarchyType === 2;
     }
 
