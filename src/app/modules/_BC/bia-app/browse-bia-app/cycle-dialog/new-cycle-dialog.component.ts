@@ -60,7 +60,7 @@ export class NewCycleDialogComponent implements OnInit {
       name: 'DIALOG.NAME_EN',
       code: 'nameEn',
     },
-    { name: 'DIALOG.LIST', code: 'bcVersions' },
+    { name: 'DIALOG.LIST', code: 'versionId' },
     { name: 'DIALOG.STATUS', code: 'status' },
     { name: 'DIALOG.CREATED_ON', code: 'createdOn' },
   ];
