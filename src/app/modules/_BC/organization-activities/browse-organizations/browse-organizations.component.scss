@@ -1,4 +1,7 @@
 :host ::ng-deep {
+  .p-inputwrapper-filled .p-treeselect.p-treeselect-chip .p-treeselect-label{
+    padding: 0.5rem 0.5rem !important;
+  }
   .p-tag.p-button-sm > .p-button-label {
     display: none;
   }

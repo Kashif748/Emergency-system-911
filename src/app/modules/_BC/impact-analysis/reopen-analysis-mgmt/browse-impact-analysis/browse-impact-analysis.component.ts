@@ -1,31 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { ConfirmationService, LazyLoadEvent, TreeNode } from 'primeng/api';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { TranslateService } from '@ngx-translate/core';
-import {
-  auditTime,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
-import {
-  BrowseImpactAnalysisState,
-  BrowseImpactAnalysisStateModel,
-} from '../../states/browse-impact-analysis.state';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
-import {
-  BcActivityAnalysis,
-  BcAnalysisStatus,
-  BcCycles,
-  Bcrto,
-} from 'src/app/api/models';
-import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Select, Store} from '@ngxs/store';
+import {Observable, Subject} from 'rxjs';
+import {ConfirmationService, LazyLoadEvent, TreeNode} from 'primeng/api';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {TranslateService} from '@ngx-translate/core';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {BrowseImpactAnalysisState, BrowseImpactAnalysisStateModel} from '../../states/browse-impact-analysis.state';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
+import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, Bcrto} from 'src/app/api/models';
+import {BrowseImpactAnalysisAction} from '../../states/browse-impact-analysis.action';
 import {
   ActivityFrquencyAction,
   ActivityFrquencyState,
@@ -34,20 +18,15 @@ import {
   OrgDetailState,
   RtoState,
 } from '@core/states';
-import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
-import { TreeHelper } from '@core/helpers/tree.helper';
-import {
-  BrowseReourceAnalysisStateModel,
-  BrowseResourceAnalysisState,
-} from '../../states/browse-resource-analysis.state';
-import { BcResources } from '../../../../../api/models/bc-resources';
-import { ResourceAnalysisState } from '@core/states/impact-analysis/resource-analysis.state';
-import { BrowseResourceAnalysisAction } from '../../states/browse-resource-analysis.action';
-import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
-import { cloneDeep } from 'lodash';
-import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BcOrgHierarchyProjection} from 'src/app/api/models/bc-org-hierarchy-projection';
+import {TreeHelper} from '@core/helpers/tree.helper';
+import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState,} from '../../states/browse-resource-analysis.state';
+import {BcResources} from '../../../../../api/models/bc-resources';
+import {ResourceAnalysisState} from '@core/states/impact-analysis/resource-analysis.state';
+import {BrowseResourceAnalysisAction} from '../../states/browse-resource-analysis.action';
+import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -115,7 +94,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   cycleStatus: boolean = false;
   closeAlertBox: boolean = true;
   isResourceOnDivision: boolean = false;
-  isActivityOnSection: boolean = false;
 
   public sortableColumns = [
     {
@@ -423,20 +401,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    console.log(this.orgHir);
-    this.orgHireracy = cloneDeep(this.orgHir);
-    this.orgHireracy.forEach((node) => {
-      this.markDisabledNodes(node);
-    });
-  }
-  markDisabledNodes(node: TreeNode) {
-    if (node.children) {
-      node.expanded = true;
-      node.children.forEach((child) => {
-        this.markDisabledNodes(child);
-      });
-    }
-    node.selectable = node?.data?.bcOrgHirType?.id === 2;
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
@@ -474,7 +438,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     }
     if (filter['orgHierarchyId']) {
       const hierarchyType = filter['orgHierarchyId']?.data?.bcOrgHirType?.id;
-      this.isActivityOnSection = hierarchyType === 3;
       this.isResourceOnDivision = hierarchyType === 2;
     }
 
