@@ -1,35 +1,23 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {Select, Store} from '@ngxs/store';
 import {ConfirmationService, LazyLoadEvent, MenuItem, TreeNode} from 'primeng/api';
-import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { TreeHelper } from '@core/helpers/tree.helper';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { TranslateService } from '@ngx-translate/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {
-  auditTime,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
-import { BrowseBiaAppAction } from '../states/browse-bia-app.action';
-import {
-  BrowseBiaAppState,
-  BrowseBiaAppStateModel,
-} from '../states/browse-bia-app.state';
-import { BiaAppsState } from '@core/states/bia-apps/bia-apps.state';
-import { BcAnalysisByOrgHierarchyResponse } from '../../../../api/models/bc-analysis-by-org-hierarchy-response';
-import { BcAnalysisStatus, BcCycles } from '../../../../api/models';
-import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
-import { OrgDetailAction, OrgDetailState } from '@core/states';
-import { BcOrgHierarchyProjection } from '../../../../api/models/bc-org-hierarchy-projection';
-import { cloneDeep } from 'lodash';
-import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
-import {BrowseResourceAnalysisAction} from "../../impact-analysis/states/browse-resource-analysis.action";
+import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
+import {TreeHelper} from '@core/helpers/tree.helper';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {TranslateService} from '@ngx-translate/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {BrowseBiaAppAction} from '../states/browse-bia-app.action';
+import {BrowseBiaAppState, BrowseBiaAppStateModel,} from '../states/browse-bia-app.state';
+import {BiaAppsState} from '@core/states/bia-apps/bia-apps.state';
+import {BcAnalysisByOrgHierarchyResponse} from '../../../../api/models/bc-analysis-by-org-hierarchy-response';
+import {BcAnalysisStatus, BcCycles} from '../../../../api/models';
+import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
+import {OrgDetailAction, OrgDetailState} from '@core/states';
+import {BcOrgHierarchyProjection} from '../../../../api/models/bc-org-hierarchy-projection';
+import {cloneDeep} from 'lodash';
+import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
 
 @Component({
   selector: 'app-browse-bia-app',
@@ -240,7 +228,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
 
   clear() {
     this.store.dispatch([
-      new BrowseBiaAppAction.UpdateFilter({ clear: true }),
+      new BrowseBiaAppAction.UpdateCycleFilter({ clear: true }),
       new BrowseBiaAppAction.LoadBia({
         pageRequest: undefined,
         cycleId: this.selectedCycle?.id,
@@ -279,7 +267,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     }
 
     this.store
-      .dispatch(new BrowseBiaAppAction.UpdateFilter(filter))
+      .dispatch(new BrowseBiaAppAction.UpdateCycleFilter(filter))
       .toPromise()
       .then(() => {
         if (filter.type) {
