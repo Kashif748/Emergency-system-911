@@ -183,6 +183,11 @@ export class ImpactAnalysisState {
       'status',
       'createdOn',
     ];
+    setState(
+      patch<ImpactAnalysisStateModel>({
+        loading: true,
+      })
+    );
     return this.cyclesController
       .getAll20({
         isActive: true,
@@ -198,8 +203,9 @@ export class ImpactAnalysisState {
             patch<ImpactAnalysisStateModel>({
               cyclesPage: {
                 ...bc.result,
-                content: bc.result?.content?.sort((a, b) => b.id - a.id),
+                content: bc.result?.content
               },
+              loading: false,
             })
           );
         }),
