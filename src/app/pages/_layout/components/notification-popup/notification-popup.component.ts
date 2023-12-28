@@ -6,7 +6,6 @@ import {isEmpty} from 'lodash';
 import {Router} from "@angular/router";
 import {TranslationService} from "../../../../modules/i18n/translation.service";
 import {takeUntil} from "rxjs/operators";
-import {AuthService} from "@core/services/auth.service";
 import {IStorageService} from "@core/services/storage.service";
 
 @Component({
@@ -46,8 +45,12 @@ export class NotificationPopupComponent implements OnInit, OnDestroy {
       }});
   }
   makeAllAsRead() {
-    this.notificationService.markAllAsRead();
-    this.display = false;
+    this.notification$.pipe(takeUntil(this.destroy$)).subscribe((notifications) => {
+      const notificationIds = notifications.map((notification) => notification.id);
+      console.log('Notification IDs:', notificationIds);
+      this.notificationService.markImportantNotifiAllAsRead(notificationIds);
+      this.display = false;
+    });
   }
 
   redirect(item) {
