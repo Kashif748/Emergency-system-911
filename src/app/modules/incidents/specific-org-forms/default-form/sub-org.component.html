@@ -394,7 +394,7 @@
                 >
                   <mat-label>{{ "INCIDENTS.TAGS" | translate }}</mat-label>
                   <mat-select
-                    placeholder="{{ 'INCIDENTS.TAGS'| translate }}"
+                    placeholder="{{ 'INCIDENTS.TAGS' | translate }}"
                     formControlName="incidentTags"
                     multiple="true"
                   >
@@ -633,7 +633,6 @@
                   <mat-label>{{ "INCIDENTS.UNITS" | translate }}</mat-label>
                   <mat-select
                     placeholder="{{ 'INCIDENTS.UNITS' | translate }}"
-                    (selectionChange)="onChange($event)"
                     formControlName="incidentGroups"
                     multiple
                   >

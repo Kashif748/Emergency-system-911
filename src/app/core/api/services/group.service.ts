@@ -54,6 +54,9 @@ export class GroupService {
     });
   }
 
+  getListNonGlobalGroupsByOrgId(orgId) {
+    return this.http.get<any>(`${this.baseUrl}/non-global/${orgId}`);
+  }
   getCategoryZoneGroups(
     categoryId: number,
     zoneId: number,
