@@ -218,7 +218,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
                 });
 
                 if (this.incidents.org) {
-                  this.loadNonGlobalGroups(this.incidents.org.id, 0, 10);
+                  this.loadNonGlobalGroups(this.incidents.org.id);
                 }
 
                 this.incidentService
@@ -339,11 +339,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
               }
 
               if (this.incidents.responsibleOrg) {
-                this.loadNonGlobalGroups(
-                  this.incidents.responsibleOrg.id,
-                  0,
-                  10
-                );
+                this.loadNonGlobalGroups(this.incidents.responsibleOrg.id);
               }
 
               this.getGP(this.incidentId);
@@ -377,7 +373,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     } else {
       // add mode.
       const org = this.commonData.currentOrgDetails;
-      this.loadNonGlobalGroups(org.id, 0, 10);
+      this.loadNonGlobalGroups(org.id);
     }
 
     this.store
@@ -1489,24 +1485,19 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   }
 
   changGroups(id) {
-    this.loadNonGlobalGroups(id, 0, 10);
+    this.loadNonGlobalGroups(id);
   }
 
-  loadNonGlobalGroups(id, page, size) {
-    this.groupService
-      .getNonGlobalGroupsByOrgId(id, '', page, size, 'orgStructure.id,id,asc')
-      .subscribe(
-        (data) => {
-          if (data) {
-            this.groups.push(...data.result?.content);
-          }
-          if (data.result?.totalPages > page) {
-            this.loadNonGlobalGroups(id, page + 1, size);
-          }
-          this.cdr.detectChanges();
-        },
-        (error) => {}
-      );
+  loadNonGlobalGroups(id) {
+    this.groupService.getListNonGlobalGroupsByOrgId(id).subscribe(
+      (data) => {
+        if (data) {
+          this.groups = data.result;
+        }
+        this.cdr.detectChanges();
+      },
+      (error) => {}
+    );
   }
 
   getSubCatCenter() {
