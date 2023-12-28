@@ -28,60 +28,65 @@
   </ng-template>
 
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
-    <!-- first name -->
+    <!-- name AR -->
     <div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
-        <input type="text" formControlName="firstName" pInputText />
+        <input type="text" formControlName="nameAr" pInputText />
         <label>
-          {{ "PHONEBOOK.FIRST_NAME" | translate }}
+          {{ "PHONEBOOK.NAME_AR" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
       <ng-container
         *ngIf="
-          form.controls['firstName'].touched &&
-          !form.controls['firstName'].valid &&
-          form.controls['firstName'].dirty
+          form.controls['nameAr'].touched &&
+          !form.controls['nameAr'].valid &&
+          form.controls['nameAr'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['firstName'].hasError('required')"
+          *ngIf="form.controls['nameAr'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
         </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameAr'].hasError('arabic')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ARABIC" | translate }}
+        </p>
       </ng-container>
     </div>
-    <!-- middle name -->
-    <div class="p-field p-col-12 p-md-4">
-      <span class="p-float-label">
-        <input type="text" formControlName="middleName" pInputText />
-        <label>{{ "PHONEBOOK.MIDDLE_NAME" | translate }} </label>
-      </span>
-    </div>
 
-    <!-- last name -->
+    <!--  name  EN -->
     <div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
-        <input type="text" formControlName="lastName" pInputText />
+        <input type="text" formControlName="nameEn" pInputText />
         <label>
-          {{ "PHONEBOOK.LAST_NAME" | translate }}
+          {{ "PHONEBOOK.NAME_EN" | translate }}
           <strong class="required-asterisk"> * </strong>
         </label>
       </span>
 
       <ng-container
         *ngIf="
-          form.controls['lastName'].touched &&
-          !form.controls['lastName'].valid &&
-          form.controls['lastName'].dirty
+          form.controls['nameEn'].touched &&
+          !form.controls['nameEn'].valid &&
+          form.controls['nameEn'].dirty
         "
       >
         <p
           class="p-error mb-0"
-          *ngIf="form.controls['lastName'].hasError('required')"
+          *ngIf="form.controls['nameEn'].hasError('required')"
         >
           {{ "VALIDATION_MSG.REQUIRED" | translate }}
+        </p>
+        <p
+          class="p-error mb-0"
+          *ngIf="form.controls['nameEn'].hasError('english')"
+        >
+          {{ "VALIDATION_MSG.MUST_BE_IN_ENGLISH" | translate }}
         </p>
       </ng-container>
     </div>
@@ -104,31 +109,100 @@
       </span>
     </div>
 
-    <!-- org name -->
+    <!-- IsPrimary -->
     <div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
-        <input type="text" formControlName="orgName" pInputText />
         <label>
-          {{ "PHONEBOOK.ORG_NAME" | translate }}
-          <strong class="required-asterisk"> * </strong>
+          {{ "PHONEBOOK.TYPE" | translate }}
         </label>
-      </span>
-
-      <ng-container
-        *ngIf="
-          form.controls['orgName'].touched &&
-          !form.controls['orgName'].valid &&
-          form.controls['orgName'].dirty
-        "
-      >
-        <p
-          class="p-error mb-0"
-          *ngIf="form.controls['orgName'].hasError('required')"
+        <p-selectButton
+          [options]="phonebookTypes"
+          optionLabel="name"
+          optionValue="value"
+          formControlName="internal"
         >
-          {{ "VALIDATION_MSG.REQUIRED" | translate }}
-        </p>
-      </ng-container>
+          <ng-template let-item>
+            <span> {{ item?.name | translate }}</span>
+            <!-- <i [class]="item.icon"></i> -->
+          </ng-template>
+        </p-selectButton>
+      </span>
     </div>
+
+    <!-- Org Dropdown -->
+
+    <ng-container *ngIf="form.get('internal')?.value; else externalTemplate">
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <p-dropdown
+            [options]="orgs$ | async"
+            [autoDisplayFirst]="false"
+            appendTo="body"
+            [filter]="true"
+            formControlName="orgId"
+            filterBy="nameAr,nameEn,code"
+            dataKey="id"
+            [showClear]="true"
+            inputId="orgId"
+            (onShow)="loadOrgs()"
+          >
+            <ng-template let-item pTemplate="selectedItem">
+              {{ item | translateObj }}
+            </ng-template>
+
+            <ng-template let-item pTemplate="item">
+              {{ item | translateObj }}
+            </ng-template>
+          </p-dropdown>
+          <label>
+            {{ "PHONEBOOK.ORG_NAME" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+
+        <ng-container
+          *ngIf="
+            form.controls['orgId'].touched &&
+            !form.controls['orgId'].valid &&
+            form.controls['orgId'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['orgId'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+    </ng-container>
+    <!-- org name -->
+    <ng-template #externalTemplate>
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <input type="text" formControlName="orgName" pInputText />
+          <label>
+            {{ "PHONEBOOK.ORG_NAME" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+
+        <ng-container
+          *ngIf="
+            form.controls['orgName'].touched &&
+            !form.controls['orgName'].valid &&
+            form.controls['orgName'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['orgName'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+    </ng-template>
 
     <!-- phone -->
     <div class="p-field p-col-12 p-md-4">
@@ -189,6 +263,24 @@
         offIcon="pi pi-times"
         iconPos="right"
       ></p-toggleButton>
+    </div>
+
+    <!-- Notes -->
+    <div class="p-field p-col-12 mt-3">
+      <span class="p-float-label">
+        <textarea
+          inputId="textarea"
+          class="w-100"
+          maxlength="4000"
+          pInputTextarea
+          type="text"
+          formControlName="notes"
+          rows="4"
+        ></textarea>
+        <label for="textarea">
+          {{ "PHONEBOOK.NOTES" | translate }}
+        </label>
+      </span>
     </div>
   </form>
 

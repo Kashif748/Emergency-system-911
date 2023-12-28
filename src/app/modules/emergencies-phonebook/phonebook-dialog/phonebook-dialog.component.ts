@@ -1,12 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { CommonDataState, OrgAction, OrgState } from '@core/states';
 import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { FormUtils } from '@core/utils/form.utils';
 import { Select, Store } from '@ngxs/store';
+import { GenericValidators } from '@shared/validators/generic-validators';
 import { Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { IdNameProjection } from 'src/app/api/models';
 import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
 
 @Component({
@@ -14,7 +17,9 @@ import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
   templateUrl: './phonebook-dialog.component.html',
   styleUrls: ['./phonebook-dialog.component.scss'],
 })
-export class PhonebookDialogComponent implements OnInit {
+export class PhonebookDialogComponent implements OnInit, AfterViewInit {
+  phonebookTypes = [];
+
   opened$: Observable<boolean>;
   form: FormGroup;
   destroy$ = new Subject();
@@ -22,6 +27,9 @@ export class PhonebookDialogComponent implements OnInit {
 
   @Select(PhonebookState.blocking)
   blocking$: Observable<boolean>;
+
+  @Select(OrgState.orgs)
+  orgs$: Observable<IdNameProjection[]>;
 
   @Input()
   set phonebookId(v: number) {
@@ -65,17 +73,33 @@ export class PhonebookDialogComponent implements OnInit {
       map((params) => params['_dialog'] === 'opened')
     );
   }
+  ngAfterViewInit(): void {
+    this.phonebookTypes = [
+      {
+        icon: 'pi pi-bars',
+        name: 'PHONEBOOK.EXTERNAL',
+        value: false,
+      },
+      {
+        icon: 'pi pi-th-large',
+        name: 'PHONEBOOK.INTERNAL',
+        value: true,
+      },
+    ];
+  }
 
   createForm() {
     this.form = this.formBuilder.group({
-      firstName: [null, [Validators.required]],
-      lastName: [null, [Validators.required]],
-      middleName: [null],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
       orgName: [null, [Validators.required]],
+      orgId: [null, [Validators.required]],
       jobTitle: [null],
       phoneNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
       title: [null],
+      notes: [null],
+      internal: [true, [Validators.required]],
       isActive: [true, [Validators.required]],
       id: 0,
     });
@@ -101,6 +125,10 @@ export class PhonebookDialogComponent implements OnInit {
     } else {
       this.store.dispatch(new BrowsePhonebookAction.CreatePhonebook(phonebook));
     }
+  }
+  loadOrgs() {
+    const currentOrg = this.store.selectSnapshot(CommonDataState.currentOrg);
+    this.store.dispatch(new OrgAction.LoadOrgs({ orgId: currentOrg?.id }));
   }
 
   // onSubmit() {

@@ -28,24 +28,73 @@
       [collapsed]="!(hasFilters$ | async)"
     >
       <div class="p-fluid p-grid">
+        <!-- Name -->
         <div class="p-field p-col-12">
           <input
             type="text"
             pInputText
             [ngModel]="state?.pageRequest?.filters['name']"
             (keyup)="updateFilter({ name: $event.target.value }, $event)"
-            placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
+            placeholder="{{ 'PHONEBOOK.FULL_NAME' | translate }}"
           />
         </div>
+        <!-- IsPrimary -->
         <div class="p-field p-col-12">
-          <input
-            type="text"
-            pInputText
-            [ngModel]="state?.pageRequest?.filters['orgName']"
-            (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
-            placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
-          />
+          <p-selectButton
+            [options]="phonebookTypes"
+            optionLabel="name"
+            optionValue="value"
+            [(ngModel)]="isInternal"
+            value="true"
+          >
+            <ng-template let-item>
+              <span> {{ item?.name | translate }}</span>
+            </ng-template>
+          </p-selectButton>
         </div>
+
+        <!-- Org Dropdown -->
+        <ng-container *ngIf="isInternal; else externalTemplate">
+          <div class="p-field p-col-12">
+            <span class="p-float-label">
+              <p-dropdown
+                [options]="orgs$ | async"
+                [autoDisplayFirst]="false"
+                [showClear]="true"
+                dataKey="id"
+                appendTo="body"
+                [filter]="true"
+                (onChange)="updateFilter({ orgId: $event?.value?.id }, $event)"
+                filterBy="nameAr,nameEn,code"
+                inputId="orgId"
+                (onShow)="loadOrgs()"
+                placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
+              >
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item | translateObj }}
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  {{ item | translateObj }}
+                </ng-template>
+              </p-dropdown>
+            </span>
+          </div>
+        </ng-container>
+        <!-- org name -->
+        <ng-template #externalTemplate>
+          <div class="p-field p-col-12">
+            <input
+              type="text"
+              pInputText
+              [ngModel]="state?.pageRequest?.filters['orgName']"
+              (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
+              placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
+            />
+          </div>
+        </ng-template>
+
+        <!-- Mobile Number -->
         <div class="p-field p-col-12">
           <span class="p-float-label">
             <input
@@ -60,6 +109,7 @@
           </span>
         </div>
 
+        <!-- Search Actions -->
         <div class="p-col p-d-flex justify-content-between">
           <div class="mx-1">
             <button

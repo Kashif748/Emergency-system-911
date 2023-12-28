@@ -5,15 +5,18 @@
     "TITLE": "Title",
     "ID": "ID",
     "FULL_NAME": "Full Name",
-    "FIRST_NAME": "First Name",
-    "MIDDLE_NAME": "Middle Name",
-    "LAST_NAME": "Last Name",
+    "NAME_AR": "Name (Arabic)",
+    "NAME_EN": "Name (English)",
     "ORG_NAME": "Org Name",
     "MOBILE_NUMBER": "Mobile",
     "PHONE_NUMBER": "Phone",
     "IS_ACTIVE": "active",
     "JOB_TITLE": "Job Title",
     "COPY_TOOLTIP": "Copy mobile number",
-    "ALL": "All"
+    "ALL": "All",
+    "NOTES":"Notes",
+    "TYPE":"Phonebook Type",
+    "INTERNAL": "Internal",
+    "EXTERNAL": "External"
   }
 }

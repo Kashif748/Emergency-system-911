@@ -21,6 +21,9 @@ import { MenuModule } from 'primeng/menu';
 import { DialogModule } from 'primeng/dialog';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import { DividerModule } from 'primeng/divider';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -58,6 +61,9 @@ const routes: Routes = [
     DialogModule,
     ToggleButtonModule,
     SharedBreadcrumbModule,
+    SelectButtonModule,
+    TranslateObjModule,
+    DividerModule,
     TranslateModule.forChild({
       extend: true,
       loader: {
