@@ -33,5 +33,6 @@
     "CYCLE_ENTRY_DATE":"Cycle Entry Due Date",
     "CREATED_BY":"Created By",
     "CREATED_ON":"Created On"
-  }
+  },
+  "ADD_CYCLE": "Add New Cycle"
 }

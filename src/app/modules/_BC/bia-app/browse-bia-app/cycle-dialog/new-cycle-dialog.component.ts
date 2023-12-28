@@ -5,7 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {Select, Store} from '@ngxs/store';
 import {Observable, Subject} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, takeUntil, tap} from 'rxjs/operators';
 import {FormUtils} from '@core/utils';
 import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
 import {BcCycleStatus, BcVersions} from 'src/app/api/models';
@@ -50,6 +50,7 @@ export class NewCycleDialogComponent implements OnInit {
   cycle: BcCycles[];
 
   selectedCycle: BcCycles = {};
+  public showCycleForm = false;
 
   public sortableColumns = [
     {
@@ -136,7 +137,14 @@ export class NewCycleDialogComponent implements OnInit {
     };
     this.store.dispatch(
       new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle['id'] })
-    );
+    ).pipe(
+      takeUntil(this.destroy$),
+      tap((bc) => {
+        this.form.reset();
+        this.showCycleForm = false;
+      })
+    )
+      .subscribe();
   }
   sort(event) {
     this.store.dispatch(
@@ -151,13 +159,23 @@ export class NewCycleDialogComponent implements OnInit {
     );
   }
   deleteCycle(id) {
-    return () =>
-      this.store
-        .dispatch(new BrowseBiaAppAction.Delete({ id }))
-        .toPromise()
-        .then(() => {
-          this.loadPage();
-        });
+    return () => {
+      this.confirmationService.confirm({
+        target: event.target,
+        message: this.translate.instant('CONFIRM'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.store
+            .dispatch(new BrowseBiaAppAction.Delete({ id }))
+            .toPromise()
+            .then(() => {
+              this.loadPage();
+            });
+        },
+        reject: () => {
+        },
+      });
+    };
   }
 
   changeStatues(id, status: VERSION_STATUSES) {

@@ -45,7 +45,7 @@
             </ng-template>
           </p-dropdown>
           <button type="button" pButton pRipple icon="pi pi-cog" class="p-button-warning"
-            title="{{ 'VERSIONS_SETTINGS' | translate }}" *checkPrivileges="'PRIV_ED_ANALYSIS_CYCLE'"
+            title="{{ 'VERSIONS_SETTINGS' | translate }}" *checkPrivileges="['PRIV_ED_ANALYSIS_CYCLE','PRIV_APPROVE_ANALYSIS_CYCLE', 'PRIV_CR_ANALYSIS_CYCLE']"
             (click)="openDialog(null, 'new_cycle')"></button>
         </div>
         <div class="flex-grow-1"></div>
