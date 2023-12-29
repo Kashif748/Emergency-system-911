@@ -50,7 +50,6 @@ export class NewCycleDialogComponent implements OnInit {
   cycle: BcCycles[];
 
   selectedCycle: BcCycles = {};
-  public showCycleForm = false;
 
   public sortableColumns = [
     {
@@ -112,6 +111,7 @@ export class NewCycleDialogComponent implements OnInit {
 
   close() {
     this.store.dispatch(new BrowseBiaAppAction.ToggleDialog({}));
+    this.form.reset();
   }
   buildForm() {
     this.form = this.formBuilder.group({
@@ -141,7 +141,6 @@ export class NewCycleDialogComponent implements OnInit {
       takeUntil(this.destroy$),
       tap((bc) => {
         this.form.reset();
-        this.showCycleForm = false;
       })
     )
       .subscribe();
