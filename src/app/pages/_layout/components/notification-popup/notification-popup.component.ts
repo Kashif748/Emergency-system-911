@@ -37,12 +37,14 @@ export class NotificationPopupComponent implements OnInit, OnDestroy {
     this.display = this.sotrageService.getItem('popup');
     this.sotrageService.removeItem('popup');
   }
-  markAsRead(id) {
+  markAsRead(id, event?: Event) {
     this.notificationService.markAsRead(id);
     this.notifCount$.pipe(takeUntil(this.destroy$)).subscribe(count => {
       if (count === 0) {
         this.display = false;
-      }});
+      }
+    });
+    event?.stopPropagation();
   }
   makeAllAsRead() {
     this.notification$.pipe(takeUntil(this.destroy$)).subscribe((notifications) => {

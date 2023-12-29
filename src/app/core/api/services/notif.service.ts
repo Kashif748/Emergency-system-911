@@ -5,7 +5,7 @@ import {IStorageService} from '@core/services/storage.service';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
-import {getMessaging, getToken, isSupported, MessagePayload, onMessage,} from 'firebase/messaging';
+import {getMessaging, getToken, isSupported, MessagePayload, onMessage} from 'firebase/messaging';
 import {AppCacheKeys} from '@core/constant/AppCacheKeys';
 import {DashboardService} from 'src/app/pages/dashboard/dashboard.service';
 
@@ -178,8 +178,7 @@ export class NotifService {
 
   markImportantNotifiAllAsRead(id) {
     return this.http
-      .put(`${environment.apiUrl}/inapp-notif/mark-read/`, null, {
-        params: { ids: [id] },
+      .put(`${environment.apiUrl}/inapp-notif/mark-read/0?ids=${id.join(',')}`, {
       })
       .subscribe((value) => {
         this.notifications.forEach(
