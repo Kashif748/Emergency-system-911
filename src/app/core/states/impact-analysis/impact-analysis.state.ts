@@ -1,33 +1,18 @@
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { delay, finalize, map, tap } from 'rxjs/operators';
-import { patch, updateItem } from '@ngxs/store/operators';
-import { Injectable } from '@angular/core';
-import {
-  BcActivityAnalysis,
-  BcAnalysisStatus,
-  BcCycles,
-  PageBcActivityAnalysis,
-  PageBcCycles,
-} from 'src/app/api/models';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {finalize, map, tap} from 'rxjs/operators';
+import {patch, updateItem} from '@ngxs/store/operators';
+import {Injectable} from '@angular/core';
+import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, PageBcActivityAnalysis, PageBcCycles,} from 'src/app/api/models';
 import {
   BcAcitivityAnalysisStatusControllerService,
   BcActivitiesControllerService,
   BcActivityAnalysisControllerService,
   BcCyclesControllerService,
 } from 'src/app/api/services';
-import { ImapactAnalysisAction } from './impact-analysis.action';
-import { BcAnalysisControllerService } from '../../../api/services/bc-analysis-controller.service';
-import { BcAnalysisStatusDetails } from '../../../api/models/bc-analysis-status-details';
-import { RtoStateModel } from '@core/states/bc/rto/rto.state';
-import { EMPTY, of } from 'rxjs';
-import { BcCycleStatus } from '../../../api/models/bc-cycle-status';
+import {ImapactAnalysisAction} from './impact-analysis.action';
+import {BcAnalysisControllerService} from '../../../api/services/bc-analysis-controller.service';
+import {BcAnalysisStatusDetails} from '../../../api/models/bc-analysis-status-details';
+import {RtoStateModel} from '@core/states/bc/rto/rto.state';
 
 export interface ImpactAnalysisStateModel {
   activityAnalysisPage: PageBcActivityAnalysis;
@@ -179,7 +164,7 @@ export class ImpactAnalysisState {
     const validSortKeys = [
       'nameAr',
       'nameEn',
-      'bcVersions',
+      'versionId',
       'status',
       'createdOn',
     ];

@@ -79,9 +79,9 @@
               {{ item?.createdAt | customDate | date: "short" }}
             </div>
             <button
-              class="btn btn-sm btn-link-primary"
+              class="btn btn-md btn-link-primary"
               *ngIf="!item.read"
-              (click)="markAsRead(item.id)"
+              (click)="markAsRead(item.id, $event)"
             >
               {{ "SHARED.MARK_AS_READ" | translate }}
             </button>

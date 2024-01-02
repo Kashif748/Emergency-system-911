@@ -26,6 +26,9 @@ li.iti__country:hover {
   padding: 1px;
   border-collapse: collapse;
 }
+:lang(en) > .country-dropdown {
+  margin: 0rem 0rem 0rem -23.5rem;
+}
 .search-container {
   position: relative;
 }
