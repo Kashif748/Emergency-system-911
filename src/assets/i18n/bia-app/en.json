@@ -1,9 +1,9 @@
 {
-  "APP":"#",
-  "DIVISION":"Division Name",
-  "CYCLE":"Cycle Name",
-  "ANALYSIS":"Analysis Completion Percentage",
-  "STATE":"State",
+  "APP": "#",
+  "DIVISION": "Division Name",
+  "CYCLE": "Cycle Name",
+  "ANALYSIS": "Analysis Completion Percentage",
+  "STATE": "State",
   "ANALYSIS_CRCLE": "Analysis Cycle",
   "NEW_ANALYSIS_CYCLIE": "Analysis Cycles Management",
   "ADD_NEW_ANALYSIS": "Add New Analysis",
@@ -26,13 +26,14 @@
   },
   "CONFIRM": "Are you sure that you want to proceed?",
   "DIALOG": {
+    "ACTION": "Add Analysis Cycle",
     "NAME_AR": "Name Ar",
     "NAME_EN": "Name En",
     "STATUS": "Status ",
-    "LIST":"Lists Release",
-    "CYCLE_ENTRY_DATE":"Cycle Entry Due Date",
-    "CREATED_BY":"Created By",
-    "CREATED_ON":"Created On"
+    "LIST": "Lists Release",
+    "CYCLE_ENTRY_DATE": "Cycle Entry Due Date",
+    "CREATED_BY": "Created By",
+    "CREATED_ON": "Created On"
   },
   "ADD_CYCLE": "Add New Cycle"
 }
