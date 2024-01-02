@@ -1,24 +1,11 @@
-import { EMPTY } from 'rxjs';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { patch } from '@ngxs/store/operators';
-import { Injectable } from '@angular/core';
-import { BCAction } from '@core/states/bc/bc/bc.action';
-import {
-  BcVersions,
-  BcVersionsStatus,
-  PageBcVersions,
-} from 'src/app/api/models';
-import { BcVersionsControllerService } from 'src/app/api/services';
-import {StaffStateModel} from "@core/states/bc-resources/staff/staff.state";
-import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
+import {EMPTY} from 'rxjs';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {patch} from '@ngxs/store/operators';
+import {Injectable} from '@angular/core';
+import {BCAction} from '@core/states/bc/bc/bc.action';
+import {BcVersions, BcVersionsStatus, PageBcVersions,} from 'src/app/api/models';
+import {BcVersionsControllerService} from 'src/app/api/services';
 
 export enum VERSION_STATUSES {
   CREATED = 1,
@@ -26,6 +13,7 @@ export enum VERSION_STATUSES {
   APPROVED,
   NEEDS_MODIFICATIONS,
   ARCHIVED,
+  ACTIVE,
 }
 
 export interface BCStateModel {

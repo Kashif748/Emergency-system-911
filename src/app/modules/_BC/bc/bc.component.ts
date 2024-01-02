@@ -1,26 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { IAuthService } from '@core/services/auth.service';
-import { BCState } from '@core/states';
-import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
-import { FormUtils } from '@core/utils';
-import { Select, Store } from '@ngxs/store';
-import { GenericValidators } from '@shared/validators/generic-validators';
-import { Observable, Subject } from 'rxjs';
-import {
-  filter,
-  map,
-  pairwise,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
-import { BcVersions } from 'src/app/api/models';
-import { BrowseBCAction } from '../states/browse-bc.action';
-import { BrowseBCState, BrowseBCStateModel } from '../states/browse-bc.state';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {IAuthService} from '@core/services/auth.service';
+import {BCState} from '@core/states';
+import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
+import {FormUtils} from '@core/utils';
+import {Select, Store} from '@ngxs/store';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {Observable, Subject} from 'rxjs';
+import {filter, map, pairwise, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {BcVersions} from 'src/app/api/models';
+import {BrowseBCAction} from '../states/browse-bc.action';
+import {BrowseBCState, BrowseBCStateModel} from '../states/browse-bc.state';
 import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
 import {PrivilegesService} from "@core/services/privileges.service";
 import {TranslateService} from "@ngx-translate/core";
@@ -204,11 +196,20 @@ export class BCComponent implements OnInit, OnDestroy {
 
   deleteVersion(id) {
     return () => {
-      this.store
-      .dispatch(new BrowseBCAction.Delete({ id }))
-      .toPromise()
-      .then(() => {
-        this.loadPage();
+      this.confirmationService.confirm({
+        target: event.target,
+        message: this.translate.instant('CONFIRM'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.store
+            .dispatch(new BrowseBCAction.Delete({ id }))
+            .toPromise()
+            .then(() => {
+              this.loadPage();
+            });
+        },
+        reject: () => {
+        },
       });
     };
   }
