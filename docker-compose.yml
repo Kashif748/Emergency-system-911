@@ -4,4 +4,4 @@ services:
     restart: always
     image: #{IMG_NAME}#:#{TAG}#
     ports:
-      - "127.0.0.1:3001:80"
+      - "4200:80"
