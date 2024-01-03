@@ -25,8 +25,9 @@ COPY --from=build /app/dist .
 # use nginx to serve application
 FROM nginx:1.23.1-alpine as final
 EXPOSE 80
+ARG ENV="stg"
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.${ENV}.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
