@@ -1881,7 +1881,6 @@ export class MapComponent
     } catch (err) {
       console.error(err);
     }
-    this.loading = false;
     this.cdr.detectChanges();
     let graphicPoint;
     if (this.mapType === 'reporter') {
@@ -1909,6 +1908,7 @@ export class MapComponent
         console.error(err);
       }
     }
+    this.loading = false;
     this.OnSaveMap.emit({
       ff: this.applyFeature,
       gType: graphicPoint?.attributes?.gType,
