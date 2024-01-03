@@ -1,6 +1,8 @@
 # Choose the Image which has Node installed already
 FROM node:12.22.12-alpine as build
 ARG BUILD_ARG='-c staging'
+ARG ENV=stg
+
 # make the 'app' folder the current working directory
 WORKDIR /app
 
@@ -25,7 +27,7 @@ COPY --from=build /app/dist .
 # use nginx to serve application
 FROM nginx:1.23.1-alpine as final
 EXPOSE 80
-ARG ENV="stg"
+ARG ENV
 
 COPY nginx.${ENV}.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist /usr/share/nginx/html
