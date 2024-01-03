@@ -4,7 +4,7 @@ services:
     restart: always
     image: #{IMG_NAME}#:#{TAG}#
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:r
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     extra_hosts:
       Sddappsd: 10.24.10.55
     ports:
