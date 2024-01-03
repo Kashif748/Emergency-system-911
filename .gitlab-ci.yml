@@ -47,7 +47,7 @@ build-job: # This job runs in the build stage, which runs first.
   script:
     - (docker image prune -f) || true
     - (docker rmi $(docker images $IMG_NAME -a -q | tac | uniq | tail -n +2) -f) || true
-    - DOCKER_BUILDKIT=1 docker build --build-arg ENV=$ENV --network host -t $IMG_NAME:$TAG --progress plain .
+    - DOCKER_BUILDKIT=1 docker build --network host -t $IMG_NAME:$TAG --progress plain .
     - echo "build docker image completed."
 
 publish-job: # This job runs in the build for tags, which runs first.
@@ -93,6 +93,7 @@ lint-test-job: # This job also runs in the test stage.
     - scp $IMG_NAME $SERVER:~/docker-images/
     - scp docker-compose.yml $SERVER:~/$PROJ_NAME/
     - scp docker-compose.override.yml $SERVER:~/$PROJ_NAME/
+    - scp nginx.$ENV.conf $SERVER:~/$PROJ_NAME/
 
     - echo "clear old images"
     - ssh $SERVER "(docker system prune -f) || true"
