@@ -20,6 +20,7 @@ variables:
   PROJ_NAME: Slamah-FE
   SERVER: administrator@10.24.10.245
   TAG: $CI_PIPELINE_IID
+  ENV: $CI_COMMIT_BRANCH
 
 .only-dev-and-stg:
   only:
@@ -92,6 +93,7 @@ lint-test-job: # This job also runs in the test stage.
     - scp $IMG_NAME $SERVER:~/docker-images/
     - scp docker-compose.yml $SERVER:~/$PROJ_NAME/
     - scp docker-compose.override.yml $SERVER:~/$PROJ_NAME/
+    - scp nginx.$ENV.conf $SERVER:~/$PROJ_NAME/nginx.conf
 
     - echo "clear old images"
     - ssh $SERVER "(docker system prune -f) || true"

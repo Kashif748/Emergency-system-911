@@ -1,6 +1,7 @@
 # Choose the Image which has Node installed already
 FROM node:12.22.12-alpine as build
 ARG BUILD_ARG='-c staging'
+
 # make the 'app' folder the current working directory
 WORKDIR /app
 
@@ -26,7 +27,6 @@ COPY --from=build /app/dist .
 FROM nginx:1.23.1-alpine as final
 EXPOSE 80
 
-COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
