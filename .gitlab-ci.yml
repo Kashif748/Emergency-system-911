@@ -47,7 +47,7 @@ build-job: # This job runs in the build stage, which runs first.
   script:
     - (docker image prune -f) || true
     - (docker rmi $(docker images $IMG_NAME -a -q | tac | uniq | tail -n +2) -f) || true
-    - DOCKER_BUILDKIT=1 docker build --build-arg ENV='$ENV' --network host -t $IMG_NAME:$TAG --progress plain .
+    - DOCKER_BUILDKIT=1 docker build --build-arg ENV=$ENV --network host -t $IMG_NAME:$TAG --progress plain .
     - echo "build docker image completed."
 
 publish-job: # This job runs in the build for tags, which runs first.
