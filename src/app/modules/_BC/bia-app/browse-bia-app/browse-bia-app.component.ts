@@ -143,7 +143,8 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         filter((cycles) => !!cycles),
         tap((cycles) => {
           if (cycles.length > 0) {
-            this.selectedCycle = cycles[0];
+            const sortedCycles = [...cycles].sort((a, b) => b.id - a.id);
+            this.selectedCycle = sortedCycles[0];
             this.cdr.detectChanges();
           }
           this.store.dispatch(
@@ -201,6 +202,10 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         })
       )
     );
+
+    // cycle
+    // 1- newely added cycle should be selected
+    // 2- when cycle status change it should reflect in the drop down without refresh
     this.cycles$
       .pipe(
         takeUntil(this.destroy$),
