@@ -519,7 +519,7 @@ export class ImpactAnalysisState {
       })
     );
     return this.cyclesController
-      .update104({
+      .update106({
         body: {
           ...payload,
         },

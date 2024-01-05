@@ -7,7 +7,7 @@ import {TreeHelper} from '@core/helpers/tree.helper';
 import {ILangFacade} from '@core/facades/lang.facade';
 import {TranslateService} from '@ngx-translate/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {auditTime, filter, map, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {auditTime, filter, map, pairwise, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
 import {BrowseBiaAppAction} from '../states/browse-bia-app.action';
 import {BrowseBiaAppState, BrowseBiaAppStateModel,} from '../states/browse-bia-app.state';
 import {BiaAppsState} from '@core/states/bia-apps/bia-apps.state';
@@ -207,19 +207,28 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     // 1- newely added cycle should be selected
     // 2- when cycle status change it should reflect in the drop down without refresh
     this.cycles$
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((cycles) => !!cycles && cycles.length > 0),
-        map((cycles) =>
-          cycles.find(
-            (cycle) =>
-              cycle.id === this.selectedCycle?.id &&
-              cycle.status?.id !== this.selectedCycle?.status?.id
-          ) || cycles[0]
-        ),
-        tap((cycle) => (this.selectedCycle = cycle))
-      )
-      .subscribe();
+        .pipe(
+            takeUntil(this.destroy$),
+            filter((cycles) => !!cycles),
+            pairwise(),
+            map(([prevCycles, currentCycles]) => {
+              const isNewData = currentCycles.length > prevCycles.length;
+
+              const sortedCycles = [...currentCycles].sort((a, b) => b.id - a.id);
+              if (isNewData){
+                this.setCycleId(sortedCycles[0]);
+              }
+              return (
+                  sortedCycles.find(
+                      (cycle) =>
+                          cycle.id === this.selectedCycle?.id &&
+                          cycle.status?.id !== this.selectedCycle?.status?.id
+                  ) || (isNewData ? sortedCycles[0] : this.selectedCycle)
+              );
+            }),
+            tap((cycle) => (this.selectedCycle = cycle))
+        )
+        .subscribe();
   }
 
   search() {
@@ -331,7 +340,6 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   }
 
   setCycleId(value: BcCycles) {
-    console.log(this.selectedCycle);
     this.cdr.detectChanges();
     this.store.dispatch(
       new BrowseBiaAppAction.UpdateCycle({
