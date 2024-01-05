@@ -14,7 +14,7 @@
       <div class="p-toolbar-group-right">
         <button
           *checkPrivileges="['PRIV_PERFORM_ACTIVITY_ANALYSIS','PRIV_APPROVE_ACTIVITY_ANALYSIS' , 'PRIV_REVIEW_ACTIVITY_ANALYSIS']"
-          [disabled]="!(shouldDisable$ | async)"
+          [disabled]="(!(shouldDisable$ | async) || (editable$ | async))"
           pButton
           label="{{ 'ACTIONS.SEND' | translate }}"
           icon="pi pi-send"
