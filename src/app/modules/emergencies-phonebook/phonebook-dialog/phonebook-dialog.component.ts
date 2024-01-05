@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { CommonDataState, OrgAction, OrgState } from '@core/states';
 import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { FormUtils } from '@core/utils/form.utils';
@@ -18,6 +17,8 @@ import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
   styleUrls: ['./phonebook-dialog.component.scss'],
 })
 export class PhonebookDialogComponent implements OnInit, AfterViewInit {
+  @Input() orgs: IdNameProjection[];
+  externalsOrgs: any[];
   phonebookTypes = [];
 
   opened$: Observable<boolean>;
@@ -27,9 +28,6 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
 
   @Select(PhonebookState.blocking)
   blocking$: Observable<boolean>;
-
-  @Select(OrgState.orgs)
-  orgs$: Observable<IdNameProjection[]>;
 
   @Input()
   set phonebookId(v: number) {
@@ -45,6 +43,8 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
         takeUntil(this.destroy$),
         take(1),
         tap((phonebook) => {
+          console.log(phonebook);
+
           this.form.patchValue(phonebook);
         })
       )
@@ -93,13 +93,13 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
       orgName: [null, [Validators.required]],
-      orgId: [null, [Validators.required]],
+      orgStructure: [null, [Validators.required]],
       jobTitle: [null],
       phoneNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
       title: [null],
       notes: [null],
-      internal: [true, [Validators.required]],
+      isInternal: [true, [Validators.required]],
       isActive: [true, [Validators.required]],
       id: 0,
     });
@@ -115,20 +115,25 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       });
       return;
     }
-    const phonebook = {
-      ...this.form.getRawValue(),
+    let phonebook = {
+      ...this.form.value,
     };
+    const isInternal = this.form.get('isInternal');
+    if (isInternal) {
+      phonebook['orgStructure'] = {
+        orgId: this.form.get('orgStructure').value?.id,
+      };
+      phonebook['orgName'] = this.form.get('org').value?.nameAr;
+    }
+
     phonebook.mobileNumber = phonebook.mobileNumber?.number;
     phonebook.id = this._phonebook;
+    return;
     if (this.editMode) {
       this.store.dispatch(new BrowsePhonebookAction.UpdatePhonebook(phonebook));
     } else {
       this.store.dispatch(new BrowsePhonebookAction.CreatePhonebook(phonebook));
     }
-  }
-  loadOrgs() {
-    const currentOrg = this.store.selectSnapshot(CommonDataState.currentOrg);
-    this.store.dispatch(new OrgAction.LoadOrgs({ orgId: currentOrg?.id }));
   }
 
   // onSubmit() {

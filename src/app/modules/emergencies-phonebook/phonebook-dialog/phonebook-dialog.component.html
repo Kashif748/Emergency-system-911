@@ -12,22 +12,145 @@
   <ng-template pTemplate="header">
     <h3>
       <span>{{ "PHONEBOOK.HEADER" | translate }}</span>
-      <span
-        *ngIf="!editMode"
-        class="label label-lg label-light-primary label-inline"
-      >
-        {{ "ACTIONS.NEW_ITEM" | translate }}
-      </span>
-      <span
-        *ngIf="editMode"
-        class="label label-lg label-light-success label-inline"
-      >
-        {{ "ACTIONS.UPDATE_ITEM" | translate }}
-      </span>
+
+      <div class="mx-2 d-inline">
+        <ng-container *ngIf="!editMode; else elseTemplate">
+          <p-tag severity="primary">
+            {{ "ACTIONS.NEW_ITEM" | translate }}
+          </p-tag>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <p-tag severity="info" #elseTemplate>
+            {{ "ACTIONS.UPDATE_ITEM" | translate }}
+          </p-tag>
+        </ng-template>
+      </div>
     </h3>
   </ng-template>
 
   <form [formGroup]="form" class="p-fluid p-grid mt-5">
+    <!-- IsPrimary -->
+    <div class="p-field p-col-12 p-md-4">
+      <span class="p-float-label">
+        <label>
+          {{ "PHONEBOOK.TYPE" | translate }}
+        </label>
+        <p-selectButton
+          [options]="phonebookTypes"
+          optionLabel="name"
+          optionValue="value"
+          formControlName="isInternal"
+        >
+          <ng-template let-item>
+            <span> {{ item?.name | translate }}</span>
+            <!-- <i [class]="item.icon"></i> -->
+          </ng-template>
+        </p-selectButton>
+      </span>
+    </div>
+
+    <!-- isInternal Org Dropdown -->
+
+    <ng-container *ngIf="form.get('isInternal')?.value; else externalTemplate">
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <p-dropdown
+            [options]="orgs"
+            [autoDisplayFirst]="false"
+            appendTo="body"
+            [filter]="true"
+            formControlName="orgStructure"
+            filterBy="nameAr,nameEn,code"
+            [showClear]="true"
+            inputId="orgStructure"
+            dataKey="id"
+          >
+            <ng-template let-item pTemplate="selectedItem">
+              {{ item | translateObj }}
+            </ng-template>
+
+            <ng-template let-item pTemplate="item">
+              {{ item | translateObj }}
+            </ng-template>
+          </p-dropdown>
+          <label>
+            {{ "PHONEBOOK.ORG_NAME" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+
+        <ng-container
+          *ngIf="
+            form.controls['orgStructure'].touched &&
+            !form.controls['orgStructure'].valid &&
+            form.controls['orgStructure'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['orgStructure'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+    </ng-container>
+    <!-- external org name -->
+    <ng-template #externalTemplate>
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <p-dropdown
+            [options]="externalsOrgs"
+            editable="true"
+            [autoDisplayFirst]="false"
+            appendTo="body"
+            [filter]="true"
+            formControlName="orgName"
+            filterBy="nameAr,nameEn,code"
+            dataKey="id"
+            [showClear]="true"
+            inputId="orgName"
+          >
+            <ng-template let-item pTemplate="selectedItem">
+              {{ item?.orgName }}
+            </ng-template>
+
+            <ng-template let-item pTemplate="item">
+              {{ item.orgName }}
+            </ng-template>
+          </p-dropdown>
+          <label>
+            {{ "PHONEBOOK.ORG_NAME" | translate }}
+            <strong class="required-asterisk"> * </strong>
+          </label>
+        </span>
+
+        <ng-container
+          *ngIf="
+            form.controls['orgName'].touched &&
+            !form.controls['orgName'].valid &&
+            form.controls['orgName'].dirty
+          "
+        >
+          <p
+            class="p-error mb-0"
+            *ngIf="form.controls['orgName'].hasError('required')"
+          >
+            {{ "VALIDATION_MSG.REQUIRED" | translate }}
+          </p>
+        </ng-container>
+      </div>
+    </ng-template>
+
+    <!-- title -->
+    <div class="p-field p-col-12 p-md-4">
+      <span class="p-float-label">
+        <input type="text" formControlName="title" pInputText />
+        <label>
+          {{ "PHONEBOOK.TITLE" | translate }}
+        </label>
+      </span>
+    </div>
     <!-- name AR -->
     <div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
@@ -91,16 +214,6 @@
       </ng-container>
     </div>
 
-    <!-- title -->
-    <div class="p-field p-col-12 p-md-4">
-      <span class="p-float-label">
-        <input type="text" formControlName="title" pInputText />
-        <label>
-          {{ "PHONEBOOK.TITLE" | translate }}
-        </label>
-      </span>
-    </div>
-
     <!-- job title -->
     <div class="p-field p-col-12 p-md-4">
       <span class="p-float-label">
@@ -108,101 +221,6 @@
         <label>{{ "SHARED.JOB_TITLE" | translate }} </label>
       </span>
     </div>
-
-    <!-- IsPrimary -->
-    <div class="p-field p-col-12 p-md-4">
-      <span class="p-float-label">
-        <label>
-          {{ "PHONEBOOK.TYPE" | translate }}
-        </label>
-        <p-selectButton
-          [options]="phonebookTypes"
-          optionLabel="name"
-          optionValue="value"
-          formControlName="internal"
-        >
-          <ng-template let-item>
-            <span> {{ item?.name | translate }}</span>
-            <!-- <i [class]="item.icon"></i> -->
-          </ng-template>
-        </p-selectButton>
-      </span>
-    </div>
-
-    <!-- Org Dropdown -->
-
-    <ng-container *ngIf="form.get('internal')?.value; else externalTemplate">
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
-          <p-dropdown
-            [options]="orgs$ | async"
-            [autoDisplayFirst]="false"
-            appendTo="body"
-            [filter]="true"
-            formControlName="orgId"
-            filterBy="nameAr,nameEn,code"
-            dataKey="id"
-            [showClear]="true"
-            inputId="orgId"
-            (onShow)="loadOrgs()"
-          >
-            <ng-template let-item pTemplate="selectedItem">
-              {{ item | translateObj }}
-            </ng-template>
-
-            <ng-template let-item pTemplate="item">
-              {{ item | translateObj }}
-            </ng-template>
-          </p-dropdown>
-          <label>
-            {{ "PHONEBOOK.ORG_NAME" | translate }}
-            <strong class="required-asterisk"> * </strong>
-          </label>
-        </span>
-
-        <ng-container
-          *ngIf="
-            form.controls['orgId'].touched &&
-            !form.controls['orgId'].valid &&
-            form.controls['orgId'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['orgId'].hasError('required')"
-          >
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-        </ng-container>
-      </div>
-    </ng-container>
-    <!-- org name -->
-    <ng-template #externalTemplate>
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
-          <input type="text" formControlName="orgName" pInputText />
-          <label>
-            {{ "PHONEBOOK.ORG_NAME" | translate }}
-            <strong class="required-asterisk"> * </strong>
-          </label>
-        </span>
-
-        <ng-container
-          *ngIf="
-            form.controls['orgName'].touched &&
-            !form.controls['orgName'].valid &&
-            form.controls['orgName'].dirty
-          "
-        >
-          <p
-            class="p-error mb-0"
-            *ngIf="form.controls['orgName'].hasError('required')"
-          >
-            {{ "VALIDATION_MSG.REQUIRED" | translate }}
-          </p>
-        </ng-container>
-      </div>
-    </ng-template>
 
     <!-- phone -->
     <div class="p-field p-col-12 p-md-4">
@@ -285,10 +303,11 @@
   </form>
 
   <ng-template pTemplate="footer">
-    <div class="p-col p-d-flex">
+    <div class="p-col p-d-flex justify-content-between">
       <button
         pButton
         icon="pi pi-times"
+        class="p-button-outlined"
         (click)="close()"
         label="{{ 'ACTIONS.CLOSE' | translate }}"
       ></button>

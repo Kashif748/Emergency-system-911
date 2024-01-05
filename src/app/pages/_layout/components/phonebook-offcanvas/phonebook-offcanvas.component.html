@@ -38,61 +38,33 @@
             placeholder="{{ 'PHONEBOOK.FULL_NAME' | translate }}"
           />
         </div>
-        <!-- IsPrimary -->
-        <div class="p-field p-col-12">
-          <p-selectButton
-            [options]="phonebookTypes"
-            optionLabel="name"
-            optionValue="value"
-            [(ngModel)]="isInternal"
-            value="true"
-          >
-            <ng-template let-item>
-              <span> {{ item?.name | translate }}</span>
-            </ng-template>
-          </p-selectButton>
-        </div>
 
         <!-- Org Dropdown -->
-        <ng-container *ngIf="isInternal; else externalTemplate">
-          <div class="p-field p-col-12">
-            <span class="p-float-label">
-              <p-dropdown
-                [options]="orgs$ | async"
-                [autoDisplayFirst]="false"
-                [showClear]="true"
-                dataKey="id"
-                appendTo="body"
-                [filter]="true"
-                (onChange)="updateFilter({ orgId: $event?.value?.id }, $event)"
-                filterBy="nameAr,nameEn,code"
-                inputId="orgId"
-                (onShow)="loadOrgs()"
-                placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
-              >
-                <ng-template let-item pTemplate="selectedItem">
-                  {{ item | translateObj }}
-                </ng-template>
-
-                <ng-template let-item pTemplate="item">
-                  {{ item | translateObj }}
-                </ng-template>
-              </p-dropdown>
-            </span>
-          </div>
-        </ng-container>
-        <!-- org name -->
-        <ng-template #externalTemplate>
-          <div class="p-field p-col-12">
-            <input
-              type="text"
-              pInputText
-              [ngModel]="state?.pageRequest?.filters['orgName']"
-              (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
+        <div class="p-field p-col-12">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="orgs$ | async"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              dataKey="id"
+              appendTo="body"
+              [filter]="true"
+              (onChange)="updateFilter({ orgId: $event?.value?.id }, $event)"
+              filterBy="nameAr,nameEn,code"
+              inputId="orgId"
+              (onShow)="loadOrgs()"
               placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
-            />
-          </div>
-        </ng-template>
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                {{ item | translateObj }}
+              </ng-template>
+
+              <ng-template let-item pTemplate="item">
+                {{ item | translateObj }}
+              </ng-template>
+            </p-dropdown>
+          </span>
+        </div>
 
         <!-- Mobile Number -->
         <div class="p-field p-col-12">
@@ -134,6 +106,31 @@
         </div>
       </div>
     </p-panel>
+    <!-- Internal-external filters -->
+    <div class="my-auto py-2">
+      <button
+        pButton
+        type="button"
+        class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-outlined"
+        (click)="updateFilter({ internal: false }, $event)"
+        [ngClass]="{
+          active: !state?.pageRequest?.filters['external']
+        }"
+      >
+        <span class="m-auto"> {{ "PHONEBOOK.EXTERNAL" | translate }}</span>
+      </button>
+      <button
+        pButton
+        type="button"
+        class="p-tag w-95px mx-2 px-2 text-center py-1 p-button-rounded p-button-sm p-button-outlined"
+        (click)="updateFilter({ internal: true }, $event)"
+        [ngClass]="{
+          active: state?.pageRequest?.filters['internal']
+        }"
+      >
+        <span class="m-auto"> {{ "PHONEBOOK.INTERNAL" | translate }} </span>
+      </button>
+    </div>
     <perfect-scrollbar class="overflow-scroll h-auto">
       <ng-container *ngIf="!(loading$ | async); else loadingSkelton">
         <ul class="navi navi-hover navi-active mt-4">

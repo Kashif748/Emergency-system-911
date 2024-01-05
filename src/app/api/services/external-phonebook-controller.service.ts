@@ -13,7 +13,7 @@ import { ExternalPhonebook } from '../models/external-phonebook';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseBoolean } from '../models/rest-api-response-boolean';
 import { RestApiResponseExternalPhonebook } from '../models/rest-api-response-external-phonebook';
-import { RestApiResponsePageExternalPhonebook } from '../models/rest-api-response-page-external-phonebook';
+import { RestApiResponsePageExternalPhonebookProjection } from '../models/rest-api-response-page-external-phonebook-projection';
 
 @Injectable()
 export class ExternalPhonebookControllerService extends BaseService {
@@ -86,8 +86,9 @@ export class ExternalPhonebookControllerService extends BaseService {
     mobileNumber?: string;
     orgName?: string;
     active?: boolean;
+    isInternal?: boolean;
     pageable: Pageable;
-  }): Observable<StrictHttpResponse<RestApiResponsePageExternalPhonebook>> {
+  }): Observable<StrictHttpResponse<RestApiResponsePageExternalPhonebookProjection>> {
 
     const rb = new RequestBuilder(this.rootUrl, ExternalPhonebookControllerService.Search2Path, 'get');
     if (params) {
@@ -95,6 +96,7 @@ export class ExternalPhonebookControllerService extends BaseService {
       rb.query('mobileNumber', params.mobileNumber, {});
       rb.query('orgName', params.orgName, {});
       rb.query('active', params.active, {});
+      rb.query('isInternal', params.isInternal, {});
       rb.query('pageable', params.pageable, {});
     }
 
@@ -104,7 +106,7 @@ export class ExternalPhonebookControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponsePageExternalPhonebook>;
+        return r as StrictHttpResponse<RestApiResponsePageExternalPhonebookProjection>;
       })
     );
   }
@@ -120,11 +122,12 @@ export class ExternalPhonebookControllerService extends BaseService {
     mobileNumber?: string;
     orgName?: string;
     active?: boolean;
+    isInternal?: boolean;
     pageable: Pageable;
-  }): Observable<RestApiResponsePageExternalPhonebook> {
+  }): Observable<RestApiResponsePageExternalPhonebookProjection> {
 
     return this.search2$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponsePageExternalPhonebook>) => r.body as RestApiResponsePageExternalPhonebook)
+      map((r: StrictHttpResponse<RestApiResponsePageExternalPhonebookProjection>) => r.body as RestApiResponsePageExternalPhonebookProjection)
     );
   }
 

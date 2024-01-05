@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
+import { CommonDataState, OrgAction, OrgState } from '@core/states';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ExternalPhonebook } from 'src/app/api/models';
+import { ExternalPhonebook, ExternalPhonebookProjection, IdNameProjection } from 'src/app/api/models';
 import { BrowsePhonebookAction } from './states/browse-phonebook.action';
 import {
   BrowsePhonebookState,
@@ -25,8 +26,9 @@ export class EmergenciesPhonebookComponent implements OnInit {
   public totalRecords$: Observable<number>;
   @Select(BrowsePhonebookState.state)
   public state$: Observable<BrowsePhonebookStateModel>;
-
-  public page$: Observable<ExternalPhonebook[]>;
+  @Select(OrgState.orgs)
+  orgs$: Observable<IdNameProjection[]>;
+  public page$: Observable<ExternalPhonebookProjection[]>;
 
   displayedColumns: string[] = [
     'firstName',
@@ -45,6 +47,7 @@ export class EmergenciesPhonebookComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadOrgs();
     this.page$ = this.store.select(PhonebookState.page).pipe(
       filter((p) => !!p),
       map((page) =>
@@ -107,5 +110,9 @@ export class EmergenciesPhonebookComponent implements OnInit {
         },
       })
     );
+  }
+  loadOrgs() {
+    const currentOrg = this.store.selectSnapshot(CommonDataState.currentOrg);
+    this.store.dispatch(new OrgAction.LoadOrgs({ orgId: currentOrg?.id }));
   }
 }

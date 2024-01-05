@@ -1,10 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
-import { ExternalPhonebook } from './external-phonebook';
+import { ExternalPhonebookProjection } from './external-phonebook-projection';
 import { PageableObject } from './pageable-object';
 import { SortObject } from './sort-object';
-export interface PageExternalPhonebook {
-  content?: Array<ExternalPhonebook>;
+export interface PageExternalPhonebookProjection {
+  content?: Array<ExternalPhonebookProjection>;
   empty?: boolean;
   first?: boolean;
   last?: boolean;

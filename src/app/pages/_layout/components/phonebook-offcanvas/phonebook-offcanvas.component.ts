@@ -4,7 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ExternalPhonebook, IdNameProjection } from 'src/app/api/models';
+import { ExternalPhonebook, ExternalPhonebookProjection, IdNameProjection } from 'src/app/api/models';
 import { OffcanvasPhonebookAction } from './states/offcanvas-phonebook.action';
 import {
   OffcanvasPhonebookState,
@@ -25,7 +25,6 @@ import { CommonDataState, OrgAction, OrgState } from '@core/states';
 export class PhonebookOffcanvasComponent implements OnInit, AfterViewInit {
   display;
   phonebookTypes = [];
-  isInternal = false;
   @Select(PhonebookState.sidebarLoading)
   public loading$: Observable<boolean>;
   @Select(PhonebookState.totalSidebarPageRecords)
@@ -42,7 +41,7 @@ export class PhonebookOffcanvasComponent implements OnInit, AfterViewInit {
   public position$ = this.langFacade.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'left' : 'right'))
   );
-  public page$: Observable<ExternalPhonebook[]>;
+  public page$: Observable<ExternalPhonebookProjection[]>;
   constructor(
     private store: Store,
     private clipboard: Clipboard,

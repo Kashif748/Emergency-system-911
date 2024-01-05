@@ -12,17 +12,17 @@ import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { PhonebookAction } from './phonebook.action';
 import {ExternalPhonebookControllerService} from "../../../api/services/external-phonebook-controller.service";
-import {PageExternalPhonebook} from "../../../api/models/page-external-phonebook";
+import {PageExternalPhonebookProjection} from "../../../api/models/page-external-phonebook-projection";
 import {ExternalPhonebook} from "../../../api/models/external-phonebook";
 
 
 export interface PhonebookStateModel {
-  page: PageExternalPhonebook;
+  page: PageExternalPhonebookProjection;
   phonebook: ExternalPhonebook; //User
   loading: boolean;
   blocking: boolean;
   // sidebar state
-  sidebarPage: PageExternalPhonebook;
+  sidebarPage: PageExternalPhonebookProjection;
   sidebarLoading: boolean;
 }
 
