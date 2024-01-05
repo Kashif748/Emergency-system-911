@@ -27,6 +27,7 @@ import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { Store } from '@ngrx/store';
 import { IncidentDashboardStateModel } from '../new-incidents-view/store/incidents-dashboard.reducer';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-inquiry',
@@ -84,7 +85,8 @@ export class InquiryComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.lang = this.translationService.getSelectedLanguage();
     this.commonData = this.appCommonService.getCommonData();
-    this.tags = this.commonData?.tags;
+    let groupedTags = _.groupBy(this.commonData?.tags, 'module');
+    this.tags = groupedTags['INQUIRY'];
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 20, 0, 1);
     this.maxDate = new Date(currentYear + 1, 11, 31);
@@ -231,9 +233,7 @@ export class InquiryComponent implements OnInit, OnChanges {
         }
         this.formGroup.patchValue({
           ...result,
-          incidentTags: result.result.incidentTags.map(
-            (tagObj) => tagObj.tag.id
-          ),
+          inquiryTags: result.result.inquiryTags.map((tagObj) => tagObj.tag.id),
           createdDate: this.customDatePipe.transform(
             result['createdDate'],
             false
@@ -310,15 +310,8 @@ export class InquiryComponent implements OnInit, OnChanges {
       id: this.formGroup.value.reportingVia,
       label: 'ReportingVia',
     };
-    body.inquiryTags.forEach((t) => {
-      const tag = {
-        id: 0,
-        inquiry: {
-          id: this.inquiryId,
-        },
-
-        tag: { id: t },
-      };
+    body.inquiryTags = body.inquiryTags.map((t) => {
+      return { tag: { id: t } };
     });
     if (body.id == 0) {
       // remove id from sent request
