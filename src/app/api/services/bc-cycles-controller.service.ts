@@ -1,18 +1,18 @@
 /* tslint:disable */
 /* eslint-disable */
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { BaseService } from '../base-service';
-import { ApiConfiguration } from '../api-configuration';
-import { StrictHttpResponse } from '../strict-http-response';
-import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {BaseService} from '../base-service';
+import {ApiConfiguration} from '../api-configuration';
+import {StrictHttpResponse} from '../strict-http-response';
+import {RequestBuilder} from '../request-builder';
+import {Observable} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 
-import { BcCycles } from '../models/bc-cycles';
-import { Pageable } from '../models/pageable';
-import { RestApiResponseBcCycles } from '../models/rest-api-response-bc-cycles';
-import { RestApiResponsePageBcCycles } from '../models/rest-api-response-page-bc-cycles';
+import {BcCycles} from '../models/bc-cycles';
+import {Pageable} from '../models/pageable';
+import {RestApiResponseBcCycles} from '../models/rest-api-response-bc-cycles';
+import {RestApiResponsePageBcCycles} from '../models/rest-api-response-page-bc-cycles';
 
 @Injectable()
 export class BcCyclesControllerService extends BaseService {
@@ -171,21 +171,21 @@ export class BcCyclesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update104
+   * Path part for operation update106
    */
-  static readonly Update104Path = '/v1/bc/cycles';
+  static readonly Update106Path = '/v1/bc/cycles';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update104()` instead.
+   * To access only the response body, use `update106()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update104$Response(params: {
+  update106$Response(params: {
     body: BcCycles
   }): Observable<StrictHttpResponse<RestApiResponseBcCycles>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.Update104Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.Update106Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -203,15 +203,15 @@ export class BcCyclesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update104$Response()` instead.
+   * To access the full response (for headers, for example), `update106$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update104(params: {
+  update106(params: {
     body: BcCycles
   }): Observable<RestApiResponseBcCycles> {
 
-    return this.update104$Response(params).pipe(
+    return this.update106$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcCycles>) => r.body as RestApiResponseBcCycles)
     );
   }
