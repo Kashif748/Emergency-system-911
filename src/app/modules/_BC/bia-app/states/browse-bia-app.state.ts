@@ -1,24 +1,17 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { PageRequestModel } from '@core/models/page-request.model';
-import { TextUtils } from '@core/utils';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { iif, patch } from '@ngxs/store/operators';
-import { BrowseBiaAppAction } from './browse-bia-app.action';
-import { BiaAction } from '@core/states/bia-apps/bia-apps.action';
-import { ImapactAnalysisAction } from '@core/states/impact-analysis/impact-analysis.action';
-import { EMPTY } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { BrowseBCStateModel } from '../../states/browse-bc.state';
+import {Injectable} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {TextUtils} from '@core/utils';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {iif, patch} from '@ngxs/store/operators';
+import {BrowseBiaAppAction} from './browse-bia-app.action';
+import {BiaAction} from '@core/states/bia-apps/bia-apps.action';
+import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
+import {EMPTY} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {BrowseBCStateModel} from '../../states/browse-bc.state';
 
 export interface BrowseBiaAppStateModel {
   pageRequest: PageRequestModel;
@@ -260,12 +253,12 @@ export class BrowseBiaAppState {
     { payload }: BrowseBiaAppAction.CreateCycle
   ) {
     return dispatch(new ImapactAnalysisAction.CreateCycle(payload.form)).pipe(
-      tap(() => {
+      tap((v) => {
         this.messageHelper.success();
         dispatch([
           new BrowseBiaAppAction.LoadBia({
             pageRequest: undefined,
-            cycleId: payload.cycle,
+            cycleId: this.route.snapshot.queryParams['_cycle'],
           }),
           new BrowseBiaAppAction.LoadCycles({}),
           new BrowseBiaAppAction.ToggleDialog({}),
