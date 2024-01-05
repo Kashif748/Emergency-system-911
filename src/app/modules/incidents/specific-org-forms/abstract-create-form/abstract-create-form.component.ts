@@ -170,7 +170,8 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     // prevent load incident data if id related to inquiry component.
     this.lang = this.translationService.getSelectedLanguage();
     this.commonData = this.appCommonDataService.getCommonData();
-    this.tags = this.commonData?.tags;
+    let groupedTags = _.groupBy(this.commonData?.tags, 'module');
+    this.tags = groupedTags['INCIDENT'];
     // get data from url
     this.incidentId = this.route.snapshot.params['id'];
     this.interimId = this.route.snapshot.params['interimId'];
