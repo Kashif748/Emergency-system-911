@@ -310,9 +310,12 @@ export class InquiryComponent implements OnInit, OnChanges {
       id: this.formGroup.value.reportingVia,
       label: 'ReportingVia',
     };
-    body.inquiryTags = body.inquiryTags.map((t) => {
-      return { tag: { id: t } };
-    });
+    if (body.inquiryTags) {
+      body.inquiryTags = body.inquiryTags.map((t) => {
+        return { tag: { id: t } };
+      });
+    }
+
     if (body.id == 0) {
       // remove id from sent request
       delete body.id;
