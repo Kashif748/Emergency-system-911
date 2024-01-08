@@ -126,7 +126,7 @@ export class InquiryComponent implements OnInit, OnChanges {
       id: [0],
       reportingVia: [4, [Validators.required]],
       reporterName: [null, Validators.required],
-      reportedByMobile: [''],
+      reportedByMobile: ['', Validators.required],
       reporterEmail: ['', [Validators.email]],
       subject: ['', Validators.required],
       answer: [''],
@@ -135,7 +135,7 @@ export class InquiryComponent implements OnInit, OnChanges {
       orgStructure: [null, Validators.required],
       user: [null, Validators.required],
       createdDate: [new Date(), Validators.required],
-      inquiryTags: [],
+      inquiryTags: [null],
     });
     this.checkReportingViewValidation();
     if (this.commonData.currentUserDetails.id) {
@@ -233,7 +233,10 @@ export class InquiryComponent implements OnInit, OnChanges {
         }
         this.formGroup.patchValue({
           ...result,
-          inquiryTags: result.result.inquiryTags.map((tagObj) => tagObj.tag.id),
+          inquiryTags: result?.inquiryTags.map(
+            (tagObj) => tagObj.tag?.id
+          ),
+
           createdDate: this.customDatePipe.transform(
             result['createdDate'],
             false
@@ -311,9 +314,11 @@ export class InquiryComponent implements OnInit, OnChanges {
       label: 'ReportingVia',
     };
     if (body.inquiryTags) {
-      body.inquiryTags = body.inquiryTags.map((t) => {
+      body.inquiryTags = body.inquiryTags?.map((t) => {
         return { tag: { id: t } };
       });
+    } else {
+      body['inquiryTags'] = [];
     }
 
     if (body.id == 0) {
