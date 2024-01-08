@@ -5,7 +5,6 @@ import {
   EventEmitter,
   Inject,
   Input,
-  ModuleWithProviders,
   NgModule,
   OnChanges,
   OnDestroy,
@@ -13,14 +12,11 @@ import {
   Optional,
   Output,
   SimpleChanges,
-  SkipSelf,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IThemeFacade } from '@core/facades/theme.facade';
-import { loadModules } from 'esri-loader';
 import { TranslationService } from 'src/app/modules/i18n/translation.service';
-import { TranslationModule } from 'src/app/modules/i18n/translation.module';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 import { Subject, Subscription } from 'rxjs';
@@ -53,16 +49,18 @@ import {
 } from './utils/map.models';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { PropTranslatorPipe } from '@shared/pipes/prop-translator.pipe';
 import { AppCommonDataService } from '@core/services/app-common-data.service';
 import esri = __esri;
-import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { EsriModule } from './utils/map-module.enum';
+import { PopupBuilder } from './services/popup.builder';
+import { CdatePipe } from '@shared/sh-pipes/cdate.pipe';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
+  providers: [CdatePipe, PopupBuilder],
 })
 export class MapComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit
@@ -75,6 +73,8 @@ export class MapComponent
   @Output() OnSaveMap: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
+    private mapService: MapService,
+    private popupBuidler: PopupBuilder,
     private translationService: TranslationService,
     private alertService: AlertsService,
     private cdr: ChangeDetectorRef,
@@ -83,12 +83,9 @@ export class MapComponent
     private orgService: OrgService,
     private linkService: ILinkService,
     private appCommonDataService: AppCommonDataService,
-    private propTranslator: PropTranslatorPipe,
-    private datePipe: DatePipe,
     @Optional() public dialogRef: MatDialogRef<MapComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: MapConfig,
-    @Optional() private incidentsService: IncidentsService,
-    private sanitizer: DomSanitizer
+    @Optional() private incidentsService: IncidentsService
   ) {}
 
   private readonly minDisplayScale = 10000;
@@ -153,46 +150,6 @@ export class MapComponent
   public createQuery: () => __esri.Query;
 
   public ONWANI_SEARCH_DZSP_IMAGE_LAYER: __esri.MapImageLayer;
-
-  private static async loadMapModules() {
-    return loadModules(
-      [
-        'esri/Map',
-        'esri/views/MapView',
-        'esri/layers/MapImageLayer',
-        'esri/layers/FeatureLayer',
-        'esri/tasks/support/Query',
-        'esri/tasks/QueryTask',
-        // 'esri/Basemap',
-        'esri/views/draw/Draw',
-        'esri/geometry/geometryEngine',
-        // 'esri/widgets/LayerList',
-        // 'esri/widgets/BasemapGallery',
-        // 'esri/widgets/Legend',
-        'esri/widgets/Home',
-        'esri/widgets/Compass',
-        // 'esri/widgets/Expand',
-        'esri/Graphic',
-        // 'esri/widgets/Search',
-        'esri/layers/GraphicsLayer',
-        'esri/layers/WMSLayer',
-        'esri/widgets/CoordinateConversion',
-        'esri/widgets/Locate',
-        'esri/widgets/Track',
-        'esri/layers/VectorTileLayer',
-        'esri/Basemap',
-        'esri/WebMap',
-        // 'esri/urlUtils',
-        // 'esri/geometry/Extent',
-        // 'dojo/dom-construct',
-        // 'esri/widgets/BasemapToggle',
-        // 'dojo/domReady!',
-      ]
-      // {
-      //   version: '4.15',
-      // }
-    );
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (Array.isArray(this.config)) {
@@ -337,20 +294,27 @@ export class MapComponent
         Graphic,
         GraphicsLayer,
         WMSLayer,
-        Locate,
         Track,
-        CoordinateConversion,
-        VectorTileLayer,
-        Basemap,
-        WebMap,
-      ] = await MapComponent.loadMapModules();
+      ] = await this.mapService.loadModules([
+        EsriModule.Map,
+        EsriModule.MapView,
+        EsriModule.MapImageLayer,
+        EsriModule.FeatureLayer,
+        EsriModule.Query,
+        EsriModule.QueryTask,
+        EsriModule.Draw,
+        EsriModule.geometryEngine,
+        EsriModule.Home,
+        EsriModule.Compass,
+        EsriModule.Graphic,
+        EsriModule.GraphicsLayer,
+        EsriModule.WMSLayer,
+        EsriModule.Track,
+      ]);
 
       this.createQueryTask = (url: string) => new QueryTask(url);
       this.createQuery = () => new Query();
 
-      // __esri.urlUtils.addProxyRule({ urlPrefix: '', proxyUrl: '' });
-      // const urlUtils = _urlUtils as __esri.urlUtils;
-      // urlUtils.addProxyRule({urlPrefix: ''})
       // -------------------------------------------------------- START FEATURE LAYERS --------------------------------------
       new FeatureLayer({
         url: '/arcgis/rest/services/Onwani/OnwaniAPI/MapServer',
@@ -414,29 +378,6 @@ export class MapComponent
       });
 
       // -------------------------------------------------------- END FEATURE LAYERS --------------------------------------
-
-      // map base layers
-      const measureThisAction = {
-        title: 'Measure Length',
-        id: 'measure-this',
-        image: 'Measure_Distance16.png',
-      };
-
-      const popupIncidents = {
-        title: this.getIncidentTitle.bind(this), //'/2022',//this.translationService.translateAWord('INCIDENTS.SUBJECT'),
-        content: this.buildIncidentDialog.bind(this),
-        outFields: ['*'],
-        autoOpenEnabled: true,
-        actions: [measureThisAction],
-      } as __esri.PopupTemplateProperties;
-
-      const popupTasks: esri.PopupTemplateProperties = {
-        title: this.getIncidentTitle.bind(this), //this.translationService.translateAWord('TASK.TASK_TITLE'),
-        content: this.buildTaskDialog.bind(this),
-        outFields: ['*'],
-        autoOpenEnabled: true,
-        actions: [measureThisAction],
-      } as __esri.PopupTemplateProperties;
 
       // -------------------------------------------------------- START ONWANI LAYERS --------------------------------------
       const ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER: __esri.MapImageLayer =
@@ -563,51 +504,49 @@ export class MapComponent
           environment.ADMGIS_ROOT_ROUTE + '/rest/services/ECMS/ECMS/MapServer',
         id: 'basemap',
         title: 'ECMS',
-        popup: {
-          highlightEnabled: true,
-          autoOpenEnabled: true,
-        },
         sublayers: [
           {
             id: 0,
             visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
+            popupTemplate: this.popupBuidler.buildPopup('Incident'),
+
             title: 'INCIDENT POINT',
           },
           {
             id: 1,
             visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupTasks,
+            popupTemplate: this.popupBuidler.buildPopup('Task'),
             title: 'TASK POINT',
           },
           {
             id: 2,
             visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
+            popupTemplate: this.popupBuidler.buildPopup('Incident'),
             title: 'INCIDENT LINE',
           },
           {
             id: 3,
             visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupTasks,
+            popupTemplate: this.popupBuidler.buildPopup('Task'),
             title: 'TASK LINE',
           },
           {
             id: 4,
             visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
+            popupTemplate: this.popupBuidler.buildPopup('Incident'),
             title: 'INCIDENT POLYGON',
           },
           {
             id: 5,
             visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupTasks,
+            popupTemplate: this.popupBuidler.buildPopup('Task'),
+
             title: 'TASK POLYGON',
           },
           {
             id: 6,
             visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
+            popupTemplate: this.popupBuidler.buildPopup('Incident'),
             title: 'ORGANIZATION POINT',
           },
         ],
@@ -706,11 +645,7 @@ export class MapComponent
         // scale: 700000,
         zoom: 8,
         map: this.map,
-        popup: {
-          highlightEnabled: true,
-          autoOpenEnabled: false,
-          defaultPopupTemplateEnabled: true,
-        },
+        popup: this.popupBuidler.popupOptions,
 
         highlightOptions: {
           color: 'orange',
@@ -1012,13 +947,13 @@ export class MapComponent
                 case MapActionType.INCIDENT_POLYLINE:
                 case MapActionType.INCIDENT_POLYGON:
                 case MapActionType.ORGRANIZATION_POINT:
-                  item.popupTemplate = popupIncidents as any;
+                  item.popupTemplate = this.popupBuidler.buildPopup('Incident');
                   break;
 
                 case MapActionType.TASK_POINT:
                 case MapActionType.TASK_POLYLINE:
                 case MapActionType.TASK_POLYGON:
-                  item.popupTemplate = popupTasks as any;
+                  item.popupTemplate = this.popupBuidler.buildPopup('Task');
                   break;
               }
               return item;
@@ -1628,16 +1563,16 @@ export class MapComponent
               case MapActionType.INCIDENT_POINT:
               case MapActionType.INCIDENT_POLYGON:
               case MapActionType.INCIDENT_POLYLINE:
-                item.popupTemplate = popupIncidents as any;
+                item.popupTemplate = this.popupBuidler.buildPopup('Incident');
                 break;
 
               case MapActionType.TASK_POINT:
               case MapActionType.TASK_POLYLINE:
               case MapActionType.TASK_POLYGON:
-                item.popupTemplate = popupTasks as any;
+                item.popupTemplate = this.popupBuidler.buildPopup('Task');
                 break;
               default:
-                item.popupTemplate = popupTasks as any;
+                item.popupTemplate = this.popupBuidler.buildPopup('Task');
                 break;
             }
 
@@ -1683,11 +1618,7 @@ export class MapComponent
           // scale: 700000,
           zoom: 8,
           map: this.map,
-          popup: {
-            highlightEnabled: true,
-            autoOpenEnabled: false,
-            defaultPopupTemplateEnabled: true,
-          },
+          popup: this.popupBuidler.popupOptions,
 
           highlightOptions: {
             color: 'orange',
@@ -1986,161 +1917,6 @@ export class MapComponent
     }
     return '';
   }
-  private getIncidentTitle(feature: __esri.Feature) {
-    const attrs = feature.graphic.attributes;
-    const isLangAr = this.lang === 'ar';
-    const isLangEn = this.lang === 'en';
-    let title = '';
-    if (isLangEn) {
-      title = `<div class="row"><div class="image"><b class="textId">{INCIDENT_REF_ID}/2023</b>
-    <div>
-       <a class="btn btn-primary custom-btn" href="${
-         location.origin
-       }/incidents/view/${
-        attrs.INCIDENT_REF_ID
-      }" target="_blank"><p class="customText">
-       ${this.translationService.translateAWord('INCIDENTS.showIncident')}</p>
-       </a>
-      </div></div></div>`;
-    }
-    if (isLangAr) {
-      title = `
-<div class="row directionAr">
-       <a class="btn btn-primary custom-btnAr" href="${
-         location.origin
-       }/incidents/view/${
-        attrs.INCIDENT_REF_ID
-      }" target="_blank"><p class="customText">
-       ${this.translationService.translateAWord('INCIDENTS.showIncident')}</p>
-       </a>
-<b class="textIdAr">2023/{INCIDENT_REF_ID}</b>
-<div class="imageAr">
-    </div></div>`;
-    }
-    const path = 'data:image/png;base64';
-
-    return title;
-  }
-
-  private buildIncidentDialog(feature: __esri.Feature) {
-    //new
-    const attrs = feature.graphic.attributes;
-    let close_Date = this.datePipe.transform(attrs?.CLOSE_DATE, 'short');
-    let create_Date = this.datePipe.transform(attrs.CREATION_DATE, 'short');
-    if (close_Date == null) {
-      close_Date = '';
-    }
-    if (create_Date == null) {
-      create_Date = '';
-    }
-    const dialogDesign = `<table class="table table-bordered">
-    <thead></thead>
-    <tbody>
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.SUBJECT'
-        )}:</th>
-        <td>{NAME}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.CREATION_DATE'
-        )}:</th>
-        <td>${create_Date}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.CLOSE_DATE'
-        )}:</th>
-        <td>${close_Date}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.PRIORITY'
-        )}:</th>
-        <td>{PRIORITY}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.MAIN_CATEGORY'
-        )}:</th>
-        <td>
-        {INC_CATEGORY}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  `;
-    return dialogDesign;
-  }
-  private buildTaskDialog(feature: __esri.Feature) {
-    const attrs = feature.graphic.attributes;
-    const duedate = this.datePipe.transform(attrs?.DUE_DATE, 'short');
-    return `<table class="table table-bordered">
-    <thead></thead>
-    <tbody>
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.TASK_TITLE'
-        )}:</th>
-        <td>{NAME}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.ORGANIZATION'
-        )}:</th>
-        <td>{ORG_NAME}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.TASK_TYPE'
-        )}:</th>
-        <td>
-        {TASK_TYPE}
-        </td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.PRIORITY'
-        )}:</th>
-        <td>{PRIORITY}</td>
-      </tr>
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.DUE_DATE'
-        )}:</th>
-        <td>${duedate}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="container-fluid mb-2">
-    <div class="row">
-      <div class="col-6 px-1">
-        <a class="btn btn-primary d-block text-center" href="${
-          location.origin
-        }/incidents/viewTask/${attrs.TASK_REF_ID}" target="_blank">
-        ${this.translationService.translateAWord('TASK.SHOW')}
-        </a>
-      </div>
-      <div class="col-6 px-1">
-        <a class="btn btn-primary d-block text-center" href="${
-          location.origin
-        }/incidents/view/${attrs.INCIDENT_REF_ID}" target="_blank">
-        ${this.translationService.translateAWord('INCIDENTS.showIncident')}
-        </a>
-      </div>
-    </div>
-  </div>
-  `;
-  }
 }
 
 @NgModule({
@@ -2159,5 +1935,6 @@ export class MapComponent
     NgbPopoverModule,
     MatTooltipModule,
   ],
+  exports: [MapComponent],
 })
 export class MapModule {}

@@ -6,7 +6,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { TranslationModule } from 'src/app/modules/i18n/translation.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { MapModule } from 'src/app/shared/components/map/map.component';
+import { MapModule } from 'src/app/shared/sh-components/map/map.component';
 import { DashboardComponent } from './dashboard.component';
 import { CovidDahsboardComponent } from './covid-dahsboard/covid-dahsboard.component';
 import { Widget1Component } from './widget1/widget1.component';
