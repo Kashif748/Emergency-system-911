@@ -51,6 +51,14 @@
   .esri-popup__header-title:hover {
     background-color: transparent !important;
   }
+
+  .esri-ui-inner-container.esri-ui-corner-container {
+    margin-top: 1.3rem !important;
+  }
+
+  .esri-widget {
+    border-radius: 10px !important;
+  }
 }
 
 .save-map {
