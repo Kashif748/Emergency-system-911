@@ -193,9 +193,6 @@ export class InquiryComponent implements OnInit, OnChanges {
               Validators.pattern(RegxConst.EMAIL_REGEX),
             ])
           );
-        this.formGroup
-          .get('reportedByMobile')
-          .setValidators([Validators.pattern(RegxConst.PHONE_REGEX)]);
       }
       this.formGroup.get('reporterEmail').updateValueAndValidity();
       this.formGroup.get('reportedByMobile').updateValueAndValidity();
@@ -233,9 +230,7 @@ export class InquiryComponent implements OnInit, OnChanges {
         }
         this.formGroup.patchValue({
           ...result,
-          inquiryTags: result?.inquiryTags.map(
-            (tagObj) => tagObj.tag?.id
-          ),
+          inquiryTags: result?.inquiryTags.map((tagObj) => tagObj.tag?.id),
 
           createdDate: this.customDatePipe.transform(
             result['createdDate'],
