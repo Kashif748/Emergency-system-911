@@ -100,23 +100,22 @@
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <p-dropdown
-            [options]="externalsOrgs"
+            [options]="externalsOrgs$ | async"
             editable="true"
             [autoDisplayFirst]="false"
             appendTo="body"
             [filter]="true"
             formControlName="orgName"
             filterBy="nameAr,nameEn,code"
-            dataKey="id"
             [showClear]="true"
             inputId="orgName"
           >
             <ng-template let-item pTemplate="selectedItem">
-              {{ item?.orgName }}
+              {{ item }}
             </ng-template>
 
             <ng-template let-item pTemplate="item">
-              {{ item.orgName }}
+              {{ item }}
             </ng-template>
           </p-dropdown>
           <label>

@@ -16,6 +16,17 @@ export namespace PhonebookAction {
     ) {}
   }
 
+  export class LoadExternalOrgs {
+    static readonly type = '[Phonebook] Load External Orgs';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        orgName: string;
+      }
+    ) {}
+  }
   export class LoadSidebarPage {
     static readonly type = '[Phonebook] Load Sidebar Page';
     /**

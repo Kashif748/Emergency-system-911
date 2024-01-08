@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { CommonDataState, OrgAction, OrgState } from '@core/states';
+import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ExternalPhonebook, ExternalPhonebookProjection, IdNameProjection } from 'src/app/api/models';
+import {
+  ExternalPhonebook,
+  ExternalPhonebookProjection,
+  IdNameProjection,
+} from 'src/app/api/models';
 import { BrowsePhonebookAction } from './states/browse-phonebook.action';
 import {
   BrowsePhonebookState,
@@ -48,6 +53,7 @@ export class EmergenciesPhonebookComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOrgs();
+    this.store.dispatch(new PhonebookAction.LoadExternalOrgs({ orgName: '' }));
     this.page$ = this.store.select(PhonebookState.page).pipe(
       filter((p) => !!p),
       map((page) =>

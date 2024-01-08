@@ -7,7 +7,7 @@ import { FormUtils } from '@core/utils/form.utils';
 import { Select, Store } from '@ngxs/store';
 import { GenericValidators } from '@shared/validators/generic-validators';
 import { Observable, Subject } from 'rxjs';
-import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { IdNameProjection } from 'src/app/api/models';
 import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
 
@@ -18,7 +18,7 @@ import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
 })
 export class PhonebookDialogComponent implements OnInit, AfterViewInit {
   @Input() orgs: IdNameProjection[];
-  externalsOrgs: any[];
+
   phonebookTypes = [];
 
   opened$: Observable<boolean>;
@@ -29,6 +29,8 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
   @Select(PhonebookState.blocking)
   blocking$: Observable<boolean>;
 
+  @Select(PhonebookState.externalsOrgs)
+  public externalsOrgs$: Observable<any[]>;
   @Input()
   set phonebookId(v: number) {
     this._phonebook = v;
