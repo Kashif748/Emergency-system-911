@@ -93,6 +93,11 @@ export class ImpactAnalysisState {
   }
 
   @Selector([ImpactAnalysisState])
+  static editable(state: ImpactAnalysisStateModel) {
+    return state?.statusbasedOnId.editable;
+  }
+
+  @Selector([ImpactAnalysisState])
   static cycles(state: ImpactAnalysisStateModel) {
     return state?.cyclesPage.content;
   }
@@ -514,7 +519,7 @@ export class ImpactAnalysisState {
       })
     );
     return this.cyclesController
-      .update104({
+      .update106({
         body: {
           ...payload,
         },

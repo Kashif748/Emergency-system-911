@@ -382,6 +382,8 @@
                           pInputText
                           type="text"
                           [(ngModel)]="selectedCycle.nameAr"
+                          name="nameAr"
+                          required
                         />
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -397,6 +399,8 @@
                           pInputText
                           type="text"
                           [(ngModel)]="selectedCycle.nameEn"
+                          name="nameEn"
+                          required
                         />
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -414,11 +418,12 @@
                       <ng-template pTemplate="input">
                         <p-calendar
                           [(ngModel)]="selectedCycle.dueDate"
-                          [minDate]="selectedCycle.dueDate"
+                          [minDate]="minDate"
                           [showIcon]="true"
                           showButtonBar="true"
                           [showTime]="true"
                           appendTo="body"
+                          required
                         ></p-calendar>
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -538,6 +543,7 @@
                       pRipple
                       type="button"
                       pSaveEditableRow
+                      [disabled]="!selectedCycle.nameAr || !selectedCycle.nameEn || !selectedCycle.dueDate"
                       icon="pi pi-check"
                       (click)="onRowEditSave(item)"
                       class="p-button-rounded p-button-text p-button-success"
