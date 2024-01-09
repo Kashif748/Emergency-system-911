@@ -66,7 +66,7 @@ export class GroupService {
     let params = new HttpParams()
       .append('category', categoryId.toString())
       .append('zone', '' + zoneId.toString())
-      .append('contractNo', '' + contractNo);
+      .append('contractNo', contractNo ?? '');
 
     if (pointLocation && pointLocation.length) {
       params = params.append('location', pointLocation);
