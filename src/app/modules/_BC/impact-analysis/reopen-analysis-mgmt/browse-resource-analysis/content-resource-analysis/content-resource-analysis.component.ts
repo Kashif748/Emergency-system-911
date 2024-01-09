@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PageRequestModel} from "@core/models/page-request.model";
-import {BrowseUsersAction} from "../../../../../_user-mgmt/states/browse-users.action";
 import {Store} from "@ngxs/store";
 import {LazyLoadEvent} from "primeng/api";
 import {BcResources} from "../../../../../../api/models/bc-resources";
+import {BrowseResourceAnalysisAction} from "../../../states/browse-resource-analysis.action";
 
 @Component({
   selector: 'app-content-resource-analysis',
@@ -29,12 +29,8 @@ export class ContentResourceAnalysisComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    /*this.onPageChange.emit({
-      first: this.pageRequest?.first,
-      rows: this.pageRequest?.rows,
-    });*/
-  }
-  openView(id?: number) {
-    this.store.dispatch(new BrowseUsersAction.OpenView({ userId: id }));
+    }
+  openView(resourceId?: number) {
+    this.store.dispatch(new BrowseResourceAnalysisAction.OpenView({ id: resourceId }));
   }
 }

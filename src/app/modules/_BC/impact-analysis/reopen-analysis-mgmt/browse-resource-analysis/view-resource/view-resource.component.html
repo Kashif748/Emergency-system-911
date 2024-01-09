@@ -1,0 +1,853 @@
+<p-dialog
+        #dialog
+        [visible]="opened$ | async"
+        (visibleChange)="close()"
+        [modal]="true"
+        [style]="{ width: '100%', height: 'auto' }"
+        [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+        [maximizable]="true"
+        [baseZIndex]="10000"
+        [draggable]="true"
+        [resizable]="false"
+>
+    <ng-template pTemplate="header">
+        <ng-template [ngTemplateOutlet]="header"></ng-template>
+    </ng-template>
+    <ng-template [ngTemplateOutlet]="content"></ng-template>
+    <ng-template pTemplate="footer">
+        <ng-template [ngTemplateOutlet]="footer"></ng-template>
+    </ng-template>
+</p-dialog>
+
+<!-- templates header -->
+<ng-template #header>
+    <div class="d-flex">
+        <h3>
+            <ng-container>
+                {{ "RESOURCES.VIEW_RESOURCE" | translate }}
+            </ng-container>
+        </h3>
+    </div>
+    <span class="flex-grow-1"></span>
+</ng-template>
+
+<!-- templates content -->
+<ng-template #content>
+    <div  class="w-100 pt-2 min-h-200px">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row" *ngIf="resource$ | async as resource">
+                    <div class="m-2 p-field p-col-6 p-md-3">
+                        <span class="p-float-label">
+                          <input disabled class="p-col-12" type="text" pInputText
+                                 [value]="resource.orgHierarchy | translateObj : 'name'"/>
+                          <label>
+                            {{ "ORG_ARTCH" | translate }}
+                          </label>
+                        </span>
+                    </div>
+                    <div class="m-2 p-field p-col-6 p-md-2">
+                        <!--<span class="p-float-label">
+                          <input disabled class="p-col-12" type="text" pInputText
+                                 [value]=""/>
+                            <label>
+                                {{ "ACTIVITY_NAME" | translate }}
+                            </label>
+                        </span>-->
+                    </div>
+
+                    <div class="m-2 p-field p-col-6 p-md-2">
+                        <span class="p-float-label">
+                            <input disabled class="p-col-12" type="text" pInputText
+                                   [value]="resource?.createdBy | translateObj : ['FirstName', ' ', 'LastName']"
+                            />
+                            <label>{{ "CREATED_BY" | translate }}</label>
+                        </span>
+                    </div>
+
+                    <div class="m-2 p-field p-col-6 p-md-2">
+                        <span class="p-float-label">
+                            <input disabled class="p-col-10" type="text" pInputText
+                                   [value]="resource?.status | translateObj : 'name'"/>
+                            <label>{{ "STATUS" | translate }}</label>
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-end flex-grow-1 px-4">
+                        <ng-template [ngTemplateOutlet]="worklog"></ng-template>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12"></div>
+
+            <!--Staff Requirements for Main Roles table-->
+
+            <div class="mt-2 col-md-4 col-sm-12">
+                <div class="card card-height">
+                    <ng-container *ngIf="staffLoading$ | async; else staffTableTemplate">
+                        <p-table [value]="[].constructor(5)">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "STAFF_REQ.STAFF_REQ_MAIN" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "STAFF_REQ.PERSONAL_DESIGNATION" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "STAFF_REQ.KEY_RESPONSE" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="cursor-pointer hoverable">
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <ng-template #staffTableTemplate>
+                        <p-table
+                                [columns]=""
+                                totalRecords="10"
+                                [value]="staffPage$ | async"
+                                dataKey="id"
+                                [autoLayout]="true"
+                        >
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "STAFF_REQ.STAFF_REQ_MAIN" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" [style.width]="'col.width'"/>
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th class="min-w-150px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "STAFF_REQ.PERSONAL_DESIGNATION" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-150px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "STAFF_REQ.KEY_RESPONSE" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item let-columns="columns">
+                                <tr class="read-only-row">
+                                    <td class="min-w-150px">
+                                        {{ item.resourceDesignation | translateObj : 'name'}}
+                                    </td>
+                                    <td class="min-w-150px">
+                                        {{ item.keyResponsibilities }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="100%">
+                                        <div class="w-100">
+                                            <nodata-table></nodata-table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!--Remote Work table-->
+            <div class="p-mt-2 col-md-4 col-sm-12">
+                <div class="card card-height">
+                    <ng-container *ngIf="remoteWorkLoading$ | async; else remoteTableTemplate">
+                        <p-table [value]="[].constructor(5)">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "REMOTE_WORK.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "REMOTE_WORK.PERSONAL_DESIG" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "REMOTE_WORK.PRIORITY_LEVEL" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="cursor-pointer hoverable">
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <ng-template #remoteTableTemplate>
+                        <p-table
+                          [columns]=""
+                          totalRecords="5"
+                          [value]="remoteWorkPage$ | async"
+                          dataKey="id"
+                          [autoLayout]="true"
+                        >
+                          <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "REMOTE_WORK.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                          <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                              <col *ngFor="let col of columns" [style.width]="'col.width'" />
+                            </colgroup>
+                          </ng-template>
+                          <ng-template pTemplate="header">
+                            <tr>
+                              <th class="min-w-100px max-w-300px">
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                  {{ "REMOTE_WORK.PERSONAL_DESIG" | translate }}
+                                </div>
+                              </th>
+                              <th class="min-w-100px max-w-300px">
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                  {{ "REMOTE_WORK.PRIORITY_LEVEL" | translate }}
+                                </div>
+                              </th>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-item>
+                              <tr class="read-only-row">
+                                  <td class="min-w-100px max-w-300px">
+                                      {{ item.resourceDesignation | translateObj : 'name'}}
+                                  </td>
+                                  <td class="min-w-100px max-w-300px">
+                                        {{ item.importantLevel | translateObj : 'name'}}
+                                  </td>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="emptymessage">
+                            <tr>
+                              <td colspan="100%">
+                                <div class="w-100">
+                                  <nodata-table></nodata-table>
+                                </div>
+                              </td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!--Vital Records for Business table-->
+            <div class="mt-2 col-md-4 col-sm-6">
+                <div class="card card-height">
+                    <ng-container *ngIf="recordLoading$ | async; else recordsTableTemplate">
+                        <p-table [value]="[].constructor(5)">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "RECORDS.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "RECORDS.RECORD_NAME" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "RECORDS.RECORD_TYPE" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "RECORDS.CRITICALLITY" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="cursor-pointer hoverable">
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <ng-template #recordsTableTemplate>
+                        <p-table
+                                [columns]=""
+                                totalRecords="5"
+                                [value]="recordPage$ | async"
+                                dataKey="id"
+                                [autoLayout]="true"
+                        >
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "RECORDS.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" [style.width]="'col.width'"/>
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "RECORDS.RECORD_NAME" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "RECORDS.RECORD_TYPE" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "RECORDS.CRITICALLITY" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="read-only-row">
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item.recordName }}
+                                    </td>
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item.recordType ? ('RECORDS.HARD' | translate) : ('RECORDS.SOFT' | translate)}}
+                                    </td>
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item.isCritical ? ('RECORDS.CRITICALLITY' | translate) : ('RECORDS.NON_CRITICAL' | translate)}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="100%">
+                                        <div class="w-100">
+                                            <nodata-table></nodata-table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100 pt-2 min-h-200px">
+        <div class="row">
+            <!--Application and Software requirement table-->
+            <div class="mt-4 col-md-4 col-sm-6">
+                <div class="card card-height">
+                    <ng-container *ngIf="appSysLoading$ | async; else appSoftTableTemplate">
+                        <p-table [value]="[].constructor(5)">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "APP_SYS.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "APP_SYS.APP_SOFT" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "APP_SYS.APP_REQ" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "APP_SYS.USERS" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="cursor-pointer hoverable">
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <ng-template #appSoftTableTemplate>
+                        <p-table
+                                [columns]=""
+                                totalRecords="5"
+                                [value]="appSysPage$ | async"
+                                dataKey="id"
+                                [autoLayout]="true"
+                        >
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "APP_SYS.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" [style.width]="'col.width'"/>
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "APP_SYS.APP_SOFT" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "APP_SYS.APP_REQ" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "APP_SYS.USERS" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="read-only-row">
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item.applicationAndSoftware | translateObj : 'name'}}
+                                    </td>
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item.purpose}}
+                                    </td>
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item.numberOfUsers}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="100%">
+                                        <div class="w-100">
+                                            <nodata-table></nodata-table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!--IT Infrastructure table-->
+            <div class="mt-4 col-md-4 col-sm-6">
+                <div class="card card-height">
+                    <ng-container *ngIf="itInfraLoading$ | async; else itTableTemplate">
+                        <p-table [value]="[].constructor(5)">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "IT_INFRA_REQ.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.DETAILS" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.COUNT" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.AVAIL_COUNT" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.PURCHASED" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="cursor-pointer hoverable">
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <ng-template #itTableTemplate>
+                        <p-table
+                                [columns]=""
+                                totalRecords="5"
+                                [value]="itInfraPage$ | async"
+                                dataKey="id"
+                                [autoLayout]="true"
+                        >
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "IT_INFRA_REQ.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" [style.width]="'col.width'"/>
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.DETAILS" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.COUNT" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.AVAIL_COUNT" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "IT_INFRA_REQ.PURCHASED" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="read-only-row">
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item | translateObj : "details"}}
+                                    </td>
+                                    <td class="min-w-100px max-w-300px">
+                                        {{ item.requiredCount}}
+                                    </td>
+                                    <td class="min-w-100px max-w-300px">
+                                        {{ item.availableCount}}
+                                    </td>
+                                    <td class="min-w-100px max-w-300px">
+                                        {{ item.purchasedCount}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="100%">
+                                        <div class="w-100">
+                                            <nodata-table></nodata-table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!--other table-->
+            <div class="mt-4 col-md-4 col-sm-6">
+                <div class="card card-height">
+                    <ng-container *ngIf="otherLoading$ | async; else otherTableTemplate">
+                        <p-table [value]="[].constructor(5)">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "OTHERS.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "OTHERS.DETAILS" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "OTHERS.REQUIRED_COUNT" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="cursor-pointer hoverable">
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                    <td>
+                                        <p-skeleton></p-skeleton>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <ng-template #otherTableTemplate>
+                        <p-table
+                                [columns]=""
+                                totalRecords="5"
+                                [value]="otherPage$ | async"
+                                dataKey="id"
+                                [autoLayout]="true"
+                        >
+                            <ng-template pTemplate="caption">
+                                <div class="table-header">
+                                    {{ "OTHERS.TAB_LABEL" | translate }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" [style.width]="'col.width'"/>
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="min-w-200px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "OTHERS.DETAILS" | translate }}
+                                        </div>
+                                    </th>
+                                    <th class="min-w-100px max-w-300px">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            {{ "OTHERS.REQUIRED_COUNT" | translate }}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr class="read-only-row">
+                                    <td class="min-w-200px max-w-300px">
+                                        {{ item | translateObj : "details"}}
+                                    </td>
+                                    <td class="min-w-100px max-w-300px">
+                                        {{ item.requiredCount}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="100%">
+                                        <div class="w-100">
+                                            <nodata-table></nodata-table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<!--footer-->
+<ng-template #footer>
+
+</ng-template>
+
+<ng-template #worklog>
+    <div #worklogRef></div>
+    <button
+            pButton
+            pRipple
+            type="button"
+            (click)="openWorklogSide()"
+            label="{{ 'WORKLOG_BTN' | translate }}"
+            class="p-button-outlined"
+    ></button>
+
+    <p-sidebar
+            [(visible)]="displayWorklogSide"
+            [showCloseIcon]="false"
+            styleClass="w-500px "
+            [modal]="false"
+            [position]="(dir$ | async) == 'ltr' ? 'left' : 'right'">
+        <div class="p-d-flex justify-content-between align-items-center header border-bottom p-3">
+            <h5 class="m-0">{{ "RES_WORKLOG_HEADER" | translate }}</h5>
+            <button
+                    pButton
+                    pRipple
+                    type="button"
+                    icon="pi pi-times-circle"
+                    (click)="displayWorklogSide = false"
+                    class="p-button-rounded p-button-secondary p-button-text"
+            ></button>
+        </div>
+        <div class="p-2 shadow" *ngIf="resourceWorklogTypes$ | async as activityWorklogTypes">
+            <button
+                    (onChange)="filterWorklogs($event?.value)"
+                    *ngFor="let type of activityWorklogTypes"
+                    pButton
+                    type="button"
+                    class="font-weight-bold px-2 text-center py-1 ml-2 p-button-rounded p-button-sm"
+                    [class]="type?.id == selectedWorklogType?.id? 'active p-button-primary': 'p-button-outlined'"
+                    (click)="filterWorklogs(type)">
+                <span class="m-auto"> {{ type | translateObj }} </span>
+            </button>
+        </div>
+        <div class="timeline timeline-3 pt-3">
+            <div dir="rtl" class="timeline-items">
+                <div *ngIf="worklogLoading$ | async; else tableTemplate" class="px-3">
+                    <div class="timeline-item pl-10" *ngFor="let worklog of [].constructor(5)">
+                        <div class="timeline-content">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div>
+                                    <p-skeleton width="15rem"></p-skeleton>
+                                </div>
+                                <p-skeleton width="5rem"></p-skeleton>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-3">
+                                <p-skeleton width="10rem"></p-skeleton>
+                                <div class="mr-2"></div>
+                                <p-skeleton width="6rem"></p-skeleton>
+                            </div>
+                        </div>
+                        <div class="timeline-media">
+                            <div class="symbol symbol-circle symbol-35 symbol-light-primary">
+                                <span class="symbol-label">
+                                  <p-skeleton shape="circle" size="2.5rem"></p-skeleton>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #tableTemplate>
+                    <perfect-scrollbar
+                            #scroll
+                            [config]="{ wheelSpeed: 2 }"
+                            class="ps-container ps-theme-default ps-active-y px-4"
+                            style="scroll-behavior: smooth;scroll-snap-type: proximity;max-height: 630px;">
+                        <ng-container *ngIf="worklogPage$ | async as page">
+                            <div class="timeline-item border-0" *ngFor="let worklog of page" [id]="'msg-' + worklog?.id">
+                                <div class="timeline-content">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div>
+                                            <p class="font-weight-bold">
+                                                {{ worklog?.notes }}
+                                            </p>
+                                        </div>
+                                        <span class="label label-light-primary label-inline mr-2 h-auto">
+                                            {{ worklog?.actionType | translateObj }}
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between mt-4">
+                                        <div class="d-flex align-items-center font-size-sm text-muted">
+                                            <span>
+                                                {{ worklog?.createdBy | translateObj : "firstName" }}
+                                                {{ worklog?.createdBy | translateObj : "lastName" }}
+                                            </span>
+                                            <div class="mx-2">|</div>
+                                            <span [dir]="dir$ | async">
+                                                {{ worklog?.createdOn | cdate }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="timeline-media">
+                                    <div class="symbol symbol-circle symbol-35 symbol-light-primary">
+                                        <img *ngIf="!worklog?.createdBy?.photo" class="avatar align-self-end"
+                                             src="./assets/media/users/default.jpg"
+                                             alt="..."/>
+                                        <img class="avatar align-self-end" *ngIf="worklog?.createdBy?.photo"
+                                             [attr.src]="worklog?.createdBy?.photo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!page || page?.length == 0" class="w-100 mt-40">
+                                <nodata-table></nodata-table>
+                            </div>
+                        </ng-container>
+                    </perfect-scrollbar>
+                </ng-template>
+            </div>
+            <div class="p-col-12 p-0">
+                <div class="p-inputgroup">
+                    <input
+                            type="text"
+                            (keypress)="keydown($event)"
+                            [formControl]="note"
+                            pInputText
+                            class="h-50px"
+                            style="border-radius: 0 !important"
+                    />
+                    <button
+                            [disabled]="note?.invalid"
+                            type="button"
+                            pButton
+                            pRipple
+                            style="border-radius: 0 !important"
+                            icon="pi pi-save"
+                            label="{{ 'ACTIONS.SAVE' | translate }}"
+                            (click)="submitWorklog()"
+                    ></button>
+                </div>
+            </div>
+        </div>
+    </p-sidebar>
+</ng-template>

@@ -59,7 +59,8 @@
     "STATUS": "Status",
     "DIALOG": {
       "ADD": "Add New Resource"
-    }
+    },
+    "VIEW_RESOURCE": "View Resource Analysis"
   },
   "SYSTEMS": {
     "TITLE": "Technology systems to perform the activity or process",
@@ -101,6 +102,45 @@
   },
   "WORKLOG_BTN": "Notes",
   "WORKLOG_HEADER": "Notes for acticity anlysis",
+  "RES_WORKLOG_HEADER": "Notes for resource analysis",
   "BC_COPYING_ERROR_MESSAGE": "Resources already exist for current division and analysis cycle.",
-  "WARNING_ERROR_MESSAGE": "Users are not allowed to perform activity analysis on chosen cycle. Cycle is not in <strong>Approved</strong> status."
+  "WARNING_ERROR_MESSAGE": "Users are not allowed to perform activity analysis on chosen cycle. Cycle is not in <strong>Approved</strong> status.",
+  "STAFF_REQ": {
+    "STAFF_REQ_MAIN":"Staff Requirements for Main Roles",
+    "PERSONAL_DESIGNATION":"Personnel Designation",
+    "KEY_RESPONSE":"Key Responsibilities"
+  },
+  "REMOTE_WORK": {
+    "TAB_LABEL": "Remote Work",
+    "PERSONAL_DESIG":"Personnel Designation",
+    "PRIORITY_LEVEL":"Priority Level"
+  },
+  "RECORDS": {
+    "TAB_LABEL": "Records",
+    "RECORD_NAME":"Record Name",
+    "RECORD_TYPE":"Record Type",
+    "CRITICALLITY":"Criticality",
+    "HARD": "Hard",
+    "SOFT": "Soft",
+    "CRITICAL": "Critical",
+    "NON_CRITICAL": "Non-Critical"
+  },
+  "APP_SYS": {
+    "TAB_LABEL": "Applications & Systems",
+    "APP_REQ":"Required for / Purpose",
+    "APP_SOFT":"Application/Software Name",
+    "USERS":"Number of Users"
+  },
+  "IT_INFRA_REQ": {
+    "TAB_LABEL": "IT Infrastructure Requirements",
+    "DETAILS":"Details",
+    "COUNT":"Required Count",
+    "AVAIL_COUNT":"Available Count",
+    "PURCHASED":"To Be Purchased"
+  },
+  "OTHERS": {
+    "TAB_LABEL": "Other Requirements",
+    "DETAILS":"Details",
+    "REQUIRED_COUNT":"Required Count"
+  }
 }
