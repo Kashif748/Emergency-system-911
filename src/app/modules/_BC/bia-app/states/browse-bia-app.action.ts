@@ -1,8 +1,7 @@
-import { PageRequestModel } from '@core/models/page-request.model';
-import { BcActivities } from '../../../../api/models/bc-activities';
-import { BcActivityAnalysisDto, BcCycles } from '../../../../api/models';
-import { BcResources } from '../../../../api/models/bc-resources';
-import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {BcActivities} from '../../../../api/models/bc-activities';
+import {BcActivityAnalysisDto, BcCycles} from '../../../../api/models';
+import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
 
 export namespace BrowseBiaAppAction {
   export class LoadBia {
@@ -118,7 +117,7 @@ export namespace BrowseBiaAppAction {
     /**
      *
      */
-    constructor(public payload: { form: BcCycles; cycle: number }) {}
+    constructor(public payload: { form: BcCycles }) {}
   }
   export class UpdateCycle {
     static readonly type = '[BrowseBiaApp] Update Cycle';
