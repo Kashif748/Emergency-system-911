@@ -1,14 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
-import { environment } from 'src/environments/environment';
-import { TranslationService } from 'src/app/modules/i18n/translation.service';
-import { UrlHelperService } from '@core/services/url-helper.service';
-import { BehaviorSubject } from 'rxjs';
-import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
-import { tap } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
-import { DateTimeUtil } from '@core/utils/DateTimeUtil';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/internal/Observable';
+import {environment} from 'src/environments/environment';
+import {TranslationService} from 'src/app/modules/i18n/translation.service';
+import {UrlHelperService} from '@core/services/url-helper.service';
+import {BehaviorSubject} from 'rxjs';
+import {AlertsService} from 'src/app/_metronic/core/services/alerts.service';
+import {tap} from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
+import {DateTimeUtil} from '@core/utils/DateTimeUtil';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +40,7 @@ export class InquiriesService {
         toDate: data?.toDate ?? '',
         subject: data?.subject ?? '',
         userId: data?.userId?.id ?? '',
+        tagIds: data?.tagIds?.join(',') ?? [],
         page: pageNumber ?? '0',
         size: pageSize ?? '10',
         // sort: `${sort?.active ?? ''},${sort?.direction ?? ''}`,
@@ -58,6 +59,7 @@ export class InquiriesService {
           orgId: filterForm?.orgId ?? '',
           userId: filterForm?.userId?.id ?? '',
           subject: filterForm?.subject ?? '',
+          tagIds: filterForm?.tagIds?.join(',') ?? [],
         },
 
         responseType: 'blob' as any,
@@ -95,6 +97,7 @@ export class InquiriesService {
             subject: filterForm?.subject ?? '',
             userId: filterForm?.userId?.id ?? '',
             callDurationInMinutes: filterForm?.callDurationInMinutes ?? '',
+            tagIds: filterForm?.tagIds?.join(',') ?? [],
           },
         })
         .subscribe(
