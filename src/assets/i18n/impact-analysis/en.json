@@ -101,8 +101,8 @@
     "TABLE_CELL": " Impact Types / Time Period"
   },
   "WORKLOG_BTN": "Notes",
-  "WORKLOG_HEADER": "Notes for acticity anlysis",
   "RES_WORKLOG_HEADER": "Notes for resource analysis",
+  "WORKLOG_HEADER": "Notes for activity anlysis",
   "BC_COPYING_ERROR_MESSAGE": "Resources already exist for current division and analysis cycle.",
   "WARNING_ERROR_MESSAGE": "Users are not allowed to perform activity analysis on chosen cycle. Cycle is not in <strong>Approved</strong> status.",
   "STAFF_REQ": {

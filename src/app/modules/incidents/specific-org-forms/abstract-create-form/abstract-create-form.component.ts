@@ -462,7 +462,6 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
               (contract) => contract?.CONTRACT_NO
             );
             this.contractsNo = contractsNos.join(',');
-            console.log(this.contractsNo);
           }
 
           // this.groupService

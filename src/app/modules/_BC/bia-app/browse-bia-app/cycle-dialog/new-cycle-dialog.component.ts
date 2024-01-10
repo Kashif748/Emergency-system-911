@@ -137,7 +137,7 @@ export class NewCycleDialogComponent implements OnInit {
     };
     cycleForm.isActive = true;
     this.store.dispatch(
-      new BrowseBiaAppAction.CreateCycle({ form: cycleForm, cycle: this.cycle['id'] })
+      new BrowseBiaAppAction.CreateCycle({ form: cycleForm })
     ).pipe(
       takeUntil(this.destroy$),
       tap((bc) => {
