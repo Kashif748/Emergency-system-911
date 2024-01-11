@@ -51,6 +51,11 @@ export const COLUMNS = [
   },
   {
     key: 'createdBy',
+    nameAr: 'الوسم',
+    nameEn: 'TAG',
+  },
+  {
+    key: 'tag',
     nameAr: 'انشأ من قبل',
     nameEn: 'CREATED BY',
   },
