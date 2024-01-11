@@ -63,18 +63,30 @@
         </mat-expansion-panel-header>
         <form [formGroup]="filtersForm" class="mt-4">
           <div class="d-flex flex-wrap">
-            <div class="px-2 w-100">
-              <mat-form-field
-                appearance="fill"
-                class="form-element example-full-width"
-              >
-                <mat-label>
-                  {{ "Survey.Table.SERIAL" | translate }}</mat-label
-                >
+            <div class="px-2 w-50">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label> {{ "Survey.Table.SERIAL" | translate }}</mat-label>
                 <input matInput type="text" formControlName="incident" />
               </mat-form-field>
             </div>
+            <!-- category -->
 
+            <div class="px-2 w-50">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>{{ "INCIDENTS.CATEGORY" | translate }}</mat-label>
+                <mat-select
+                  placeholder="{{ 'INCIDENTS.CATEGORY' | translate }}"
+                  formControlName="category"
+                >
+                  <mat-option
+                    *ngFor="let category of mainCategories"
+                    [value]="category.id"
+                  >
+                    {{ category | propTranslator : "name" }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
             <div class="px-2 w-50">
               <mat-form-field
                 appearance="fill"
@@ -168,8 +180,8 @@
             </th>
             <td mat-cell *matCellDef="let element" class="setCenter">
               <span class="font-weight-bolder" dir="ltr">
-                  2023 / {{ element.incident?.id}}
-                </span>
+                2023 / {{ element.incident?.id }}
+              </span>
             </td></ng-container
           >
 
@@ -188,7 +200,21 @@
               }}</span>
             </td></ng-container
           >
-
+          <ng-container matColumnDef="incidentCategory">
+            <th
+              style="text-align: center"
+              mat-header-cell
+              *matHeaderCellDef
+              style="width: 15%; text-align: center"
+            >
+              {{ "INCIDENTS.CATEGORY" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="setCenter">
+              <span class="font-weight-bolder">{{
+                element.incident?.incidentCategory | propTranslator : "name"
+              }}</span>
+            </td></ng-container
+          >
           <ng-container matColumnDef="reportingVia">
             <th
               class="setCenter"

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResourceDialogComponent } from './resource-dialog.component';
+import { GroupGisComponent } from './group-gis.component';
 
-describe('ResourceDialogComponent', () => {
-  let component: ResourceDialogComponent;
-  let fixture: ComponentFixture<ResourceDialogComponent>;
+describe('GroupGisComponent', () => {
+  let component: GroupGisComponent;
+  let fixture: ComponentFixture<GroupGisComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ResourceDialogComponent ]
+      declarations: [ GroupGisComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ResourceDialogComponent);
+    fixture = TestBed.createComponent(GroupGisComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

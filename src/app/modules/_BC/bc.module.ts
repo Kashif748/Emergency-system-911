@@ -1,40 +1,48 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
-import { ILangFacade, LangFacade } from '@core/facades/lang.facade';
-import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient} from '@angular/common/http';
+import {ILangFacade, LangFacade} from '@core/facades/lang.facade';
+import {TranslateObjModule} from '@shared/sh-pipes/translate-obj.pipe';
 
-import { BCComponent } from './bc/bc.component';
-import { BCRoutingModule } from './bc-routing.module';
+import {BCComponent} from './bc/bc.component';
+import {BCRoutingModule} from './bc-routing.module';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
-import { TreeModule } from 'primeng/tree';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { TableModule } from 'primeng/table';
-import { NodataTableModule } from '../../shared/components/nodata-table/nodata-table.module';
-import { OrganizationChartModule } from 'primeng/organizationchart';
-import { PaginatorModule } from 'primeng/paginator';
-import { MenuModule } from 'primeng/menu';
-import { SkeletonModule } from 'primeng/skeleton';
-import { ColorPickerModule } from 'primeng/colorpicker';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { DialogModule } from 'primeng/dialog';
-import { ToolbarModule } from 'primeng/toolbar';
-import { SidebarModule } from 'primeng/sidebar';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
-import { DividerModule } from 'primeng/divider';
-import { NgxsModule } from '@ngxs/store';
-import { BrowseBCState } from './states/browse-bc.state';
-import { PrivilegesDirectiveModule } from '@shared/sh-directives/privileges.directive';
-import { BadgeModule } from 'primeng/badge';
-import { BrowseOrgDetailState } from './bc-lists/org-detail/states/browse-orgDetail.state';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {PanelMenuModule} from 'primeng/panelmenu';
+import {ButtonModule} from 'primeng/button';
+import {TagModule} from 'primeng/tag';
+import {TreeModule} from 'primeng/tree';
+import {InputTextModule} from 'primeng/inputtext';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {TableModule} from 'primeng/table';
+import {NodataTableModule} from '../../shared/components/nodata-table/nodata-table.module';
+import {OrganizationChartModule} from 'primeng/organizationchart';
+import {PaginatorModule} from 'primeng/paginator';
+import {MenuModule} from 'primeng/menu';
+import {SkeletonModule} from 'primeng/skeleton';
+import {ColorPickerModule} from 'primeng/colorpicker';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {DialogModule} from 'primeng/dialog';
+import {ToolbarModule} from 'primeng/toolbar';
+import {SidebarModule} from 'primeng/sidebar';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {SharedBreadcrumbModule} from '@shared/sh-components/breadcrumbs/breadcrumb.component';
+import {DividerModule} from 'primeng/divider';
+import {NgxsModule} from '@ngxs/store';
+import {BrowseBCState} from './states/browse-bc.state';
+import {PrivilegesDirectiveModule} from '@shared/sh-directives/privileges.directive';
+import {BadgeModule} from 'primeng/badge';
+import {CdateModule} from '@shared/sh-pipes/cdate.pipe';
+import {ToggleButtonModule} from 'primeng/togglebutton';
+import {BrowseOrgDetailState} from './bc-lists/org-detail/states/browse-orgDetail.state';
+import {BlockUIModule} from 'primeng/blockui';
+import {BlockableDivModule} from '@shared/sh-components/blockable-div/blockable-div.component';
+import {ProgressBarModule} from 'primeng/progressbar';
+import {ConfirmationService} from "primeng/api";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {PanelModule} from "primeng/panel";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/bc/', '.json');
@@ -81,7 +89,14 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     PrivilegesDirectiveModule,
     BadgeModule,
+    CdateModule,
+    ToggleButtonModule,
+    BlockUIModule,
+    BlockableDivModule,
+    ProgressBarModule,
+    ConfirmPopupModule,
+    PanelModule
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  providers: [{ provide: ILangFacade, useClass: LangFacade }, ConfirmationService],
 })
 export class BCModule {}

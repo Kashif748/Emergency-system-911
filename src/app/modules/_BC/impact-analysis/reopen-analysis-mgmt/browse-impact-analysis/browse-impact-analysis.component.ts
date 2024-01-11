@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {Observable, Subject} from 'rxjs';
-import {LazyLoadEvent, TreeNode} from 'primeng/api';
+import {ConfirmationService, LazyLoadEvent, TreeNode} from 'primeng/api';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {TranslateService} from '@ngx-translate/core';
 import {auditTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -22,12 +22,11 @@ import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BcOrgHierarchyProjection} from 'src/app/api/models/bc-org-hierarchy-projection';
 import {TreeHelper} from '@core/helpers/tree.helper';
-import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState} from "../../states/browse-resource-analysis.state";
-import {BcResources} from "../../../../../api/models/bc-resources";
-import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
-import {BrowseResourceAnalysisAction} from "../../states/browse-resource-analysis.action";
-import {ImapactAnalysisAction} from "@core/states/impact-analysis/impact-analysis.action";
-import { cloneDeep } from "lodash";
+import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState,} from '../../states/browse-resource-analysis.state';
+import {BcResources} from '../../../../../api/models/bc-resources';
+import {ResourceAnalysisState} from '@core/states/impact-analysis/resource-analysis.state';
+import {BrowseResourceAnalysisAction} from '../../states/browse-resource-analysis.action';
+import {ImapactAnalysisAction} from '@core/states/impact-analysis/impact-analysis.action';
 
 @Component({
   selector: 'app-browse-impact-analysis',
@@ -47,7 +46,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
 
   @Select(BrowseResourceAnalysisState.state)
   public browseResourceState$: Observable<BrowseReourceAnalysisStateModel>;
-
 
   //   analysis page
   // filters
@@ -92,6 +90,10 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   avoidSearch = false;
   orgHierarchyId: number;
   cycleId: number;
+  alreadyFoundResource: boolean = false;
+  cycleStatus: boolean = false;
+  closeAlertBox: boolean = true;
+  isResourceOnDivision: boolean = false;
 
   public sortableColumns = [
     {
@@ -109,7 +111,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   ];
 
   public columns = [
-    { name: 'ACTIVITY_NAME', code: 'activityName', disabled: true},
+    { name: 'ACTIVITY_NAME', code: 'activityName', disabled: true },
     {
       name: 'ACTIVITY_FEQ',
       code: 'activityFrequency',
@@ -158,26 +160,25 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     private treeHelper: TreeHelper,
     private router: Router,
     private route: ActivatedRoute,
+    private confirmationService: ConfirmationService,
   ) {
-    this.lang.vm$
-      .pipe
-      ()
-      .subscribe((res) => {
-        if (res['key'] == 'ar') {
-          this.sortableColumns[0].code = 'activity.nameAr';
-          this.sortableColumns[1].code = 'activity.activityFrequence.nameAr';
-          this.sortableColumns[2].code = 'cycle.nameAr';
-        } else {
-          this.sortableColumns[0].code = 'activity.nameEn';
-          this.sortableColumns[1].code = 'activity.activityFrequence.nameEn';
-          this.sortableColumns[2].code = 'cycle.nameEn';
-        }
-      });
+    this.lang.vm$.pipe().subscribe((res) => {
+      if (res['key'] == 'ar') {
+        this.sortableColumns[0].code = 'activity.nameAr';
+        this.sortableColumns[1].code = 'activity.activityFrequence.nameAr';
+        this.sortableColumns[2].code = 'cycle.nameAr';
+      } else {
+        this.sortableColumns[0].code = 'activity.nameEn';
+        this.sortableColumns[1].code = 'activity.activityFrequence.nameEn';
+        this.sortableColumns[2].code = 'cycle.nameEn';
+      }
+    });
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         this.orgHierarchyId = params['_division'];
         this.cycleId = params['_cycle'];
+        this.alreadyFoundResource = false;
       });
   }
 
@@ -205,10 +206,10 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
         map((data) => this.setTree(data))
       )
       .subscribe();*/
-    const orgItem = this.findObjectById(id, this.orgHir)
+    const orgItem = this.findObjectById(id, this.orgHir);
     if (orgItem) {
       const orgHierarchyId = {
-        orgHierarchyId: orgItem
+        orgHierarchyId: orgItem,
       };
       this.updateFilter(orgHierarchyId);
     }
@@ -225,7 +226,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
         this.changeView('CARDS');
       });
 
-
     this.store
       .select(OrgDetailState.orgHirSearch)
       .pipe(
@@ -235,60 +235,80 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-
-    this.store.dispatch([new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
-      new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 })])
+    this.store
+      .dispatch([
+        new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
+        new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 }),
+      ])
       .pipe(
         takeUntil(this.destroy$),
         take(1),
         filter((p) => !!p),
         tap(() => {
-          const checkParentID = this.orgHir.find(item => item.data.id == this.orgHierarchyId);
+          const checkParentID = this.orgHir.find(
+            (item) => item.data.id == this.orgHierarchyId
+          );
           this.cycles$
             .pipe(
               takeUntil(this.destroy$),
               take(1),
-              map(cycles => cycles.find(cycle => cycle.id == this.cycleId)),
+              map((cycles) => cycles.find((cycle) => cycle.id == this.cycleId)),
               tap((foundCycle) => {
+                this.cycleStatus = foundCycle.status.id !== 3;
                 this.updateFilter({ cycleId: foundCycle });
               })
-            ).subscribe();
+            )
+            .subscribe();
           if (checkParentID) {
             const orgHierarchyId = { orgHierarchyId: checkParentID };
             this.updateFilter(orgHierarchyId);
             this.loadPage();
             this.loadResourcePage();
           } else {
-            this.store.dispatch(new OrgDetailAction.GetOrgHierarchyParent({ page: 0, size: 100, id: this.orgHierarchyId }))
+            this.store
+              .dispatch(
+                new OrgDetailAction.GetOrgHierarchyParent({
+                  page: 0,
+                  size: 100,
+                  id: this.orgHierarchyId,
+                })
+              )
               .pipe(
                 switchMap(() => this.store.select(OrgDetailState.orgHirParent)),
                 takeUntil(this.destroy$),
                 take(1),
                 tap((orgHirParent) => {
-                  this.store.dispatch([
-                    new OrgDetailAction.GetOrgHierarchySearch({
-                      page: 0,
-                      size: 100,
-                      parentId: orgHirParent[0].id ? orgHirParent[0].id : this.orgHierarchyId
-                    }),
-                    new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 })
-                  ]).pipe(
-                    takeUntil(this.destroy$),
-                    take(1),
-                    tap(() => {
-                      this.selectOrgHierarchyById(this.orgHierarchyId);
-                      this.loadPage();
-                      this.loadResourcePage();
-                    })
-                  ).subscribe();
-                }
-              )).subscribe();
+                  this.store
+                    .dispatch([
+                      new OrgDetailAction.GetOrgHierarchySearch({
+                        page: 0,
+                        size: 100,
+                        parentId: orgHirParent[0].id
+                          ? orgHirParent[0].id
+                          : this.orgHierarchyId,
+                      }),
+                      new BrowseImpactAnalysisAction.LoadCycles({
+                        page: 0,
+                        size: 100,
+                      }),
+                    ])
+                    .pipe(
+                      takeUntil(this.destroy$),
+                      take(1),
+                      tap(() => {
+                        this.selectOrgHierarchyById(this.orgHierarchyId);
+                        this.loadPage();
+                        this.loadResourcePage();
+                      })
+                    )
+                    .subscribe();
+                })
+              )
+              .subscribe();
           }
-        }),
+        })
       )
       .subscribe();
-
-
 
     // All filters states
     this.store.dispatch([
@@ -310,30 +330,31 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
 
     // resourec table state
 
-    this.resourcePage$ = this.store
-      .select(ResourceAnalysisState.page)
-      .pipe(
-        filter((p) => !!p),
-        map((page) =>
-          page?.map((u) => {
-            return {
-              ...u,
-              actions: [
-                {
-                  label: this.translate.instant('START_RESOURC_ANALYSIS'),
-                  icon: 'pi pi-pencil',
-                  command: () => {
-                    this.startResourceAnalysis(u);
-                  },
+    this.resourcePage$ = this.store.select(ResourceAnalysisState.page).pipe(
+      filter((p) => !!p),
+      map((page) =>
+        page?.map((u) => {
+          if (
+            u.orgHierarchy.id == this.orgHierarchyId &&
+            u.cycle.id == this.cycleId
+          ) {
+            this.alreadyFoundResource = true;
+          }
+          return {
+            ...u,
+            actions: [
+              {
+                label: this.translate.instant('START_RESOURC_ANALYSIS'),
+                icon: 'pi pi-pencil',
+                command: () => {
+                  this.startResourceAnalysis(u);
                 },
-              ],
-            };
-          })
-        )
-      );
-
-
-
+              },
+            ],
+          };
+        })
+      )
+    );
 
     // Table State
     this.page$ = this.store
@@ -380,20 +401,6 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    console.log(this.orgHir);
-    this.orgHireracy = cloneDeep(this.orgHir);
-    this.orgHireracy.forEach((node) => {
-      this.markDisabledNodes(node);
-    });
-  }
-  markDisabledNodes(node: TreeNode) {
-    if (node.children) {
-      node.expanded = true;
-      node.children.forEach((child) => {
-        this.markDisabledNodes(child);
-      });
-    }
-    node.selectable = node?.data?.bcOrgHirType?.id === 2;
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event.filter);
@@ -406,7 +413,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
           size: 100,
           parentId: parseInt(node?.key),
         })
-      )
+      );
     }
   }
 
@@ -416,7 +423,11 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       this.store.dispatch(new BrowseResourceAnalysisAction.LoadPage());
     }
   }
-  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent, click?: boolean) {
+  updateFilter(
+    filter: { [key: string]: any },
+    event?: KeyboardEvent,
+    click?: boolean
+  ) {
     if (event?.key === 'Enter') {
       return this.search();
     }
@@ -425,10 +436,14 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     } else {
       this.avoidSearch = false;
     }
+    if (filter['orgHierarchyId']) {
+      const hierarchyType = filter['orgHierarchyId']?.data?.bcOrgHirType?.id;
+      this.isResourceOnDivision = hierarchyType === 2;
+    }
+
     const keys = Object.keys(filter);
     if (keys.length > 0) {
       switch (keys[0]) {
-
         case 'orgHierarchyId':
           filter['orgHierarchyId'] = {
             id: filter['orgHierarchyId']?.key,
@@ -444,7 +459,9 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseResourceAnalysisAction.UpdateFilter(filter));
 
     if (click) {
-      this.store.dispatch(new BrowseImpactAnalysisAction.UpdateRoute(filter))
+      this.cycleStatus = filter['cycleId'] && filter['cycleId'].status.id !== 3;
+      this.closeAlertBox = this.cycleStatus;
+      this.store.dispatch(new BrowseImpactAnalysisAction.UpdateRoute(filter));
       this.search();
       this.checkStatus(filter);
     }
@@ -477,7 +494,31 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
       new BrowseImpactAnalysisAction.Sort({ field: event.value })
     );
   }
-
+  createResource(event: Event) {
+    if (!this.orgHierarchyId || !this.cycleId) {
+      return;
+    }
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translate.instant('RESOURCES.CONFIREM'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(
+          new BrowseResourceAnalysisAction.CreateResourceAnalysis({
+            cycle: { id: this.cycleId },
+            orgHierarchy: {
+              id: this.orgHierarchyId,
+              orgStructure: null,
+            },
+            isActive: true
+          })
+        );
+      },
+      reject: () => {
+        //reject action
+      },
+    });
+  }
   resourceSort(event) {
     this.store.dispatch(
       new BrowseResourceAnalysisAction.Sort({ field: event.value })
@@ -486,13 +527,17 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
 
   resourceOrder(event) {
     this.store.dispatch(
-      new BrowseResourceAnalysisAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseResourceAnalysisAction.Sort({
+        order: event.checked ? 'desc' : 'asc',
+      })
     );
   }
 
   order(event) {
     this.store.dispatch(
-      new BrowseImpactAnalysisAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseImpactAnalysisAction.Sort({
+        order: event.checked ? 'desc' : 'asc',
+      })
     );
   }
 
@@ -506,7 +551,7 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
     });
   }
 
-  startAnalysis(activity: BcActivityAnalysis) {
+    startAnalysis(activity: BcActivityAnalysis) {
     this.router.navigate(['bc/activity-analysis'], {
       queryParams: {
         _cycle: activity?.cycle?.id,
@@ -537,23 +582,40 @@ export class BrowseImpactAnalysisComponent implements OnInit, OnDestroy {
   }
 
   public checkStatus(filters) {
-    const orgHie = filters['orgHierarchyId'] ? filters['orgHierarchyId']?.id : this.orgHierarchyId;
+    const orgHie = filters['orgHierarchyId']
+      ? filters['orgHierarchyId']?.id
+      : this.orgHierarchyId;
     const cycle = filters['cycleId'] ? filters['cycleId']?.id : this.cycleId;
-    this.store.dispatch(new BrowseImpactAnalysisAction.LoadAnalysisStatusInfo(
-      { orgHierarchyId: orgHie, cycleId: cycle })).pipe(
-      switchMap(() => this.store.select(ImpactAnalysisState.loadAnalysisStatus)),
-      takeUntil(this.destroy$),
-      take(1),
-      filter((p) => !!p),
-      tap((status) => {
-        this.store.dispatch(new ImapactAnalysisAction.LoadStatusBasedOnStatusId(
-          { id:  status?.id}));
-      })
-    ).subscribe();
+    this.store
+      .dispatch(
+        new BrowseImpactAnalysisAction.LoadAnalysisStatusInfo({
+          orgHierarchyId: orgHie,
+          cycleId: cycle,
+        })
+      )
+      .pipe(
+        switchMap(() =>
+          this.store.select(ImpactAnalysisState.loadAnalysisStatus)
+        ),
+        takeUntil(this.destroy$),
+        take(1),
+        filter((p) => !!p),
+        tap((status) => {
+          this.store.dispatch(
+            new ImapactAnalysisAction.LoadStatusBasedOnStatusId({
+              id: status?.id,
+            })
+          );
+        })
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  closeAlert() {
+    this.closeAlertBox = false;
   }
 }

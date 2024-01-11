@@ -1,40 +1,52 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ActivityFrquencyAction,
   ActivityFrquencyState,
   ActivityPrioritySeqAction,
   ActivityPrioritySeqState,
-  OrgDetailAction, OrgDetailState,
+  OrgDetailAction,
+  OrgDetailState,
   RtoAction,
-  RtoState
-} from "@core/states";
-import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
-import {Select, Store} from "@ngxs/store";
-import {BcActivityAnalysis, BcAnalysisStatus, BcCycles, Bcrto} from "../../../../../api/models";
-import {TranslateService} from "@ngx-translate/core";
-import {LazyLoadEvent, TreeNode} from "primeng/api";
-import {Observable, Subject} from "rxjs";
-import {TreeHelper} from "@core/helpers/tree.helper";
-import {BcOrgHierarchyProjection} from "../../../../../api/models/bc-org-hierarchy-projection";
-import {auditTime, filter, map, takeUntil} from "rxjs/operators";
-import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.state";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {BrowseImpactAnalysisAction} from "../../states/browse-impact-analysis.action";
-import {BrowseImpactAnalysisState, BrowseImpactAnalysisStateModel} from "../../states/browse-impact-analysis.state";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {Router} from "@angular/router";
-import {BcResources} from "../../../../../api/models/bc-resources";
-import {ResourceAnalysisState} from "@core/states/impact-analysis/resource-analysis.state";
-import {BrowseReourceAnalysisStateModel, BrowseResourceAnalysisState} from "../../states/browse-resource-analysis.state";
-import {BrowseResourceAnalysisAction} from "../../states/browse-resource-analysis.action";
+  RtoState,
+} from '@core/states';
+import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
+import { Select, Store } from '@ngxs/store';
+import {
+  BcActivityAnalysis,
+  BcAnalysisStatus,
+  BcCycles,
+  Bcrto,
+} from '../../../../../api/models';
+import { TranslateService } from '@ngx-translate/core';
+import { ConfirmationService, LazyLoadEvent, TreeNode } from 'primeng/api';
+import { Observable, Subject } from 'rxjs';
+import { TreeHelper } from '@core/helpers/tree.helper';
+import { BcOrgHierarchyProjection } from '../../../../../api/models/bc-org-hierarchy-projection';
+import { auditTime, filter, map, takeUntil } from 'rxjs/operators';
+import { ImpactAnalysisState } from '@core/states/impact-analysis/impact-analysis.state';
+import { ILangFacade } from '@core/facades/lang.facade';
+import { BrowseImpactAnalysisAction } from '../../states/browse-impact-analysis.action';
+import {
+  BrowseImpactAnalysisState,
+  BrowseImpactAnalysisStateModel,
+} from '../../states/browse-impact-analysis.state';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BcResources } from '../../../../../api/models/bc-resources';
+import { ResourceAnalysisState } from '@core/states/impact-analysis/resource-analysis.state';
+import {
+  BrowseReourceAnalysisStateModel,
+  BrowseResourceAnalysisState,
+} from '../../states/browse-resource-analysis.state';
+import { BrowseResourceAnalysisAction } from '../../states/browse-resource-analysis.action';
 
 @Component({
   selector: 'app-browse-resource-analysis',
   templateUrl: './browse-resource-analysis.component.html',
-  styleUrls: ['./browse-resource-analysis.component.scss']
+  styleUrls: ['./browse-resource-analysis.component.scss'],
 })
 export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
-// filters
+  // filters
   public orgHir: TreeNode[] = [];
   public orgHireracy: TreeNode[] = [];
 
@@ -64,6 +76,10 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
   public hasFilters$: Observable<boolean>;
 
   private destroy$ = new Subject();
+
+  alreadyFoundResource: boolean = false;
+  orgHierarchyId: number;
+  cycleId: number;
 
   public sortableColumns = [
     {
@@ -103,8 +119,18 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
     private translateObj: TranslateObjPipe,
     private lang: ILangFacade,
     private treeHelper: TreeHelper,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+    private confirmationService: ConfirmationService
+  ) {
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        this.orgHierarchyId = params['_division'];
+        this.cycleId = params['_cycle'];
+        this.alreadyFoundResource = false;
+      });
+  }
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -121,7 +147,6 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new BrowseImpactAnalysisAction.LoadCycles({ page: 0, size: 100 }),
       new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
-
     ]);
     this.store
       .select(OrgDetailState.orgHirSearch)
@@ -135,7 +160,7 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
-        this.orgHir =[];
+        this.orgHir = [];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,
@@ -146,27 +171,31 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
       });
 
     // Table State
-    this.page$ = this.store
-      .select(ResourceAnalysisState.page)
-      .pipe(
-        filter((p) => !!p),
-        map((page) =>
-          page?.map((u) => {
-            return {
-              ...u,
-              actions: [
-                {
-                  label: this.translate.instant('START_RESOURC_ANALYSIS'),
-                  icon: 'pi pi-pencil',
-                  command: () => {
-                    this.startAnalysis(u);
-                  },
+    this.page$ = this.store.select(ResourceAnalysisState.page).pipe(
+      filter((p) => !!p),
+      map((page) =>
+        page?.map((u) => {
+          if (
+            u.orgHierarchy.id == this.orgHierarchyId &&
+            u.cycle.id == this.cycleId
+          ) {
+            this.alreadyFoundResource = true;
+          }
+          return {
+            ...u,
+            actions: [
+              {
+                label: this.translate.instant('START_RESOURC_ANALYSIS'),
+                icon: 'pi pi-pencil',
+                command: () => {
+                  this.startAnalysis(u);
                 },
-              ],
-            };
-          })
-        )
-      );
+              },
+            ],
+          };
+        })
+      )
+    );
   }
   public setTree(_searchResponses: BcOrgHierarchyProjection[]) {
     if (_searchResponses.length == 0) {
@@ -243,7 +272,9 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
 
   order(event) {
     this.store.dispatch(
-      new BrowseResourceAnalysisAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+      new BrowseResourceAnalysisAction.Sort({
+        order: event.checked ? 'desc' : 'asc',
+      })
     );
   }
 
@@ -265,7 +296,17 @@ export class BrowseResourceAnalysisComponent implements OnInit, OnDestroy {
       })
     );
   }
-
+  createResource() {
+    if (!this.orgHierarchyId || !this.cycleId) {
+      return;
+    }
+    this.store.dispatch(
+      new BrowseResourceAnalysisAction.CreateResourceAnalysis({
+        cycle: { id: this.cycleId },
+        orgHierarchy: { id: this.orgHierarchyId, orgStructure: null },
+      })
+    );
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

@@ -1,30 +1,30 @@
 /* tslint:disable */
 /* eslint-disable */
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { BaseService } from '../base-service';
-import { ApiConfiguration } from '../api-configuration';
-import { StrictHttpResponse } from '../strict-http-response';
-import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {BaseService} from '../base-service';
+import {ApiConfiguration} from '../api-configuration';
+import {StrictHttpResponse} from '../strict-http-response';
+import {RequestBuilder} from '../request-builder';
+import {Observable} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 
-import { Pageable } from '../models/pageable';
-import { RestApiResponseBoolean } from '../models/rest-api-response-boolean';
-import { RestApiResponseListIncidentTask } from '../models/rest-api-response-list-incident-task';
-import { RestApiResponseListLong } from '../models/rest-api-response-list-long';
-import { RestApiResponseListMapStringObject } from '../models/rest-api-response-list-map-string-object';
-import { RestApiResponseListTaskType } from '../models/rest-api-response-list-task-type';
-import { RestApiResponseLong } from '../models/rest-api-response-long';
-import { RestApiResponsePageIncidentTask } from '../models/rest-api-response-page-incident-task';
-import { RestApiResponsePageIncidentTaskProjection } from '../models/rest-api-response-page-incident-task-projection';
-import { RestApiResponseString } from '../models/rest-api-response-string';
-import { RestApiResponseTaskDetails } from '../models/rest-api-response-task-details';
-import { RestApiResponseTaskMetricsDetails } from '../models/rest-api-response-task-metrics-details';
-import { TaskCriteria } from '../models/task-criteria';
-import { TaskDetails } from '../models/task-details';
-import { TaskFilter } from '../models/task-filter';
-import { TaskStatus } from '../models/task-status';
+import {Pageable} from '../models/pageable';
+import {RestApiResponseBoolean} from '../models/rest-api-response-boolean';
+import {RestApiResponseListIncidentTask} from '../models/rest-api-response-list-incident-task';
+import {RestApiResponseListLong} from '../models/rest-api-response-list-long';
+import {RestApiResponseListMapStringObject} from '../models/rest-api-response-list-map-string-object';
+import {RestApiResponseListTaskType} from '../models/rest-api-response-list-task-type';
+import {RestApiResponseLong} from '../models/rest-api-response-long';
+import {RestApiResponsePageIncidentTask} from '../models/rest-api-response-page-incident-task';
+import {RestApiResponsePageIncidentTaskProjection} from '../models/rest-api-response-page-incident-task-projection';
+import {RestApiResponseString} from '../models/rest-api-response-string';
+import {RestApiResponseTaskDetails} from '../models/rest-api-response-task-details';
+import {RestApiResponseTaskMetricsDetails} from '../models/rest-api-response-task-metrics-details';
+import {TaskCriteria} from '../models/task-criteria';
+import {TaskDetails} from '../models/task-details';
+import {TaskFilter} from '../models/task-filter';
+import {TaskStatus} from '../models/task-status';
 
 @Injectable()
 export class TaskControllerService extends BaseService {
@@ -666,7 +666,7 @@ export class TaskControllerService extends BaseService {
     as: 'PDF' | 'EXCEL';
     lang: boolean;
     filter: TaskFilter;
-  }): Observable<StrictHttpResponse<void>> {
+  }): Observable<StrictHttpResponse<any>> {
 
     const rb = new RequestBuilder(this.rootUrl, TaskControllerService.Export2Path, 'get');
     if (params) {
@@ -681,7 +681,7 @@ export class TaskControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+        return r as StrictHttpResponse<any>;
       })
     );
   }
@@ -696,10 +696,10 @@ export class TaskControllerService extends BaseService {
     as: 'PDF' | 'EXCEL';
     lang: boolean;
     filter: TaskFilter;
-  }): Observable<void> {
+  }): Observable<any> {
 
     return this.export2$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }
 

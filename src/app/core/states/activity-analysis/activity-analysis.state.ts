@@ -211,7 +211,7 @@ export class ActivityAnalysisState {
         blocking: true,
       })
     );
-    return this.cyclesController.getOne13({ id: payload.id }).pipe(
+    return this.cyclesController.getOne24({ id: payload.id }).pipe(
       map((response) => response.result),
       tap((cycle) => {
         setState(
@@ -248,7 +248,7 @@ export class ActivityAnalysisState {
         blocking: true,
       })
     );
-    return this.activitiesAnalysisController.update115({ body: payload }).pipe(
+    return this.activitiesAnalysisController.update117({ body: payload }).pipe(
       map((response) => response.result),
       tap((activityAnalysis) => {
         setState(

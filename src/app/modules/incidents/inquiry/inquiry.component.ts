@@ -27,6 +27,7 @@ import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { Store } from '@ngrx/store';
 import { IncidentDashboardStateModel } from '../new-incidents-view/store/incidents-dashboard.reducer';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-inquiry',
@@ -42,6 +43,7 @@ export class InquiryComponent implements OnInit, OnChanges {
   incidentDurationInSeconds = 0;
   // Variables
   reportingVia: any[] = [];
+  tags: any[];
   commonData: AppCommonData;
   lang = 'en';
   isLoading = false;
@@ -83,6 +85,8 @@ export class InquiryComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.lang = this.translationService.getSelectedLanguage();
     this.commonData = this.appCommonService.getCommonData();
+    let groupedTags = _.groupBy(this.commonData?.tags, 'module');
+    this.tags = groupedTags['INQUIRY'];
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 20, 0, 1);
     this.maxDate = new Date(currentYear + 1, 11, 31);
@@ -120,9 +124,9 @@ export class InquiryComponent implements OnInit, OnChanges {
   createForm() {
     this.formGroup = this.formBuilder.group({
       id: [0],
-      reportingVia: [4 , [Validators.required]],
+      reportingVia: [4, [Validators.required]],
       reporterName: [null, Validators.required],
-      reportedByMobile: [''],
+      reportedByMobile: ['', Validators.required],
       reporterEmail: ['', [Validators.email]],
       subject: ['', Validators.required],
       answer: [''],
@@ -131,6 +135,7 @@ export class InquiryComponent implements OnInit, OnChanges {
       orgStructure: [null, Validators.required],
       user: [null, Validators.required],
       createdDate: [new Date(), Validators.required],
+      inquiryTags: [null],
     });
     this.checkReportingViewValidation();
     if (this.commonData.currentUserDetails.id) {
@@ -188,9 +193,6 @@ export class InquiryComponent implements OnInit, OnChanges {
               Validators.pattern(RegxConst.EMAIL_REGEX),
             ])
           );
-        this.formGroup
-          .get('reportedByMobile')
-          .setValidators([Validators.pattern(RegxConst.PHONE_REGEX)]);
       }
       this.formGroup.get('reporterEmail').updateValueAndValidity();
       this.formGroup.get('reportedByMobile').updateValueAndValidity();
@@ -228,6 +230,8 @@ export class InquiryComponent implements OnInit, OnChanges {
         }
         this.formGroup.patchValue({
           ...result,
+          inquiryTags: result?.inquiryTags.map((tagObj) => tagObj.tag?.id),
+
           createdDate: this.customDatePipe.transform(
             result['createdDate'],
             false
@@ -304,6 +308,14 @@ export class InquiryComponent implements OnInit, OnChanges {
       id: this.formGroup.value.reportingVia,
       label: 'ReportingVia',
     };
+    if (body.inquiryTags) {
+      body.inquiryTags = body.inquiryTags?.map((t) => {
+        return { tag: { id: t } };
+      });
+    } else {
+      body['inquiryTags'] = [];
+    }
+
     if (body.id == 0) {
       // remove id from sent request
       delete body.id;

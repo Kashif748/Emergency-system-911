@@ -82,7 +82,7 @@ export class AnalysisSummaryState {
       })
     );
     return this.activitiesAnalysisController
-      .summary({
+      .summary3({
         ...payload.filters,
         pageable: {
           page: payload.page,
@@ -128,7 +128,7 @@ export class AnalysisSummaryState {
       })
     );
     return this.activitiesAnalysisController
-      .export8({
+      .export11({
         as: payload.type,
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
         ...payload.filters,

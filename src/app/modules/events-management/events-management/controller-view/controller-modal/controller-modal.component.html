@@ -1,18 +1,33 @@
-<div [dir]="lang == 'en' ? 'ltr' : 'rtl'" class="card card-custom" style="overflow: hidden">
+<div
+  [dir]="lang == 'en' ? 'ltr' : 'rtl'"
+  class="card card-custom"
+  style="overflow: hidden"
+>
   <div class="card-header px-3">
     <div class="card-title">
       <h4 class="card-label">
         <span>{{ "EVENTSMODULES." + controllerName | translate }}</span>
-        <span style="margin: 10px;" *ngIf="isAddMode" class="label label-lg label-light-primary label-inline">
+        <span
+          style="margin: 10px"
+          *ngIf="isAddMode"
+          class="label label-lg label-light-primary label-inline"
+        >
           {{ "ACTIONS.NEW_ITEM" | translate }}
         </span>
-        <span style="margin: 10px;" *ngIf="!isAddMode" class="label label-lg label-light-success label-inline">
+        <span
+          style="margin: 10px"
+          *ngIf="!isAddMode"
+          class="label label-lg label-light-success label-inline"
+        >
           {{ "ACTIONS.UPDATE_ITEM" | translate }}
         </span>
       </h4>
     </div>
     <div class="card-toolbar">
-      <button (click)="dialogRef.close()" class="btn btn-icon btn-sm btn-light-primary">
+      <button
+        (click)="dialogRef.close()"
+        class="btn btn-icon btn-sm btn-light-primary"
+      >
         <i class="ki ki-close icon-nm"></i>
       </button>
     </div>
@@ -24,55 +39,66 @@
           <mat-label class="asterisk_input">
             {{ "EVENTSMODULES.mainCategory" | translate }}
           </mat-label>
-          <mat-select formControlName="assetsMainCategory" [compareWith]="compareWith">
+          <mat-select
+            formControlName="assetsMainCategory"
+            [compareWith]="compareWith"
+          >
             <mat-option *ngFor="let cat of mainCategories$" [value]="cat">
               {{ lang === "en" ? cat.nameEn : cat.nameAr }}
             </mat-option>
           </mat-select>
-
         </mat-form-field>
-
-
-
-
-
       </ng-container>
 
       <mat-form-field appearance="fill">
-        <input matInput placeholder="{{ 'EVENTSMODULES.itemNameAr' | translate }}" type="text"
-          formControlName="nameAr" />
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.itemNameAr' | translate }}"
+          type="text"
+          formControlName="nameAr"
+        />
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <input matInput placeholder="{{ 'EVENTSMODULES.itemNameEn' | translate }}" type="text"
-          formControlName="nameEn" />
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.itemNameEn' | translate }}"
+          type="text"
+          formControlName="nameEn"
+        />
       </mat-form-field>
 
-        <!-- local risks dropdown -->
+      <!-- local risks dropdown -->
 
-      <mat-form-field *ngIf="controllerName == 'assetsCategory'" appearance="fill">
+      <mat-form-field
+        *ngIf="controllerName == 'assetsCategory'"
+        appearance="fill"
+      >
         <mat-label class="asterisk_input">
           {{ "EVENTSMODULES.localRisks" | translate }}
         </mat-label>
-        <mat-select multiple  formControlName="localRisks" [compareWith]="compareWithLocalRisk">
-          <mat-option *ngFor="let cat of localRisks " [value]="cat.id">
+        <mat-select
+          multiple
+          formControlName="localRisks"
+          [compareWith]="compareWithLocalRisk"
+        >
+          <mat-option *ngFor="let cat of localRisks" [value]="cat.id">
             {{ lang === "en" ? cat.nameEn : cat.nameAr }}
           </mat-option>
         </mat-select>
-
       </mat-form-field>
-
-
-
-
-
-
-
 
       <ng-container *ngIf="controllerName == 'priorities'">
         <div class="colors-list" *ngIf="false">
-          <span *ngFor="let color of colors" class="label label-sm label-rounded" [class]="'label-' + color"></span>
-          <span *ngFor="let color of colors" class="label label-sm label-rounded"
-            [class]="'label-light-' + color"></span>
+          <span
+            *ngFor="let color of colors"
+            class="label label-sm label-rounded"
+            [class]="'label-' + color"
+          ></span>
+          <span
+            *ngFor="let color of colors"
+            class="label label-sm label-rounded"
+            [class]="'label-light-' + color"
+          ></span>
         </div>
 
         <div dir="ltr">
@@ -82,14 +108,23 @@
               <mat-optgroup [label]="'heavey colors'">
                 <mat-option [value]="color" *ngFor="let color of colors">
                   {{ color }}
-                  <span class="label label-sm label-rounded" [class]="'label-' + color"></span>
+                  <span
+                    class="label label-sm label-rounded"
+                    [class]="'label-' + color"
+                  ></span>
                 </mat-option>
               </mat-optgroup>
 
               <mat-optgroup [label]="'light colors'">
-                <mat-option *ngFor="let color of colors" [value]="'light-' + color">
+                <mat-option
+                  *ngFor="let color of colors"
+                  [value]="'light-' + color"
+                >
                   {{ color }}
-                  <span class="label label-sm label-rounded" [class]="'label-light-' + color"></span>
+                  <span
+                    class="label label-sm label-rounded"
+                    [class]="'label-light-' + color"
+                  ></span>
                 </mat-option>
               </mat-optgroup>
             </mat-select>
@@ -100,8 +135,18 @@
           <mat-label class="asterisk_input">
             {{ "AUTH.LOGIN.Organizations" | translate }}
           </mat-label>
-          <input matInput [matAutocomplete]="auto" formControlName="orgId" disabled />
-          <mat-spinner *ngIf="orgsSpinner" matSuffix [diameter]="18" style="float: right; margin-left: 8px">
+          <input
+            matInput
+            [matAutocomplete]="auto"
+            formControlName="orgId"
+            disabled
+          />
+          <mat-spinner
+            *ngIf="orgsSpinner"
+            matSuffix
+            [diameter]="18"
+            style="float: right; margin-left: 8px"
+          >
           </mat-spinner>
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let org of filterOrgsList" [value]="org">
@@ -111,34 +156,81 @@
         </mat-form-field>
       </ng-container>
 
+      <div *ngIf="controllerName == 'tags'" class="form-group col-lg-12 p-0">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>{{ "EVENTSMODULES.MODULE" | translate }}</mat-label>
+          <mat-select
+            placeholder="{{ 'EVENTSMODULES.MODULE' | translate }}"
+            formControlName="module"
+          >
+            <mat-option *ngFor="let module of tagModuls" [value]="module">
+              {{ "EVENTSMODULES." + module | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <mat-form-field *ngIf="controllerName == 'hospitals'" appearance="fill">
-        <input matInput placeholder="Plot NO" type="text" formControlName="plotNumber" />
+        <input
+          matInput
+          placeholder="Plot NO"
+          type="text"
+          formControlName="plotNumber"
+        />
       </mat-form-field>
-      <mat-form-field *ngIf="controllerName == 'incidentCategories'" appearance="fill">
-        <input matInput placeholder="{{ 'EVENTSMODULES.serialNumber' | translate }} " type="text"
-          formControlName="serialNumber" />
+      <mat-form-field
+        *ngIf="controllerName == 'incidentCategories'"
+        appearance="fill"
+      >
+        <input
+          matInput
+          placeholder="{{ 'EVENTSMODULES.serialNumber' | translate }} "
+          type="text"
+          formControlName="serialNumber"
+        />
       </mat-form-field>
 
       <div class="row">
-        <mat-slide-toggle color="primary" formControlName="isActive" class="m-auto">
+        <mat-slide-toggle
+          color="primary"
+          formControlName="isActive"
+          class="m-auto"
+        >
           <span class="mx-4" *ngIf="getFormControl('isActive')">
-            {{  "ACTIONS.ACTIVE"  | translate }}</span>
+            {{ "ACTIONS.ACTIVE" | translate }}</span
+          >
           <span class="mx-4" *ngIf="!formGroup.get('isActive').value">
-            {{ "ACTIONS.INACTIVE" | translate }}</span>
+            {{ "ACTIONS.INACTIVE" | translate }}</span
+          >
         </mat-slide-toggle>
       </div>
     </form>
   </div>
   <div class="card-footer p-3 d-flex justify-content-between">
-    <button (click)="onSubmit()" *ngIf="isAddMode" class="btn btn-primary font-weight-bold">
+    <button
+      (click)="onSubmit()"
+      *ngIf="isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
       {{ "ACTIONS.CREATE" | translate }}
-      <span [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'" cacheSVG="true" class="svg-icon svg-icon-md"></span>
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Code/Plus.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
     </button>
 
-    <button (click)="onSubmit()" *ngIf="!isAddMode" class="btn btn-primary font-weight-bold">
+    <button
+      (click)="onSubmit()"
+      *ngIf="!isAddMode"
+      class="btn btn-primary font-weight-bold"
+    >
       {{ "ACTIONS.UPDATE" | translate }}
-      <span [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'" cacheSVG="true"
-        class="svg-icon svg-icon-md"></span>
+      <span
+        [inlineSVG]="'/assets/media/svg/icons/Files/Cloud-upload.svg'"
+        cacheSVG="true"
+        class="svg-icon svg-icon-md"
+      ></span>
     </button>
   </div>
 </div>

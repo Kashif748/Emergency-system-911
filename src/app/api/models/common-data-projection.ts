@@ -31,6 +31,7 @@ import { Ranks } from './ranks';
 import { Reason } from './reason';
 import { ReportingVia } from './reporting-via';
 import { Sla } from './sla';
+import { Tag } from './tag';
 import { TaskStatus } from './task-status';
 import { TaskType } from './task-type';
 import { UserMinimunProjection } from './user-minimun-projection';
@@ -71,6 +72,7 @@ export interface CommonDataProjection {
   reasons?: Array<Reason>;
   reportingVias?: Array<ReportingVia>;
   sla?: Array<Sla>;
+  tags?: Array<Tag>;
   taskStatus?: Array<TaskStatus>;
   taskType?: Array<TaskType>;
   userSystemId?: number;

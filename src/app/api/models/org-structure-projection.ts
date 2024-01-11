@@ -21,8 +21,10 @@ export interface OrgStructureProjection {
   loginUaePass?: boolean;
   managerGroupId?: number;
   managerId?: number;
+  mapGisLayer?: string;
   nameAr?: string;
   nameEn?: string;
+  nationalCompliance?: number;
   parent?: IEntity;
   representativeGroupId?: number;
   sector?: IEntity;

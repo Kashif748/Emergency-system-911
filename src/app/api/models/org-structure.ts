@@ -28,9 +28,11 @@ export interface OrgStructure {
   loginUaePass?: boolean;
   managerGroupId?: number;
   managerId?: number;
+  mapGisLayer?: string;
   mobno?: string;
   nameAr: string;
   nameEn: string;
+  nationalCompliance?: number;
   newsId?: number;
   officialEmail?: string;
   operationNumbers?: number;

@@ -57,6 +57,9 @@ import { PropTranslatorPipe } from '@shared/pipes/prop-translator.pipe';
 import { AppCommonDataService } from '@core/services/app-common-data.service';
 import esri = __esri;
 import { DomSanitizer } from '@angular/platform-browser';
+import * as FeatureLayer from 'esri/layers/FeatureLayer';
+import { ListboxModule } from 'primeng/listbox';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 
 @Component({
   selector: 'app-map',
@@ -66,7 +69,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class MapComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit
 {
-  private queryInfo: (graphic: esri.Graphic) => Promise<LocationInfoModel>;
+  private queryInfo: (
+    graphic: esri.Graphic,
+    url?: string
+  ) => Promise<LocationInfoModel>;
+  private queryGemotry: (
+    url: string,
+    g: esri.Geometry
+  ) => Promise<esri.Graphic[]>;
   filterLayersFunc$: Subject<(where: any, fName: MapActionType) => void> =
     new Subject();
   @Input() configData: MapConfig;
@@ -145,6 +155,8 @@ export class MapComponent
   public addTeamPolygon: () => void;
   public addReporterPoint: () => void;
   public reCenterMap: () => void;
+  public addLayer: (layer: any) => void;
+  public removeLayer: (layer: any) => void;
 
   public createQueryTask: (url: string) => __esri.QueryTask;
   public createQuery: () => __esri.Query;
@@ -435,6 +447,17 @@ export class MapComponent
           maxScale: 1155000,
         } as __esri.MapImageLayerProperties);
 
+      const org = this.commonService.getCommonData()?.currentOrgDetails;
+      const CURRENT_ORG_IMAGE_LAYER: __esri.MapImageLayer = new MapImageLayer({
+        // url: org.mapGisLayer,
+        url: 'https://makani.drm.gov.ae/arcgis/rest/services/Infrastructure/DRM_Projects_Information/MapServer',
+        id: 'CURRENT_ORG_IMAGE_LAYER',
+        title: 'Municipality',
+        layerId: '3',
+        opacity: 0.4,
+        visible: false,
+      } as __esri.MapImageLayerProperties);
+
       const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
@@ -597,34 +620,12 @@ export class MapComponent
         ],
       } as __esri.MapImageProperties);
 
-      this.queryInfo = async (graphic: esri.Graphic) => {
-        const queryGemotry = async (
-          queryTask: __esri.QueryTask,
-          query: __esri.Query,
-          g: esri.Geometry
-        ) => {
-          query.geometry = g;
-          query.spatialRelationship = 'within';
-          query.outFields = ['*'];
-          query.returnGeometry = true;
-          const result = await queryTask.execute(query);
-          return result.features[0];
-        };
-
-        // const result = await this.ONWANI_SEARCH_DZSP_IMAGE_LAYER.when(
-        //   async (_) => {
-        // const queryResult = await queryGemotry(
-        //   this.ONWANI_SEARCH_DZSP_IMAGE_LAYER.findSublayerById(
-        //     DZSP_ID_COMMUNITY
-        //   ) as any as esri.FeatureLayer,
-        //   graphic.geometry
-        // );
-        const queryResult = await queryGemotry(
-          this.createQueryTask(DZSP_SEARCH_URL + DZSP_ID_COMMUNITY),
-          this.createQuery(),
-          graphic.geometry
-        );
-        const locationInfo: LocationInfoModel = queryResult.attributes;
+      this.queryInfo = async (
+        graphic: esri.Graphic,
+        url: string = DZSP_SEARCH_URL + DZSP_ID_COMMUNITY
+      ) => {
+        const queryResult = await this.queryGemotry(url, graphic.geometry);
+        const locationInfo: LocationInfoModel = queryResult[0].attributes;
 
         this.zoomedLocationInfo.zoneAr = locationInfo.MUNICIPALITYARA;
         this.zoomedLocationInfo.zoneEn = locationInfo.MUNICIPALITY;
@@ -635,14 +636,20 @@ export class MapComponent
         this.zoomedLocationInfo.plotEn = locationInfo.COMMUNITYNAMEENG;
 
         this.zoomedLocationInfo.plotAr = locationInfo.COMMUNITYNAMEARA;
-
         this.cdr.detectChanges();
         return locationInfo;
-        //   }
-        // );
-        // return result as LocationInfoModel;
       };
 
+      this.queryGemotry = async (url: string, g: esri.Geometry) => {
+        const queryTask = this.createQueryTask(url);
+        const query = this.createQuery();
+        query.geometry = g;
+        query.spatialRelationship = 'within';
+        query.outFields = ['*'];
+        query.returnGeometry = true;
+        const result = await queryTask.execute(query);
+        return result.features;
+      };
       const ABUDHABI_ARCGIS_BASE_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `https://arcgis.sdi.abudhabi.ae/arcgis/rest/services/Pub/BaseMap${
@@ -660,6 +667,7 @@ export class MapComponent
         layers: [
           ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
           ABUDHABI_ARCGIS_BASE_IMAGE_LAYER,
+          CURRENT_ORG_IMAGE_LAYER,
           // ONWANI_ADDRESSING_IMAGE_LAYER,
           // DistrictMapLayer,
           // CommunityMapLayer,
@@ -787,7 +795,7 @@ export class MapComponent
             type: address?.type || 'point', // autocasts as new Point()
             longitude: address?.Lng,
             latitude: address?.Lat,
-            rings: [address?.polygonRings],
+            rings: address?.polygonRings,
             paths: [address?.polylinePaths],
             spatialReference: this.mapView.spatialReference,
             hasM: true,
@@ -819,8 +827,10 @@ export class MapComponent
         this.mapView
           .goTo(mapMarker, { animate: true, duration: 2000 })
           .then(() => {
-            this.mapView.popup.open({ features: [mapMarker] });
-            this.mapView.popup.triggerAction(0);
+            if (this.showLocInfo) {
+              this.mapView.popup.open({ features: [mapMarker] });
+              this.mapView.popup.triggerAction(0);
+            }
           });
       };
 
@@ -865,7 +875,7 @@ export class MapComponent
             type: address?.type || 'point', // autocasts as new Point()
             longitude: address?.Lng,
             latitude: address?.Lat,
-            rings: [address?.polygonRings],
+            rings: address?.polygonRings,
             paths: [address?.polylinePaths],
             spatialReference: this.mapView.spatialReference,
             hasM: true,
@@ -1681,6 +1691,27 @@ export class MapComponent
         this.mapView = new MapView(mapViewProperties);
       };
 
+      this.addLayer = async (layer) => {
+        const newLayer: esri.FeatureLayer = new FeatureLayer(layer);
+        newLayer.opacity = 0.8;
+        // const qTask = this.createQueryTask(newLayer.url);
+        // const query = newLayer.createQuery();
+        // query.spatialRelationship = 'within';
+        // query.outFields = ['*'];
+        // query.returnGeometry = true;
+        // const result = await qTask.execute(query);
+        // console.log(result);
+
+        this.map.add(newLayer);
+      };
+
+      this.removeLayer = (layerId: number) => {
+        const alreadyAdded = this.map.findLayerById(layerId?.toString());
+        if (alreadyAdded) {
+          this.map.remove(alreadyAdded);
+        }
+      };
+
       if (this.data.zoomModel?.featureName) {
         this.zoomToRequest(
           this.data.zoomModel.referenceId,
@@ -1844,12 +1875,12 @@ export class MapComponent
     this.cdr.detectChanges();
     // query info of community and district of selected location on map
     let result;
+    let contractorsResult: esri.Graphic[];
     try {
       result = await this.queryInfo(this.mapView.graphics.getItemAt(0));
     } catch (err) {
       console.error(err);
     }
-    this.loading = false;
     this.cdr.detectChanges();
     let graphicPoint;
     if (this.mapType === 'reporter') {
@@ -1861,7 +1892,23 @@ export class MapComponent
     } else {
       graphicPoint = this.mapView?.graphics?.getItemAt(0);
     }
-
+    if (this.mapType === MapViewType.INCIDENT) {
+      const currentOrgLayer = this.map.findLayerById(
+        'CURRENT_ORG_IMAGE_LAYER'
+      ) as FeatureLayer;
+      try {
+        contractorsResult = await this.queryGemotry(
+          `${currentOrgLayer.url}/${currentOrgLayer.layerId}`,
+          this.mapView.graphics.getItemAt(0).geometry
+        );
+        result['contractors'] = contractorsResult.map(
+          (item) => item.attributes
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    this.loading = false;
     this.OnSaveMap.emit({
       ff: this.applyFeature,
       gType: graphicPoint?.attributes?.gType,
@@ -1933,7 +1980,7 @@ export class MapComponent
       </div></div></div>`;
     }
     if (isLangAr) {
-      title = `      
+      title = `
 <div class="row directionAr">
        <a class="btn btn-primary custom-btnAr" href="${
          location.origin
@@ -1971,28 +2018,28 @@ export class MapComponent
         )}:</th>
         <td>{NAME}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.CREATION_DATE'
         )}:</th>
         <td>${create_Date}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.CLOSE_DATE'
         )}:</th>
         <td>${close_Date}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.PRIORITY'
         )}:</th>
         <td>{PRIORITY}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">${this.translationService.translateAWord(
           'INCIDENTS.MAIN_CATEGORY'
@@ -2086,7 +2133,9 @@ export class MapComponent
     FormsModule,
     CommonModule,
     NgbPopoverModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ListboxModule,
+    TranslateObjModule,
   ],
   exports: [MapComponent],
 })

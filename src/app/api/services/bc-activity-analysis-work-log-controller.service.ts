@@ -25,21 +25,21 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById33
+   * Path part for operation deleteById34
    */
-  static readonly DeleteById33Path = '/v1/bc/activity-analysis/work-log/delete/{id}';
+  static readonly DeleteById34Path = '/v1/bc/activity-analysis/work-log/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById33()` instead.
+   * To access only the response body, use `deleteById34()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById33$Response(params: {
+  deleteById34$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.DeleteById33Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.DeleteById34Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -57,15 +57,15 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById33$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById34$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById33(params: {
+  deleteById34(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById33$Response(params).pipe(
+    return this.deleteById34$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

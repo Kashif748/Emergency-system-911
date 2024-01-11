@@ -8,6 +8,8 @@ export interface BcActivitySystems {
   cycle: BcCycles;
   id?: number;
   isActive?: boolean;
+  referenceId?: number;
+  sequenceNumber?: number;
   system?: BcSystems;
 }
 

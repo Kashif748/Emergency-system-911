@@ -11,6 +11,7 @@ export interface Bcrto {
   isCritical?: boolean;
   nameAr?: string;
   nameEn?: string;
+  referenceId?: number;
   versionId?: number;
 }
 

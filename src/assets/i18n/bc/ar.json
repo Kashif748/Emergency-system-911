@@ -3,12 +3,13 @@
     "PAGE_REPORT": "{first} - {last} من {totalRecords}"
   },
   "VERSIONS_SETTINGS": "إعدادات الاصدارات",
-  "SELECT_MSG_INFO" :"لم يتم إختيار إصدار",
-  "SELECT_MSG_ACTION" :"قم بإختيار إصدار من القائمة لعرض البيانات",
+  "SELECT_MSG_INFO": "لم يتم إختيار إصدار",
+  "SELECT_MSG_ACTION": "قم بإختيار إصدار من القائمة لعرض البيانات",
+  "CONFIRM": "هل انت متأكد أنك تريد الاستمرار؟",
   "SEND_APPROVAL": "ارسال للإعتماد",
   "APPROVED": "إعتماد",
   "RETURN_MOD": "ارجاع للتعديل",
-  "ADD_VERSION": "إنشاء إصدار جديد",
+  "ADD_VERSION": "اضافة إصدار جديد",
   "VERSION": "الإصدار",
   "UPDATE": "حفظ التعديلات؟",
   "VERSION_EN": "اسم الاصدار (انجليزي)",
@@ -17,6 +18,15 @@
   "ORG_DETAILS": "بيانات الجهة",
   "ORG_ARTCH": "الهيكل الإداري",
   "IMPACTS": "التأثيرات",
+  "VERSION_LIST": {
+    "NAME_AR": "الإسم (عربي)",
+    "NAME_EN": "الإسم (انجليزي) ",
+    "STATUS": "الحالة",
+    "CREATED_BY": "تم الإنشاء من قبل",
+    "CREATED_ON": "تم الإنشاء بتاريخ",
+    "UPDATED_BY": "تم التحديث من قبل",
+    "UPDATED_ON": "تم التحديث بتاريخ"
+  },
   "IMPACT_LEVELS": {
     "TAB_LABEL": "مستويات التأثير",
     "HEADER": " تفعيل مستويات التأثير الخاصة بالمؤسسة",
@@ -51,6 +61,7 @@
   "ORG_NAME_EN": "إسم الجهة (انجليزي)",
   "DESC": "وصف",
   "EMPLOYEES": "عدد الموظفين الإجمالي",
+  "COMPLIANCE_PERCENTAGE": "نسبة الامتثال للمعيار الوطني",
   "ACTIVITIES": "عدد العمليات المؤسسية",
   "RTO_ENG": "زمن التعافي",
 
@@ -68,7 +79,6 @@
     "DESC_EN": " الوصف (انجليزي)",
     "CRITICAL": "حيوي",
     "NONCRITICAL": "غير حيوي"
-
   },
   "ACTIVITY_FEQ": {
     "TITLE_ACQ_FEQ": "تردد النشاط",
@@ -108,7 +118,7 @@
   },
   "ORG_HIE": {
     "DETAILS": "بيانات الـ{{hirType}}",
-    "TYPE" :"النوع",
+    "TYPE": "النوع",
     "ADD": "إضافة",
     "NAME_EN": "الاسم (انجليزي)",
     "NAME_AR": "الاسم (عربي)",
@@ -118,11 +128,12 @@
       "DEPT_MGMT": "مدير الإدارة ",
       "FIRST_BUSI_COORDINATOR": "منسق استمرارية أعمال أول ",
       "SECOND_BUSI_COORDINATOR": "منسق استمرارية أعمال ثاني ",
-      "COORDINATOR" : "منسقي استمرارية الأعمال"
+      "COORDINATOR": "منسقي استمرارية الأعمال"
     },
     "SECTION": {
       "USER_DATA": "بيانات المستخدمين",
       "SECTION_HEAD": "رئيس القسم "
     }
-  }
+  },
+  "BC_COPYING_MESSAGE": "جاري نسخ بيانات قوائم التحليل السابقة"
 }

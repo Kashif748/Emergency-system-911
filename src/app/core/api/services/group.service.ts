@@ -54,14 +54,19 @@ export class GroupService {
     });
   }
 
+  getListNonGlobalGroupsByOrgId(orgId) {
+    return this.http.get<any>(`${this.baseUrl}/non-global/${orgId}`);
+  }
   getCategoryZoneGroups(
     categoryId: number,
     zoneId: number,
-    pointLocation: string
+    pointLocation: string,
+    contractNo: string
   ) {
     let params = new HttpParams()
       .append('category', categoryId.toString())
-      .append('zone', '' + zoneId.toString());
+      .append('zone', '' + zoneId.toString())
+      .append('contractNo', contractNo ?? '');
 
     if (pointLocation && pointLocation.length) {
       params = params.append('location', pointLocation);

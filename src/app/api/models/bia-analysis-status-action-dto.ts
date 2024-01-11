@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface BiaAnalysisStatusActionDto {
-  cssClass?: string;
+  color?: string;
   id?: number;
   nameAr?: string;
   nameEn?: string;

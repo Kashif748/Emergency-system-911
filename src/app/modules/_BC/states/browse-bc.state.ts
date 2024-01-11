@@ -16,6 +16,7 @@ import { EMPTY } from 'rxjs';
 import { BCAction } from '@core/states/bc/bc/bc.action';
 import { ApiHelper } from '@core/helpers/api.helper';
 import { iif, patch } from '@ngxs/store/operators';
+import { TranslateService } from '@ngx-translate/core';
 export interface BrowseBCStateModel {
   pageRequest: PageRequestModel;
   currentTab: string;
@@ -31,7 +32,7 @@ export const BROWSE_BUSINESS_CONTINUITY_UI_STATE_TOKEN =
     pageRequest: {
       filters: {},
       first: 0,
-      rows: 50,
+      rows: 10,
     },
   },
 })
@@ -45,7 +46,8 @@ export class BrowseBCState {
     private messageHelper: MessageHelper,
     private router: Router,
     private route: ActivatedRoute,
-    private apiHelper: ApiHelper
+    private apiHelper: ApiHelper,
+    private translate: TranslateService
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -75,9 +77,38 @@ export class BrowseBCState {
         page: this.apiHelper.page(pageRequest),
         size: pageRequest.rows,
         sort: this.apiHelper.sort(pageRequest),
+        statusId:payload?.statusId
       })
     );
   }
+
+  @Action(BrowseBCAction.Sort)
+  sort(
+    { setState, dispatch, getState }: StateContext<BrowseBCStateModel>,
+    { payload }: BrowseBCAction.Sort
+  ) {
+    setState(
+      patch<BrowseBCStateModel>({
+        pageRequest: patch<PageRequestModel>({
+          sortOrder: iif((_) => payload.order?.length > 0, payload.order),
+          sortField: iif((_) => payload.field !== undefined, payload.field),
+        }),
+      })
+    );
+
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+      new BCAction.LoadPage({
+        page: this.apiHelper.page(pageRequest),
+        size: pageRequest.rows,
+        sort: this.apiHelper.sort(pageRequest),
+        filters: {
+          ...pageRequest.filters,
+        },
+      })
+    );
+  }
+
   @Action(BrowseBCAction.CreateBusinessContinuity)
   CreateBusinessContinuity(
     { dispatch }: StateContext<BrowseBCStateModel>,
@@ -86,7 +117,6 @@ export class BrowseBCState {
     return dispatch(new BCAction.Create(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        dispatch(new BrowseBCAction.LoadPage());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
@@ -166,5 +196,20 @@ export class BrowseBCState {
       },
       queryParamsHandling: 'merge',
     });
+  }
+  @Action(BrowseBCAction.Delete)
+  Delete(
+    { dispatch }: StateContext<BrowseBCStateModel>,
+    { payload }: BrowseBCAction.Delete
+  ) {
+    return dispatch(new BCAction.Delete(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      })
+    );
   }
 }

@@ -1,0 +1,75 @@
+<p-dialog
+  [visible]="display && (notification$ | async)?.length > 0"
+  (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '55vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <h3>
+      <ng-container>
+        {{ "NOTIFICATIONS.IMP_NOTIFICATIONS" | translate }}
+      </ng-container>
+    </h3>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <!--begin::Nav-->
+    <div class="navi navi-hover">
+      <!--begin::Item-->
+      <a
+        *ngFor="let item of notification$ | async"
+        (click)="redirect(item)"
+        class="navi-item cursor-pointer"
+        [ngClass]="{ 'bg-light-primary': !item.read }"
+      >
+        <div class="navi-link px-2">
+          <div class="symbol symbol-light-success symbol-40 mx-1 symbol-circle">
+          <span class="symbol-label font-size-h5">
+            <i class="flaticon-bell text-success icon-lg"></i
+            ></span>
+          </div>
+
+          <div class="navi-text d-flex flex-column px-4">
+            <p class="font-weight-bold mb-1">{{ item?.message[lang]?.title }}</p>
+            <p style="word-break: break-word">{{ item?.message[lang]?.body }}</p>
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <div class="text-muted">
+                {{ item?.createdAt | customDate | date: "short" }}
+              </div>
+              <button
+                class="btn btn-md btn-link-primary"
+                *ngIf="!item.read"
+                (click)="markAsRead(item.id, $event)"
+              >
+                {{ "SHARED.MARK_AS_READ" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </a>
+      <!--end::Item-->
+    </div>
+
+    <!--end::Nav-->
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="p-col  p-d-flex">
+      <button pButton icon="pi pi-times" (click)="close()"
+              label="{{'ACTIONS.CLOSE' | translate }}"></button>
+      <div class="ml-dir-auto"></div>
+      <div class="mx-1" *ngIf="(notification$ | async)?.length > 1">
+        <button
+          pButton
+          label="{{ 'ACTIONS.markAllAsRead' | translate }}"
+          icon="pi pi-check-square"
+          (click)="makeAllAsRead()"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

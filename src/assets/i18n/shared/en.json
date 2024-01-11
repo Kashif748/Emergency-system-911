@@ -340,10 +340,10 @@
       "CURRENT_CYCLE": "Current Analysis Cycle",
       "CRITICAL_ACTIVITY": "Number - Percentage of Critical Activities",
       "CRITICAL_EMPLOY": "Number of Critical Employees",
-      "CRITICAL_SYSTEM":"Number of Critical Systems",
+      "CRITICAL_SYSTEM": "Number of Critical Systems",
       "ORG_ARTCH": "Organization Hierarchy",
       "ANALYSIS_CRCLE": "Analysis Cycle",
-      "TITTLE_SECTION":"Business Continuity Section - Contact Details"
+      "TITTLE_SECTION": "Business Continuity Section - Contact Details"
     },
     "AUTH": {
       "GENERAL": {
@@ -636,6 +636,7 @@
       "SUB_CATEGORY": "Sub Category",
       "HISTORY": "History",
       "UNITS": "Teams",
+      "TAGS": "Tags",
       "OTHER": "Other",
       "ANOTHER_CATEGORY": "Another category",
       "CELLS": "Cells",
@@ -1356,14 +1357,17 @@
       "TITLE_AR": "Title Ar",
       "BODY_En": "Body En",
       "BODY_Ar": "Body Ar",
-      "NAME": "Name",
       "NAME_En": "Name En",
       "NAME_Ar": "Name Ar",
       "SMS_NOTIFICATION": "SMS Notification",
       "PUSH_NOTIFICATION": "Push Notification",
       "WORKLOG": "Worklog Templates",
       "COPY_CLIPBOARD": "Copy to clipboard",
-      "alertnessLevel": "Alertness Levels"
+      "alertnessLevel": "Alertness Levels",
+      "tags": "Tags",
+      "MODULE": "Module",
+      "INCIDENT": "Incident",
+      "INQUIRY": "Inquiry"
     },
     "NEWS": {
       "NEWS": "News",
@@ -1388,6 +1392,7 @@
     },
     "NOTIFICATIONS": {
       "NOTIFICATIONS": "Notifications",
+      "IMP_NOTIFICATIONS": "Important Notifications",
       "NEW": "New"
     },
     "PRIVATE_POSITION": {
@@ -1448,7 +1453,8 @@
       "MUST_BE_IN_ARABIC": "Only Arabic letters allowed, and following special characters #$%&()_-/\\[].:;,.",
       "MUST_BE_IN_ENGLISH": "Only English letters allowed, and following special characters #$%&()_-/\\[].:;,.",
       "NOT_SAME_TYPE": "Cannot assign to different type",
-      "INVALID_URL": "Invalid url"
+      "INVALID_URL": "Invalid url",
+      "INCORRECT_VALUE": "Incorrect field value"
     },
     "NO_DATA_FILTER": "No data matching the filter",
     "NO_DATA": "No data",
@@ -1638,8 +1644,7 @@
         },
         "ERROR": {
           "TITLE": "Error",
-          "MESSAGE": "Something went wrong.",
-          "CMESSAGE": "Resources already exist for current division and analysis cycle."
+          "MESSAGE": "Something went wrong."
         },
         "WARN": {
           "TITLE": "Warning"
@@ -1670,6 +1675,7 @@
       "NAME_AR": "Name(Ar)",
       "NAME_EN": "Name(En)",
       "SHIFT_SCHEDULE": "Shift Schedule",
+      "CONTRACT_NO": "Contract NO",
       "GROUP_NAME": "Name",
       "ORGANIZATION": "Organization",
       "DESCRIPTION_AR": "Description(Ar)",
@@ -1704,10 +1710,11 @@
       "noMembers": "No Members",
       "groupsMembers": "Groups Members",
       "all": "All Groups",
-      "CHOOSE_APPROACH": "Choose way of determining location",
+      "CHOOSE_APPROACH": "Group Zones",
       "MAP": "Map",
       "SELECT": "Select from list",
       "CHOOSE_LOCATION": "Choose Location",
+      "CONTRACT_NO_SEARCH": "Searc By Contract",
       "LOCATION": "LOCATION",
       "WARNING_NOTE": "Please note that only map or selection would be saved , depends on what's you're opening right now",
       "CATEGORIES_LOCATIONS": "Assigned Categories & Locations",

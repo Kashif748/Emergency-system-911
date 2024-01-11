@@ -1,29 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { auditTime, filter, map, take, takeUntil, tap } from 'rxjs/operators';
-import { Select, Store } from '@ngxs/store';
-import { TranslateService } from '@ngx-translate/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ActivatedRoute } from '@angular/router';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { LazyLoadEvent, MenuItem, TreeNode } from 'primeng/api';
-import { BcActivities } from '../../../../api/models/bc-activities';
-import { OrgActivityState } from '@core/states/org-activities/orgActivity.state';
-import {
-  BrowseOrgActivityStateModel,
-  BrowseOrganizationState,
-} from '../states/browse-organization.state';
-import { BrowseOrganizationAction } from '../states/browse-organization.action';
-import { ActivityFrquencyState } from '@core/states/bc/activity-frquency/activity-frquency.state';
-import { ActivityFrquencyAction, OrgDetailAction } from '@core/states';
-import { BcActivityFrequencies } from '../../../../api/models/bc-activity-frequencies';
-import { OrgDetailState } from '@core/states/bc/org-details/org-detail.state';
-import { TranslateObjPipe } from '@shared/sh-pipes/translate-obj.pipe';
-import { BcOrgHierarchy } from '../../../../api/models/bc-org-hierarchy';
-import { PrivilegesService } from '@core/services/privileges.service';
-import { BcOrgHierarchyProjection } from 'src/app/api/models/bc-org-hierarchy-projection';
-import { TreeHelper } from '@core/helpers/tree.helper';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {auditTime, filter, map, takeUntil} from 'rxjs/operators';
+import {Select, Store} from '@ngxs/store';
+import {TranslateService} from '@ngx-translate/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {LazyLoadEvent, MenuItem, TreeNode} from 'primeng/api';
+import {BcActivities} from '../../../../api/models/bc-activities';
+import {OrgActivityState} from '@core/states/org-activities/orgActivity.state';
+import {BrowseOrgActivityStateModel, BrowseOrganizationState,} from '../states/browse-organization.state';
+import {BrowseOrganizationAction} from '../states/browse-organization.action';
+import {ActivityFrquencyState} from '@core/states/bc/activity-frquency/activity-frquency.state';
+import {ActivityFrquencyAction, OrgDetailAction} from '@core/states';
+import {BcActivityFrequencies} from '../../../../api/models/bc-activity-frequencies';
+import {OrgDetailState} from '@core/states/bc/org-details/org-detail.state';
+import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
+import {PrivilegesService} from '@core/services/privileges.service';
+import {BcOrgHierarchyProjection} from 'src/app/api/models/bc-org-hierarchy-projection';
+import {TreeHelper} from '@core/helpers/tree.helper';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-browse-organizations',
@@ -32,6 +27,7 @@ import { TreeHelper } from '@core/helpers/tree.helper';
 })
 export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
   public orgHir: TreeNode[] = [];
+  public orgHireracy: TreeNode[] = [];
 
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
@@ -239,7 +235,19 @@ export class BrowseOrganizationsComponent implements OnInit, OnDestroy {
     } else {
       this.orgHir = branch;
     }
-    console.log(this.orgHir);
+    this.orgHireracy = cloneDeep(this.orgHir);
+    this.orgHireracy.forEach((node) => {
+      this.markDisabledNodes(node);
+    });
+  }
+  markDisabledNodes(node: TreeNode) {
+    if (node.children) {
+      node.expanded = true;
+      node.children.forEach((child) => {
+        this.markDisabledNodes(child);
+      });
+    }
+    node.selectable = node?.data?.bcOrgHirType?.id === 3;
   }
   filterOrgHir(event) {
     this.auditLoadOrgPage$.next(event);

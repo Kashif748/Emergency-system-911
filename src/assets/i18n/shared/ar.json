@@ -376,7 +376,7 @@
       "CRITICAL_SYSTEM": "عدد الأنظمة الحيوية",
       "ORG_ARTCH": "الهيكل الإداري",
       "ANALYSIS_CRCLE": "دورة التحليل",
-      "TITTLE_SECTION":"قسم استمرارية الأعمال - بيانات التواصل"
+      "TITTLE_SECTION": "قسم استمرارية الأعمال - بيانات التواصل"
     },
     "AUTH": {
       "GENERAL": {
@@ -536,9 +536,9 @@
           "OUT_OF_RANGE": "رقم غير صالح ، يجب أن يكون الإدخال في النطاق [0 ، 999]"
         }
       },
-      "SIMILAR_INCIDENTS" :"بلاغات مشابهة",
-      "SIMILAR_INCIDENTS_MSG" :"يوجد {{count}} بلاغ مطابق",
-      "LINK":"الرابط",
+      "SIMILAR_INCIDENTS": "بلاغات مشابهة",
+      "SIMILAR_INCIDENTS_MSG": "يوجد {{count}} بلاغ مطابق",
+      "LINK": "الرابط",
       "ALL": "الكل",
       "LATE": "متأخر",
       "INCIDENTS": "البلاغات",
@@ -670,6 +670,7 @@
       "SUB_CATEGORY": "التصنيف الفرعي",
       "CLEAR": "مسح ",
       "UNITS": "الفرق",
+      "TAGS" :"الوسم",
       "OTHER": "اخرى ",
       "ANOTHER_CATEGORY": "تصنيف آخر",
       "CELLS": "الخلايا",
@@ -1392,7 +1393,11 @@
       "SMS_NOTIFICATION": "تنبيهات الرسائل النصية",
       "PUSH_NOTIFICATION": "تنبيهات البرنامج",
       "WORKLOG": "نموذج سجل المهمة/البلاغ",
-      "alertnessLevel": "مستويات الاستعداد"
+      "alertnessLevel": "مستويات الاستعداد",
+      "tags": "الوسوم",
+      "MODULE":"الموديول",
+      "INCIDENT":"بلاغ",
+      "INQUIRY":"استفسار"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",
@@ -1417,6 +1422,7 @@
     },
     "NOTIFICATIONS": {
       "NOTIFICATIONS": "التنبيهات ",
+      "IMP_NOTIFICATIONS": " تنبيهات هامة",
       "NEW": "جديدة"
     },
     "PRIVATE_POSITION": {
@@ -1630,8 +1636,7 @@
         },
         "ERROR": {
           "TITLE": "خطء",
-          "MESSAGE": "حدث خطء ما.",
-          "CMESSAGE": "يتواجد متطلبات موارد للادارة و دورة التحليل الحاليين."
+          "MESSAGE": "حدث خطء ما."
         },
         "WARN": {
           "TITLE": "تحذير"
@@ -1680,7 +1685,8 @@
       "MUST_BE_IN_ARABIC": "لا يُسمح إلا بالأحرف العربية، وعلامات الترقيم التالية #$%&()_-/\\[].:;.",
       "MUST_BE_IN_ENGLISH": "لا يُسمح إلا بالأحرف الإنجليزية، وعلامات الترقيم التالية #$%&()_-/\\[].:;..",
       "NOT_SAME_TYPE": "لا يسمح ان تختار نوع مختلف",
-      "INVALID_URL": "رابط غير صحيح"
+      "INVALID_URL": "رابط غير صحيح",
+      "INCORRECT_VALUE": "قيمة الحقل غير صحيحة"
     },
     "USER": {
       "PROFILE": {
@@ -1699,6 +1705,7 @@
       "NAME_EN": "الاسم(انكليزي)",
       "GROUP_NAME": "الاسم",
       "SHIFT_SCHEDULE": "جدول المناوبة",
+      "CONTRACT_NO" :"رقم العقد",
       "ORGANIZATION": "الجهة",
       "DESCRIPTION_AR": "الوصف(عربي)",
       "DESCRIPTION_EN": "الوصف (انكليزي)",
@@ -1732,10 +1739,11 @@
       "hasMembers": "تملك  أعضاء",
       "noMembers": "لا  تملك أعضاء",
       "all": "الكل",
-      "CHOOSE_APPROACH": "اختار طريقة لتحديد المكان",
+      "CHOOSE_APPROACH": "نطاق الفريق",
       "MAP": "تحديد من الخريطة",
       "SELECT": "اختيار من قائمة",
       "CHOOSE_LOCATION": "حدد موقع",
+      "CONTRACT_NO_SEARCH":"بحث باستخدام العقد",
       "LOCATION": "موقع",
       "WARNING_NOTE": "من فضلك اعلم ان احد الاختيارات سيتم حفظها  طبقا لما  هو نشط عند الحفظ",
       "CATEGORIES_LOCATIONS": "التصنيفات والنطاقات المسندة",

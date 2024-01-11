@@ -22,6 +22,7 @@ export class Incident {
   centerCategory: number;
   incidentReasons: any[];
   incidentOrgs: any[];
+  incidentTags: any[];
   incidentRiskImpact: any;
   incidentsChallengesReqs: Challenge[];
   isInternal: boolean;

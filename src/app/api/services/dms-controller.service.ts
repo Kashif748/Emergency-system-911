@@ -430,12 +430,16 @@ export class DmsControllerService extends BaseService {
   findAttachment$Response(params: {
     entityTagId: number;
     entityId: number;
+    orgId?: number;
+    withSub?: boolean;
   }): Observable<StrictHttpResponse<any>> {
 
     const rb = new RequestBuilder(this.rootUrl, DmsControllerService.FindAttachmentPath, 'get');
     if (params) {
       rb.query('entityTagId', params.entityTagId, {});
       rb.query('entityId', params.entityId, {});
+      rb.query('orgId', params.orgId, {});
+      rb.query('withSub', params.withSub, {});
     }
 
     return this.http.request(rb.build({
@@ -458,6 +462,8 @@ export class DmsControllerService extends BaseService {
   findAttachment(params: {
     entityTagId: number;
     entityId: number;
+    orgId?: number;
+    withSub?: boolean;
   }): Observable<any> {
 
     return this.findAttachment$Response(params).pipe(

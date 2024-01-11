@@ -1,22 +1,11 @@
-import { EMPTY } from 'rxjs';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { patch } from '@ngxs/store/operators';
-import { Injectable } from '@angular/core';
-import { BCAction } from '@core/states/bc/bc/bc.action';
-import {
-  BcVersions,
-  BcVersionsStatus,
-  PageBcVersions,
-} from 'src/app/api/models';
-import { BcVersionsControllerService } from 'src/app/api/services';
+import {EMPTY} from 'rxjs';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {patch} from '@ngxs/store/operators';
+import {Injectable} from '@angular/core';
+import {BCAction} from '@core/states/bc/bc/bc.action';
+import {BcVersions, BcVersionsStatus, PageBcVersions,} from 'src/app/api/models';
+import {BcVersionsControllerService} from 'src/app/api/services';
 
 export enum VERSION_STATUSES {
   CREATED = 1,
@@ -24,6 +13,7 @@ export enum VERSION_STATUSES {
   APPROVED,
   NEEDS_MODIFICATIONS,
   ARCHIVED,
+  ACTIVE,
 }
 
 export interface BCStateModel {
@@ -135,7 +125,7 @@ export class BCState {
       })
     );
     return this.bC
-      .insertOne1({
+      .insertOne2({
         body: payload,
       })
       .pipe(
@@ -174,7 +164,7 @@ export class BCState {
         loading: true,
       })
     );
-    return this.bC.getOne({ id: payload.id }).pipe(
+    return this.bC.getOne1({ id: payload.id }).pipe(
       tap((bc) => {
         setState(
           patch<BCStateModel>({
@@ -226,5 +216,28 @@ export class BCState {
           );
         })
       );
+  }
+  @Action(BCAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<BCStateModel>,
+    { payload }: BCAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<BCStateModel>({
+        loading: true,
+      })
+    );
+    return this.bC.deleteById1({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<BCStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
   }
 }

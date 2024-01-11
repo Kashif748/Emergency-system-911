@@ -1,28 +1,33 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { IAuthService } from '@core/services/auth.service';
-import { IStorageService } from '@core/services/storage.service';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import {
-  getMessaging,
-  getToken,
-  onMessage,
-  isSupported,
-  Messaging,
-  MessagePayload,
-} from 'firebase/messaging';
-import { AppCacheKeys } from '@core/constant/AppCacheKeys';
-import { DashboardService } from 'src/app/pages/dashboard/dashboard.service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {IAuthService} from '@core/services/auth.service';
+import {IStorageService} from '@core/services/storage.service';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
+import {environment} from 'src/environments/environment';
+import {getMessaging, getToken, isSupported, MessagePayload, onMessage} from 'firebase/messaging';
+import {AppCacheKeys} from '@core/constant/AppCacheKeys';
+import {DashboardService} from 'src/app/pages/dashboard/dashboard.service';
+
 @Injectable({
   providedIn: 'root',
 })
 export class NotifService {
   isSidebarVisible: boolean;
+  private popup: boolean;
   sidebarVisibilityChange: Subject<boolean> = new Subject<boolean>();
   isBrowserSupportFCM$: Subject<boolean> = new Subject<boolean>();
   onNewMessage$: Subject<MessagePayload> = new Subject<MessagePayload>();
+
+  private popupStore = new BehaviorSubject<boolean>(this.popup);
+  public get popup$() {
+    return this.popupStore.asObservable();
+  }
+  popupNotifications = [];
+  private popupNotifStore = new BehaviorSubject<any[]>([]);
+  public get unreadNotificationInPopup$() {
+    return this.popupNotifStore.asObservable();
+  }
 
   notifications = [];
   private notifStore = new BehaviorSubject<any[]>([]);
@@ -85,6 +90,7 @@ export class NotifService {
       this.dashboardService.checkLogsChanges(payload);
       setTimeout(async () => {
         await this.getNotifications().subscribe();
+        this.setPopupValue(true);
       }, 8000);
     });
   }
@@ -135,8 +141,17 @@ export class NotifService {
           this.notifications = [...notifications, ...this.notifications];
           this.notifStore.next(this.notifications);
           this.refreshCount();
+
+          const unreadNotifications = notifications.filter((notification) => !notification.read && notification.popup === true);
+          this.popupNotifications = [...unreadNotifications];
+          this.popupNotifStore.next(this.popupNotifications);
         })
       );
+  }
+
+  setPopupValue(popup: boolean) {
+    this.popup = popup;
+    this.popupStore.next(popup);
   }
 
   markAsRead(id) {
@@ -153,6 +168,19 @@ export class NotifService {
     return this.http
       .put(`${environment.apiUrl}/inapp-notif/mark-all-read`, {})
       .subscribe((v) => {
+        this.notifications.forEach(
+          (notification) => (notification.read = true)
+        );
+        this.notifStore.next(this.notifications);
+        this.resetNotificationCount();
+      });
+  }
+
+  markImportantNotifiAllAsRead(id) {
+    return this.http
+      .put(`${environment.apiUrl}/inapp-notif/mark-read/0?ids=${id.join(',')}`, {
+      })
+      .subscribe((value) => {
         this.notifications.forEach(
           (notification) => (notification.read = true)
         );

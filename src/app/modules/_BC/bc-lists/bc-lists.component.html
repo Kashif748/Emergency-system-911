@@ -74,7 +74,7 @@
           icon="pi pi-cog"
           class="p-button-warning"
           title="{{ 'VERSIONS_SETTINGS' | translate }}"
-          *checkPrivileges="'PRIV_CR_BC_VER'"
+          *checkPrivileges="'PRIV_ED_BC_VER'"
           (click)="toggleDialog()"
         ></button>
       </div>
@@ -114,7 +114,7 @@
           ></button>
         </ng-container>
 
-        <ng-container *checkPrivileges="'PRIV_CR_BC_VER'">
+        <ng-container *checkPrivileges="'PRIV_ED_BC_VER'">
           <button
             pButton
             pRipple
@@ -132,6 +132,7 @@
             class="p-button-outlined"
           ></button>
         </ng-container>
+        <p-confirmPopup></p-confirmPopup>
       </div>
     </div>
   </div>

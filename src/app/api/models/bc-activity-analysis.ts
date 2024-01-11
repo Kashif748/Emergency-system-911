@@ -13,8 +13,10 @@ export interface BcActivityAnalysis {
   id?: number;
   isActive?: boolean;
   recoveryPriority?: BcRecoveryPriorities;
+  referenceId?: number;
   remote?: boolean;
   rto?: Bcrto;
+  sequenceNumber?: number;
   skills?: string;
   spof?: string;
   status: BcAnalysisStatus;

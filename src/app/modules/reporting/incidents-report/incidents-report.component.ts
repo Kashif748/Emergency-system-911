@@ -92,6 +92,7 @@ export class IncidentsReportComponent implements OnInit {
     { formControlName: AdvancedSearchFieldsEnum.RESPONSIBLE_ORG },
     { formControlName: AdvancedSearchFieldsEnum.STATUS },
     { formControlName: AdvancedSearchFieldsEnum.GROUP },
+    { formControlName: AdvancedSearchFieldsEnum.TAG },
   ];
   public loading = true;
   public resetForm = new FormControl(false);
@@ -537,6 +538,10 @@ export class IncidentsReportComponent implements OnInit {
       formControlName: AdvancedSearchFieldsEnum.GROUP,
       children: this.groups,
     };
+    const tags: DataOptions = {
+      formControlName: AdvancedSearchFieldsEnum.TAG,
+      children: this.commonData?.tags,
+    };
     this.advancedSearchDataList = [
       priorities,
       cities,
@@ -544,7 +549,8 @@ export class IncidentsReportComponent implements OnInit {
       reportingVias,
       statuses,
       group,
-      subCategories
+      subCategories,
+      tags
     ];
     console.log(statuses);
     console.log(group);

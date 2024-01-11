@@ -1,18 +1,11 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { Router } from '@angular/router';
-import { NotifService } from '@core/api/services/notif.service';
-import { Observable, Subject } from 'rxjs';
-import { isEmpty } from 'lodash';
-import { TranslationService } from 'src/app/modules/i18n/translation.service';
+import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild,} from '@angular/core';
+import {Router} from '@angular/router';
+import {NotifService} from '@core/api/services/notif.service';
+import {Observable, Subject} from 'rxjs';
+import {isEmpty} from 'lodash';
+import {TranslationService} from 'src/app/modules/i18n/translation.service';
 import * as moment from 'moment';
-import { takeUntil } from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-notifications-dropdown',
@@ -85,8 +78,9 @@ export class NotificationsDropdownComponent implements OnInit, OnDestroy {
     }
   }
 
-  markAsRead(id) {
+  markAsRead(id, event?: Event) {
     this.notificationService.markAsRead(id);
+    event?.stopPropagation();
   }
 
   makeAllAsRead() {

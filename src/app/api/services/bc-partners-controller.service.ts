@@ -13,6 +13,7 @@ import { BcPartners } from '../models/bc-partners';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseBcPartners } from '../models/rest-api-response-bc-partners';
 import { RestApiResponsePageBcPartners } from '../models/rest-api-response-page-bc-partners';
+import { RestApiResponsePageBcPartnersSummaryResponse } from '../models/rest-api-response-page-bc-partners-summary-response';
 
 @Injectable()
 export class BcPartnersControllerService extends BaseService {
@@ -259,6 +260,119 @@ export class BcPartnersControllerService extends BaseService {
 
     return this.getOne15$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcPartners>) => r.body as RestApiResponseBcPartners)
+    );
+  }
+
+  /**
+   * Path part for operation summary
+   */
+  static readonly SummaryPath = '/v1/bc/partners/summary';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `summary()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary$Response(params: {
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<StrictHttpResponse<RestApiResponsePageBcPartnersSummaryResponse>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcPartnersControllerService.SummaryPath, 'get');
+    if (params) {
+      rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('isCritical', params.isCritical, {});
+      rb.query('pageable', params.pageable, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponsePageBcPartnersSummaryResponse>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `summary$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  summary(params: {
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+    pageable: Pageable;
+  }): Observable<RestApiResponsePageBcPartnersSummaryResponse> {
+
+    return this.summary$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponsePageBcPartnersSummaryResponse>) => r.body as RestApiResponsePageBcPartnersSummaryResponse)
+    );
+  }
+
+  /**
+   * Path part for operation export7
+   */
+  static readonly Export7Path = '/v1/bc/partners/export';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `export7()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  export7$Response(params: {
+    as: 'PDF' | 'EXCEL';
+    lang: boolean;
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+  }): Observable<StrictHttpResponse<any>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcPartnersControllerService.Export7Path, 'get');
+    if (params) {
+      rb.query('as', params.as, {});
+      rb.query('lang', params.lang, {});
+      rb.query('orgHierarchyId', params.orgHierarchyId, {});
+      rb.query('cycleId', params.cycleId, {});
+      rb.query('isCritical', params.isCritical, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<any>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `export7$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  export7(params: {
+    as: 'PDF' | 'EXCEL';
+    lang: boolean;
+    orgHierarchyId?: number;
+    cycleId: number;
+    isCritical?: string;
+  }): Observable<any> {
+
+    return this.export7$Response(params).pipe(
+      map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }
 

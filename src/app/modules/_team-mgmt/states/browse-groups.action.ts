@@ -4,10 +4,11 @@ import {
   UserInappAuthentication,
   UserMiddlewareAuth,
 } from 'src/app/api/models';
-import {Group} from "../../../api/models/group";
-import {GroupUser} from "../../../api/models/group-user";
-import {LocationGeoAndName} from "../../../api/models/location-geo-and-name";
-import {CenterRequest} from "../../../api/models/center-request";
+import { Group } from '../../../api/models/group';
+import { GroupUser } from '../../../api/models/group-user';
+import { LocationGeoAndName } from '../../../api/models/location-geo-and-name';
+import { CenterRequest } from '../../../api/models/center-request';
+import { GroupContractRequest } from 'src/app/api/models/group-contract-request';
 export namespace BrowseGroupsAction {
   export class LoadGroups {
     static readonly type = '[BrowseGroups] Load Groups';
@@ -59,9 +60,7 @@ export namespace BrowseGroupsAction {
     /**
      *
      */
-    constructor(
-      public payload: Group
-    ) {}
+    constructor(public payload: Group) {}
   }
 
   export class UpdateGroup {
@@ -69,9 +68,7 @@ export namespace BrowseGroupsAction {
     /**
      *
      */
-    constructor(
-      public payload: Group
-    ) {}
+    constructor(public payload: Group) {}
   }
 
   export class AddGeometryLocation {
@@ -85,7 +82,6 @@ export namespace BrowseGroupsAction {
         groupId: number;
         location?: LocationGeoAndName[];
       }
-
     ) {}
   }
 
@@ -94,9 +90,7 @@ export namespace BrowseGroupsAction {
     /**
      *
      */
-    constructor(
-      public payload: Group
-    ) {}
+    constructor(public payload: Group) {}
   }
 
   export class ToggleDialog {
@@ -114,8 +108,8 @@ export namespace BrowseGroupsAction {
      */
     constructor(
       public payload: {
-        groupId?: number,
-        user: GroupUser[]
+        groupId?: number;
+        user: GroupUser[];
       }
     ) {}
   }
@@ -127,8 +121,8 @@ export namespace BrowseGroupsAction {
      */
     constructor(
       public payload: {
-        groupId: number,
-        user: GroupUser[]
+        groupId: number;
+        user: GroupUser[];
       }
     ) {}
   }
@@ -140,8 +134,8 @@ export namespace BrowseGroupsAction {
      */
     constructor(
       public payload: {
-        groupId: number,
-        user: GroupUser
+        groupId: number;
+        user: GroupUser;
       }
     ) {}
   }
@@ -178,5 +172,22 @@ export namespace BrowseGroupsAction {
         groupId: number;
       }
     ) {}
+  }
+
+  // GIS MAP ACTIONS
+  export class AddContract {
+    static readonly type = '[BrowseGroups] Add Group Contract';
+    /**
+     *
+     */
+    constructor(public payload: GroupContractRequest) {}
+  }
+
+  export class GetContract {
+    static readonly type = '[BrowseGroups] Get Group Contract';
+    /**
+     *
+     */
+    constructor(public payload: { groupId: number }) {}
   }
 }

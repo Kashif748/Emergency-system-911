@@ -67,6 +67,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     this._appSystemId = v;
     this.buildForm();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -83,6 +84,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...app,
           });
+          this.defaultFormValue = app;
           this.patchValue(app);
         })
       )
@@ -189,7 +191,7 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
     return this.formBuilder.group({
       id: formFields.id,
       label: this.translate.currentLang === 'en' ? formFields.nameEn : formFields.nameAr,
-      hour: [null, [Validators.required, Validators.min(0)]],
+      hour: [null, [Validators.pattern('^[0-9]*$')]],
     });
   }
 
@@ -275,13 +277,13 @@ export class AppSystemDialogComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.store.dispatch(new AppSystemAction.GetAppSystem({}));
     this.form.reset();
     this.form.patchValue(this.defaultFormValue);
-    const hoursArray = this.defaultFormValue.value.hours;
+    const hoursArray = JSON.parse(this.defaultFormValue.minLicenseRequired).minLicenseRequired;
     for (let i = 0; i < hoursArray.length; i++) {
       const hourControl = hoursArray.at(i) as FormGroup;
-      (this.form.get('hours') as FormArray).controls[i].get('label').setValue(hourControl['label']);
+      (this.form.get('hours') as FormArray).controls[i].get('label').setValue(hourControl['key']);
+      (this.form.get('hours') as FormArray).controls[i].get('hour').setValue(hourControl['value']);
     }
     this.cdr.detectChanges();
   }

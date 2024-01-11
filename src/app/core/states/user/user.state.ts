@@ -178,6 +178,11 @@ export class UserState {
     { setState }: StateContext<UserStateModel>,
     { payload }: UserAction.LoadUsers
   ) {
+    setState(
+      patch<UserStateModel>({
+        loading: true,
+      })
+    );
     return this.userService
       .getAllForOrg({
         pageable: {
@@ -186,6 +191,7 @@ export class UserState {
           sort: payload.sort,
         },
         name: payload.search,
+        code: payload?.code
       })
       .pipe(
         tap(({ result: { content: list } }) => {
@@ -204,6 +210,13 @@ export class UserState {
               })
             );
           }
+        }),
+        finalize(() => {
+          setState(
+            patch<UserStateModel>({
+              loading: false,
+            })
+          );
         })
       );
   }
@@ -322,7 +335,7 @@ export class UserState {
     { setState }: StateContext<UserStateModel>,
     {}: UserAction.GetRanks
   ) {
-    return this.rankService.findActiveList1({}).pipe(
+    return this.rankService.findActiveList2({}).pipe(
       tap((res) => {
         setState(
           patch<UserStateModel>({

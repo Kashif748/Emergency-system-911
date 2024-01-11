@@ -156,19 +156,19 @@
             placeholder="{{ 'ORG_ARTCH' | translate }}"
             appendTo="body"
           >
-          <ng-template let-option let-placeholder pTemplate="header">
-            <div class="w-100 p-2">
-              <span class="p-input-icon-left w-100">
-                <i class="pi pi-search"></i>
-                <input
-                  (keyup)="filterOrgHir($event.target.value)"
-                  type="text"
-                  pInputText
-                  class="w-100"
-                />
-              </span>
-            </div>
-          </ng-template>
+            <ng-template let-option let-placeholder pTemplate="header">
+              <div class="w-100 p-2">
+                <span class="p-input-icon-left w-100">
+                  <i class="pi pi-search"></i>
+                  <input
+                    (keyup)="filterOrgHir($event.target.value)"
+                    type="text"
+                    pInputText
+                    class="w-100"
+                  />
+                </span>
+              </div>
+            </ng-template>
             <ng-template let-option let-placeholder pTemplate="value">
               {{
                 option
@@ -291,10 +291,15 @@
       </p-divider>
 
       <div class="ml-dir-auto d-flex">
-        <app-resource-dialog
-          [orgHir]="orgHireracy"
-          [cycles]="cycles$ | async"
-        ></app-resource-dialog>
+        <button
+          *checkPrivileges="'PRIV_PERFORM_ACTIVITY_ANALYSIS'"
+          pButton
+          label="{{ 'RESOURCES.ADD_RESOURCE' | translate }}"
+          icon="pi pi-plus"
+          [disabled]="alreadyFoundResource"
+          (click)="createResource()"
+
+        ></button>
       </div>
     </div>
   </div>

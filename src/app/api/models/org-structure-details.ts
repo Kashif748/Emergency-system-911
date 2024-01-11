@@ -26,10 +26,12 @@ export interface OrgStructureDetails {
   loginOtp?: boolean;
   loginUaePass?: boolean;
   managerId?: number;
+  mapGisLayer?: string;
   mobno?: string;
   municipalityCode?: string;
   nameAr: string;
   nameEn: string;
+  nationalCompliance?: number;
   officialEmail?: string;
   operationNumbers?: number;
   parentOrg?: OrgStructure;

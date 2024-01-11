@@ -22,21 +22,21 @@ export class AdcmcCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getById11
+   * Path part for operation getById12
    */
-  static readonly GetById11Path = '/v1/assets/main-category/{id}';
+  static readonly GetById12Path = '/v1/assets/main-category/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getById11()` instead.
+   * To access only the response body, use `getById12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById11$Response(params: {
+  getById12$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseAdcmcCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcmcCategoryControllerService.GetById11Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AdcmcCategoryControllerService.GetById12Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -54,15 +54,15 @@ export class AdcmcCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getById11$Response()` instead.
+   * To access the full response (for headers, for example), `getById12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getById11(params: {
+  getById12(params: {
     id: number;
   }): Observable<RestApiResponseAdcmcCategory> {
 
-    return this.getById11$Response(params).pipe(
+    return this.getById12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcmcCategory>) => r.body as RestApiResponseAdcmcCategory)
     );
   }

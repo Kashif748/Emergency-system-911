@@ -12,6 +12,7 @@ import { map, filter } from 'rxjs/operators';
 import { BcActivityAnalysis } from '../models/bc-activity-analysis';
 import { BcActivityAnalysisChangeStatusDto } from '../models/bc-activity-analysis-change-status-dto';
 import { BcActivityAnalysisDto } from '../models/bc-activity-analysis-dto';
+import { BcActivityAnalysisRequest } from '../models/bc-activity-analysis-request';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseBcActivityAnalysis } from '../models/rest-api-response-bc-activity-analysis';
 import { RestApiResponseBcActivityAnalysisDtoWithStatus } from '../models/rest-api-response-bc-activity-analysis-dto-with-status';
@@ -177,21 +178,21 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update115
+   * Path part for operation update117
    */
-  static readonly Update115Path = '/v1/bc/activity-analysis';
+  static readonly Update117Path = '/v1/bc/activity-analysis';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update115()` instead.
+   * To access only the response body, use `update117()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update115$Response(params: {
+  update117$Response(params: {
     body: BcActivityAnalysis
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityAnalysis>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Update115Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Update117Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -209,15 +210,15 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update115$Response()` instead.
+   * To access the full response (for headers, for example), `update117$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update115(params: {
+  update117(params: {
     body: BcActivityAnalysis
   }): Observable<RestApiResponseBcActivityAnalysis> {
 
-    return this.update115$Response(params).pipe(
+    return this.update117$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysis>) => r.body as RestApiResponseBcActivityAnalysis)
     );
   }
@@ -269,6 +270,52 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation duplicateActivityAnalysis
+   */
+  static readonly DuplicateActivityAnalysisPath = '/v1/bc/activity-analysis/duplicate';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `duplicateActivityAnalysis()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  duplicateActivityAnalysis$Response(params: {
+    body: BcActivityAnalysisRequest
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.DuplicateActivityAnalysisPath, 'post');
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `duplicateActivityAnalysis$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  duplicateActivityAnalysis(params: {
+    body: BcActivityAnalysisRequest
+  }): Observable<void> {
+
+    return this.duplicateActivityAnalysis$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getOne34
    */
   static readonly GetOne34Path = '/v1/bc/activity-analysis/{id}';
@@ -315,24 +362,24 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation summary
+   * Path part for operation summary3
    */
-  static readonly SummaryPath = '/v1/bc/activity-analysis/summary';
+  static readonly Summary3Path = '/v1/bc/activity-analysis/summary';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `summary()` instead.
+   * To access only the response body, use `summary3()` instead.
    *
    * This method doesn't expect any request body.
    */
-  summary$Response(params: {
+  summary3$Response(params: {
     orgHierarchyId?: number;
     cycleId?: number;
     isCritical?: string;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityAnalysisSummaryResponse>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.SummaryPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Summary3Path, 'get');
     if (params) {
       rb.query('orgHierarchyId', params.orgHierarchyId, {});
       rb.query('cycleId', params.cycleId, {});
@@ -353,18 +400,18 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `summary$Response()` instead.
+   * To access the full response (for headers, for example), `summary3$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  summary(params: {
+  summary3(params: {
     orgHierarchyId?: number;
     cycleId?: number;
     isCritical?: string;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityAnalysisSummaryResponse> {
 
-    return this.summary$Response(params).pipe(
+    return this.summary3$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityAnalysisSummaryResponse>) => r.body as RestApiResponsePageBcActivityAnalysisSummaryResponse)
     );
   }
@@ -486,17 +533,17 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation export8
+   * Path part for operation export11
    */
-  static readonly Export8Path = '/v1/bc/activity-analysis/export';
+  static readonly Export11Path = '/v1/bc/activity-analysis/export';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `export8()` instead.
+   * To access only the response body, use `export11()` instead.
    *
    * This method doesn't expect any request body.
    */
-  export8$Response(params: {
+  export11$Response(params: {
     as: 'PDF' | 'EXCEL';
     lang: boolean;
     orgHierarchyId?: number;
@@ -504,7 +551,7 @@ export class BcActivityAnalysisControllerService extends BaseService {
     isCritical?: string;
   }): Observable<StrictHttpResponse<any>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Export8Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.Export11Path, 'get');
     if (params) {
       rb.query('as', params.as, {});
       rb.query('lang', params.lang, {});
@@ -526,11 +573,11 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `export8$Response()` instead.
+   * To access the full response (for headers, for example), `export11$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  export8(params: {
+  export11(params: {
     as: 'PDF' | 'EXCEL';
     lang: boolean;
     orgHierarchyId?: number;
@@ -538,7 +585,7 @@ export class BcActivityAnalysisControllerService extends BaseService {
     isCritical?: string;
   }): Observable<any> {
 
-    return this.export8$Response(params).pipe(
+    return this.export11$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }

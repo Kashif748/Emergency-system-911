@@ -20,6 +20,11 @@
   "ADD_NEW_ACTIVITY": "Select Cycle Activities",
   "ADD_ACTIVITY_ACTION": "  Add Activities Analysis  ",
   "ORG_ARTCH": "Organization Hierarchy",
+  "DUPLICATE": "Duplicate",
+  "DUPLICATE_MSG": "Copy activity information from the previous analysis cycle",
+  "DUPLICATE_ALERT": "Copying activity information done.",
+  "SUCCESS": "Success {{success}}",
+  "FAILED": "Failed {{failed}}",
   "START_ANALYSIS": "Analyze Activity ",
   "START_RESOURC_ANALYSIS": "Analyze Resources",
   "CYCLE_NAME": "Cycle Name",
@@ -50,6 +55,7 @@
     "CYCLE": "Analysis Cycle",
     "ONSITE_STAFF": "Staff Needed On-Site",
     "OFFSITE_STAFF": "Staff Needed Remotely",
+    "CONFIREM": "New resource will be added for selected division and cycle",
     "STATUS": "Status",
     "DIALOG": {
       "ADD": "Add New Resource"
@@ -71,7 +77,7 @@
   },
   "EMPLOYEES": {
     "TAB_LABEL": "Primary & Secondary Employees",
-    "NAME":"Name",
+    "NAME": "Name",
     "SECONDARY": "Secondary",
     "PRI": "Primary",
     "PRIMARY": "Primary/Secondary"
@@ -85,12 +91,16 @@
     "DETAILS": "Dependency details",
     "VENDER": "Vender/Partner",
     "TAB_INSIDE": "Dependencies Inside Organization",
-    "SECTOR":"Sector",
-    "ACTIVITY":"Activity",
-    "TAB_DEPT":"Dependencies Inside Department"
+    "SECTOR": "Sector",
+    "ACTIVITY": "Activity",
+    "TAB_DEPT": "Dependencies Inside Department"
   },
   "IMPACT_MATRIX": {
     "TAB_LABEL": "Impact Matrix",
     "TABLE_CELL": " Impact Types / Time Period"
-  }
+  },
+  "WORKLOG_BTN": "Notes",
+  "WORKLOG_HEADER": "Notes for activity anlysis",
+  "BC_COPYING_ERROR_MESSAGE": "Resources already exist for current division and analysis cycle.",
+  "WARNING_ERROR_MESSAGE": "Users are not allowed to perform activity analysis on chosen cycle. Cycle is not in <strong>Approved</strong> status."
 }

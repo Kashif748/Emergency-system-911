@@ -54,6 +54,9 @@ export class CreateIncident {
     isMain: boolean;
   }[];
 
+  incidentTags: {
+    id: number;
+  }[];
   incidentRiskImpact: { id: number };
   incidentsChallengesReqs: Challenge[];
   isInternal: boolean;
@@ -101,6 +104,7 @@ export class CreateIncident {
     this.incidentEnvironmentImpact = this.prepareEnvEmpact(
       data.incidentEnvironmentImpact
     );
+    this.incidentTags = this.prepareTags(data.incidentTags, incidentId);
     this.incidentsChallengesReqs = data.incidentsChallengesReqs || [];
     this.incidentGroups = this.prepareIncidentsGroups(
       data.incidentGroups,
@@ -162,6 +166,25 @@ export class CreateIncident {
       };
       impacts.push(imptc);
     });
+  }
+  prepareTags(tags: any[], incidentId) {
+    const tagRes = [];
+    if (isEmpty(tags)) {
+      return [];
+    }
+
+    tags.forEach((t) => {
+      const tag = {
+        id: 0,
+        incident: {
+          id: incidentId,
+        },
+
+        tag: { id: t },
+      };
+      tagRes.push(tag);
+    });
+    return tagRes;
   }
 
   prepareOrgsObj(secondaryorg: any[], primaryorg): any[] {

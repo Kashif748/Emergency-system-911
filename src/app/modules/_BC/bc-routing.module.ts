@@ -88,17 +88,44 @@ const routes: Routes = [
         path: 'bia-analysis-summary',
         canLoad: [PrivilegeGuard],
         data: {
-          permission: [
-            'PRIV_VW_ACTIVITY_ANALYSIS',
-            'PRIV_PERFORM_ACTIVITY_ANALYSIS',
-            'PRIV_REVIEW_ACTIVITY_ANALYSIS',
-            'PRIV_APPROVE_ACTIVITY_ANALYSIS',
-          ],
-          type: 'or',
+          permission: ['PRIV_ACT_ANLAYSIS_RPT'],
         },
         loadChildren: () =>
           import('./analysis-summary/analysis-summary.module').then(
             (m) => m.AnalysisSummaryModule
+          ),
+      },
+      {
+        path: 'systems-report',
+        canLoad: [PrivilegeGuard],
+        data: {
+          permission: ['PRIV_ACT_SYS_RPT'],
+        },
+        loadChildren: () =>
+          import('./reports/systems-report/systems-report.module').then(
+            (m) => m.SystemsReportModule
+          ),
+      },
+      {
+        path: 'vendors-report',
+        canLoad: [PrivilegeGuard],
+        data: {
+          permission: ['PRIV_VENDOR_RPT'],
+        },
+        loadChildren: () =>
+          import('./reports/vendors-report/vendors-report.module').then(
+            (m) => m.VendorsReportModule
+          ),
+      },
+      {
+        path: 'employees-report',
+        canLoad: [PrivilegeGuard],
+        data: {
+          permission: ['PRIV_ACT_EMP_RPT'],
+        },
+        loadChildren: () =>
+          import('./reports/employees-report/employees-report.module').then(
+            (m) => m.EmployeesReportModule
           ),
       },
     ],

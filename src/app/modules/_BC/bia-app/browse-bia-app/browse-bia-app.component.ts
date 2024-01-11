@@ -1,35 +1,37 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, of, Subject} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {LazyLoadEvent, MenuItem, TreeNode} from "primeng/api";
-import {TranslateObjPipe} from "@shared/sh-pipes/translate-obj.pipe";
-import {TreeHelper} from "@core/helpers/tree.helper";
-import {ILangFacade} from "@core/facades/lang.facade";
-import {PrivilegesService} from "@core/services/privileges.service";
-import {TranslateService} from "@ngx-translate/core";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {auditTime, filter, map, switchMap, take, takeUntil, tap} from "rxjs/operators";
-import {BrowseBiaAppAction} from "../states/browse-bia-app.action";
-import {BrowseBiaAppState, BrowseBiaAppStateModel} from "../states/browse-bia-app.state";
-import {BiaAppsState} from "@core/states/bia-apps/bia-apps.state";
-import {BcAnalysisByOrgHierarchyResponse} from "../../../../api/models/bc-analysis-by-org-hierarchy-response";
-import {BcAnalysisStatus, BcCycles} from "../../../../api/models";
-import {ImpactAnalysisState} from "@core/states/impact-analysis/impact-analysis.state";
-import {ActivatedRoute, Router} from "@angular/router";
-import {OrgDetailAction, OrgDetailState} from "@core/states";
-import {BcOrgHierarchyProjection} from "../../../../api/models/bc-org-hierarchy-projection";
-import { cloneDeep } from "lodash";
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {Select, Store} from '@ngxs/store';
+import {ConfirmationService, LazyLoadEvent, MenuItem, TreeNode} from 'primeng/api';
+import {TranslateObjPipe} from '@shared/sh-pipes/translate-obj.pipe';
+import {TreeHelper} from '@core/helpers/tree.helper';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {TranslateService} from '@ngx-translate/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {auditTime, filter, map, pairwise, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {BrowseBiaAppAction} from '../states/browse-bia-app.action';
+import {BrowseBiaAppState, BrowseBiaAppStateModel,} from '../states/browse-bia-app.state';
+import {BiaAppsState} from '@core/states/bia-apps/bia-apps.state';
+import {BcAnalysisByOrgHierarchyResponse} from '../../../../api/models/bc-analysis-by-org-hierarchy-response';
+import {BcAnalysisStatus, BcCycles} from '../../../../api/models';
+import {ImpactAnalysisState} from '@core/states/impact-analysis/impact-analysis.state';
+import {OrgDetailAction, OrgDetailState} from '@core/states';
+import {BcOrgHierarchyProjection} from '../../../../api/models/bc-org-hierarchy-projection';
+import {cloneDeep} from 'lodash';
+import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
 
 @Component({
   selector: 'app-browse-bia-app',
   templateUrl: './browse-bia-app.component.html',
-  styleUrls: ['./browse-bia-app.component.scss']
+  styleUrls: ['./browse-bia-app.component.scss'],
 })
 export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   public page$: Observable<BcAnalysisByOrgHierarchyResponse[]>;
 
   @Select(ImpactAnalysisState.cycles)
   public cycles$: Observable<BcCycles[]>;
+
+  @Select(BiaAppsState.blocking)
+  public blocking$: Observable<boolean>;
 
   @Select(BrowseBiaAppState.state)
   public state$: Observable<BrowseBiaAppStateModel>;
@@ -43,16 +45,18 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   @Select(BrowseBiaAppState.hasFilters)
   public hasFilters$: Observable<boolean>;
 
-  public sortAnalysisCycles$: Observable<any[]>;
-
   @Select(OrgDetailState.loading)
   public loadingOrgHir$: Observable<boolean>;
 
   @Select(ImpactAnalysisState.activityStatuses)
   public activityStatuses$: Observable<BcAnalysisStatus[]>;
 
+  public smallScreen: boolean;
+
+  VERSION_STATUSES = VERSION_STATUSES;
   private auditLoadOrgPage$ = new Subject<string>();
   selectedCycle: any;
+  sidebar = false;
   public orgHir: TreeNode[] = [];
   public orgHireracy: TreeNode[] = [];
   private destroy$ = new Subject();
@@ -70,8 +74,8 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
   ] as MenuItem[];
 
   public sortableColumns = [
-    { name: 'DIVISION', code: 'orgHierarchy' },
-    { name: 'STATE', code: 'status' },
+    { name: 'DIVISION', code: '' },
+    { name: 'STATE', code: '' },
   ];
 
   public columns = [
@@ -96,21 +100,20 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private langFacade: ILangFacade,
     private treeHelper: TreeHelper,
-    private privilegesService: PrivilegesService,
-    private router: Router,
-    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
   ) {
     this.langFacade.vm$
       .pipe
       // map(({ ActiveLang: { key } }) => (key === 'ar' ? 'right' : 'left'))
       ()
       .subscribe((res) => {
-        if (res['key'] == 'ar') {
-          this.sortableColumns[0].code = 'orgHierarchy.nameAr';
-          this.sortableColumns[1].code = 'status.nameAr';
+        if (res.ActiveLang?.key == 'ar') {
+          this.sortableColumns[0].code = 'org_hir_name_ar';
+          this.sortableColumns[1].code = 'status_name_ar';
         } else {
-          this.sortableColumns[0].code = 'orgHierarchy.nameEn';
-          this.sortableColumns[1].code = 'status.nameEn';
+          this.sortableColumns[0].code = 'org_hir_name_en';
+          this.sortableColumns[1].code = 'status_name_en';
         }
       });
   }
@@ -120,36 +123,40 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
         takeUntil(this.destroy$),
-        filter((c) => c.matches)
+        map((c) => c.matches),
+        tap((c) => {
+          this.smallScreen = c;
+          c ? (this.sidebar = false) : (this.sidebar = true);
+        })
       )
-      .subscribe(() => {
-        this.changeView('CARDS');
-      });
-    this.store.dispatch([
-      new BrowseBiaAppAction.LoadCycles({ page: 0, size: 100 }),
-      new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 })
-    ]).pipe(
-      takeUntil(this.destroy$),
-      take(1),
-      filter((p) => !!p),
-      tap(() => {
-        this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
-          cycle: this.selectedCycle}));
-        this.loadPage(null, this.selectedCycle);
-      })
-    ).subscribe();
-    this.sortAnalysisCycles$ = this.cycles$.pipe(
-      filter((cycles) => !!cycles),
-      switchMap((cycles) => {
-        return of([...cycles].sort((a, b) => b.id - a.id));
-      })
-    );
-    this.sortAnalysisCycles$.subscribe(cycles => {
-      if (cycles.length > 0) {
-        const sortedCycles = [...cycles];
-        this.selectedCycle = sortedCycles[0].id;
-      }
-    });
+      .subscribe();
+    this.store
+      .dispatch([
+        new BrowseBiaAppAction.LoadActivitiesStatuses(),
+        new BrowseBiaAppAction.LoadCycles({}),
+        new OrgDetailAction.GetOrgHierarchySearch({ page: 0, size: 100 }),
+      ])
+      .pipe(
+        switchMap(() => this.cycles$),
+        takeUntil(this.destroy$),
+        take(1),
+        filter((cycles) => !!cycles),
+        tap((cycles) => {
+          if (cycles.length > 0) {
+            const sortedCycles = [...cycles].sort((a, b) => b.id - a.id);
+            this.selectedCycle = sortedCycles[0];
+            this.cdr.detectChanges();
+          }
+          this.store.dispatch(
+            new BrowseBiaAppAction.UpdateCycle({
+              cycle: this.selectedCycle?.id,
+            })
+          );
+          this.loadPage(null, this.selectedCycle);
+        })
+      )
+      .subscribe();
+
     this.store
       .select(OrgDetailState.orgHirSearch)
       .pipe(
@@ -161,7 +168,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     this.auditLoadOrgPage$
       .pipe(takeUntil(this.destroy$), auditTime(2000))
       .subscribe((search: string) => {
-        this.orgHir =[];
+        this.orgHir = [];
         this.store.dispatch(
           new OrgDetailAction.GetOrgHierarchySearch({
             page: 0,
@@ -195,20 +202,51 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         })
       )
     );
+
+    // cycle
+    // 1- newely added cycle should be selected
+    // 2- when cycle status change it should reflect in the drop down without refresh
+    this.cycles$
+        .pipe(
+            takeUntil(this.destroy$),
+            filter((cycles) => !!cycles),
+            pairwise(),
+            map(([prevCycles, currentCycles]) => {
+              const isNewData = currentCycles.length > prevCycles.length;
+
+              const sortedCycles = [...currentCycles].sort((a, b) => b.id - a.id);
+              if (isNewData){
+                this.setCycleId(sortedCycles[0]);
+              }
+              return (
+                  sortedCycles.find(
+                      (cycle) =>
+                          cycle.id === this.selectedCycle?.id &&
+                          cycle.status?.id !== this.selectedCycle?.status?.id
+                  ) || (isNewData ? sortedCycles[0] : this.selectedCycle)
+              );
+            }),
+            tap((cycle) => (this.selectedCycle = cycle))
+        )
+        .subscribe();
   }
 
   search() {
-    this.store.dispatch(new BrowseBiaAppAction.LoadBia({
-      pageRequest: undefined,
-      cycleId: this.selectedCycle
-    }));
+    this.store.dispatch(
+      new BrowseBiaAppAction.LoadBia({
+        pageRequest: undefined,
+        cycleId: this.selectedCycle?.id,
+      })
+    );
   }
 
   clear() {
     this.store.dispatch([
-      new BrowseBiaAppAction.UpdateFilter({ clear: true }),
-      new BrowseBiaAppAction.LoadBia({ pageRequest: undefined,
-        cycleId: this.selectedCycle}),
+      new BrowseBiaAppAction.UpdateCycleFilter({ clear: true }),
+      new BrowseBiaAppAction.LoadBia({
+        pageRequest: undefined,
+        cycleId: this.selectedCycle?.id,
+      }),
     ]);
   }
 
@@ -243,7 +281,7 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
     }
 
     this.store
-      .dispatch(new BrowseBiaAppAction.UpdateFilter(filter))
+      .dispatch(new BrowseBiaAppAction.UpdateCycleFilter(filter))
       .toPromise()
       .then(() => {
         if (filter.type) {
@@ -264,14 +302,18 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
 
   sort(event) {
     this.store.dispatch(
-      new BrowseBiaAppAction.SortBia({ field: event.value, cycle: this.selectedCycle})
+      new BrowseBiaAppAction.SortBia({
+        field: event.value,
+        cycle: this.selectedCycle,
+      })
     );
   }
 
   order(event) {
     this.store.dispatch(
       new BrowseBiaAppAction.SortBia({
-        order: event.checked ? 'desc' : 'asc', cycle: this.selectedCycle
+        order: event.checked ? 'desc' : 'asc',
+        cycle: this.selectedCycle,
       })
     );
   }
@@ -292,17 +334,20 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
           first: event?.first,
           rows: event?.rows,
         },
-        cycleId: cycle ? cycle : this.selectedCycle,
+        cycleId: cycle ? cycle?.id : this.selectedCycle?.id,
       })
     );
   }
 
   setCycleId(value: BcCycles) {
-    this.store.dispatch(new BrowseBiaAppAction.UpdateCycle({
-      cycle: value}))
+    this.cdr.detectChanges();
+    this.store.dispatch(
+      new BrowseBiaAppAction.UpdateCycle({
+        cycle: value?.id,
+      })
+    );
     this.loadPage(null, value);
   }
-
 
   public setTree(searchResponses: BcOrgHierarchyProjection[]) {
     if (searchResponses.length == 0) {
@@ -356,5 +401,25 @@ export class BrowseBiaAppComponent implements OnInit, OnDestroy {
         })
       );
     }
+  }
+  changeStatues(status: VERSION_STATUSES) {
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translate.instant('CONFIRM'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(
+          new BrowseBiaAppAction.ChangeCycleStatus({
+            cycleId: this.selectedCycle?.id,
+            statusId: status,
+          })
+        );
+      },
+      reject: () => {
+      },
+    });
+  }
+  openDialog(id?: number, cycle?: string) {
+    this.store.dispatch(new BrowseBiaAppAction.ToggleDialog({ dialog: cycle }));
   }
 }

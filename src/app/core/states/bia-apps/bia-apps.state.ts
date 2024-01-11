@@ -1,22 +1,35 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
-import {Injectable} from '@angular/core';
-import {EMPTY} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {patch} from '@ngxs/store/operators';
-import {BcAnalysisControllerService} from "../../../api/services/bc-analysis-controller.service";
-import {PageBcAnalysisByOrgHierarchyResponse} from "../../../api/models/page-bc-analysis-by-org-hierarchy-response";
-import {BcAnalysisByOrgHierarchyResponse} from "../../../api/models/bc-analysis-by-org-hierarchy-response";
-import {BiaAction} from "@core/states/bia-apps/bia-apps.action";
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { patch } from '@ngxs/store/operators';
+import { BcAnalysisControllerService } from '../../../api/services/bc-analysis-controller.service';
+import { PageBcAnalysisByOrgHierarchyResponse } from '../../../api/models/page-bc-analysis-by-org-hierarchy-response';
+import { BcAnalysisByOrgHierarchyResponse } from '../../../api/models/bc-analysis-by-org-hierarchy-response';
+import { BiaAction } from '@core/states/bia-apps/bia-apps.action';
+import {
+  BcCycleStatusControllerService,
+  BcCyclesControllerService,
+} from '../../../api/services';
+import { BcCycleStatus } from 'src/app/api/models';
+import {ILangFacade} from "@core/facades/lang.facade";
 
 export interface BiaStateModel {
   page: PageBcAnalysisByOrgHierarchyResponse;
   bia: BcAnalysisByOrgHierarchyResponse;
+  statuses: BcCycleStatus[];
   loading: boolean;
   blocking: boolean;
 }
 
-const BIA_APPS_STATE_TOKEN =
-  new StateToken<BiaStateModel>('biaApps');
+const BIA_APPS_STATE_TOKEN = new StateToken<BiaStateModel>('biaApps');
 
 @State<BiaStateModel>({ name: BIA_APPS_STATE_TOKEN })
 @Injectable()
@@ -27,6 +40,9 @@ export class BiaAppsState {
    */
   constructor(
     private bia: BcAnalysisControllerService,
+    private cycle: BcCyclesControllerService,
+    private cycleStatusService: BcCycleStatusControllerService,
+    private langFacade: ILangFacade,
   ) {}
 
   /* ************************ SELECTORS ******************** */
@@ -55,7 +71,36 @@ export class BiaAppsState {
     return state?.blocking;
   }
 
+  @Selector([BiaAppsState])
+  static statuses(state: BiaStateModel) {
+    return state.statuses;
+  }
+
   /* ********************** ACTIONS ************************* */
+
+  @Action(BiaAction.LoadStatuses, { cancelUncompleted: true })
+  loadStatuses(
+    { setState }: StateContext<BiaStateModel>,
+    { payload }: BiaAction.LoadStatuses
+  ) {
+    return this.cycleStatusService
+      .getAll21({
+        isActive: true,
+        pageable: {
+          page: payload?.page ?? 0,
+          size: payload?.size ?? 50,
+        },
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<BiaStateModel>({
+              statuses: res.result?.content,
+            })
+          );
+        })
+      );
+  }
   @Action(BiaAction.LoadPage, { cancelUncompleted: true })
   loadPage(
     { setState }: StateContext<BiaStateModel>,
@@ -74,7 +119,7 @@ export class BiaAppsState {
         pageable: {
           page: payload.page,
           size: payload.size,
-          sort: payload.sort ? payload.sort : ['rowNumber', 'desc'],
+          sort: payload.sort ? payload.sort : this.langFacade.stateSanpshot.ActiveLang.key == 'ar' ? ['org_hir_name_ar', 'desc'] : ['org_hir_name_en', 'desc'],
         },
       })
       .pipe(
@@ -102,5 +147,29 @@ export class BiaAppsState {
           );
         })
       );
+  }
+
+  @Action(BiaAction.Delete, { cancelUncompleted: true })
+  Delete(
+    { setState }: StateContext<BiaStateModel>,
+    { payload }: BiaAction.Delete
+  ) {
+    if (payload.id === undefined || payload.id === null) {
+      return;
+    }
+    setState(
+      patch<BiaStateModel>({
+        loading: true,
+      })
+    );
+    return this.cycle.deleteById25({ id: payload.id }).pipe(
+      finalize(() => {
+        setState(
+          patch<BiaStateModel>({
+            loading: false,
+          })
+        );
+      })
+    );
   }
 }

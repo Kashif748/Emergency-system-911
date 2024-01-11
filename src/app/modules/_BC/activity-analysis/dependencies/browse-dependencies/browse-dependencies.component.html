@@ -3,36 +3,29 @@
   <h3 class="card-title align-items-start flex-column m-0">
     <span class="card-label font-weight-bolder">{{
       "DEPENDENCIES.TITLE" | translate
-    }}</span>
+      }}</span>
   </h3>
 </div>
 <app-dependencies-dialog></app-dependencies-dialog>
 <div class="row" *ngIf="state$ | async as state">
+
   <div class="col-4">
-    <app-content-dependencies
-      [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_ORG"
-      [page]="activityDependencyOrg$ | async"
-      [pageRequest]="state?.pageRequest"
+    <app-content-dependencies [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL"
+      [page]="activityDependencyInternal$ | async" [pageRequest]="state?.pageRequest"
       [activityStatus]="activityStatus$ | async"
-      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_ORG, $event)"
-    ></app-content-dependencies>
+      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL, $event)"></app-content-dependencies>
   </div>
+
   <div class="col-4">
-    <app-content-dependencies
-      [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL"
-      [page]="activityDependencyInternal$ | async"
-      [pageRequest]="state?.pageRequest"
-      [activityStatus]="activityStatus$ | async"
-      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_INTERNAL, $event)"
-    ></app-content-dependencies>
+    <app-content-dependencies [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_ORG" [page]="activityDependencyOrg$ | async"
+      [pageRequest]="state?.pageRequest" [activityStatus]="activityStatus$ | async"
+      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_ORG, $event)"></app-content-dependencies>
   </div>
+
   <div class="col-4">
-    <app-content-dependencies
-      [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL"
-      [page]="activityDependencyExternal$ | async"
-      [pageRequest]="state?.pageRequest"
+    <app-content-dependencies [dependType]="DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL"
+      [page]="activityDependencyExternal$ | async" [pageRequest]="state?.pageRequest"
       [activityStatus]="activityStatus$ | async"
-      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL, $event)"
-    ></app-content-dependencies>
+      (onPageChange)="loadPage(DEPENDENCIES_TYPES.DEPENDENCY_EXTERNAL, $event)"></app-content-dependencies>
   </div>
 </div>

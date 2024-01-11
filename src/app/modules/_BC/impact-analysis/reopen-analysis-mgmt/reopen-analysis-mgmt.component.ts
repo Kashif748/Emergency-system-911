@@ -26,6 +26,9 @@ export class ReopenAnalysisMgmtComponent implements OnInit, OnDestroy {
   @Select(ImpactAnalysisState.statusbasedOnId)
   public statusbasedOnId$: Observable<BcAnalysisStatus>;
 
+  @Select(ImpactAnalysisState.editable)
+  public editable$: Observable<BcAnalysisStatus>;
+
   @Select(ImpactAnalysisState.totalRecords)
   public totalRecords$: Observable<number>;
 

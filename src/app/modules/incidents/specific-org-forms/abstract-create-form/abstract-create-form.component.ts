@@ -110,6 +110,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   status: any[];
   centerCat: any;
   incSubCategoriesCenter: any[];
+  tags: any[];
   Porg: any[] = [];
   incidents: any;
   stas: any;
@@ -134,6 +135,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   public addLocationToMapFunc: (ref: TaskIncidentGisData) => void;
   addressPointLocation: AddressSearchResultModel = null;
   pointInXY: string;
+  contractsNo: string;
 
   protected constructor(
     protected router: Router,
@@ -168,6 +170,8 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     // prevent load incident data if id related to inquiry component.
     this.lang = this.translationService.getSelectedLanguage();
     this.commonData = this.appCommonDataService.getCommonData();
+    let groupedTags = _.groupBy(this.commonData?.tags, 'module');
+    this.tags = groupedTags['INCIDENT'];
     // get data from url
     this.incidentId = this.route.snapshot.params['id'];
     this.interimId = this.route.snapshot.params['interimId'];
@@ -211,10 +215,11 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
                   ),
                   reportedByMobile: rMobile,
                   locationUrl: this.incidents.location,
+                  tags: data.result.tags.map((tagObj) => tagObj.tag.id),
                 });
 
                 if (this.incidents.org) {
-                  this.loadNonGlobalGroups(this.incidents.org.id, 0, 10);
+                  this.loadNonGlobalGroups(this.incidents.org.id);
                 }
 
                 this.incidentService
@@ -284,6 +289,9 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
               this.inputLoadedDistricts();
               this.formGroup.patchValue({
                 getLocationFromReporter: data.result.getLocationFromReporter,
+                incidentTags: data.result.incidentTags.map(
+                  (tagObj) => tagObj.tag.id
+                ),
               });
               const obj = new Incident(data.result);
 
@@ -332,11 +340,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
               }
 
               if (this.incidents.responsibleOrg) {
-                this.loadNonGlobalGroups(
-                  this.incidents.responsibleOrg.id,
-                  0,
-                  10
-                );
+                this.loadNonGlobalGroups(this.incidents.responsibleOrg.id);
               }
 
               this.getGP(this.incidentId);
@@ -370,7 +374,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
     } else {
       // add mode.
       const org = this.commonData.currentOrgDetails;
-      this.loadNonGlobalGroups(org.id, 0, 10);
+      this.loadNonGlobalGroups(org.id);
     }
 
     this.store
@@ -431,6 +435,8 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
         closeMapAuto,
       })
       .subscribe((response) => {
+        console.log(response);
+
         if (!response) {
           return;
         }
@@ -451,6 +457,13 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
         ) {
           const { latitude, longitude, x, y } = response?.pointCoordinates;
           this.pointInXY = `POINT(${latitude} ${longitude})`;
+          if (response.locationInfo?.contractors) {
+            let contractsNos = response.locationInfo?.contractors?.map(
+              (contract) => contract?.CONTRACT_NO
+            );
+            this.contractsNo = contractsNos.join(',');
+          }
+
           // this.groupService
           //   .checkPointIntersection(
           //     location,
@@ -525,6 +538,7 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
       incidentDistrict: [null, [Validators.required]],
       incidentCommunity: [null],
       incidentCells: [null],
+      incidentTags: [],
       incidentHospitals: [null],
       primaryOrg: [null, [Validators.required]],
       incidentReasons: [null],
@@ -1471,24 +1485,19 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
   }
 
   changGroups(id) {
-    this.loadNonGlobalGroups(id, 0, 10);
+    this.loadNonGlobalGroups(id);
   }
 
-  loadNonGlobalGroups(id, page, size) {
-    this.groupService
-      .getNonGlobalGroupsByOrgId(id, '', page, size, 'orgStructure.id,id,asc')
-      .subscribe(
-        (data) => {
-          if (data) {
-            this.groups.push(...data.result?.content);
-          }
-          if (data.result?.totalPages > page) {
-            this.loadNonGlobalGroups(id, page + 1, size);
-          }
-          this.cdr.detectChanges();
-        },
-        (error) => {}
-      );
+  loadNonGlobalGroups(id) {
+    this.groupService.getListNonGlobalGroupsByOrgId(id).subscribe(
+      (data) => {
+        if (data) {
+          this.groups = data.result;
+        }
+        this.cdr.detectChanges();
+      },
+      (error) => {}
+    );
   }
 
   getSubCatCenter() {
@@ -1647,7 +1656,8 @@ export abstract class AbstractCreateFormComponent implements OnInit, OnDestroy {
         .getCategoryZoneGroups(
           this.formGroup.value.incidentCategory,
           this.formGroup.value.incidentDistrict.zoneId,
-          this.pointInXY
+          this.pointInXY,
+          this.contractsNo
         )
         .subscribe((value) => {
           if (value) {

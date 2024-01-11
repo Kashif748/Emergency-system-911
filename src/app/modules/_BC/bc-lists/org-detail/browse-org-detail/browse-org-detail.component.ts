@@ -73,6 +73,7 @@ export class BrowseOrgDetailComponent implements OnInit, OnDestroy {
       description: [null],
       employeeNumbers: [null],
       operationNumbers: [null],
+      nationalCompliance: [null],
       orgId: 0,
     });
   }

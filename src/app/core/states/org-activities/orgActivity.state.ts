@@ -86,7 +86,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .search21({
+      .search28({
         pageable: {
           page: payload.page,
           size: payload.size,
@@ -128,8 +128,9 @@ export class OrgActivityState {
     { payload }: OrgActivityAction.loadIdsList
   ) {
     return this.bcActivities
-      .list9({
+      .list11({
         cycleId: payload.cycleId,
+        orgHierarchyId:payload.orgHierarchyId
       })
       .pipe(
         tap((res) => {
@@ -168,7 +169,7 @@ export class OrgActivityState {
         blocking: true,
       })
     );
-    return this.bcActivities.getOne28({ id: payload.id }).pipe(
+    return this.bcActivities.getOne37({ id: payload.id }).pipe(
       tap((res) => {
         setState(
           patch<OrgActivitiesStateModel>({
@@ -197,7 +198,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .insertOne26({
+      .insertOne36({
         body: payload,
       })
       .pipe(
@@ -222,7 +223,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .update106({
+      .update116({
         body: payload,
       })
       .pipe(

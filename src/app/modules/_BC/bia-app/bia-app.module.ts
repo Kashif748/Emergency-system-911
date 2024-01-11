@@ -42,6 +42,11 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {BiaAppComponent} from "./bia-app.component";
 import {NewCycleDialogComponent} from "./browse-bia-app/cycle-dialog/new-cycle-dialog.component";
 import {CalendarModule} from "primeng/calendar";
+import {BadgeModule} from "primeng/badge";
+import {CdateModule} from "@shared/sh-pipes/cdate.pipe";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {ConfirmationService} from "primeng/api";
+import {PanelModule} from "primeng/panel";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/bia-app/', '.json');
@@ -93,8 +98,13 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     ProgressSpinnerModule,
     SelectButtonModule,
-    CalendarModule
+    CalendarModule,
+    BadgeModule,
+    ToolbarModule,
+    CdateModule,
+    ConfirmPopupModule,
+    PanelModule
   ],
-  providers: [{ provide: ILangFacade, useClass: LangFacade }],
+  providers: [{ provide: ILangFacade, useClass: LangFacade }, ConfirmationService],
 })
 export class BiaAppModule { }

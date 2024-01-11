@@ -40,7 +40,8 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
 
   @Select(BrowseActivityAnalysisState.impactTotal)
   public impactTotal$: Observable<number>;
-
+  
+  @Select(BrowseActivityAnalysisState.impactAnalysisRes)
   public impactAnalysisRes$: Observable<Bcrto>;
 
   tabs = TABS;
@@ -92,9 +93,6 @@ export class ActivityAnalysisComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.impactAnalysisRes$ = this.store
-      .select(BrowseActivityAnalysisState.impactAnalysisRes)
-      .pipe(skip(1));
     this.notes = new FormControl('', Validators.required);
   }
   changeTab(index: number) {

@@ -24,21 +24,70 @@ export class BcVersionsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteById
+   * Path part for operation manageVersionStatus
    */
-  static readonly DeleteByIdPath = '/v1/bc/version/delete/{id}';
+  static readonly ManageVersionStatusPath = '/v1/bc/version/manage/status/{versionId}/{statusId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteById()` instead.
+   * To access only the response body, use `manageVersionStatus()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById$Response(params: {
+  manageVersionStatus$Response(params: {
+    versionId: number;
+    statusId: number;
+  }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.ManageVersionStatusPath, 'put');
+    if (params) {
+      rb.path('versionId', params.versionId, {});
+      rb.path('statusId', params.statusId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseBcVersions>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `manageVersionStatus$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  manageVersionStatus(params: {
+    versionId: number;
+    statusId: number;
+  }): Observable<RestApiResponseBcVersions> {
+
+    return this.manageVersionStatus$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
+    );
+  }
+
+  /**
+   * Path part for operation deleteById1
+   */
+  static readonly DeleteById1Path = '/v1/bc/version/delete/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteById1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteById1$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.DeleteByIdPath, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.DeleteById1Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,15 +105,15 @@ export class BcVersionsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteById$Response()` instead.
+   * To access the full response (for headers, for example), `deleteById1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteById(params: {
+  deleteById1(params: {
     id: number;
   }): Observable<void> {
 
-    return this.deleteById$Response(params).pipe(
+    return this.deleteById1$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
@@ -125,21 +174,21 @@ export class BcVersionsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update80
+   * Path part for operation update81
    */
-  static readonly Update80Path = '/v1/bc/version';
+  static readonly Update81Path = '/v1/bc/version';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update80()` instead.
+   * To access only the response body, use `update81()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update80$Response(params: {
+  update81$Response(params: {
     body: BcVersions
   }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.Update80Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.Update81Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -157,35 +206,35 @@ export class BcVersionsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update80$Response()` instead.
+   * To access the full response (for headers, for example), `update81$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update80(params: {
+  update81(params: {
     body: BcVersions
   }): Observable<RestApiResponseBcVersions> {
 
-    return this.update80$Response(params).pipe(
+    return this.update81$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
     );
   }
 
   /**
-   * Path part for operation insertOne1
+   * Path part for operation insertOne2
    */
-  static readonly InsertOne1Path = '/v1/bc/version';
+  static readonly InsertOne2Path = '/v1/bc/version';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne1()` instead.
+   * To access only the response body, use `insertOne2()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne1$Response(params: {
+  insertOne2$Response(params: {
     body: BcVersions
   }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.InsertOne1Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.InsertOne2Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -203,35 +252,35 @@ export class BcVersionsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne1$Response()` instead.
+   * To access the full response (for headers, for example), `insertOne2$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne1(params: {
+  insertOne2(params: {
     body: BcVersions
   }): Observable<RestApiResponseBcVersions> {
 
-    return this.insertOne1$Response(params).pipe(
+    return this.insertOne2$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
     );
   }
 
   /**
-   * Path part for operation getOne
+   * Path part for operation getOne1
    */
-  static readonly GetOnePath = '/v1/bc/version/{id}';
+  static readonly GetOne1Path = '/v1/bc/version/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getOne()` instead.
+   * To access only the response body, use `getOne1()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne$Response(params: {
+  getOne1$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.GetOnePath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.GetOne1Path, 'get');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -249,64 +298,15 @@ export class BcVersionsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getOne$Response()` instead.
+   * To access the full response (for headers, for example), `getOne1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getOne(params: {
+  getOne1(params: {
     id: number;
   }): Observable<RestApiResponseBcVersions> {
 
-    return this.getOne$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
-    );
-  }
-
-  /**
-   * Path part for operation manageVersionStatus
-   */
-  static readonly ManageVersionStatusPath = '/v1/bc/version/manage/status';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `manageVersionStatus()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  manageVersionStatus$Response(params: {
-    versionId: number;
-    statusId: number;
-  }): Observable<StrictHttpResponse<RestApiResponseBcVersions>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsControllerService.ManageVersionStatusPath, 'get');
-    if (params) {
-      rb.query('versionId', params.versionId, {});
-      rb.query('statusId', params.statusId, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcVersions>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `manageVersionStatus$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  manageVersionStatus(params: {
-    versionId: number;
-    statusId: number;
-  }): Observable<RestApiResponseBcVersions> {
-
-    return this.manageVersionStatus$Response(params).pipe(
+    return this.getOne1$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcVersions>) => r.body as RestApiResponseBcVersions)
     );
   }

@@ -9,39 +9,41 @@ import {
   Store,
 } from '@ngxs/store';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
-import {
-  GroupLocationGeoResponse,
-  OrgStructure,
-} from 'src/app/api/models';
-import {
-  RanksControllerService,
-} from 'src/app/api/services';
+import { GroupLocationGeoResponse, OrgStructure } from 'src/app/api/models';
+import { OrgMapGisLayerControllerService } from 'src/app/api/services';
 import { GroupAction } from './group.action';
-import {patch, updateItem} from '@ngxs/store/operators';
+import { patch, updateItem } from '@ngxs/store/operators';
 import { UrlHelperService } from '@core/services/url-helper.service';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { OrgState } from '../org/org.state';
 import { EMPTY } from 'rxjs';
-import {ManageGroupsService} from "../../../api/services/manage-groups.service";
-import {Group} from "../../../api/models/group";
-import {PageGroupProjection} from "../../../api/models/page-group-projection";
-import {Pageable, User, UserAndRoleProjection, UserInappAuthentication, UserMiddlewareAuth} from "../../../api/models";
-import {GroupProjection} from "../../../api/models/group-projection";
-import {UserGroupMapControllerService} from "../../../api/services/user-group-map-controller.service";
-import {GroupUser} from "../../../api/models/group-user";
-import {MessageHelper} from "@core/helpers/message.helper";
-import {GroupLocationGeoInfo} from "../../../api/models/group-location-geo-info";
-import {GroupLocationGeometryControllerService} from "../../../api/services/group-location-geometry-controller.service";
-import {UserState, UserStateModel} from "@core/states/user/user.state";
-import {UserAction} from "@core/states/user/user.action";
-import {UserProfileControllerService} from "../../../api/services";
-import {userType} from "../../../modules/groups-management/group.model";
+import { ManageGroupsService } from '../../../api/services/manage-groups.service';
+import { Group } from '../../../api/models/group';
+import { PageGroupProjection } from '../../../api/models/page-group-projection';
+import {
+  Pageable,
+  User,
+  UserAndRoleProjection,
+  UserInappAuthentication,
+  UserMiddlewareAuth,
+} from '../../../api/models';
+import { GroupProjection } from '../../../api/models/group-projection';
+import { UserGroupMapControllerService } from '../../../api/services/user-group-map-controller.service';
+import { GroupUser } from '../../../api/models/group-user';
+import { MessageHelper } from '@core/helpers/message.helper';
+import { GroupLocationGeoInfo } from '../../../api/models/group-location-geo-info';
+import { GroupLocationGeometryControllerService } from '../../../api/services/group-location-geometry-controller.service';
+import { UserProfileControllerService } from '../../../api/services';
+import { userType } from '../../../modules/groups-management/group.model';
+import { GroupContractControllerService } from 'src/app/api/services/group-contract-controller.service';
+import { GroupContract } from 'src/app/api/models/group-contract';
 
 export interface GroupStateModel {
   page: PageGroupProjection;
   group: Group | GroupProjection;
   user: User & UserInappAuthentication & UserMiddlewareAuth;
   groupUser: GroupUser;
+  groupContract: GroupContract;
   createdGroup: Group;
   groupLocGeometry: GroupLocationGeoInfo | GroupLocationGeoResponse[];
   groupMapUser: UserAndRoleProjection[];
@@ -50,7 +52,7 @@ export interface GroupStateModel {
   blocking: boolean;
 }
 
-const USER_STATE_TOKEN =   new StateToken<GroupStateModel>('group');
+const USER_STATE_TOKEN = new StateToken<GroupStateModel>('group');
 
 @State<GroupStateModel>({ name: USER_STATE_TOKEN })
 @Injectable()
@@ -61,7 +63,6 @@ export class GroupState {
    */
   constructor(
     private groupService: ManageGroupsService,
-    private rankService: RanksControllerService,
     private urlHelper: UrlHelperService,
     private langFacade: ILangFacade,
     private store: Store,
@@ -69,6 +70,7 @@ export class GroupState {
     private createUserGroupMap: UserGroupMapControllerService,
     private groupLocationGeometry: GroupLocationGeometryControllerService,
     private userService: UserProfileControllerService,
+    private contractController: GroupContractControllerService
   ) {}
   /* ************************ SELECTORS ******************** */
   @Selector([GroupState])
@@ -108,6 +110,10 @@ export class GroupState {
   @Selector([GroupState])
   static usersAssignToGroup(state: GroupStateModel) {
     return state?.usersAssignToGroup;
+  }
+  @Selector([GroupState])
+  static groupContract(state: GroupStateModel) {
+    return state?.groupContract;
   }
 
   /* ********************** ACTIONS ************************* */
@@ -155,7 +161,7 @@ export class GroupState {
               loading: false,
             })
           );
-        }),
+        })
       );
   }
 
@@ -217,8 +223,7 @@ export class GroupState {
       .export6({
         as: payload.type,
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
-        filter: {...payload.filters},
-
+        filter: { ...payload.filters },
       })
       .pipe(
         tap((res: any) => {
@@ -293,7 +298,7 @@ export class GroupState {
 
   @Action(GroupAction.GroupGeometryLocation)
   groupGeometryLocation(
-    { setState}: StateContext<GroupStateModel>,
+    { setState }: StateContext<GroupStateModel>,
     { payload }: GroupAction.GroupGeometryLocation
   ) {
     setState(
@@ -302,9 +307,10 @@ export class GroupState {
       })
     );
     return this.groupLocationGeometry
-      .update51({
+      .update52({
         body: payload,
-      }).pipe(
+      })
+      .pipe(
         finalize(() => {
           setState(
             patch<GroupStateModel>({
@@ -314,7 +320,61 @@ export class GroupState {
         })
       );
   }
-
+  @Action(GroupAction.AddContract)
+  AddContract(
+    { setState }: StateContext<GroupStateModel>,
+    { payload }: GroupAction.AddContract
+  ) {
+    setState(
+      patch<GroupStateModel>({
+        blocking: true,
+      })
+    );
+    return this.contractController
+      .update53({
+        body: payload,
+      })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<GroupStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
+  @Action(GroupAction.GetContract)
+  GetContract(
+    { setState }: StateContext<GroupStateModel>,
+    { payload }: GroupAction.GetContract
+  ) {
+    setState(
+      patch<GroupStateModel>({
+        blocking: true,
+      })
+    );
+    return this.contractController
+      .getByGroup({
+        groupId: payload.groupId,
+      })
+      .pipe(
+        tap((res) => {
+          setState(
+            patch<GroupStateModel>({
+              groupContract: res.result,
+            })
+          );
+        }),
+        finalize(() => {
+          setState(
+            patch<GroupStateModel>({
+              blocking: false,
+            })
+          );
+        })
+      );
+  }
 
   @Action(GroupAction.Create)
   create(
@@ -333,8 +393,8 @@ export class GroupState {
       .pipe(
         tap((res) => {
           setState(
-            patch<GroupStateModel> ( {
-              createdGroup: res.result
+            patch<GroupStateModel>({
+              createdGroup: res.result,
             })
           );
         }),
@@ -365,8 +425,8 @@ export class GroupState {
       .pipe(
         tap((res) => {
           setState(
-            patch<GroupStateModel> ( {
-              createdGroup: res.result
+            patch<GroupStateModel>({
+              createdGroup: res.result,
             })
           );
         }),
@@ -457,7 +517,7 @@ export class GroupState {
       );
   }
 
-  @Action(GroupAction.GetGeometryLocation , { cancelUncompleted: true })
+  @Action(GroupAction.GetGeometryLocation, { cancelUncompleted: true })
   getGeometryLocationInfo(
     { setState }: StateContext<GroupStateModel>,
     { payload }: GroupAction.GetGeometryLocation
@@ -482,8 +542,8 @@ export class GroupState {
       .pipe(
         tap((res) => {
           setState(
-            patch<GroupStateModel> ( {
-              groupLocGeometry: res.result
+            patch<GroupStateModel>({
+              groupLocGeometry: res.result,
             })
           );
         }),
@@ -502,7 +562,7 @@ export class GroupState {
     { setState, getState }: StateContext<GroupStateModel>,
     { payload }: GroupAction.LoadGroupMapUserPage
   ) {
-    const users = getState().usersAssignToGroup
+    const users = getState().usersAssignToGroup;
     let manager;
     if (users) {
       manager = users.find((item, index) => {
@@ -510,6 +570,9 @@ export class GroupState {
           return item;
         }
       });
+    }
+    if (payload.selectedUsers) {
+
     }
     return this.userService
       .getAllForOrg({
@@ -519,27 +582,23 @@ export class GroupState {
           sort: payload.sort,
         },
         name: payload.name,
-
       })
       .pipe(
-        tap( ({result: {content: list}}) => {
+        tap(({ result: { content: list } }) => {
           setState(
             patch<GroupStateModel>({
               groupMapUser: list.map((v) => {
-                if (manager) {
-                  if (v.id === manager['user'].id) {
-                    return {...v , disabled: true};
-                  } else {
-                    return {...v , disabled: false};
-                  }
+                if (payload.type === 'manager') {
+                  const isDisabled = payload.selectedUsers?.some(selectedUser => selectedUser.id === v.id) ?? false;
+                  return { ...v, disabled: isDisabled };
                 } else {
-                  return {...v , disabled: false};
+                  const isManager = manager?.user?.id === v.id || (payload.selectedUsers && payload.selectedUsers['id'] === v.id);
+                  return { ...v, disabled: isManager };
                 }
               }),
             })
           );
-
-        }),
+        })
       );
   }
 }

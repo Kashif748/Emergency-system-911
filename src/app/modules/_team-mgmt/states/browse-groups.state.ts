@@ -14,14 +14,15 @@ import {
 import { iif, patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import {GroupAction} from "@core/states";
-import {BrowseGroupsAction} from "./browse-groups.action";
-import {IncicentLocationInfoAction} from "@core/states/incident-location-info/incidentLocInfo.action";
+import { GroupAction } from '@core/states';
+import { BrowseGroupsAction } from './browse-groups.action';
+import { IncicentLocationInfoAction } from '@core/states/incident-location-info/incidentLocInfo.action';
+import { GisAction } from '@core/states/gis/gis.action';
 
 export interface BrowseGroupsStateModel {
   pageRequest: PageRequestModel;
   columns: string[];
-   view: 'TABLE' | 'CARDS';
+  view: 'TABLE' | 'CARDS';
 }
 
 export const BROWSE_GROUPS_UI_STATE_TOKEN =
@@ -41,9 +42,9 @@ export const BROWSE_GROUPS_UI_STATE_TOKEN =
       'org',
       'leader',
       'shift_schedule',
-      'usersnumber'
+      'usersnumber',
     ],
-     view: 'TABLE',
+    view: 'TABLE',
   },
 })
 @Injectable()
@@ -200,10 +201,12 @@ export class BrowseGroupsState {
     { dispatch }: StateContext<BrowseGroupsStateModel>,
     { payload }: BrowseGroupsAction.CreateUser
   ) {
-    return dispatch(new GroupAction.CreateUser({
-      groupId: payload.groupId,
-      user: payload.user
-    })).pipe(
+    return dispatch(
+      new GroupAction.CreateUser({
+        groupId: payload.groupId,
+        user: payload.user,
+      })
+    ).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseGroupsAction.LoadGroups());
@@ -224,17 +227,10 @@ export class BrowseGroupsState {
     { payload }: BrowseGroupsAction.CreateGroup
   ) {
     return dispatch(new GroupAction.Create(payload)).pipe(
-      tap(() => {
-        this.messageHelper.success();
-        // dispatch(new BrowseGroupsAction.LoadGroups());
-      }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-     /* finalize(() => {
-         dispatch(new BrowseGroupsAction.ToggleDialog({}));
-      })*/
+      })
     );
   }
 
@@ -246,15 +242,11 @@ export class BrowseGroupsState {
     return dispatch(new GroupAction.Update(payload)).pipe(
       tap(() => {
         this.messageHelper.success();
-        // dispatch(new BrowseGroupsAction.LoadGroups());
       }),
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
       }),
-       finalize(() => {
-          // dispatch(new BrowseGroupsAction.ToggleDialog({}));
-       })
     );
   }
 
@@ -293,7 +285,7 @@ export class BrowseGroupsState {
         return EMPTY;
       }),
       finalize(() => {
-         dispatch(new BrowseGroupsAction.ToggleDialog({}));
+        dispatch(new BrowseGroupsAction.ToggleDialog({}));
       })
     );
   }
@@ -311,8 +303,8 @@ export class BrowseGroupsState {
       catchError((err) => {
         this.messageHelper.error({ error: err });
         return EMPTY;
-      }),
-     /* finalize(() => {
+      })
+      /* finalize(() => {
         dispatch(new BrowseGroupsAction.ToggleDialog({}));
       })*/
     );
@@ -379,7 +371,9 @@ export class BrowseGroupsState {
     { dispatch }: StateContext<BrowseGroupsStateModel>,
     { payload }: BrowseGroupsAction.AddIncidentLocInfo
   ) {
-    return dispatch(new IncicentLocationInfoAction.IncidentLocationInfo(payload)).pipe(
+    return dispatch(
+      new IncicentLocationInfoAction.IncidentLocationInfo(payload)
+    ).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseGroupsAction.LoadGroups());
@@ -399,7 +393,9 @@ export class BrowseGroupsState {
     { dispatch }: StateContext<BrowseGroupsStateModel>,
     { payload }: BrowseGroupsAction.UpdateIncidentLocInfo
   ) {
-    return dispatch(new IncicentLocationInfoAction.UpdateIncidentLocationInfo(payload)).pipe(
+    return dispatch(
+      new IncicentLocationInfoAction.UpdateIncidentLocationInfo(payload)
+    ).pipe(
       tap(() => {
         this.messageHelper.success();
         dispatch(new BrowseGroupsAction.LoadGroups());
@@ -414,4 +410,35 @@ export class BrowseGroupsState {
     );
   }
 
+  @Action(BrowseGroupsAction.AddContract)
+  AddContract(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.AddContract
+  ) {
+    return dispatch(new GroupAction.AddContract(payload)).pipe(
+      tap(() => {
+        this.messageHelper.success();
+        dispatch(new BrowseGroupsAction.LoadGroups());
+      }),
+      catchError((err) => {
+        this.messageHelper.error({ error: err });
+        return EMPTY;
+      }),
+      finalize(() => {
+        dispatch(new BrowseGroupsAction.ToggleDialog({}));
+      })
+    );
+  }
+
+  @Action(BrowseGroupsAction.GetContract)
+  GetContract(
+    { dispatch }: StateContext<BrowseGroupsStateModel>,
+    { payload }: BrowseGroupsAction.GetContract
+  ) {
+    return dispatch(new GroupAction.GetContract(payload)).pipe(
+      catchError((err) => {
+        return EMPTY;
+      })
+    );
+  }
 }

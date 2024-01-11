@@ -1,18 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { IAuthService } from '@core/services/auth.service';
-import { BCState } from '@core/states';
-import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
-import { FormUtils } from '@core/utils';
-import { Select, Store } from '@ngxs/store';
-import { GenericValidators } from '@shared/validators/generic-validators';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { BcVersions } from 'src/app/api/models';
-import { BrowseBCAction } from '../states/browse-bc.action';
-import { BrowseBCState, BrowseBCStateModel } from '../states/browse-bc.state';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {IAuthService} from '@core/services/auth.service';
+import {BCState} from '@core/states';
+import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
+import {FormUtils} from '@core/utils';
+import {Select, Store} from '@ngxs/store';
+import {GenericValidators} from '@shared/validators/generic-validators';
+import {Observable, Subject} from 'rxjs';
+import {filter, map, pairwise, switchMap, take, takeUntil, tap,} from 'rxjs/operators';
+import {BcVersions} from 'src/app/api/models';
+import {BrowseBCAction} from '../states/browse-bc.action';
+import {BrowseBCState, BrowseBCStateModel} from '../states/browse-bc.state';
+import {ConfirmationService, LazyLoadEvent} from 'primeng/api';
+import {PrivilegesService} from "@core/services/privileges.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-bc',
@@ -20,6 +23,7 @@ import { BrowseBCState, BrowseBCStateModel } from '../states/browse-bc.state';
   styleUrls: ['./bc.component.scss'],
 })
 export class BCComponent implements OnInit, OnDestroy {
+  VERSION_STATUSES = VERSION_STATUSES;
   @Select(BrowseBCState.state)
   public state$: Observable<BrowseBCStateModel>;
 
@@ -33,6 +37,9 @@ export class BCComponent implements OnInit, OnDestroy {
 
   public versions$: Observable<BcVersions[]>;
 
+  @Select(BCState.totalRecords)
+  public totalRecords$: Observable<number>;
+
   selectedVersion: BcVersions;
   get loggedinUserId() {
     return this.auth.getClaim('orgId');
@@ -41,19 +48,41 @@ export class BCComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private destroy$ = new Subject();
 
+  public sortableColumns = [
+    {
+      name: 'VERSION_LIST.NAME_AR',
+      code: 'nameAr',
+    },
+    {
+      name: 'VERSION_LIST.NAME_EN',
+      code: 'nameEn',
+    },
+    { name: 'VERSION_LIST.CREATED_ON', code: 'createdOn' },
+  ];
+
   constructor(
     private store: Store,
     private route: ActivatedRoute,
     private auth: IAuthService,
     private langFacade: ILangFacade,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public privilege: PrivilegesService,
+    private translate: TranslateService,
+    private confirmationService: ConfirmationService,
   ) {
     this.route.queryParams
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((params) => {
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params) => params['_version']),
+        pairwise(),
+        filter(
+          ([previousValue, currentValue]) => currentValue !== previousValue
+        )
+      )
+      .subscribe(([previousValue, currentValue]) => {
         this.store.dispatch(
           new BrowseBCAction.GetVersion({
-            versionId: params['_version'],
+            versionId: currentValue,
           })
         );
       });
@@ -81,6 +110,13 @@ export class BCComponent implements OnInit, OnDestroy {
         versions.filter(
           (version) => version.status?.id !== VERSION_STATUSES.ARCHIVED
         )
+      ),
+      map((page) =>
+        page?.map((u) => {
+          return {
+            ...u,
+          };
+        })
       )
     );
   }
@@ -137,5 +173,64 @@ export class BCComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  sort(event) {
+    this.store.dispatch(new BrowseBCAction.Sort({ field: event.value }));
+  }
+  order(event) {
+    this.store.dispatch(
+      new BrowseBCAction.Sort({ order: event.checked ? 'desc' : 'asc' })
+    );
+  }
+  public loadPage(event?: LazyLoadEvent) {
+    this.store.dispatch(
+      new BrowseBCAction.LoadPage({
+        pageRequest: {
+          first: event?.first,
+          rows: event?.rows,
+        },
+      })
+    );
+  }
+
+  deleteVersion(id) {
+    return () => {
+      this.confirmationService.confirm({
+        target: event.target,
+        message: this.translate.instant('CONFIRM'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.store
+            .dispatch(new BrowseBCAction.Delete({ id }))
+            .toPromise()
+            .then(() => {
+              this.loadPage();
+            });
+        },
+        reject: () => {
+        },
+      });
+    };
+  }
+
+  changeStatues(id, status: VERSION_STATUSES) {
+    return () => {
+      this.confirmationService.confirm({
+        target: event.target,
+        message: this.translate.instant('CONFIRM'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.store.dispatch(
+            new BrowseBCAction.ChangeStatus({
+              versionId: id,
+              statusId: status,
+            })
+          );
+        },
+        reject: () => {
+        },
+      });
+    };
   }
 }

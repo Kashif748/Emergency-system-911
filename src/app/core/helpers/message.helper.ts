@@ -12,23 +12,13 @@ export class MessageHelper {
   success(param?: { summary?: string; detail?: string }) {
     this.messageService.add({
       severity: 'success',
-      summary:
-        param?.summary ?? this.translate.instant('SHARED.DIALOG.SUCCESS.TITLE'),
-      detail:
-        param?.detail ??
-        this.translate.instant('SHARED.DIALOG.SUCCESS.MESSAGE'),
+      summary: this.translate.instant(
+        param?.summary ?? 'SHARED.DIALOG.SUCCESS.TITLE'
+      ),
+      detail: this.translate.instant(
+        param?.detail ?? 'SHARED.DIALOG.SUCCESS.MESSAGE'
+      ),
     });
-  }
-
-  cError(param?: { summary?: string; detail?: string }) {
-    this.messageService.add({
-      severity: 'error',
-      summary:
-        param?.summary ?? this.translate.instant('SHARED.DIALOG.ERROR.TITLE'),
-      detail:
-        param?.detail ??
-          this.translate.instant('SHARED.DIALOG.ERROR.CMESSAGE'),
-    })
   }
 
   error(param?: {
@@ -57,16 +47,13 @@ export class MessageHelper {
     }
     this.messageService.add({
       severity: param.severity,
-      summary:
-        param?.summary ??
-        this.translate.instant(
-          `SHARED.DIALOG.${param.severity?.toUpperCase()}.TITLE`
-        ),
-      detail:
+      summary: this.translate.instant(
+        param?.summary ?? `SHARED.DIALOG.${param.severity?.toUpperCase()}.TITLE`
+      ),
+      detail: this.translate.instant(
         param?.detail ??
-        this.translate.instant(
           `SHARED.DIALOG.${param.severity?.toUpperCase()}.MESSAGE`
-        ),
+      ),
     });
   }
   confirm(param: {

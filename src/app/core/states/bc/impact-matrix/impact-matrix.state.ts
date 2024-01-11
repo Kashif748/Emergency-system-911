@@ -195,7 +195,7 @@ export class ImpactMatrixState {
   @Action(ImpactMatrixAction.Export, { cancelUncompleted: true })
   export({}: StateContext<ImpactMatrixStateModel>, { payload }: ImpactMatrixAction.Export) {
     return this.impactMatrix
-      .export7({
+      .export8({
         as: payload.type,
         lang: this.langFacade.stateSanpshot.ActiveLang.key == 'ar',
         isActive: true,

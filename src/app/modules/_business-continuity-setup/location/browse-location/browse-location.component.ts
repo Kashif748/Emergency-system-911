@@ -4,7 +4,7 @@ import {Select, Store} from '@ngxs/store';
 import {LazyLoadEvent, MenuItem} from 'primeng/api';
 import {LOCATIONS} from '../../tempData.conts';
 import {ILangFacade} from '@core/facades/lang.facade';
-import {BcLocations} from 'src/app/api/models';
+import {BcLocations, BcLocationsProjection} from 'src/app/api/models';
 import {Observable, Subject} from 'rxjs';
 import {LocationsState} from '@core/states/bc-setup/locations/locations.state';
 import {BrowseLocationsState, BrowseLocationsStateModel} from '../states/browse-locations.state';
@@ -24,7 +24,7 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
   @Select(LocationTypeState.page)
   public locationTypes$: Observable<BcLocationTypes[]>;
 
-  public page$: Observable<BcLocations[]>;
+  public page$: Observable<BcLocationsProjection[]>;
 
   @Select(LocationsState.totalRecords)
   public totalRecords$: Observable<number>;
@@ -103,7 +103,7 @@ export class BrowseLocationComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.openDialog(u.id);
                 },
-                disabled: !u.isActive || !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_RESOURCE'),
+                disabled: !u.getisActive || !this.privilegesService.checkActionPrivileges('PRIV_ED_BC_RESOURCE'),
               },
               {
                 label: this.translate.instant('ACTIONS.DELETE'),

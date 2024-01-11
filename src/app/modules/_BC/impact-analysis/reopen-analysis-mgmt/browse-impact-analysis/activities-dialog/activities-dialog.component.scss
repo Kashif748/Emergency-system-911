@@ -1,16 +1,75 @@
-:host ::ng-deep .row-disabled {
-  background-color: rgba(0,0,0,.15) !important;
-  cursor: auto !important;
-  .p-tabview .p-tabview-panels {
-    height: 97%;
-    overflow-y: auto;
-    .p-tabview-panel {
-      height: 97%;
+:host ::ng-deep {
+  .p-sidebar {
+    z-index: 1;
+    .p-sidebar-header {
+      padding: 0;
     }
+    .p-sidebar-content {
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+      flex: auto;
+      .timeline {
+        .timeline-content:before {
+          display: none !important;
+        }
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+        .timeline-items {
+          flex: auto;
+        }
+        .timeline-item {
+          padding: 0 0 20px 20px !important ;
+          flex: auto;
+          border: 0 !important ;
+          .timeline-media {
+            width: 40px !important;
+            height: 40px !important;
+            top: 6px !important;
+          }
+        }
+      }
+      :lang(ar) {
+        .timeline-items .timeline-item {
+          margin-right: 25px;
+          margin-left: 0;
+          padding: 0 20px 20px 0px !important;
+          position: relative;
+          .timeline-media {
+            right: -25px !important;
+            left: 0 !important;
+          }
+        }
+      }
+    }
+  }
+  .row-disabled {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    cursor: auto !important;
+    .p-tabview .p-tabview-panels {
+      height: 97%;
+      overflow-y: auto;
+      .p-tabview-panel {
+        height: 97%;
+      }
+    }
+  }
+  .row-selected {
+    background-color: #e0f0ff !important;
+  }
+  .p-dialog-footer {
+    padding-top: 6px;
+  }
+  .p-checkbox-label {
+    margin: 0 8px;
+  }
+  .p-tag {
+    font-size: 12px;
   }
 }
 :host ::ng-deep {
-  .p-datatable .p-datatable-tbody > tr > td{
+  .p-datatable .p-datatable-tbody > tr > td {
     font-weight: 100 !important;
   }
 }
@@ -19,7 +78,7 @@
   color: #495057; /* Set the text color to a darker gray */
   /* Change the cursor to 'not-allowed' */
 }
-.card{
+.card {
   background-color: #f8f9fa !important;
 }
 .vertical-table {
@@ -45,10 +104,6 @@
 .vertical-data {
   margin-left: 10px;
 }
-.card-height{
+.card-height {
   height: 100%;
 }
-
-
-
-

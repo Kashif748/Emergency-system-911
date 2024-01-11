@@ -14,7 +14,7 @@
       <div class="p-toolbar-group-right">
         <button
           *checkPrivileges="['PRIV_PERFORM_ACTIVITY_ANALYSIS','PRIV_APPROVE_ACTIVITY_ANALYSIS' , 'PRIV_REVIEW_ACTIVITY_ANALYSIS']"
-          [disabled]="!(shouldDisable$ | async)"
+          [disabled]="(!(shouldDisable$ | async) || (editable$ | async))"
           pButton
           label="{{ 'ACTIONS.SEND' | translate }}"
           icon="pi pi-send"
@@ -60,7 +60,7 @@
 <ng-template #header>
   <div class="d-flex">
     <h3>
-      <span>{{ "SHARED.DIALOG.UPDATE.MESSAGE" | translate }}</span>
+      <!-- <span>{{ "SHARED.DIALOG.UPDATE.MESSAGE" | translate }}</span> -->
     </h3>
   </div>
 </ng-template>

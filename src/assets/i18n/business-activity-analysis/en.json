@@ -24,7 +24,7 @@
     "SPOF": "Single Point of Failure (SPOF)",
     "SKILLS": "Skills",
     "REMOTELY": "Can be done remotely",
-    "RTO":"Rto"
+    "RTO": "Rto"
   },
   "SYSTEMS": {
     "TAB_LABEL": "Systems",
@@ -54,6 +54,7 @@
     "OTHER_PHONE": "Alternative phone",
     "COL1": "مقرلا",
     "NAME": "Name",
+    "EMAIL":"Email",
 
     "PHONE": "هاتف العمل الثابت"
   },
@@ -115,9 +116,9 @@
   },
   "SUMMARY": {
     "TAB_LABEL": "Activity Report",
-    "CYCLE":"Analysis Cycle",
+    "CYCLE": "Analysis Cycle",
 
-    "TITLE":"Activity Summary",
+    "TITLE": "Activity Summary",
     "ACTIVITY": "Activity Name",
     "CAPACITY": "Capacity",
     "CRITICALITY": "Criticality",
@@ -127,6 +128,23 @@
     "RTO": "Rto",
     "SECTION": "Section",
     "SECTOR": "Sector",
+    "CRITICAL": "Critical",
+    "NOT_CRITICAL": "Not critical",
+    "ALL": "All",
+    "VENDOR": "Vendor Name",
+    "CONTACT_PERSON": "Primary Contact",
+    "SUPPLIES": "Supplies / Services Provided",
+    "PRIMARY_CONTACT": "Primary Contact Number",
+    "SECONDARY_CONTACT": "Secondary Contact Number",
+    "VENDORS_REPORT": "Vendors Report"
+  },
+  "SYSTEMS_REPORT": {
+    "REPORT": "Systems Report",
+    "CYCLE": "Analysis Cycle",
+    "NAME": "System Name",
+    "ACTIVITIES": "Activities",
+    "CRITICALITY": "Criticality",
+    "DIVISIONS": "Divisions",
     "CRITICAL": "Critical",
     "NOT_CRITICAL": "Not critical",
     "ALL": "All"

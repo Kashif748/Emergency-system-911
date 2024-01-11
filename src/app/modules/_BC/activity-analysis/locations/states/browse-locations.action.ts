@@ -1,5 +1,5 @@
-import { PageRequestModel } from '@core/models/page-request.model';
-import { BcActivityLocations } from 'src/app/api/models';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {BcActivityLocations} from 'src/app/api/models';
 
 export namespace BrowseActivityLocationsAction {
   export class LoadLocations {
@@ -28,14 +28,14 @@ export namespace BrowseActivityLocationsAction {
   }
 
   export class Create {
-    static readonly type = '[BrowseActivityLocationsAction] Create';
+    static readonly type = '[BrowseActivityLocationsAction] Create activity location';
     /**
      *
      */
     constructor(public payload: BcActivityLocations) {}
   }
   export class Update {
-    static readonly type = '[BrowseActivityLocationsAction] Update';
+    static readonly type = '[BrowseActivityLocationsAction] Update activity location';
     /**
      *
      */

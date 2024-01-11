@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {GenericValidators} from '@shared/validators/generic-validators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
@@ -20,9 +20,10 @@ import {ActivityAnalysisStatusAction} from "../../../../../../api/models/activit
   templateUrl: './employees-dialog.component.html',
   styleUrls: ['./employees-dialog.component.scss'],
 })
-export class EmployeesDialogComponent implements OnInit, OnDestroy {
+export class EmployeesDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   employeesTypes = [];
   opened$: Observable<boolean>;
+  viewOnly$: Observable<boolean>;
 
   @Select(ActivityEmployeesState.blocking)
   blocking$: Observable<boolean>;
@@ -31,6 +32,8 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
   @ViewChild(Dialog) dialog: Dialog;
 
   _employeeId: number;
+
+  private defaultFormValue: { [key: string]: any } = {};
 
   @Select(ActivityAnalysisState.activityStatus)
   public activityStatus$: Observable<ActivityAnalysisStatusAction>;
@@ -43,8 +46,9 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
   }
   set employeeId(v: number) {
     this._employeeId = v;
-    this.buildForm();
+    this.form.reset();
     if (v === undefined || v === null) {
+      this.defaultFormValue = null;
       return;
     }
     this.store
@@ -59,6 +63,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             ...employee,
           });
+          this.defaultFormValue = employee;
         })
       )
       .subscribe();
@@ -69,27 +74,32 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private store: Store
+    private store: Store,
+    protected cdr: ChangeDetectorRef,
   ) {
-    this.route.queryParams
-      .pipe(
-        map((params) => params['_id']),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((id) => {
-        this.employeeId = id;
-      });
+    this.viewOnly$ = this.route.queryParams.pipe(
+      tap(({ _id }) => {
+        this.employeeId = _id;
+      }),
+      map((params) => params['_mode'] === 'viewonly'),
+      tap((v) => {
+        if (this.form) {
+          try {
+            if (v) {
+              this.form.disable();
+            } else {
+              this.form.enable();
+            }
+          } catch {}
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
     this.buildForm();
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened'),
-      tap(()=> {
-        // this.buildForm()
-        this.form.reset()
-        this.form.updateValueAndValidity()
-      } )
     );
   }
   ngAfterViewInit(): void {
@@ -113,9 +123,9 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new BrowseActivityEmployeesAction.ToggleDialog({}));
   }
   clear() {
-    const employeeId = this._employeeId;
-    this.employeeId = null;
-    this.employeeId = employeeId;
+    this.form.reset();
+    this.form.patchValue(this.defaultFormValue);
+    this.cdr.detectChanges();
   }
   buildForm() {
     this.form = this.formBuilder.group({
@@ -125,9 +135,9 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
         null,
         [Validators.required, Validators.pattern(RegxConst.EMAIL_REGEX)],
       ],
-      mobileNumber: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required]],
-      secondNumber: [],
+      mobileNumber: [null, [Validators.required]],
+      phoneNumber: [null, [Validators.required]],
+      secondNumber: [null],
       isPrimary: false,
     });
   }
@@ -167,6 +177,7 @@ export class EmployeesDialogComponent implements OnInit, OnDestroy {
       this.store.dispatch(new BrowseActivityEmployeesAction.Create(payload));
     }
   }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

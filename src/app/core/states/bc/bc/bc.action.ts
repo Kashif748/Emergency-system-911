@@ -58,4 +58,15 @@ export namespace BCAction {
       }
     ) {}
   }
+  export class Delete {
+    static readonly type = '[BC] Delete Version';
+    /**
+     *
+     */
+    constructor(
+      public payload: {
+        id?: number;
+      }
+    ) {}
+  }
 }

@@ -14,6 +14,7 @@ import { IncidentStatistics } from '@core/api/models/incident.model';
 import { IncidentsService } from '@core/api/services/incident.service';
 import { InquiryService } from '@core/api/services/inquiry.service';
 import {
+  AppCommonData,
   IncidentStatu,
   Kpi,
   Priority,
@@ -35,7 +36,8 @@ import {
   debounceTime,
   takeUntil,
   tap,
-  switchMap, mergeMap,
+  switchMap,
+  mergeMap,
 } from 'rxjs/operators';
 import { ICategory } from '../../reporting/model/incidents-report';
 import { EmailListComponent } from '../email-list/email-list.component';
@@ -66,6 +68,7 @@ import { MapActionType } from '@shared/components/map/utils/MapActionType';
 import { OrgService } from '@core/api/services/org.service';
 import { BaseComponent } from '@shared/components/base.component';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-new-incidents-view',
@@ -86,7 +89,7 @@ export class NewIncidentsViewComponent
   showIncidentsMenu = false;
   incidentViews = IncidentViewsEnum;
   paginationConfig: PageConfig;
-  commonData: any;
+  commonData: AppCommonData;
   priorities: Priority[];
   kpis: Kpi[];
 
@@ -114,6 +117,7 @@ export class NewIncidentsViewComponent
     { formControlName: AdvancedSearchFieldsEnum.REPORTING_VIA },
     { formControlName: AdvancedSearchFieldsEnum.RESPONSIBLE_ORG },
     { formControlName: AdvancedSearchFieldsEnum.STATUS },
+    { formControlName: AdvancedSearchFieldsEnum.TAG },
   ];
   dashboardData: IncidentStatistics = {
     incidents: null,
@@ -255,6 +259,7 @@ export class NewIncidentsViewComponent
         this.currentView = view ?? this.viewStartUserPrivileges;
         this.paginationConfig.currentPage = page;
         this.advancedSearchFilter = filter;
+        this.loadingAdvancedSearchData();
         this.loadData();
       });
 
@@ -352,6 +357,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.RESPONSIBLE_ORG },
       { formControlName: AdvancedSearchFieldsEnum.LEADING_ORG },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
 
     this.isLoading$.next(true);
@@ -389,7 +395,7 @@ export class NewIncidentsViewComponent
         { active: 'incidentDate', direction: 'desc' }
       )
       .pipe(
-        mergeMap(data => {
+        mergeMap((data) => {
           this.isLoading$.next(false); // Update loading state as soon as data is received
 
           this.data = data.result.content;
@@ -397,11 +403,14 @@ export class NewIncidentsViewComponent
 
           return this.incidentsService.getIncidentDashboardStatistics(
             DashboardModules.INCIDENTS,
-            { status: INCIDENT_STATUS.IN_PROCESSING, ...this.advancedSearchFilter }
+            {
+              status: INCIDENT_STATUS.IN_PROCESSING,
+              ...this.advancedSearchFilter,
+            }
           );
         })
       )
-      .subscribe(dashboardData => {
+      .subscribe((dashboardData) => {
         this.dashboardData = dashboardData as IncidentStatistics;
         // this.getAssignedCities();
         // this.getAssignedIncidentsCategories();
@@ -514,6 +523,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
       { formControlName: AdvancedSearchFieldsEnum.LEADING_ORG },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
     this.selectedDisplayedCols = [...this.incidentDisplayedColumns];
     if (this.mapView) {
@@ -541,8 +551,6 @@ export class NewIncidentsViewComponent
       this.cdr.detectChanges();
     });*/
 
-
-
     this.incidentsService
       .getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
@@ -550,7 +558,7 @@ export class NewIncidentsViewComponent
         { active: 'incidentDate', direction: 'desc' }
       )
       .pipe(
-        mergeMap(data => {
+        mergeMap((data) => {
           this.isLoading$.next(false); // Update loading state as soon as data is received
 
           this.data = data.result.content;
@@ -562,7 +570,7 @@ export class NewIncidentsViewComponent
           );
         })
       )
-      .subscribe(dashboardData => {
+      .subscribe((dashboardData) => {
         this.dashboardData = dashboardData as IncidentStatistics;
         // this.getAssignedCities();
         // this.getAssignedIncidentsCategories();
@@ -592,6 +600,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.CATEGORY },
       { formControlName: AdvancedSearchFieldsEnum.LEADING_ORG },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
     this.selectedDisplayedCols = [...this.incidentDisplayedColumns];
     if (this.mapView) {
@@ -626,7 +635,7 @@ export class NewIncidentsViewComponent
         { active: 'incidentDate', direction: 'desc' }
       )
       .pipe(
-        mergeMap(data => {
+        mergeMap((data) => {
           this.isLoading$.next(false); // Update loading state as soon as data is received
 
           this.data = data.result.content;
@@ -638,7 +647,7 @@ export class NewIncidentsViewComponent
           );
         })
       )
-      .subscribe(dashboardData => {
+      .subscribe((dashboardData) => {
         this.dashboardData = dashboardData as IncidentStatistics;
         // this.getAssignedCities();
         // this.getAssignedIncidentsCategories();
@@ -675,6 +684,7 @@ export class NewIncidentsViewComponent
       { formControlName: AdvancedSearchFieldsEnum.CREATED_DATE },
       { formControlName: AdvancedSearchFieldsEnum.END_DATE },
       { formControlName: AdvancedSearchFieldsEnum.REPORTING_CONTACT },
+      { formControlName: AdvancedSearchFieldsEnum.TAG },
     ];
     //this.selectedDisplayedCols = [...this.incidentDisplayedColumns];
 
@@ -704,7 +714,7 @@ export class NewIncidentsViewComponent
         this.paginationConfig.currentPage - 1 || 0
       )
       .pipe(
-        mergeMap(data => {
+        mergeMap((data) => {
           this.isLoading$.next(false); // Update loading state as soon as data is received
 
           this.data = data.result.content;
@@ -716,7 +726,7 @@ export class NewIncidentsViewComponent
           );
         })
       )
-      .subscribe(dashboardData => {
+      .subscribe((dashboardData) => {
         this.dashboardData = dashboardData as IncidentStatistics;
         // this.getAssignedCities();
         // this.getAssignedIncidentsCategories();
@@ -884,7 +894,7 @@ export class NewIncidentsViewComponent
       this.map.mapView?.graphics?.removeAll();
       await this.showIncidentDashboardGraphics(this.filterLayers);
     }
-   /* forkJoin({
+    /* forkJoin({
       data: this.incidentsService.getAllWithFilters(
         this.paginationConfig.currentPage - 1 || 0,
         this.advancedSearchFilter,
@@ -907,16 +917,17 @@ export class NewIncidentsViewComponent
       this.isLoading$.next(false);
     });*/
 
-    this.incidentsService.getAllWithFilters(
-      this.paginationConfig.currentPage - 1 || 0,
-      this.advancedSearchFilter,
-      {
-        active: 'incidentDate',
-        direction: 'desc',
-      }
-    )
+    this.incidentsService
+      .getAllWithFilters(
+        this.paginationConfig.currentPage - 1 || 0,
+        this.advancedSearchFilter,
+        {
+          active: 'incidentDate',
+          direction: 'desc',
+        }
+      )
       .pipe(
-        mergeMap(data => {
+        mergeMap((data) => {
           this.isLoading$.next(false); // Update loading state as soon as data is received
 
           this.data = data.result.content;
@@ -928,7 +939,7 @@ export class NewIncidentsViewComponent
           );
         })
       )
-      .subscribe(dashboardData => {
+      .subscribe((dashboardData) => {
         this.dashboardData = dashboardData as IncidentStatistics;
         // this.getAssignedCities();
         // this.getAssignedIncidentsCategories();
@@ -1076,7 +1087,16 @@ export class NewIncidentsViewComponent
       children: this.commonData?.interimIncidentStatuses,
     };
 
-    this.advancedSearchDataList = [priorities, reportingVias, status];
+    let groupedTags = _.groupBy(this.commonData?.tags, 'module');
+    const tags: DataOptions = {
+      formControlName: AdvancedSearchFieldsEnum.TAG,
+      children:
+        this.currentView === IncidentViewsEnum.INQUIRIES
+          ? groupedTags['INQUIRY']
+          : groupedTags['INCIDENT'],
+    };
+
+    this.advancedSearchDataList = [priorities, reportingVias, status, tags];
   }
 
   pageChanged($event: number) {

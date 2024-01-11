@@ -1,8 +1,11 @@
-<div class="d-flex pb-4 justify-content-between align-items-center ">
+<div class="d-flex pb-4 justify-content-between align-items-center">
   <span class="font-weight-bolder">
     {{ "ACTIONS.ADVANCED_SEARCH" | translate }}</span
   >
-  <button class="btn btn-icon btn-light-primary btn-sm" (click)="dialogRef.close()">
+  <button
+    class="btn btn-icon btn-light-primary btn-sm"
+    (click)="dialogRef.close()"
+  >
     <span
       [inlineSVG]="'/assets/media/svg/icons/Code/Error-circle.svg'"
       cacheSVG="true"
@@ -408,6 +411,34 @@
           <mat-option
             *ngFor="
               let rv of dataLists | extractDataList : advancedSearchFields.GROUP
+            "
+            [value]="rv.id"
+          >
+            {{ rv | propTranslator : "name" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- icnident tags-->
+    <div
+      class="form-group col-lg-6 pl-4 pr-4"
+      *ngIf="formFields | showFormControl : advancedSearchFields.TAG"
+    >
+      <mat-form-field
+        [dir]="directionality.value"
+        appearance="fill"
+        class="w-100"
+      >
+        <mat-label>{{ "INCIDENTS.TAGS" | translate }}</mat-label>
+        <mat-select
+          placeholder="{{ 'INCIDENTS.TAGS' | translate }}"
+          [id]="advancedSearchFields.TAG"
+          [formControlName]="advancedSearchFields.TAG"
+          multiple="true"
+        >
+          <mat-option
+            *ngFor="
+              let rv of dataLists | extractDataList : advancedSearchFields.TAG
             "
             [value]="rv.id"
           >
