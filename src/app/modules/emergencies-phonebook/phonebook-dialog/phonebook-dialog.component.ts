@@ -7,7 +7,15 @@ import { FormUtils } from '@core/utils/form.utils';
 import { Select, Store } from '@ngxs/store';
 import { GenericValidators } from '@shared/validators/generic-validators';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  skip,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { IdNameProjection } from 'src/app/api/models';
 import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
 
@@ -45,8 +53,6 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
         takeUntil(this.destroy$),
         take(1),
         tap((phonebook) => {
-          console.log(phonebook);
-
           this.form.patchValue(phonebook);
         })
       )
@@ -95,7 +101,7 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
       orgName: [null, [Validators.required]],
-      orgStructure: [null, [Validators.required]],
+      referenceOrgId: [null],
       jobTitle: [null],
       phoneNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
@@ -105,6 +111,36 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       isActive: [true, [Validators.required]],
       id: 0,
     });
+    this.form
+      .get('isInternal')
+      .valueChanges.pipe(
+        skip(1),
+        takeUntil(this.destroy$),
+        tap((isInternal) => {
+          this.form.get('orgName').reset();
+          this.form.get('referenceOrgId').reset();
+          if (isInternal) {
+            this.form
+              .get('referenceOrgId')
+              .setValidators([Validators.required]);
+          } else {
+            this.form.get('referenceOrgId').setAsyncValidators(null);
+          }
+          this.form.get('referenceOrgId').updateValueAndValidity();
+        })
+      )
+      .subscribe();
+    this.form
+      .get('referenceOrgId')
+      .valueChanges.pipe(
+        takeUntil(this.destroy$),
+        map((org) => org?.nameAr),
+        filter((p) => !!p),
+        tap((name) => {
+          this.form.get('orgName').setValue(name);
+        })
+      )
+      .subscribe();
   }
   close() {
     this.store.dispatch(new BrowsePhonebookAction.ToggleDialog({}));
@@ -117,20 +153,20 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       });
       return;
     }
+    const isInternal = this.form.get('isInternal').value;
+
     let phonebook = {
       ...this.form.value,
+      referenceOrgId: isInternal
+        ? {
+            id: this.form.get('referenceOrgId').value?.id,
+          }
+        : null,
+      mobileNumber: this.form.get('mobileNumber')?.value?.number,
     };
-    const isInternal = this.form.get('isInternal');
-    if (isInternal) {
-      phonebook['orgStructure'] = {
-        orgId: this.form.get('orgStructure').value?.id,
-      };
-      phonebook['orgName'] = this.form.get('org').value?.nameAr;
-    }
 
-    phonebook.mobileNumber = phonebook.mobileNumber?.number;
-    phonebook.id = this._phonebook;
-    return;
+    console.log(phonebook);
+
     if (this.editMode) {
       this.store.dispatch(new BrowsePhonebookAction.UpdatePhonebook(phonebook));
     } else {
@@ -138,6 +174,9 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
     }
   }
 
+  filterOrgs(event) {
+    console.log(event);
+  }
   // onSubmit() {
   //   let newItem = {
   //     ...this.form.value,

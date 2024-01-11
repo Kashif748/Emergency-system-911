@@ -27,25 +27,28 @@
             <div class="p-field p-col-12 p-md-3">
               <span class="p-float-label">
                 <p-dropdown
-                  [options]="orgs$ | async"
+                  (onChange)="updateFilter({ orgName: $event?.value }, $event)"
+                  [ngModel]="state?.pageRequest?.filters['orgName']"
+                  [options]="externalsOrgs$ | async"
                   [autoDisplayFirst]="false"
-                  [showClear]="true"
-                  dataKey="id"
                   appendTo="body"
-                  [filter]="true"
-                  (onChange)="
-                    updateFilter({ orgId: $event?.value?.id }, $event)
-                  "
-                  filterBy="nameAr,nameEn,code"
-                  inputId="orgId"
+                  editable="true"
+                  [filter]="false"
+                  [showClear]="true"
+                  inputId="orgName"
                   placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
-                >
-                  <ng-template let-item pTemplate="selectedItem">
-                    {{ item | translateObj }}
-                  </ng-template>
-
-                  <ng-template let-item pTemplate="item">
-                    {{ item | translateObj }}
+                  ><ng-template let-option let-placeholder pTemplate="header">
+                    <div class="w-100 p-2">
+                      <span class="p-input-icon-left w-100">
+                        <i class="pi pi-search"></i>
+                        <input
+                          (keyup)="filterOrg($event.target.value)"
+                          type="text"
+                          pInputText
+                          class="w-100"
+                        />
+                      </span>
+                    </div>
                   </ng-template>
                 </p-dropdown>
               </span>

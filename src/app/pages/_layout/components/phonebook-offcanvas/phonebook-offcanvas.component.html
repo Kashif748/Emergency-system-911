@@ -43,25 +43,19 @@
         <div class="p-field p-col-12">
           <span class="p-float-label">
             <p-dropdown
-              [options]="orgs$ | async"
+              [options]="externalsOrgs$ | async"
+              editable="true"
               [autoDisplayFirst]="false"
               [showClear]="true"
               dataKey="id"
               appendTo="body"
               [filter]="true"
-              (onChange)="updateFilter({ orgId: $event?.value?.id }, $event)"
-              filterBy="nameAr,nameEn,code"
-              inputId="orgId"
+              (onChange)="updateFilter({ orgName: $event?.value }, $event)"
+              [ngModel]="state?.pageRequest?.filters['orgName']"
+              inputId="orgName"
               (onShow)="loadOrgs()"
               placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
             >
-              <ng-template let-item pTemplate="selectedItem">
-                {{ item | translateObj }}
-              </ng-template>
-
-              <ng-template let-item pTemplate="item">
-                {{ item | translateObj }}
-              </ng-template>
             </p-dropdown>
           </span>
         </div>

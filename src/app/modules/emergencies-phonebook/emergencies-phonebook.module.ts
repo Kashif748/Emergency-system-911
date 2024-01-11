@@ -24,7 +24,7 @@ import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadc
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import { DividerModule } from 'primeng/divider';
-import {TagModule} from "primeng/tag";
+import { TagModule } from 'primeng/tag';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(

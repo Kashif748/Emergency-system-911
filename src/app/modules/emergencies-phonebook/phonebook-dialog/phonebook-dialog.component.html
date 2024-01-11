@@ -59,10 +59,10 @@
             [autoDisplayFirst]="false"
             appendTo="body"
             [filter]="true"
-            formControlName="orgStructure"
+            formControlName="referenceOrgId"
             filterBy="nameAr,nameEn,code"
             [showClear]="true"
-            inputId="orgStructure"
+            inputId="referenceOrgId"
             dataKey="id"
           >
             <ng-template let-item pTemplate="selectedItem">
@@ -81,14 +81,14 @@
 
         <ng-container
           *ngIf="
-            form.controls['orgStructure'].touched &&
-            !form.controls['orgStructure'].valid &&
-            form.controls['orgStructure'].dirty
+            form.controls['referenceOrgId'].touched &&
+            !form.controls['referenceOrgId'].valid &&
+            form.controls['referenceOrgId'].dirty
           "
         >
           <p
             class="p-error mb-0"
-            *ngIf="form.controls['orgStructure'].hasError('required')"
+            *ngIf="form.controls['referenceOrgId'].hasError('required')"
           >
             {{ "VALIDATION_MSG.REQUIRED" | translate }}
           </p>
@@ -106,17 +106,9 @@
             appendTo="body"
             [filter]="true"
             formControlName="orgName"
-            filterBy="nameAr,nameEn,code"
             [showClear]="true"
             inputId="orgName"
           >
-            <ng-template let-item pTemplate="selectedItem">
-              {{ item }}
-            </ng-template>
-
-            <ng-template let-item pTemplate="item">
-              {{ item }}
-            </ng-template>
           </p-dropdown>
           <label>
             {{ "PHONEBOOK.ORG_NAME" | translate }}

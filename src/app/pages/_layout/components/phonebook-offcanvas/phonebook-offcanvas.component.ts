@@ -4,7 +4,11 @@ import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ExternalPhonebook, ExternalPhonebookProjection, IdNameProjection } from 'src/app/api/models';
+import {
+  ExternalPhonebook,
+  ExternalPhonebookProjection,
+  IdNameProjection,
+} from 'src/app/api/models';
 import { OffcanvasPhonebookAction } from './states/offcanvas-phonebook.action';
 import {
   OffcanvasPhonebookState,
@@ -16,6 +20,7 @@ import { PageRequestModel } from '@core/models/page-request.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { CommonDataState, OrgAction, OrgState } from '@core/states';
+import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 
 @Component({
   selector: 'app-phonebook-offcanvas',
@@ -35,8 +40,8 @@ export class PhonebookOffcanvasComponent implements OnInit, AfterViewInit {
   @Select(OffcanvasPhonebookState.hasFilters)
   public hasFilters$: Observable<boolean>;
 
-  @Select(OrgState.orgs)
-  orgs$: Observable<IdNameProjection[]>;
+  @Select(PhonebookState.externalsOrgs)
+  public externalsOrgs$: Observable<any[]>;
 
   public position$ = this.langFacade.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'left' : 'right'))
@@ -51,6 +56,7 @@ export class PhonebookOffcanvasComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(new PhonebookAction.LoadExternalOrgs({ orgName: '' }));
     this.page$ = this.store.select(PhonebookState.sidebarPage).pipe(
       filter((p) => !!p),
       map((page) => page?.filter((u) => u.isActive))
