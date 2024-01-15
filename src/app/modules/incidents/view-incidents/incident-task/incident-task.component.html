@@ -53,7 +53,7 @@
             {{ "INCIDENTS.ASSIGNED" | translate }}
           </th>
           <!-- 7 -->
-          <th style="actions bg-white">
+          <th *appPrivileges="'PRIV_UP_TASK'" style="actions bg-white">
             {{ "INCIDENTS.ACTIONS" | translate }}
           </th>
         </tr>
@@ -130,6 +130,7 @@
           <!-- 7 -->
           <td class="actions bg-white">
             <button
+               *appPrivileges="'PRIV_UP_TASK'"
               (click)="updateTask(item.id); $event.stopPropagation()"
               class="btn btn-sm btn-clean btn-icon mr-2"
               matTooltip="{{ 'TASK.UPDATE_TASK' | translate }}"
