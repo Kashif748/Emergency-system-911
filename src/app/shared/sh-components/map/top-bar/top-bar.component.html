@@ -1,209 +1,100 @@
-<div class="container">
-  <div class="d-flex p-3">
-    <div class="spacer"></div>
-    <div>
-      <ng-template #popContentLayers> Show/Hide Map Layers </ng-template>
-      <ng-template #popTitleLayers><b>Map Layers</b></ng-template>
-      <button
-        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 "
-        placement="bottom"
-        [ngbPopover]="popContentLayers"
-        [popoverTitle]="popTitleLayers"
-      >
-      <i class="flaticon2-down"></i>
-      </button>
-    </div>
-    <div>
-      <div class="w-400px ">
-        <input
-          type="text"
-          placeholder="{{ 'MAP.TOP_BAR.ADDRESS_SEARCH' | translate }}"
-          aria-label="Address"
-          [formControl]="searchControl"
-          [matAutocomplete]="auto"
-          class="form-control"
-        />
-        <mat-autocomplete
-          autoActiveFirstOption
-          #auto="matAutocomplete"
-          [displayWith]="displayWith"
-        >
-          <mat-option
-            *ngFor="let option of filteredOptions | async"
-            [value]="option"
-          >
-            {{ option.Address }}
-          </mat-option>
-        </mat-autocomplete>
-      </div>
-    </div>
-    <!-- advance search -->
-    <div>
-      <ng-template #popContentSearch>
-        <div class="row">
-          <!-- Municipality -->
-          <div class="col-12">
-            <div class="form-group w-100">
-              <label for="inputM"
-                >{{ "SHARED.MUNICIPALITY" | translate }}:</label
-              >
-              <select
-                class="form-control"
-                id="inputM"
-                (change)="selectM($event.target.value)"
-                [formControl]="selectMControl"
-              >
-                <option value="">
-                  {{ "SHARED.CHOOSE" | translate }}
-                </option>
-                <option value="ADM">{{ "SHARED.ADM" | translate }}</option>
-                <option value="AAM">{{ "SHARED.AAM" | translate }}</option>
-                <option value="WRM">{{ "SHARED.DRM" | translate }}</option>
-              </select>
-            </div>
-          </div>
-          <!-- District/Zone -->
-          <div class="col-12">
-            <div class="form-group w-100">
-              <label for="inputD">{{ "SHARED.District/Zone" | translate }}:</label>
-              <select
-                id="inputD"
-                class="form-control"
-                [formControl]="selectDControl"
-                (change)="selectD($event.target.value)"
-              >
-                <option value="">
-                  {{ "SHARED.CHOOSE" | translate }}
-                </option>
-                <option
-                  [value]="item.NAMEENGLISH"
-                  *ngFor="let item of optionsD"
-                >
-                  {{
-                    (selectMControl.value != "AAM"
-                      ? ""
-                      : item.DISTRICTID + " - ") + item.name
-                  }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Sector/Community -->
-          <div class="col-12">
-            <div class="form-group w-100">
-              <label for="inputS">{{ "SHARED.Sector/Community" | translate }}:</label>
-              <select
-                id="inputS"
-                class="form-control"
-                [formControl]="selectSControl"
-                (change)="selectS($event.target.value)"
-              >
-                <option value="">
-                  {{ "SHARED.CHOOSE" | translate }}
-                </option>
-                <option
-                  [value]="item.COMMUNITYNAMEENG"
-                  *ngFor="let item of optionsS"
-                >
-                  {{
-                    (selectMControl.value != "AAM"
-                      ? ""
-                      : item.COMMUNITYID + " - ") + item.name
-                  }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Road Id -->
-          <div class="col-12" *ngIf="selectMControl.value == 'AAM'">
-            <div class="form-group w-100">
-              <label for="inputP">{{ "SHARED.ROADID" | translate }}:</label>
-              <select
-                id="inputP"
-                class="form-control"
-                [formControl]="selectRControl"
-                (change)="selectR($event.target.value)"
-              >
-                <option value="">
-                  {{ "SHARED.CHOOSE" | translate }}
-                </option>
-                <option [value]="item" *ngFor="let item of optionsR">
-                  {{ item }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Plot Number -->
-          <div class="col-12">
-            <div class="form-group w-100">
-              <label for="inputP">{{ "SHARED.PLOT_NUMBER" | translate }}:</label>
-              <select
-                id="inputP"
-                class="form-control"
-                [formControl]="selectPControl"
-                (change)="selectP($event.target.value)"
-              >
-                <option value="">
-                  {{ "SHARED.CHOOSE" | translate }}
-                </option>
-                <option [value]="item.PLOTNUMBER" *ngFor="let item of optionsP">
-                  {{ item.PLOTNUMBER }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </ng-template>
-      <ng-template #popTitleSearch>
-        <div class="dir-ltr">
-          <div class="row">
-            <div class="col-12">
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter AAM PLOT Adrress [DID-CID-RID-PID]"
-                  aria-label="Enter AAM PLOT Adrress [DID-CID-RID-PID]"
-                  aria-describedby="basic-addon2"
-                  [formControl]="searchControl"
-                />
-                <div class="input-group-append">
-                  <span
-                    class="input-group-text btn btn-icon btn-primary"
-                    id="basic-addon2"
-                    ><i class="fas fa-search"></i
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-template>
-      <button
-        class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 "
-        placement="bottom"
-        [ngbPopover]="popContentSearch"
-        [autoClose]="false"
-        [popoverClass]="'w-350px'"
-        [container]="map.data.viewOnly ? 'body' : '#map-container'"
-      >
-      <i class="flaticon2-search-1"></i>
-
-      </button>
-    </div>
-    <div>
-      <button
-      class="btn btn-white btn-sm font-weight-bold cursor-pointer mx-4 "
-      placement="bottom"
-      (click)="clearSearch()"
-    >
-    <i class="flaticon-cancel"></i>
-
-    </button>
-    </div>
-    <div class="spacer"></div>
+<div>
+  <button pButton (click)="layers.toggle($event)" icon="pi pi-angle-down"
+    class="p-button-text p-button-secondary bg-white esri-widget"></button>
+  <p-overlayPanel #layers appendTo="body">
+    <ng-template pTemplate>
+      <p-listbox [options]="layersPage$ | async" [formControl]="selectedLayer" styleClass="border-0" multiple="true"
+        checkbox="true" [showToggleAll]="false">
+        <ng-template let-layer pTemplate="item">
+          <span class="px-2">
+            {{ layer | translateObj }}
+          </span>
+        </ng-template></p-listbox>
+    </ng-template>
+  </p-overlayPanel>
+  <div class="d-inline-flex w-300px mx-4">
+    <span class="p-fluid w-100 esri-widget">
+      <p-autoComplete [showEmptyMessage]="true" styleClass="esri-widget" [formControl]="searchControl"
+        placeholder="{{ 'MAP.TOP_BAR.ADDRESS_SEARCH' | translate }}" [suggestions]="filteredOptions | async"
+        field="Address" [minLength]="1" appendTo="body"></p-autoComplete>
+    </span>
   </div>
+
+  <button pButton (click)="advancedSearch.toggle($event)" icon="pi pi-sliders-h"
+    class="p-button-text p-button-secondary bg-white esri-widget"></button>
+
+  <p-overlayPanel #advancedSearch appendTo="body">
+    <ng-template pTemplate>
+      <div class="w-200px" (click)="$event.preventDefault()">
+
+        <!-- Municipality -->
+        <div class="p-field">
+          <p-dropdown [(ngModel)]="selectedM" (onChange)="selectM($event?.value?.value)" styleClass="w-100"
+            [options]="optionsM" placeholder="{{ 'SHARED.MUNICIPALITY' | translate }}" optionLabel="label"
+            dataKey="value" [showClear]="true">
+            <ng-template pTemplate="selectedItem">
+              <div>
+                {{ selectedM?.label | translate }}
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div>
+                {{ item.label | translate }}
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- District/Zone -->
+        <div class="p-field">
+          <p-dropdown [(ngModel)]="selectedD" (onChange)="selectD($event?.value?.NAMEENGLISH)" styleClass="w-100"
+            [options]="optionsD" placeholder="{{ 'SHARED.District/Zone' | translate }}" [showClear]="true">
+            <ng-template pTemplate="selectedItem">
+              <div>
+                {{(selectedM?.value != "AAM" ? "" : selectedD?.DISTRICTID + " - ") + selectedD?.name}}
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div>
+                {{ (selectedM?.value != "AAM" ? "" : item?.DISTRICTID + " - ") + item.name }}
+              </div>
+            </ng-template></p-dropdown>
+        </div>
+
+        <!-- Sector/Community -->
+        <div class="p-field">
+          <p-dropdown [(ngModel)]="selectedS" (onChange)="selectS($event?.value?.COMMUNITYNAMEENG)" styleClass="w-100"
+            [options]="optionsS" placeholder="{{ 'SHARED.Sector/Community' | translate }}" [showClear]="true">
+            <ng-template pTemplate="selectedItem">
+              <div>
+                {{ (selectedM?.value != "AAM" ? "" : selectedS.COMMUNITYID + " - ") + selectedS.name }}
+
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div>
+                {{ (selectedM?.value != "AAM" ? "" : item.COMMUNITYID + " - ") + item.name }}
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <!-- Road Id -->
+        <div class="p-field" *ngIf="selectedM?.value == 'AAM'">
+          <p-dropdown [(ngModel)]="selectedR" (onChange)="selectR($event?.value)" styleClass="w-100"
+            [options]="optionsR" placeholder="{{ 'SHARED.ROADID' | translate }}" [showClear]="true">
+          </p-dropdown>
+        </div>
+
+        <!-- Plot Number -->
+
+        <div class="p-field">
+          <p-dropdown [(ngModel)]="selectedP" (onChange)="selectP($event?.value?.PLOTNUMBER)" styleClass="w-100"
+            [options]="optionsP" optionLabel="PLOTNUMBER" placeholder="{{ 'SHARED.PLOT_NUMBER' | translate }}"
+            [showClear]="true">
+          </p-dropdown>
+        </div>
+      </div>
+    </ng-template>
+  </p-overlayPanel>
 </div>

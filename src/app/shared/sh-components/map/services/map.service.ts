@@ -12,6 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { map } from 'rxjs/operators';
 import { AddressSearchResultModel } from '../utils/map.models';
+import { EsriModule } from '../utils/map-module.enum';
 
 export interface MapConfig {
   showSaveButton: boolean;
@@ -40,6 +41,10 @@ export class MapService {
   ) {
     this.getIncidentPointLayer();
     this.getTaskPointLayer();
+  }
+
+  public loadModules(modules: EsriModule[]): Promise<any[]> {
+    return loadModules(modules, {});
   }
 
   public addressSearch(searchTerm: string) {

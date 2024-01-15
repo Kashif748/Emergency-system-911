@@ -255,11 +255,17 @@
   </div>
 
   <div class="spinner-container m-auto p-10" *ngIf="loading">
-    <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+    <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
   </div>
 </div>
 
 <!-- map top-bar -->
-<div id="map-topbar" *ngIf="!smallSize" #topbar class="w-100">
+<div id="map-topbar" [ngClass]="{'show': showTopBar}" *ngIf="!smallSize" #topbar style="z-index: -1;">
   <app-top-bar></app-top-bar>
 </div>
+
+<button pButton icon="pi pi-search" class="p-button-text p-button-secondary bg-white esri-widget" id="topbar-toggler"
+  (click)="showTopBar = !showTopBar"></button>
+
+<button pButton icon="pi pi-replay" (click)="reload()" id="refresh-btn"
+  class="p-button-text p-button-secondary bg-white esri-widget"></button>

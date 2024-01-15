@@ -5,7 +5,6 @@ import {
   EventEmitter,
   Inject,
   Input,
-  ModuleWithProviders,
   NgModule,
   OnChanges,
   OnDestroy,
@@ -13,14 +12,11 @@ import {
   Optional,
   Output,
   SimpleChanges,
-  SkipSelf,
+  ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IThemeFacade } from '@core/facades/theme.facade';
-import { loadModules } from 'esri-loader';
 import { TranslationService } from 'src/app/modules/i18n/translation.service';
-import { TranslationModule } from 'src/app/modules/i18n/translation.module';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 import { Subject, Subscription } from 'rxjs';
@@ -36,45 +32,49 @@ import { MapActionType } from '@shared/components/map/utils/MapActionType';
 import { TaskIncidentGisData } from '@shared/components/map/utils/TaskIncidentGisData';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, DatePipe } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatOptionModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 import {
   AddressSearchResultModel,
   DZSP_ID_COMMUNITY,
-  DZSP_ID_DISTRICT,
-  DZSP_ID_MUNICIPALITY,
-  DZSP_ID_PLOT,
   DZSP_SEARCH_URL,
   LocationInfoModel,
 } from './utils/map.models';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { PropTranslatorPipe } from '@shared/pipes/prop-translator.pipe';
 import { AppCommonDataService } from '@core/services/app-common-data.service';
 import esri = __esri;
-import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
+import { EsriModule } from './utils/map-module.enum';
+import { PopupBuilder } from './services/popup.builder';
+import { CdatePipe } from '@shared/sh-pipes/cdate.pipe';
+import { ButtonModule } from 'primeng/button';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { DropdownModule } from 'primeng/dropdown';
+import { ListboxModule } from 'primeng/listbox';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
+  providers: [CdatePipe, PopupBuilder],
 })
 export class MapComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit
 {
+  @ViewChild(TopBarComponent) topbar: TopBarComponent;
+
   private queryInfo: (graphic: esri.Graphic) => Promise<LocationInfoModel>;
   filterLayersFunc$: Subject<(where: any, fName: MapActionType) => void> =
     new Subject();
   @Input() configData: MapConfig;
-  @Input() currentLocationOfUser;
+  @Input() currentLocationOfUser: boolean;
   @Output() OnSaveMap: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
+    private mapService: MapService,
+    private popupBuidler: PopupBuilder,
     private translationService: TranslationService,
     private alertService: AlertsService,
     private cdr: ChangeDetectorRef,
@@ -83,23 +83,18 @@ export class MapComponent
     private orgService: OrgService,
     private linkService: ILinkService,
     private appCommonDataService: AppCommonDataService,
-    private propTranslator: PropTranslatorPipe,
-    private datePipe: DatePipe,
     @Optional() public dialogRef: MatDialogRef<MapComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: MapConfig,
-    @Optional() private incidentsService: IncidentsService,
-    private sanitizer: DomSanitizer
+    @Optional() private incidentsService: IncidentsService
   ) {}
-
-  private readonly minDisplayScale = 10000;
 
   // UI
   @Input() title: string;
   @Input() dashboardMode = false;
-  @Input() showLayers = true;
   @Input() showLocInfo = true;
   @Input() smallSize = false;
   currentLocation = true;
+  showTopBar = false;
   @Output() OnFetchCoordinates: EventEmitter<boolean> = new EventEmitter();
   // main map view
   public mapView: esri.MapView;
@@ -147,53 +142,19 @@ export class MapComponent
   public addTeamPolyline: () => void;
   public addTeamPolygon: () => void;
   public addReporterPoint: () => void;
-  public reCenterMap: () => void;
+  public addLayer: (layer: any) => void;
+  public removeLayer: (layer: any) => void;
 
   public createQueryTask: (url: string) => __esri.QueryTask;
   public createQuery: () => __esri.Query;
 
-  public ONWANI_SEARCH_DZSP_IMAGE_LAYER: __esri.MapImageLayer;
-
-  private static async loadMapModules() {
-    return loadModules(
-      [
-        'esri/Map',
-        'esri/views/MapView',
-        'esri/layers/MapImageLayer',
-        'esri/layers/FeatureLayer',
-        'esri/tasks/support/Query',
-        'esri/tasks/QueryTask',
-        // 'esri/Basemap',
-        'esri/views/draw/Draw',
-        'esri/geometry/geometryEngine',
-        // 'esri/widgets/LayerList',
-        // 'esri/widgets/BasemapGallery',
-        // 'esri/widgets/Legend',
-        'esri/widgets/Home',
-        'esri/widgets/Compass',
-        // 'esri/widgets/Expand',
-        'esri/Graphic',
-        // 'esri/widgets/Search',
-        'esri/layers/GraphicsLayer',
-        'esri/layers/WMSLayer',
-        'esri/widgets/CoordinateConversion',
-        'esri/widgets/Locate',
-        'esri/widgets/Track',
-        'esri/layers/VectorTileLayer',
-        'esri/Basemap',
-        'esri/WebMap',
-        // 'esri/urlUtils',
-        // 'esri/geometry/Extent',
-        // 'dojo/dom-construct',
-        // 'esri/widgets/BasemapToggle',
-        // 'dojo/domReady!',
-      ]
-      // {
-      //   version: '4.15',
-      // }
-    );
+  reload() {
+    if (this.topbar) {
+      this.topbar.clearSearch();
+    } else {
+      this.initializeMap();
+    }
   }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (Array.isArray(this.config)) {
       if (this.config.length > 0) {
@@ -203,7 +164,6 @@ export class MapComponent
             this.mapType = this.groupData[i].mapType;
             this.showButton = !this.groupData[i].viewOnly;
             this.showSaveButton = this.groupData[i].showSaveButton;
-            this.showLayers = this.groupData[i].showLayers ? true : false;
             this.showLocInfo = this.groupData[i].showLocInfo ? true : false;
           }
           if (this.groupData[i]?.zoomModel?.featureName && this.zoomToRequest) {
@@ -227,7 +187,6 @@ export class MapComponent
         this.mapType = this.data.mapType;
         this.showButton = !this.data.viewOnly;
         this.showSaveButton = this.data.showSaveButton;
-        this.showLayers = this.data.showLayers ? true : false;
         this.showLocInfo = this.data.showLocInfo ? true : false;
       }
       if (this.data?.zoomModel?.featureName && this.zoomToRequest) {
@@ -248,7 +207,6 @@ export class MapComponent
             this.mapType = this.groupData[i].mapType;
             this.showButton = !this.groupData[i].viewOnly;
             this.showSaveButton = this.groupData[i].showSaveButton;
-            this.showLayers = this.groupData[i].showLayers ? true : false;
             this.showLocInfo = this.groupData[i].showLocInfo ? true : false;
           }
           if (this.groupData[i]?.zoomModel?.featureName && this.zoomToRequest) {
@@ -282,7 +240,6 @@ export class MapComponent
       this.mapType = this.data.mapType;
       this.showButton = !this.data.viewOnly;
       this.showSaveButton = this.data.showSaveButton;
-      this.showLayers = this.data.showLayers ?? true;
       this.showLocInfo = this.data.showLocInfo ?? true;
       this.mapType === 'reporter'
         ? (this.currentLocation = false)
@@ -294,7 +251,6 @@ export class MapComponent
           this.mapType = this.groupData[i].mapType;
           this.showButton = !this.groupData[i].viewOnly;
           this.showSaveButton = this.groupData[i].showSaveButton;
-          this.showLayers = this.groupData[i].showLayers ?? true;
           this.showLocInfo = this.groupData[i].showLocInfo ?? true;
         }
       }
@@ -337,26 +293,29 @@ export class MapComponent
         Graphic,
         GraphicsLayer,
         WMSLayer,
-        Locate,
         Track,
-        CoordinateConversion,
-        VectorTileLayer,
-        Basemap,
-        WebMap,
-      ] = await MapComponent.loadMapModules();
+      ] = await this.mapService.loadModules([
+        EsriModule.Map,
+        EsriModule.MapView,
+        EsriModule.MapImageLayer,
+        EsriModule.FeatureLayer,
+        EsriModule.Query,
+        EsriModule.QueryTask,
+        EsriModule.Draw,
+        EsriModule.geometryEngine,
+        EsriModule.Home,
+        EsriModule.Compass,
+        EsriModule.Graphic,
+        EsriModule.GraphicsLayer,
+        EsriModule.WMSLayer,
+        EsriModule.Track,
+      ]);
 
       this.createQueryTask = (url: string) => new QueryTask(url);
       this.createQuery = () => new Query();
 
-      // __esri.urlUtils.addProxyRule({ urlPrefix: '', proxyUrl: '' });
-      // const urlUtils = _urlUtils as __esri.urlUtils;
-      // urlUtils.addProxyRule({urlPrefix: ''})
       // -------------------------------------------------------- START FEATURE LAYERS --------------------------------------
-      new FeatureLayer({
-        url: '/arcgis/rest/services/Onwani/OnwaniAPI/MapServer',
-        id: 'qr_layer',
-        layerId: 1,
-      });
+
       const IncPointFeatureService = new FeatureLayer({
         url:
           environment.ADMGIS_ROOT_ROUTE +
@@ -415,29 +374,6 @@ export class MapComponent
 
       // -------------------------------------------------------- END FEATURE LAYERS --------------------------------------
 
-      // map base layers
-      const measureThisAction = {
-        title: 'Measure Length',
-        id: 'measure-this',
-        image: 'Measure_Distance16.png',
-      };
-
-      const popupIncidents = {
-        title: this.getIncidentTitle.bind(this), //'/2022',//this.translationService.translateAWord('INCIDENTS.SUBJECT'),
-        content: this.buildIncidentDialog.bind(this),
-        outFields: ['*'],
-        autoOpenEnabled: true,
-        actions: [measureThisAction],
-      } as __esri.PopupTemplateProperties;
-
-      const popupTasks: esri.PopupTemplateProperties = {
-        title: this.getIncidentTitle.bind(this), //this.translationService.translateAWord('TASK.TASK_TITLE'),
-        content: this.buildTaskDialog.bind(this),
-        outFields: ['*'],
-        autoOpenEnabled: true,
-        actions: [measureThisAction],
-      } as __esri.PopupTemplateProperties;
-
       // -------------------------------------------------------- START ONWANI LAYERS --------------------------------------
       const ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
@@ -446,21 +382,6 @@ export class MapComponent
           title: 'Municipality',
           opacity: 0.2,
           maxScale: 1155000,
-        } as __esri.MapImageLayerProperties);
-
-      const TAWAJUDI_FACILITIES_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `/agsupc/rest/services/UDM/TAWAJUDI_FACILITIES/MapServer`,
-          id: 'TAWAJUDI_FACILITIES_IMAGE_LAYER',
-          title: 'Tawajudi Facilities',
-          opacity: 0.3,
-          sublayers: [
-            {
-              id: 12,
-              visible: true,
-              title: 'Tawajudi Facilities',
-            },
-          ],
         } as __esri.MapImageLayerProperties);
 
       // new layer start
@@ -494,47 +415,9 @@ export class MapComponent
             {
               id: this.lang == 'ar' ? 22 : 7,
               visible: true,
-              // tilte: 'Plots',
             },
           ],
         } as __esri.MapImageLayerProperties);
-
-      this.ONWANI_SEARCH_DZSP_IMAGE_LAYER = new MapImageLayer({
-        // url: '/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer',
-        id: 'ONWANI_SEARCH_DZSP_IMAGE_LAYER',
-        visible: false,
-        sublayers: [
-          {
-            id: DZSP_ID_PLOT,
-            visible: false,
-            url:
-              'http://10.21.10.245:4200/gateway/OnwaniMapServices/1.0/' +
-              DZSP_ID_PLOT,
-          },
-          {
-            id: DZSP_ID_DISTRICT,
-            visible: false,
-            url:
-              'http://10.21.10.245:4200/gateway/OnwaniMapServices/1.0/' +
-              DZSP_ID_DISTRICT,
-          },
-          {
-            id: DZSP_ID_COMMUNITY,
-            visible: false,
-            url:
-              'http://10.21.10.245:4200/gateway/OnwaniMapServices/1.0/' +
-              DZSP_ID_COMMUNITY,
-          },
-          {
-            id: DZSP_ID_MUNICIPALITY,
-            visible: false,
-            url:
-              'http://10.21.10.245:4200/gateway/OnwaniMapServices/1.0/' +
-              DZSP_ID_MUNICIPALITY,
-          },
-        ],
-        imageTransparency: true,
-      } as __esri.MapImageLayerProperties);
 
       const ONWANI_STREET_IMAGE_LAYER: __esri.WMSLayer = new WMSLayer({
         url: '/geoserver/wms',
@@ -544,11 +427,10 @@ export class MapComponent
         },
         copyright: 'GeoServer',
         description: 'AAM Data',
-        minScale: this.minDisplayScale,
+        minScale: 10000,
         version: '1.3.0',
         visible: true,
         id: 'ONWANI_STREET_IMAGE_LAYER',
-        // visibleLayers: [''],
         sublayers: [
           {
             name: 'geosmart:streets',
@@ -557,61 +439,6 @@ export class MapComponent
       } as __esri.WMSLayerProperties);
 
       // -------------------------------------------------------- END ONWANI LAYERS --------------------------------------
-
-      const ecmsMapService: esri.MapImageLayer = new MapImageLayer({
-        url:
-          environment.ADMGIS_ROOT_ROUTE + '/rest/services/ECMS/ECMS/MapServer',
-        id: 'basemap',
-        title: 'ECMS',
-        popup: {
-          highlightEnabled: true,
-          autoOpenEnabled: true,
-        },
-        sublayers: [
-          {
-            id: 0,
-            visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
-            title: 'INCIDENT POINT',
-          },
-          {
-            id: 1,
-            visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupTasks,
-            title: 'TASK POINT',
-          },
-          {
-            id: 2,
-            visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
-            title: 'INCIDENT LINE',
-          },
-          {
-            id: 3,
-            visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupTasks,
-            title: 'TASK LINE',
-          },
-          {
-            id: 4,
-            visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
-            title: 'INCIDENT POLYGON',
-          },
-          {
-            id: 5,
-            visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupTasks,
-            title: 'TASK POLYGON',
-          },
-          {
-            id: 6,
-            visible: !this.dashboardMode && this.showLayers,
-            popupTemplate: popupIncidents,
-            title: 'ORGANIZATION POINT',
-          },
-        ],
-      } as __esri.MapImageProperties);
 
       this.queryInfo = async (graphic: esri.Graphic) => {
         const queryGemotry = async (
@@ -627,14 +454,6 @@ export class MapComponent
           return result.features[0];
         };
 
-        // const result = await this.ONWANI_SEARCH_DZSP_IMAGE_LAYER.when(
-        //   async (_) => {
-        // const queryResult = await queryGemotry(
-        //   this.ONWANI_SEARCH_DZSP_IMAGE_LAYER.findSublayerById(
-        //     DZSP_ID_COMMUNITY
-        //   ) as any as esri.FeatureLayer,
-        //   graphic.geometry
-        // );
         const queryResult = await queryGemotry(
           this.createQueryTask(DZSP_SEARCH_URL + DZSP_ID_COMMUNITY),
           this.createQuery(),
@@ -654,9 +473,6 @@ export class MapComponent
 
         this.cdr.detectChanges();
         return locationInfo;
-        //   }
-        // );
-        // return result as LocationInfoModel;
       };
 
       // Configure the Map
@@ -675,16 +491,8 @@ export class MapComponent
         layers: [
           ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
           ABUDHABI_ARCGIS_BASE_IMAGE_LAYER,
-          // ONWANI_ADDRESSING_IMAGE_LAYER,
-          // DistrictMapLayer,
-          // CommunityMapLayer,
-          // TAWAJUDI_FACILITIES_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER,
           ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER,
-          // this.ONWANI_SEARCH_DZSP_IMAGE_LAYER,
-          // ONWANI_DZSP_IMAGE_LAYER,
-          // ONWANI_STREET_IMAGE_LAYER,
-          ecmsMapService,
         ],
       };
 
@@ -706,40 +514,15 @@ export class MapComponent
         // scale: 700000,
         zoom: 8,
         map: this.map,
-        popup: {
-          highlightEnabled: true,
-          autoOpenEnabled: false,
-          defaultPopupTemplateEnabled: true,
-        },
+        popup: this.popupBuidler.popupOptions,
 
         highlightOptions: {
           color: 'orange',
         },
         spatialReference: { wkid: 102100 },
       };
-      //const findMyLocation = new Track({ view: this.mapView });
-      //console.log(findMyLocation);
-      //!this.currentLocation && this.mapView.ui.add(findMyLocation, 'top-right');
-
-      /*  const track = new Track({
-        view: mapViewProperties,
-        graphic: new Graphic({
-          symbol: {
-            type: "simple-marker",
-            size: "12px",
-            color: "green",
-            outline: {
-              color: "#efefef",
-              width: "1.5px"
-            }
-          }
-        }),
-        useHeadingEnabled: false
-      });*/
-      //mapViewProperties.container.add(locate, "top-left");
 
       this.mapView = new MapView(mapViewProperties);
-      /*this.mapView.ui.add(track, "top-left");*/
       // open popups just for symboles
       this.mapView.on('click', (e) => {
         this.mapView.hitTest(e).then((res) => {
@@ -753,11 +536,6 @@ export class MapComponent
           }
         });
       });
-
-      // this.baseMapToggle = new BasemapToggle({
-      //   view: this.mapView,
-      //   nextBasemap: mainBasemapDarkGrayProps,
-      // });
 
       // ---------------------------------- START DEFINE FUNCTIONS ------------------------------------
 
@@ -796,7 +574,6 @@ export class MapComponent
           // height: '64px',
         };
         // Create a graphic and add the geometry and symbol to it
-        console.log(address);
         const mapMarker: __esri.Graphic = new Graphic({
           geometry: {
             type: address?.type || 'point', // autocasts as new Point()
@@ -847,11 +624,10 @@ export class MapComponent
 
       this.zoomToGroupAddress = (address: AddressSearchResultModel) => {
         let polgonSymbol = {
-          type: 'simple-fill', // autocasts as SimpleFillSymbol
+          type: 'simple-fill',
           style: 'diagonal-cross',
           color: [0, 0, 0, 0.1],
           outline: {
-            // autocasts as SimpleLineSymbol
             color: [4, 90, 141],
             width: 4,
             cap: 'round',
@@ -860,7 +636,7 @@ export class MapComponent
         };
 
         let polylineSymbol = {
-          type: 'simple-line', // autocasts as new SimpleFillSymbol
+          type: 'simple-line',
           color: [255, 0, 0],
           width: 4,
           cap: 'round',
@@ -868,15 +644,10 @@ export class MapComponent
         };
 
         let pointSymbol = {
-          type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
+          type: 'simple-marker',
           color: [226, 119, 40],
-          // type: 'picture-marker', // autocasts as new PictureMarkerSymbol()
-          // url: 'https://static.arcgis.com/images/Symbols/Shapes/BlackStarLargeB.png',
-          // width: '64px',
-          // height: '64px',
         };
         // Create a graphic and add the geometry and symbol to it
-        console.log(address);
         const mapMarker: __esri.Graphic = new Graphic({
           geometry: {
             type: address?.type || 'point', // autocasts as new Point()
@@ -894,24 +665,11 @@ export class MapComponent
               : address?.type == 'polyline'
               ? polylineSymbol
               : pointSymbol,
-          /* popupTemplate: {
-            title: 'Onwani Address',
-            content: (feature: __esri.Feature) => {
-              return `${address.Address}`;
-            },
-            outFields: ['*'],
-          } as __esri.PopupTemplateProperties,*/
         } as __esri.GraphicProperties);
 
         // Add the graphics to the view's graphics layer
         this.mapView.zoom = address.zoom;
         this.addressGraphicsLayer.add(mapMarker);
-        /* this.mapView
-          .goTo(mapMarker, { animate: true, duration: 2000 })
-          .then(() => {
-            this.mapView.popup.open({ features: [mapMarker] });
-            this.mapView.popup.triggerAction(0);
-          });*/
       };
       // ---------------------------------- END DEFINE FUNCTIONS ------------------------------------
 
@@ -923,6 +681,11 @@ export class MapComponent
           case MapActionType.INCIDENT_POINT:
             TaskUrl = IncPointFeatureService.url + '/0';
             Symbol = {
+              // type: 'simple-marker',
+              // style: 'path',
+              // path: 'M213.2 32H288V96c0 17.7 14.3 32 32 32s32-14.3 32-32V32h74.8c27.1 0 51.3 17.1 60.3 42.6l42.7 120.6c-10.9-2.1-22.2-3.2-33.8-3.2c-59.5 0-112.1 29.6-144 74.8V224c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7 14.3 32 32 32c2.3 0 4.6-.3 6.8-.7c-4.5 15.5-6.8 31.8-6.8 48.7c0 5.4 .2 10.7 .7 16l-.7 0c-17.7 0-32 14.3-32 32v64H86.6C56.5 480 32 455.5 32 425.4c0-6.2 1.1-12.4 3.1-18.2L152.9 74.6C162 49.1 186.1 32 213.2 32zM352 368a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm211.3-43.3c-6.2-6.2-16.4-6.2-22.6 0L480 385.4l-28.7-28.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l40 40c6.2 6.2 16.4 6.2 22.6 0l72-72c6.2-6.2 6.2-16.4 0-22.6z',
+              // color: 'red',
+              // size: '26px',
               type: 'simple-marker',
               style: 'circle',
               color: 'red',
@@ -1012,13 +775,13 @@ export class MapComponent
                 case MapActionType.INCIDENT_POLYLINE:
                 case MapActionType.INCIDENT_POLYGON:
                 case MapActionType.ORGRANIZATION_POINT:
-                  item.popupTemplate = popupIncidents as any;
+                  item.popupTemplate = this.popupBuidler.buildPopup('Incident');
                   break;
 
                 case MapActionType.TASK_POINT:
                 case MapActionType.TASK_POLYLINE:
                 case MapActionType.TASK_POLYGON:
-                  item.popupTemplate = popupTasks as any;
+                  item.popupTemplate = this.popupBuidler.buildPopup('Task');
                   break;
               }
               return item;
@@ -1038,6 +801,19 @@ export class MapComponent
         });
       };
 
+      this.addLayer = async (layer) => {
+        const newLayer: esri.FeatureLayer = new FeatureLayer(layer);
+        newLayer.opacity = 0.8;
+        this.map.add(newLayer);
+      };
+
+      this.removeLayer = (layerId: number) => {
+        const alreadyAdded = this.map.findLayerById(layerId?.toString());
+        if (alreadyAdded) {
+          this.map.remove(alreadyAdded);
+        }
+      };
+
       this.filterLayersFunc$.next(filterLayers);
 
       const clearGraphics = () => {
@@ -1054,13 +830,12 @@ export class MapComponent
           view: this.mapView,
         });
 
-        // if(!this.smallSize){
-        //   const search = new Search({ view: this.mapView}) as HTMLElement;
-        //   this.mapView.ui.add(search, { position:'manual'});
-        // }
         if (!this.smallSize) {
           this.mapView?.ui.add('map-topbar', { position: 'manual', index: 0 });
+          this.mapView?.ui.add('topbar-toggler', { position: 'top-trailing' });
         }
+
+        this.mapView?.ui.add('refresh-btn', { position: 'top-trailing' });
 
         const homeBtn = new Home({ view: this.mapView });
         !this.smallSize && this.mapView.ui.add(homeBtn, 'top-trailing');
@@ -1072,19 +847,11 @@ export class MapComponent
         !this.currentLocation &&
           this.mapView.ui.add(findMyLocation, 'top-right');
 
-        // var coordinateConversionWidget = new CoordinateConversion({
-        //   view: this.mapView
-        // });
-
-        // this.mapView.ui.add(coordinateConversionWidget, "bottom-right");
-
         if (Array.isArray(this.groupData) && this.groupData.length > 0) {
           // for multiple Location to show
           for (let i = 0; i < this.groupData.length; i++) {
             if (this.groupData[i]?.pointLocation) {
               this.zoomToGroupAddress(this.groupData[i]?.pointLocation);
-              // createPointGraphic([this.data?.pointLocation.Lat, this.data?.pointLocation.Lng], this.mapView,'Inc_point' );
-              // this.saveMap();
             }
             if (this.groupData[i]?.polygonLocation) {
               this.zoomToGroupAddress(this.groupData[i].polygonLocation);
@@ -1409,10 +1176,6 @@ export class MapComponent
                 taskIncidentData.creation_date,
                 'YYYY-MM-DD HH:mm:ss'
               ),
-              //  CLOSE_DATE: DateTimeUtil.format(
-              //   taskIncidentData.closeDate,
-              //   'YYYY-MM-DD HH:mm:ss'
-              // ),
             };
             await ApplyEdits(
               graphic,
@@ -1493,7 +1256,6 @@ export class MapComponent
                   } else {
                     Result = true;
                   }
-                  ecmsMapService.refresh();
                   return Result;
                 }
                 break;
@@ -1511,7 +1273,6 @@ export class MapComponent
                   } else {
                     Result = true;
                   }
-                  ecmsMapService.refresh();
                   return Result;
                 }
                 break;
@@ -1525,7 +1286,6 @@ export class MapComponent
               error.message
             );
 
-            ecmsMapService.refresh();
             return Result;
           });
       };
@@ -1628,16 +1388,16 @@ export class MapComponent
               case MapActionType.INCIDENT_POINT:
               case MapActionType.INCIDENT_POLYGON:
               case MapActionType.INCIDENT_POLYLINE:
-                item.popupTemplate = popupIncidents as any;
+                item.popupTemplate = this.popupBuidler.buildPopup('Incident');
                 break;
 
               case MapActionType.TASK_POINT:
               case MapActionType.TASK_POLYLINE:
               case MapActionType.TASK_POLYGON:
-                item.popupTemplate = popupTasks as any;
+                item.popupTemplate = this.popupBuidler.buildPopup('Task');
                 break;
               default:
-                item.popupTemplate = popupTasks as any;
+                item.popupTemplate = this.popupBuidler.buildPopup('Task');
                 break;
             }
 
@@ -1670,32 +1430,6 @@ export class MapComponent
               });
           });
         });
-      };
-
-      this.reCenterMap = () => {
-        const mapViewProperties: esri.MapViewProperties = {
-          container: document.getElementById('map') as HTMLDivElement,
-          // center: [54.3773, 24.4539],
-          center: [53.8248, 24.0088],
-          constraints: {
-            snapToZoom: true,
-          },
-          // scale: 700000,
-          zoom: 8,
-          map: this.map,
-          popup: {
-            highlightEnabled: true,
-            autoOpenEnabled: false,
-            defaultPopupTemplateEnabled: true,
-          },
-
-          highlightOptions: {
-            color: 'orange',
-          },
-          spatialReference: { wkid: 102100 },
-        };
-
-        this.mapView = new MapView(mapViewProperties);
       };
 
       if (this.data.zoomModel?.featureName) {
@@ -1986,178 +1720,25 @@ export class MapComponent
     }
     return '';
   }
-  private getIncidentTitle(feature: __esri.Feature) {
-    const attrs = feature.graphic.attributes;
-    const isLangAr = this.lang === 'ar';
-    const isLangEn = this.lang === 'en';
-    let title = '';
-    if (isLangEn) {
-      title = `<div class="row"><div class="image"><b class="textId">{INCIDENT_REF_ID}/2023</b>
-    <div>
-       <a class="btn btn-primary custom-btn" href="${
-         location.origin
-       }/incidents/view/${
-        attrs.INCIDENT_REF_ID
-      }" target="_blank"><p class="customText">
-       ${this.translationService.translateAWord('INCIDENTS.showIncident')}</p>
-       </a>
-      </div></div></div>`;
-    }
-    if (isLangAr) {
-      title = `
-<div class="row directionAr">
-       <a class="btn btn-primary custom-btnAr" href="${
-         location.origin
-       }/incidents/view/${
-        attrs.INCIDENT_REF_ID
-      }" target="_blank"><p class="customText">
-       ${this.translationService.translateAWord('INCIDENTS.showIncident')}</p>
-       </a>
-<b class="textIdAr">2023/{INCIDENT_REF_ID}</b>
-<div class="imageAr">
-    </div></div>`;
-    }
-    const path = 'data:image/png;base64';
-
-    return title;
-  }
-
-  private buildIncidentDialog(feature: __esri.Feature) {
-    //new
-    const attrs = feature.graphic.attributes;
-    let close_Date = this.datePipe.transform(attrs?.CLOSE_DATE, 'short');
-    let create_Date = this.datePipe.transform(attrs.CREATION_DATE, 'short');
-    if (close_Date == null) {
-      close_Date = '';
-    }
-    if (create_Date == null) {
-      create_Date = '';
-    }
-    const dialogDesign = `<table class="table table-bordered">
-    <thead></thead>
-    <tbody>
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.SUBJECT'
-        )}:</th>
-        <td>{NAME}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.CREATION_DATE'
-        )}:</th>
-        <td>${create_Date}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.CLOSE_DATE'
-        )}:</th>
-        <td>${close_Date}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.PRIORITY'
-        )}:</th>
-        <td>{PRIORITY}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.MAIN_CATEGORY'
-        )}:</th>
-        <td>
-        {INC_CATEGORY}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  `;
-    return dialogDesign;
-  }
-  private buildTaskDialog(feature: __esri.Feature) {
-    const attrs = feature.graphic.attributes;
-    const duedate = this.datePipe.transform(attrs?.DUE_DATE, 'short');
-    return `<table class="table table-bordered">
-    <thead></thead>
-    <tbody>
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.TASK_TITLE'
-        )}:</th>
-        <td>{NAME}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'INCIDENTS.ORGANIZATION'
-        )}:</th>
-        <td>{ORG_NAME}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.TASK_TYPE'
-        )}:</th>
-        <td>
-        {TASK_TYPE}
-        </td>
-      </tr>
-
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.PRIORITY'
-        )}:</th>
-        <td>{PRIORITY}</td>
-      </tr>
-      <tr>
-        <th scope="row">${this.translationService.translateAWord(
-          'TASK.DUE_DATE'
-        )}:</th>
-        <td>${duedate}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="container-fluid mb-2">
-    <div class="row">
-      <div class="col-6 px-1">
-        <a class="btn btn-primary d-block text-center" href="${
-          location.origin
-        }/incidents/viewTask/${attrs.TASK_REF_ID}" target="_blank">
-        ${this.translationService.translateAWord('TASK.SHOW')}
-        </a>
-      </div>
-      <div class="col-6 px-1">
-        <a class="btn btn-primary d-block text-center" href="${
-          location.origin
-        }/incidents/view/${attrs.INCIDENT_REF_ID}" target="_blank">
-        ${this.translationService.translateAWord('INCIDENTS.showIncident')}
-        </a>
-      </div>
-    </div>
-  </div>
-  `;
-  }
 }
 
 @NgModule({
   declarations: [MapComponent, TopBarComponent],
   imports: [
     CommonModule,
-    TranslateModule,
-    InlineSVGModule,
-    MatProgressSpinnerModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    ReactiveFormsModule,
     FormsModule,
-    NgbPopoverModule,
-    MatTooltipModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ButtonModule,
+    AutoCompleteModule,
+    OverlayPanelModule,
+    DropdownModule,
+    ListboxModule,
+    ProgressSpinnerModule,
+    TranslateObjModule,
+    // -----------
+    InlineSVGModule,
   ],
+  exports: [MapComponent],
 })
 export class MapModule {}
