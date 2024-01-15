@@ -1,17 +1,13 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatExpansionPanel } from '@angular/material/expansion';
-import { DateTimeUtil } from '@core/utils/DateTimeUtil';
-import {
-  DataOptions,
-  FormFieldName,
-} from '@shared/components/advanced-search/advanced-search.component';
-import { AdvancedSearchFieldsEnum } from '@shared/components/advanced-search/advancedSearch.model';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { finalize, subscribeOn } from 'rxjs/operators';
-import { TranslationService } from '../../i18n/translation.service';
-import { InquiryModel } from '../inquiries.model';
-import { InquiriesService } from '../inquiries.service';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatExpansionPanel} from '@angular/material/expansion';
+import {DateTimeUtil} from '@core/utils/DateTimeUtil';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {TranslationService} from '../../i18n/translation.service';
+import {InquiriesService} from '../inquiries.service';
+import * as _ from "lodash";
+import {AppCommonDataService} from "@core/services/app-common-data.service";
+import {AppCommonData} from "@core/entities/AppCommonData";
 
 @Component({
   selector: 'app-inquiries-report',
@@ -27,7 +23,10 @@ export class InquiriesReportComponent implements OnInit {
     toDate: [''],
     subject: [''],
     userId: [''],
+    tagIds: [null]
   });
+  tags: any[];
+  commonData: AppCommonData;
   public lang = 'en';
   public inquiries: any[];
   public paginationConfig: any;
@@ -39,7 +38,8 @@ export class InquiriesReportComponent implements OnInit {
     private translationService: TranslationService,
     private inquiryServices: InquiriesService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private readonly appCommonService: AppCommonDataService,
   ) {
     this.paginationConfig = {
       itemsPerPage: 10,
@@ -51,6 +51,9 @@ export class InquiriesReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.lang = this.translationService.getSelectedLanguage();
+    this.commonData = this.appCommonService.getCommonData();
+    const groupedTags = _.groupBy(this.commonData?.tags, 'module');
+    this.tags = groupedTags['INQUIRY'];
     this.getInquiriesList(0);
   }
 
