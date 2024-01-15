@@ -562,7 +562,7 @@
           queryParamsHandling="merge"></button>
       </div>
     </ng-container>
-    <ng-container *checkPrivileges="'PRIV_UP_TASK'">
+    <ng-container *ngIf="privilegesService.checkActionPrivilege('PRIV_UP_TASK') || tabv?.activeIndex === 2">
       <div class="mx-1" *ngIf="(!(viewOnly$ | async) && !closedStatus) || tabv?.activeIndex === 2">
         <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
           (click)="submit()"></button>
