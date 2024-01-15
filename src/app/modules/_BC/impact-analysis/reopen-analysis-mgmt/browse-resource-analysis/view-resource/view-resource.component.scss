@@ -1,0 +1,60 @@
+.read-only-row {
+  background-color: #f8f9fa !important;
+  color: #495057;
+}
+.card {
+  background-color: #f8f9fa !important;
+}
+.card-height {
+  height: 100%;
+}
+:host ::ng-deep {
+  .p-datatable .p-datatable-tbody > tr > td{
+    font-weight: 100 !important;
+  }
+  .p-sidebar {
+    z-index: 1;
+    .p-sidebar-header {
+      padding: 0;
+    }
+    .p-sidebar-content {
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+      flex: auto;
+      .timeline {
+        .timeline-content:before {
+          display: none !important;
+        }
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+        .timeline-items {
+          flex: auto;
+        }
+        .timeline-item {
+          padding: 0 0 20px 20px !important ;
+          flex: auto;
+          border: 0 !important ;
+          .timeline-media {
+            width: 40px !important;
+            height: 40px !important;
+            top: 6px !important;
+          }
+        }
+      }
+      :lang(ar) {
+        .timeline-items .timeline-item {
+          margin-right: 25px;
+          margin-left: 0;
+          padding: 0 20px 20px 0px !important;
+          position: relative;
+          .timeline-media {
+            right: -25px !important;
+            left: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}
