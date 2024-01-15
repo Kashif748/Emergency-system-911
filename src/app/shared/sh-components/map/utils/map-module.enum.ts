@@ -27,4 +27,5 @@ export enum EsriModule {
   urlUtils = 'esri/urlUtils',
   Extent = 'esri/geometry/Extent',
   BasemapToggle = 'esri/widgets/BasemapToggle',
+  ActionButton = 'esri/support/actions/ActionButton',
 }

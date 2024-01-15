@@ -1,4 +1,27 @@
 :host ::ng-deep {
+  #map-topbar {
+    transition: all 0.75s ease;
+    transform: translateX(0);
+    [dir="ltr"] & {
+      right: -50%;
+    }
+    [dir="rtl"] & {
+      left: -50%;
+    }
+  }
+  #map-topbar.show {
+    [dir="ltr"] & {
+      right: 50%;
+      transform: translateX(50%);
+    }
+    [dir="rtl"] & {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  .esri-ui-inner-container.esri-ui-manual-container {
+    inset: 15px;
+  }
   .esri-component.esri-attribution.esri-widget {
     display: none !important;
   }
@@ -48,16 +71,16 @@
       padding: 0.5rem !important;
     }
   }
+
   .esri-popup__header-title:hover {
     background-color: transparent !important;
   }
 
-  .esri-ui-inner-container.esri-ui-corner-container {
-    margin-top: 1.3rem !important;
-  }
-
   .esri-widget {
     border-radius: 10px !important;
+    input {
+      border-radius: 10px !important;
+    }
   }
 }
 

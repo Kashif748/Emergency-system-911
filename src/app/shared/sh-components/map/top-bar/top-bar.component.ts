@@ -3,12 +3,21 @@ import {
   Component,
   forwardRef,
   Inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ILangFacade } from '@core/facades/lang.facade';
-import { Observable, of } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import {
+  filter,
+  map,
+  pairwise,
+  startWith,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { MapComponent } from '../map.component';
 import { MapService } from '../services/map.service';
 import {
@@ -19,13 +28,19 @@ import {
   DZSP_ID_PLOT,
   DZSP_SEARCH_URL,
 } from '../utils/map.models';
+import { SelectItem } from 'primeng/api';
+import { OrgMapGisLayer } from 'src/app/api/models/org-map-gis-layer';
+import { Select, Store } from '@ngxs/store';
+import { GisState } from '@core/states/gis/gis.state';
+import { GisAction } from '@core/states/gis/gis.action';
 
 @Component({
   selector: 'app-top-bar',
   templateUrl: './top-bar.component.html',
   styleUrls: ['./top-bar.component.scss'],
 })
-export class TopBarComponent implements OnInit {
+export class TopBarComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject();
   /**
    *
    */
@@ -33,21 +48,45 @@ export class TopBarComponent implements OnInit {
     @Inject(forwardRef(() => MapComponent)) public map: MapComponent,
     private mapService: MapService,
     private cdr: ChangeDetectorRef,
-    private langFacade: ILangFacade
+    private langFacade: ILangFacade,
+    private store: Store
   ) {}
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   public lang = 'en';
   searchControl = new FormControl();
-  selectMControl = new FormControl('');
-  selectDControl = new FormControl('');
-  selectSControl = new FormControl('');
-  selectRControl = new FormControl('');
-  selectPControl = new FormControl('');
+  selectedLayer = new FormControl(null);
+
+  public optionsM: SelectItem[] = [
+    { value: 'ADM', label: 'SHARED.ADM' },
+    { value: 'AAM', label: 'SHARED.AAM' },
+    { value: 'WRM', label: 'SHARED.DRM' },
+  ];
+  public optionsD = [];
+  public optionsS = [];
+  public optionsP = [];
+  public optionsR = [];
+
+  public selectedM: SelectItem;
+  public selectedD: { name: string; DISTRICTID: string; NAMEENGLISH: string };
+  public selectedS: {
+    name: string;
+    COMMUNITYID: string;
+    COMMUNITYNAMEENG: string;
+  };
+  public selectedR: string;
+  public selectedP: { PLOTNUMBER: string };
 
   filteredOptions: Observable<AddressSearchResultModel[]>;
+  @Select(GisState.layersPage)
+  public layersPage$: Observable<OrgMapGisLayer[]>;
 
   ngOnInit() {
     this.lang = this.langFacade.stateSanpshot?.ActiveLang?.key;
     this.filteredOptions = this.searchControl.valueChanges.pipe(
+      takeUntil(this.destroy$),
       tap((v: AddressSearchResultModel) => {
         if (!!v && typeof v === 'object') {
           this.map.zoomToAddress(v);
@@ -56,10 +95,44 @@ export class TopBarComponent implements OnInit {
       filter((v) => (v as any)?.length > 2),
       switchMap((value) => this._filter(value as any))
     );
+
+    this.store.dispatch([
+      new GisAction.LoadLayers({
+        page: 0,
+        size: 10,
+      }),
+    ]);
+    this.selectedLayer.valueChanges
+      .pipe(
+        startWith([]),
+        takeUntil(this.destroy$),
+        map((value) => value as [OrgMapGisLayer]),
+        pairwise(),
+        map(([oldValue, newValue]) => {
+          if (newValue.length > oldValue.length) {
+            newValue.forEach((layer) => {
+              if (oldValue.indexOf(layer) == -1) {
+                const layerFeature = {
+                  url: `${layer.url}/${layer.layerId}`,
+                  id: layer.nameEn.replace(/ /g, '_').toUpperCase(),
+                  layerId: layer.layerId,
+                };
+                this.map.addLayer(layerFeature);
+              }
+            });
+          } else {
+            oldValue.forEach((layer) => {
+              if (newValue.indexOf(layer) == -1)
+                this.map.removeLayer(
+                  layer.nameEn.replace(/ /g, '_').toUpperCase()
+                );
+            });
+          }
+        })
+      )
+      .subscribe();
   }
-  displayWith(value) {
-    return value?.Address;
-  }
+
   private _filter(value: string): Observable<AddressSearchResultModel[]> {
     if (typeof value !== 'string') {
       return of([value]);
@@ -71,11 +144,10 @@ export class TopBarComponent implements OnInit {
       .pipe(map((r) => r as AddressSearchResultModel[]));
   }
 
-  public optionsD = [];
   async selectM(municipality) {
-    this.selectDControl.setValue('');
-    this.selectSControl.setValue('');
-    this.selectPControl.setValue('');
+    this.selectedD = null;
+    this.selectedS = null;
+    this.selectedP = null;
     this.optionsD = [];
     this.optionsS = [];
     this.optionsR = [];
@@ -133,10 +205,9 @@ export class TopBarComponent implements OnInit {
     }
   }
 
-  public optionsS = [];
   async selectD(district) {
-    this.selectSControl.setValue('');
-    this.selectPControl.setValue('');
+    this.selectedS = null;
+    this.selectedP = null;
 
     this.optionsS = [];
     this.optionsR = [];
@@ -184,7 +255,7 @@ export class TopBarComponent implements OnInit {
       ];
       query.returnGeometry = false;
       query.orderByFields = [
-        this.selectMControl.value == 'AAM' ? 'COMMUNITYID' : 'COMMUNITYNAMEENG',
+        this.selectedM?.value == 'AAM' ? 'COMMUNITYID' : 'COMMUNITYNAMEENG',
       ];
       const result = await queryTask.execute(query);
       this.optionsS = result.features.map((f) => {
@@ -200,12 +271,10 @@ export class TopBarComponent implements OnInit {
     }
   }
 
-  public optionsP = [];
   async selectS(sector: string) {
-    const isAAM = this.selectMControl.value == 'AAM';
-
-    this.selectPControl.setValue('');
-    this.selectRControl.setValue('');
+    const isAAM = this.selectedM?.value == 'AAM';
+    this.selectedP = null;
+    this.selectedR = null;
 
     this.optionsR = [];
     this.optionsP = [];
@@ -243,9 +312,9 @@ export class TopBarComponent implements OnInit {
       const query = this.map.createQuery();
 
       query.where = `MUNICIPALITYENG = '${
-        this.selectMControl.value
+        this.selectedM?.value
       }' AND UPPER(DISTRICTENG) = '${
-        this.selectDControl.value
+        this.selectedD?.NAMEENGLISH
       }' AND UPPER(COMMUNITYENG) = '${sector.toUpperCase()}' ${
         isAAM ? '' : 'AND ROADID = 0'
       }`;
@@ -273,10 +342,9 @@ export class TopBarComponent implements OnInit {
     }
   }
 
-  public optionsR = [];
   async selectR(road) {
+    this.selectedP = null;
     this.optionsP = [];
-    this.selectPControl.setValue('');
     if (road) {
       // ----------------------- load next cascading dropdown options ---------------------------
       const queryTask = this.map.createQueryTask(
@@ -284,10 +352,10 @@ export class TopBarComponent implements OnInit {
       );
       const query = this.map.createQuery();
       query.where = `MUNICIPALITYENG = '${
-        this.selectMControl.value
+        this.selectedM?.value
       }' AND UPPER(DISTRICTENG) = '${
-        this.selectDControl.value
-      }' AND UPPER(COMMUNITYENG) = '${this.selectSControl.value.toUpperCase()}' AND ROADID = ${road}`;
+        this.selectedD?.NAMEENGLISH
+      }' AND UPPER(COMMUNITYENG) = '${this.selectedS?.COMMUNITYNAMEENG?.toUpperCase()}' AND ROADID = ${road}`;
       query.outFields = ['OBJECTID', 'PLOTNUMBER', 'FLAT_ID'];
       query.returnGeometry = false;
       query.orderByFields = ['PLOTNUMBER', 'FLAT_ID'];
@@ -307,7 +375,7 @@ export class TopBarComponent implements OnInit {
   }
 
   async selectP(plot: string) {
-    const isAAM = this.selectMControl.value == 'AAM';
+    const isAAM = this.selectedM?.value == 'AAM';
 
     if (plot) {
       // ----------------------- zoom to plot --------------------------------------------
@@ -317,11 +385,11 @@ export class TopBarComponent implements OnInit {
       );
       const pQuery = this.map.createQuery();
       pQuery.where = `MUNICIPALITYENG = '${
-        this.selectMControl.value
+        this.selectedM?.value
       }' AND UPPER(DISTRICTENG) = '${
-        this.selectDControl.value
-      }' AND UPPER(COMMUNITYENG) = '${this.selectSControl.value.toUpperCase()}' ${
-        isAAM ? 'AND ROADID = ' + this.selectRControl.value : ''
+        this.selectedD?.NAMEENGLISH
+      }' AND UPPER(COMMUNITYENG) = '${this.selectedS?.COMMUNITYNAMEENG?.toUpperCase()}' ${
+        isAAM ? 'AND ROADID = ' + this.selectedR : ''
       } AND UPPER(PLOTNUMBER) = '${plot.toUpperCase()}'`;
       pQuery.orderByFields = ['PLOTNUMBER', 'FLAT_ID'];
       pQuery.outFields = ['OBJECTID', 'PLOTNUMBER', 'FLAT_ID'];
@@ -347,17 +415,13 @@ export class TopBarComponent implements OnInit {
     }
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchControl.reset();
-    this.selectDControl.reset();
-    this.selectMControl.reset();
-    this.selectPControl.reset();
-    this.selectRControl.reset();
-    this.selectSControl.reset();
-    this.ngOnInit();
-    // center: [53.8248, 24.0088],
-    // zoom: 8,
-    //24.2159697,54.0221061
+    this.selectedD = null;
+    this.selectedM = null;
+    this.selectedS = null;
+    this.selectedP = null;
+    this.selectedR = null;
     this.map.initializeMap();
   }
 }

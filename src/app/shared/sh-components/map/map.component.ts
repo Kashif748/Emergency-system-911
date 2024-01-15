@@ -12,9 +12,9 @@ import {
   Optional,
   Output,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IThemeFacade } from '@core/facades/theme.facade';
 import { TranslationService } from 'src/app/modules/i18n/translation.service';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -32,26 +32,27 @@ import { MapActionType } from '@shared/components/map/utils/MapActionType';
 import { TaskIncidentGisData } from '@shared/components/map/utils/TaskIncidentGisData';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatOptionModule } from '@angular/material/core';
 import {
   AddressSearchResultModel,
   DZSP_ID_COMMUNITY,
   DZSP_SEARCH_URL,
   LocationInfoModel,
 } from './utils/map.models';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppCommonDataService } from '@core/services/app-common-data.service';
 import esri = __esri;
 import { TranslateModule } from '@ngx-translate/core';
 import { EsriModule } from './utils/map-module.enum';
 import { PopupBuilder } from './services/popup.builder';
 import { CdatePipe } from '@shared/sh-pipes/cdate.pipe';
+import { ButtonModule } from 'primeng/button';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { DropdownModule } from 'primeng/dropdown';
+import { ListboxModule } from 'primeng/listbox';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-map',
@@ -62,6 +63,8 @@ import { CdatePipe } from '@shared/sh-pipes/cdate.pipe';
 export class MapComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit
 {
+  @ViewChild(TopBarComponent) topbar: TopBarComponent;
+
   private queryInfo: (graphic: esri.Graphic) => Promise<LocationInfoModel>;
   filterLayersFunc$: Subject<(where: any, fName: MapActionType) => void> =
     new Subject();
@@ -91,6 +94,7 @@ export class MapComponent
   @Input() showLocInfo = true;
   @Input() smallSize = false;
   currentLocation = true;
+  showTopBar = false;
   @Output() OnFetchCoordinates: EventEmitter<boolean> = new EventEmitter();
   // main map view
   public mapView: esri.MapView;
@@ -138,10 +142,19 @@ export class MapComponent
   public addTeamPolyline: () => void;
   public addTeamPolygon: () => void;
   public addReporterPoint: () => void;
+  public addLayer: (layer: any) => void;
+  public removeLayer: (layer: any) => void;
 
   public createQueryTask: (url: string) => __esri.QueryTask;
   public createQuery: () => __esri.Query;
 
+  reload() {
+    if (this.topbar) {
+      this.topbar.clearSearch();
+    } else {
+      this.initializeMap();
+    }
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (Array.isArray(this.config)) {
       if (this.config.length > 0) {
@@ -668,11 +681,15 @@ export class MapComponent
           case MapActionType.INCIDENT_POINT:
             TaskUrl = IncPointFeatureService.url + '/0';
             Symbol = {
+              // type: 'simple-marker',
+              // style: 'path',
+              // path: 'M213.2 32H288V96c0 17.7 14.3 32 32 32s32-14.3 32-32V32h74.8c27.1 0 51.3 17.1 60.3 42.6l42.7 120.6c-10.9-2.1-22.2-3.2-33.8-3.2c-59.5 0-112.1 29.6-144 74.8V224c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7 14.3 32 32 32c2.3 0 4.6-.3 6.8-.7c-4.5 15.5-6.8 31.8-6.8 48.7c0 5.4 .2 10.7 .7 16l-.7 0c-17.7 0-32 14.3-32 32v64H86.6C56.5 480 32 455.5 32 425.4c0-6.2 1.1-12.4 3.1-18.2L152.9 74.6C162 49.1 186.1 32 213.2 32zM352 368a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm211.3-43.3c-6.2-6.2-16.4-6.2-22.6 0L480 385.4l-28.7-28.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l40 40c6.2 6.2 16.4 6.2 22.6 0l72-72c6.2-6.2 6.2-16.4 0-22.6z',
+              // color: 'red',
+              // size: '26px',
               type: 'simple-marker',
-              style: 'path',
-              path: 'M213.2 32H288V96c0 17.7 14.3 32 32 32s32-14.3 32-32V32h74.8c27.1 0 51.3 17.1 60.3 42.6l42.7 120.6c-10.9-2.1-22.2-3.2-33.8-3.2c-59.5 0-112.1 29.6-144 74.8V224c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7 14.3 32 32 32c2.3 0 4.6-.3 6.8-.7c-4.5 15.5-6.8 31.8-6.8 48.7c0 5.4 .2 10.7 .7 16l-.7 0c-17.7 0-32 14.3-32 32v64H86.6C56.5 480 32 455.5 32 425.4c0-6.2 1.1-12.4 3.1-18.2L152.9 74.6C162 49.1 186.1 32 213.2 32zM352 368a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm211.3-43.3c-6.2-6.2-16.4-6.2-22.6 0L480 385.4l-28.7-28.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l40 40c6.2 6.2 16.4 6.2 22.6 0l72-72c6.2-6.2 6.2-16.4 0-22.6z',
+              style: 'circle',
               color: 'red',
-              size: '26px',
+              size: '16px',
             };
             break;
 
@@ -784,6 +801,19 @@ export class MapComponent
         });
       };
 
+      this.addLayer = async (layer) => {
+        const newLayer: esri.FeatureLayer = new FeatureLayer(layer);
+        newLayer.opacity = 0.8;
+        this.map.add(newLayer);
+      };
+
+      this.removeLayer = (layerId: number) => {
+        const alreadyAdded = this.map.findLayerById(layerId?.toString());
+        if (alreadyAdded) {
+          this.map.remove(alreadyAdded);
+        }
+      };
+
       this.filterLayersFunc$.next(filterLayers);
 
       const clearGraphics = () => {
@@ -802,7 +832,10 @@ export class MapComponent
 
         if (!this.smallSize) {
           this.mapView?.ui.add('map-topbar', { position: 'manual', index: 0 });
+          this.mapView?.ui.add('topbar-toggler', { position: 'top-trailing' });
         }
+
+        this.mapView?.ui.add('refresh-btn', { position: 'top-trailing' });
 
         const homeBtn = new Home({ view: this.mapView });
         !this.smallSize && this.mapView.ui.add(homeBtn, 'top-trailing');
@@ -1693,17 +1726,18 @@ export class MapComponent
   declarations: [MapComponent, TopBarComponent],
   imports: [
     CommonModule,
-    TranslateModule,
-    InlineSVGModule,
-    MatProgressSpinnerModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    ReactiveFormsModule,
     FormsModule,
-    NgbPopoverModule,
-    MatTooltipModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ButtonModule,
+    AutoCompleteModule,
+    OverlayPanelModule,
+    DropdownModule,
+    ListboxModule,
+    ProgressSpinnerModule,
+    TranslateObjModule,
+    // -----------
+    InlineSVGModule,
   ],
   exports: [MapComponent],
 })
