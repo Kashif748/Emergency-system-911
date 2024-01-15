@@ -309,7 +309,7 @@ export class TaskDialogComponent
     private translateObj: TranslateObjPipe,
     private privileges: PrivilegesService,
     private router: Router,
-    private privilegesService: PrivilegesService,
+    public privilegesService: PrivilegesService,
     //TODO: to be replaced with primeng
     public matDialog: MatDialog
   ) {
