@@ -1,0 +1,90 @@
+<div class="container-fluid">
+  <app-breadcrumb></app-breadcrumb>
+  <div class="mx-4 my-10">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <!--advance search-->
+          <div class="col-12 position-relative">
+            <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
+                        legend="{{'ACTIONS.ADVANCED_SEARCH' | translate}}" [collapsed]="true">
+              <div class="p-fluid p-grid">
+                <div class="p-field p-col-4 p-md-2">
+                  <p-dropdown
+                          placeholder="{{'VENDERS.DIALOG.CRITICALITY' | translate}}" [autoDisplayFirst]="false"
+                          [showClear]="true" dataKey="id"
+                  >
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj: 'name' }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj : 'name'}}
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+
+                <div class="p-field p-col-4 p-md-2">
+                  <p-dropdown
+                          placeholder="{{'VENDERS.DIALOG.CRITICALITY' | translate}}" [autoDisplayFirst]="false"
+                          [showClear]="true" dataKey="id"
+                  >
+                    <ng-template let-item pTemplate="selectedItem">
+                      {{ item | translateObj: 'name' }}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="item">
+                      {{ item | translateObj : 'name'}}
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+                <div class="p-col p-d-flex">
+                  <div class="ml-dir-auto"></div>
+                  <div class="mx-1">
+                    <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-times"
+                            class="p-button-outlined" (click)="clear()"></button>
+                  </div>
+                  <div class="mx-1">
+                    <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search"
+                            (click)="search()"></button>
+                  </div>
+                </div>
+              </div>
+            </p-fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-4 shadow">
+      <div class="row pb-20">
+        <div class="p-col-12">
+          <div class="w-100 flex-wrap">
+            <div class="p-d-flex p-jc-center" *ngIf="priorities$ | async as priorities">
+              <ng-container *ngFor="let priority of priorities">
+                <div class="col-md-2 border rounded p-10 p-mr-2 text-center" [style.background-color]="priority.colorHexa">
+                  <div>
+                    <a class="d-block font-size-h5 font-weight-bolder text-dark">
+                      {{priority | translateObj : 'name'}}
+                    </a>
+                  </div>
+                  <div>
+                    <a class="d-block font-size-h5 font-weight-bold text-dark">
+                    18
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div class="header-state mb-2 col-lg-2 col-md-12">
+          <div class="row shadow-0">
+            <div class="col-lg-12 col-md-4 col-sm-6 p-0 m-3">
+              <app-main-category-widget></app-main-category-widget>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

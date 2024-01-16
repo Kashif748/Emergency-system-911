@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { UnderBuildComponent } from '../under-build/under-build.component';
-import { PrivilegeGuard } from '@shared/guards/privilege.guard';
-import { IncidentsService } from '../_metronic/core/services/incidents.service';
-import { LayoutComponent } from './_layout/layout.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {UnderBuildComponent} from '../under-build/under-build.component';
+import {PrivilegeGuard} from '@shared/guards/privilege.guard';
+import {IncidentsService} from '../_metronic/core/services/incidents.service';
+import {LayoutComponent} from './_layout/layout.component';
 
 const routes: Routes = [
   {
@@ -352,6 +352,13 @@ const routes: Routes = [
           import('../modules/public-position/public-position.module').then(
             (m) => m.PublicPositionModule
           ),
+      },
+      {
+        path: 'emergency-dashboard',
+        loadChildren: () =>
+            import('../modules/emergency-statistics-dashboard/emergency-statistics-dashboard.module').then(
+                (m) => m.EmergencyStatisticsDashboardModule
+            ),
       },
       {
         path: 'news',
