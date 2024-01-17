@@ -4,7 +4,6 @@ import {EmergencyStatisticsDashboardRoutingModule} from './emergency-statistics-
 import {EmergencyStatisticsDashboardComponent} from './emergency-statistics-dashboard.component';
 import {StatisticsComponent} from './statistics/statistics.component';
 import {DividerModule} from "primeng/divider";
-import {SharedBreadcrumbModule} from "@shared/sh-components/breadcrumbs/breadcrumb.component";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {HttpClient} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
@@ -20,9 +19,11 @@ import {NgxsModule} from "@ngxs/store";
 import {BrowseStatisticsState} from "./states/browse-statistics.state";
 import {InlineSVGModule} from "ng-inline-svg";
 import {NgApexchartsModule} from "ng-apexcharts";
+import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
+import {SharedModule} from "@shared/shared.module";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/business-continuity-setup/', '.json');
+  return new TranslateHttpLoader(http, 'assets/i18n/emergency-dashboard/', '.json');
 }
 
 @NgModule({
@@ -36,7 +37,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     FieldsetModule,
     ButtonModule,
     DropdownModule,
-    SharedBreadcrumbModule,
     TranslateObjModule,
     InlineSVGModule,
     NgApexchartsModule,
@@ -50,6 +50,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
       },
       isolate: true,
     }),
+    SharedBreadcrumbModule,
+    SharedModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })

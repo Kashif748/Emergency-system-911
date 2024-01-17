@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ILangFacade} from "@core/facades/lang.facade";
 
 @Component({
   selector: 'app-emergency-statistics-dashboard',
@@ -6,7 +7,7 @@ import {Component, OnInit} from '@angular/core';
 })
 export class EmergencyStatisticsDashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private lang: ILangFacade) { }
 
   ngOnInit(): void {
   }

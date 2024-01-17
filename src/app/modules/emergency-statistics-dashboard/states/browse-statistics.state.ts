@@ -19,23 +19,6 @@ export const BROWSE_STATISTICS_UI_STATE_TOKEN =
 
 @State<BrowseStatisticsStateModel>({
   name: BROWSE_STATISTICS_UI_STATE_TOKEN,
-  defaults: {
-    pageRequest: {
-      filters: {},
-      first: 0,
-      rows: 10,
-    },
-    columns: [
-      'nameAr',
-      'nameEn',
-      'org',
-      'emiratesId',
-      'userName',
-      'title',
-      'role',
-    ],
-    view: 'TABLE',
-  },
 })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })

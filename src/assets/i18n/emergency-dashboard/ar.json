@@ -1,0 +1,5 @@
+{
+  "SHARED": {
+    "PAGE_REPORT": "{first} - {last} من {totalRecords}"
+  }
+}

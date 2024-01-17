@@ -95,6 +95,7 @@ import {VendorsReportState} from '@core/states/bc-reports/vendors-report/vendors
 import {EmployeesReportState} from '@core/states/bc-reports/employees-report/employees-report.state';
 import {GisState} from '@core/states/gis/gis.state';
 import {IncidentCategoriesState} from "@core/states/incident-categories/incident-categories.state";
+import firebase from 'firebase/compat/app';
 import initializeApp = firebase.initializeApp;
 
 initializeApp(environment.firebase);
@@ -230,7 +231,8 @@ export function getHighlightLanguages() {
             'browse_employees_report',
             'browse_systems_report',
             'browse_vendors_report',
-            'browse_analysis_summary'
+            'browse_analysis_summary',
+            'browse_emergency_statistics'
           ],
         },
         ['common_data']
