@@ -57,29 +57,58 @@
     </div>
     <div class="card mt-4 shadow">
       <div class="row pb-20">
+        <!--priorities-->
         <div class="p-col-12">
-          <div class="w-100 flex-wrap">
-            <div class="p-d-flex p-jc-center" *ngIf="priorities$ | async as priorities">
+          <div class="d-md-flex p-jc-center" *ngIf="priorities$ | async as priorities">
               <ng-container *ngFor="let priority of priorities">
-                <div class="col-md-2 border rounded p-10 p-mr-2 text-center" [style.background-color]="priority.colorHexa">
-                  <div>
-                    <a class="d-block font-size-h5 font-weight-bolder text-dark">
-                      {{priority | translateObj : 'name'}}
-                    </a>
+                <div class="col-lg-2 col-md-4 col-sm-6 item pt-0 pb-4">
+                  <!--begin::Stats Widget 27-->
+                  <div class="card card-custom m-0 shadow-sm h-100" [style.background-color]="priority.colorHexa">
+                    <!--begin::Body-->
+                    <div class="card-body d-lg-flex justify-content-center">
+                      <div class="d-flex flex-column">
+                        <a class="d-block font-size-h5 font-weight-bolder text-dark">
+                          {{priority | translateObj : 'name'}}
+                        </a>
+                        <a class="text-center d-block font-size-h5 font-weight-bold text-dark">
+                          19
+                        </a>
+                      </div>
+                    </div>
+                    <!--end::Body-->
                   </div>
-                  <div>
-                    <a class="d-block font-size-h5 font-weight-bold text-dark">
-                    18
-                    </a>
-                  </div>
+                  <!--end::Stats Widget 27-->
                 </div>
               </ng-container>
             </div>
-          </div>
         </div>
+        <!--main category-->
         <div class="header-state mb-2 col-lg-2 col-md-12">
           <div class="row shadow-0">
             <div class="col-lg-12 col-md-4 col-sm-6 p-0 m-3">
+              <app-main-category-widget></app-main-category-widget>
+            </div>
+          </div>
+        </div>
+        <!--Bar Chart & incident count-->
+        <div class="col-lg-8 col-md-12">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+              <div class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm">
+                <div class="card-body p-0 h-100">
+                  <apx-chart  [series]="chartOptionsR.series" [chart]="chartOptionsR.chart"
+                              [plotOptions]="chartOptionsR.plotOptions" [yaxis]="chartOptionsR.yaxis" [xaxis]="chartOptionsR.xaxis"
+                              [stroke]="chartOptionsR.stroke" [grid]="chartOptionsR.grid" [fill]="chartOptionsR.fill"
+                              [annotations]="chartOptionsR.annotations" [tooltip]="chartOptionsR.tooltip"></apx-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-state mb-2 pr-6 col-lg-2 col-md-12">
+          <div class="row shadow-0">
+            <div class="col-lg-12 col-md-4 col-sm-6 p-0 mt-3">
               <app-main-category-widget></app-main-category-widget>
             </div>
           </div>

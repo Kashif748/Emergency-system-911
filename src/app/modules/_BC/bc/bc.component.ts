@@ -113,6 +113,7 @@ export class BCComponent implements OnInit, OnDestroy {
       ),
       map((page) =>
         page?.map((u) => {
+          console.log(u);
           return {
             ...u,
           };

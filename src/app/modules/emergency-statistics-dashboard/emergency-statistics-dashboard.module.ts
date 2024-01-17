@@ -19,6 +19,7 @@ import {IncidentWidgetComponent} from './statistics/incident-widget/incident-wid
 import {NgxsModule} from "@ngxs/store";
 import {BrowseStatisticsState} from "./states/browse-statistics.state";
 import {InlineSVGModule} from "ng-inline-svg";
+import {NgApexchartsModule} from "ng-apexcharts";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/business-continuity-setup/', '.json');
@@ -38,6 +39,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     SharedBreadcrumbModule,
     TranslateObjModule,
     InlineSVGModule,
+    NgApexchartsModule,
     NgxsModule.forFeature([BrowseStatisticsState]),
     TranslateModule.forChild({
       extend: true,
