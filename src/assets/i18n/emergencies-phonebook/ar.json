@@ -4,16 +4,22 @@
     "NEW_ITEM": "عنصر جديد",
     "TITLE": "اللقب",
     "ID": "ID",
-    "FULL_NAME" : "الاسم",
-    "FIRST_NAME": "الاسم",
-    "MIDDLE_NAME": "الاسم الأوسط",
-    "LAST_NAME": "الاسم الأخير",
+    "FULL_NAME": "الاسم",
+    "NAME_AR": "الاسم (عربي)",
+    "NAME_EN": "الاسم (انكليزي)",
     "ORG_NAME": "الجهة",
     "MOBILE_NUMBER": "الجوال",
     "PHONE_NUMBER": "الهاتف الثابت",
     "IS_ACTIVE": "حالةالنشاط",
     "JOB_TITLE": "المسمى الوظيفي",
-    "COPY_TOOLTIP" : "نسخ رقم الجوال",
-    "ALL" :"الكل"
+    "COPY_TOOLTIP": "نسخ رقم الجوال",
+    "ALL": "الكل",
+    "NOTES":"ملاحظات",
+    "TYPE":"نوع حهة الاتصال",
+    "INTERNAL": "داخلي",
+    "EXTERNAL": "خارجي"
+
+
+
   }
 }

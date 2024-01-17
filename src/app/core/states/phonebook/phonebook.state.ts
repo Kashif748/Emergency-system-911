@@ -11,18 +11,18 @@ import { patch } from '@ngxs/store/operators';
 import { EMPTY } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { PhonebookAction } from './phonebook.action';
-import {ExternalPhonebookControllerService} from "../../../api/services/external-phonebook-controller.service";
-import {PageExternalPhonebook} from "../../../api/models/page-external-phonebook";
-import {ExternalPhonebook} from "../../../api/models/external-phonebook";
-
+import { ExternalPhonebookControllerService } from '../../../api/services/external-phonebook-controller.service';
+import { PageExternalPhonebookProjection } from '../../../api/models/page-external-phonebook-projection';
+import { ExternalPhonebook } from '../../../api/models/external-phonebook';
 
 export interface PhonebookStateModel {
-  page: PageExternalPhonebook;
+  page: PageExternalPhonebookProjection;
+  externalsOrgs: any[];
   phonebook: ExternalPhonebook; //User
   loading: boolean;
   blocking: boolean;
   // sidebar state
-  sidebarPage: PageExternalPhonebook;
+  sidebarPage: PageExternalPhonebookProjection;
   sidebarLoading: boolean;
 }
 
@@ -56,6 +56,10 @@ export class PhonebookState {
   @Selector([PhonebookState])
   static blocking(state: PhonebookStateModel) {
     return state?.blocking;
+  }
+  @Selector([PhonebookState])
+  static externalsOrgs(state: PhonebookStateModel) {
+    return state?.externalsOrgs;
   }
   // sidebar selectors
   @Selector([PhonebookState])
@@ -190,6 +194,38 @@ export class PhonebookState {
             })
           );
         })
+      );
+  }
+  @Action(PhonebookAction.LoadExternalOrgs, { cancelUncompleted: true })
+  loadExternalOrgs(
+    { setState }: StateContext<PhonebookStateModel>,
+    { payload }: PhonebookAction.LoadExternalOrgs
+  ) {
+    return this.phonebookService
+      .search2({
+        pageable: {
+          size: 20,
+        },
+        orgName: payload.orgName,
+      })
+      .pipe(
+        tap((res) => {
+          let content = res.result?.content;
+          setState(
+            patch<PhonebookStateModel>({
+              externalsOrgs: [...new Set(content.map((u) => u?.orgName))],
+            })
+          );
+        }),
+        catchError(() => {
+          setState(
+            patch<PhonebookStateModel>({
+              externalsOrgs: [],
+            })
+          );
+          return EMPTY;
+        }),
+        finalize(() => {})
       );
   }
   // sidebar actions

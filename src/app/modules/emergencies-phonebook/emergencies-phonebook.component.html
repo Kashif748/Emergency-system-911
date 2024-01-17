@@ -1,4 +1,4 @@
-<app-phonebook-dialog></app-phonebook-dialog>
+<app-phonebook-dialog [orgs]="orgs$ | async"></app-phonebook-dialog>
 
 <div class="container-fluid">
   <app-breadcrumb></app-breadcrumb>
@@ -13,23 +13,45 @@
           [collapsed]="true"
         >
           <div class="p-fluid p-grid">
+            <!-- Name -->
             <div class="p-field p-col-4 p-md-3">
               <input
                 type="text"
                 pInputText
                 [ngModel]="state?.pageRequest?.filters['name']"
                 (keyup)="updateFilter({ name: $event.target.value }, $event)"
-                placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
+                placeholder="{{ 'PHONEBOOK.FULL_NAME' | translate }}"
               />
             </div>
-            <div class="p-field p-col-4 p-md-3">
-              <input
-                type="text"
-                pInputText
-                [ngModel]="state?.pageRequest?.filters['orgName']"
-                (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
-                placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
-              />
+            <!-- Org Dropdown -->
+            <div class="p-field p-col-12 p-md-3">
+              <span class="p-float-label">
+                <p-dropdown
+                  (onChange)="updateFilter({ orgName: $event?.value }, $event)"
+                  [ngModel]="state?.pageRequest?.filters['orgName']"
+                  [options]="externalsOrgs$ | async"
+                  [autoDisplayFirst]="false"
+                  appendTo="body"
+                  editable="true"
+                  [filter]="false"
+                  [showClear]="true"
+                  inputId="orgName"
+                  placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
+                  ><ng-template let-option let-placeholder pTemplate="header">
+                    <div class="w-100 p-2">
+                      <span class="p-input-icon-left w-100">
+                        <i class="pi pi-search"></i>
+                        <input
+                          (keyup)="filterOrg($event.target.value)"
+                          type="text"
+                          pInputText
+                          class="w-100"
+                        />
+                      </span>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </span>
             </div>
             <!-- mobile -phone  -->
             <div class="p-field p-col-12 p-md-3">
@@ -73,6 +95,8 @@
       </div>
       <div class="w-100 d-flex flex-wrap mx-1 my-2 px-6">
         <div class="my-auto">
+          <!-- active-inactive filters -->
+
           <button
             pButton
             type="button"
@@ -105,6 +129,32 @@
             }"
           >
             <span class="m-auto"> {{ "ACTIONS.ACTIVE" | translate }} </span>
+          </button>
+        </div>
+        <p-divider layout="vertical"></p-divider>
+        <!-- Internal-external filters -->
+        <div class="my-auto">
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-outlined"
+            (click)="loadByStatus({ internal: false })"
+            [ngClass]="{
+              active: !state?.pageRequest?.filters['external']
+            }"
+          >
+            <span class="m-auto"> {{ "PHONEBOOK.EXTERNAL" | translate }}</span>
+          </button>
+          <button
+            pButton
+            type="button"
+            class="p-tag w-95px mx-2 px-2 text-center py-1 p-button-rounded p-button-sm p-button-outlined"
+            (click)="loadByStatus({ internal: true })"
+            [ngClass]="{
+              active: state?.pageRequest?.filters['internal']
+            }"
+          >
+            <span class="m-auto"> {{ "PHONEBOOK.INTERNAL" | translate }} </span>
           </button>
         </div>
 

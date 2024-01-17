@@ -22,6 +22,8 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import {PaginatorModule} from 'primeng/paginator';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
+import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(
@@ -47,6 +49,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     PaginatorModule,
     RouterModule,
     SharedModule,
+    TranslateObjModule,
+    SelectButtonModule,
     TranslateModule.forChild({
       extend: true,
       loader: {

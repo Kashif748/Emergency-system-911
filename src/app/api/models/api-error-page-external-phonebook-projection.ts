@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface ApiErrorPageExternalPhonebook {
+export interface ApiErrorPageExternalPhonebookProjection {
   code?: string;
   message_Ar?: string;
   message_En?: string;

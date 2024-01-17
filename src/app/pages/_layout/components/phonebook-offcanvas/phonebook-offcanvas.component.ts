@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ExternalPhonebook } from 'src/app/api/models';
+import {
+  ExternalPhonebook,
+  ExternalPhonebookProjection,
+  IdNameProjection,
+} from 'src/app/api/models';
 import { OffcanvasPhonebookAction } from './states/offcanvas-phonebook.action';
 import {
   OffcanvasPhonebookState,
@@ -15,14 +19,17 @@ import { MessageHelper } from '@core/helpers/message.helper';
 import { PageRequestModel } from '@core/models/page-request.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ILangFacade } from '@core/facades/lang.facade';
+import { CommonDataState, OrgAction, OrgState } from '@core/states';
+import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 
 @Component({
   selector: 'app-phonebook-offcanvas',
   templateUrl: './phonebook-offcanvas.component.html',
   styleUrls: ['./phonebook-offcanvas.component.scss'],
 })
-export class PhonebookOffcanvasComponent implements OnInit {
+export class PhonebookOffcanvasComponent implements OnInit, AfterViewInit {
   display;
+  phonebookTypes = [];
   @Select(PhonebookState.sidebarLoading)
   public loading$: Observable<boolean>;
   @Select(PhonebookState.totalSidebarPageRecords)
@@ -33,11 +40,13 @@ export class PhonebookOffcanvasComponent implements OnInit {
   @Select(OffcanvasPhonebookState.hasFilters)
   public hasFilters$: Observable<boolean>;
 
+  @Select(PhonebookState.externalsOrgs)
+  public externalsOrgs$: Observable<any[]>;
 
   public position$ = this.langFacade.vm$.pipe(
     map(({ ActiveLang: { key } }) => (key === 'ar' ? 'left' : 'right'))
   );
-  public page$: Observable<ExternalPhonebook[]>;
+  public page$: Observable<ExternalPhonebookProjection[]>;
   constructor(
     private store: Store,
     private clipboard: Clipboard,
@@ -47,10 +56,25 @@ export class PhonebookOffcanvasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(new PhonebookAction.LoadExternalOrgs({ orgName: '' }));
     this.page$ = this.store.select(PhonebookState.sidebarPage).pipe(
       filter((p) => !!p),
       map((page) => page?.filter((u) => u.isActive))
     );
+  }
+  ngAfterViewInit(): void {
+    this.phonebookTypes = [
+      {
+        icon: 'pi pi-bars',
+        name: 'PHONEBOOK.EXTERNAL',
+        value: false,
+      },
+      {
+        icon: 'pi pi-th-large',
+        name: 'PHONEBOOK.INTERNAL',
+        value: true,
+      },
+    ];
   }
   openSideBar() {
     this.display = !this.display;
@@ -67,7 +91,6 @@ export class PhonebookOffcanvasComponent implements OnInit {
   }
   search() {
     this.store.dispatch(new OffcanvasPhonebookAction.LoadPhonebook());
-
   }
 
   clear() {
@@ -75,7 +98,6 @@ export class PhonebookOffcanvasComponent implements OnInit {
       new OffcanvasPhonebookAction.UpdateFilter({ clear: true }),
       new OffcanvasPhonebookAction.LoadPhonebook(),
     ]);
-
   }
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
     if (event?.key === 'Enter') {
@@ -96,6 +118,10 @@ export class PhonebookOffcanvasComponent implements OnInit {
     );
   }
 
+  loadOrgs() {
+    const currentOrg = this.store.selectSnapshot(CommonDataState.currentOrg);
+    this.store.dispatch(new OrgAction.LoadOrgs({ orgId: currentOrg?.id }));
+  }
   copyToClipboard(phonebook: ExternalPhonebook) {
     this.clipboard.copy(phonebook.mobileNumber);
     this.messageHelper.success({
