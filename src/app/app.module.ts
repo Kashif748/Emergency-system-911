@@ -149,91 +149,91 @@ export function getHighlightLanguages() {
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     // ------------------
     NgxsModule.forRoot(
-      [
-        RootState,
-        UserState,
-        RoleState,
-        OrgState,
-        TaskState,
-        GroupState,
-        GisState,
-        CenterState,
-        IncidentLocInfoState,
-        IncidentState,
-        CommonDataState,
-        AssetState,
-        PhonebookState,
-        SituationsState,
-        NewsState,
-        RtoState,
-        ImpLevelWorkingState,
-        ActivityPrioritySeqState,
-        ActivityFrquencyState,
-        LocationTypeState,
-        ImpactLevelState,
-        ImpactMatrixState,
-        OrgDetailState,
-        BCState,
-        LocationsState,
-        SystemsState,
-        OrgActivityState,
-        ActivityAnalysisState,
-        ActivitySystemsState,
-        ActivityEmployeesState,
-        ActivityLocationsState,
-        ActivityDependenciesState,
-        ActivityWorklogsState,
-        ImpactAnalysisState,
-        ActivityImpactMatrixState,
-        VenderState,
-        RemoteWorkState,
-        RecordsState,
-        AppSystemState,
-        InfraState,
-        ResourceAnalysisState,
-        StaffState,
-        OtherState,
-        ResourceWorklogsState,
-        BiaAppsState,
-        AnalysisSummaryState,
-        SystemsReportState,
-        VendorsReportState,
-        EmployeesReportState,
-        IncidentCategoriesState
-      ],
-      {
-        developmentMode: !environment.production,
-      }
+        [
+          RootState,
+          UserState,
+          RoleState,
+          OrgState,
+          TaskState,
+          GroupState,
+          GisState,
+          CenterState,
+          IncidentLocInfoState,
+          IncidentState,
+          CommonDataState,
+          AssetState,
+          PhonebookState,
+          SituationsState,
+          NewsState,
+          RtoState,
+          ImpLevelWorkingState,
+          ActivityPrioritySeqState,
+          ActivityFrquencyState,
+          LocationTypeState,
+          ImpactLevelState,
+          ImpactMatrixState,
+          OrgDetailState,
+          BCState,
+          LocationsState,
+          SystemsState,
+          OrgActivityState,
+          ActivityAnalysisState,
+          ActivitySystemsState,
+          ActivityEmployeesState,
+          ActivityLocationsState,
+          ActivityDependenciesState,
+          ActivityWorklogsState,
+          ImpactAnalysisState,
+          ActivityImpactMatrixState,
+          VenderState,
+          RemoteWorkState,
+          RecordsState,
+          AppSystemState,
+          InfraState,
+          ResourceAnalysisState,
+          StaffState,
+          OtherState,
+          ResourceWorklogsState,
+          BiaAppsState,
+          AnalysisSummaryState,
+          SystemsReportState,
+          VendorsReportState,
+          EmployeesReportState,
+          IncidentCategoriesState
+        ],
+        {
+          developmentMode: !environment.production,
+        }
     ),
     NgxsStoragePluginModule.forRoot(
-      {
-        key: [
-          'browse_users',
-          'browse_roles',
-          'common_data',
-          'browse_tasks',
-          'browse_groups',
-          'browse_bc',
-          // 'browse_activity_analysis',
-          // 'browse_impact_analysis',
-          'browse_org_activities',
-          'browse_vender',
-          'browse_remote_work',
-          'browse_record',
-          'browse_app_system',
-          'browse_infra',
-          'browse_resource_analysis',
-          'browse_staff',
-          'browse_other',
-          'browse_resource_worklogs',
-          'browse_bia_app',
-          'browse_employees_report',
-          'browse_systems_report',
-          'browse_vendors_report',
-          'browse_analysis_summary'
-        ],
-      },
-      ['common_data']
+        {
+          key: [
+            'browse_users',
+            'browse_roles',
+            'common_data',
+            'browse_tasks',
+            'browse_groups',
+            'browse_bc',
+            // 'browse_activity_analysis',
+            // 'browse_impact_analysis',
+            'browse_org_activities',
+            'browse_vender',
+            'browse_remote_work',
+            'browse_record',
+            'browse_app_system',
+            'browse_infra',
+            'browse_resource_analysis',
+            'browse_staff',
+            'browse_other',
+            'browse_resource_worklogs',
+            'browse_bia_app',
+            'browse_employees_report',
+            'browse_systems_report',
+            'browse_vendors_report',
+            'browse_analysis_summary'
+          ],
+        },
+        ['common_data']
     ),
     ToastModule,
     ButtonModule,
@@ -274,22 +274,22 @@ export function getHighlightLanguages() {
 export class AppModule {
   constructor(private iconRegistery: MatIconRegistry, sanitizer: DomSanitizer) {
     this.iconRegistery.addSvgIcon(
-      'ads_click',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/media/svg/icons/Electric/ads_click.svg'
-      )
+        'ads_click',
+        sanitizer.bypassSecurityTrustResourceUrl(
+            '../../assets/media/svg/icons/Electric/ads_click.svg'
+        )
     );
     this.iconRegistery.addSvgIcon(
-      'flash_on',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/media/svg/icons/Electric/flash_on.svg'
-      )
+        'flash_on',
+        sanitizer.bypassSecurityTrustResourceUrl(
+            '../../assets/media/svg/icons/Electric/flash_on.svg'
+        )
     );
     this.iconRegistery.addSvgIcon(
-      'person',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/media/svg/icons/Electric/ads_click.svg'
-      )
+        'person',
+        sanitizer.bypassSecurityTrustResourceUrl(
+            '../../assets/media/svg/icons/Electric/ads_click.svg'
+        )
     );
   }
 }
