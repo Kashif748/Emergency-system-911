@@ -71,16 +71,6 @@ export class BcListsComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.versions$ = this.store.select(BCState.versions).pipe(
-      takeUntil(this.destroy$),
-      filter((p) => !!p),
-      map((versions) =>
-        versions.filter(
-          (version) => version.status?.id !== VERSION_STATUSES.ARCHIVED
-        )
-      )
-    );
-
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
