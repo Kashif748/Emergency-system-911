@@ -19,7 +19,7 @@ export namespace BrowseBCAction {
     /**
      *
      */
-    constructor(public payload: { versionId: number }) {}
+    constructor(public payload?: { versionId: number }) {}
   }
 
   export class ChangeStatus {

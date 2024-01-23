@@ -157,7 +157,7 @@ export class BrowseBCState {
     return dispatch([
       new BrowseBCAction.LoadPage(),
       new BCAction.GetVersion({
-        id: payload.versionId,
+        id: payload?.versionId ? payload.versionId : this.route.snapshot.queryParams['_version'],
       }),
     ]).pipe(
       catchError((err) => {
