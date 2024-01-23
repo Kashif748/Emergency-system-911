@@ -1,58 +1,43 @@
 <div class="container-fluid">
   <app-breadcrumb></app-breadcrumb>
   <div class="mx-4 my-10">
-    <div class="row">
+    <div class="row border-bottom">
       <div class="col-12">
-        <div class="row">
-          <!--advance search-->
-          <div class="col-12 position-relative">
-            <p-fieldset [toggleable]="true" styleClass="px-3 py-2 search-section"
-                        legend="{{'ACTIONS.ADVANCED_SEARCH' | translate}}" [collapsed]="true">
-              <div class="p-fluid p-grid">
-                <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown
-                          placeholder="{{'VENDERS.DIALOG.CRITICALITY' | translate}}" [autoDisplayFirst]="false"
-                          [showClear]="true" dataKey="id"
-                  >
-                    <ng-template let-item pTemplate="selectedItem">
-                      {{ item | translateObj: 'name' }}
-                    </ng-template>
+        <div class="row justify-content-center">
+          <!-- First Date Field -->
+          <div class="p-field p-col-12 p-md-4 justify-content-end d-flex">
+            <span class="p-float-label">
+              <p-calendar
+                    [showIcon]="true"
+                    showButtonBar="true"
+                    appendTo="body"
+              ></p-calendar>
+              <label>
+              {{ "LOGINATTEMPTS.from_date" | translate }}
+               </label>
+            </span>
+          </div>
 
-                    <ng-template let-item pTemplate="item">
-                      {{ item | translateObj : 'name'}}
-                    </ng-template>
-                  </p-dropdown>
-                </div>
+          <!-- Second Date Field -->
+          <div class="p-field p-col-12 p-md-2">
+            <span class="p-float-label">
+              <p-calendar
+                      [showIcon]="true"
+                      showButtonBar="true"
+                      appendTo="body"
+              ></p-calendar>
+              <label>
+                {{ "LOGINATTEMPTS.to_date" | translate }}
+              </label>
+            </span>
+          </div>
 
-                <div class="p-field p-col-4 p-md-2">
-                  <p-dropdown
-                          placeholder="{{'VENDERS.DIALOG.CRITICALITY' | translate}}" [autoDisplayFirst]="false"
-                          [showClear]="true" dataKey="id"
-                  >
-                    <ng-template let-item pTemplate="selectedItem">
-                      {{ item | translateObj: 'name' }}
-                    </ng-template>
-
-                    <ng-template let-item pTemplate="item">
-                      {{ item | translateObj : 'name'}}
-                    </ng-template>
-                  </p-dropdown>
-                </div>
-                <div class="p-col p-d-flex">
-                  <div class="ml-dir-auto"></div>
-                  <div class="mx-1">
-                    <button pButton type="button" label="{{'ACTIONS.CLEAR' | translate }}" icon="pi pi-times"
-                            class="p-button-outlined" (click)="clear()"></button>
-                  </div>
-                  <div class="mx-1">
-                    <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search"
-                            (click)="search()"></button>
-                  </div>
-                </div>
-              </div>
-            </p-fieldset>
+          <!-- Submit Button -->
+          <div class="p-field p-col-2">
+            <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search"></button>
           </div>
         </div>
+
       </div>
     </div>
     <div class="card mt-4 shadow">

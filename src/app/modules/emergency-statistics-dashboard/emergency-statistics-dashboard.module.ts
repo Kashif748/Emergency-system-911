@@ -21,6 +21,7 @@ import {InlineSVGModule} from "ng-inline-svg";
 import {NgApexchartsModule} from "ng-apexcharts";
 import { SharedBreadcrumbModule } from '@shared/sh-components/breadcrumbs/breadcrumb.component';
 import {SharedModule} from "@shared/shared.module";
+import {CalendarModule} from "primeng/calendar";
 
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/emergency-dashboard/', '.json');
@@ -51,7 +52,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
       isolate: true,
     }),
     SharedBreadcrumbModule,
-    SharedModule
+    SharedModule,
+    CalendarModule
   ],
   providers: [{ provide: ILangFacade, useClass: LangFacade }],
 })
