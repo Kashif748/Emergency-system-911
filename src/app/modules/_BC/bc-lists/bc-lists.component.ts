@@ -1,23 +1,17 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { ILangFacade } from '@core/facades/lang.facade';
-import { TranslateService } from '@ngx-translate/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit,} from '@angular/core';
+import {ILangFacade} from '@core/facades/lang.facade';
+import {TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, MenuItem} from 'primeng/api';
-import { Observable, of, Subject } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { TABS } from './tabs.const';
-import { Router } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { BrowseBCAction } from '../states/browse-bc.action';
-import { BCAction, BCState } from '@core/states';
-import { BcVersions } from '../../../api/models/bc-versions';
-import { VERSION_STATUSES } from '@core/states/bc/bc/bc.state';
+import {Observable, Subject} from 'rxjs';
+import {filter, map, takeUntil, tap} from 'rxjs/operators';
+import {TABS} from './tabs.const';
+import {Router} from '@angular/router';
+import {Select, Store} from '@ngxs/store';
+import {BrowseBCAction} from '../states/browse-bc.action';
+import {BCState} from '@core/states';
+import {BcVersions} from '../../../api/models/bc-versions';
+import {VERSION_STATUSES} from '@core/states/bc/bc/bc.state';
 
 @Component({
   selector: 'app-bc-lists',
@@ -61,7 +55,9 @@ export class BcListsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   ngOnInit() {
-    this.store.dispatch(new BrowseBCAction.LoadPage());
+    this.store.dispatch([new BrowseBCAction.LoadPage(),
+      new BrowseBCAction.GetVersion()]);
+    this.versions$ = this.store.select(BCState.versions).pipe();
     this.store
       .select(BCState.selectedVersion)
       .pipe(
@@ -70,7 +66,6 @@ export class BcListsComponent implements OnInit, OnDestroy {
         tap((version) => (this.selectedVersion = version))
       )
       .subscribe();
-
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(
