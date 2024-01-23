@@ -189,7 +189,7 @@
                 </div>
               </th>
 
-              <th *checkPrivileges="['PRIV_APPROVE_ACTIVITY_ANALYSIS', 'PRIV_PERFORM_ACTIVITY_ANALYSIS', 'PRIV_REVIEW_ACTIVITY_ANALYSIS']" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
+              <th *checkPrivileges="['PRIV_PERFORM_ACTIVITY_ANALYSIS']" style="width: 92px">{{ "ACTIONS.ACTIONS" | translate }}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
@@ -338,6 +338,7 @@
               </td>
 
               <td>
+                <ng-container *ngIf="item.status.id === 1">
                 <button
                   *checkPrivileges="['PRIV_PERFORM_ACTIVITY_ANALYSIS']"
                   pButton
@@ -353,6 +354,7 @@
                   [popup]="true"
                   [model]="item.actions"
                 ></p-menu>
+                </ng-container>
               </td>
             </tr>
           </ng-template>

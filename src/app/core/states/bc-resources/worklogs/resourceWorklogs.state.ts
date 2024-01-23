@@ -154,7 +154,7 @@ export class ResourceWorklogsState {
 
   @Action(ResourceWorklogsAction.Create)
   create(
-    { setState }: StateContext<ResourceWorklogsStateModel>,
+    { setState, getState }: StateContext<ResourceWorklogsStateModel>,
     { payload }: ResourceWorklogsAction.Create
   ) {
     setState(
@@ -169,8 +169,12 @@ export class ResourceWorklogsState {
       })
       .pipe(
         tap((activityWorklogs) => {
+          const currentPage = getState().page;
           setState(
             patch<ResourceWorklogsStateModel>({
+              page: patch({
+                content: [...currentPage.content, activityWorklogs?.result],
+              }),
               Worklog: activityWorklogs.result,
             })
           );
