@@ -106,9 +106,9 @@
         pButton
         type="button"
         class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-outlined"
-        (click)="updateFilter({ internal: false }, $event)"
+        (click)="loadByStatus({ isInternal: false })"
         [ngClass]="{
-          active: !state?.pageRequest?.filters['external']
+          active: !state?.pageRequest?.filters['isInternal']
         }"
       >
         <span class="m-auto"> {{ "PHONEBOOK.EXTERNAL" | translate }}</span>
@@ -117,9 +117,9 @@
         pButton
         type="button"
         class="p-tag w-95px mx-2 px-2 text-center py-1 p-button-rounded p-button-sm p-button-outlined"
-        (click)="updateFilter({ internal: true }, $event)"
+        (click)="loadByStatus({ isInternal: true })"
         [ngClass]="{
-          active: state?.pageRequest?.filters['internal']
+          active: state?.pageRequest?.filters['isInternal']
         }"
       >
         <span class="m-auto"> {{ "PHONEBOOK.INTERNAL" | translate }} </span>
@@ -133,8 +133,7 @@
               <div class="navi-text d-flex flex-column justify-content-between">
                 <span class="d-flex">
                   <span class="font-weight-bold">
-                    {{ item.title }} {{ item.firstName }}
-                    {{ item.lastName }}
+                    {{ item | translateObj }}
                   </span>
                   <div class="spacer"></div>
                   <span class="label label-light-primary label-inline mr-2">
