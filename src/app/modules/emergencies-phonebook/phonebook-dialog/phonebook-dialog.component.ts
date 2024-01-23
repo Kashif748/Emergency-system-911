@@ -101,7 +101,7 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
       orgName: [null, [Validators.required]],
-      referenceOrgId: [null],
+      referenceOrgId: [null ,[Validators.required]],
       jobTitle: [null],
       phoneNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
@@ -124,7 +124,7 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
               .get('referenceOrgId')
               .setValidators([Validators.required]);
           } else {
-            this.form.get('referenceOrgId').setAsyncValidators(null);
+            this.form.get('referenceOrgId').setValidators(null);
           }
           this.form.get('referenceOrgId').updateValueAndValidity();
         })

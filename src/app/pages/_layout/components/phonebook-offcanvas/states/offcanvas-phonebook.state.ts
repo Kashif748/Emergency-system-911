@@ -50,7 +50,7 @@ export class OffcanvasPhonebookState {
   @Selector([OffcanvasPhonebookState])
   static hasFilters(state: OffcanvasPhonebookStateModel): boolean {
     return (
-      Object.keys(state.pageRequest.filters).filter((k) => k !== 'active')
+      Object.keys(state.pageRequest.filters).filter((k) => k !== 'active' && k !== 'isInternal')
         .length > 0
     );
   }
