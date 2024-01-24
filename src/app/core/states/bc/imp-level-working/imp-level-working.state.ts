@@ -78,7 +78,7 @@ export class ImpLevelWorkingState {
       })
     );
     return this.impLevelWorking
-      .getAll17({
+      .getAll18({
         isActive: true,
         versionId: payload.versionId,
         pageable: {
@@ -153,7 +153,7 @@ export class ImpLevelWorkingState {
     );
 
     return this.impLevelWorking
-      .update100({
+      .update102({
         body: payload,
       })
       .pipe(

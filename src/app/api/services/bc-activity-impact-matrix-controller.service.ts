@@ -26,25 +26,25 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll28
+   * Path part for operation getAll29
    */
-  static readonly GetAll28Path = '/v1/bc/activity-impact-matrix';
+  static readonly GetAll29Path = '/v1/bc/activity-impact-matrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll28()` instead.
+   * To access only the response body, use `getAll29()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll28$Response(params: {
+  getAll29$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityImpactMatrix>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.GetAll28Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityImpactMatrixControllerService.GetAll29Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -64,19 +64,19 @@ export class BcActivityImpactMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll28$Response()` instead.
+   * To access the full response (for headers, for example), `getAll29$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll28(params: {
+  getAll29(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityImpactMatrix> {
 
-    return this.getAll28$Response(params).pipe(
+    return this.getAll29$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityImpactMatrix>) => r.body as RestApiResponsePageBcActivityImpactMatrix)
     );
   }

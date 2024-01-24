@@ -419,7 +419,7 @@ export class GroupState {
       })
     );
     return this.groupService
-      .update50({
+      .update51({
         body: payload,
       })
       .pipe(
@@ -451,7 +451,7 @@ export class GroupState {
       })
     );
     return this.groupService
-      .update50({
+      .update51({
         body: payload,
       })
       .pipe(

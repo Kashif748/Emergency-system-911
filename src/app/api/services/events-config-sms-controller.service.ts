@@ -25,21 +25,21 @@ export class EventsConfigSmsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update64
+   * Path part for operation update66
    */
-  static readonly Update64Path = '/v1/events-config-sms';
+  static readonly Update66Path = '/v1/events-config-sms';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update64()` instead.
+   * To access only the response body, use `update66()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update64$Response(params: {
+  update66$Response(params: {
     body: EventsConfigSms
   }): Observable<StrictHttpResponse<RestApiResponseEventsConfigSmsProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EventsConfigSmsControllerService.Update64Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, EventsConfigSmsControllerService.Update66Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -57,15 +57,15 @@ export class EventsConfigSmsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update64$Response()` instead.
+   * To access the full response (for headers, for example), `update66$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update64(params: {
+  update66(params: {
     body: EventsConfigSms
   }): Observable<RestApiResponseEventsConfigSmsProjection> {
 
-    return this.update64$Response(params).pipe(
+    return this.update66$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseEventsConfigSmsProjection>) => r.body as RestApiResponseEventsConfigSmsProjection)
     );
   }

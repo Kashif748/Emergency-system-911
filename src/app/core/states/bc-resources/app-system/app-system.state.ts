@@ -201,7 +201,7 @@ export class AppSystemState {
       })
     );
     return this.bcResourcesAppAndSoftwareService
-      .update92({
+      .update94({
         body: payload,
       })
       .pipe(

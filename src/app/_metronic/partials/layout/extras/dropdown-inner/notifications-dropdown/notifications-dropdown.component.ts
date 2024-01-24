@@ -98,7 +98,7 @@ export class NotificationsDropdownComponent implements OnInit, OnDestroy {
         this.markAsRead(item.id);
       }
       this.myDrop.toggle();
-      this.router.navigate([item.routing]);
+      this.router.navigateByUrl(item.routing);
     }
   }
 

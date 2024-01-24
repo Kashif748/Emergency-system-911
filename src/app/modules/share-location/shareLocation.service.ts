@@ -25,7 +25,7 @@ export class ShareLocationService {
     createdOn: Date;
   }) {
     return this.http.post(
-      `${environment.apiUrl}/incident-reporter-location/ext`,
+      `${environment.apiUrl}/ext/incident-reporter-location`,
       body
     );
   }

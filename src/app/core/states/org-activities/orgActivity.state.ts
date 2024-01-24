@@ -198,7 +198,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .insertOne36({
+      .insertOne35({
         body: payload,
       })
       .pipe(
@@ -223,7 +223,7 @@ export class OrgActivityState {
       })
     );
     return this.bcActivities
-      .update116({
+      .update118({
         body: payload,
       })
       .pipe(

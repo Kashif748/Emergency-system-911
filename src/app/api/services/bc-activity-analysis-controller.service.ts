@@ -122,25 +122,25 @@ export class BcActivityAnalysisControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll30
+   * Path part for operation getAll31
    */
-  static readonly GetAll30Path = '/v1/bc/activity-analysis';
+  static readonly GetAll31Path = '/v1/bc/activity-analysis';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll30()` instead.
+   * To access only the response body, use `getAll31()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll30$Response(params: {
+  getAll31$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityAnalysis>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.GetAll30Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisControllerService.GetAll31Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -160,19 +160,19 @@ export class BcActivityAnalysisControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll30$Response()` instead.
+   * To access the full response (for headers, for example), `getAll31$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll30(params: {
+  getAll31(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityAnalysis> {
 
-    return this.getAll30$Response(params).pipe(
+    return this.getAll31$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityAnalysis>) => r.body as RestApiResponsePageBcActivityAnalysis)
     );
   }

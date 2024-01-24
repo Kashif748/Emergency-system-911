@@ -1,13 +1,20 @@
-import {Injectable} from '@angular/core';
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
-import {patch} from '@ngxs/store/operators';
-import {EMPTY} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {ActivityFrquencyStateModel} from '@core/states/bc/activity-frquency/activity-frquency.state';
-import {BcPartnersControllerService} from "../../../../api/services/bc-partners-controller.service";
-import {BcPartners} from "../../../../api/models/bc-partners";
-import {PageBcPartners} from "../../../../api/models/page-bc-partners";
-import {VenderAction} from "@core/states/bc-setup/venders/vender.action";
+import { Injectable } from '@angular/core';
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { patch } from '@ngxs/store/operators';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { ActivityFrquencyStateModel } from '@core/states/bc/activity-frquency/activity-frquency.state';
+import { BcPartnersControllerService } from '../../../../api/services/bc-partners-controller.service';
+import { BcPartners } from '../../../../api/models/bc-partners';
+import { PageBcPartners } from '../../../../api/models/page-bc-partners';
+import { VenderAction } from '@core/states/bc-setup/venders/vender.action';
 
 export interface VenderStateModel {
   page: PageBcPartners;
@@ -16,9 +23,7 @@ export interface VenderStateModel {
   blocking: boolean;
 }
 
-const VENDER_STATE_TOKEN = new StateToken<VenderStateModel>(
-  'vender'
-);
+const VENDER_STATE_TOKEN = new StateToken<VenderStateModel>('vender');
 @State<VenderStateModel>({
   name: VENDER_STATE_TOKEN,
 })
@@ -28,9 +33,7 @@ export class VenderState {
   /**
    *
    */
-  constructor(
-    private vender: BcPartnersControllerService,
-  ) {}
+  constructor(private vender: BcPartnersControllerService) {}
   /* ************************ SELECTORS ******************** */
   @Selector([VenderState])
   static page(state: VenderStateModel) {
@@ -69,14 +72,14 @@ export class VenderState {
       })
     );
     return this.vender
-      .getAll12({
+      .getAll13({
         pageable: {
           page: payload.page,
           size: payload.size,
           sort: payload.sort ? payload.sort : ['id', 'desc'],
         },
         isActive: true,
-        ...payload.filters
+        ...payload.filters,
       })
       .pipe(
         tap((res) => {
@@ -185,7 +188,7 @@ export class VenderState {
       })
     );
     return this.vender
-      .update94({
+      .update96({
         body: payload,
       })
       .pipe(

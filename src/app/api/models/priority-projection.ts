@@ -4,6 +4,7 @@ import { IdNameProjection } from './id-name-projection';
 export interface PriorityProjection {
   colorHexa: string;
   color?: string;
+  colorHexa?: string;
   id?: number;
   isActive?: boolean;
   nameAr?: string;

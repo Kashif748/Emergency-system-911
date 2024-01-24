@@ -70,21 +70,21 @@ export class BcResourcesRemoteWorkControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update85
+   * Path part for operation update87
    */
-  static readonly Update85Path = '/v1/bc/resources/remote-work';
+  static readonly Update87Path = '/v1/bc/resources/remote-work';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update85()` instead.
+   * To access only the response body, use `update87()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update85$Response(params: {
+  update87$Response(params: {
     body: BcResourcesRemoteWork
   }): Observable<StrictHttpResponse<RestApiResponseBcResourcesRemoteWork>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcResourcesRemoteWorkControllerService.Update85Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcResourcesRemoteWorkControllerService.Update87Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,15 +102,15 @@ export class BcResourcesRemoteWorkControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update85$Response()` instead.
+   * To access the full response (for headers, for example), `update87$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update85(params: {
+  update87(params: {
     body: BcResourcesRemoteWork
   }): Observable<RestApiResponseBcResourcesRemoteWork> {
 
-    return this.update85$Response(params).pipe(
+    return this.update87$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcResourcesRemoteWork>) => r.body as RestApiResponseBcResourcesRemoteWork)
     );
   }

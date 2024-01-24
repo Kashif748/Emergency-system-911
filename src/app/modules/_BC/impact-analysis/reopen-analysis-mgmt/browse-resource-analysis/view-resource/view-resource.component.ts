@@ -217,9 +217,11 @@ export class ViewResourceComponent implements OnInit, OnDestroy {
     };
     this.store.dispatch([new ResourceWorklogsAction.Create(worklog)])
         .pipe(
+            switchMap(() =>
+                this.store.select(ResourceWorklogsState.Worklog)
+            ),
             filter((p) => !!p),
-            take(1),
-            tap(() => {
+            tap(async (data) => {
               this.note.reset();
             })
         )

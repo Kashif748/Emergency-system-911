@@ -1,14 +1,21 @@
-import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
-import {Injectable} from '@angular/core';
-import {EMPTY} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
-import {patch} from '@ngxs/store/operators';
-import {PageBcResourcesItInfrastructure} from "../../../../api/models/page-bc-resources-it-infrastructure";
-import {BcResourcesItInfrastructure} from "../../../../api/models/bc-resources-it-infrastructure";
-import {BcResourcesItInfrastructureControllerService} from "../../../../api/services/bc-resources-it-infrastructure-controller.service";
-import {InfraAction} from "@core/states/bc-resources/infra-req/infra.action";
-import {StaffStateModel} from "@core/states/bc-resources/staff/staff.state";
-import {StaffAction} from "@core/states/bc-resources/staff/staff.action";
+import {
+  Action,
+  Selector,
+  SelectorOptions,
+  State,
+  StateContext,
+  StateToken,
+} from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { EMPTY } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { patch } from '@ngxs/store/operators';
+import { PageBcResourcesItInfrastructure } from '../../../../api/models/page-bc-resources-it-infrastructure';
+import { BcResourcesItInfrastructure } from '../../../../api/models/bc-resources-it-infrastructure';
+import { BcResourcesItInfrastructureControllerService } from '../../../../api/services/bc-resources-it-infrastructure-controller.service';
+import { InfraAction } from '@core/states/bc-resources/infra-req/infra.action';
+import { StaffStateModel } from '@core/states/bc-resources/staff/staff.state';
+import { StaffAction } from '@core/states/bc-resources/staff/staff.action';
 
 export interface InfraStateModel {
   page: PageBcResourcesItInfrastructure;
@@ -17,8 +24,7 @@ export interface InfraStateModel {
   blocking: boolean;
 }
 
-const INFRA_STATE_TOKEN =
-  new StateToken<InfraStateModel>('infra');
+const INFRA_STATE_TOKEN = new StateToken<InfraStateModel>('infra');
 
 @State<InfraStateModel>({ name: INFRA_STATE_TOKEN })
 @Injectable()
@@ -141,7 +147,7 @@ export class InfraState {
       })
     );
     return this.bcResourcesItInfrastructure
-      .update90({
+      .update92({
         body: payload,
       })
       .pipe(
@@ -203,14 +209,16 @@ export class InfraState {
         loading: true,
       })
     );
-    return this.bcResourcesItInfrastructure.deleteById11({ id: payload.id }).pipe(
-      finalize(() => {
-        setState(
-          patch<InfraStateModel>({
-            loading: false,
-          })
-        );
-      })
-    );
+    return this.bcResourcesItInfrastructure
+      .deleteById11({ id: payload.id })
+      .pipe(
+        finalize(() => {
+          setState(
+            patch<InfraStateModel>({
+              loading: false,
+            })
+          );
+        })
+      );
   }
 }

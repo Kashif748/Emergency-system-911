@@ -73,21 +73,21 @@ export class ModuleOrgControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update26
+   * Path part for operation update27
    */
-  static readonly Update26Path = '/v1/module-org';
+  static readonly Update27Path = '/v1/module-org';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update26()` instead.
+   * To access only the response body, use `update27()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update26$Response(params: {
+  update27$Response(params: {
     body: Array<ModuleOrg>
   }): Observable<StrictHttpResponse<RestApiResponseListModuleOrg>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ModuleOrgControllerService.Update26Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ModuleOrgControllerService.Update27Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -105,35 +105,35 @@ export class ModuleOrgControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update26$Response()` instead.
+   * To access the full response (for headers, for example), `update27$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update26(params: {
+  update27(params: {
     body: Array<ModuleOrg>
   }): Observable<RestApiResponseListModuleOrg> {
 
-    return this.update26$Response(params).pipe(
+    return this.update27$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListModuleOrg>) => r.body as RestApiResponseListModuleOrg)
     );
   }
 
   /**
-   * Path part for operation create24
+   * Path part for operation create25
    */
-  static readonly Create24Path = '/v1/module-org';
+  static readonly Create25Path = '/v1/module-org';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create24()` instead.
+   * To access only the response body, use `create25()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create24$Response(params: {
+  create25$Response(params: {
     body: Array<ModuleOrg>
   }): Observable<StrictHttpResponse<RestApiResponseListModuleOrg>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ModuleOrgControllerService.Create24Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ModuleOrgControllerService.Create25Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -151,15 +151,15 @@ export class ModuleOrgControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create24$Response()` instead.
+   * To access the full response (for headers, for example), `create25$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create24(params: {
+  create25(params: {
     body: Array<ModuleOrg>
   }): Observable<RestApiResponseListModuleOrg> {
 
-    return this.create24$Response(params).pipe(
+    return this.create25$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListModuleOrg>) => r.body as RestApiResponseListModuleOrg)
     );
   }

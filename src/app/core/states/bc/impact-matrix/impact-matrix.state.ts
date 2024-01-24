@@ -143,7 +143,7 @@ export class ImpactMatrixState {
     );
 
     return this.impactMatrix
-      .update101({
+      .update103({
         body: payload,
       })
       .pipe(

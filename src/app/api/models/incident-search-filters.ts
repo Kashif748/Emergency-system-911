@@ -17,6 +17,7 @@ export interface IncidentSearchFilters {
   responsibleOrg?: number;
   serial?: string;
   subject?: string;
+  tagIds?: Array<number>;
   toDate?: string;
 }
 

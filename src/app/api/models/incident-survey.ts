@@ -6,6 +6,7 @@ export interface IncidentSurvey {
   happiness?: number;
   id?: number;
   incident?: Incident;
+  logoHorizental?: string;
   other?: string;
   reason?: number;
 }

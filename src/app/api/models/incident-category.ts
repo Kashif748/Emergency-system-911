@@ -5,6 +5,7 @@ import { OrgStructure } from './org-structure';
 export interface IncidentCategory {
   icon: string;
   chatBotEnabled?: boolean;
+  icon?: string;
   id?: number;
   isActive?: boolean;
   localRisk?: LocalRisk;

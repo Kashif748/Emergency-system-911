@@ -81,21 +81,21 @@ export class OperationalReportControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update19
+   * Path part for operation update20
    */
-  static readonly Update19Path = '/v1/operational-reports';
+  static readonly Update20Path = '/v1/operational-reports';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update19()` instead.
+   * To access only the response body, use `update20()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update19$Response(params: {
+  update20$Response(params: {
     body: OperationalReport
   }): Observable<StrictHttpResponse<RestApiResponseOperationalReport>> {
 
-    const rb = new RequestBuilder(this.rootUrl, OperationalReportControllerService.Update19Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, OperationalReportControllerService.Update20Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -113,35 +113,35 @@ export class OperationalReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update19$Response()` instead.
+   * To access the full response (for headers, for example), `update20$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update19(params: {
+  update20(params: {
     body: OperationalReport
   }): Observable<RestApiResponseOperationalReport> {
 
-    return this.update19$Response(params).pipe(
+    return this.update20$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOperationalReport>) => r.body as RestApiResponseOperationalReport)
     );
   }
 
   /**
-   * Path part for operation create19
+   * Path part for operation create20
    */
-  static readonly Create19Path = '/v1/operational-reports';
+  static readonly Create20Path = '/v1/operational-reports';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create19()` instead.
+   * To access only the response body, use `create20()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create19$Response(params: {
+  create20$Response(params: {
     body: OperationalReport
   }): Observable<StrictHttpResponse<RestApiResponseOperationalReport>> {
 
-    const rb = new RequestBuilder(this.rootUrl, OperationalReportControllerService.Create19Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, OperationalReportControllerService.Create20Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -159,15 +159,15 @@ export class OperationalReportControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create19$Response()` instead.
+   * To access the full response (for headers, for example), `create20$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create19(params: {
+  create20(params: {
     body: OperationalReport
   }): Observable<RestApiResponseOperationalReport> {
 
-    return this.create19$Response(params).pipe(
+    return this.create20$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseOperationalReport>) => r.body as RestApiResponseOperationalReport)
     );
   }

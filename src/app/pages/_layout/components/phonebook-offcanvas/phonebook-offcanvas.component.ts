@@ -106,6 +106,14 @@ export class PhonebookOffcanvasComponent implements OnInit, AfterViewInit {
 
     this.store.dispatch(new OffcanvasPhonebookAction.UpdateFilter(filter));
   }
+  loadByStatus(filter: { [key: string]: any }) {
+    this.store
+      .dispatch(new OffcanvasPhonebookAction.UpdateFilter(filter))
+      .toPromise()
+      .then(() => {
+        this.search();
+      });
+  }
 
   public loadPage(event: PageRequestModel) {
     this.store.dispatch(

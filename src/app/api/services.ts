@@ -29,7 +29,7 @@ export { OrgQuickLinkControllerService } from './services/org-quick-link-control
 export { OrgMapGisLayerControllerService } from './services/org-map-gis-layer-controller.service';
 export { OperationalReportControllerService } from './services/operational-report-controller.service';
 export { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
-export { NotificationControllerService } from './services/notification-controller.service';
+export { SmsNotificationControllerService } from './services/sms-notification-controller.service';
 export { NewsControllerService } from './services/news-controller.service';
 export { NewsTypeControllerService } from './services/news-type-controller.service';
 export { MsExchangeOrgConfigControllerService } from './services/ms-exchange-org-config-controller.service';
@@ -65,6 +65,7 @@ export { GroupIncidentCategoryControllerService } from './services/group-inciden
 export { GroupCentersControllerService } from './services/group-centers-controller.service';
 export { ManageGroupsService } from './services/manage-groups.service';
 export { GroupLocationGeometryControllerService } from './services/group-location-geometry-controller.service';
+export { GroupContractControllerService } from './services/group-contract-controller.service';
 export { SchedulerControllerService } from './services/scheduler-controller.service';
 export { AvayaControllerService } from './services/avaya-controller.service';
 export { ExerciseControllerService } from './services/exercise-controller.service';
@@ -148,8 +149,8 @@ export { SendSmsControllerService } from './services/send-sms-controller.service
 export { PersonalInquiryControllerService } from './services/personal-inquiry-controller.service';
 export { MailControllerService } from './services/mail-controller.service';
 export { IncidentSurveyControllerService } from './services/incident-survey-controller.service';
-export { IncidentReporterLocationControllerService } from './services/incident-reporter-location-controller.service';
 export { UaePassControllerService } from './services/uae-pass-controller.service';
+export { IncidentReporterLocationControllerService } from './services/incident-reporter-location-controller.service';
 export { ManualTaskForAdafasaService } from './services/manual-task-for-adafasa.service';
 export { InformationSharingControllerService } from './services/information-sharing-controller.service';
 export { IncidentSurveyConfigControllerService } from './services/incident-survey-config-controller.service';
@@ -166,6 +167,7 @@ export { OrganizationHierarchicalStructureService } from './services/organizatio
 export { NotificationTransactionControllerService } from './services/notification-transaction-controller.service';
 export { NotificationPlaceHolderControllerService } from './services/notification-place-holder-controller.service';
 export { InspectionControllerService } from './services/inspection-controller.service';
+export { GroupTypesControllerService } from './services/group-types-controller.service';
 export { MsMailJobService } from './services/ms-mail-job.service';
 export { DohControllerService } from './services/doh-controller.service';
 export { DashboardControllerService } from './services/dashboard-controller.service';

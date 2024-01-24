@@ -120,23 +120,23 @@ export class BcResourcesDesignationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update91
+   * Path part for operation update93
    */
-  static readonly Update91Path = '/v1/bc/resources/designation';
+  static readonly Update93Path = '/v1/bc/resources/designation';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update91()` instead.
+   * To access only the response body, use `update93()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    *
    * @deprecated
    */
-  update91$Response(params: {
+  update93$Response(params: {
     body: BcResourcesDesignation
   }): Observable<StrictHttpResponse<RestApiResponseBcResourcesDesignation>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcResourcesDesignationControllerService.Update91Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcResourcesDesignationControllerService.Update93Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,17 +154,17 @@ export class BcResourcesDesignationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update91$Response()` instead.
+   * To access the full response (for headers, for example), `update93$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    *
    * @deprecated
    */
-  update91(params: {
+  update93(params: {
     body: BcResourcesDesignation
   }): Observable<RestApiResponseBcResourcesDesignation> {
 
-    return this.update91$Response(params).pipe(
+    return this.update93$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcResourcesDesignation>) => r.body as RestApiResponseBcResourcesDesignation)
     );
   }
