@@ -23,7 +23,6 @@ import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { IncidentsService } from 'src/app/_metronic/core/services/incidents.service';
-import { CommonService } from '@core/services/common.service';
 import { ILinkService } from '@core/services/link.service';
 import { OrgService } from '@core/api/services/org.service';
 import { MapConfig, MapService } from './services/map.service';
@@ -53,6 +52,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ListboxModule } from 'primeng/listbox';
 import { TranslateObjModule } from '@shared/sh-pipes/translate-obj.pipe';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Store } from '@ngxs/store';
+import { CommonDataState } from '@core/states';
+import { UrlHelperService } from '@core/services/url-helper.service';
 
 @Component({
   selector: 'app-map',
@@ -74,12 +76,13 @@ export class MapComponent
 
   constructor(
     private mapService: MapService,
+    private store: Store,
+    private urlHelper: UrlHelperService,
     private popupBuidler: PopupBuilder,
     private translationService: TranslationService,
     private alertService: AlertsService,
     private cdr: ChangeDetectorRef,
     private themeFacade: IThemeFacade,
-    private commonService: CommonService,
     private orgService: OrgService,
     private linkService: ILinkService,
     private appCommonDataService: AppCommonDataService,
@@ -144,6 +147,7 @@ export class MapComponent
   public addReporterPoint: () => void;
   public addLayer: (layer: any) => void;
   public removeLayer: (layer: any) => void;
+  public takeScreenshot: () => void;
 
   public createQueryTask: (url: string) => __esri.QueryTask;
   public createQuery: () => __esri.Query;
@@ -294,6 +298,8 @@ export class MapComponent
         GraphicsLayer,
         WMSLayer,
         Track,
+        Fullscreen,
+        Print,
       ] = await this.mapService.loadModules([
         EsriModule.Map,
         EsriModule.MapView,
@@ -309,6 +315,8 @@ export class MapComponent
         EsriModule.GraphicsLayer,
         EsriModule.WMSLayer,
         EsriModule.Track,
+        EsriModule.Fullscreen,
+        EsriModule.Print,
       ]);
 
       this.createQueryTask = (url: string) => new QueryTask(url);
@@ -384,9 +392,6 @@ export class MapComponent
           maxScale: 1155000,
         } as __esri.MapImageLayerProperties);
 
-      // new layer start
-
-      // new layer end
       const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
@@ -673,14 +678,18 @@ export class MapComponent
       };
       // ---------------------------------- END DEFINE FUNCTIONS ------------------------------------
 
-      const filterLayers = (where, fName: MapActionType) => {
+      const filterLayers = (
+        where,
+        fName: MapActionType,
+        symbol?: __esri.SymbolProperties
+      ) => {
         let TaskUrl;
         let Symbol;
 
         switch (fName) {
           case MapActionType.INCIDENT_POINT:
             TaskUrl = IncPointFeatureService.url + '/0';
-            Symbol = {
+            Symbol = symbol ?? {
               // type: 'simple-marker',
               // style: 'path',
               // path: 'M213.2 32H288V96c0 17.7 14.3 32 32 32s32-14.3 32-32V32h74.8c27.1 0 51.3 17.1 60.3 42.6l42.7 120.6c-10.9-2.1-22.2-3.2-33.8-3.2c-59.5 0-112.1 29.6-144 74.8V224c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7 14.3 32 32 32c2.3 0 4.6-.3 6.8-.7c-4.5 15.5-6.8 31.8-6.8 48.7c0 5.4 .2 10.7 .7 16l-.7 0c-17.7 0-32 14.3-32 32v64H86.6C56.5 480 32 455.5 32 425.4c0-6.2 1.1-12.4 3.1-18.2L152.9 74.6C162 49.1 186.1 32 213.2 32zM352 368a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm211.3-43.3c-6.2-6.2-16.4-6.2-22.6 0L480 385.4l-28.7-28.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l40 40c6.2 6.2 16.4 6.2 22.6 0l72-72c6.2-6.2 6.2-16.4 0-22.6z',
@@ -695,7 +704,7 @@ export class MapComponent
 
           case MapActionType.INCIDENT_POLYLINE:
             TaskUrl = IncLineFeatureService.url + '/2';
-            Symbol = {
+            Symbol = symbol ?? {
               type: 'simple-line',
               color: [4, 90, 141],
               width: 4,
@@ -706,7 +715,7 @@ export class MapComponent
 
           case MapActionType.INCIDENT_POLYGON:
             TaskUrl = IncPolygonFeatureService.url + '/4';
-            Symbol = {
+            Symbol = symbol ?? {
               type: 'simple-fill',
               style: 'diagonal-cross',
               color: [0, 0, 0, 0.1],
@@ -716,7 +725,7 @@ export class MapComponent
 
           case MapActionType.TASK_POINT:
             TaskUrl = TskPointFeatureService.url + '/1';
-            Symbol = {
+            Symbol = symbol ?? {
               type: 'simple-marker',
               style: 'circle',
               color: 'green',
@@ -726,7 +735,7 @@ export class MapComponent
 
           case MapActionType.TASK_POLYLINE:
             TaskUrl = TskLineFeatureService.url + '/3';
-            Symbol = {
+            Symbol = symbol ?? {
               type: 'simple-line',
               color: [200, 90, 141],
               width: 4,
@@ -737,7 +746,7 @@ export class MapComponent
 
           case MapActionType.TASK_POLYGON:
             TaskUrl = TskPolygonFeatureService.url + '/5';
-            Symbol = {
+            Symbol = symbol ?? {
               type: 'simple-fill',
               style: 'diagonal-cross',
               color: [0, 0, 0, 0.1],
@@ -747,7 +756,7 @@ export class MapComponent
 
           case MapActionType.ORGRANIZATION_POINT:
             TaskUrl = TskPointFeatureService.url + '/6';
-            Symbol = {
+            Symbol = symbol ?? {
               type: 'simple-marker',
               style: 'circle',
               color: 'yellow',
@@ -763,6 +772,25 @@ export class MapComponent
         query.returnGeometry = true;
         query.outFields = ['*'];
         query.where = where;
+        const categories = this.store.selectSnapshot(
+          CommonDataState.incidentCategories
+        );
+        const catMap = categories
+          .filter((c) => !!c.icon)
+          .reduce((pv, cv) => {
+            pv[cv.id] = cv;
+            return pv;
+          }, {});
+        const priorities = this.store.selectSnapshot(
+          CommonDataState.priorities
+        );
+        const prioMap = priorities
+          .filter((p) => !!p.colorHexa)
+          .reduce((pv, cv) => {
+            pv[cv.id] = cv;
+            return pv;
+          }, {});
+
         queryTask.execute(query).then((result) => {
           // *** ADD ***//
 
@@ -816,10 +844,6 @@ export class MapComponent
 
       this.filterLayersFunc$.next(filterLayers);
 
-      const clearGraphics = () => {
-        this.mapView.graphics.removeAll();
-      };
-
       await this.mapView.when(async () => {
         setTimeout(async (_) => {
           if (this.dashboardMode) {
@@ -835,17 +859,36 @@ export class MapComponent
           this.mapView?.ui.add('topbar-toggler', { position: 'top-trailing' });
         }
 
+        !this.smallSize &&
+          this.mapView.ui.add(new Home({ view: this.mapView }), 'top-trailing');
+
+        this.mapView.ui.add(
+          new Fullscreen({
+            view: this.mapView,
+          }),
+          'bottom-trailing'
+        );
+
+        this.takeScreenshot = () => {
+          this.mapView.takeScreenshot({ quality: 100 }).then((screenshot) => {
+            this.urlHelper.downloadBase64(
+              screenshot.dataUrl,
+              `map - ${new Date().toISOString().split('.')[0]}`
+            );
+          });
+        };
+
+        !this.smallSize &&
+          this.mapView.ui.add(
+            new Compass({ view: this.mapView }),
+            'top-trailing'
+          );
+
         this.mapView?.ui.add('refresh-btn', { position: 'top-trailing' });
+        this.mapView?.ui.add('screenshoot-btn', { position: 'bottom-leading' });
 
-        const homeBtn = new Home({ view: this.mapView });
-        !this.smallSize && this.mapView.ui.add(homeBtn, 'top-trailing');
-
-        const compass = new Compass({ view: this.mapView });
-        !this.smallSize && this.mapView.ui.add(compass, 'top-trailing');
-
-        const findMyLocation = new Track({ view: this.mapView });
         !this.currentLocation &&
-          this.mapView.ui.add(findMyLocation, 'top-right');
+          this.mapView.ui.add(new Track({ view: this.mapView }), 'top-right');
 
         if (Array.isArray(this.groupData) && this.groupData.length > 0) {
           // for multiple Location to show
@@ -873,10 +916,6 @@ export class MapComponent
             this.zoomToAddress(this.data.polylineLocation);
           }
         }
-
-        // if (this.configData) {
-        //   this.addReporterPoint();
-        // }
       });
 
       const drawPoint = (Type, previousLocation?) => {
@@ -1448,7 +1487,7 @@ export class MapComponent
   private async showDashboardGraphics(
     filterLayers: (where, fName: MapActionType) => void
   ) {
-    const org = this.commonService.getCommonData()?.currentOrgDetails;
+    const org = this.store.selectSnapshot(CommonDataState.currentOrg);
     if (!org) {
       return;
     }

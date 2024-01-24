@@ -3,6 +3,7 @@
 import { LocalRisk } from './local-risk';
 import { OrgStructure } from './org-structure';
 export interface IncidentCategory {
+  icon: string;
   chatBotEnabled?: boolean;
   id?: number;
   isActive?: boolean;
@@ -13,4 +14,3 @@ export interface IncidentCategory {
   parent?: IncidentCategory;
   serialNumber: number;
 }
-

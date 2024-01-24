@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { IdNameProjection } from './id-name-projection';
 export interface PriorityProjection {
+  colorHexa: string;
   color?: string;
   id?: number;
   isActive?: boolean;
@@ -9,4 +10,3 @@ export interface PriorityProjection {
   nameEn?: string;
   orgStructure?: IdNameProjection;
 }
-

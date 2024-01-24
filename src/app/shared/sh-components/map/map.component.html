@@ -265,7 +265,11 @@
 </div>
 
 <button pButton icon="pi pi-search" class="p-button-text p-button-secondary bg-white esri-widget" id="topbar-toggler"
-  (click)="showTopBar = !showTopBar"></button>
+  (click)="showTopBar = !showTopBar" title="{{'ACTIONS.SEARCH' | translate}}"></button>
 
 <button pButton icon="pi pi-replay" (click)="reload()" id="refresh-btn"
-  class="p-button-text p-button-secondary bg-white esri-widget"></button>
+  class="p-button-text p-button-secondary bg-white esri-widget" title="{{'ACTIONS.RELOAD' | translate}}"></button>
+
+
+<button pButton icon="pi pi-image" (click)="takeScreenshot()" id="screenshoot-btn"
+  class="p-button-text p-button-secondary bg-white esri-widget" title="{{'ACTIONS.RELOAD' | translate}}"></button>

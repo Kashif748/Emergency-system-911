@@ -1,6 +1,6 @@
 {
   "/ecms/*": {
-    "target": "http://10.24.13.245:8080",
+    "target": "http://10.21.13.245:8080",
     "pathRewrite": {
       "^/ecms": "ecms"
     },
