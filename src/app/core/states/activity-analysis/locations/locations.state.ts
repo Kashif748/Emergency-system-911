@@ -16,8 +16,8 @@ import {
 } from 'src/app/api/models';
 import { BcActivityLocationsControllerService } from 'src/app/api/services';
 import { ActivityLocationsAction } from './locations.action';
-import {ActivityEmployeesAction} from "@core/states/activity-analysis/employees/employees.action";
-import {ActivityEmployeesStateModel} from "@core/states/activity-analysis/employees/employees.state";
+import { ActivityEmployeesAction } from '@core/states/activity-analysis/employees/employees.action';
+import { ActivityEmployeesStateModel } from '@core/states/activity-analysis/employees/employees.state';
 
 export interface ActivityLocationsStateModel {
   page: PageBcActivityLocations;
@@ -188,7 +188,7 @@ export class ActivityLocationsState {
     );
 
     return this.activityLocations
-      .update111({
+      .update113({
         body: { ...payload },
       })
       .pipe(

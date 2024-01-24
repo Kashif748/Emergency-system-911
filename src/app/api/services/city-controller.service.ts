@@ -70,21 +70,21 @@ export class CityControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update73
+   * Path part for operation update75
    */
-  static readonly Update73Path = '/v1/cities';
+  static readonly Update75Path = '/v1/cities';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update73()` instead.
+   * To access only the response body, use `update75()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update73$Response(params: {
+  update75$Response(params: {
     body: City
   }): Observable<StrictHttpResponse<RestApiResponseCity>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CityControllerService.Update73Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, CityControllerService.Update75Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class CityControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update73$Response()` instead.
+   * To access the full response (for headers, for example), `update75$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update73(params: {
+  update75(params: {
     body: City
   }): Observable<RestApiResponseCity> {
 
-    return this.update73$Response(params).pipe(
+    return this.update75$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCity>) => r.body as RestApiResponseCity)
     );
   }
 
   /**
-   * Path part for operation create68
+   * Path part for operation create69
    */
-  static readonly Create68Path = '/v1/cities';
+  static readonly Create69Path = '/v1/cities';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create68()` instead.
+   * To access only the response body, use `create69()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create68$Response(params: {
+  create69$Response(params: {
     body: City
   }): Observable<StrictHttpResponse<RestApiResponseCity>> {
 
-    const rb = new RequestBuilder(this.rootUrl, CityControllerService.Create68Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, CityControllerService.Create69Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class CityControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create68$Response()` instead.
+   * To access the full response (for headers, for example), `create69$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create68(params: {
+  create69(params: {
     body: City
   }): Observable<RestApiResponseCity> {
 
-    return this.create68$Response(params).pipe(
+    return this.create69$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseCity>) => r.body as RestApiResponseCity)
     );
   }

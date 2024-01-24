@@ -70,21 +70,21 @@ export class BcResourcesNonItInfrastructureControllerService extends BaseService
   }
 
   /**
-   * Path part for operation update87
+   * Path part for operation update89
    */
-  static readonly Update87Path = '/v1/bc/resources/non/it-infrastructure';
+  static readonly Update89Path = '/v1/bc/resources/non/it-infrastructure';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update87()` instead.
+   * To access only the response body, use `update89()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update87$Response(params: {
+  update89$Response(params: {
     body: BcResourcesNonItInfrastructure
   }): Observable<StrictHttpResponse<RestApiResponseBcResourcesNonItInfrastructure>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcResourcesNonItInfrastructureControllerService.Update87Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcResourcesNonItInfrastructureControllerService.Update89Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,15 +102,15 @@ export class BcResourcesNonItInfrastructureControllerService extends BaseService
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update87$Response()` instead.
+   * To access the full response (for headers, for example), `update89$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update87(params: {
+  update89(params: {
     body: BcResourcesNonItInfrastructure
   }): Observable<RestApiResponseBcResourcesNonItInfrastructure> {
 
-    return this.update87$Response(params).pipe(
+    return this.update89$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcResourcesNonItInfrastructure>) => r.body as RestApiResponseBcResourcesNonItInfrastructure)
     );
   }

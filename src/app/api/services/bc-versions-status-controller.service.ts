@@ -70,23 +70,23 @@ export class BcVersionsStatusControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll9
+   * Path part for operation getAll10
    */
-  static readonly GetAll9Path = '/v1/bc/version-status';
+  static readonly GetAll10Path = '/v1/bc/version-status';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll9()` instead.
+   * To access only the response body, use `getAll10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll9$Response(params: {
+  getAll10$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcVersionsStatus>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsStatusControllerService.GetAll9Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsStatusControllerService.GetAll10Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcVersionsStatusControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll9$Response()` instead.
+   * To access the full response (for headers, for example), `getAll10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll9(params: {
+  getAll10(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcVersionsStatus> {
 
-    return this.getAll9$Response(params).pipe(
+    return this.getAll10$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcVersionsStatus>) => r.body as RestApiResponsePageBcVersionsStatus)
     );
   }
 
   /**
-   * Path part for operation update80
+   * Path part for operation update82
    */
-  static readonly Update80Path = '/v1/bc/version-status';
+  static readonly Update82Path = '/v1/bc/version-status';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update80()` instead.
+   * To access only the response body, use `update82()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update80$Response(params: {
+  update82$Response(params: {
     body: BcVersionsStatus
   }): Observable<StrictHttpResponse<RestApiResponseBcVersionsStatus>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcVersionsStatusControllerService.Update80Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcVersionsStatusControllerService.Update82Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,15 +154,15 @@ export class BcVersionsStatusControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update80$Response()` instead.
+   * To access the full response (for headers, for example), `update82$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update80(params: {
+  update82(params: {
     body: BcVersionsStatus
   }): Observable<RestApiResponseBcVersionsStatus> {
 
-    return this.update80$Response(params).pipe(
+    return this.update82$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcVersionsStatus>) => r.body as RestApiResponseBcVersionsStatus)
     );
   }

@@ -78,7 +78,7 @@ export class ImpactLevelState {
     );
 
     return this.impactLevel
-      .getAll19({
+      .getAll20({
         versionId: payload.versionId,
         isActive: payload.isActive,
         pageable: {
@@ -152,7 +152,7 @@ export class ImpactLevelState {
     );
 
     return this.impactLevel
-      .update103({
+      .update105({
         body: payload,
       })
       .pipe(

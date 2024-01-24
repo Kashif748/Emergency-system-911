@@ -24,21 +24,21 @@ export class AdcdaClassificationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation findActivePage29
+   * Path part for operation findActivePage30
    */
-  static readonly FindActivePage29Path = '/v1/adcda-classification';
+  static readonly FindActivePage30Path = '/v1/adcda-classification';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findActivePage29()` instead.
+   * To access only the response body, use `findActivePage30()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage29$Response(params: {
+  findActivePage30$Response(params: {
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageAdcdaClassification>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaClassificationControllerService.FindActivePage29Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaClassificationControllerService.FindActivePage30Path, 'get');
     if (params) {
       rb.query('pageable', params.pageable, {});
     }
@@ -56,35 +56,35 @@ export class AdcdaClassificationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `findActivePage29$Response()` instead.
+   * To access the full response (for headers, for example), `findActivePage30$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage29(params: {
+  findActivePage30(params: {
     pageable: Pageable;
   }): Observable<RestApiResponsePageAdcdaClassification> {
 
-    return this.findActivePage29$Response(params).pipe(
+    return this.findActivePage30$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageAdcdaClassification>) => r.body as RestApiResponsePageAdcdaClassification)
     );
   }
 
   /**
-   * Path part for operation update124
+   * Path part for operation update126
    */
-  static readonly Update124Path = '/v1/adcda-classification';
+  static readonly Update126Path = '/v1/adcda-classification';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update124()` instead.
+   * To access only the response body, use `update126()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update124$Response(params: {
+  update126$Response(params: {
     body: AdcdaClassification
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaClassification>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaClassificationControllerService.Update124Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaClassificationControllerService.Update126Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class AdcdaClassificationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update124$Response()` instead.
+   * To access the full response (for headers, for example), `update126$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update124(params: {
+  update126(params: {
     body: AdcdaClassification
   }): Observable<RestApiResponseAdcdaClassification> {
 
-    return this.update124$Response(params).pipe(
+    return this.update126$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaClassification>) => r.body as RestApiResponseAdcdaClassification)
     );
   }
 
   /**
-   * Path part for operation create81
+   * Path part for operation create82
    */
-  static readonly Create81Path = '/v1/adcda-classification';
+  static readonly Create82Path = '/v1/adcda-classification';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create81()` instead.
+   * To access only the response body, use `create82()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create81$Response(params: {
+  create82$Response(params: {
     body: AdcdaClassification
   }): Observable<StrictHttpResponse<RestApiResponseAdcdaClassification>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AdcdaClassificationControllerService.Create81Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, AdcdaClassificationControllerService.Create82Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class AdcdaClassificationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create81$Response()` instead.
+   * To access the full response (for headers, for example), `create82$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create81(params: {
+  create82(params: {
     body: AdcdaClassification
   }): Observable<RestApiResponseAdcdaClassification> {
 
-    return this.create81$Response(params).pipe(
+    return this.create82$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAdcdaClassification>) => r.body as RestApiResponseAdcdaClassification)
     );
   }

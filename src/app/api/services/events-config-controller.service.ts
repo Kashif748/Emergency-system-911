@@ -25,22 +25,22 @@ export class EventsConfigControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update63
+   * Path part for operation update65
    */
-  static readonly Update63Path = '/v1/events-config/{id}';
+  static readonly Update65Path = '/v1/events-config/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update63()` instead.
+   * To access only the response body, use `update65()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update63$Response(params: {
+  update65$Response(params: {
     id: number;
     body: EventsConfig
   }): Observable<StrictHttpResponse<RestApiResponseEventsConfig>> {
 
-    const rb = new RequestBuilder(this.rootUrl, EventsConfigControllerService.Update63Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, EventsConfigControllerService.Update65Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
       rb.body(params.body, 'application/json');
@@ -59,16 +59,16 @@ export class EventsConfigControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update63$Response()` instead.
+   * To access the full response (for headers, for example), `update65$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update63(params: {
+  update65(params: {
     id: number;
     body: EventsConfig
   }): Observable<RestApiResponseEventsConfig> {
 
-    return this.update63$Response(params).pipe(
+    return this.update65$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseEventsConfig>) => r.body as RestApiResponseEventsConfig)
     );
   }

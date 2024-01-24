@@ -121,21 +121,21 @@ export class InterimIncidentControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation create27
+   * Path part for operation create28
    */
-  static readonly Create27Path = '/v1/interim-incidents';
+  static readonly Create28Path = '/v1/interim-incidents';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create27()` instead.
+   * To access only the response body, use `create28()` instead.
    *
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  create27$Response(params?: {
+  create28$Response(params?: {
     body?: { 'details': InterimIncidentDetails, 'doc'?: Blob }
   }): Observable<StrictHttpResponse<RestApiResponseInterimIncident>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.Create27Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, InterimIncidentControllerService.Create28Path, 'post');
     if (params) {
       rb.body(params.body, 'multipart/form-data');
     }
@@ -153,15 +153,15 @@ export class InterimIncidentControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create27$Response()` instead.
+   * To access the full response (for headers, for example), `create28$Response()` instead.
    *
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  create27(params?: {
+  create28(params?: {
     body?: { 'details': InterimIncidentDetails, 'doc'?: Blob }
   }): Observable<RestApiResponseInterimIncident> {
 
-    return this.create27$Response(params).pipe(
+    return this.create28$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseInterimIncident>) => r.body as RestApiResponseInterimIncident)
     );
   }

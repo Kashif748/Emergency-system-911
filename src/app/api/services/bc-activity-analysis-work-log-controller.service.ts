@@ -71,21 +71,21 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update113
+   * Path part for operation update115
    */
-  static readonly Update113Path = '/v1/bc/activity-analysis/work-log';
+  static readonly Update115Path = '/v1/bc/activity-analysis/work-log';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update113()` instead.
+   * To access only the response body, use `update115()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update113$Response(params: {
+  update115$Response(params: {
     body: BcActivityAnalysisWorkLog
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.Update113Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.Update115Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -103,35 +103,35 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update113$Response()` instead.
+   * To access the full response (for headers, for example), `update115$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update113(params: {
+  update115(params: {
     body: BcActivityAnalysisWorkLog
   }): Observable<RestApiResponseBcActivityAnalysisWorkLog> {
 
-    return this.update113$Response(params).pipe(
+    return this.update115$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>) => r.body as RestApiResponseBcActivityAnalysisWorkLog)
     );
   }
 
   /**
-   * Path part for operation insertOne34
+   * Path part for operation save3
    */
-  static readonly InsertOne34Path = '/v1/bc/activity-analysis/work-log';
+  static readonly Save3Path = '/v1/bc/activity-analysis/work-log';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `insertOne34()` instead.
+   * To access only the response body, use `save3()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne34$Response(params: {
+  save3$Response(params: {
     body: BcActivityAnalysisWorkLog
-  }): Observable<StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>> {
+  }): Observable<StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLogProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.InsertOne34Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityAnalysisWorkLogControllerService.Save3Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -142,23 +142,23 @@ export class BcActivityAnalysisWorkLogControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>;
+        return r as StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLogProjection>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `insertOne34$Response()` instead.
+   * To access the full response (for headers, for example), `save3$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  insertOne34(params: {
+  save3(params: {
     body: BcActivityAnalysisWorkLog
-  }): Observable<RestApiResponseBcActivityAnalysisWorkLog> {
+  }): Observable<RestApiResponseBcActivityAnalysisWorkLogProjection> {
 
-    return this.insertOne34$Response(params).pipe(
-      map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLog>) => r.body as RestApiResponseBcActivityAnalysisWorkLog)
+    return this.save3$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseBcActivityAnalysisWorkLogProjection>) => r.body as RestApiResponseBcActivityAnalysisWorkLogProjection)
     );
   }
 

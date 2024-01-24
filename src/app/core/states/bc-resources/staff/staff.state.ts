@@ -261,7 +261,7 @@ export class StaffState {
       })
     );
     return this.staff
-      .update84({
+      .update86({
         body: payload,
       })
       .pipe(

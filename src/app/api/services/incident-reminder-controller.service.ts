@@ -26,21 +26,21 @@ export class IncidentReminderControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete11
+   * Path part for operation delete12
    */
-  static readonly Delete11Path = '/v1/incident-reminder/delete/{reminderId}';
+  static readonly Delete12Path = '/v1/incident-reminder/delete/{reminderId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete11()` instead.
+   * To access only the response body, use `delete12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete11$Response(params: {
+  delete12$Response(params: {
     reminderId: number;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentReminderControllerService.Delete11Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentReminderControllerService.Delete12Path, 'put');
     if (params) {
       rb.path('reminderId', params.reminderId, {});
     }
@@ -58,15 +58,15 @@ export class IncidentReminderControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete11$Response()` instead.
+   * To access the full response (for headers, for example), `delete12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete11(params: {
+  delete12(params: {
     reminderId: number;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete11$Response(params).pipe(
+    return this.delete12$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
@@ -121,21 +121,21 @@ export class IncidentReminderControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update39
+   * Path part for operation update40
    */
-  static readonly Update39Path = '/v1/incident-reminder';
+  static readonly Update40Path = '/v1/incident-reminder';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update39()` instead.
+   * To access only the response body, use `update40()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update39$Response(params: {
+  update40$Response(params: {
     body: IncidentReminder
   }): Observable<StrictHttpResponse<RestApiResponseIncidentReminderProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentReminderControllerService.Update39Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentReminderControllerService.Update40Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -153,15 +153,15 @@ export class IncidentReminderControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update39$Response()` instead.
+   * To access the full response (for headers, for example), `update40$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update39(params: {
+  update40(params: {
     body: IncidentReminder
   }): Observable<RestApiResponseIncidentReminderProjection> {
 
-    return this.update39$Response(params).pipe(
+    return this.update40$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentReminderProjection>) => r.body as RestApiResponseIncidentReminderProjection)
     );
   }

@@ -77,7 +77,7 @@ export class ActivityFrquencyState {
       })
     );
     return this.activityFrquency
-      .getAll22({
+      .getAll23({
         isActive: true,
         pageable: {
           page: payload.page,
@@ -148,7 +148,7 @@ export class ActivityFrquencyState {
       })
     );
     return this.activityFrquency
-      .update106({
+      .update108({
         body: payload,
       })
       .pipe(
