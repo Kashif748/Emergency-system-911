@@ -74,21 +74,21 @@ export class DmsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete27
+   * Path part for operation delete28
    */
-  static readonly Delete27Path = '/v1/dms';
+  static readonly Delete28Path = '/v1/dms';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete27()` instead.
+   * To access only the response body, use `delete28()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete27$Response(params: {
+  delete28$Response(params: {
     id: string;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, DmsControllerService.Delete27Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, DmsControllerService.Delete28Path, 'put');
     if (params) {
       rb.query('id', params.id, {});
     }
@@ -106,15 +106,15 @@ export class DmsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete27$Response()` instead.
+   * To access the full response (for headers, for example), `delete28$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete27(params: {
+  delete28(params: {
     id: string;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete27$Response(params).pipe(
+    return this.delete28$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
@@ -520,7 +520,7 @@ export class DmsControllerService extends BaseService {
   /**
    * Path part for operation loadLogo
    */
-  static readonly LoadLogoPath = '/v1/dms/load-logo/ext/{id}';
+  static readonly LoadLogoPath = '/v1/dms/load-org-logo/ext/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -559,6 +559,52 @@ export class DmsControllerService extends BaseService {
   }): Observable<any> {
 
     return this.loadLogo$Response(params).pipe(
+      map((r: StrictHttpResponse<any>) => r.body as any)
+    );
+  }
+
+  /**
+   * Path part for operation loadLogo1
+   */
+  static readonly LoadLogo1Path = '/v1/dms/load-logo/ext/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `loadLogo1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadLogo1$Response(params: {
+    id: string;
+  }): Observable<StrictHttpResponse<any>> {
+
+    const rb = new RequestBuilder(this.rootUrl, DmsControllerService.LoadLogo1Path, 'get');
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<any>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `loadLogo1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  loadLogo1(params: {
+    id: string;
+  }): Observable<any> {
+
+    return this.loadLogo1$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }

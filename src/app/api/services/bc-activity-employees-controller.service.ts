@@ -71,25 +71,25 @@ export class BcActivityEmployeesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll29
+   * Path part for operation getAll30
    */
-  static readonly GetAll29Path = '/v1/bc/activity-employees';
+  static readonly GetAll30Path = '/v1/bc/activity-employees';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll29()` instead.
+   * To access only the response body, use `getAll30()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll29$Response(params: {
+  getAll30$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityEmployees>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.GetAll29Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.GetAll30Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -109,39 +109,39 @@ export class BcActivityEmployeesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll29$Response()` instead.
+   * To access the full response (for headers, for example), `getAll30$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll29(params: {
+  getAll30(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityEmployees> {
 
-    return this.getAll29$Response(params).pipe(
+    return this.getAll30$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityEmployees>) => r.body as RestApiResponsePageBcActivityEmployees)
     );
   }
 
   /**
-   * Path part for operation update112
+   * Path part for operation update114
    */
-  static readonly Update112Path = '/v1/bc/activity-employees';
+  static readonly Update114Path = '/v1/bc/activity-employees';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update112()` instead.
+   * To access only the response body, use `update114()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update112$Response(params: {
+  update114$Response(params: {
     body: BcActivityEmployees
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityEmployees>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.Update112Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityEmployeesControllerService.Update114Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -159,15 +159,15 @@ export class BcActivityEmployeesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update112$Response()` instead.
+   * To access the full response (for headers, for example), `update114$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update112(params: {
+  update114(params: {
     body: BcActivityEmployees
   }): Observable<RestApiResponseBcActivityEmployees> {
 
-    return this.update112$Response(params).pipe(
+    return this.update114$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityEmployees>) => r.body as RestApiResponseBcActivityEmployees)
     );
   }

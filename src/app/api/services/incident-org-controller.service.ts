@@ -23,21 +23,21 @@ export class IncidentOrgControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete13
+   * Path part for operation delete14
    */
-  static readonly Delete13Path = '/v1/incident-orgs/delete/{id}';
+  static readonly Delete14Path = '/v1/incident-orgs/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete13()` instead.
+   * To access only the response body, use `delete14()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13$Response(params: {
+  delete14$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentOrgControllerService.Delete13Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentOrgControllerService.Delete14Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -55,35 +55,35 @@ export class IncidentOrgControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete13$Response()` instead.
+   * To access the full response (for headers, for example), `delete14$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13(params: {
+  delete14(params: {
     id: number;
   }): Observable<void> {
 
-    return this.delete13$Response(params).pipe(
+    return this.delete14$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation update41
+   * Path part for operation update42
    */
-  static readonly Update41Path = '/v1/incident-orgs';
+  static readonly Update42Path = '/v1/incident-orgs';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update41()` instead.
+   * To access only the response body, use `update42()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update41$Response(params: {
+  update42$Response(params: {
     body: IncidentOrg
   }): Observable<StrictHttpResponse<RestApiResponseIncidentOrg>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentOrgControllerService.Update41Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentOrgControllerService.Update42Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -101,15 +101,15 @@ export class IncidentOrgControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update41$Response()` instead.
+   * To access the full response (for headers, for example), `update42$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update41(params: {
+  update42(params: {
     body: IncidentOrg
   }): Observable<RestApiResponseIncidentOrg> {
 
-    return this.update41$Response(params).pipe(
+    return this.update42$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentOrg>) => r.body as RestApiResponseIncidentOrg)
     );
   }

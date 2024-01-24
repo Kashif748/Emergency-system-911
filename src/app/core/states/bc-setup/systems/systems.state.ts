@@ -76,7 +76,7 @@ export class SystemsState {
     );
 
     return this.systemsService
-      .getAll10({
+      .getAll11({
         isActive: true,
         pageable: {
           page: payload.page,
@@ -153,7 +153,7 @@ export class SystemsState {
     );
 
     return this.systemsService
-      .update82({
+      .update84({
         body: payload,
       })
       .pipe(

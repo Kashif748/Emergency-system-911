@@ -21,6 +21,7 @@ export interface IncidentStatisticsDataFilter {
   serial?: string;
   status?: number;
   subject?: string;
+  tagIds?: Array<number>;
   toDate?: string;
   userId?: number;
 }

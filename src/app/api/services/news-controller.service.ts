@@ -25,21 +25,21 @@ export class NewsControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete4
+   * Path part for operation delete5
    */
-  static readonly Delete4Path = '/v1/news/delete/{id}';
+  static readonly Delete5Path = '/v1/news/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete4()` instead.
+   * To access only the response body, use `delete5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete4$Response(params: {
+  delete5$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseNews>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.Delete4Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.Delete5Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -57,36 +57,36 @@ export class NewsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete4$Response()` instead.
+   * To access the full response (for headers, for example), `delete5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete4(params: {
+  delete5(params: {
     id: number;
   }): Observable<RestApiResponseNews> {
 
-    return this.delete4$Response(params).pipe(
+    return this.delete5$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNews>) => r.body as RestApiResponseNews)
     );
   }
 
   /**
-   * Path part for operation findActivePage6
+   * Path part for operation findActivePage7
    */
-  static readonly FindActivePage6Path = '/v1/news';
+  static readonly FindActivePage7Path = '/v1/news';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findActivePage6()` instead.
+   * To access only the response body, use `findActivePage7()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage6$Response(params: {
+  findActivePage7$Response(params: {
     filter: NewsCriteria;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageNewsProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.FindActivePage6Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.FindActivePage7Path, 'get');
     if (params) {
       rb.query('filter', params.filter, {});
       rb.query('pageable', params.pageable, {});
@@ -105,36 +105,36 @@ export class NewsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `findActivePage6$Response()` instead.
+   * To access the full response (for headers, for example), `findActivePage7$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage6(params: {
+  findActivePage7(params: {
     filter: NewsCriteria;
     pageable: Pageable;
   }): Observable<RestApiResponsePageNewsProjection> {
 
-    return this.findActivePage6$Response(params).pipe(
+    return this.findActivePage7$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageNewsProjection>) => r.body as RestApiResponsePageNewsProjection)
     );
   }
 
   /**
-   * Path part for operation update23
+   * Path part for operation update24
    */
-  static readonly Update23Path = '/v1/news';
+  static readonly Update24Path = '/v1/news';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update23()` instead.
+   * To access only the response body, use `update24()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update23$Response(params: {
+  update24$Response(params: {
     body: News
   }): Observable<StrictHttpResponse<RestApiResponseNews>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.Update23Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, NewsControllerService.Update24Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -152,15 +152,15 @@ export class NewsControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update23$Response()` instead.
+   * To access the full response (for headers, for example), `update24$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update23(params: {
+  update24(params: {
     body: News
   }): Observable<RestApiResponseNews> {
 
-    return this.update23$Response(params).pipe(
+    return this.update24$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseNews>) => r.body as RestApiResponseNews)
     );
   }

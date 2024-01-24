@@ -116,23 +116,23 @@ export class BcWorkLogTypesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update79
+   * Path part for operation update81
    */
-  static readonly Update79Path = '/v1/bc/work-log/types';
+  static readonly Update81Path = '/v1/bc/work-log/types';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update79()` instead.
+   * To access only the response body, use `update81()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    *
    * @deprecated
    */
-  update79$Response(params: {
+  update81$Response(params: {
     body: BcWorkLogTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcWorkLogTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcWorkLogTypesControllerService.Update79Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcWorkLogTypesControllerService.Update81Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -150,17 +150,17 @@ export class BcWorkLogTypesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update79$Response()` instead.
+   * To access the full response (for headers, for example), `update81$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    *
    * @deprecated
    */
-  update79(params: {
+  update81(params: {
     body: BcWorkLogTypes
   }): Observable<RestApiResponseBcWorkLogTypes> {
 
-    return this.update79$Response(params).pipe(
+    return this.update81$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcWorkLogTypes>) => r.body as RestApiResponseBcWorkLogTypes)
     );
   }

@@ -84,7 +84,7 @@ export class ActivityPrioritySeqState {
     );
 
     return this.activityPrioritySeq
-      .getAll14({
+      .getAll15({
         isActive: true,
         versionId: payload.versionId,
         pageable: {
@@ -156,7 +156,7 @@ export class ActivityPrioritySeqState {
       })
     );
     return this.activityPrioritySeq
-      .update97({
+      .update99({
         body: payload,
       })
       .pipe(

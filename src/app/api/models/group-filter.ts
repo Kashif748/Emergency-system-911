@@ -2,6 +2,7 @@
 /* eslint-disable */
 export interface GroupFilter {
   active?: string;
+  groupType?: number;
   hasMember?: string;
   incidentCategoryId?: number;
   incidentLocation?: number;

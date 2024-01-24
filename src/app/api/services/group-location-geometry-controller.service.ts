@@ -69,21 +69,21 @@ export class GroupLocationGeometryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation create48
+   * Path part for operation create47
    */
-  static readonly Create48Path = '/v1/group-geometry-location';
+  static readonly Create47Path = '/v1/group-geometry-location';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create48()` instead.
+   * To access only the response body, use `create47()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create48$Response(params: {
+  create47$Response(params: {
     body: GroupLocationGeoInfo
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, GroupLocationGeometryControllerService.Create48Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, GroupLocationGeometryControllerService.Create47Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -101,15 +101,15 @@ export class GroupLocationGeometryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create48$Response()` instead.
+   * To access the full response (for headers, for example), `create47$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create48(params: {
+  create47(params: {
     body: GroupLocationGeoInfo
   }): Observable<RestApiResponseBoolean> {
 
-    return this.create48$Response(params).pipe(
+    return this.create47$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

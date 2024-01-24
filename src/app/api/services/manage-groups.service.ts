@@ -15,6 +15,7 @@ import { OrgStructure } from '../models/org-structure';
 import { Pageable } from '../models/pageable';
 import { RestApiResponseGroup } from '../models/rest-api-response-group';
 import { RestApiResponseGroupProjection } from '../models/rest-api-response-group-projection';
+import { RestApiResponseListNonGlobalGroupsByOrgResponse } from '../models/rest-api-response-list-non-global-groups-by-org-response';
 import { RestApiResponsePageGroup } from '../models/rest-api-response-page-group';
 import { RestApiResponsePageGroupProjection } from '../models/rest-api-response-page-group-projection';
 
@@ -32,21 +33,21 @@ export class ManageGroupsService extends BaseService {
   }
 
   /**
-   * Path part for operation delete17
+   * Path part for operation delete18
    */
-  static readonly Delete17Path = '/v1/groups/delete/{id}';
+  static readonly Delete18Path = '/v1/groups/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete17()` instead.
+   * To access only the response body, use `delete18()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete17$Response(params: {
+  delete18$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Delete17Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Delete18Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -64,15 +65,15 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete17$Response()` instead.
+   * To access the full response (for headers, for example), `delete18$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete17(params: {
+  delete18(params: {
     id: number;
   }): Observable<RestApiResponseGroup> {
 
-    return this.delete17$Response(params).pipe(
+    return this.delete18$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }
@@ -127,21 +128,21 @@ export class ManageGroupsService extends BaseService {
   }
 
   /**
-   * Path part for operation update50
+   * Path part for operation update51
    */
-  static readonly Update50Path = '/v1/groups';
+  static readonly Update51Path = '/v1/groups';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update50()` instead.
+   * To access only the response body, use `update51()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update50$Response(params: {
+  update51$Response(params: {
     body: Group
   }): Observable<StrictHttpResponse<RestApiResponseGroup>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Update50Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.Update51Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -159,15 +160,15 @@ export class ManageGroupsService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update50$Response()` instead.
+   * To access the full response (for headers, for example), `update51$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update50(params: {
+  update51(params: {
     body: Group
   }): Observable<RestApiResponseGroup> {
 
-    return this.update50$Response(params).pipe(
+    return this.update51$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseGroup>) => r.body as RestApiResponseGroup)
     );
   }
@@ -362,6 +363,58 @@ export class ManageGroupsService extends BaseService {
 
     return this.getNonGlobal$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageGroupProjection>) => r.body as RestApiResponsePageGroupProjection)
+    );
+  }
+
+  /**
+   * Path part for operation getNonGlobalGroupsByOrg
+   */
+  static readonly GetNonGlobalGroupsByOrgPath = '/v1/groups/non-global/{orgId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getNonGlobalGroupsByOrg()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNonGlobalGroupsByOrg$Response(params: {
+    orgId: OrgStructure;
+    name?: string;
+    groupType?: number;
+  }): Observable<StrictHttpResponse<RestApiResponseListNonGlobalGroupsByOrgResponse>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ManageGroupsService.GetNonGlobalGroupsByOrgPath, 'get');
+    if (params) {
+      rb.path('orgId', params.orgId, {});
+      rb.query('name', params.name, {});
+      rb.query('groupType', params.groupType, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<RestApiResponseListNonGlobalGroupsByOrgResponse>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getNonGlobalGroupsByOrg$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNonGlobalGroupsByOrg(params: {
+    orgId: OrgStructure;
+    name?: string;
+    groupType?: number;
+  }): Observable<RestApiResponseListNonGlobalGroupsByOrgResponse> {
+
+    return this.getNonGlobalGroupsByOrg$Response(params).pipe(
+      map((r: StrictHttpResponse<RestApiResponseListNonGlobalGroupsByOrgResponse>) => r.body as RestApiResponseListNonGlobalGroupsByOrgResponse)
     );
   }
 

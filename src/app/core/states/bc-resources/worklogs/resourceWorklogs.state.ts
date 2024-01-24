@@ -20,7 +20,7 @@ import {
   BcWorkLogTypesControllerService,
 } from 'src/app/api/services';
 import { BcWorkLogTypes } from 'src/app/api/models/bc-work-log-types';
-import {ResourceWorklogsAction} from "@core/states/bc-resources/worklogs/resourceWorklogs.action";
+import { ResourceWorklogsAction } from '@core/states/bc-resources/worklogs/resourceWorklogs.action';
 
 export interface ResourceWorklogsStateModel {
   page: PageBcActivityAnalysisWorkLogProjection;
@@ -47,7 +47,9 @@ export class ResourceWorklogsState {
 
   /* ************************ SELECTORS ******************** */
   @Selector([ResourceWorklogsState])
-  static page(state: ResourceWorklogsStateModel): BcActivityAnalysisWorkLogProjection[] {
+  static page(
+    state: ResourceWorklogsStateModel
+  ): BcActivityAnalysisWorkLogProjection[] {
     return state?.page?.content;
   }
 
@@ -78,7 +80,7 @@ export class ResourceWorklogsState {
   /* ********************** ACTIONS ************************* */
   @Action(ResourceWorklogsAction.LoadPage, { cancelUncompleted: true })
   loadPage(
-    { setState, getState}: StateContext<ResourceWorklogsStateModel>,
+    { setState, getState }: StateContext<ResourceWorklogsStateModel>,
     { payload }: ResourceWorklogsAction.LoadPage
   ) {
     setState(
@@ -86,49 +88,44 @@ export class ResourceWorklogsState {
         loading: true,
       })
     );
-    return this.Worklogs
-      .search26({
-        isActive: true,
-        actionTypeId: payload.actionTypeId,
-        resourceId: payload.resourceId,
-        pageable: {
-          page: payload.page,
-          size: payload.size,
-          sort: ['createdOn'],
-        },
+    return this.Worklogs.search26({
+      isActive: true,
+      actionTypeId: payload.actionTypeId,
+      resourceId: payload.resourceId,
+      pageable: {
+        page: payload.page,
+        size: payload.size,
+        sort: ['createdOn'],
+      },
+    }).pipe(
+      tap((res) => {
+        if (!payload.resetPage) {
+          let currentPage = getState().page;
+          res.result.content = [...res.result.content, ...currentPage.content];
+        }
+        setState(
+          patch<ResourceWorklogsStateModel>({
+            page: res.result,
+            loading: false,
+          })
+        );
+      }),
+      catchError(() => {
+        setState(
+          patch<ResourceWorklogsStateModel>({
+            page: { content: [], totalElements: 0 },
+          })
+        );
+        return EMPTY;
+      }),
+      finalize(() => {
+        setState(
+          patch<ResourceWorklogsStateModel>({
+            loading: false,
+          })
+        );
       })
-      .pipe(
-        tap((res) => {
-          if (!payload.resetPage) {
-            let currentPage = getState().page;
-            res.result.content = [
-              ...res.result.content,
-              ...currentPage.content,
-            ];
-          }
-          setState(
-            patch<ResourceWorklogsStateModel>({
-              page: res.result,
-              loading: false,
-            })
-          );
-        }),
-        catchError(() => {
-          setState(
-            patch<ResourceWorklogsStateModel>({
-              page: { content: [], totalElements: 0 },
-            })
-          );
-          return EMPTY;
-        }),
-        finalize(() => {
-          setState(
-            patch<ResourceWorklogsStateModel>({
-              loading: false,
-            })
-          );
-        })
-      );
+    );
   }
 
   @Action(ResourceWorklogsAction.LoadWorklogsTypes, { cancelUncompleted: true })
@@ -163,30 +160,28 @@ export class ResourceWorklogsState {
       })
     );
 
-    return this.Worklogs
-      .insertOne34({
-        body: { ...payload },
+    return this.Worklogs.save3({
+      body: { ...payload },
+    }).pipe(
+      tap((activityWorklogs) => {
+        const currentPage = getState().page;
+        setState(
+          patch<ResourceWorklogsStateModel>({
+            page: patch({
+              content: [...currentPage.content, activityWorklogs?.result],
+            }),
+            Worklog: activityWorklogs.result,
+          })
+        );
+      }),
+      finalize(() => {
+        setState(
+          patch<ResourceWorklogsStateModel>({
+            blocking: false,
+          })
+        );
       })
-      .pipe(
-        tap((activityWorklogs) => {
-          const currentPage = getState().page;
-          setState(
-            patch<ResourceWorklogsStateModel>({
-              page: patch({
-                content: [...currentPage.content, activityWorklogs?.result],
-              }),
-              Worklog: activityWorklogs.result,
-            })
-          );
-        }),
-        finalize(() => {
-          setState(
-            patch<ResourceWorklogsStateModel>({
-              blocking: false,
-            })
-          );
-        })
-      );
+    );
   }
   @Action(ResourceWorklogsAction.Update)
   update(
@@ -199,19 +194,17 @@ export class ResourceWorklogsState {
       })
     );
 
-    return this.Worklogs
-      .update113({
-        body: { ...payload },
+    return this.Worklogs.update115({
+      body: { ...payload },
+    }).pipe(
+      finalize(() => {
+        setState(
+          patch<ResourceWorklogsStateModel>({
+            blocking: false,
+          })
+        );
       })
-      .pipe(
-        finalize(() => {
-          setState(
-            patch<ResourceWorklogsStateModel>({
-              blocking: false,
-            })
-          );
-        })
-      );
+    );
   }
 
   @Action(ResourceWorklogsAction.GetWorklog, { cancelUncompleted: true })

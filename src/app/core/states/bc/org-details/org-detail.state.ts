@@ -265,7 +265,7 @@ export class OrgDetailState {
         loading: true,
       })
     );
-    return this.orgHir.update96({ body: payload }).pipe(
+    return this.orgHir.update98({ body: payload }).pipe(
       finalize(() => {
         setState(
           patch<OrgDetailStateModel>({
@@ -309,7 +309,7 @@ export class OrgDetailState {
     );
 
     return this.orgHirTypes
-      .getAll13({
+      .getAll14({
         isActive: true,
         pageable: {
           page: payload.page,

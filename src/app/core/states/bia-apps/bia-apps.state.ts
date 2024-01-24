@@ -84,7 +84,7 @@ export class BiaAppsState {
     { payload }: BiaAction.LoadStatuses
   ) {
     return this.cycleStatusService
-      .getAll21({
+      .getAll22({
         isActive: true,
         pageable: {
           page: payload?.page ?? 0,

@@ -34,11 +34,12 @@ export class GroupCategoryCenterControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getGroups$Response(params?: {
-    category?: number;
+  getGroups$Response(params: {
+    category: number;
     center?: number;
-    zone?: number;
+    zone: number;
     location?: string;
+    contractNo?: Array<string>;
   }): Observable<StrictHttpResponse<RestApiResponseListGroup>> {
 
     const rb = new RequestBuilder(this.rootUrl, GroupCategoryCenterControllerService.GetGroupsPath, 'get');
@@ -47,6 +48,7 @@ export class GroupCategoryCenterControllerService extends BaseService {
       rb.query('center', params.center, {});
       rb.query('zone', params.zone, {});
       rb.query('location', params.location, {});
+      rb.query('contractNo', params.contractNo, {});
     }
 
     return this.http.request(rb.build({
@@ -66,11 +68,12 @@ export class GroupCategoryCenterControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getGroups(params?: {
-    category?: number;
+  getGroups(params: {
+    category: number;
     center?: number;
-    zone?: number;
+    zone: number;
     location?: string;
+    contractNo?: Array<string>;
   }): Observable<RestApiResponseListGroup> {
 
     return this.getGroups$Response(params).pipe(
@@ -79,21 +82,21 @@ export class GroupCategoryCenterControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update42
+   * Path part for operation update43
    */
-  static readonly Update42Path = '/v1/incident-location-info';
+  static readonly Update43Path = '/v1/incident-location-info';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update42()` instead.
+   * To access only the response body, use `update43()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update42$Response(params: {
+  update43$Response(params: {
     body: IncidentLocationInfo
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, GroupCategoryCenterControllerService.Update42Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, GroupCategoryCenterControllerService.Update43Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -111,15 +114,15 @@ export class GroupCategoryCenterControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update42$Response()` instead.
+   * To access the full response (for headers, for example), `update43$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update42(params: {
+  update43(params: {
     body: IncidentLocationInfo
   }): Observable<RestApiResponseBoolean> {
 
-    return this.update42$Response(params).pipe(
+    return this.update43$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }

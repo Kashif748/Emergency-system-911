@@ -141,7 +141,7 @@ export class RecordsState {
       })
     );
     return this.bcRecords
-      .update86({
+      .update88({
         body: payload,
       })
       .pipe(

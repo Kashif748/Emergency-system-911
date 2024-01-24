@@ -70,21 +70,21 @@ export class BcResourcesItInfrastructureControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update90
+   * Path part for operation update92
    */
-  static readonly Update90Path = '/v1/bc/resources/it-infrastructure';
+  static readonly Update92Path = '/v1/bc/resources/it-infrastructure';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update90()` instead.
+   * To access only the response body, use `update92()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update90$Response(params: {
+  update92$Response(params: {
     body: BcResourcesItInfrastructure
   }): Observable<StrictHttpResponse<RestApiResponseBcResourcesItInfrastructure>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcResourcesItInfrastructureControllerService.Update90Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcResourcesItInfrastructureControllerService.Update92Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,15 +102,15 @@ export class BcResourcesItInfrastructureControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update90$Response()` instead.
+   * To access the full response (for headers, for example), `update92$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update90(params: {
+  update92(params: {
     body: BcResourcesItInfrastructure
   }): Observable<RestApiResponseBcResourcesItInfrastructure> {
 
-    return this.update90$Response(params).pipe(
+    return this.update92$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcResourcesItInfrastructure>) => r.body as RestApiResponseBcResourcesItInfrastructure)
     );
   }

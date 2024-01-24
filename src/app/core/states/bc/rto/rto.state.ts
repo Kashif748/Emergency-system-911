@@ -70,7 +70,7 @@ export class RtoState {
       })
     );
     return this.rto
-      .getAll11({
+      .getAll12({
         isActive: true,
         versionId: payload.versionId,
         pageable: {
@@ -142,7 +142,7 @@ export class RtoState {
       })
     );
     return this.rto
-      .update83({
+      .update85({
         body: payload,
       })
       .pipe(

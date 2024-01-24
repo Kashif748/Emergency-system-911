@@ -4,6 +4,7 @@ import { LocalRisk } from './local-risk';
 import { OrgStructure } from './org-structure';
 export interface IncidentCategory {
   chatBotEnabled?: boolean;
+  icon?: string;
   id?: number;
   isActive?: boolean;
   localRisk?: LocalRisk;

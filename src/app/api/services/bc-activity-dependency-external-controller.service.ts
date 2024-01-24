@@ -70,25 +70,25 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll23
+   * Path part for operation getAll24
    */
-  static readonly GetAll23Path = '/v1/bc/activity/vendor-dependency';
+  static readonly GetAll24Path = '/v1/bc/activity/vendor-dependency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll23()` instead.
+   * To access only the response body, use `getAll24()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll23$Response(params: {
+  getAll24$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityDependencyExternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.GetAll23Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.GetAll24Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -108,39 +108,39 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll23$Response()` instead.
+   * To access the full response (for headers, for example), `getAll24$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll23(params: {
+  getAll24(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityDependencyExternal> {
 
-    return this.getAll23$Response(params).pipe(
+    return this.getAll24$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityDependencyExternal>) => r.body as RestApiResponsePageBcActivityDependencyExternal)
     );
   }
 
   /**
-   * Path part for operation update107
+   * Path part for operation update109
    */
-  static readonly Update107Path = '/v1/bc/activity/vendor-dependency';
+  static readonly Update109Path = '/v1/bc/activity/vendor-dependency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update107()` instead.
+   * To access only the response body, use `update109()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update107$Response(params: {
+  update109$Response(params: {
     body: BcActivityDependencyExternal
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.Update107Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyExternalControllerService.Update109Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -158,15 +158,15 @@ export class BcActivityDependencyExternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update107$Response()` instead.
+   * To access the full response (for headers, for example), `update109$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update107(params: {
+  update109(params: {
     body: BcActivityDependencyExternal
   }): Observable<RestApiResponseBcActivityDependencyExternal> {
 
-    return this.update107$Response(params).pipe(
+    return this.update109$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityDependencyExternal>) => r.body as RestApiResponseBcActivityDependencyExternal)
     );
   }

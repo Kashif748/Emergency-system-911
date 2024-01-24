@@ -7,6 +7,7 @@ export interface InquirySearchCriteria {
   orgId?: number;
   reporterContact?: number;
   subject?: string;
+  tagIds?: Array<number>;
   toDate?: string;
   userId?: number;
 }

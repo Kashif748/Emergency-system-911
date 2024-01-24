@@ -37,11 +37,13 @@ export class InappNotificationControllerService extends BaseService {
    */
   markRead$Response(params: {
     id: number;
+    ids?: Array<number>;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
     const rb = new RequestBuilder(this.rootUrl, InappNotificationControllerService.MarkReadPath, 'put');
     if (params) {
       rb.path('id', params.id, {});
+      rb.query('ids', params.ids, {});
     }
 
     return this.http.request(rb.build({
@@ -63,6 +65,7 @@ export class InappNotificationControllerService extends BaseService {
    */
   markRead(params: {
     id: number;
+    ids?: Array<number>;
   }): Observable<RestApiResponseBoolean> {
 
     return this.markRead$Response(params).pipe(
