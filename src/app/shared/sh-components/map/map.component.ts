@@ -16,7 +16,6 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IThemeFacade } from '@core/facades/theme.facade';
-import { TranslationService } from 'src/app/modules/i18n/translation.service';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 import { Subject, Subscription } from 'rxjs';
@@ -38,9 +37,8 @@ import {
   DZSP_SEARCH_URL,
   LocationInfoModel,
 } from './utils/map.models';
-import { AppCommonDataService } from '@core/services/app-common-data.service';
 import esri = __esri;
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EsriModule } from './utils/map-module.enum';
 import { PopupBuilder } from './services/popup.builder';
 import { CdatePipe } from '@shared/sh-pipes/cdate.pipe';
@@ -83,16 +81,14 @@ export class MapComponent
     private store: Store,
     private urlHelper: UrlHelperService,
     private popupBuidler: PopupBuilder,
-    private translationService: TranslationService,
+    private translate: TranslateService,
     private alertService: AlertsService,
     private cdr: ChangeDetectorRef,
     private themeFacade: IThemeFacade,
     private orgService: OrgService,
     private linkService: ILinkService,
-    private appCommonDataService: AppCommonDataService,
     @Optional() public dialogRef: MatDialogRef<MapComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: MapConfig,
-    // @Optional() private incidentsService: IncidentsService
     @Optional() private incidentsService: IncidentControllerService,
     @Optional() private taskService: TaskControllerService
   ) {}
@@ -120,7 +116,9 @@ export class MapComponent
   public zoomToAddress: (address: AddressSearchResultModel) => void;
   public zoomToGroupAddress: (address: AddressSearchResultModel) => void;
   // Variables
-  lang = 'en';
+  get lang() {
+    return this.translate.currentLang;
+  }
   draw: any;
   mpImg: any;
   public groupData: Array<MapConfig> = [];
@@ -228,7 +226,6 @@ export class MapComponent
         }
       }
     }
-    this.lang = this.translationService.getSelectedLanguage();
 
     if (Array.isArray(this.config)) {
       if (this.config.length > 0) {
@@ -605,12 +602,10 @@ export class MapComponent
           popupTemplate: {
             title:
               address?.type == 'polygon'
-                ? this.translationService.translateAWord(
-                    'INCIDENTS.TEAM_LOCATION'
-                  )
+                ? this.translate.instant('INCIDENTS.TEAM_LOCATION')
                 : this.title
                 ? this.title
-                : this.translationService.translateAWord('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
+                : this.translate.instant('INCIDENTS.REPORTER'), //'Location Shared By Reporter',
             content: (feature: __esri.Feature) => {
               return `${address.Address}`;
             },
@@ -1283,7 +1278,7 @@ export class MapComponent
 
       this.applyFeature = async (taskIncidentData: TaskIncidentGisData) => {
         this.alertService.openSuccessSnackBarWithMsg(
-          this.translationService.get('SHARED.NOTIFICATION.MAP_UPDATE'),
+          this.translate.instant('SHARED.NOTIFICATION.MAP_UPDATE'),
           5000
         );
         await applyFeature(taskIncidentData);
@@ -1763,6 +1758,22 @@ export class MapComponent
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
+  }
+
+  get gType() {
+    let graphicPoint;
+    if (this.mapType === 'reporter') {
+      if (this.mapView?.graphics?.getItemAt(1)) {
+        graphicPoint = this.mapView?.graphics?.getItemAt(1);
+      } else {
+        graphicPoint = this.mapView?.graphics?.getItemAt(0);
+      }
+    } else {
+      graphicPoint = this.mapView?.graphics?.getItemAt(0);
+    }
+    const gType = graphicPoint?.attributes?.gType;
+
+    return gType;
   }
 }
 
