@@ -190,6 +190,7 @@
       "SEND": "Send",
       "CLOSE": "Close",
       "ACTIONS": "Actions",
+      "RELOAD": "Reload",
       "EXPORT_TO_PDF": "Export To PDF",
       "EXPORT_TO_XLSX": "Export To XLSX",
       "EXPORT": "Export",

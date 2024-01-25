@@ -14,4 +14,3 @@ export interface IncidentCategory {
   parent?: IncidentCategory;
   serialNumber: number;
 }
-

@@ -10,4 +10,3 @@ export interface PriorityProjection {
   nameEn?: string;
   orgStructure?: IdNameProjection;
 }
-

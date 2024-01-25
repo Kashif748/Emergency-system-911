@@ -28,4 +28,6 @@ export enum EsriModule {
   Extent = 'esri/geometry/Extent',
   BasemapToggle = 'esri/widgets/BasemapToggle',
   ActionButton = 'esri/support/actions/ActionButton',
+  Fullscreen = 'esri/widgets/Fullscreen',
+  Print = 'esri/widgets/Print',
 }
