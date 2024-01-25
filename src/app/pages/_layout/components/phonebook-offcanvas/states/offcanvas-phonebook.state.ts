@@ -50,8 +50,9 @@ export class OffcanvasPhonebookState {
   @Selector([OffcanvasPhonebookState])
   static hasFilters(state: OffcanvasPhonebookStateModel): boolean {
     return (
-      Object.keys(state.pageRequest.filters).filter((k) => k !== 'active' && k !== 'isInternal')
-        .length > 0
+      Object.keys(state.pageRequest.filters).filter(
+        (k) => k !== 'active' && k !== 'isInternal'
+      ).length > 0
     );
   }
   /* ********************** ACTIONS ************************* */
@@ -80,6 +81,7 @@ export class OffcanvasPhonebookState {
         sort: this.apiHelper.sort(pageRequest),
         filters: {
           ...pageRequest.filters,
+          active: true,
         },
       })
     );

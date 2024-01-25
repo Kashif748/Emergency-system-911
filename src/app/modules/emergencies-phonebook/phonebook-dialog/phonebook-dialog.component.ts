@@ -42,7 +42,7 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
   @Input()
   set phonebookId(v: number) {
     this._phonebook = v;
-    this.createForm();
+    this.form?.reset();
     if (v === undefined || v === null) {
       return;
     }
@@ -80,6 +80,7 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
+    this.createForm();
   }
   ngAfterViewInit(): void {
     this.phonebookTypes = [
@@ -101,7 +102,7 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       nameAr: [null, [Validators.required, GenericValidators.arabic]],
       nameEn: [null, [Validators.required, GenericValidators.english]],
       orgName: [null, [Validators.required]],
-      referenceOrgId: [null ,[Validators.required]],
+      referenceOrgId: [null, [Validators.required]],
       jobTitle: [null],
       phoneNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
@@ -146,6 +147,9 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
     this.store.dispatch(new BrowsePhonebookAction.ToggleDialog({}));
   }
   submit() {
+    console.log(this.form.get('mobileNumber'));
+
+    return;
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {

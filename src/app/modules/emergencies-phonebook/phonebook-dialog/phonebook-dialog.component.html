@@ -231,6 +231,7 @@
           formControlName="mobileNumber"
           [enablePlaceholder]="false"
           [enableAutoCountrySelect]="true"
+          phoneType="MOBILE"
         >
         </ngx-intl-tel-input>
         <label class="dir-text">
@@ -282,9 +283,9 @@
           class="w-100"
           maxlength="4000"
           pInputTextarea
-          type="text"
           formControlName="notes"
           rows="4"
+          [class.p-filled]="form.controls?.notes?.value"
         ></textarea>
         <label for="textarea">
           {{ "PHONEBOOK.NOTES" | translate }}
