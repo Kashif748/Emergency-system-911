@@ -5,6 +5,11 @@ import {ILangFacade} from "@core/facades/lang.facade";
 import {Observable} from "rxjs";
 import {CommonDataState} from "@core/states";
 import {PriorityProjection} from "../../../api/models/priority-projection";
+import {BrowseStatisticsAction} from "../states/browse-statistics.action";
+import {FormBuilder} from "@angular/forms";
+import {BrowseStatisticsState, BrowseStatisticsStateModel} from "../states/browse-statistics.state";
+import {IncidentStatisticsState} from "@core/states/incident-statistics/incident-statistics.state";
+import {IncidentStatisticData} from "../../../api/models/incident-statistic-data";
 
 @Component({
   selector: 'app-statistics',
@@ -16,12 +21,19 @@ export class StatisticsComponent implements OnInit {
   @Select(CommonDataState.priorities)
   public priorities$: Observable<PriorityProjection[]>;
 
+  @Select(IncidentStatisticsState.incidentStatistics)
+  public incidentStatistics$: Observable<IncidentStatisticData>;
+
+  @Select(BrowseStatisticsState.state)
+  public state$: Observable<BrowseStatisticsStateModel>;
+
   public chartOptionsR: Partial<any>;
 
   constructor(
       private store: Store,
       private translate: TranslateService,
       private langFacade: ILangFacade,
+      private fb: FormBuilder,
   ) {
     this.langFacade.vm$.pipe(
     ).subscribe((res) => {
@@ -34,10 +46,44 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.search()
     this.initCharts();
   }
   search() {
-    //this.store.dispatch(new BrowseVenderAction.LoadVender());
+    this.store.dispatch(new BrowseStatisticsAction.LoadIncidentStatistics());
+  }
+  updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
+    /*if (event?.key === 'Enter') {
+      return this.search();
+    }
+    const keys = Object.keys(filter);
+    if (keys.length > 0) {
+      switch (keys[0]) {
+        case 'orgIds':
+          filter['orgIds'] = filter['orgIds']
+              .map((o) => {
+                return {
+                  key: o?.key,
+                  labelEn: o.labelEn,
+                  labelAr: o.labelAr,
+                };
+              })
+              .filter((id) => ![undefined, null].includes(id));
+          break;
+
+        default:
+          break;
+      }
+    }*/
+
+/*    this.store
+        .dispatch(new BrowseTasksAction.UpdateFilter(filter))
+        .toPromise()
+        .then(() => {
+          if (filter.type) {
+            this.search();
+          }
+        });*/
   }
 
   clear() {

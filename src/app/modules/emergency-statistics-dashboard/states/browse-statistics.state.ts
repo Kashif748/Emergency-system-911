@@ -7,11 +7,10 @@ import {TextUtils} from '@core/utils';
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
 import {IncidentCategoriesAction} from "@core/states/incident-categories/incident-categories.action";
 import {BrowseStatisticsAction} from "./browse-statistics.action";
+import {IncidentStatisticsAction} from "@core/states/incident-statistics/incident-statistics.action";
 
 export interface BrowseStatisticsStateModel {
   pageRequest: PageRequestModel;
-  columns: string[];
-  view: 'TABLE' | 'CARDS';
 }
 
 export const BROWSE_STATISTICS_UI_STATE_TOKEN =
@@ -19,6 +18,16 @@ export const BROWSE_STATISTICS_UI_STATE_TOKEN =
 
 @State<BrowseStatisticsStateModel>({
   name: BROWSE_STATISTICS_UI_STATE_TOKEN,
+  defaults: {
+    pageRequest: {
+      filters: {
+        fromDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+        toDate: new Date(),
+      },
+      first: 0,
+      rows: 10,
+    }
+  },
 })
 @Injectable()
 @SelectorOptions({ injectContainerState: false })
@@ -50,12 +59,24 @@ export class BrowseStatisticsState {
   }
   /* ********************** ACTIONS ************************* */
   @Action(BrowseStatisticsAction.LoadIncidentCategories)
-  loadUsers(
+  LoadIncidentCategories(
     { setState, dispatch }: StateContext<BrowseStatisticsStateModel>,
     { }: BrowseStatisticsAction.LoadIncidentCategories
   ) {
     return dispatch(
       new IncidentCategoriesAction.LoadIncidentCategories()
+    );
+  }
+  @Action(BrowseStatisticsAction.LoadIncidentStatistics)
+  LoadIncidentStatistics(
+      { setState, dispatch, getState }: StateContext<BrowseStatisticsStateModel>,
+      { payload}: BrowseStatisticsAction.LoadIncidentStatistics
+  ) {
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+        new IncidentStatisticsAction.LoadIncidentStatistics({
+          filters: {...pageRequest?.filters},
+        })
     );
   }
 }

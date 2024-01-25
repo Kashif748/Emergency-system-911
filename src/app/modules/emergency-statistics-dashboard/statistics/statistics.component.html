@@ -1,16 +1,18 @@
 <div class="container-fluid">
   <app-breadcrumb></app-breadcrumb>
-  <div class="mx-4 my-10">
+  <div class="mx-4 my-10" *ngIf="state$ | async as state">
     <div class="row border-bottom">
       <div class="col-12">
         <div class="row justify-content-center">
-          <!-- First Date Field -->
+          <!-- From Date -->
           <div class="p-field p-col-12 p-md-4 justify-content-end d-flex">
             <span class="p-float-label">
               <p-calendar
                     [showIcon]="true"
                     showButtonBar="true"
                     appendTo="body"
+                    [ngModel]="state?.pageRequest?.filters['fromDate']"
+                    (ngModelChange)="updateFilter({fromDate: $event}, $event)"
               ></p-calendar>
               <label>
               {{ "LOGINATTEMPTS.from_date" | translate }}
@@ -18,13 +20,15 @@
             </span>
           </div>
 
-          <!-- Second Date Field -->
+          <!-- To Date -->
           <div class="p-field p-col-12 p-md-2">
             <span class="p-float-label">
               <p-calendar
                       [showIcon]="true"
                       showButtonBar="true"
                       appendTo="body"
+                      [ngModel]="state?.pageRequest?.filters['toDate']"
+                      (ngModelChange)="updateFilter({toDate: $event}, $event)"
               ></p-calendar>
               <label>
                 {{ "LOGINATTEMPTS.to_date" | translate }}
@@ -52,10 +56,10 @@
                     <!--begin::Body-->
                     <div class="card-body d-lg-flex justify-content-center">
                       <div class="d-flex flex-column">
-                        <a class="d-block font-size-h5 font-weight-bolder text-dark">
+                        <a class="d-block font-size-h6 font-weight-bolder text-dark">
                           {{priority | translateObj : 'name'}}
                         </a>
-                        <a class="text-center d-block font-size-h5 font-weight-bold text-dark">
+                        <a class="text-center d-block font-size-h2 font-weight-bolder text-dark">
                           19
                         </a>
                       </div>

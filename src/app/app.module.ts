@@ -97,6 +97,7 @@ import {GisState} from '@core/states/gis/gis.state';
 import {IncidentCategoriesState} from "@core/states/incident-categories/incident-categories.state";
 import firebase from 'firebase/compat/app';
 import initializeApp = firebase.initializeApp;
+import {IncidentStatisticsState} from "@core/states/incident-statistics/incident-statistics.state";
 
 initializeApp(environment.firebase);
 registerLocaleData(localeAr);
@@ -200,7 +201,8 @@ export function getHighlightLanguages() {
           SystemsReportState,
           VendorsReportState,
           EmployeesReportState,
-          IncidentCategoriesState
+          IncidentCategoriesState,
+          IncidentStatisticsState
         ],
         {
           developmentMode: !environment.production,
