@@ -22,7 +22,6 @@ import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
 import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { IncidentsService } from 'src/app/_metronic/core/services/incidents.service';
 import { ILinkService } from '@core/services/link.service';
 import { OrgService } from '@core/api/services/org.service';
 import { MapConfig, MapService } from './services/map.service';
@@ -55,6 +54,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Store } from '@ngxs/store';
 import { CommonDataState } from '@core/states';
 import { UrlHelperService } from '@core/services/url-helper.service';
+import {
+  IncidentControllerService,
+  TaskControllerService,
+} from 'src/app/api/services';
+import { IncidentsDataResponse } from 'src/app/api/models';
 
 @Component({
   selector: 'app-map',
@@ -88,7 +92,9 @@ export class MapComponent
     private appCommonDataService: AppCommonDataService,
     @Optional() public dialogRef: MatDialogRef<MapComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: MapConfig,
-    @Optional() private incidentsService: IncidentsService
+    // @Optional() private incidentsService: IncidentsService
+    @Optional() private incidentsService: IncidentControllerService,
+    @Optional() private taskService: TaskControllerService
   ) {}
 
   // UI
@@ -681,7 +687,7 @@ export class MapComponent
       const filterLayers = (
         where,
         fName: MapActionType,
-        symbol?: __esri.SymbolProperties
+        incidentsMap?: { [key: number]: IncidentsDataResponse }
       ) => {
         let TaskUrl;
         let Symbol;
@@ -689,12 +695,7 @@ export class MapComponent
         switch (fName) {
           case MapActionType.INCIDENT_POINT:
             TaskUrl = IncPointFeatureService.url + '/0';
-            Symbol = symbol ?? {
-              // type: 'simple-marker',
-              // style: 'path',
-              // path: 'M213.2 32H288V96c0 17.7 14.3 32 32 32s32-14.3 32-32V32h74.8c27.1 0 51.3 17.1 60.3 42.6l42.7 120.6c-10.9-2.1-22.2-3.2-33.8-3.2c-59.5 0-112.1 29.6-144 74.8V224c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7 14.3 32 32 32c2.3 0 4.6-.3 6.8-.7c-4.5 15.5-6.8 31.8-6.8 48.7c0 5.4 .2 10.7 .7 16l-.7 0c-17.7 0-32 14.3-32 32v64H86.6C56.5 480 32 455.5 32 425.4c0-6.2 1.1-12.4 3.1-18.2L152.9 74.6C162 49.1 186.1 32 213.2 32zM352 368a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm211.3-43.3c-6.2-6.2-16.4-6.2-22.6 0L480 385.4l-28.7-28.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l40 40c6.2 6.2 16.4 6.2 22.6 0l72-72c6.2-6.2 6.2-16.4 0-22.6z',
-              // color: 'red',
-              // size: '26px',
+            Symbol = {
               type: 'simple-marker',
               style: 'circle',
               color: 'red',
@@ -704,7 +705,7 @@ export class MapComponent
 
           case MapActionType.INCIDENT_POLYLINE:
             TaskUrl = IncLineFeatureService.url + '/2';
-            Symbol = symbol ?? {
+            Symbol = {
               type: 'simple-line',
               color: [4, 90, 141],
               width: 4,
@@ -715,7 +716,7 @@ export class MapComponent
 
           case MapActionType.INCIDENT_POLYGON:
             TaskUrl = IncPolygonFeatureService.url + '/4';
-            Symbol = symbol ?? {
+            Symbol = {
               type: 'simple-fill',
               style: 'diagonal-cross',
               color: [0, 0, 0, 0.1],
@@ -725,7 +726,7 @@ export class MapComponent
 
           case MapActionType.TASK_POINT:
             TaskUrl = TskPointFeatureService.url + '/1';
-            Symbol = symbol ?? {
+            Symbol = {
               type: 'simple-marker',
               style: 'circle',
               color: 'green',
@@ -735,7 +736,7 @@ export class MapComponent
 
           case MapActionType.TASK_POLYLINE:
             TaskUrl = TskLineFeatureService.url + '/3';
-            Symbol = symbol ?? {
+            Symbol = {
               type: 'simple-line',
               color: [200, 90, 141],
               width: 4,
@@ -746,7 +747,7 @@ export class MapComponent
 
           case MapActionType.TASK_POLYGON:
             TaskUrl = TskPolygonFeatureService.url + '/5';
-            Symbol = symbol ?? {
+            Symbol = {
               type: 'simple-fill',
               style: 'diagonal-cross',
               color: [0, 0, 0, 0.1],
@@ -756,7 +757,7 @@ export class MapComponent
 
           case MapActionType.ORGRANIZATION_POINT:
             TaskUrl = TskPointFeatureService.url + '/6';
-            Symbol = symbol ?? {
+            Symbol = {
               type: 'simple-marker',
               style: 'circle',
               color: 'yellow',
@@ -772,24 +773,32 @@ export class MapComponent
         query.returnGeometry = true;
         query.outFields = ['*'];
         query.where = where;
-        const categories = this.store.selectSnapshot(
-          CommonDataState.incidentCategories
-        );
-        const catMap = categories
-          .filter((c) => !!c.icon)
-          .reduce((pv, cv) => {
-            pv[cv.id] = cv;
-            return pv;
-          }, {});
-        const priorities = this.store.selectSnapshot(
-          CommonDataState.priorities
-        );
-        const prioMap = priorities
-          .filter((p) => !!p.colorHexa)
-          .reduce((pv, cv) => {
-            pv[cv.id] = cv;
-            return pv;
-          }, {});
+
+        if (incidentsMap) {
+          const categories = this.store.selectSnapshot(
+            CommonDataState.incidentCategories
+          );
+          const catMap = categories
+            .filter((c) => !!c.icon)
+            .reduce((pv, cv) => {
+              pv[cv.id] = cv.icon;
+              return pv;
+            }, {});
+          const priorities = this.store.selectSnapshot(
+            CommonDataState.priorities
+          );
+          const prioMap = priorities
+            .filter((p) => !!p.colorHexa)
+            .reduce((pv, cv) => {
+              pv[cv.id] = cv.colorHexa;
+              return pv;
+            }, {});
+          Object.keys(incidentsMap).forEach((key) => {
+            incidentsMap[key]['color'] = prioMap[incidentsMap[key].priorityId];
+            incidentsMap[key]['icon'] =
+              catMap[incidentsMap[key].mainIncCategoryId];
+          });
+        }
 
         queryTask.execute(query).then((result) => {
           // *** ADD ***//
@@ -797,6 +806,25 @@ export class MapComponent
           const graphics = result.features
             .filter((f) => !!f.geometry.get('x') && !!f.geometry.get('y'))
             .map((item) => {
+              Symbol =
+                incidentsMap &&
+                item.attributes['CUST_ATTR_1']?.startsWith('Inc_') &&
+                incidentsMap[item.attributes['INCIDENT_REF_ID']] &&
+                incidentsMap[item.attributes['INCIDENT_REF_ID']]['icon'] &&
+                incidentsMap[item.attributes['INCIDENT_REF_ID']]['color']
+                  ? {
+                      type: 'simple-marker',
+                      style: 'path',
+                      path: incidentsMap[item.attributes['INCIDENT_REF_ID']][
+                        'icon'
+                      ],
+                      color:
+                        incidentsMap[item.attributes['INCIDENT_REF_ID']][
+                          'color'
+                        ],
+                      size: '26px',
+                    }
+                  : Symbol;
               item.symbol = Symbol;
               switch (fName) {
                 case MapActionType.INCIDENT_POINT:
@@ -1277,7 +1305,7 @@ export class MapComponent
         } else {
           edits = { addFeatures: [graphic] };
         }
-        // esri.FeatureLayerApplyEditsEdits;
+
         await fService
           .applyEdits(edits)
           .then((editsResult) => {
@@ -1485,7 +1513,11 @@ export class MapComponent
   }
 
   private async showDashboardGraphics(
-    filterLayers: (where, fName: MapActionType) => void
+    filterLayers: (
+      where,
+      fName: MapActionType,
+      incidentsMap?: { [key: number]: IncidentsDataResponse }
+    ) => void
   ) {
     const org = this.store.selectSnapshot(CommonDataState.currentOrg);
     if (!org) {
@@ -1501,17 +1533,19 @@ export class MapComponent
     });
     orgs = `${orgs.slice(0, orgs.length - 1)} )`;
 
-    const incidentIds: string[] = await this.incidentsService
-      .getIncidentsIds(
-        0,
-        {
-          status: 1,
-        },
-        null,
-        100000
-      )
+    const lightIncidents: any[] = await this.incidentsService
+      .incidentsData({
+        filter: {},
+        status: 1 as any,
+      })
       .pipe(map((res) => res?.result))
       .toPromise();
+
+    const incidentsMap = lightIncidents.reduce((pv, cv) => {
+      pv[cv.id] = cv;
+      return pv;
+    }, {});
+    const incidentIds = lightIncidents.map((r) => r.id);
     const temp = 1000;
     let loopCount = 0;
     loopCount = incidentIds.length / temp;
@@ -1526,12 +1560,12 @@ export class MapComponent
       incidents = `${incidents.slice(0, incidents.length - 1)} )`;
 
       const where = `INCIDENT_REF_ID in ${incidents}`;
-      filterLayers(where, MapActionType.INCIDENT_POINT);
-      filterLayers(where, MapActionType.INCIDENT_POLYLINE);
-      filterLayers(where, MapActionType.INCIDENT_POLYGON);
+      filterLayers(where, MapActionType.INCIDENT_POINT, incidentsMap);
+      filterLayers(where, MapActionType.INCIDENT_POLYLINE, incidentsMap);
+      filterLayers(where, MapActionType.INCIDENT_POLYGON, incidentsMap);
     }
-    const taskIds = await this.incidentsService
-      .getMyAssignedOrgTaskIds(0, { status: 6 }, null, 10)
+    const taskIds = await this.taskService
+      .getCreatedForOrgTasks({ filter: { status: [6] } })
       .pipe(map((r) => r.result))
       .toPromise();
     const tempTask = 1000;
@@ -1683,22 +1717,6 @@ export class MapComponent
     }
   }
 
-  get gType() {
-    let graphicPoint;
-    if (this.mapType === 'reporter') {
-      if (this.mapView?.graphics?.getItemAt(1)) {
-        graphicPoint = this.mapView?.graphics?.getItemAt(1);
-      } else {
-        graphicPoint = this.mapView?.graphics?.getItemAt(0);
-      }
-    } else {
-      graphicPoint = this.mapView?.graphics?.getItemAt(0);
-    }
-    const gType = graphicPoint?.attributes?.gType;
-
-    return gType;
-  }
-
   public async save(taskIncidentData: TaskIncidentGisData) {
     this.loading = true;
     this.cdr.detectChanges();
@@ -1745,19 +1763,6 @@ export class MapComponent
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
     });
-  }
-
-  getPriority(priorityId) {
-    const isLangAr = this.lang === 'ar';
-    const priority = this.appCommonDataService.findElementInArray(
-      'priorities',
-      'id',
-      priorityId
-    );
-    if (priority) {
-      return isLangAr ? priority.nameAr : priority.nameEn;
-    }
-    return '';
   }
 }
 
