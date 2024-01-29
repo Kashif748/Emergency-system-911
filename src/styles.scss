@@ -23,6 +23,11 @@
   font-family: $font-family;
   // font-weight: 500;
 }
+.fa,
+.far,
+.fas {
+  font-family: "Font Awesome 5 Free" !important;
+}
 
 @import "style/fixed.scss";
 
@@ -102,7 +107,7 @@
 }
 .p-component {
   *:not(.pi) {
-    font-family: "Tajawal" ;
+    font-family: "Tajawal";
   }
 }
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {

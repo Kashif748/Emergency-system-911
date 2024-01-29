@@ -81,9 +81,17 @@
     input {
       border-radius: 10px !important;
     }
-    &.p-button{
+    &.p-button {
       width: 32px;
       height: 32px;
+    }
+    .p-selectbutton.p-buttonset.p-component {
+      height: 32px;
+      border-radius: 10px !important;
+      .p-button {
+        height: 100%;
+        border: 0;
+      }
     }
   }
 }

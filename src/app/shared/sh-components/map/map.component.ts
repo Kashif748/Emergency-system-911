@@ -18,15 +18,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IThemeFacade } from '@core/facades/theme.facade';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { AlertsService } from 'src/app/_metronic/core/services/alerts.service';
-import { Subject, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ILinkService } from '@core/services/link.service';
 import { OrgService } from '@core/api/services/org.service';
 import { MapConfig, MapService } from './services/map.service';
-import { MapViewType } from '@shared/components/map/utils/MapViewType';
-import { MapActionType } from '@shared/components/map/utils/MapActionType';
-import { TaskIncidentGisData } from '@shared/components/map/utils/TaskIncidentGisData';
 import { DateTimeUtil } from '@core/utils/DateTimeUtil';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -57,6 +54,13 @@ import {
   TaskControllerService,
 } from 'src/app/api/services';
 import { IncidentsDataResponse } from 'src/app/api/models';
+import { MapViewType } from './utils/map-view-type.enum';
+import { MapGraphicType } from './utils/map-graphic-type.enum';
+import { TaskIncidentGisData } from './utils/TaskIncidentGisData';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { ShareLocationComponent } from './share-location/share-location.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-map',
@@ -70,11 +74,15 @@ export class MapComponent
   @ViewChild(TopBarComponent) topbar: TopBarComponent;
 
   private queryInfo: (graphic: esri.Graphic) => Promise<LocationInfoModel>;
-  filterLayersFunc$: Subject<(where: any, fName: MapActionType) => void> =
+  filterLayersFunc$: Subject<(where: any, fName: MapGraphicType) => void> =
     new Subject();
   @Input() configData: MapConfig;
   @Input() currentLocationOfUser: boolean;
   @Output() OnSaveMap: EventEmitter<any> = new EventEmitter<any>();
+
+  get mapConfig() {
+    return this.configData ?? this.data;
+  }
 
   constructor(
     private mapService: MapService,
@@ -93,6 +101,76 @@ export class MapComponent
     @Optional() private taskService: TaskControllerService
   ) {}
 
+  get viewOnly() {
+    return this.mapConfig.viewOnly;
+  }
+
+  get mapEditingType() {
+    return this.mapConfig?.mapEditingType ?? this.mapType;
+  }
+  get taskId() {
+    return this.mapType == MapViewType.TASK
+      ? this.mapConfig?.zoomModel?.referenceId
+      : null;
+  }
+  get incidentId() {
+    return this.mapType == MapViewType.INCIDENT
+      ? this.mapConfig?.zoomModel?.referenceId
+      : null;
+  }
+  get shareableLocation() {
+    return this.mapConfig?.viewOnly && (this.incidentId || this.taskId);
+  }
+
+  get drawOptions() {
+    let optionsMap = {
+      [MapViewType.INCIDENT]: [
+        {
+          icon: 'fa fa-map-marker-alt',
+          title: this.translate.instant('INCIDENTS.SET_INCIDENT_POINT'),
+          type: MapGraphicType.INCIDENT_POINT,
+        },
+        {
+          icon: 'fa fa-wave-square',
+          title: this.translate.instant('INCIDENTS.CREATE_INCIDENT_POLYLINE'),
+          type: MapGraphicType.INCIDENT_POLYLINE,
+        },
+        {
+          icon: 'fa fa-draw-polygon',
+          title: this.translate.instant('INCIDENTS.CREATE_INCIDENT_POLYGON'),
+          type: MapGraphicType.INCIDENT_POLYGON,
+        },
+      ],
+      [MapViewType.TASK]: [
+        {
+          icon: 'fa fa-map-marker-alt',
+          title: this.translate.instant('TASK.CREATE_TASK_POINT'),
+          type: MapGraphicType.TASK_POINT,
+        },
+        {
+          icon: 'fa fa-wave-square',
+          title: this.translate.instant('TASK.CREATE_TASK_POLYLINE'),
+          type: MapGraphicType.TASK_POLYLINE,
+        },
+        {
+          icon: 'fa fa-draw-polygon',
+          title: this.translate.instant('TASK.CREATE_TASK_POLYGON'),
+          type: MapGraphicType.TASK_POLYGON,
+        },
+      ],
+      [MapViewType.ASSET]: [],
+      [MapViewType.ORGANIZATION]: [],
+      [MapViewType.TEAM]: [],
+      [MapViewType.REPORTER]: [],
+    };
+    return (optionsMap[this.mapEditingType] ?? []) as {
+      icon: string;
+      title: string;
+      type: MapGraphicType;
+    }[];
+  }
+
+  gdrawType: MapGraphicType;
   // UI
   @Input() title: string;
   @Input() dashboardMode = false;
@@ -103,6 +181,9 @@ export class MapComponent
   @Output() OnFetchCoordinates: EventEmitter<boolean> = new EventEmitter();
   // main map view
   public mapView: esri.MapView;
+  get graphicsView() {
+    return this.mapView['graphicsView'] as __esri.GraphicsLayerView;
+  }
   map: esri.Map;
   showButton = false;
   showSaveButton = true;
@@ -119,10 +200,10 @@ export class MapComponent
   get lang() {
     return this.translate.currentLang;
   }
-  draw: any;
-  mpImg: any;
+  draw: __esri.Draw;
   public groupData: Array<MapConfig> = [];
   public loading = false;
+  public initializing$ = new BehaviorSubject(true);
   public zoomedLocationInfo: {
     zoneAr?: string;
     zoneEn?: string;
@@ -138,20 +219,11 @@ export class MapComponent
   private applyFeature: (mode: any) => Promise<void>;
 
   private zoomToRequest: (referenceId: any, featureName: string) => void;
-  public addIncidentPoint: () => void;
-  public addIncidentPolyline: () => void;
-  public addIncidentPolygon: () => void;
-  public addTaskPoint: () => void;
-  public addTaskPolyline: () => void;
-  public addTaskPolygon: () => void;
-  public addOrgPoint: () => void;
-  public addAssetPoint: () => void;
-  public addTeamPolyline: () => void;
-  public addTeamPolygon: () => void;
-  public addReporterPoint: () => void;
+  public gdraw: (type: MapGraphicType) => void;
   public addLayer: (layer: any) => void;
   public removeLayer: (layer: any) => void;
   public takeScreenshot: () => void;
+  public shareLocation = false;
 
   public createQueryTask: (url: string) => __esri.QueryTask;
   public createQuery: () => __esri.Query;
@@ -263,14 +335,24 @@ export class MapComponent
       }
     }
     this.applyStyle();
-    const map = this.initializeMap().then(() => {
+    this.initializeMap().then(() => {
       if (this.mapType === 'reporter' && !this.data?.viewOnly) {
-        this.addReporterPoint();
+        this.gdraw(MapGraphicType.REPORTER_POINT);
       }
     });
   }
 
   ngAfterViewInit(): void {
+    this.gdrawType = this.drawOptions[0]?.type;
+    this.initializing$
+      .pipe(
+        filter((i) => !i),
+        take(1)
+      )
+      .subscribe(() => {
+        this.gdraw(this.gdrawType);
+      });
+
     setTimeout(() => {
       if (this.currentLocationOfUser) {
         let btn = document.querySelector(
@@ -284,6 +366,7 @@ export class MapComponent
   }
 
   async initializeMap() {
+    this.initializing$.next(true);
     // Load the modules for the ArcGIS API for JavaScript
     try {
       const [
@@ -373,14 +456,6 @@ export class MapComponent
           '/rest/services/ECMS/ECMS/FeatureServer',
         id: 'TskPolygonFeatureService',
         layerId: 5,
-      });
-
-      const OrgPointFeatureService = new FeatureLayer({
-        url:
-          environment.ADMGIS_ROOT_ROUTE +
-          '/rest/services/ECMS/ECMS/FeatureServer',
-        id: 'IncPolygonFeatureService',
-        layerId: 6,
       });
 
       // -------------------------------------------------------- END FEATURE LAYERS --------------------------------------
@@ -534,12 +609,38 @@ export class MapComponent
       // open popups just for symboles
       this.mapView.on('click', (e) => {
         this.mapView.hitTest(e).then((res) => {
-          if (res.results.length > 0) {
+          if (this.viewOnly && res.results.length > 0) {
             if (this.mapView.graphics.includes(res.results[0].graphic)) {
               this.mapView.popup.open({
                 location: res.results[0].graphic.geometry,
                 features: res.results.map((r) => r.graphic),
               });
+            }
+          } else if (!this.viewOnly) {
+            switch (this.gdrawType) {
+              case MapGraphicType.ASSET_POINT:
+              case MapGraphicType.TASK_POINT:
+              case MapGraphicType.INCIDENT_POINT:
+              case MapGraphicType.REPORTER_POINT:
+              case MapGraphicType.ORGRANIZATION_POINT:
+                this.gdraw(this.gdrawType);
+                break;
+              case MapGraphicType.INCIDENT_POLYLINE:
+              case MapGraphicType.TASK_POLYLINE:
+              case MapGraphicType.TEAM_POLYLINE:
+                if (!res.results?.length) {
+                  this.gdraw(this.gdrawType);
+                }
+                break;
+              case MapGraphicType.INCIDENT_POLYGON:
+              case MapGraphicType.TASK_POLYGON:
+              case MapGraphicType.TEAM_POLYGON:
+                if (!this.graphicsView?.updating) {
+                  this.gdraw(this.gdrawType);
+                }
+                break;
+              default:
+                break;
             }
           }
         });
@@ -574,12 +675,8 @@ export class MapComponent
         };
 
         let pointSymbol = {
-          type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
+          type: 'simple-marker',
           color: [226, 119, 40],
-          // type: 'picture-marker', // autocasts as new PictureMarkerSymbol()
-          // url: 'https://static.arcgis.com/images/Symbols/Shapes/BlackStarLargeB.png',
-          // width: '64px',
-          // height: '64px',
         };
         // Create a graphic and add the geometry and symbol to it
         const mapMarker: __esri.Graphic = new Graphic({
@@ -681,14 +778,14 @@ export class MapComponent
 
       const filterLayers = (
         where,
-        fName: MapActionType,
+        fName: MapGraphicType,
         incidentsMap?: { [key: number]: IncidentsDataResponse }
       ) => {
         let TaskUrl;
         let Symbol;
 
         switch (fName) {
-          case MapActionType.INCIDENT_POINT:
+          case MapGraphicType.INCIDENT_POINT:
             TaskUrl = IncPointFeatureService.url + '/0';
             Symbol = {
               type: 'simple-marker',
@@ -698,7 +795,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.INCIDENT_POLYLINE:
+          case MapGraphicType.INCIDENT_POLYLINE:
             TaskUrl = IncLineFeatureService.url + '/2';
             Symbol = {
               type: 'simple-line',
@@ -709,7 +806,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.INCIDENT_POLYGON:
+          case MapGraphicType.INCIDENT_POLYGON:
             TaskUrl = IncPolygonFeatureService.url + '/4';
             Symbol = {
               type: 'simple-fill',
@@ -719,7 +816,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.TASK_POINT:
+          case MapGraphicType.TASK_POINT:
             TaskUrl = TskPointFeatureService.url + '/1';
             Symbol = {
               type: 'simple-marker',
@@ -729,7 +826,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.TASK_POLYLINE:
+          case MapGraphicType.TASK_POLYLINE:
             TaskUrl = TskLineFeatureService.url + '/3';
             Symbol = {
               type: 'simple-line',
@@ -740,7 +837,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.TASK_POLYGON:
+          case MapGraphicType.TASK_POLYGON:
             TaskUrl = TskPolygonFeatureService.url + '/5';
             Symbol = {
               type: 'simple-fill',
@@ -750,7 +847,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.ORGRANIZATION_POINT:
+          case MapGraphicType.ORGRANIZATION_POINT:
             TaskUrl = TskPointFeatureService.url + '/6';
             Symbol = {
               type: 'simple-marker',
@@ -822,16 +919,16 @@ export class MapComponent
                   : Symbol;
               item.symbol = Symbol;
               switch (fName) {
-                case MapActionType.INCIDENT_POINT:
-                case MapActionType.INCIDENT_POLYLINE:
-                case MapActionType.INCIDENT_POLYGON:
-                case MapActionType.ORGRANIZATION_POINT:
+                case MapGraphicType.INCIDENT_POINT:
+                case MapGraphicType.INCIDENT_POLYLINE:
+                case MapGraphicType.INCIDENT_POLYGON:
+                case MapGraphicType.ORGRANIZATION_POINT:
                   item.popupTemplate = this.popupBuidler.buildPopup('Incident');
                   break;
 
-                case MapActionType.TASK_POINT:
-                case MapActionType.TASK_POLYLINE:
-                case MapActionType.TASK_POLYGON:
+                case MapGraphicType.TASK_POINT:
+                case MapGraphicType.TASK_POLYLINE:
+                case MapGraphicType.TASK_POLYGON:
                   item.popupTemplate = this.popupBuidler.buildPopup('Task');
                   break;
               }
@@ -907,8 +1004,26 @@ export class MapComponent
             'top-trailing'
           );
 
-        this.mapView?.ui.add('refresh-btn', { position: 'top-trailing' });
-        this.mapView?.ui.add('screenshoot-btn', { position: 'bottom-leading' });
+        this.viewOnly &&
+          this.mapView?.ui.add('refresh-btn', { position: 'top-trailing' });
+
+        this.viewOnly &&
+          this.mapView?.ui.add('screenshoot-btn', {
+            position: 'bottom-leading',
+            index: 0,
+          });
+
+        this.shareableLocation &&
+          this.mapView?.ui.add('share-btn', {
+            position: 'bottom-leading',
+            index: 1,
+          });
+
+        !this.viewOnly &&
+          this.mapView?.ui.add('draw-select', {
+            position: 'bottom-leading',
+            index: 1,
+          });
 
         !this.currentLocation &&
           this.mapView.ui.add(new Track({ view: this.mapView }), 'top-right');
@@ -942,7 +1057,7 @@ export class MapComponent
       });
 
       const drawPoint = (Type, previousLocation?) => {
-        function enableCreatePoint(draw, mapView) {
+        function enableCreatePoint(draw: __esri.Draw, mapView: __esri.MapView) {
           const action = draw.create('point', { mode: 'click' });
 
           action.on('draw-complete', (evt) => {
@@ -1149,10 +1264,10 @@ export class MapComponent
             symbol: {
               type: 'simple-fill', // autocasts as SimpleFillSymbol
               style: 'diagonal-cross',
-              color: [0, 0, 0, 0.1],
+              color: 'red',
               outline: {
                 // autocasts as SimpleLineSymbol
-                color: [4, 90, 141],
+                color: 'red',
                 width: 4,
                 cap: 'round',
                 join: 'round',
@@ -1163,48 +1278,28 @@ export class MapComponent
         }
       };
 
-      this.addIncidentPoint = () => {
-        drawPoint('Inc_point');
-      };
-
-      this.addIncidentPolyline = () => {
-        drawLine('Inc_Polyline');
-      };
-
-      this.addIncidentPolygon = () => {
-        drawPolygon('Inc_Polygon');
-      };
-
-      this.addTaskPoint = () => {
-        drawPoint('Tsk_point');
-      };
-
-      this.addTaskPolyline = () => {
-        drawLine('Tsk_Polyline');
-      };
-
-      this.addTaskPolygon = () => {
-        drawPolygon('Tsk_Polygon');
-      };
-
-      this.addOrgPoint = () => {
-        drawPoint('Org_point');
-      };
-
-      this.addAssetPoint = () => {
-        drawPoint('Asset_point');
-      };
-
-      this.addTeamPolyline = () => {
-        drawLine('Team_Polyline');
-      };
-
-      this.addTeamPolygon = () => {
-        drawPolygon('Team_Polygon');
-      };
-
-      this.addReporterPoint = () => {
-        drawPoint('Reporter_Point');
+      this.gdraw = (type: MapGraphicType) => {
+        switch (type) {
+          case MapGraphicType.INCIDENT_POINT:
+          case MapGraphicType.TASK_POINT:
+          case MapGraphicType.ORGRANIZATION_POINT:
+          case MapGraphicType.ASSET_POINT:
+          case MapGraphicType.REPORTER_POINT:
+            drawPoint(type);
+            break;
+          case MapGraphicType.INCIDENT_POLYLINE:
+          case MapGraphicType.TASK_POLYLINE:
+          case MapGraphicType.TEAM_POLYLINE:
+            drawLine(type);
+            break;
+          case MapGraphicType.INCIDENT_POLYGON:
+          case MapGraphicType.TASK_POLYGON:
+          case MapGraphicType.TEAM_POLYGON:
+            drawPolygon(type);
+            break;
+          default:
+            break;
+        }
       };
 
       const applyFeature = async (taskIncidentData: TaskIncidentGisData) => {
@@ -1222,9 +1317,9 @@ export class MapComponent
         // save new graphic in gis
         const graphic = this.mapView.graphics.getItemAt(0);
         switch (graphic.attributes.gType) {
-          case MapActionType.INCIDENT_POINT:
-          case MapActionType.INCIDENT_POLYLINE:
-          case MapActionType.INCIDENT_POLYGON:
+          case MapGraphicType.INCIDENT_POINT:
+          case MapGraphicType.INCIDENT_POLYLINE:
+          case MapGraphicType.INCIDENT_POLYGON:
             graphic.attributes = {
               INCIDENT_REF_ID: taskIncidentData.refId,
               NAME: taskIncidentData.title,
@@ -1246,9 +1341,9 @@ export class MapComponent
             );
             break;
 
-          case MapActionType.TASK_POINT:
-          case MapActionType.TASK_POLYLINE:
-          case MapActionType.TASK_POLYGON:
+          case MapGraphicType.TASK_POINT:
+          case MapGraphicType.TASK_POLYLINE:
+          case MapGraphicType.TASK_POLYGON:
             graphic.attributes = {
               INCIDENT_REF_ID: taskIncidentData.inc_ref_id,
               TASK_REF_ID: taskIncidentData.refId,
@@ -1352,12 +1447,12 @@ export class MapComponent
           });
       };
 
-      this.zoomToRequest = (REF_ID, fName: MapActionType) => {
+      this.zoomToRequest = (REF_ID, fName: MapGraphicType) => {
         let where;
         let TaskUrl;
         let Symbol;
         switch (fName) {
-          case MapActionType.INCIDENT_POINT:
+          case MapGraphicType.INCIDENT_POINT:
             TaskUrl = IncPointFeatureService.url + '/0';
             where = "INCIDENT_REF_ID = '" + REF_ID + "'";
             Symbol = {
@@ -1369,7 +1464,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.INCIDENT_POLYLINE:
+          case MapGraphicType.INCIDENT_POLYLINE:
             TaskUrl = IncLineFeatureService.url + '/2';
             where = "INCIDENT_REF_ID = '" + REF_ID + "'";
             Symbol = {
@@ -1381,7 +1476,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.INCIDENT_POLYGON:
+          case MapGraphicType.INCIDENT_POLYGON:
             TaskUrl = IncPolygonFeatureService.url + '/4';
             where = "INCIDENT_REF_ID = '" + REF_ID + "'";
             Symbol = {
@@ -1392,7 +1487,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.TASK_POINT:
+          case MapGraphicType.TASK_POINT:
             TaskUrl = TskPointFeatureService.url + '/1';
             where = "TASK_REF_ID = '" + REF_ID + "'";
             Symbol = {
@@ -1404,7 +1499,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.TASK_POLYLINE:
+          case MapGraphicType.TASK_POLYLINE:
             TaskUrl = TskLineFeatureService.url + '/3';
             where = "TASK_REF_ID = '" + REF_ID + "'";
             Symbol = {
@@ -1416,7 +1511,7 @@ export class MapComponent
             };
             break;
 
-          case MapActionType.TASK_POLYGON:
+          case MapGraphicType.TASK_POLYGON:
             TaskUrl = TskPolygonFeatureService.url + '/5';
             where = "TASK_REF_ID = '" + REF_ID + "'";
             Symbol = {
@@ -1447,15 +1542,15 @@ export class MapComponent
           const graphics = result.features.map((item) => {
             item.symbol = Symbol;
             switch (fName) {
-              case MapActionType.INCIDENT_POINT:
-              case MapActionType.INCIDENT_POLYGON:
-              case MapActionType.INCIDENT_POLYLINE:
+              case MapGraphicType.INCIDENT_POINT:
+              case MapGraphicType.INCIDENT_POLYGON:
+              case MapGraphicType.INCIDENT_POLYLINE:
                 item.popupTemplate = this.popupBuidler.buildPopup('Incident');
                 break;
 
-              case MapActionType.TASK_POINT:
-              case MapActionType.TASK_POLYLINE:
-              case MapActionType.TASK_POLYGON:
+              case MapGraphicType.TASK_POINT:
+              case MapGraphicType.TASK_POLYLINE:
+              case MapGraphicType.TASK_POLYGON:
                 item.popupTemplate = this.popupBuidler.buildPopup('Task');
                 break;
               default:
@@ -1505,12 +1600,13 @@ export class MapComponent
     } catch (error) {
       console.error('EsriLoader: ', error);
     }
+    this.initializing$.next(false);
   }
 
   private async showDashboardGraphics(
     filterLayers: (
       where,
-      fName: MapActionType,
+      fName: MapGraphicType,
       incidentsMap?: { [key: number]: IncidentsDataResponse }
     ) => void
   ) {
@@ -1555,9 +1651,9 @@ export class MapComponent
       incidents = `${incidents.slice(0, incidents.length - 1)} )`;
 
       const where = `INCIDENT_REF_ID in ${incidents}`;
-      filterLayers(where, MapActionType.INCIDENT_POINT, incidentsMap);
-      filterLayers(where, MapActionType.INCIDENT_POLYLINE, incidentsMap);
-      filterLayers(where, MapActionType.INCIDENT_POLYGON, incidentsMap);
+      filterLayers(where, MapGraphicType.INCIDENT_POINT, incidentsMap);
+      filterLayers(where, MapGraphicType.INCIDENT_POLYLINE, incidentsMap);
+      filterLayers(where, MapGraphicType.INCIDENT_POLYGON, incidentsMap);
     }
     const taskIds = await this.taskService
       .getCreatedForOrgTasks({ filter: { status: [6] } })
@@ -1578,9 +1674,9 @@ export class MapComponent
       tasks = `${tasks.slice(0, tasks.length - 1)} )`;
 
       const con = `ORG_NAME in ${orgs} and TASK_REF_ID in ${tasks}`;
-      filterLayers(con, MapActionType.TASK_POINT);
-      filterLayers(con, MapActionType.TASK_POLYLINE);
-      filterLayers(con, MapActionType.TASK_POLYGON);
+      filterLayers(con, MapGraphicType.TASK_POINT);
+      filterLayers(con, MapGraphicType.TASK_POLYLINE);
+      filterLayers(con, MapGraphicType.TASK_POLYGON);
     }
   }
 
@@ -1601,27 +1697,27 @@ export class MapComponent
     if (this.oldGraphics != null) {
       for (const g of this.oldGraphics) {
         switch (this.data.zoomModel?.featureName) {
-          case MapActionType.INCIDENT_POINT:
+          case MapGraphicType.INCIDENT_POINT:
             await ApplyEdits(g, IncPointFeatureService, '', 'deleteFeatures');
             break;
 
-          case MapActionType.INCIDENT_POLYLINE:
+          case MapGraphicType.INCIDENT_POLYLINE:
             await ApplyEdits(g, IncLineFeatureService, '', 'deleteFeatures');
             break;
 
-          case MapActionType.INCIDENT_POLYGON:
+          case MapGraphicType.INCIDENT_POLYGON:
             await ApplyEdits(g, IncPolygonFeatureService, '', 'deleteFeatures');
             break;
 
-          case MapActionType.TASK_POINT:
+          case MapGraphicType.TASK_POINT:
             await ApplyEdits(g, TskPointFeatureService, '', 'deleteFeatures');
             break;
 
-          case MapActionType.TASK_POLYLINE:
+          case MapGraphicType.TASK_POLYLINE:
             await ApplyEdits(g, TskLineFeatureService, '', 'deleteFeatures');
             break;
 
-          case MapActionType.TASK_POLYGON:
+          case MapGraphicType.TASK_POLYGON:
             await ApplyEdits(g, TskPolygonFeatureService, '', 'deleteFeatures');
             break;
         }
@@ -1778,7 +1874,7 @@ export class MapComponent
 }
 
 @NgModule({
-  declarations: [MapComponent, TopBarComponent],
+  declarations: [MapComponent, TopBarComponent, ShareLocationComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -1790,6 +1886,9 @@ export class MapComponent
     DropdownModule,
     ListboxModule,
     ProgressSpinnerModule,
+    DialogModule,
+    InputTextModule,
+    SelectButtonModule,
     TranslateObjModule,
     // -----------
     InlineSVGModule,

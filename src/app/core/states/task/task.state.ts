@@ -11,7 +11,7 @@ import {
   Store,
 } from '@ngxs/store';
 import { patch, updateItem } from '@ngxs/store/operators';
-import { MapActionType } from '@shared/sh-components/map/utils/MapActionType';
+import { MapGraphicType } from '@shared/sh-components/map/utils/map-graphic-type.enum';
 import { EMPTY, of } from 'rxjs';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import {
@@ -452,7 +452,7 @@ export class TaskState {
               ...task,
               incidentId: {
                 id: task.incidentId,
-                featureName: MapActionType.INCIDENT_POINT,
+                featureName: MapGraphicType.INCIDENT_POINT,
                 subject: task.incidentName,
               },
             });

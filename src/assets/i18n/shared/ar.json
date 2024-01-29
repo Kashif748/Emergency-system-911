@@ -576,7 +576,7 @@
       "Incident_Id": "رقم البلاغ",
       "CITY": "نطاق البلاغ",
       "CREATION_DATE": "تاريخ الإنشاء",
-      "CLOSE_DATE": "تاريخ قريب",
+      "CLOSE_DATE": "تاريخ الإغلاق",
       "GENERALPOSITION": "الموقف العام",
       "PRIVATEPOSITION": "الموقف الخاص",
       "ISINTERNAL": "داخلي",

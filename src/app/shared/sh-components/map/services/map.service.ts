@@ -5,9 +5,9 @@ import { loadModules } from 'esri-loader';
 import { MapComponent } from '../map.component';
 import { environment } from 'src/environments/environment';
 import esri = __esri;
-import { MapViewType } from '@shared/components/map/utils/MapViewType';
-import { MapActionType } from '@shared/components/map/utils/MapActionType';
-import { TaskIncidentGisData } from '@shared/components/map/utils/TaskIncidentGisData';
+import { MapViewType } from '../utils/map-view-type.enum';
+import { MapGraphicType } from '../utils/map-graphic-type.enum';
+import { TaskIncidentGisData } from '../utils/TaskIncidentGisData';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ILangFacade } from '@core/facades/lang.facade';
 import { map } from 'rxjs/operators';
@@ -17,9 +17,10 @@ import { EsriModule } from '../utils/map-module.enum';
 export interface MapConfig {
   showSaveButton: boolean;
   mapType: MapViewType;
+  mapEditingType?: MapViewType;
   zoomModel?: {
     referenceId: any;
-    featureName: MapActionType;
+    featureName: MapGraphicType;
   };
   viewOnly?: boolean;
   showLayers?: boolean;
@@ -315,5 +316,17 @@ export class MapService {
         );
         return false;
       });
+  }
+
+  getUTMByIncidentId(incidentId: number) {
+    return this.http.get<any>(
+      `${environment.ADMGIS_ROOT_ROUTE}/rest/services/ECMS/ECMS/FeatureServer/0/query?f=json&outFields=features&inSR=32640&outSR=32640&spatialRel=esriSpatialRelIntersects&where=INCIDENT_REF_ID%20%3D%20%27${incidentId}%27`
+    );
+  }
+
+  getUTMByTaskId(taskId: number) {
+    return this.http.get<any>(
+      `${environment.ADMGIS_ROOT_ROUTE}/rest/services/ECMS/ECMS/FeatureServer/1/query?f=json&outFields=features&inSR=32640&outSR=32640&spatialRel=esriSpatialRelIntersects&where=TASK_REF_ID%20%3D%20%27${taskId}%27`
+    );
   }
 }
