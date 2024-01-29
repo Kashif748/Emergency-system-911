@@ -341,20 +341,6 @@ export class TaskDialogComponent
     );
   }
 
-  openShareMapLocationDialog() {
-    const task = this.store.selectSnapshot(TaskState.task);
-    this.matDialog.open(ShareMapLocationComponent, {
-      disableClose: false,
-      panelClass: 'modal',
-      width: '400px',
-      height: 'auto',
-      data: {
-        incidentId: (task?.incidentId as any)?.id,
-        taskId: this._taskId,
-      },
-    });
-  }
-
   initCreate() {
     const incidentSubject = this.route.snapshot.queryParams['incidentSubject'];
     let incidentId;
@@ -836,6 +822,7 @@ export class TaskDialogComponent
 
     instance.config = {
       mapType: taskLocation ? MapViewType.TASK : MapViewType.INCIDENT,
+      mapEditingType: MapViewType.TASK,
       showSaveButton: false,
       zoomModel: {
         referenceId: taskLocation ? task?.id : (task.incidentId as any)?.id,

@@ -72,33 +72,37 @@ export class PopupBuilder {
       <thead></thead>
       <tbody>
         <tr>
-          <th scope="row">${this.translate.instant('INCIDENTS.SUBJECT')}:</th>
+          <th scope="row" class="d-flex"><span>${this.translate.instant(
+            'INCIDENTS.SUBJECT'
+          )}</span><span class="flex-grow-1"></span><span>:</span></th>
           <td>{NAME}</td>
         </tr>
 
         <tr>
-          <th scope="row">${this.translate.instant(
+          <th scope="row" class="d-flex"><span>${this.translate.instant(
             'INCIDENTS.CREATION_DATE'
-          )}:</th>
-          <td>${this.cdate.transform(attrs?.CREATION_DATE, 'short')}</td>
+          )}</span><span class="flex-grow-1"></span><span>:</span></th>
+          <td>${this.cdate.transform(attrs?.CREATION_DATE)}</td>
         </tr>
 
         <tr>
-          <th scope="row">${this.translate.instant(
+          <th scope="row" class="d-flex"><span>${this.translate.instant(
             'INCIDENTS.CLOSE_DATE'
-          )}:</th>
-          <td>${this.cdate.transform(attrs?.CLOSE_DATE, 'short')}</td>
+          )}</span><span class="flex-grow-1"></span><span>:</span></th>
+          <td>${this.cdate.transform(attrs?.CLOSE_DATE)}</td>
         </tr>
 
         <tr>
-          <th scope="row">${this.translate.instant('INCIDENTS.PRIORITY')}:</th>
+          <th scope="row" class="d-flex"><span>${this.translate.instant(
+            'INCIDENTS.PRIORITY'
+          )}</span><span class="flex-grow-1"></span><span>:</span></th>
           <td>{PRIORITY}</td>
         </tr>
 
         <tr>
-          <th scope="row">${this.translate.instant(
+          <th scope="row" class="d-flex"><span>${this.translate.instant(
             'INCIDENTS.MAIN_CATEGORY'
-          )}:</th>
+          )}</span><span class="flex-grow-1"></span><span>:</span></th>
           <td>
           {INC_CATEGORY}
           </td>
@@ -148,7 +152,7 @@ export class PopupBuilder {
           <th scope="row" class="d-flex"><span>${this.translate.instant(
             'TASK.DUE_DATE'
           )}</span><span class="flex-grow-1"></span><span>:</span></th>
-          <td>${this.cdate.transform(attrs?.DUE_DATE, 'short')}</td>
+          <td>${this.cdate.transform(attrs?.DUE_DATE)}</td>
         </tr>
       </tbody>
     </table>`;

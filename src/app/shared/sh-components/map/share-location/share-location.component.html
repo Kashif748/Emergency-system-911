@@ -1,0 +1,10 @@
+<div class="row">
+  <div class="p-col-12 p-field">
+    <label for="locationUrl">{{'INCIDENTS.LOCATION_URL' | translate }}</label>
+    <div class="p-inputgroup">
+      <input id="locationUrl" type="text" pInputText [(ngModel)]="locationUrl" readonly>
+      <button type="button" (click)="copyUrlClick()" pButton pRipple icon="pi pi-clone" [loading]="loading$ | async"
+        styleClass="p-button-warn"></button>
+    </div>
+  </div>
+</div>
