@@ -102,7 +102,7 @@ export class MapComponent
   ) {}
 
   get viewOnly() {
-    return this.mapConfig.viewOnly;
+    return this.mapConfig?.viewOnly;
   }
 
   get mapEditingType() {
@@ -158,10 +158,34 @@ export class MapComponent
           type: MapGraphicType.TASK_POLYGON,
         },
       ],
-      [MapViewType.ASSET]: [],
-      [MapViewType.ORGANIZATION]: [],
-      [MapViewType.TEAM]: [],
-      [MapViewType.REPORTER]: [],
+      [MapViewType.ASSET]: [
+        {
+          icon: 'fa fa-map-marker-alt',
+          title: this.translate.instant('RESOURCE.CREATE_ASSET_POINT'),
+          type: MapGraphicType.ASSET_POINT,
+        },
+      ],
+      [MapViewType.ORGANIZATION]: [
+        {
+          icon: 'fa fa-map-marker-alt',
+          title: this.translate.instant('ORGANIZATIONS.CREATE_ORG_POINT'),
+          type: MapGraphicType.ORGRANIZATION_POINT,
+        },
+      ],
+      [MapViewType.TEAM]: [
+        {
+          icon: 'fa fa-draw-polygon',
+          title: this.translate.instant('INCIDENTS.CREATE_TEAM_POLYGON'),
+          type: MapGraphicType.TEAM_POLYGON,
+        },
+      ],
+      [MapViewType.REPORTER]: [
+        {
+          icon: 'fa fa-map-marker-alt',
+          title: this.translate.instant('INCIDENTS.CREATE_REPORTER_POINT'),
+          type: MapGraphicType.REPORTER_POINT,
+        },
+      ],
     };
     return (optionsMap[this.mapEditingType] ?? []) as {
       icon: string;
