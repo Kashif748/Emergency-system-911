@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ILangFacade } from '@core/facades/lang.facade';
 import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { FormUtils } from '@core/utils/form.utils';
@@ -64,7 +65,8 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private store: Store
+    private store: Store,
+    private langFacade: ILangFacade
   ) {
     this.route.queryParams
       .pipe(
@@ -135,7 +137,11 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
       .get('referenceOrgId')
       .valueChanges.pipe(
         takeUntil(this.destroy$),
-        map((org) => org?.nameAr),
+        map((org) =>
+          this.langFacade.stateSanpshot?.ActiveLang?.key === 'ar'
+            ? org?.nameAr
+            : org?.nameEn
+        ),
         filter((p) => !!p),
         tap((name) => {
           this.form.get('orgName').setValue(name);
@@ -147,9 +153,6 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
     this.store.dispatch(new BrowsePhonebookAction.ToggleDialog({}));
   }
   submit() {
-    console.log(this.form.get('mobileNumber'));
-
-    return;
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       FormUtils.ForEach(this.form, (fc) => {
@@ -168,8 +171,6 @@ export class PhonebookDialogComponent implements OnInit, AfterViewInit {
         : null,
       mobileNumber: this.form.get('mobileNumber')?.value?.number,
     };
-
-    console.log(phonebook);
 
     if (this.editMode) {
       this.store.dispatch(new BrowsePhonebookAction.UpdatePhonebook(phonebook));
