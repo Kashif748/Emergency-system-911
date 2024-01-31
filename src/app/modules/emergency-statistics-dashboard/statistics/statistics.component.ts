@@ -9,7 +9,6 @@ import {FormBuilder} from "@angular/forms";
 import {BrowseStatisticsState, BrowseStatisticsStateModel} from "../states/browse-statistics.state";
 import {IncidentStatisticsState} from "@core/states/incident-statistics/incident-statistics.state";
 import {filter, switchMap} from "rxjs/operators";
-import {BrowseVenderAction} from "../../_business-continuity-setup/vender/states/browse-vender.action";
 
 @Component({
   selector: 'app-statistics',
