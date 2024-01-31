@@ -2,14 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {Select, Store} from "@ngxs/store";
 import {TranslateService} from "@ngx-translate/core";
 import {ILangFacade} from "@core/facades/lang.facade";
-import {Observable} from "rxjs";
+import {combineLatest, Observable, of} from "rxjs";
 import {CommonDataState} from "@core/states";
-import {PriorityProjection} from "../../../api/models/priority-projection";
 import {BrowseStatisticsAction} from "../states/browse-statistics.action";
 import {FormBuilder} from "@angular/forms";
 import {BrowseStatisticsState, BrowseStatisticsStateModel} from "../states/browse-statistics.state";
 import {IncidentStatisticsState} from "@core/states/incident-statistics/incident-statistics.state";
-import {IncidentStatisticData} from "../../../api/models/incident-statistic-data";
+import {filter, switchMap} from "rxjs/operators";
+import {BrowseVenderAction} from "../../_business-continuity-setup/vender/states/browse-vender.action";
 
 @Component({
   selector: 'app-statistics',
@@ -18,11 +18,8 @@ import {IncidentStatisticData} from "../../../api/models/incident-statistic-data
 })
 export class StatisticsComponent implements OnInit {
   lang = 'en';
-  @Select(CommonDataState.priorities)
-  public priorities$: Observable<PriorityProjection[]>;
 
-  @Select(IncidentStatisticsState.incidentStatistics)
-  public incidentStatistics$: Observable<IncidentStatisticData>;
+  public priorities$: Observable<any[]>;
 
   @Select(BrowseStatisticsState.state)
   public state$: Observable<BrowseStatisticsStateModel>;
@@ -48,50 +45,32 @@ export class StatisticsComponent implements OnInit {
   ngOnInit(): void {
     this.search()
     this.initCharts();
+    this.priorities$ = combineLatest([
+      this.store.select(CommonDataState.priorities),
+      this.store.select(IncidentStatisticsState.incidentStatistics),
+    ]).pipe(
+        filter(([priorities, incidentStatistics]) => !!priorities && !!incidentStatistics),
+        switchMap(([priorities, incidentStatistics]) => {
+          const prioritiesCount = incidentStatistics.incidents.priorityData;
+
+          const categoriesWithTotal = priorities.map(priority => ({
+            ...priority,
+            total: prioritiesCount.find(data => data.id === priority.id)?.total
+          })).filter(priority => !!priority.total);
+          return of(categoriesWithTotal);
+        }));
   }
   search() {
     this.store.dispatch(new BrowseStatisticsAction.LoadIncidentStatistics());
   }
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
-    /*if (event?.key === 'Enter') {
+    if (event?.key === 'Enter') {
       return this.search();
     }
-    const keys = Object.keys(filter);
-    if (keys.length > 0) {
-      switch (keys[0]) {
-        case 'orgIds':
-          filter['orgIds'] = filter['orgIds']
-              .map((o) => {
-                return {
-                  key: o?.key,
-                  labelEn: o.labelEn,
-                  labelAr: o.labelAr,
-                };
-              })
-              .filter((id) => ![undefined, null].includes(id));
-          break;
-
-        default:
-          break;
-      }
-    }*/
-
-/*    this.store
-        .dispatch(new BrowseTasksAction.UpdateFilter(filter))
-        .toPromise()
-        .then(() => {
-          if (filter.type) {
-            this.search();
-          }
-        });*/
+    this.store.dispatch(new BrowseStatisticsAction.UpdateFilter(filter));
   }
 
-  clear() {
-  /*  this.store.dispatch([
-      new BrowseVenderAction.UpdateFilter({ clear: true }),
-      new BrowseVenderAction.LoadVender(),
-    ]);*/
-  }
+  clear() {}
   initCharts() {
     this.chartOptionsR = {
       series: [

@@ -8,6 +8,7 @@
           <div class="p-field p-col-12 p-md-4 justify-content-end d-flex">
             <span class="p-float-label">
               <p-calendar
+                      dateFormat="dd/mm/yy"
                     [showIcon]="true"
                     showButtonBar="true"
                     appendTo="body"
@@ -19,11 +20,11 @@
                </label>
             </span>
           </div>
-
           <!-- To Date -->
           <div class="p-field p-col-12 p-md-2">
             <span class="p-float-label">
               <p-calendar
+
                       [showIcon]="true"
                       showButtonBar="true"
                       appendTo="body"
@@ -38,7 +39,8 @@
 
           <!-- Submit Button -->
           <div class="p-field p-col-2">
-            <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search"></button>
+            <button pButton label="{{ 'ACTIONS.SEARCH' | translate }}" icon="pi pi-search"
+                    (click)="search()"></button>
           </div>
         </div>
 
@@ -60,7 +62,7 @@
                           {{priority | translateObj : 'name'}}
                         </a>
                         <a class="text-center d-block font-size-h2 font-weight-bolder text-dark">
-                          19
+                          {{priority.total | number}}
                         </a>
                       </div>
                     </div>
