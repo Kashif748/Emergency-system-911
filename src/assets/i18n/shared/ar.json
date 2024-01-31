@@ -857,7 +857,7 @@
         "sms": " رسائل نصية",
         "Emails": "بريد الكتروني",
         "Push_Notifications": "تنبيهات منصة",
-        "MOBILE_NUMBER": "رقم الموبايل",
+        "MOBILE_NUMBER": "رقم الهاتف المتحرك",
         "CREATION_DATE": "تاريخ الإنشاء ",
         "SMS_MESSAGE": "نص الرسالة",
         "STATUS": "الحالة",
@@ -1090,7 +1090,7 @@
       "MIN_LENGTH_FIELD": "اقل حجم للخانة:",
       "MAX_LENGTH_FIELD": "اكبر حجم للخانة :",
       "EMAIL_ERR_MSG": "الرجاء إدخال بريد  صالح ",
-      "MOBILE_ERR_MSG": "الرجاء ادخال رقم  صالح الموبايل"
+      "MOBILE_ERR_MSG": "الرجاء ادخال رقم  صالح "
     },
     "DAILY_BREVITY": {
       "HEADER": "الإيجاز اليومي",
@@ -1123,10 +1123,10 @@
       "LOGIN_TIME": "وقت تسجيل الدخول",
       "LOGOUT_TIME": "وقت تسجيل الخروج",
       "STATUS": "الحالة",
-      "MOBLIE_NUMBER": "رقم الموبايل ",
+      "MOBLIE_NUMBER": "رقم الهاتف المتحرك ",
       "BODY": "النص",
       "CREATED_ON": "تاريخ الانشاء",
-      "EDIT_MOBILE_NUMBER": "تعديل رقم الموبايل"
+      "EDIT_MOBILE_NUMBER": "تعديل رقم الهاتف المتحرك"
     },
     "TRADE_LICENSE": {
       "ACTIVITY": "النشاط",
