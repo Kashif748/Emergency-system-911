@@ -406,10 +406,8 @@ export class MapComponent
         Compass,
         Graphic,
         GraphicsLayer,
-        WMSLayer,
         Track,
         Fullscreen,
-        Print,
       ] = await this.mapService.loadModules([
         EsriModule.Map,
         EsriModule.MapView,
@@ -423,10 +421,8 @@ export class MapComponent
         EsriModule.Compass,
         EsriModule.Graphic,
         EsriModule.GraphicsLayer,
-        EsriModule.WMSLayer,
         EsriModule.Track,
         EsriModule.Fullscreen,
-        EsriModule.Print,
       ]);
 
       this.createQueryTask = (url: string) => new QueryTask(url);
@@ -484,69 +480,6 @@ export class MapComponent
 
       // -------------------------------------------------------- END FEATURE LAYERS --------------------------------------
 
-      // -------------------------------------------------------- START ONWANI LAYERS --------------------------------------
-      const ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
-          id: 'MunicipalityImage',
-          title: 'Municipality',
-          opacity: 0.2,
-          maxScale: 1155000,
-        } as __esri.MapImageLayerProperties);
-
-      const ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `/agsupc/rest/services/DevelopmentCode/DPM_DevCode${
-            this.lang == 'ar' ? '_Ara' : '_Eng'
-          }/MapServer`,
-          id: 'ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER',
-          tilte: 'Districts',
-          transparent: true,
-          minScale: 1155600,
-          sublayers: [
-            {
-              id: this.lang == 'ar' ? 147 : 23,
-              visible: true,
-            },
-          ],
-        } as __esri.MapImageLayerProperties);
-
-      const ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER: __esri.MapImageLayer =
-        new MapImageLayer({
-          url: `/agsupc/rest/services/GeoPlanner2/Planning_Municipalities4/MapServer`,
-          id: 'ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER',
-          tilte: 'Plots',
-          transparent: true,
-          minScale: 10000,
-          sublayers: [
-            {
-              id: this.lang == 'ar' ? 22 : 7,
-              visible: true,
-            },
-          ],
-        } as __esri.MapImageLayerProperties);
-
-      const ONWANI_STREET_IMAGE_LAYER: __esri.WMSLayer = new WMSLayer({
-        url: '/geoserver/wms',
-        format: 'png',
-        customLayerParameters: {
-          styles: this.lang === 'en' ? 'Street_En' : 'Street',
-        },
-        copyright: 'GeoServer',
-        description: 'AAM Data',
-        minScale: 10000,
-        version: '1.3.0',
-        visible: true,
-        id: 'ONWANI_STREET_IMAGE_LAYER',
-        sublayers: [
-          {
-            name: 'geosmart:streets',
-          },
-        ],
-      } as __esri.WMSLayerProperties);
-
-      // -------------------------------------------------------- END ONWANI LAYERS --------------------------------------
-
       this.queryInfo = async (graphic: esri.Graphic) => {
         const queryGemotry = async (
           queryTask: __esri.QueryTask,
@@ -583,6 +516,17 @@ export class MapComponent
       };
 
       // Configure the Map
+
+      // -------------------------------------------------------- START ONWANI LAYERS --------------------------------------
+      const ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER: __esri.MapImageLayer =
+        new MapImageLayer({
+          url: `https://onwani.abudhabi.ae/arcgis/rest/services/MSSI/ADMINBOUNDARIES/MapServer`,
+          id: 'MunicipalityImage',
+          title: 'Municipality',
+          opacity: 0.2,
+          maxScale: 1155000,
+        } as __esri.MapImageLayerProperties);
+
       const ABUDHABI_ARCGIS_BASE_IMAGE_LAYER: __esri.MapImageLayer =
         new MapImageLayer({
           url: `https://arcgis.sdi.abudhabi.ae/arcgis/rest/services/Pub/BaseMap${
@@ -593,18 +537,16 @@ export class MapComponent
             { id: 423, visible: false },
           ],
         } as __esri.MapImageLayerProperties);
+      // -------------------------------------------------------- END ONWANI LAYERS --------------------------------------
       const mapProperties: esri.MapProperties = {
         basemap: 'satellite',
         layers: [
           ONWANI_ADMIN_BOUNDRIES_IMAGE_LAYER,
           ABUDHABI_ARCGIS_BASE_IMAGE_LAYER,
-          ONWANI_ADMIN_BOUNDRIES_DISTRICT_IMAGE_LAYER,
-          ONWANI_ADMIN_BOUNDRIES_PLOT_IMAGE_LAYER,
         ],
       };
 
       this.map = new Map(mapProperties);
-      this.map.add(ONWANI_STREET_IMAGE_LAYER);
       this.addressGraphicsLayer = new GraphicsLayer();
       this.DZSP_GRAPHICS_LAYER = new GraphicsLayer();
       this.map.add(this.DZSP_GRAPHICS_LAYER);
