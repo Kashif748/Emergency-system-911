@@ -42,7 +42,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.search()
+    this.search();
     this.initCharts();
     this.priorities$ = combineLatest([
       this.store.select(CommonDataState.priorities),
@@ -61,6 +61,7 @@ export class StatisticsComponent implements OnInit {
   }
   search() {
     this.store.dispatch(new BrowseStatisticsAction.LoadIncidentStatistics());
+    this.store.dispatch(new BrowseStatisticsAction.LoadIncidentStatisticsCenter());
   }
   updateFilter(filter: { [key: string]: any }, event?: KeyboardEvent) {
     if (event?.key === 'Enter') {

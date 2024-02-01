@@ -1,10 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Select, Store} from "@ngxs/store";
 import {combineLatest, Observable, of, Subject} from "rxjs";
-import {IncidentCategoriesState} from "@core/states/incident-categories/incident-categories.state";
 import {IncidentStatisticsState} from "@core/states/incident-statistics/incident-statistics.state";
-import {IncidentStatisticData} from "../../../../api/models/incident-statistic-data";
-import {filter, map, switchMap} from "rxjs/operators";
+import {filter, switchMap} from "rxjs/operators";
 import {CommonDataState} from "@core/states";
 
 @Component({
@@ -14,9 +12,6 @@ import {CommonDataState} from "@core/states";
 })
 export class MainCategoryWidgetComponent implements OnInit, OnDestroy {
   public categories$: Observable<any[]>;
-
-  @Select(IncidentCategoriesState.loading)
-  public loading$: Observable<boolean>;
 
   private destroy$ = new Subject();
   constructor(

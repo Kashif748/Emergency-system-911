@@ -10,4 +10,15 @@ export namespace IncidentStatisticsAction {
         }
     ) {}
   }
+  export class LoadIncidentStatisticsCenters {
+    static readonly type = '[IncidentStatistics] Load Incident statistics centers';
+    /**
+     *
+     */
+    constructor(
+        public payload: {
+          filters?: { [key: string]: any };
+        }
+    ) {}
+  }
 }

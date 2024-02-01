@@ -1,13 +1,6 @@
 import {PageRequestModel} from "@core/models/page-request.model";
 
 export namespace BrowseStatisticsAction {
-  export class LoadIncidentCategories {
-    static readonly type = '[BrowseIncidentStatistics] Load Incident Categories';
-    /**
-     *
-     */
-    constructor() {}
-  }
   export class LoadIncidentStatistics {
     static readonly type = '[BrowseIncidentStatistics] Load Incident statistics';
     /**
@@ -21,5 +14,12 @@ export namespace BrowseStatisticsAction {
      *
      */
     constructor(public payload: { clear?: boolean; [key: string]: any }) {}
+  }
+  export class LoadIncidentStatisticsCenter {
+    static readonly type = '[BrowseIncidentStatistics] Load Incident statistics centers';
+    /**
+     *
+     */
+    constructor(public payload?: { pageRequest: PageRequestModel }) {}
   }
 }

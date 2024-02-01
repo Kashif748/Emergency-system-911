@@ -94,7 +94,6 @@ import {SystemsReportState} from '@core/states/bc-reports/systems-report/systems
 import {VendorsReportState} from '@core/states/bc-reports/vendors-report/vendors-report.state';
 import {EmployeesReportState} from '@core/states/bc-reports/employees-report/employees-report.state';
 import {GisState} from '@core/states/gis/gis.state';
-import {IncidentCategoriesState} from "@core/states/incident-categories/incident-categories.state";
 import firebase from 'firebase/compat/app';
 import initializeApp = firebase.initializeApp;
 import {IncidentStatisticsState} from "@core/states/incident-statistics/incident-statistics.state";
@@ -201,7 +200,6 @@ export function getHighlightLanguages() {
           SystemsReportState,
           VendorsReportState,
           EmployeesReportState,
-          IncidentCategoriesState,
           IncidentStatisticsState
         ],
         {

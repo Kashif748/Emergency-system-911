@@ -4,7 +4,7 @@ import {patch} from '@ngxs/store/operators';
 import {finalize, tap} from 'rxjs/operators';
 import {IncidentControllerService} from "../../../api/services/incident-controller.service";
 import {IncidentStatisticData} from "../../../api/models/incident-statistic-data";
-import {IncidentStatisticsAction} from "@core/states/incident-statistics/incident-statistics.action";
+import {IncidentStatisticsAction, LoadIncidentStatisticsCenters} from "@core/states/incident-statistics/incident-statistics.action";
 import {DateTimeUtil} from "@core/utils/DateTimeUtil";
 
 export interface IncidentStatisticsStateModel {
@@ -43,8 +43,8 @@ export class IncidentStatisticsState {
 
   @Action(IncidentStatisticsAction.LoadIncidentStatistics, { cancelUncompleted: true })
   loadIncidentsStatistics(
-    { setState }: StateContext<IncidentStatisticsStateModel>,
-    { payload }: IncidentStatisticsAction.LoadIncidentStatistics
+      { setState }: StateContext<IncidentStatisticsStateModel>,
+      { payload }: IncidentStatisticsAction.LoadIncidentStatistics
   ) {
     setState(
         patch<IncidentStatisticsStateModel>({
@@ -55,23 +55,55 @@ export class IncidentStatisticsState {
       filter: this.filters(payload?.filters),
     };
     return this.incidentStatistics
-      .incidentStatistics(request)
-      .pipe(
-        tap(({ result }) => {
-          setState(
-            patch<IncidentStatisticsStateModel>({
-              incidentStatistics: result,
+        .incidentStatistics(request)
+        .pipe(
+            tap(({ result }) => {
+              setState(
+                  patch<IncidentStatisticsStateModel>({
+                    incidentStatistics: result,
+                  })
+              );
+            }),
+            finalize(() => {
+              setState(
+                  patch<IncidentStatisticsStateModel>({
+                    loading: false,
+                  })
+              );
             })
-          );
-        }),
-        finalize(() => {
-          setState(
-            patch<IncidentStatisticsStateModel>({
-              loading: false,
-            })
-          );
+        );
+  }
+  @Action(IncidentStatisticsAction.LoadIncidentStatisticsCenters, { cancelUncompleted: true })
+  loadIncidentsStatisticsCenters(
+      { setState }: StateContext<IncidentStatisticsStateModel>,
+      { payload }: IncidentStatisticsAction.LoadIncidentStatisticsCenters
+  ) {
+    setState(
+        patch<IncidentStatisticsStateModel>({
+          loading: true,
         })
-      );
+    );
+    const request = {
+      filter: this.filters(payload?.filters),
+    };
+    return this.incidentStatistics
+        .incidentStatistics(request)
+        .pipe(
+            tap(({ result }) => {
+              setState(
+                  patch<IncidentStatisticsStateModel>({
+                    incidentStatistics: result,
+                  })
+              );
+            }),
+            finalize(() => {
+              setState(
+                  patch<IncidentStatisticsStateModel>({
+                    loading: false,
+                  })
+              );
+            })
+        );
   }
   private filters(filters: { [key: string]: string }) {
     const fromDateCreation =
@@ -85,6 +117,7 @@ export class IncidentStatisticsState {
     return {
       fromDate: fromDateCreation,
       toDate: toDateCreation,
+      module: 'incidents'
     };
   }
 }

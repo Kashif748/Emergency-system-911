@@ -5,12 +5,9 @@ import {MessageHelper} from '@core/helpers/message.helper';
 import {PageRequestModel} from '@core/models/page-request.model';
 import {TextUtils} from '@core/utils';
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
-import {IncidentCategoriesAction} from "@core/states/incident-categories/incident-categories.action";
 import {BrowseStatisticsAction} from "./browse-statistics.action";
 import {IncidentStatisticsAction} from "@core/states/incident-statistics/incident-statistics.action";
-import {BrowseTasksAction} from "../../_task-mgmt/states/browse-tasks.action";
 import {iif, patch} from "@ngxs/store/operators";
-import {BrowseTasksStateModel} from "../../_task-mgmt/states/browse-tasks.state";
 
 export interface BrowseStatisticsStateModel {
   pageRequest: PageRequestModel;
@@ -75,19 +72,22 @@ export class BrowseStatisticsState {
     );
   }
   /* ********************** ACTIONS ************************* */
-  @Action(BrowseStatisticsAction.LoadIncidentCategories)
-  LoadIncidentCategories(
-    { setState, dispatch }: StateContext<BrowseStatisticsStateModel>,
-    { }: BrowseStatisticsAction.LoadIncidentCategories
-  ) {
-    return dispatch(
-      new IncidentCategoriesAction.LoadIncidentCategories()
-    );
-  }
   @Action(BrowseStatisticsAction.LoadIncidentStatistics)
-  LoadIncidentStatistics(
+  loadIncidentStatistics(
       { setState, dispatch, getState }: StateContext<BrowseStatisticsStateModel>,
       { payload}: BrowseStatisticsAction.LoadIncidentStatistics
+  ) {
+    const pageRequest = getState().pageRequest;
+    return dispatch(
+        new IncidentStatisticsAction.LoadIncidentStatistics({
+          filters: {...pageRequest?.filters},
+        })
+    );
+  }
+  @Action(BrowseStatisticsAction.LoadIncidentStatisticsCenter)
+  loadIncidentStatisticsCenter(
+      { setState, dispatch, getState }: StateContext<BrowseStatisticsStateModel>,
+      { payload}: BrowseStatisticsAction.LoadIncidentStatisticsCenter
   ) {
     const pageRequest = getState().pageRequest;
     return dispatch(
