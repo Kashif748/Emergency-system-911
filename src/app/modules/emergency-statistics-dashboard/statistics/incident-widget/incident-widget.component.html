@@ -1,23 +1,55 @@
 <ng-container *ngIf="incidentStatistics$ | async as incidentCategories">
   <ng-container *ngIf="incidentCategories.incidents">
-    <ng-container *ngFor="let label of labels">
-      <div class="col-lg-12 col-md-4 col-sm-6 item pt-0 pb-4">
-        <!--begin::Stats Widget 27-->
-        <div class="card card-custom m-0 shadow-sm h-100">
-          <!--begin::Body-->
-          <div class="flex-column card-body p-4 d-flex justify-content-between">
-            <div class="">
-              <a class="d-block font-size-h7 p-2 font-weight-bolder text-dark text-center">
-                {{label | translateObj : 'name'}}
-              </a>
-            </div>
-            <a class="align-items-center font-size-h1 p-2 font-weight-bolder text-center">
-              {{ incidentCategories.incidents.total | number }}</a>
+    <div class="col-lg-12 col-md-4 col-sm-6 item pt-0 pb-4">
+      <!--begin::Stats Widget 27-->
+      <div class="card card-custom m-0 shadow-sm h-100">
+        <!--begin::Body-->
+        <div class="flex-column card-body p-4 d-flex justify-content-between">
+          <div class="">
+            <a class="d-block font-size-h7 p-2 font-weight-bolder text-dark text-center">
+              {{ 'TOTALINCIDENT' | translate }}
+            </a>
           </div>
-          <!--end::Body-->
+          <a class="align-items-center font-size-h1 p-2 font-weight-bolder text-center">
+            {{ incidentCategories.incidents.total | number }}</a>
         </div>
-        <!--end::Stats Widget 27-->
+        <!--end::Body-->
       </div>
-    </ng-container>
+      <!--end::Stats Widget 27-->
+    </div>
+    <div class="col-lg-12 col-md-4 col-sm-6 item pt-0 pb-4">
+      <!--begin::Stats Widget 27-->
+      <div class="card card-custom m-0 shadow-sm h-100">
+        <!--begin::Body-->
+        <div class="flex-column card-body p-4 d-flex justify-content-between">
+          <div class="">
+            <a class="d-block font-size-h7 p-2 font-weight-bolder text-dark text-center">
+              {{ 'CLOSEINCIDENT' | translate }}
+            </a>
+          </div>
+          <a class="align-items-center font-size-h1 p-2 font-weight-bolder text-center">
+            % {{ (this.closeIncidentTimePercentage /incidentCategories.incidents.total) | number }}</a>
+        </div>
+        <!--end::Body-->
+      </div>
+      <!--end::Stats Widget 27-->
+    </div>
+    <div class="col-lg-12 col-md-4 col-sm-6 item pt-0 pb-4">
+      <!--begin::Stats Widget 27-->
+      <div class="card card-custom m-0 shadow-sm h-100">
+        <!--begin::Body-->
+        <div class="flex-column card-body p-4 d-flex justify-content-between">
+          <div class="">
+            <a class="d-block font-size-h7 p-2 font-weight-bolder text-dark text-center">
+              {{ 'AVGRESPONSETIME' | translate }}
+            </a>
+          </div>
+          <a class="align-items-center font-size-h1 p-2 font-weight-bolder text-center">
+            {{ (this.avgResponseTime /incidentCategories.incidents.total) | number}} Hrs</a>
+        </div>
+        <!--end::Body-->
+      </div>
+      <!--end::Stats Widget 27-->
+    </div>
   </ng-container>
 </ng-container>

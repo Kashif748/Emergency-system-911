@@ -988,11 +988,16 @@ export { RestApiResponseIncidentProjection } from './models/rest-api-response-in
 export { ApiErrorListIncidentIdSubjectProjection } from './models/api-error-list-incident-id-subject-projection';
 export { RestApiResponseListIncidentIdSubjectProjection } from './models/rest-api-response-list-incident-id-subject-projection';
 export { IncidentStatisticsDataFilter } from './models/incident-statistics-data-filter';
+export { ApiErrorListCenterData } from './models/api-error-list-center-data';
+export { CenterData } from './models/center-data';
+export { RestApiResponseListCenterData } from './models/rest-api-response-list-center-data';
 export { ApiErrorIncidentStatisticData } from './models/api-error-incident-statistic-data';
+export { CategoryData } from './models/category-data';
 export { IncidentData } from './models/incident-data';
 export { IncidentStatisticData } from './models/incident-statistic-data';
 export { InquiryData } from './models/inquiry-data';
 export { InterimIncidentData } from './models/interim-incident-data';
+export { PriorityData } from './models/priority-data';
 export { RestApiResponseIncidentStatisticData } from './models/rest-api-response-incident-statistic-data';
 export { TotalData } from './models/total-data';
 export { ApiErrorListIncidentStatistics } from './models/api-error-list-incident-statistics';

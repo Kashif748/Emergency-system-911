@@ -9,6 +9,7 @@ import {FormBuilder} from "@angular/forms";
 import {BrowseStatisticsState, BrowseStatisticsStateModel} from "../states/browse-statistics.state";
 import {IncidentStatisticsState} from "@core/states/incident-statistics/incident-statistics.state";
 import {filter, switchMap} from "rxjs/operators";
+import {CenterData} from "../../../api/models/center-data";
 
 @Component({
   selector: 'app-statistics',
@@ -19,6 +20,9 @@ export class StatisticsComponent implements OnInit {
   lang = 'en';
 
   public priorities$: Observable<any[]>;
+
+  @Select(IncidentStatisticsState.incidentStatisticsCenter)
+  public incidentStatisticsCenter$: Observable<CenterData[]>;
 
   @Select(BrowseStatisticsState.state)
   public state$: Observable<BrowseStatisticsStateModel>;
@@ -58,6 +62,7 @@ export class StatisticsComponent implements OnInit {
           })).filter(priority => !!priority.total);
           return of(categoriesWithTotal);
         }));
+    this.updateChart();
   }
   search() {
     this.store.dispatch(new BrowseStatisticsAction.LoadIncidentStatistics());
@@ -71,6 +76,61 @@ export class StatisticsComponent implements OnInit {
   }
 
   clear() {}
+  updateChart() {
+    this.chartOptionsR = {
+      series: [
+        {
+          name: "Incident Count",
+          type: "column",
+          data: [440, 505, 414, 671, 227, 413]
+        },
+        {
+          name: "Avg Response Time",
+          type: "line",
+          data: [23, 42, 35, 27, 43, 22]
+        }
+      ],
+      chart: {
+        height: 300,
+        type: "line"
+      },
+      stroke: {
+        width: 1,
+        colors: ['#d4526e'],
+      },
+      title: {
+        text: ""
+      },
+      dataLabels: {
+        enabled: true,
+        enabledOnSeries: [1]
+      },
+      labels: [
+        "Mussafah",
+        "City Center",
+        "Infrastruct Sector",
+        "Wathba Center",
+        "Zayed City Center",
+        "Shahamah Center",
+      ],
+      xaxis: {
+        type: "category"
+      },
+      yaxis: [
+        {
+          title: {
+            text: ""
+          }
+        },
+        {
+          opposite: true,
+          title: {
+            text: ""
+          }
+        }
+      ]
+    };
+  }
   initCharts() {
     this.chartOptionsR = {
       series: [
@@ -79,19 +139,8 @@ export class StatisticsComponent implements OnInit {
         },
       ],
       chart: {
-        type: 'bar',
+        type: 'line',
         height: 300,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '55%',
-          endingShape: 'rounded',
-          dataLabels: {
-            enabled: false,
-            show: false,
-          },
-        },
       },
       colors: [
         '#33b2df',
@@ -101,45 +150,28 @@ export class StatisticsComponent implements OnInit {
         '#A5978B',
         '#2b908f',
       ],
-      dataLabels: {
-        enabled: false,
-        textAnchor: 'start',
-        style: {
-          colors: ['black'],
-          fontFamily: 'Tajawal',
-        },
-        formatter(val, opt) {
-          return opt.w.globals.labels[opt.dataPointIndex] + ':  ' + val;
-        },
-        offsetX: 0,
-      },
       stroke: {
         width: 1,
-        colors: ['#000'],
+        colors: ['#d4526e'],
       },
+      dataLabels: {
+        enabled: true,
+        enabledOnSeries: [1]
+      },
+      labels: [
+        "Mussafah",
+        "City Center",
+        "Infrastruct Sector",
+        "Wathba Center",
+        "Zayed City Center",
+        "Shahamah Center",
+      ],
       xaxis: {
-        categories: [],
+        type: "category"
       },
       yaxis: {
         labels: {
           show: true,
-        },
-      },
-
-      tooltip: {
-        theme: 'dark',
-        enabled: true,
-        y: {
-          show: true,
-          formatter: (value, { series, seriesIndex, dataPointIndex, w }) => {
-            return value;
-          },
-          title: {
-            formatter: (seriesName) => (this.lang),
-          },
-        },
-        z: {
-          formatter: undefined,
         },
       },
     };

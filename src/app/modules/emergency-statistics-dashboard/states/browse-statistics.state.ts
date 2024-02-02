@@ -5,9 +5,10 @@ import {MessageHelper} from '@core/helpers/message.helper';
 import {PageRequestModel} from '@core/models/page-request.model';
 import {TextUtils} from '@core/utils';
 import {Action, Selector, SelectorOptions, State, StateContext, StateToken} from '@ngxs/store';
-import {BrowseStatisticsAction} from "./browse-statistics.action";
 import {IncidentStatisticsAction} from "@core/states/incident-statistics/incident-statistics.action";
 import {iif, patch} from "@ngxs/store/operators";
+import {BrowseStatisticsAction} from "./browse-statistics.action";
+import {CenterAction} from "@core/states/service-center-area/centers/center.action";
 
 export interface BrowseStatisticsStateModel {
   pageRequest: PageRequestModel;
@@ -91,7 +92,7 @@ export class BrowseStatisticsState {
   ) {
     const pageRequest = getState().pageRequest;
     return dispatch(
-        new IncidentStatisticsAction.LoadIncidentStatistics({
+        new IncidentStatisticsAction.LoadIncidentStatisticsCenters({
           filters: {...pageRequest?.filters},
         })
     );

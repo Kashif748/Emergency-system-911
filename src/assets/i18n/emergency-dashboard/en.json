@@ -1,5 +1,7 @@
 {
-  "SHARED": {
-    "PAGE_REPORT": "{first} - {last} of {totalRecords}"
-  }
+  "TOTALINCIDENT": "Total Register Incidents",
+  "CLOSEINCIDENT": "Closed Incidents Within Time Percentage",
+  "AVGRESPONSETIME": "Average Response Time",
+  "INCIDENTCOUNT": "Incidents Count",
+  "AVG_RESPONSETIME": "Avg Response Time"
 }

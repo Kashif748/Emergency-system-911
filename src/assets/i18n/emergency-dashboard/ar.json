@@ -1,5 +1,7 @@
 {
-  "SHARED": {
-    "PAGE_REPORT": "{first} - {last} من {totalRecords}"
-  }
+  "TOTALINCIDENT": "مجموع البلاغات المسجلة",
+  "CLOSEINCIDENT": "نسبة البلاغات المغلقة ضمن الوقت المحدد",
+  "AVGRESPONSETIME": "متوسط زمن الإستجابة",
+  "INCIDENTCOUNT": "عدد البلاغات",
+  "AVG_RESPONSETIME": "متوسط زمن الاستجابة"
 }

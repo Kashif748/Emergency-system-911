@@ -5,7 +5,7 @@
       <div class="col-12">
         <div class="row justify-content-center">
           <!-- From Date -->
-          <div class="p-field p-col-12 p-md-4 justify-content-end d-flex">
+          <div class="p-field p-col-6 p-md-4 justify-content-end d-flex">
             <span class="p-float-label">
               <p-calendar
                       dateFormat="dd/mm/yy"
@@ -21,7 +21,7 @@
             </span>
           </div>
           <!-- To Date -->
-          <div class="p-field p-col-12 p-md-2">
+          <div class="p-field p-col-6 p-md-2">
             <span class="p-float-label">
               <p-calendar
 
@@ -87,10 +87,17 @@
             <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
               <div class="card card-custom rounded d-block overflow-hidden map-card h-100 m-0 mb-2 shadow-sm">
                 <div class="card-body p-0 h-100">
-                  <apx-chart  [series]="chartOptionsR.series" [chart]="chartOptionsR.chart"
-                              [plotOptions]="chartOptionsR.plotOptions" [yaxis]="chartOptionsR.yaxis" [xaxis]="chartOptionsR.xaxis"
-                              [stroke]="chartOptionsR.stroke" [grid]="chartOptionsR.grid" [fill]="chartOptionsR.fill"
-                              [annotations]="chartOptionsR.annotations" [tooltip]="chartOptionsR.tooltip"></apx-chart>
+                  <apx-chart  [series]="chartOptionsR.series"
+                              [chart]="chartOptionsR.chart"
+                              [yaxis]="chartOptionsR.yaxis"
+                              [xaxis]="chartOptionsR.xaxis"
+                              [labels]="chartOptionsR.labels"
+                              [stroke]="chartOptionsR.stroke"
+                              [title]="chartOptionsR.title"
+                              [dataLabels]="chartOptionsR.dataLabels"
+                              [fill]="chartOptionsR.fill"
+                              [tooltip]="chartOptionsR.tooltip"
+                  ></apx-chart>
                 </div>
               </div>
             </div>

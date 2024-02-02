@@ -40,6 +40,7 @@ import { RestApiResponsePageIncidentInfoWithOrgsProjection } from '../models/res
 import { RestApiResponsePageIncidentProjectionMinimum } from '../models/rest-api-response-page-incident-projection-minimum';
 import { RestApiResponseString } from '../models/rest-api-response-string';
 import { RestApiResponseTaskStatusDetails } from '../models/rest-api-response-task-status-details';
+import {RestApiResponseListCenterData} from "../models/rest-api-response-list-center-data";
 
 @Injectable()
 export class IncidentControllerService extends BaseService {
@@ -715,6 +716,67 @@ export class IncidentControllerService extends BaseService {
 
     return this.findBySubject$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListIncidentIdSubjectProjection>) => r.body as RestApiResponseListIncidentIdSubjectProjection)
+    );
+  }
+
+  /**
+   * Path part for operation getCenter
+   */
+  static readonly GetCenterPath = '/v1/incidents/statistics-data-center';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCenter()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCenter$Response(params: {
+    module?: string;
+    filter: IncidentStatisticsDataFilter;
+    priority?: Array<Priority>;
+    emergencylevel?: Array<EmergencyLevel>;
+    statuses?: Array<IncidentStatus>;
+    isKpiExpired?: boolean;
+  }): Observable<StrictHttpResponse<RestApiResponseListCenterData>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IncidentControllerService.GetCenterPath, 'get');
+    if (params) {
+      rb.query('module', params.module, {});
+      rb.query('filter', params.filter, {});
+      rb.query('priority', params.priority, {});
+      rb.query('emergencylevel', params.emergencylevel, {});
+      rb.query('statuses', params.statuses, {});
+      rb.query('isKpiExpired', params.isKpiExpired, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RestApiResponseListCenterData>;
+        })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getCenter$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCenter(params: {
+    module?: string;
+    filter: IncidentStatisticsDataFilter;
+    priority?: Array<Priority>;
+    emergencylevel?: Array<EmergencyLevel>;
+    statuses?: Array<IncidentStatus>;
+    isKpiExpired?: boolean;
+  }): Observable<RestApiResponseListCenterData> {
+
+    return this.getCenter$Response(params).pipe(
+        map((r: StrictHttpResponse<RestApiResponseListCenterData>) => r.body as RestApiResponseListCenterData)
     );
   }
 

@@ -4,11 +4,13 @@ import {patch} from '@ngxs/store/operators';
 import {finalize, tap} from 'rxjs/operators';
 import {IncidentControllerService} from "../../../api/services/incident-controller.service";
 import {IncidentStatisticData} from "../../../api/models/incident-statistic-data";
-import {IncidentStatisticsAction, LoadIncidentStatisticsCenters} from "@core/states/incident-statistics/incident-statistics.action";
+import {IncidentStatisticsAction} from "@core/states/incident-statistics/incident-statistics.action";
 import {DateTimeUtil} from "@core/utils/DateTimeUtil";
+import {CenterData} from "../../../api/models/center-data";
 
 export interface IncidentStatisticsStateModel {
   incidentStatistics: IncidentStatisticData;
+  incidentStatisticsCenter: CenterData[];
   loading: boolean;
   blocking: boolean;
 }
@@ -32,6 +34,11 @@ export class IncidentStatisticsState {
   @Selector([IncidentStatisticsState])
   static incidentStatistics(state: IncidentStatisticsStateModel) {
     return state?.incidentStatistics;
+  }
+
+  @Selector([IncidentStatisticsState])
+  static incidentStatisticsCenter(state: IncidentStatisticsStateModel) {
+    return state?.incidentStatisticsCenter;
   }
 
 
@@ -87,12 +94,12 @@ export class IncidentStatisticsState {
       filter: this.filters(payload?.filters),
     };
     return this.incidentStatistics
-        .incidentStatistics(request)
+        .getCenter(request)
         .pipe(
             tap(({ result }) => {
               setState(
                   patch<IncidentStatisticsStateModel>({
-                    incidentStatistics: result,
+                    incidentStatisticsCenter: result,
                   })
               );
             }),
