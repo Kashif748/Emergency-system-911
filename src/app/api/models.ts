@@ -1009,7 +1009,6 @@ export { CenterData } from './models/center-data';
 export { RestApiResponseListCenterData } from './models/rest-api-response-list-center-data';
 export { ApiErrorIncidentStatisticData } from './models/api-error-incident-statistic-data';
 export { CategoryData } from './models/category-data';
-export { CenterData } from './models/center-data';
 export { IncidentData } from './models/incident-data';
 export { IncidentStatisticData } from './models/incident-statistic-data';
 export { InquiryData } from './models/inquiry-data';
