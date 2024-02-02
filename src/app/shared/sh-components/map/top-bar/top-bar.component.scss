@@ -1,3 +1,5 @@
-::ng-deep .popover {
-  width: 300px; /* Max Width of the popover (depending on the container!) */
+::ng-deep {
+  .show .popover {
+    width: 300px; /* Max Width of the popover (depending on the container!) */
+  }
 }

@@ -222,6 +222,7 @@
       "OK": "حسناً",
       "SEND": "ارسال",
       "ACTIONS": "الاجراء",
+      "RELOAD": "إعادة تحميل",
       "CLOSE": "إغلاق",
       "EXPORT_TO_PDF": "تصدير ك PDF",
       "EXPORT_TO_XLSX": "تصدير ك XLSX",
@@ -575,7 +576,7 @@
       "Incident_Id": "رقم البلاغ",
       "CITY": "نطاق البلاغ",
       "CREATION_DATE": "تاريخ الإنشاء",
-      "CLOSE_DATE": "تاريخ قريب",
+      "CLOSE_DATE": "تاريخ الإغلاق",
       "GENERALPOSITION": "الموقف العام",
       "PRIVATEPOSITION": "الموقف الخاص",
       "ISINTERNAL": "داخلي",
@@ -670,7 +671,7 @@
       "SUB_CATEGORY": "التصنيف الفرعي",
       "CLEAR": "مسح ",
       "UNITS": "الفرق",
-      "TAGS" :"الوسم",
+      "TAGS": "الوسم",
       "OTHER": "اخرى ",
       "ANOTHER_CATEGORY": "تصنيف آخر",
       "CELLS": "الخلايا",
@@ -856,7 +857,7 @@
         "sms": " رسائل نصية",
         "Emails": "بريد الكتروني",
         "Push_Notifications": "تنبيهات منصة",
-        "MOBILE_NUMBER": "رقم الموبايل",
+        "MOBILE_NUMBER": "رقم الهاتف المتحرك",
         "CREATION_DATE": "تاريخ الإنشاء ",
         "SMS_MESSAGE": "نص الرسالة",
         "STATUS": "الحالة",
@@ -892,7 +893,7 @@
       "SPECIALIZED_EMAIL": "البريد الالكتروني للمختص",
       "TASKS": "المهام",
       "Tasks_type": "تصنيف  المهام",
-      "SHOW": "عرض المهمة",
+      "SHOW": "معاينة المهمة",
       "VIEW": "أنقر لعرض المهمة",
       "ASSIGNED": {
         "EMPTY_OPT": "الرجاء تحديد الحدث أولاً"
@@ -1089,7 +1090,7 @@
       "MIN_LENGTH_FIELD": "اقل حجم للخانة:",
       "MAX_LENGTH_FIELD": "اكبر حجم للخانة :",
       "EMAIL_ERR_MSG": "الرجاء إدخال بريد  صالح ",
-      "MOBILE_ERR_MSG": "الرجاء ادخال رقم  صالح الموبايل"
+      "MOBILE_ERR_MSG": "الرجاء ادخال رقم  صالح "
     },
     "DAILY_BREVITY": {
       "HEADER": "الإيجاز اليومي",
@@ -1122,10 +1123,10 @@
       "LOGIN_TIME": "وقت تسجيل الدخول",
       "LOGOUT_TIME": "وقت تسجيل الخروج",
       "STATUS": "الحالة",
-      "MOBLIE_NUMBER": "رقم الموبايل ",
+      "MOBLIE_NUMBER": "رقم الهاتف المتحرك ",
       "BODY": "النص",
       "CREATED_ON": "تاريخ الانشاء",
-      "EDIT_MOBILE_NUMBER": "تعديل رقم الموبايل"
+      "EDIT_MOBILE_NUMBER": "تعديل رقم الهاتف المتحرك"
     },
     "TRADE_LICENSE": {
       "ACTIVITY": "النشاط",
@@ -1395,9 +1396,9 @@
       "WORKLOG": "نموذج سجل المهمة/البلاغ",
       "alertnessLevel": "مستويات الاستعداد",
       "tags": "الوسوم",
-      "MODULE":"الموديول",
-      "INCIDENT":"بلاغ",
-      "INQUIRY":"استفسار"
+      "MODULE": "الموديول",
+      "INCIDENT": "بلاغ",
+      "INQUIRY": "استفسار"
     },
     "NEWS": {
       "NEWS": "شريط الاخبار",
@@ -1705,7 +1706,7 @@
       "NAME_EN": "الاسم(انكليزي)",
       "GROUP_NAME": "الاسم",
       "SHIFT_SCHEDULE": "جدول المناوبة",
-      "CONTRACT_NO" :"رقم العقد",
+      "CONTRACT_NO": "رقم العقد",
       "ORGANIZATION": "الجهة",
       "DESCRIPTION_AR": "الوصف(عربي)",
       "DESCRIPTION_EN": "الوصف (انكليزي)",
@@ -1743,7 +1744,7 @@
       "MAP": "تحديد من الخريطة",
       "SELECT": "اختيار من قائمة",
       "CHOOSE_LOCATION": "حدد موقع",
-      "CONTRACT_NO_SEARCH":"بحث باستخدام العقد",
+      "CONTRACT_NO_SEARCH": "بحث باستخدام العقد",
       "LOCATION": "موقع",
       "WARNING_NOTE": "من فضلك اعلم ان احد الاختيارات سيتم حفظها  طبقا لما  هو نشط عند الحفظ",
       "CATEGORIES_LOCATIONS": "التصنيفات والنطاقات المسندة",

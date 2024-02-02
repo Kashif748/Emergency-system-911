@@ -33,6 +33,12 @@
 
 // support right to left
 [dir="rtl"] {
+ 
+  .p-autocomplete .p-autocomplete-loader {
+      left: 0.5rem !important;
+      right: unset !important;
+  }
+
   .pi-angle-double-right:before {
     content: "\e92d";
   }
@@ -674,4 +680,8 @@ button.p-button-secondary.active {
 
 p-treeselect {
   display: block;
+}
+
+a.p-button:hover {
+  color: #fff !important;
 }

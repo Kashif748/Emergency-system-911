@@ -167,4 +167,33 @@ export class UrlHelperService {
       reader.onerror = (error) => reject(error);
     });
   }
+
+  downloadBase64(dataUrl: string, filename = 'file') {
+    // the download is handled differently in Microsoft browsers
+    // because the download attribute for <a> elements is not supported
+    if (!window.navigator.msSaveOrOpenBlob) {
+      // in browsers that support the download attribute
+      // a link is created and a programmatic click will trigger the download
+      const element = document.createElement('a');
+      element.setAttribute('href', dataUrl);
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    } else {
+      // for MS browsers convert dataUrl to Blob
+      const byteString = atob(dataUrl.split(',')[1]);
+      const mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], { type: mimeString });
+
+      // download file
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+    }
+  }
 }

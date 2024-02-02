@@ -28,22 +28,22 @@ export class IncidentsWorkLogControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete8
+   * Path part for operation delete9
    */
-  static readonly Delete8Path = '/v1/incidents/{incidentId}/logs/inactive/{id}';
+  static readonly Delete9Path = '/v1/incidents/{incidentId}/logs/inactive/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete8()` instead.
+   * To access only the response body, use `delete9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete8$Response(params: {
+  delete9$Response(params: {
     incidentId: number;
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseBoolean>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Delete8Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Delete9Path, 'put');
     if (params) {
       rb.path('incidentId', params.incidentId, {});
       rb.path('id', params.id, {});
@@ -62,38 +62,38 @@ export class IncidentsWorkLogControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete8$Response()` instead.
+   * To access the full response (for headers, for example), `delete9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete8(params: {
+  delete9(params: {
     incidentId: number;
     id: number;
   }): Observable<RestApiResponseBoolean> {
 
-    return this.delete8$Response(params).pipe(
+    return this.delete9$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBoolean>) => r.body as RestApiResponseBoolean)
     );
   }
 
   /**
-   * Path part for operation findActivePage7
+   * Path part for operation findActivePage8
    */
-  static readonly FindActivePage7Path = '/v1/incidents/{incidentId}/logs';
+  static readonly FindActivePage8Path = '/v1/incidents/{incidentId}/logs';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findActivePage7()` instead.
+   * To access only the response body, use `findActivePage8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage7$Response(params: {
+  findActivePage8$Response(params: {
     incidentId: number;
     hasAttachment?: boolean;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageIncidentWorkLogProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.FindActivePage7Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.FindActivePage8Path, 'get');
     if (params) {
       rb.path('incidentId', params.incidentId, {});
       rb.query('hasAttachment', params.hasAttachment, {});
@@ -113,38 +113,38 @@ export class IncidentsWorkLogControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `findActivePage7$Response()` instead.
+   * To access the full response (for headers, for example), `findActivePage8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage7(params: {
+  findActivePage8(params: {
     incidentId: number;
     hasAttachment?: boolean;
     pageable: Pageable;
   }): Observable<RestApiResponsePageIncidentWorkLogProjection> {
 
-    return this.findActivePage7$Response(params).pipe(
+    return this.findActivePage8$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageIncidentWorkLogProjection>) => r.body as RestApiResponsePageIncidentWorkLogProjection)
     );
   }
 
   /**
-   * Path part for operation update33
+   * Path part for operation update34
    */
-  static readonly Update33Path = '/v1/incidents/{incidentId}/logs';
+  static readonly Update34Path = '/v1/incidents/{incidentId}/logs';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update33()` instead.
+   * To access only the response body, use `update34()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update33$Response(params: {
+  update34$Response(params: {
     incidentId: number;
     body: IncidentsWorkLog
   }): Observable<StrictHttpResponse<RestApiResponseIncidentWorkLogMinProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Update33Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Update34Path, 'put');
     if (params) {
       rb.path('incidentId', params.incidentId, {});
       rb.body(params.body, 'application/json');
@@ -163,37 +163,37 @@ export class IncidentsWorkLogControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update33$Response()` instead.
+   * To access the full response (for headers, for example), `update34$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update33(params: {
+  update34(params: {
     incidentId: number;
     body: IncidentsWorkLog
   }): Observable<RestApiResponseIncidentWorkLogMinProjection> {
 
-    return this.update33$Response(params).pipe(
+    return this.update34$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentWorkLogMinProjection>) => r.body as RestApiResponseIncidentWorkLogMinProjection)
     );
   }
 
   /**
-   * Path part for operation create29
+   * Path part for operation create30
    */
-  static readonly Create29Path = '/v1/incidents/{incidentId}/logs';
+  static readonly Create30Path = '/v1/incidents/{incidentId}/logs';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create29()` instead.
+   * To access only the response body, use `create30()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create29$Response(params: {
+  create30$Response(params: {
     incidentId: number;
     body: IncidentsWorkLog
   }): Observable<StrictHttpResponse<RestApiResponseIncidentWorkLogMinProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Create29Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, IncidentsWorkLogControllerService.Create30Path, 'post');
     if (params) {
       rb.path('incidentId', params.incidentId, {});
       rb.body(params.body, 'application/json');
@@ -212,16 +212,16 @@ export class IncidentsWorkLogControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create29$Response()` instead.
+   * To access the full response (for headers, for example), `create30$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create29(params: {
+  create30(params: {
     incidentId: number;
     body: IncidentsWorkLog
   }): Observable<RestApiResponseIncidentWorkLogMinProjection> {
 
-    return this.create29$Response(params).pipe(
+    return this.create30$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseIncidentWorkLogMinProjection>) => r.body as RestApiResponseIncidentWorkLogMinProjection)
     );
   }

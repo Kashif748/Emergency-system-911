@@ -1,24 +1,18 @@
-import { isEmpty } from 'lodash';
-import { Router } from '@angular/router';
-import { Direction } from '@angular/cdk/bidi';
-import {
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {isEmpty} from 'lodash';
+import {Router} from '@angular/router';
+import {Direction} from '@angular/cdk/bidi';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild,} from '@angular/core';
 
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import * as moment from 'moment';
 
-import { TranslationService } from 'src/app/modules/i18n/translation.service';
-import { NotifService } from '@core/api/services/notif.service';
+import {TranslationService} from 'src/app/modules/i18n/translation.service';
+import {NotifService} from '@core/api/services/notif.service';
 
-import { DmsService } from '@core/api/services/dms.service';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import {DmsService} from '@core/api/services/dms.service';
+import {PerfectScrollbarComponent} from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'app-notifications-offcanvas',
@@ -145,7 +139,7 @@ export class NotificationsOffcanvasComponent implements OnInit, OnDestroy {
       if (item.read == 'false') {
         this.markAsRead(item.id);
       }
-      this.router.navigate([item.routing]);
+      this.router.navigateByUrl(item.routing);
     }
   }
 

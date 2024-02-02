@@ -8,6 +8,7 @@ export interface InappNotification {
   message?: string;
   moduleId?: number;
   notificationTransaction?: NotificationTransaction;
+  popup?: boolean;
   read?: boolean;
   routing?: string;
   userId?: number;

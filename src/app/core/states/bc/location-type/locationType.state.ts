@@ -69,7 +69,7 @@ export class LocationTypeState {
       })
     );
     return this.locationType
-      .getAll16({
+      .getAll17({
         isActive: true,
         pageable: {
           page: payload.page,
@@ -141,7 +141,7 @@ export class LocationTypeState {
       })
     );
     return this.locationType
-      .update99({
+      .update101({
         body: payload,
       })
       .pipe(

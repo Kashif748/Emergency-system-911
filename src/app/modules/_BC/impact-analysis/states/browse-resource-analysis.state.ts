@@ -1,24 +1,17 @@
-import { PageRequestModel } from '@core/models/page-request.model';
-import {
-  Action,
-  Selector,
-  SelectorOptions,
-  State,
-  StateContext,
-  StateToken,
-} from '@ngxs/store';
-import { Injectable } from '@angular/core';
-import { MessageHelper } from '@core/helpers/message.helper';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiHelper } from '@core/helpers/api.helper';
-import { TextUtils } from '@core/utils';
-import { iif, patch } from '@ngxs/store/operators';
-import { BrowseResourceAnalysisAction } from './browse-resource-analysis.action';
-import { throwError } from 'rxjs';
-import { BrowseOrganizationAction } from '../../organization-activities/states/browse-organization.action';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { ResourceAnalysisAction } from '@core/states/impact-analysis/resource-analysis.action';
-import { TranslateService } from '@ngx-translate/core';
+import {PageRequestModel} from '@core/models/page-request.model';
+import {Action, Selector, SelectorOptions, State, StateContext, StateToken,} from '@ngxs/store';
+import {Injectable} from '@angular/core';
+import {MessageHelper} from '@core/helpers/message.helper';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiHelper} from '@core/helpers/api.helper';
+import {TextUtils} from '@core/utils';
+import {iif, patch} from '@ngxs/store/operators';
+import {BrowseResourceAnalysisAction} from './browse-resource-analysis.action';
+import {throwError} from 'rxjs';
+import {BrowseOrganizationAction} from '../../organization-activities/states/browse-organization.action';
+import {catchError, finalize, tap} from 'rxjs/operators';
+import {ResourceAnalysisAction} from '@core/states/impact-analysis/resource-analysis.action';
+import {TranslateService} from '@ngx-translate/core';
 
 export interface BrowseReourceAnalysisStateModel {
   pageRequest: PageRequestModel;
@@ -158,7 +151,6 @@ export class BrowseResourceAnalysisState {
         this.messageHelper.success();
         dispatch([
           new BrowseResourceAnalysisAction.LoadPage(),
-          new BrowseResourceAnalysisAction.ToggleDialog({}),
         ]);
       }),
       catchError((err) => {
@@ -230,9 +222,9 @@ export class BrowseResourceAnalysisState {
     this.router.navigate([], {
       queryParams: {
         _dialog:
-          this.route.snapshot.queryParams['_dialog'] == 'opened'
+          this.route.snapshot.queryParams['_dialog'] == 'resources'
             ? undefined
-            : 'opened',
+              : 'resources',
         _id: payload.resourceId,
         _mode: undefined,
       },
@@ -261,7 +253,7 @@ export class BrowseResourceAnalysisState {
         _dialog:
           this.route.snapshot.queryParams['_dialog'] == 'opened'
             ? undefined
-            : 'opened',
+            : 'resources',
         _id: payload.id,
         _mode: 'viewonly',
       },

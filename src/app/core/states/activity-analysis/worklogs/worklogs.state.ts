@@ -168,7 +168,7 @@ export class ActivityWorklogsState {
     );
 
     return this.activityWorklogs
-      .insertOne34({
+      .save3({
         body: { ...payload },
       })
       .pipe(
@@ -204,7 +204,7 @@ export class ActivityWorklogsState {
     );
 
     return this.activityWorklogs
-      .update113({
+      .update115({
         body: { ...payload },
       })
       .pipe(

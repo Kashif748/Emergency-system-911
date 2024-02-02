@@ -128,21 +128,21 @@ export class BcOrgHierarchyControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update96
+   * Path part for operation update98
    */
-  static readonly Update96Path = '/v1/bc/org-hir';
+  static readonly Update98Path = '/v1/bc/org-hir';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update96()` instead.
+   * To access only the response body, use `update98()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update96$Response(params: {
+  update98$Response(params: {
     body: BcOrgHierarchy
   }): Observable<StrictHttpResponse<RestApiResponseBcOrgHierarchy>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.Update96Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcOrgHierarchyControllerService.Update98Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -160,15 +160,15 @@ export class BcOrgHierarchyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update96$Response()` instead.
+   * To access the full response (for headers, for example), `update98$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update96(params: {
+  update98(params: {
     body: BcOrgHierarchy
   }): Observable<RestApiResponseBcOrgHierarchy> {
 
-    return this.update96$Response(params).pipe(
+    return this.update98$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcOrgHierarchy>) => r.body as RestApiResponseBcOrgHierarchy)
     );
   }

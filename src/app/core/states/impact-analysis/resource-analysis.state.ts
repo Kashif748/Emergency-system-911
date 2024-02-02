@@ -157,7 +157,7 @@ export class ResourceAnalysisState {
       })
     );
     return this.bcResources
-      .update93({
+      .update95({
         body: payload,
       })
       .pipe(

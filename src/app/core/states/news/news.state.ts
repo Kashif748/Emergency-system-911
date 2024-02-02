@@ -63,7 +63,7 @@ export class NewsState {
       })
     );
     return this.newsService
-      .findActivePage6({
+      .findActivePage7({
         pageable: {
           page: payload.page,
           size: payload.size,

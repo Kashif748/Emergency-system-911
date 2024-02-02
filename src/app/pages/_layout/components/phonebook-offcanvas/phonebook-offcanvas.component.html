@@ -28,24 +28,39 @@
       [collapsed]="!(hasFilters$ | async)"
     >
       <div class="p-fluid p-grid">
+        <!-- Name -->
         <div class="p-field p-col-12">
           <input
             type="text"
             pInputText
             [ngModel]="state?.pageRequest?.filters['name']"
             (keyup)="updateFilter({ name: $event.target.value }, $event)"
-            placeholder="{{ 'PHONEBOOK.FIRST_NAME' | translate }}"
+            placeholder="{{ 'PHONEBOOK.FULL_NAME' | translate }}"
           />
         </div>
+
+        <!-- Org Dropdown -->
         <div class="p-field p-col-12">
-          <input
-            type="text"
-            pInputText
-            [ngModel]="state?.pageRequest?.filters['orgName']"
-            (keyup)="updateFilter({ orgName: $event.target.value }, $event)"
-            placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
-          />
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="externalsOrgs$ | async"
+              editable="true"
+              [autoDisplayFirst]="false"
+              [showClear]="true"
+              dataKey="id"
+              appendTo="body"
+              [filter]="true"
+              (onChange)="updateFilter({ orgName: $event?.value }, $event)"
+              [ngModel]="state?.pageRequest?.filters['orgName']"
+              inputId="orgName"
+              (onShow)="loadOrgs()"
+              placeholder="{{ 'PHONEBOOK.ORG_NAME' | translate }}"
+            >
+            </p-dropdown>
+          </span>
         </div>
+
+        <!-- Mobile Number -->
         <div class="p-field p-col-12">
           <span class="p-float-label">
             <input
@@ -60,6 +75,7 @@
           </span>
         </div>
 
+        <!-- Search Actions -->
         <div class="p-col p-d-flex justify-content-between">
           <div class="mx-1">
             <button
@@ -84,6 +100,48 @@
         </div>
       </div>
     </p-panel>
+    <!-- Internal-external filters -->
+    <div class="my-auto py-2">
+      <button
+        pButton
+        type="button"
+        class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-primary"
+        (click)="loadByStatus({ active: true, isInternal: null })"
+        [class]="
+          state?.pageRequest?.filters['isInternal'] == null
+            ? 'active'
+            : 'p-button-outlined'
+        "
+      >
+        <span class="m-auto"> {{ "PHONEBOOK.ALL" | translate }}</span>
+      </button>
+      <button
+        pButton
+        type="button"
+        class="p-tag w-95px mx-4 px-2 text-center py-1 p-button-rounded p-button-sm p-button-primary"
+        (click)="loadByStatus({ isInternal: false })"
+        [class]="
+          state?.pageRequest?.filters['isInternal'] == false
+            ? 'active'
+            : 'p-button-outlined'
+        "
+      >
+        <span class="m-auto"> {{ "PHONEBOOK.EXTERNAL" | translate }}</span>
+      </button>
+      <button
+        pButton
+        type="button"
+        class="p-tag w-95px px-2 text-center py-1 p-button-rounded p-button-sm p-button-primary"
+        (click)="loadByStatus({ isInternal: true })"
+        [class]="
+          state?.pageRequest?.filters['isInternal'] == true
+            ? 'active'
+            : 'p-button-outlined'
+        "
+      >
+        <span class="m-auto"> {{ "PHONEBOOK.INTERNAL" | translate }} </span>
+      </button>
+    </div>
     <perfect-scrollbar class="overflow-scroll h-auto">
       <ng-container *ngIf="!(loading$ | async); else loadingSkelton">
         <ul class="navi navi-hover navi-active mt-4">
@@ -92,8 +150,7 @@
               <div class="navi-text d-flex flex-column justify-content-between">
                 <span class="d-flex">
                   <span class="font-weight-bold">
-                    {{ item.title }} {{ item.firstName }}
-                    {{ item.lastName }}
+                    {{ item | translateObj }}
                   </span>
                   <div class="spacer"></div>
                   <span class="label label-light-primary label-inline mr-2">

@@ -16,7 +16,7 @@ import { RestApiResponsePageSmsNotificationProjection } from '../models/rest-api
 import { RestApiResponseSmsNotification } from '../models/rest-api-response-sms-notification';
 
 @Injectable()
-export class NotificationControllerService extends BaseService {
+export class SmsNotificationControllerService extends BaseService {
   constructor(
     config: ApiConfiguration,
     http: HttpClient
@@ -25,22 +25,22 @@ export class NotificationControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update21
+   * Path part for operation update22
    */
-  static readonly Update21Path = '/v1/notification/sms/{id}';
+  static readonly Update22Path = '/v1/notification/sms/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update21()` instead.
+   * To access only the response body, use `update22()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update21$Response(params: {
+  update22$Response(params: {
     id: number;
     body: NotificationDetails
   }): Observable<StrictHttpResponse<RestApiResponseSmsNotification>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NotificationControllerService.Update21Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, SmsNotificationControllerService.Update22Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
       rb.body(params.body, 'application/json');
@@ -59,16 +59,16 @@ export class NotificationControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update21$Response()` instead.
+   * To access the full response (for headers, for example), `update22$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update21(params: {
+  update22(params: {
     id: number;
     body: NotificationDetails
   }): Observable<RestApiResponseSmsNotification> {
 
-    return this.update21$Response(params).pipe(
+    return this.update22$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseSmsNotification>) => r.body as RestApiResponseSmsNotification)
     );
   }
@@ -89,7 +89,7 @@ export class NotificationControllerService extends BaseService {
     page: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageSmsNotificationProjection>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NotificationControllerService.Get10Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, SmsNotificationControllerService.Get10Path, 'get');
     if (params) {
       rb.query('notificationTransId', params.notificationTransId, {});
       rb.query('page', params.page, {});
@@ -137,7 +137,7 @@ export class NotificationControllerService extends BaseService {
     page: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageSmsNotification>> {
 
-    const rb = new RequestBuilder(this.rootUrl, NotificationControllerService.Get11Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, SmsNotificationControllerService.Get11Path, 'get');
     if (params) {
       rb.query('page', params.page, {});
     }

@@ -1,12 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ILangFacade } from '@core/facades/lang.facade';
 import { PhonebookAction } from '@core/states/phonebook/phonebook.action';
 import { PhonebookState } from '@core/states/phonebook/phonebook.state';
 import { FormUtils } from '@core/utils/form.utils';
 import { Select, Store } from '@ngxs/store';
+import { GenericValidators } from '@shared/validators/generic-validators';
 import { Observable, Subject } from 'rxjs';
-import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  skip,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { IdNameProjection } from 'src/app/api/models';
 import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
 
 @Component({
@@ -14,7 +25,11 @@ import { BrowsePhonebookAction } from '../states/browse-phonebook.action';
   templateUrl: './phonebook-dialog.component.html',
   styleUrls: ['./phonebook-dialog.component.scss'],
 })
-export class PhonebookDialogComponent implements OnInit {
+export class PhonebookDialogComponent implements OnInit, AfterViewInit {
+  @Input() orgs: IdNameProjection[];
+
+  phonebookTypes = [];
+
   opened$: Observable<boolean>;
   form: FormGroup;
   destroy$ = new Subject();
@@ -23,10 +38,12 @@ export class PhonebookDialogComponent implements OnInit {
   @Select(PhonebookState.blocking)
   blocking$: Observable<boolean>;
 
+  @Select(PhonebookState.externalsOrgs)
+  public externalsOrgs$: Observable<any[]>;
   @Input()
   set phonebookId(v: number) {
     this._phonebook = v;
-    this.createForm();
+    this.form?.reset();
     if (v === undefined || v === null) {
       return;
     }
@@ -48,7 +65,8 @@ export class PhonebookDialogComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private store: Store
+    private store: Store,
+    private langFacade: ILangFacade
   ) {
     this.route.queryParams
       .pipe(
@@ -64,21 +82,72 @@ export class PhonebookDialogComponent implements OnInit {
     this.opened$ = this.route.queryParams.pipe(
       map((params) => params['_dialog'] === 'opened')
     );
+    this.createForm();
+  }
+  ngAfterViewInit(): void {
+    this.phonebookTypes = [
+      {
+        icon: 'pi pi-bars',
+        name: 'PHONEBOOK.EXTERNAL',
+        value: false,
+      },
+      {
+        icon: 'pi pi-th-large',
+        name: 'PHONEBOOK.INTERNAL',
+        value: true,
+      },
+    ];
   }
 
   createForm() {
     this.form = this.formBuilder.group({
-      firstName: [null, [Validators.required]],
-      lastName: [null, [Validators.required]],
-      middleName: [null],
+      nameAr: [null, [Validators.required, GenericValidators.arabic]],
+      nameEn: [null, [Validators.required, GenericValidators.english]],
       orgName: [null, [Validators.required]],
+      referenceOrgId: [null, [Validators.required]],
       jobTitle: [null],
       phoneNumber: [null, [Validators.pattern(/^-?([0-9]\d*)?$/)]],
       mobileNumber: [null, [Validators.required]],
       title: [null],
+      notes: [null],
+      isInternal: [true, [Validators.required]],
       isActive: [true, [Validators.required]],
       id: 0,
     });
+    this.form
+      .get('isInternal')
+      .valueChanges.pipe(
+        skip(1),
+        takeUntil(this.destroy$),
+        tap((isInternal) => {
+          this.form.get('orgName').reset();
+          this.form.get('referenceOrgId').reset();
+          if (isInternal) {
+            this.form
+              .get('referenceOrgId')
+              .setValidators([Validators.required]);
+          } else {
+            this.form.get('referenceOrgId').setValidators(null);
+          }
+          this.form.get('referenceOrgId').updateValueAndValidity();
+        })
+      )
+      .subscribe();
+    this.form
+      .get('referenceOrgId')
+      .valueChanges.pipe(
+        takeUntil(this.destroy$),
+        map((org) =>
+          this.langFacade.stateSanpshot?.ActiveLang?.key === 'ar'
+            ? org?.nameAr
+            : org?.nameEn
+        ),
+        filter((p) => !!p),
+        tap((name) => {
+          this.form.get('orgName').setValue(name);
+        })
+      )
+      .subscribe();
   }
   close() {
     this.store.dispatch(new BrowsePhonebookAction.ToggleDialog({}));
@@ -91,11 +160,18 @@ export class PhonebookDialogComponent implements OnInit {
       });
       return;
     }
-    const phonebook = {
-      ...this.form.getRawValue(),
+    const isInternal = this.form.get('isInternal').value;
+
+    let phonebook = {
+      ...this.form.value,
+      referenceOrgId: isInternal
+        ? {
+            id: this.form.get('referenceOrgId').value?.id,
+          }
+        : null,
+      mobileNumber: this.form.get('mobileNumber')?.value?.number,
     };
-    phonebook.mobileNumber = phonebook.mobileNumber?.number;
-    phonebook.id = this._phonebook;
+
     if (this.editMode) {
       this.store.dispatch(new BrowsePhonebookAction.UpdatePhonebook(phonebook));
     } else {
@@ -103,6 +179,9 @@ export class PhonebookDialogComponent implements OnInit {
     }
   }
 
+  filterOrgs(event) {
+    console.log(event);
+  }
   // onSubmit() {
   //   let newItem = {
   //     ...this.form.value,

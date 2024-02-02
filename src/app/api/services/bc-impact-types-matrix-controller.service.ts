@@ -118,21 +118,21 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update101
+   * Path part for operation update103
    */
-  static readonly Update101Path = '/v1/bc/impactTypeMatrix';
+  static readonly Update103Path = '/v1/bc/impactTypeMatrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update101()` instead.
+   * To access only the response body, use `update103()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update101$Response(params: {
+  update103$Response(params: {
     body: BcImpactMatrixDto
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactMatrixDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.Update101Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypesMatrixControllerService.Update103Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -150,15 +150,15 @@ export class BcImpactTypesMatrixControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update101$Response()` instead.
+   * To access the full response (for headers, for example), `update103$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update101(params: {
+  update103(params: {
     body: BcImpactMatrixDto
   }): Observable<RestApiResponseBcImpactMatrixDto> {
 
-    return this.update101$Response(params).pipe(
+    return this.update103$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactMatrixDto>) => r.body as RestApiResponseBcImpactMatrixDto)
     );
   }

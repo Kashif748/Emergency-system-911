@@ -70,21 +70,21 @@ export class ConfidentialtyControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update78
+   * Path part for operation update80
    */
-  static readonly Update78Path = '/v1/circular-confidentialties';
+  static readonly Update80Path = '/v1/circular-confidentialties';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update78()` instead.
+   * To access only the response body, use `update80()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update78$Response(params: {
+  update80$Response(params: {
     body: Confidentialty
   }): Observable<StrictHttpResponse<RestApiResponseConfidentialty>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Update78Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Update80Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -102,35 +102,35 @@ export class ConfidentialtyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update78$Response()` instead.
+   * To access the full response (for headers, for example), `update80$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update78(params: {
+  update80(params: {
     body: Confidentialty
   }): Observable<RestApiResponseConfidentialty> {
 
-    return this.update78$Response(params).pipe(
+    return this.update80$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseConfidentialty>) => r.body as RestApiResponseConfidentialty)
     );
   }
 
   /**
-   * Path part for operation create73
+   * Path part for operation create74
    */
-  static readonly Create73Path = '/v1/circular-confidentialties';
+  static readonly Create74Path = '/v1/circular-confidentialties';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create73()` instead.
+   * To access only the response body, use `create74()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create73$Response(params: {
+  create74$Response(params: {
     body: Confidentialty
   }): Observable<StrictHttpResponse<RestApiResponseConfidentialty>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Create73Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, ConfidentialtyControllerService.Create74Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -148,15 +148,15 @@ export class ConfidentialtyControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create73$Response()` instead.
+   * To access the full response (for headers, for example), `create74$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create73(params: {
+  create74(params: {
     body: Confidentialty
   }): Observable<RestApiResponseConfidentialty> {
 
-    return this.create73$Response(params).pipe(
+    return this.create74$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseConfidentialty>) => r.body as RestApiResponseConfidentialty)
     );
   }

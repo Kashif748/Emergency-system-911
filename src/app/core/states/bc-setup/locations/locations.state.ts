@@ -162,7 +162,7 @@ export class LocationsState {
     );
 
     return this.locationService
-      .update98({
+      .update100({
         body: payload,
       })
       .pipe(

@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import { IncidentStatus } from './incident-status';
-export interface IncidentStatisticsFilter {
+export interface IncidentChartFilters {
   categoryId?: number;
   centerId?: number;
   city?: number;
@@ -17,6 +17,7 @@ export interface IncidentStatisticsFilter {
   serial?: number;
   status?: Array<IncidentStatus>;
   subject?: string;
+  tagIds?: Array<number>;
   toDate?: string;
 }
 

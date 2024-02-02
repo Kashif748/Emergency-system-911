@@ -35,7 +35,7 @@ import { OrgQuickLinkControllerService } from './services/org-quick-link-control
 import { OrgMapGisLayerControllerService } from './services/org-map-gis-layer-controller.service';
 import { OperationalReportControllerService } from './services/operational-report-controller.service';
 import { OperationalReportStatusControllerService } from './services/operational-report-status-controller.service';
-import { NotificationControllerService } from './services/notification-controller.service';
+import { SmsNotificationControllerService } from './services/sms-notification-controller.service';
 import { NewsControllerService } from './services/news-controller.service';
 import { NewsTypeControllerService } from './services/news-type-controller.service';
 import { MsExchangeOrgConfigControllerService } from './services/ms-exchange-org-config-controller.service';
@@ -71,6 +71,7 @@ import { GroupIncidentCategoryControllerService } from './services/group-inciden
 import { GroupCentersControllerService } from './services/group-centers-controller.service';
 import { ManageGroupsService } from './services/manage-groups.service';
 import { GroupLocationGeometryControllerService } from './services/group-location-geometry-controller.service';
+import { GroupContractControllerService } from './services/group-contract-controller.service';
 import { SchedulerControllerService } from './services/scheduler-controller.service';
 import { AvayaControllerService } from './services/avaya-controller.service';
 import { ExerciseControllerService } from './services/exercise-controller.service';
@@ -154,8 +155,8 @@ import { SendSmsControllerService } from './services/send-sms-controller.service
 import { PersonalInquiryControllerService } from './services/personal-inquiry-controller.service';
 import { MailControllerService } from './services/mail-controller.service';
 import { IncidentSurveyControllerService } from './services/incident-survey-controller.service';
-import { IncidentReporterLocationControllerService } from './services/incident-reporter-location-controller.service';
 import { UaePassControllerService } from './services/uae-pass-controller.service';
+import { IncidentReporterLocationControllerService } from './services/incident-reporter-location-controller.service';
 import { ManualTaskForAdafasaService } from './services/manual-task-for-adafasa.service';
 import { InformationSharingControllerService } from './services/information-sharing-controller.service';
 import { IncidentSurveyConfigControllerService } from './services/incident-survey-config-controller.service';
@@ -172,6 +173,7 @@ import { OrganizationHierarchicalStructureService } from './services/organizatio
 import { NotificationTransactionControllerService } from './services/notification-transaction-controller.service';
 import { NotificationPlaceHolderControllerService } from './services/notification-place-holder-controller.service';
 import { InspectionControllerService } from './services/inspection-controller.service';
+import { GroupTypesControllerService } from './services/group-types-controller.service';
 import { MsMailJobService } from './services/ms-mail-job.service';
 import { DohControllerService } from './services/doh-controller.service';
 import { DashboardControllerService } from './services/dashboard-controller.service';
@@ -183,7 +185,6 @@ import { BcActivityAnalysisWorkflowControllerService } from './services/bc-activ
 import { AdcmcCategoryControllerService } from './services/adcmc-category-controller.service';
 import { TagControllerService } from './services/tag-controller.service';
 import { MigrationControllerService } from './services/migration-controller.service';
-import { GroupContractControllerService } from './services/group-contract-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -224,7 +225,7 @@ import { GroupContractControllerService } from './services/group-contract-contro
     OrgMapGisLayerControllerService,
     OperationalReportControllerService,
     OperationalReportStatusControllerService,
-    NotificationControllerService,
+    SmsNotificationControllerService,
     NewsControllerService,
     NewsTypeControllerService,
     MsExchangeOrgConfigControllerService,
@@ -344,8 +345,8 @@ import { GroupContractControllerService } from './services/group-contract-contro
     PersonalInquiryControllerService,
     MailControllerService,
     IncidentSurveyControllerService,
-    IncidentReporterLocationControllerService,
     UaePassControllerService,
+    IncidentReporterLocationControllerService,
     ManualTaskForAdafasaService,
     InformationSharingControllerService,
     IncidentSurveyConfigControllerService,
@@ -362,6 +363,7 @@ import { GroupContractControllerService } from './services/group-contract-contro
     NotificationTransactionControllerService,
     NotificationPlaceHolderControllerService,
     InspectionControllerService,
+    GroupTypesControllerService,
     MsMailJobService,
     DohControllerService,
     DashboardControllerService,
@@ -389,7 +391,7 @@ export class ApiModule {
     }
   }
 
-  constructor(
+  constructor( 
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

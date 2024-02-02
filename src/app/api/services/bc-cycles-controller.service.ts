@@ -1,18 +1,18 @@
 /* tslint:disable */
 /* eslint-disable */
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import {BaseService} from '../base-service';
-import {ApiConfiguration} from '../api-configuration';
-import {StrictHttpResponse} from '../strict-http-response';
-import {RequestBuilder} from '../request-builder';
-import {Observable} from 'rxjs';
-import {filter, map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BaseService } from '../base-service';
+import { ApiConfiguration } from '../api-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+import { RequestBuilder } from '../request-builder';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
-import {BcCycles} from '../models/bc-cycles';
-import {Pageable} from '../models/pageable';
-import {RestApiResponseBcCycles} from '../models/rest-api-response-bc-cycles';
-import {RestApiResponsePageBcCycles} from '../models/rest-api-response-page-bc-cycles';
+import { BcCycles } from '../models/bc-cycles';
+import { Pageable } from '../models/pageable';
+import { RestApiResponseBcCycles } from '../models/rest-api-response-bc-cycles';
+import { RestApiResponsePageBcCycles } from '../models/rest-api-response-page-bc-cycles';
 
 @Injectable()
 export class BcCyclesControllerService extends BaseService {
@@ -119,23 +119,23 @@ export class BcCyclesControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll20
+   * Path part for operation getAll21
    */
-  static readonly GetAll20Path = '/v1/bc/cycles';
+  static readonly GetAll21Path = '/v1/bc/cycles';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll20()` instead.
+   * To access only the response body, use `getAll21()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll20$Response(params: {
+  getAll21$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcCycles>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.GetAll20Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcCyclesControllerService.GetAll21Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -155,17 +155,17 @@ export class BcCyclesControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll20$Response()` instead.
+   * To access the full response (for headers, for example), `getAll21$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll20(params: {
+  getAll21(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcCycles> {
 
-    return this.getAll20$Response(params).pipe(
+    return this.getAll21$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcCycles>) => r.body as RestApiResponsePageBcCycles)
     );
   }

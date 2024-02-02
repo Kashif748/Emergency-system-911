@@ -70,23 +70,23 @@ export class BcImpactTypeControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll18
+   * Path part for operation getAll19
    */
-  static readonly GetAll18Path = '/v1/bc/impactType';
+  static readonly GetAll19Path = '/v1/bc/impactType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll18()` instead.
+   * To access only the response body, use `getAll19()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll18$Response(params: {
+  getAll19$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcImpactTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.GetAll18Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.GetAll19Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -106,37 +106,37 @@ export class BcImpactTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll18$Response()` instead.
+   * To access the full response (for headers, for example), `getAll19$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAll18(params: {
+  getAll19(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcImpactTypes> {
 
-    return this.getAll18$Response(params).pipe(
+    return this.getAll19$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcImpactTypes>) => r.body as RestApiResponsePageBcImpactTypes)
     );
   }
 
   /**
-   * Path part for operation update102
+   * Path part for operation update104
    */
-  static readonly Update102Path = '/v1/bc/impactType';
+  static readonly Update104Path = '/v1/bc/impactType';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update102()` instead.
+   * To access only the response body, use `update104()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update102$Response(params: {
+  update104$Response(params: {
     body: BcImpactTypes
   }): Observable<StrictHttpResponse<RestApiResponseBcImpactTypes>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.Update102Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcImpactTypeControllerService.Update104Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,15 +154,15 @@ export class BcImpactTypeControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update102$Response()` instead.
+   * To access the full response (for headers, for example), `update104$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update102(params: {
+  update104(params: {
     body: BcImpactTypes
   }): Observable<RestApiResponseBcImpactTypes> {
 
-    return this.update102$Response(params).pipe(
+    return this.update104$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcImpactTypes>) => r.body as RestApiResponseBcImpactTypes)
     );
   }

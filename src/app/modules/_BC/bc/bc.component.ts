@@ -106,11 +106,6 @@ export class BCComponent implements OnInit, OnDestroy {
     this.versions$ = this.store.select(BCState.versions).pipe(
       takeUntil(this.destroy$),
       filter((p) => !!p),
-      map((versions) =>
-        versions.filter(
-          (version) => version.status?.id !== VERSION_STATUSES.ARCHIVED
-        )
-      ),
       map((page) =>
         page?.map((u) => {
           console.log(u);

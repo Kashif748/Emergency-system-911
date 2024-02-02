@@ -120,23 +120,23 @@ export class BcResourcesMinPersonnelReqControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update88
+   * Path part for operation update90
    */
-  static readonly Update88Path = '/v1/bc/resources/min-personnel-req';
+  static readonly Update90Path = '/v1/bc/resources/min-personnel-req';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update88()` instead.
+   * To access only the response body, use `update90()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    *
    * @deprecated
    */
-  update88$Response(params: {
+  update90$Response(params: {
     body: BcResourcesMinPersonnelReq
   }): Observable<StrictHttpResponse<RestApiResponseBcResourcesMinPersonnelReq>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcResourcesMinPersonnelReqControllerService.Update88Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcResourcesMinPersonnelReqControllerService.Update90Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -154,17 +154,17 @@ export class BcResourcesMinPersonnelReqControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update88$Response()` instead.
+   * To access the full response (for headers, for example), `update90$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    *
    * @deprecated
    */
-  update88(params: {
+  update90(params: {
     body: BcResourcesMinPersonnelReq
   }): Observable<RestApiResponseBcResourcesMinPersonnelReq> {
 
-    return this.update88$Response(params).pipe(
+    return this.update90$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcResourcesMinPersonnelReq>) => r.body as RestApiResponseBcResourcesMinPersonnelReq)
     );
   }

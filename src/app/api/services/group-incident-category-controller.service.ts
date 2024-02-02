@@ -73,22 +73,22 @@ export class GroupIncidentCategoryControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update48
+   * Path part for operation update49
    */
-  static readonly Update48Path = '/v1/groups/{groupId}/incident-category';
+  static readonly Update49Path = '/v1/groups/{groupId}/incident-category';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update48()` instead.
+   * To access only the response body, use `update49()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update48$Response(params: {
+  update49$Response(params: {
     groupId: number;
     body: GroupIncidentCatRequest
   }): Observable<StrictHttpResponse<RestApiResponseListGroupIncidentCategory>> {
 
-    const rb = new RequestBuilder(this.rootUrl, GroupIncidentCategoryControllerService.Update48Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, GroupIncidentCategoryControllerService.Update49Path, 'put');
     if (params) {
       rb.path('groupId', params.groupId, {});
       rb.body(params.body, 'application/json');
@@ -107,16 +107,16 @@ export class GroupIncidentCategoryControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update48$Response()` instead.
+   * To access the full response (for headers, for example), `update49$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update48(params: {
+  update49(params: {
     groupId: number;
     body: GroupIncidentCatRequest
   }): Observable<RestApiResponseListGroupIncidentCategory> {
 
-    return this.update48$Response(params).pipe(
+    return this.update49$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseListGroupIncidentCategory>) => r.body as RestApiResponseListGroupIncidentCategory)
     );
   }

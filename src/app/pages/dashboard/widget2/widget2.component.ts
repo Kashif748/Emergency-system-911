@@ -30,7 +30,7 @@ export class Widget2Component implements OnInit, OnChanges {
       this.widgets = changes['widgets'].currentValue;
       this.widgets = this.widgets.map((widget) => {
         const priority = this.priorities.find((item) => item.id === widget.id);
-        widget['color'] = priority.color?.replace('light-', '');
+        widget['color'] = priority?.color?.replace('light-', '');
         return widget;
       });
     }

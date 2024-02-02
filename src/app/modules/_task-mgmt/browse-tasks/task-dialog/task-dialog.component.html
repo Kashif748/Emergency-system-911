@@ -500,10 +500,6 @@
       <p-tabPanel header="{{'TASK_LOCATION' | translate }}">
         <div class="row h-100">
           <div class="col-12">
-            <div class="row border-bottom mb-3 p-2 pb-4 align-items-center">
-              <p-button label="{{'INCIDENTS.SHARE_LOCATION_GOOGLE_MAPS' | translate }}" iconPos="right"
-                icon="pi pi-share-alt" (click)="openShareMapLocationDialog()"></p-button>
-            </div>
             <ng-container #mapContainer></ng-container>
           </div>
         </div>
@@ -562,7 +558,7 @@
           queryParamsHandling="merge"></button>
       </div>
     </ng-container>
-    <ng-container *checkPrivileges="'PRIV_UP_TASK'">
+    <ng-container *ngIf="privilegesService.checkActionPrivilege('PRIV_UP_TASK') || tabv?.activeIndex === 2">
       <div class="mx-1" *ngIf="(!(viewOnly$ | async) && !closedStatus) || tabv?.activeIndex === 2">
         <button pButton label="{{ 'ACTIONS.SAVE' | translate }}" icon="pi pi-save" [loading]="blocking$ | async"
           (click)="submit()"></button>

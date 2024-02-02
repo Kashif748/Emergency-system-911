@@ -14,16 +14,18 @@ export class CdatePipe implements PipeTransform {
     try {
       let result = new Date();
 
-      if (value) {
+      if (value && typeof value !== 'number') {
         result = new Date(DateTimeUtil.getDateInGMTFormat(value));
+      } else {
+        result = value;
       }
       if (!args?.length) {
         args = ['yyyy/MM/dd h:mm:ss a'];
       }
 
-      return this.date.transform(result, args);
+      return this.date.transform(result, args) ?? '';
     } catch {
-      return value;
+      return value ?? '';
     }
   }
 }

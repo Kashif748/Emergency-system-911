@@ -66,21 +66,21 @@ export class AvayaControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation update53
+   * Path part for operation update55
    */
-  static readonly Update53Path = '/v1/ext/avaya';
+  static readonly Update55Path = '/v1/ext/avaya';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update53()` instead.
+   * To access only the response body, use `update55()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update53$Response(params: {
+  update55$Response(params: {
     body: AvayaRequest
   }): Observable<StrictHttpResponse<RestApiResponseAvayaDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AvayaControllerService.Update53Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, AvayaControllerService.Update55Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -98,35 +98,35 @@ export class AvayaControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update53$Response()` instead.
+   * To access the full response (for headers, for example), `update55$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update53(params: {
+  update55(params: {
     body: AvayaRequest
   }): Observable<RestApiResponseAvayaDto> {
 
-    return this.update53$Response(params).pipe(
+    return this.update55$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAvayaDto>) => r.body as RestApiResponseAvayaDto)
     );
   }
 
   /**
-   * Path part for operation create49
+   * Path part for operation create50
    */
-  static readonly Create49Path = '/v1/ext/avaya';
+  static readonly Create50Path = '/v1/ext/avaya';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `create49()` instead.
+   * To access only the response body, use `create50()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create49$Response(params: {
+  create50$Response(params: {
     body: AvayaRequest
   }): Observable<StrictHttpResponse<RestApiResponseAvayaDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AvayaControllerService.Create49Path, 'post');
+    const rb = new RequestBuilder(this.rootUrl, AvayaControllerService.Create50Path, 'post');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -144,15 +144,15 @@ export class AvayaControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `create49$Response()` instead.
+   * To access the full response (for headers, for example), `create50$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create49(params: {
+  create50(params: {
     body: AvayaRequest
   }): Observable<RestApiResponseAvayaDto> {
 
-    return this.create49$Response(params).pipe(
+    return this.create50$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseAvayaDto>) => r.body as RestApiResponseAvayaDto)
     );
   }

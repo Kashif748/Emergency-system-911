@@ -70,25 +70,25 @@ export class BcActivityDependencyInternalControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAll25
+   * Path part for operation getAll26
    */
-  static readonly GetAll25Path = '/v1/bc/activity/internal-dependency';
+  static readonly GetAll26Path = '/v1/bc/activity/internal-dependency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAll25()` instead.
+   * To access only the response body, use `getAll26()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll25$Response(params: {
+  getAll26$Response(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageBcActivityDependencyInternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyInternalControllerService.GetAll25Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyInternalControllerService.GetAll26Path, 'get');
     if (params) {
       rb.query('isActive', params.isActive, {});
       rb.query('versionId', params.versionId, {});
@@ -108,39 +108,39 @@ export class BcActivityDependencyInternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAll25$Response()` instead.
+   * To access the full response (for headers, for example), `getAll26$Response()` instead.
    *
    * This method doesn't expect any request body.
    *
    * @deprecated
    */
-  getAll25(params: {
+  getAll26(params: {
     isActive?: boolean;
     versionId?: number;
     pageable: Pageable;
   }): Observable<RestApiResponsePageBcActivityDependencyInternal> {
 
-    return this.getAll25$Response(params).pipe(
+    return this.getAll26$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageBcActivityDependencyInternal>) => r.body as RestApiResponsePageBcActivityDependencyInternal)
     );
   }
 
   /**
-   * Path part for operation update109
+   * Path part for operation update111
    */
-  static readonly Update109Path = '/v1/bc/activity/internal-dependency';
+  static readonly Update111Path = '/v1/bc/activity/internal-dependency';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `update109()` instead.
+   * To access only the response body, use `update111()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update109$Response(params: {
+  update111$Response(params: {
     body: BcActivityDependencyInternal
   }): Observable<StrictHttpResponse<RestApiResponseBcActivityDependencyInternal>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyInternalControllerService.Update109Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BcActivityDependencyInternalControllerService.Update111Path, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -158,15 +158,15 @@ export class BcActivityDependencyInternalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `update109$Response()` instead.
+   * To access the full response (for headers, for example), `update111$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update109(params: {
+  update111(params: {
     body: BcActivityDependencyInternal
   }): Observable<RestApiResponseBcActivityDependencyInternal> {
 
-    return this.update109$Response(params).pipe(
+    return this.update111$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseBcActivityDependencyInternal>) => r.body as RestApiResponseBcActivityDependencyInternal)
     );
   }

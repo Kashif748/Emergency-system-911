@@ -24,21 +24,21 @@ export class HospitalControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation delete16
+   * Path part for operation delete17
    */
-  static readonly Delete16Path = '/v1/hospitals/delete/{id}';
+  static readonly Delete17Path = '/v1/hospitals/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete16()` instead.
+   * To access only the response body, use `delete17()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete16$Response(params: {
+  delete17$Response(params: {
     id: number;
   }): Observable<StrictHttpResponse<RestApiResponseHospital>> {
 
-    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.Delete16Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.Delete17Path, 'put');
     if (params) {
       rb.path('id', params.id, {});
     }
@@ -56,35 +56,35 @@ export class HospitalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `delete16$Response()` instead.
+   * To access the full response (for headers, for example), `delete17$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete16(params: {
+  delete17(params: {
     id: number;
   }): Observable<RestApiResponseHospital> {
 
-    return this.delete16$Response(params).pipe(
+    return this.delete17$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponseHospital>) => r.body as RestApiResponseHospital)
     );
   }
 
   /**
-   * Path part for operation findActivePage12
+   * Path part for operation findActivePage13
    */
-  static readonly FindActivePage12Path = '/v1/hospitals';
+  static readonly FindActivePage13Path = '/v1/hospitals';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findActivePage12()` instead.
+   * To access only the response body, use `findActivePage13()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage12$Response(params: {
+  findActivePage13$Response(params: {
     pageable: Pageable;
   }): Observable<StrictHttpResponse<RestApiResponsePageHospital>> {
 
-    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.FindActivePage12Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, HospitalControllerService.FindActivePage13Path, 'get');
     if (params) {
       rb.query('pageable', params.pageable, {});
     }
@@ -102,15 +102,15 @@ export class HospitalControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `findActivePage12$Response()` instead.
+   * To access the full response (for headers, for example), `findActivePage13$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findActivePage12(params: {
+  findActivePage13(params: {
     pageable: Pageable;
   }): Observable<RestApiResponsePageHospital> {
 
-    return this.findActivePage12$Response(params).pipe(
+    return this.findActivePage13$Response(params).pipe(
       map((r: StrictHttpResponse<RestApiResponsePageHospital>) => r.body as RestApiResponsePageHospital)
     );
   }

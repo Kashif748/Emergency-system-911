@@ -1,150 +1,7 @@
 <div class="container-fluid p-0 table-container h-100" id="map-container">
   <div [hidden]="!showButton" #info>
     <!-- incident buttons -->
-    <div class="d-flex w-100 my-4" *ngIf="mapType == 'incident'">
-      <!-- add incident point -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Inc_point" (click)="addIncidentPoint()">
-        {{ "INCIDENTS.SET_INCIDENT_POINT" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
 
-      <!-- add incident polyline -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Inc_Polyline" (click)="addIncidentPolyline()">
-        {{ "INCIDENTS.CREATE_INCIDENT_POLYLINE" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Design/Line.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-
-      <!-- add incident polygon -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Inc_Polygon" (click)="addIncidentPolygon()">
-        {{ "INCIDENTS.CREATE_INCIDENT_POLYGON" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-    </div>
-
-    <div class="d-flex w-100 my-4" *ngIf="mapType == 'task'">
-      <!-- add task point -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Tsk_point" (click)="addTaskPoint()">
-        {{ "TASK.CREATE_TASK_POINT" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-
-      <!-- add task polyline -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Tsk_Polyline" (click)="addTaskPolyline()">
-        {{ "TASK.CREATE_TASK_POLYLINE" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Design/Line.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-
-      <!-- add task polygon -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Tsk_Polygon" (click)="addTaskPolygon()">
-        {{ "TASK.CREATE_TASK_POLYGON" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-    </div>
-    <div class="d-flex w-100 my-4" *ngIf="mapType == 'organization'">
-      <!-- add task point -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Org_point" (click)="addOrgPoint()">
-
-        {{ "ORGANIZATIONS.CREATE_ORG_POINT" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-
-
-    </div>
-    <div class="d-flex w-100 my-4" *ngIf="mapType == 'asset'">
-      <!-- add task point -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Asset_point" (click)="addAssetPoint()">
-
-        {{ "RESOURCE.CREATE_ASSET_POINT" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-    </div>
-    <div class="d-flex w-100 my-4" *ngIf="mapType == 'team'">
-
-
-      <!-- add team polyline -->
-      <!--<button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Inc_Polyline" (click)="addTeamPolyline()">
-        {{ "INCIDENTS.CREATE_TEAM_POLYLINE" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Design/Line.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>-->
-
-      <!-- add team polygon -->
-      <button class="
-          btn btn-md btn-light-primary
-          font-weight-bolder
-          cursor-pointer
-          mx-auto
-        " id="Inc_Polygon" (click)="addTeamPolygon()">
-        {{ "INCIDENTS.CREATE_TEAM_POLYGON" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Design/Select.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-    </div>
-    <div class="d-flex w-100 my-4" *ngIf="mapType == 'reporter'">
-      <!-- add task point -->
-      <button [hidden]="showButton" class="btn btn-md btn-light-primary font-weight-bolder cursor-pointer mx-auto"
-        id="Reporter_Point" (click)="addReporterPoint()">
-
-        {{ "INCIDENTS.CREATE_REPORTER_POINT" | translate }}
-        <span [inlineSVG]="'/assets/media/svg/icons/Map/Position.svg'" cacheSVG="true"
-          class="svg-icon svg-icon-md"></span>
-      </button>
-
-
-    </div>
   </div>
 
   <div class="h-100" style="display: contents;">
@@ -255,11 +112,49 @@
   </div>
 
   <div class="spinner-container m-auto p-10" *ngIf="loading">
-    <mat-spinner class="m-auto" diameter="50"></mat-spinner>
+    <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
   </div>
 </div>
 
 <!-- map top-bar -->
-<div id="map-topbar" *ngIf="!smallSize" #topbar class="w-100">
+<div id="map-topbar" [ngClass]="{'show': showTopBar}" *ngIf="!smallSize" #topbar style="z-index: -1;">
   <app-top-bar></app-top-bar>
 </div>
+
+<button pButton icon="pi pi-search" class="p-button-text p-button-secondary bg-white esri-widget" id="topbar-toggler"
+  (click)="showTopBar = !showTopBar" title="{{'ACTIONS.SEARCH' | translate}}"></button>
+
+<button pButton icon="pi pi-replay" (click)="reload()" id="refresh-btn" *ngIf="viewOnly"
+  class="p-button-text p-button-secondary bg-white esri-widget" title="{{'ACTIONS.RELOAD' | translate}}"></button>
+
+
+<button pButton icon="pi pi-image" (click)="takeScreenshot()" id="screenshoot-btn" *ngIf="viewOnly"
+  class="p-button-text p-button-secondary bg-white esri-widget" title="{{'ACTIONS.RELOAD' | translate}}"></button>
+
+
+<ng-container *ngIf="shareableLocation">
+
+  <button pButton icon="pi pi-share-alt" (click)="shareLocation = true" id="share-btn"
+    class="p-button-text p-button-secondary bg-white esri-widget"
+    title="{{'INCIDENTS.SHARE_LOCATION_GOOGLE_MAPS' | translate}}"></button>
+
+  <p-dialog appendTo="body" header="{{'INCIDENTS.SHARE_LOCATION_GOOGLE_MAPS' | translate}}" [(visible)]="shareLocation"
+    [style]="{width: '40vw'}" [breakpoints]="{'960px': '60vw', '640px': '90vw'}" [baseZIndex]="10000">
+    <app-share-location [taskId]="taskId" [incidentId]="incidentId" *ngIf="shareLocation"></app-share-location>
+    <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="shareLocation=false" label="{{ 'ACTIONS.OK' | translate }}"
+        styleClass="p-button-text"></p-button>
+    </ng-template>
+  </p-dialog>
+
+</ng-container>
+<ng-container *ngIf="!viewOnly">
+  <div id="draw-select" class="shadow-none esri-widget">
+    <p-selectButton optionValue="type" [(ngModel)]="gdrawType" [options]="drawOptions"
+      (onChange)="gdraw($event?.value)">
+      <ng-template let-item>
+        <i class="{{item.icon}}"></i>
+      </ng-template>
+    </p-selectButton>
+  </div>
+</ng-container>
